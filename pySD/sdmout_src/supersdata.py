@@ -18,197 +18,17 @@ https://opensource.org/licenses/BSD-3-Clause
 File Description:
 python class to handle superdroplet attributes data from SDM zarr store in ragged array format
 """
+
 # %%
+# import libraries
+
 import numpy as np
 import xarray as xr
 import awkward as ak
-import warnings
 import os
-from typing import Union
-import pytest
+from typing import Union, Tuple
 
-
-def akward_array_to_lagrange_array(
-    data: ak.Array,
-    dim1: ak.Array,
-    dim2: ak.Array,
-    dim1_as_index=False,
-    check_indices_uniqueness=False,
-):
-    """
-    This function converts a variable of the superdroplet dataset to a numpy array with the dimensions of the superdroplet dataset.
-    The function assumes that the variable is a scalar value for each superdroplet at each time step.
-
-    If you want to use it with the SupersData class, you can use the following syntax:
-    >>> akward_array_to_lagrange_array(sddata[varname], sddata.time, sddata["sdId"])
-
-    It will create a regular numpy array with the dimensions of the superdroplet dataset.
-    N : number of superdroplets
-    T : number of time steps
-    (T,N) : shape of the output array
-
-
-    The maximum "N" of ``dim2`` values is used to create the number of columns in the output array!
-    The length "T" of ``dim1`` is used to create the number of columns in the output array!
-
-    The output array the has shape (T,N).
-
-    The input arrays are assumed to have the dimensions:
-     - ``data``: T * var * dtype
-     - ``dim1``: T * int
-     - ``dim2``: T * var * int   (var is the number of superdroplets at each time step, which must be smaller than "N"!)
-
-    Values in ``dim2`` need to be the indices for the columns of the output array!
-    Values in ``dim1`` are not used as indices by default!
-    If ``dim1_as_index`` is set to ``True``, the values of ``dim1`` are used as indices for the rows of the output array!
-
-
-    Parameters
-    ----------
-    data : ak.Array
-        The variable of the superdroplet dataset. The variable must be a scalar value for each superdroplet at each time step.
-    dim1 : ak.Array
-        The first dimension of the output numpy array. This is usually the time dimension.
-        It is not used as index by default.
-        This can be changed by setting ``dim1_as_index`` to ``True``.
-    dim2 : ak.Array
-        The second dimension of the output numpy array. This is usually the superdroplet dimension.
-    dim1_as_index : bool, optional
-        If set to ``True``, the values of ``dim1`` are used as indices for the rows of the output array. The default is ``False``.
-    check_indices_uniqueness : bool, optional
-        If set to ``True``, the uniqueness of the indices is checked. The default is ``False``.
-        If the indices are not unique, a ValueError is raised.
-        This check is very slow for large arrays! Better make sure the indices are unique before calling this function.
-
-    Returns
-    -------
-    np.ndarray
-        A numpy array with the dimensions of the superdroplet dataset. The variable is stored in the numpy array.
-
-    Raises
-    ------
-    ValueError
-        If the number of superdroplets and the number of values in the variable do not match.
-    ValueError
-        If the number of superdroplets and the number of values in the variable do not match for all time steps.
-    ValueError
-        Only if ``check_indices_uniqueness`` is set to ``True``. If the indice tuples are not unique.
-
-    Examples
-    --------
-
-    The typical use, where time and superdroplet indices are given as arrays and "time" is not used as index.
-
-    >>> data = ak.Array([
-            [10, 20, 30],
-            [],
-            [40, 50],
-        ])
-    >>> time = ak.Array([
-            10.0,
-            20.0,
-            45.0,
-        ])
-    >>> id = ak.Array([
-            [0, 1, 2],
-            [],
-            [2, 3],
-        ])
-    >>> akward_array_to_lagrange_array(data = data, dim1 = time, dim2 = id, dim1_as_index = False, check_indices_uniqueness = False)
-    ... [10., 20., 30., nan],
-    ... [nan, nan, nan, nan],
-    ... [nan, nan, 40., 50.]])
-
-    In the following example, the time_index is used. As seen, the combination (0,0) from "time_index"and "id" is given twice. The last value will overwrite the previous.
-    The check for uniqueness would through a ValueError.
-
-    >>> data = ak.Array([
-            [10, 20, 30],
-            [],
-            [40, 50],
-            [90],
-        ])
-    >>> time_index = ak.Array([
-            0,
-            1,
-            2,
-            0,
-        ])
-    >>> id = ak.Array([
-            [0, 1, 2],
-            [],
-            [2, 3],
-            [0],
-        ])
-    >>> akward_array_to_lagrange_array(data = data, dim1 = time_index, dim2 = id, dim1_as_index = True, check_indices_uniqueness = False)
-    ... [[90. 20. 30. nan]
-    ...  [nan nan nan nan]
-    ...  [nan nan 40. 50.]]
-    >>> akward_array_to_lagrange_array(data = data, dim1 = time_index, dim2 = id, dim1_as_index = True, check_indices_uniqueness = True)
-    ... ValueError: The indice tuples are not unique.
-    ... This would lead to overwriting values in the numpy array.
-    ... The reason might be, that the time indices aren't unique along axis 0 already.
-
-    """
-
-    # create the output dimensions of the numpy array which are necessary to store the data.
-
-    if dim1_as_index is False:
-        T = int(ak.num(dim1, axis=0))
-        time_index = np.arange(T)
-    else:
-        time_index = dim1
-        T = int(ak.max(dim1) + 1)
-    # The superdroplets are identified by their id.
-    # Use the maximum value of the superdroplet index
-    # The ids start with id "0", so the maximum id is the number of superdroplets - 1!
-    N = int(ak.max(dim2) + 1)
-    superdroplet_index = dim2
-
-    if ak.count(superdroplet_index) != ak.count(data):
-        raise ValueError(
-            f"The number of superdroplets ({ak.count(superdroplet_index)}) and the number of values in the variable ({ak.count(data)}) do not match"
-        )
-    if not ak.all(ak.num(data) == ak.num(data)):
-        raise ValueError(
-            "The number of superdroplets and the number of values in the variable do not match for all time steps"
-        )
-
-    # check if the resulting array is sparse and inform the User
-    filled_percentage = ak.count(superdroplet_index) / (N * T) * 100
-    # print(f"{filled_percentage:.2f} % of the regular array is filled with values. Total number of values is {ak.count(superdroplet_index)} out of {N * T} possible values.")
-    if filled_percentage < 50:
-        warnings.warn(
-            "The resulting array is sparse. This might lead to significant memory usage"
-        )
-
-    # create tuples of all datapoint in the variable's akward array
-    # For this, a cartesian product of the time_index and the superdroplet_index is created
-    # The cartesian product is a tuple of all possible combinations of the two arrays
-    # It is important to do this along axis 0 (time dimension). Otherwise, only unique combinations are created
-    # The resulting array is then flattened to have a list of tuples
-    # The list of tuples is then unzipped, to seperate the time and superdroplet indeices into two arrays
-    i, j = ak.unzip(ak.flatten(ak.cartesian((time_index, superdroplet_index), axis=1)))
-
-    # Check if the indice tuples are unique.
-    # For this, one can simply compute the index value they represented in a raveled array.
-    # so i * N + j should be unique for all i, j
-    # flattened_index = i * N + j
-    if check_indices_uniqueness is True:
-        if not ak.count(i * N + j) == ak.count(np.unique(i * N + j)):
-            raise ValueError(
-                "The indice tuples are not unique.\n"
-                + "This would lead to overwriting values in the numpy array.\n"
-                + "The reason might be, that the time indices aren't unique along axis 0 already.\n"
-            )
-    else:
-        warnings.warn(
-            "The uniqueness of the indices is not checked. This might lead to overwriting values in the numpy array."
-        )
-
-    result_numpy = np.empty((T, N)) * np.nan
-    result_numpy[i, j] = ak.flatten(data)
-    return result_numpy
+from pySD.sdmout_src import sdtracing
 
 
 class SuperdropProperties:
@@ -396,7 +216,7 @@ class SupersData(SuperdropProperties):
         ValueError: If the dtype provided is not supported. Only numpy ndarray and xarray DataArray are supported.
         """
         if dtype == np.ndarray:
-            return akward_array_to_lagrange_array(
+            return sdtracing.akward_array_to_lagrange_array(
                 self[varname],
                 self.time,
                 self["sdId"],
@@ -512,265 +332,6 @@ class RainSupers(SuperdropProperties):
         else:
             err = "no known return provided for " + key + " key"
             raise ValueError(err)
-
-
-IntegerArray = Union[np.ndarray, ak.highlevel.Array]
-
-
-def get_awkward_shape(a):
-    """
-    Get the shape of the awkward array a as a list.
-    Variable axis lengths are replaced by ``np.nan``.
-
-    Parameters
-    ----------
-    a : ak.Array
-        The input array.
-
-    Returns
-    -------
-    list
-        The shape of the array as a list.
-        ``var`` positions are replaced by ``np.nan``.
-    """
-
-    # check for number of dimensions
-    ndim = a.ndim
-    # create output list
-    shape = []
-    # For each dinemsion, get the number of elements.
-    # If the number of elements changes over the axis, np.nan is used to indicate a variable axis length
-    for dim in range(ndim):
-        num = ak.num(a, axis=dim)
-        # for the 0th axis, the number of elements is an integer
-        if isinstance(num, np.ndarray):
-            num = int(num)
-            shape.append(num)
-        else:
-            maxi = int(ak.max(num))
-            mini = int(ak.min(num))
-            if maxi == mini:
-                shape.append(maxi)
-            else:
-                shape.append(np.nan)
-    return shape
-
-
-@pytest.mark.parametrize(
-    "a, should",
-    [
-        (ak.Array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]), [10]),
-        (ak.Array([[1, 2, 3], [4, 5, 6]]), [2, 3]),
-        (ak.Array([[[1, 2], [3, 4]], [[5, 6], [7, 8]]]), [2, 2, 2]),
-        (ak.Array([[1, 2, 3], [4, 5, 6, 7]]), [2, np.nan]),
-    ],
-)
-def test_get_awkward_shape(a, should):
-    print(get_awkward_shape(a))
-    assert get_awkward_shape(a) == should
-
-
-def ak_digitize_2D(
-    x: ak.highlevel.Array, bins: np.ndarray, right: bool = False
-) -> ak.highlevel.Array:
-    """
-    This function takes a 2D awkward array and bins it into the provided bins.
-    The binning is done using ``numpy.digitize`` along the flattened array.
-
-    Note
-    ----
-    The input array must be 2D.
-    None and np.nan will be stored in the last bin.
-
-    Parameters
-    ----------
-    x : ak.highlevel.Array
-        The input array to be binned.
-    bins : np.ndarray
-        The bins to be used for binning the array.
-    right : bool, optional
-        As from the numpy documentation:
-        Indicating whether the intervals include the right or the left bin edge.
-        Default behavior is (right==False) indicating that the interval does not include the right edge.
-        The left bin end is open in this case, i.e., bins[i-1] <= x < bins[i] is the default behavior for monotonically increasing bins.
-
-    Returns
-    -------
-    indices : ak.highlevel.Array of ints
-        Output array of indices, of same shape as x.
-
-    Example
-    -------
-    >>> x = ak.Array([[1, 2, 3], [4, 5, 6]])
-    >>> bins = np.array([0, 2, 4, 6])
-    >>> array_to_bin_index(x, bins, right = False)
-    [[1, 2, 2],
-     [3, 3, 4]]
-    ---------------------
-    type: 2 * var * int64
-
-    References
-    ----------
-    https://numpy.org/doc/stable/reference/generated/numpy.digitize.html
-    """
-
-    if x.ndim != 2:
-        raise ValueError("Array x must be 2D")
-    digi, num = ak.flatten(x), ak.num(x)
-
-    if bins.ndim != 1:
-        raise ValueError("Bins must be 1D")
-
-    digi = np.digitize(x=digi, bins=bins, right=right)
-    digi = ak.unflatten(digi, num)
-    return digi
-
-
-@pytest.mark.parametrize(
-    "x, bins, should",
-    [
-        (
-            ak.Array([[1, 2, 3, -1, 101], [4, 5, 6, np.nan, 90, None]]),
-            np.array([0, 3, 6, 100]),
-            ak.Array([[1, 1, 2, 0, 4], [2, 2, 3, 4, 3, 4]]),
-        ),
-    ],
-)
-def test_ak_digitize_2D(x, bins, should):
-    """Tests returns of the ak_digitize_2D function"""
-    x_binned = ak_digitize_2D(x, bins)
-    # check for equality
-    assert ak.sum(x_binned != should) == 0
-    # check for same shape
-    assert get_awkward_shape(x_binned) == get_awkward_shape(should)
-    # check for same counts
-    assert ak.count(x_binned) == ak.count(should)
-
-
-@pytest.mark.parametrize(
-    "x, bins, exception",
-    [
-        (
-            ak.Array([[[1, 2, 3, -1, 101], [4, 5, 6, np.nan, 90, None]], [None]]),
-            np.array([0, 3, 6, 100]),
-            ValueError,
-        ),
-        (
-            ak.Array([[1, 2, 3, -1, 101], [4, 5, 6, np.nan, 90, None]]),
-            np.array([[0], [3]]),
-            ValueError,
-        ),
-    ],
-)
-def test_array_to_bin_index_exception(x, bins, exception):
-    """Tests for exceptions in the ak_digitize_2D function"""
-    with pytest.raises(exception):
-        ak_digitize_2D(x, bins)
-
-
-def ak_digitize_3D(
-    x: ak.highlevel.Array, bins: np.ndarray, right: bool = False
-) -> ak.highlevel.Array:
-    """
-    This function takes a 3D awkward array and bins it into the provided bins.
-    The binning is done using ``numpy.digitize`` along the flattened array.
-
-    Note
-    ----
-    The input array must be 3D.
-    None and np.nan will be stored in the last bin.
-    Only values in the last axis are allowed! This ``ak.Array([[[1, 2, 3, -1, 101], [4, 5, 6, np.nan, 90, None]], [None, 1]])`` is not valid!
-
-
-    Parameters
-    ----------
-    x : ak.highlevel.Array
-        The input array to be binned.
-    bins : np.ndarray
-        The bins to be used for binning the array.
-    right : bool, optional
-        As from the numpy documentation:
-        Indicating whether the intervals include the right or the left bin edge.
-        Default behavior is (right==False) indicating that the interval does not include the right edge.
-        The left bin end is open in this case, i.e., bins[i-1] <= x < bins[i] is the default behavior for monotonically increasing bins.
-
-    Returns
-    -------
-    indices : ak.highlevel.Array of ints
-        Output array of indices, of same shape as x.
-
-    Example
-    -------
-    >>> x = ak.Array([[[1, 2, 3], [4, 5, 6]], [[1], [2]]])
-    >>> bins = np.array([0, 2, 4, 6])
-    >>> array_to_bin_index(x, bins, right = False)
-    [
-        [[1, 2, 2],[3, 3, 4]]
-        [[1], [2]],
-    ]
-    ---------------------
-    type: 2 * 2 * var * int64
-
-    References
-    ----------
-    https://numpy.org/doc/stable/reference/generated/numpy.digitize.html
-    """
-
-    if x.ndim != 3:
-        raise ValueError("Array x must be 3D")
-    digi, num0 = ak.flatten(x), ak.num(x)
-    digi, num1 = ak.flatten(digi), ak.num(digi)
-
-    if bins.ndim != 1:
-        raise ValueError("Bins must be 1D")
-
-    digi = np.digitize(x=digi, bins=bins, right=right)
-    digi = ak.unflatten(digi, num1)
-    digi = ak.unflatten(digi, num0)
-    return digi
-
-
-@pytest.mark.parametrize(
-    "x, bins, should",
-    [
-        (
-            ak.Array([[[1, 2, 3], [4, 5]], [[1], [2]]]),
-            np.array([0, 2, 4, 6]),
-            ak.Array([[[1, 2, 2], [3, 3]], [[1], [2]]]),
-        ),
-    ],
-)
-def test_ak_digitize_3D(x, bins, should):
-    """Tests returns of the ak_digitize_3D function"""
-    x_binned = ak_digitize_3D(x, bins)
-    # check for equality
-    assert ak.sum(x_binned != should) == 0
-    # check for same shape
-    assert get_awkward_shape(x_binned) == get_awkward_shape(should)
-    # check for same counts
-    assert ak.count(x_binned) == ak.count(should)
-
-
-@pytest.mark.parametrize(
-    "x, bins, exception",
-    [
-        # The first test is not a valid case, because only values in the last axis are allowed
-        (
-            ak.Array([[[1, 2, 3, -1, 101], [4, 5, 6, np.nan, 90, None]], [None, 1]]),
-            np.array([0, 3, 6, 100]),
-            ValueError,
-        ),
-        (
-            ak.Array([[1, 2, 3, -1, 101], [4, 5, 6, np.nan, 90, None, 1]]),
-            np.array([[0], [3]]),
-            ValueError,
-        ),
-    ],
-)
-def test_ak_digitize_3D_exception(x, bins, exception):
-    """Tests for exceptions in the ak_digitize_3D function"""
-    with pytest.raises(exception):
-        ak_digitize_3D(x, bins)
 
 
 class SupersAttribute:
@@ -927,10 +488,9 @@ class SupersAttribute:
         str
             The string representation of the attribute.
         """
-        return f"{self.name} ({self.units})\n{self.data}"
+        return f"{self.name} ({self.units})\n{self.data.typestr}"
 
-    @classmethod
-    def attribute_to_indexer(cls, attribute: "SupersAttribute") -> "SupersIndexer":
+    def attribute_to_indexer(self: "SupersAttribute") -> "SupersIndexer":
         """
         This function converts an attribute to an indexer.
         The attribute is converted to an indexer by creating a SupersIndexer object.
@@ -946,15 +506,14 @@ class SupersAttribute:
             The indexer created from the attribute.
         """
         return SupersIndexer(
-            name=attribute.name,
-            data=attribute.data,
-            units=attribute.units,
-            metadata=attribute.metadata,
+            name=self.name,
+            data=self.data,
+            units=self.units,
+            metadata=self.metadata,
         )
 
-    @classmethod
     def attribute_to_indexer_binned(
-        cls, attribute: "SupersAttribute", bin_edges: np.ndarray, right: bool = False
+        self: "SupersAttribute", bin_edges: np.ndarray, right: bool = False
     ) -> "SupersIndexerBinned":
         """
         This function converts an attribute to a binned indexer.
@@ -977,12 +536,12 @@ class SupersAttribute:
             The binned indexer created from the attribute.
         """
         return SupersIndexerBinned(
-            name=attribute.name,
-            data=attribute.data,
+            name=self.name,
+            data=self.data,
             bin_edges=bin_edges,
             right=right,
-            units=attribute.units,
-            metadata=attribute.metadata,
+            units=self.units,
+            metadata=self.metadata,
         )
 
 
@@ -1041,9 +600,8 @@ class SupersIndexer(SupersAttribute):
         # digitize the data
         self.digitized_data = self.data
 
-    @classmethod
     def indexer_to_indexer_binned(
-        cls, attribute: "SupersAttribute", bin_edges: np.ndarray, right: bool = False
+        self, bin_edges: np.ndarray, right: bool = False
     ) -> "SupersIndexerBinned":
         """
         This function converts an indexer to a binned indexer.
@@ -1066,16 +624,15 @@ class SupersIndexer(SupersAttribute):
             The binned indexer created from the indexer.
         """
         return SupersIndexerBinned(
-            name=attribute.name,
-            data=attribute.data,
+            name=self.name,
+            data=self.data,
             bin_edges=bin_edges,
             right=right,
-            units=attribute.units,
-            metadata=attribute.metadata,
+            units=self.units,
+            metadata=self.metadata,
         )
 
-    @classmethod
-    def indexer_to_attribute(cls, indexer: "SupersIndexer") -> "SupersAttribute":
+    def indexer_to_attribute(self: "SupersIndexer") -> "SupersAttribute":
         """
         This function converts an indexer to an attribute.
         The indexer is converted to an attribute by creating a SupersAttribute object.
@@ -1091,11 +648,23 @@ class SupersIndexer(SupersAttribute):
             The attribute created from the indexer.
         """
         return SupersAttribute(
-            name=indexer.name,
-            data=indexer.data,
-            units=indexer.units,
-            metadata=indexer.metadata,
+            name=self.name,
+            data=self.data,
+            units=self.units,
+            metadata=self.metadata,
         )
+
+    def __str__(self):
+        """
+        This function returns a string representation of the attribute.
+        The string representation contains the name of the attribute and the units.
+
+        Returns
+        -------
+        str
+            The string representation of the attribute.
+        """
+        return f"{self.name} ({self.units})\n{self.data.typestr}\n{self.digitized_data.typestr}"
 
 
 class SupersIndexerBinned(SupersIndexer):
@@ -1148,12 +717,12 @@ class SupersIndexerBinned(SupersIndexer):
             Default is an empty dictionary.
         """
 
+        self.set_bins(bin_edges=bin_edges, right=right)
         super().__init__(name=name, data=data, units=units, metadata=metadata)
 
-        self.set_bins(bin_edges=bin_edges)
-        self.set_digitized_data(bins=self.bin_edges, right=right)
+        # self.set_digitized_data()
 
-    def set_bins(self, bin_edges: np.ndarray):
+    def set_bins(self, bin_edges: np.ndarray, right: bool = False):
         """
         This function sets the bins of the binned indexer.
         The bins are stored in the attribute bins.
@@ -1169,8 +738,9 @@ class SupersIndexerBinned(SupersIndexer):
         self.bin_edges = bin_edges
         # set the bin centers
         self.bin_centers = (self.bin_edges[:-1] + self.bin_edges[1:]) / 2
+        self.right = right
 
-    def set_digitized_data(self, bins: np.ndarray, right: bool = False):
+    def set_digitized_data(self):
         """
         Sets a digitized version of the data.
         It uses the numpy digitize function to digitize the data.
@@ -1192,21 +762,53 @@ class SupersIndexerBinned(SupersIndexer):
 
         # digitize the data
         if self.data.ndim == 1:
-            self.digitized_data = np.digitize(x=self.data, bins=bins, right=right)
+            self.digitized_data = np.digitize(
+                x=self.data, bins=self.bin_edges, right=self.right
+            )
         elif self.data.ndim == 2:
-            self.digitized_data = ak_digitize_2D(x=self.data, bins=bins, right=right)
+            self.digitized_data = sdtracing.ak_digitize_2D(
+                x=self.data, bins=self.bin_edges, right=self.right
+            )
         elif self.data.ndim == 3:
-            self.digitized_data = ak_digitize_3D(x=self.data, bins=bins, right=right)
+            self.digitized_data = sdtracing.ak_digitize_3D(
+                x=self.data, bins=self.bin_edges, right=self.right
+            )
         else:
             raise NotImplementedError(
                 "Only 1D, 2D and 3D arrays are supported for digitization till now."
             )
 
 
-# %%
+class SupersDataNew(SuperdropProperties):
+    """
+    The class is used to store the superdroplets dataset.
+    It is a subclass of the SuperdropProperties class.
 
+    It contains the following attributes:
+    - ds (xr.Dataset): The superdroplets dataset.
+    - raggedcount (np.ndarray): The ragged count variable.
+    - attributes (dict): The attributes of the superdroplets dataset.
+        - The keys are the names of the attributes.
+        - The values are SupersAttribute objects.
 
-class SupersDataIndexed(SuperdropProperties):
+    Note
+    ----
+    The attributes are stored in the attribute attributes.
+    A list of the attribute names is provided in the attribute ``attribute_names``.
+    It contains the following variables:
+    - sdId
+    - sdgbxindex
+    - xi
+    - radius
+    - msol
+    - coord3
+    - coord1
+    - coord2
+
+    The variable time is stored in the attribute time and is created by a seperate constructor function set_time.
+
+    """
+
     attribute_names = [
         "sdId",
         "sdgbxindex",
@@ -1223,6 +825,12 @@ class SupersDataIndexed(SuperdropProperties):
         The constructor of the class uses the data
         This function extracts the attributes of the superdroplets dataset and stores them in a SupersDataIndexed object.
 
+        Parameters
+        ----------
+        dataset : os.PathLike or xr.Dataset
+            The path to the superdroplets dataset or the dataset itself.
+        consts : dict
+            The constants of the superdroplets dataset.
         """
 
         SuperdropProperties.__init__(self, consts=consts)
@@ -1231,7 +839,8 @@ class SupersDataIndexed(SuperdropProperties):
         self.raggedcount = self.ds["raggedcount"].values  # ragged count variable
 
         self.attributes = dict()
-        self.set_attributes(attribute_names=self.attribute_names)
+        self.set_attributes_from_ds(attribute_names=self.attribute_names)
+        self.set_indexes(indexes=[])
 
     def tryopen_dataset(self, dataset: Union[os.PathLike, xr.Dataset]) -> xr.Dataset:
         if isinstance(dataset, str):
@@ -1242,7 +851,7 @@ class SupersDataIndexed(SuperdropProperties):
         else:
             raise ValueError("dataset must be a path or a xarray dataset")
 
-    def set_attributes(self, attribute_names):
+    def set_attributes_from_ds(self, attribute_names):
         """
         This function sets the attributes of the superdroplets dataset.
         The attributes are stored in the attribute attributes.
@@ -1255,12 +864,12 @@ class SupersDataIndexed(SuperdropProperties):
 
         # set all attribtes
         for name in attribute_names:
-            self.set_attribute(name=name)
+            self.set_attribute_from_ds(name=name)
 
         # set time attribute
         self.set_time()
 
-    def set_attribute(self, name: str):
+    def set_attribute_from_ds(self, name: str):
         """
         This function sets an attribute of the superdroplets dataset.
         The attribute is stored in the attribute attributes.
@@ -1271,7 +880,16 @@ class SupersDataIndexed(SuperdropProperties):
             The name of the attribute to be stored.
         """
 
-        self.attributes[name] = SupersAttribute(name=name, data=self.ds[name])
+        try:
+            self.attributes[name] = SupersAttribute(name=name, data=self.ds[name])
+        except KeyError:
+            print(f"Attribute {name} not found in dataset")
+
+    def set_attribute(self, attribute: SupersAttribute):
+        """
+        This function sets an attribute of the superdroplets dataset.
+        """
+        self.attributes[attribute.name] = attribute
 
     def set_time(self):
         """
@@ -1279,14 +897,94 @@ class SupersDataIndexed(SuperdropProperties):
         The time attribute is stored in the attribute time.
         """
 
-        self.time = np.repeat(
-            ak.Array(self.ds.time.data),
-            self.raggedcount,
+        time_attribute = SupersAttribute(
+            name="time",
+            data=ak.Array(
+                np.repeat(
+                    self.ds.time.data,
+                    self.raggedcount,
+                )
+            ),
+            units=self.ds.time.units,
+            metadata=self.ds.time.attrs,
         )
+        self.set_attribute(attribute=time_attribute)
+
+    def set_indexes(self, indexes=Tuple["SupersIndexer", "SupersIndexerBinned"]):
+        """
+        This function sets the indexes of the superdroplets dataset.
+        The indexes are stored in the attribute indexes as a tuple.
+
+        Parameters
+        ----------
+        indexes : Tuple[SupersIndexer, SupersIndexerBinned]
+            The indexes to be stored.
+
+        """
+
+        indexes_list = list()
+        indexes_name_list = list()
+
+        for index in indexes:
+            if isinstance(index, SupersIndexer) or isinstance(
+                index, SupersIndexerBinned
+            ):
+                indexes_list.append(index)
+                indexes_name_list.append(index.name)
+            else:
+                raise ValueError(
+                    "indexes must be a SupersIndexer or a SupersIndexerBinned"
+                )
+
+        self.indexes = tuple(indexes_list)
+        self.indexes_names = tuple(indexes_name_list)
+
+    def add_index(self, index: Union["SupersIndexer", "SupersIndexerBinned"]):
+        """
+        This function adds an index to the superdroplets dataset.
+        The index is stored in the attribute indexes.
+
+        Parameters
+        ----------
+        index : SupersIndexer or SupersIndexerBinned
+            The index to be added.
+        """
+
+        if self.is_index(index.name):
+            raise ValueError("The index is already set.")
+        if isinstance(index, SupersIndexer) or isinstance(index, SupersIndexerBinned):
+            self.indexes = self.indexes + (index,)
+            self.indexes_names = self.indexes_names + (index.name,)
+        else:
+            raise ValueError("index must be a SupersIndexer or a SupersIndexerBinned")
+
+    def is_index(self, index: str) -> bool:
+        """
+        This function checks if an index is already set in the superdroplets dataset.
+
+        Parameters
+        ----------
+        index : str
+            The name of the index to be checked.
+
+        Returns
+        -------
+        bool
+            True if the index is already set, False otherwise.
+        """
+
+        return index in self.indexes_names
+
+    def get_data(self, key):
+        try:
+            return self.attributes[key].data
+        except KeyError:
+            err = "no known return provided for " + key + " key"
+            raise ValueError(err)
 
     def __getitem__(self, key):
         try:
-            self.attributes[key]
+            return self.attributes[key]
         except KeyError:
             err = "no known return provided for " + key + " key"
             raise ValueError(err)
@@ -1302,6 +1000,85 @@ class SupersDataIndexed(SuperdropProperties):
             The string representation of the superdroplets dataset.
         """
         result = ""
+        result += "Attributes:\n--------------\n"
         for name, attribute in self.attributes.items():
             result += str(attribute) + "\n"
+
+        result += "\nIndexes:\n--------------\n"
+        for index in self.indexes:
+            result += str(index) + "\n"
+
         return result
+
+    def index_by_attribute(self, attribute: Union["SupersAttribute"]):
+        """
+        This function indexes all attributes of the superdroplets dataset by one attribute.
+        The attribute used for indexing is provided by the index_name.
+        It will be converted to an indexer
+
+        Note
+        ----
+        For the binning of the data, the ``digitzied_data`` value of the indexer is used.
+        Depending on the dimensionality of the data, the digitized data is done using the numpy digitize function or the sdtracing.ak_digitize_2D or sdtracing.ak_digitize_3D function.
+
+
+        Parameters
+        ----------
+        index : SupersAttribute
+            The attribute to be used as a new index.
+
+        """
+
+        index = SupersIndexer.attribute_to_indexer(attribute)
+        self.index_by_indexer(index=index)
+
+    def index_by_indexer(self, index: Union["SupersAttribute"]):
+        """
+        This function indexes all attributes of the superdroplets dataset by one attribute.
+        The attribute used for indexing is provided by the index_name.
+        It will be converted to an indexer
+
+        Note
+        ----
+        For the binning of the data, the ``digitzied_data`` value of the indexer is used.
+        Depending on the dimensionality of the data, the digitized data is done using the numpy digitize function or the sdtracing.ak_digitize_2D or sdtracing.ak_digitize_3D function.
+
+
+        Parameters
+        ----------
+        indexer : SupersAttribute
+            The attribute to be used as a new index.
+
+        """
+
+        ndim = index.data.ndim
+
+        for attr_name in self.attributes:
+            print(attr_name)
+            attr = self[attr_name]
+
+            if ndim == 1:
+                binned_data = sdtracing.binning_by_1D_indexer(
+                    data=attr.data,
+                    indexer=index.digitized_data,
+                )
+            elif ndim == 2:
+                binned_data = sdtracing.binning_by_2D_indexer(
+                    data=attr.data,
+                    indexer=index.digitized_data,
+                )
+            elif ndim == 3:
+                binned_data = sdtracing.binning_by_3D_indexer(
+                    data=attr.data,
+                    indexer=index.digitized_data,
+                )
+
+            binned_attribute = SupersAttribute(
+                name=attr.name,
+                data=binned_data,
+                units=attr.units,
+                metadata=attr.metadata,
+            )
+            self.set_attribute(attribute=binned_attribute)
+
+        self.add_index(index=index)
