@@ -1082,3 +1082,38 @@ class SupersDataNew(SuperdropProperties):
             self.set_attribute(attribute=binned_attribute)
 
         self.add_index(index=index)
+
+
+# %% Example usage
+
+# from pySD.sdmout_src import pysetuptxt, pyzarr
+
+# setupfile = "/home/m/m301096/CLEO/data/output/raw/no_aerosols_collision_many_5012/clusters_301/eurec4a1d_setup.txt"
+# dataset = "/home/m/m301096/CLEO/data/output/raw/no_aerosols_collision_many_5012/clusters_301/eurec4a1d_sol.zarr"
+# # read in constants and intial setup from setup .txt file
+# config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=False)
+# consts = pysetuptxt.get_consts(setupfile, isprint=False)
+# # Create a first simple dataset to have the coordinates for later netcdf creation
+# sddata = SupersDataNew(dataset, consts)
+
+# print(sddata)
+
+# time_index = sddata["time"].attribute_to_indexer_binned(
+#     bin_edges=np.unique(sddata["time"].data)
+# )
+# time_index.digitized_data = time_index.digitized_data - 1
+# time_index.set_name("time_index")
+# sddata.set_attribute(attribute=time_index)
+
+# sddata.index_by_indexer(index=time_index)
+# print(sddata)
+
+# bins = np.logspace(-3, 3, 10)
+
+# radius_index = sddata["radius"].attribute_to_indexer_binned(bin_edges=bins)
+# radius_index.set_name("radius_index")
+
+# sddata.set_attribute(radius_index)
+
+# sddata.index_by_indexer(index=sddata["radius_index"])
+# print(sddata)
