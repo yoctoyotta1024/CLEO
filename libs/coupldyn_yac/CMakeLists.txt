@@ -10,6 +10,7 @@ message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 # explicitly set library executables path to /lib in top level of build tree
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
+find_package(MPI)
 find_package(YAC)
 
 # Add executables and create library target
@@ -28,7 +29,7 @@ target_include_directories(${LIBNAME} PRIVATE "${CMAKE_SOURCE_DIR}/libs") # CLEO
 # Link libraries to target library
 set(LINKLIBS initialise gridboxes superdrops)
 target_link_libraries("${LIBNAME}" PUBLIC ${LINKLIBS})
-target_link_libraries("${LIBNAME}" PRIVATE YAC::YAC)
+target_link_libraries("${LIBNAME}" PRIVATE YAC::YAC MPI::MPI_CXX)
 
 # set specific C++ compiler options for target (optional)
 #target_compile_options(${LIBNAME} PRIVATE)
