@@ -185,6 +185,9 @@ struct NullMicrophysicalProcess {
  * The MicrophysicsFunc concept represents all function-like types that can be called by the
  * "run_step" function in ConstTstepMicrophysics.
  *
+ * Note: NullSDMMonitor used here as placeholder for templated run_step function that can take any
+ * type satisfying the SDMMonitor concept.
+ *
  * @tparam F The type that satisfies the MicrophysicsFunc concept.
  */
 template <typename F>
