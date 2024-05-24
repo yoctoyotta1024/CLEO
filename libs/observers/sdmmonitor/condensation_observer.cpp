@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 24th May 2024
+ * Last Modified: Wednesday 22nd May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,7 +30,7 @@
  */
 KOKKOS_FUNCTION
 void MonitorCondensation::monitor_microphysics() const {
-  const auto rate_dbl = double{10.0};
+  const auto rate_dbl = double{5.0};
   const auto rate = static_cast<float>(rate_dbl);
   d_data(0) = rate;
 }
