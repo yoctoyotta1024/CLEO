@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 21st May 2024
+ * Last Modified: Friday 24th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -165,12 +165,12 @@ inline MicrophysicalProcess auto config_collisions(const Config &config, const T
 
 inline MicrophysicalProcess auto create_microphysics(const Config &config,
                                                      const Timesteps &tsteps) {
-  // const MicrophysicalProcess auto cond = config_condensation(config, tsteps);
-  // const MicrophysicalProcess auto colls = config_collisions(config, tsteps);
-  // return colls >> cond;
+  const MicrophysicalProcess<> auto cond = config_condensation(config, tsteps);
+  const MicrophysicalProcess<> auto colls = config_collisions(config, tsteps);
+  return colls >> cond;
 
-  const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
-  return null;
+  // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
+  // return null;
 }
 
 template <typename Store>
