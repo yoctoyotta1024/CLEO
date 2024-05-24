@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Shin-ichiro Shima (SiS)
  * -----
- * Last Modified: Friday 24th May 2024
+ * Last Modified: Saturday 25th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -170,7 +170,7 @@ struct DoCondensation {
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers operator()(const TeamMember &team_member,
                                                     const unsigned int subt, subviewd_supers supers,
-                                                    State &state) const {
+                                                    State &state, const SDMMonitor auto mo) const {
     do_condensation(team_member, supers, state);
     return supers;
   }

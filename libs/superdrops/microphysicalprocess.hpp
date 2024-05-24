@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Friday 24th May 2024
+ * Last Modified: Saturday 25th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -40,15 +40,19 @@
  * of two time-stepping functions ("next_step" and "on_step"), as well as the constraints on the
  * "run_step" function.
  *
+ * Note: NullSDMMonitor used here as placeholder for templated run_step function that can take any
+ * type satisfying the SDMMonitor concept.
+ *
  * @tparam P The type that satisfies the MicrophysicalProcess concept.
  */
 template <typename P>
-concept MicrophysicalProcess = requires(P p, const TeamMember &tm, const unsigned int t,
-                                        subviewd_supers supers, State &state) {
-  { p.next_step(t) } -> std::convertible_to<unsigned int>;
-  { p.on_step(t) } -> std::same_as<bool>;
-  { p.run_step(tm, t, supers, state) } -> std::convertible_to<subviewd_supers>;
-};
+concept MicrophysicalProcess =
+    requires(P p, const TeamMember &tm, const unsigned int t, subviewd_supers supers, State &state,
+             const NullSDMMonitor mo) {
+      { p.next_step(t) } -> std::convertible_to<unsigned int>;
+      { p.on_step(t) } -> std::same_as<bool>;
+      { p.run_step(tm, t, supers, state, mo) } -> std::convertible_to<subviewd_supers>;
+    };
 
 /**
  * @brief Combined microphysical process struct.
@@ -110,9 +114,9 @@ struct CombinedMicrophysicalProcess {
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers run_step(const TeamMember &team_member,
                                                   const unsigned int subt, subviewd_supers supers,
-                                                  State &state) const {
-    supers = a.run_step(team_member, subt, supers, state);
-    supers = b.run_step(team_member, subt, supers, state);
+                                                  State &state, const SDMMonitor auto mo) const {
+    supers = a.run_step(team_member, subt, supers, state, mo);
+    supers = b.run_step(team_member, subt, supers, state, mo);
     return supers;
   }
 };
@@ -170,7 +174,7 @@ struct NullMicrophysicalProcess {
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers run_step(const TeamMember &team_member,
                                                   const unsigned int subt, subviewd_supers supers,
-                                                  State &state) const {
+                                                  State &state, const SDMMonitor auto mo) const {
     return supers;
   }
 };
@@ -185,8 +189,8 @@ struct NullMicrophysicalProcess {
  */
 template <typename F>
 concept MicrophysicsFunc = requires(F f, const TeamMember &tm, const unsigned int subt,
-                                    subviewd_supers supers, State &state) {
-  { f(tm, subt, supers, state) } -> std::convertible_to<subviewd_supers>;
+                                    subviewd_supers supers, State &state, const NullSDMMonitor mo) {
+  { f(tm, subt, supers, state, mo) } -> std::convertible_to<subviewd_supers>;
 };
 
 /**
@@ -246,9 +250,9 @@ struct ConstTstepMicrophysics {
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers run_step(const TeamMember &team_member,
                                                   const unsigned int subt, subviewd_supers supers,
-                                                  State &state) const {
+                                                  State &state, const SDMMonitor auto mo) const {
     if (on_step(subt)) {
-      supers = do_microphysics(team_member, subt, supers, state);
+      supers = do_microphysics(team_member, subt, supers, state, mo);
     }
 
     return supers;

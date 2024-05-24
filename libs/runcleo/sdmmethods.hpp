@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Friday 24th May 2024
+ * Last Modified: Saturday 25th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -139,7 +139,7 @@ class SDMMethods {
 
             auto supers(d_gbxs(ii).supersingbx());
             for (unsigned int subt = t_sdm; subt < t_next; subt = microphys.next_step(subt)) {
-              supers = microphys.run_step(team_member, subt, supers, d_gbxs(ii).state);
+              supers = microphys.run_step(team_member, subt, supers, d_gbxs(ii).state, sdmmonitor);
             }
           });
     }
