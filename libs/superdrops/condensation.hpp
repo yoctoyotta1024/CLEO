@@ -63,8 +63,8 @@ struct DoCondensation {
    * @param state The state.
    */
   KOKKOS_FUNCTION
-  void do_condensation(const TeamMember &team_member, const subviewd_supers supers, State &state,
-                       SDMMonitor auto mo) const;
+  void do_condensation(const TeamMember &team_member, const subviewd_supers supers,
+                       State &state) const;
 
   /**
    * @brief Changes super-droplet radii according to condensation / evaporation and returns the
@@ -171,7 +171,7 @@ struct DoCondensation {
   KOKKOS_INLINE_FUNCTION subviewd_supers operator()(const TeamMember &team_member,
                                                     const unsigned int subt, subviewd_supers supers,
                                                     State &state, SDMMonitor auto mo) const {
-    do_condensation(team_member, supers, state, mo);
+    do_condensation(team_member, supers, state);
     return supers;
   }
 };
