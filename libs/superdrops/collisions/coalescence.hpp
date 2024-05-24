@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 21st April 2024
+ * Last Modified: Friday 24th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -128,9 +128,9 @@ struct DoCoalescence {
  * @return An instance of MicrophysicalProcess for collision-coalescence.
  */
 template <PairProbability Probability>
-inline MicrophysicalProcess auto CollCoal(const unsigned int interval,
-                                          const std::function<double(unsigned int)> int2realtime,
-                                          const Probability collcoalprob) {
+inline MicrophysicalProcess<> auto CollCoal(const unsigned int interval,
+                                            const std::function<double(unsigned int)> int2realtime,
+                                            const Probability collcoalprob) {
   const auto DELT = int2realtime(interval);
 
   const DoCoalescence coal{};

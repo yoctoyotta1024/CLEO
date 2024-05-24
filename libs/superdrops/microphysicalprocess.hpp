@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Wednesday 22nd May 2024
+ * Last Modified: Friday 24th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -42,7 +42,7 @@
  *
  * @tparam P The type that satisfies the MicrophysicalProcess concept.
  */
-template <typename P, SDMMonitor SDMMo>
+template <typename P, typename SDMMo = NullSDMMonitor>
 concept MicrophysicalProcess = requires(P p, const TeamMember &tm, const unsigned int t,
                                         subviewd_supers supers, State &state, const SDMMo mo) {
   { p.next_step(t) } -> std::convertible_to<unsigned int>;
@@ -61,7 +61,8 @@ concept MicrophysicalProcess = requires(P p, const TeamMember &tm, const unsigne
  * @tparam Microphys1 The type of the first microphysical process.
  * @tparam Microphys2 The type of the second microphysical process.
  */
-template <MicrophysicalProcess Microphys1, MicrophysicalProcess Microphys2>
+template <typename Microphys1, typename Microphys2, typename SDMMo1, typename SDMMo2>
+  requires MicrophysicalProcess<Microphys1, SDMMo1> && MicrophysicalProcess<Microphys2, SDMMo2>
 struct CombinedMicrophysicalProcess {
  private:
   Microphys1 a; /**< The first instance of type of MicrophysicalProcess. */
@@ -127,7 +128,9 @@ struct CombinedMicrophysicalProcess {
  * @param b The second microphysical process.
  * @return The combined microphysical process.
  */
-auto operator>>(const MicrophysicalProcess auto a, const MicrophysicalProcess auto b) {
+template <typename SDMMo1, typename SDMMo2>
+auto operator>>(const MicrophysicalProcess<SDMMo1> auto a,
+                const MicrophysicalProcess<SDMMo2> auto b) {
   return CombinedMicrophysicalProcess(a, b);
 }
 
@@ -183,7 +186,7 @@ struct NullMicrophysicalProcess {
  *
  * @tparam F The type that satisfies the MicrophysicsFunc concept.
  */
-template <typename F, SDMMonitor SDMMo>
+template <typename F, typename SDMMo = NullSDMMonitor>
 concept MicrophysicsFunc = requires(F f, const TeamMember &tm, const unsigned int subt,
                                     subviewd_supers supers, State &state, const SDMMo mo) {
   { f(tm, subt, supers, state, mo) } -> std::convertible_to<subviewd_supers>;
@@ -198,7 +201,8 @@ concept MicrophysicsFunc = requires(F f, const TeamMember &tm, const unsigned in
  *
  * @tparam F The type of the microphysics function.
  */
-template <MicrophysicsFunc F>
+template <typename F, typename SDMMo = NullSDMMonitor>
+  requires MicrophysicsFunc<F, SDMMo>
 struct ConstTstepMicrophysics {
  private:
   unsigned int interval; /**< The constant time step between calls to microphysics. */

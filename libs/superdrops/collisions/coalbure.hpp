@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 21st April 2024
+ * Last Modified: Friday 24th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -139,10 +139,10 @@ struct DoCoalBuRe {
  * @return A Microphysical Process enacting collision- coalescence, breakup or rebound.
  */
 template <PairProbability Probability, NFragments NFrags, CoalBuReFlag Flag>
-inline MicrophysicalProcess auto CoalBuRe(const unsigned int interval,
-                                          const std::function<double(unsigned int)> int2realtime,
-                                          const Probability collprob, const NFrags nfrags,
-                                          const Flag coalbure_flag) {
+inline MicrophysicalProcess<> auto CoalBuRe(const unsigned int interval,
+                                            const std::function<double(unsigned int)> int2realtime,
+                                            const Probability collprob, const NFrags nfrags,
+                                            const Flag coalbure_flag) {
   const auto DELT = double{int2realtime(interval)};
 
   const DoCoalBuRe<NFrags, Flag> coalbure(nfrags, coalbure_flag);
