@@ -89,9 +89,9 @@ struct DoBreakup {
 of superdroplets with a constant timestep 'interval' and
 probability of collision-breakup determined by 'collbuprob' */
 template <PairProbability Probability, NFragments NFrags>
-inline MicrophysicalProcess<> auto CollBu(const unsigned int interval,
-                                          const std::function<double(unsigned int)> int2realtime,
-                                          const Probability collbuprob, const NFrags nfrags) {
+inline MicrophysicalProcess auto CollBu(const unsigned int interval,
+                                        const std::function<double(unsigned int)> int2realtime,
+                                        const Probability collbuprob, const NFrags nfrags) {
   const auto DELT = double{int2realtime(interval)};
 
   const DoBreakup bu(nfrags);

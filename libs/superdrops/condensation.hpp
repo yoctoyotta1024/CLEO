@@ -170,7 +170,7 @@ struct DoCondensation {
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers operator()(const TeamMember &team_member,
                                                     const unsigned int subt, subviewd_supers supers,
-                                                    State &state, SDMMonitor auto mo) const {
+                                                    State &state) const {
     do_condensation(team_member, supers, state);
     return supers;
   }
@@ -190,7 +190,7 @@ struct DoCondensation {
  * @param realtime2dimless A function to convert a real-time to a dimensionless time.
  * @return The constructed microphysical process for condensation / evaporation.
  */
-inline MicrophysicalProcess<> auto Condensation(
+inline MicrophysicalProcess auto Condensation(
     const unsigned int interval, const std::function<double(unsigned int)> step2dimlesstime,
     const bool do_alter_thermo, const unsigned int niters, const double maxrtol,
     const double maxatol, const double SUBDELT,
