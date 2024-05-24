@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Friday 24th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -37,12 +37,14 @@
  */
 KOKKOS_FUNCTION
 void DoCondensation::do_condensation(const TeamMember &team_member, const subviewd_supers supers,
-                                     State &state) const {
+                                     State &state, SDMMonitor auto mo) const {
   /* superdroplet radii changes */
   double totmass_condensed(superdroplets_change(team_member, supers, state));
 
   /* resultant effect on thermodynamic state */
   effect_on_thermodynamic_state(team_member, totmass_condensed, state);
+
+  mo.monitor_microphysics();
 }
 
 /**
