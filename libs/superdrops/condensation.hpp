@@ -172,6 +172,7 @@ struct DoCondensation {
                                                     const unsigned int subt, subviewd_supers supers,
                                                     State &state, const SDMMonitor auto mo) const {
     do_condensation(team_member, supers, state);
+    mo.monitor_microphysics();  // TODO(CB): move into do_condensation and do properly
     return supers;
   }
 };

@@ -165,12 +165,14 @@ inline MicrophysicalProcess auto config_collisions(const Config &config, const T
 
 inline MicrophysicalProcess auto create_microphysics(const Config &config,
                                                      const Timesteps &tsteps) {
-  // const MicrophysicalProcess auto cond = config_condensation(config, tsteps);
+  const MicrophysicalProcess auto cond = config_condensation(config, tsteps);
   // const MicrophysicalProcess auto colls = config_collisions(config, tsteps);
   // return colls >> cond;
 
-  const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
-  return null;
+  // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
+  // return null;
+
+  return cond;
 }
 
 template <typename Store>
