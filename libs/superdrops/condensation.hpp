@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Shin-ichiro Shima (SiS)
  * -----
- * Last Modified: Wednesday 22nd May 2024
+ * Last Modified: Friday 24th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -190,7 +190,7 @@ struct DoCondensation {
  * @param realtime2dimless A function to convert a real-time to a dimensionless time.
  * @return The constructed microphysical process for condensation / evaporation.
  */
-inline MicrophysicalProcess auto Condensation(
+inline MicrophysicalProcess<> auto Condensation(
     const unsigned int interval, const std::function<double(unsigned int)> step2dimlesstime,
     const bool do_alter_thermo, const unsigned int niters, const double maxrtol,
     const double maxatol, const double SUBDELT,
