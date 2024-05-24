@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.8.2](https://github.com/yoctoyotta1024/CLEO/compare/afa7b400d9b4e214239df293784e1695824a5378..v0.8.2) - 2024-05-24
+#### Bug Fixes
+- corrected build and execution for yac_3d example - ([5d3d147](https://github.com/yoctoyotta1024/CLEO/commit/5d3d14733ed4f37665425c17c57a4be194b33114)) - wiltonloch
+#### Build system
+- moved mpi and fyaml requirements from coupldyn_yac to findyac - ([60239f3](https://github.com/yoctoyotta1024/CLEO/commit/60239f3273a0dd5e1ab8d3b6d2153915c81274d3)) - wiltonloch
+#### Refactoring
+- move random number generator into collisions - ([afa7b40](https://github.com/yoctoyotta1024/CLEO/commit/afa7b400d9b4e214239df293784e1695824a5378)) - clara.bayley
+
+- - -
+
 ## [v0.8.1](https://github.com/yoctoyotta1024/CLEO/compare/a4c22eb26a906faef8d91f140fc229d7025fd537..v0.8.1) - 2024-05-08
 #### Bug Fixes
 - docs corrected message abotu ruff settings - ([3e55894](https://github.com/yoctoyotta1024/CLEO/commit/3e558940718e085da1dfa849785dce1e250ed2ff)) - clara.bayley
