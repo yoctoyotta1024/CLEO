@@ -42,12 +42,12 @@
  *
  * @tparam P The type that satisfies the MicrophysicalProcess concept.
  */
-template <typename P, typename SDMMo = NullSDMMonitor>
+template <typename P>
 concept MicrophysicalProcess = requires(P p, const TeamMember &tm, const unsigned int t,
-                                        subviewd_supers supers, State &state, const SDMMo mo) {
+                                        subviewd_supers supers, State &state) {
   { p.next_step(t) } -> std::convertible_to<unsigned int>;
   { p.on_step(t) } -> std::same_as<bool>;
-  { p.run_step(tm, t, supers, state, mo) } -> std::convertible_to<subviewd_supers>;
+  { p.run_step(tm, t, supers, state) } -> std::convertible_to<subviewd_supers>;
 };
 
 /**
@@ -61,8 +61,7 @@ concept MicrophysicalProcess = requires(P p, const TeamMember &tm, const unsigne
  * @tparam Microphys1 The type of the first microphysical process.
  * @tparam Microphys2 The type of the second microphysical process.
  */
-template <typename Microphys1, typename Microphys2, typename SDMMo1, typename SDMMo2>
-  requires MicrophysicalProcess<Microphys1, SDMMo1> && MicrophysicalProcess<Microphys2, SDMMo2>
+template <MicrophysicalProcess Microphys1, MicrophysicalProcess Microphys2>
 struct CombinedMicrophysicalProcess {
  private:
   Microphys1 a; /**< The first instance of type of MicrophysicalProcess. */
@@ -111,9 +110,9 @@ struct CombinedMicrophysicalProcess {
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers run_step(const TeamMember &team_member,
                                                   const unsigned int subt, subviewd_supers supers,
-                                                  State &state, const SDMMonitor auto mo) const {
-    supers = a.run_step(team_member, subt, supers, state, mo);
-    supers = b.run_step(team_member, subt, supers, state, mo);
+                                                  State &state) const {
+    supers = a.run_step(team_member, subt, supers, state);
+    supers = b.run_step(team_member, subt, supers, state);
     return supers;
   }
 };
@@ -128,9 +127,7 @@ struct CombinedMicrophysicalProcess {
  * @param b The second microphysical process.
  * @return The combined microphysical process.
  */
-template <typename SDMMo1, typename SDMMo2>
-auto operator>>(const MicrophysicalProcess<SDMMo1> auto a,
-                const MicrophysicalProcess<SDMMo2> auto b) {
+auto operator>>(const MicrophysicalProcess auto a, const MicrophysicalProcess auto b) {
   return CombinedMicrophysicalProcess(a, b);
 }
 
@@ -173,7 +170,7 @@ struct NullMicrophysicalProcess {
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers run_step(const TeamMember &team_member,
                                                   const unsigned int subt, subviewd_supers supers,
-                                                  State &state, const SDMMonitor auto mo) const {
+                                                  State &state) const {
     return supers;
   }
 };
@@ -186,10 +183,10 @@ struct NullMicrophysicalProcess {
  *
  * @tparam F The type that satisfies the MicrophysicsFunc concept.
  */
-template <typename F, typename SDMMo = NullSDMMonitor>
+template <typename F>
 concept MicrophysicsFunc = requires(F f, const TeamMember &tm, const unsigned int subt,
-                                    subviewd_supers supers, State &state, const SDMMo mo) {
-  { f(tm, subt, supers, state, mo) } -> std::convertible_to<subviewd_supers>;
+                                    subviewd_supers supers, State &state) {
+  { f(tm, subt, supers, state) } -> std::convertible_to<subviewd_supers>;
 };
 
 /**
@@ -201,8 +198,7 @@ concept MicrophysicsFunc = requires(F f, const TeamMember &tm, const unsigned in
  *
  * @tparam F The type of the microphysics function.
  */
-template <typename F, typename SDMMo = NullSDMMonitor>
-  requires MicrophysicsFunc<F, SDMMo>
+template <MicrophysicsFunc F>
 struct ConstTstepMicrophysics {
  private:
   unsigned int interval; /**< The constant time step between calls to microphysics. */
@@ -250,9 +246,9 @@ struct ConstTstepMicrophysics {
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers run_step(const TeamMember &team_member,
                                                   const unsigned int subt, subviewd_supers supers,
-                                                  State &state, const SDMMonitor auto mo) const {
+                                                  State &state) const {
     if (on_step(subt)) {
-      supers = do_microphysics(team_member, subt, supers, state, mo);
+      supers = do_microphysics(team_member, subt, supers, state);
     }
 
     return supers;

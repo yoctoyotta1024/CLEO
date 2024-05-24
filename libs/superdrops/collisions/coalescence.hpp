@@ -128,9 +128,9 @@ struct DoCoalescence {
  * @return An instance of MicrophysicalProcess for collision-coalescence.
  */
 template <PairProbability Probability>
-inline MicrophysicalProcess<> auto CollCoal(const unsigned int interval,
-                                            const std::function<double(unsigned int)> int2realtime,
-                                            const Probability collcoalprob) {
+inline MicrophysicalProcess auto CollCoal(const unsigned int interval,
+                                          const std::function<double(unsigned int)> int2realtime,
+                                          const Probability collcoalprob) {
   const auto DELT = int2realtime(interval);
 
   const DoCoalescence coal{};
