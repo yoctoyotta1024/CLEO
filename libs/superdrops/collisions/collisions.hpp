@@ -256,6 +256,7 @@ struct DoCollisions {
    * @param subt The sub-time step.
    * @param supers The superdroplets.
    * @param state The state.
+   * @param mo Monitor of SDM processes.
    * @return The updated superdroplets.
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers operator()(const TeamMember &team_member,

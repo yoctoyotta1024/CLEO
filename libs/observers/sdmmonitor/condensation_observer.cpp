@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 22nd May 2024
+ * Last Modified: Saturday 25th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,15 +22,29 @@
 #include "./condensation_observer.hpp"
 
 /**
- * @brief Monitor condensation rate
+ * @brief Parallel loop to fill d_data with zero value.
+ */
+void MonitorCondensation::reset_monitor() const {
+  Kokkos::parallel_for(
+      "reset_monitor", Kokkos::RangePolicy(0, d_data.extent(0)),
+      KOKKOS_CLASS_LAMBDA(const size_t& jj) { d_data(jj) = 0.0; });
+}
+
+/**
+ * @brief Monitor mass of liquid change due to condensation / evaporation
  *
- * _Note:_ conversion of condensation rate from double precision (8 bytes double) to single
- * precision (4 bytes float) in output.
+ * Add totmass_condensed to current value for mass condensed since d_data was last reset.
  *
+ * _Note:_ conversion of mass condensed at one timestep from double precision (8 bytes double) to
+ * single precision (4 bytes float) in output.
+ *
+ * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
+ * @param totmass_condensed Mass condensed in one gridbox during one microphysical timestep
  */
 KOKKOS_FUNCTION
-void MonitorCondensation::monitor_microphysics() const {
-  const auto rate_dbl = double{5.0};
-  const auto rate = static_cast<float>(rate_dbl);
-  d_data(0) = rate;
+void MonitorCondensation::monitor_microphysics(const TeamMember& team_member,
+                                               const double totmass_condensed) const {
+  const auto ii = team_member.league_rank();  // position of gridbox
+  const auto mass_cond = static_cast<datatype>(totmass_condensed);
+  d_data(ii) += mass_cond;
 }

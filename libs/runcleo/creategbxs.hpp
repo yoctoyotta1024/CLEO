@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 1st May 2024
+ * Last Modified: Saturday 25th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -332,7 +332,7 @@ inline void initialise_gbxs_on_host(const GbxMaps &gbxmaps, const GenGridbox &ge
 
   Kokkos::parallel_for("initialise_gbxs_on_host", HostTeamPolicy(ngbxs, Kokkos::AUTO()),
                        [=](const HostTeamMember &team_member) {
-                         const int ii = team_member.league_rank();
+                         const auto ii = team_member.league_rank();
 
                          const Gridbox gbx(gen(team_member, ii, gbxmaps, totsupers, h_totsupers));
 

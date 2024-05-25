@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 8th May 2024
+ * Last Modified: Saturday 25th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -89,7 +89,7 @@ struct MoveSupersInDomain {
       Kokkos::parallel_for(
           "move_supers_in_gridboxes", TeamPolicy(ngbxs, Kokkos::AUTO()),
           KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
-            const int ii = team_member.league_rank();
+            const auto ii = team_member.league_rank();
 
             auto &gbx(d_gbxs(ii));
             move_supers_in_gbx(team_member, gbx.get_gbxindex(), gbxmaps, gbx.state,
@@ -111,7 +111,7 @@ struct MoveSupersInDomain {
       Kokkos::parallel_for(
           "move_supers_between_gridboxes", TeamPolicy(ngbxs, Kokkos::AUTO()),
           KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
-            const int ii = team_member.league_rank();
+            const auto ii = team_member.league_rank();
 
             auto &gbx(d_gbxs(ii));
             gbx.supersingbx.set_refs(team_member);
