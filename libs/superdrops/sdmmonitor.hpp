@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 22nd May 2024
+ * Last Modified: Saturday 25th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,8 +30,9 @@
  * @tparam SDMMo Type that satisfies the SDMMonitor concept.
  */
 template <typename SDMMo>
-concept SDMMonitor = requires(SDMMo mo) {
-  { mo.monitor_microphysics() } -> std::same_as<void>;
+concept SDMMonitor = requires(SDMMo mo, const TeamMember &tm, const double d) {
+  { mo.reset_monitor() } -> std::same_as<void>;
+  { mo.monitor_microphysics(tm, d) } -> std::same_as<void>;
 };
 
 /**
@@ -57,18 +58,37 @@ struct CombinedSDMMonitor {
   CombinedSDMMonitor(const SDMMo1 mo1, const SDMMo2 mo2) : a(mo1), b(mo2) {}
 
   /**
+   * @brief reset monitor for combination of 2 sdm monitors.
+   *
+   * Each monitor is reset sequentially.
+   */
+  void reset_monitor() const {
+    a.reset_monitor();
+    b.reset_monitor();
+  }
+
+  /**
    * @brief monitor microphysics for combination of 2 sdm monitors.
    *
    * Each monitor is run sequentially.
    */
-  void monitor_microphysics() const {
-    a.monitor_microphysics();
-    b.monitor_microphysics();
+  KOKKOS_FUNCTION
+  void monitor_microphysics(const TeamMember &tm, const double d) const {
+    a.monitor_microphysics(tm, d);
+    b.monitor_microphysics(tm, d);
   }
 };
 
+/**
+ * @brief Null monitor for SDM processes from observer.
+ *
+ * NullSDMMonitor does nothing
+ */
 struct NullSDMMonitor {
-  void monitor_microphysics() const {}
+  void reset_monitor() const {}
+
+  KOKKOS_FUNCTION
+  void monitor_microphysics(const TeamMember &team_member, const double d) const {}
 };
 
 #endif  //  LIBS_SUPERDROPS_SDMMONITOR_HPP_

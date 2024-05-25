@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 22nd May 2024
+ * Last Modified: Saturday 25th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -166,6 +166,11 @@ class RunStatsObserver {
     }
   }
 
+  /**
+   * @brief Get null monitor for SDM processes from observer.
+   *
+   * @return monitor 'mo' of the observer that does nothing
+   */
   SDMMonitor auto get_sdmmonitor() const { return NullSDMMonitor{}; }
 };
 

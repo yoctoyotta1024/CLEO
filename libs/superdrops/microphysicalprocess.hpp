@@ -110,6 +110,7 @@ struct CombinedMicrophysicalProcess {
    * @param subt The current time step.
    * @param supers The view of super-droplets.
    * @param state The state of the system / volume.
+   * @param mo Monitor of SDM processes.
    * @return The updated view of super-droplets after the process.
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers run_step(const TeamMember &team_member,
@@ -170,6 +171,7 @@ struct NullMicrophysicalProcess {
    * @param subt The current time step.
    * @param supers The view of super-droplets.
    * @param state The state of the system.
+   * @param mo Monitor of SDM processes.
    * @return The unchanged view of super-droplets.
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers run_step(const TeamMember &team_member,
@@ -249,6 +251,7 @@ struct ConstTstepMicrophysics {
    * @param subt The current time step.
    * @param supers The view of super-droplets.
    * @param state The state of the system / volume.
+   * @param mo Monitor of SDM processes.
    * @return The updated view of super-droplets after the process.
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers run_step(const TeamMember &team_member,

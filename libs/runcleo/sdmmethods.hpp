@@ -91,6 +91,7 @@ class SDMMethods {
    * @param t_sdm Current timestep for SDM.
    * @param d_gbxs View of gridboxes on device.
    * @param totsupers View of all superdrops (both in and out of bounds of domain).
+   * @param mo Monitor of SDM processes.
    */
   void superdrops_movement(const unsigned int t_sdm, viewd_gbx d_gbxs, const viewd_supers totsupers,
                            const SDMMonitor auto sdmmonitor) const {
@@ -135,7 +136,7 @@ class SDMMethods {
       Kokkos::parallel_for(
           "sdm_microphysics", TeamPolicy(ngbxs, Kokkos::AUTO()),
           KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
-            const int ii = team_member.league_rank();
+            const auto ii = team_member.league_rank();
 
             auto supers(d_gbxs(ii).supersingbx());
             for (unsigned int subt = t_sdm; subt < t_next; subt = microphys.next_step(subt)) {

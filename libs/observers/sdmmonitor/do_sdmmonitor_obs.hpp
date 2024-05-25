@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 22nd May 2024
+ * Last Modified: Saturday 25th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -49,13 +49,14 @@ class DoSDMMonitorObs {
   SDMMo monitor;
 
   /**
-   * @brief Copy data from monitor to the array in the dataset.
+   * @brief Copy data from monitor to the array in the dataset then reset monitor.
    */
   void at_start_step() const {
-    const size_t sz = monitor.d_data.extent(0);
-    const auto h_data = viewh_buffer("h_data", sz);
+    const auto h_data = viewh_buffer("h_data", monitor.d_data.extent(0));
     Kokkos::deep_copy(h_data, monitor.d_data);
     dataset.write_to_array(xzarr_ptr, h_data);
+
+    monitor.reset_monitor();
   }
 
  public:
@@ -65,8 +66,8 @@ class DoSDMMonitorObs {
    * @param xzarr_ptr Pointer to zarr array in xarray dataset.
    */
   DoSDMMonitorObs(Dataset<Store> &dataset,
-                  const std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr)
-      : dataset(dataset), xzarr_ptr(xzarr_ptr) {}
+                  const std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr, const SDMMo monitor)
+      : dataset(dataset), xzarr_ptr(xzarr_ptr), monitor(monitor) {}
 
   /**
    * @brief Destructor for DoSDMMonitorObs.
@@ -100,6 +101,11 @@ class DoSDMMonitorObs {
     at_start_step();
   }
 
+  /**
+   * @brief Get monitor for SDM processes from observer.
+   *
+   * @return monitor 'mo' of the observer
+   */
   SDMMonitor auto get_sdmmonitor() const { return monitor; }
 };
 

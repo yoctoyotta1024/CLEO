@@ -204,8 +204,9 @@ inline Observer auto create_gridboxes_observer(const unsigned int interval, Data
 
 template <typename Store>
 inline Observer auto create_sdmmonitor_observer(const unsigned int interval,
-                                                Dataset<Store> &dataset, const size_t maxchunk) {
-  const Observer auto monitor_cond = CondensationObserver(interval, dataset, maxchunk);
+                                                Dataset<Store> &dataset, const size_t maxchunk,
+                                                const size_t ngbxs) {
+  const Observer auto monitor_cond = CondensationObserver(interval, dataset, maxchunk, ngbxs);
   return monitor_cond;
 }
 
@@ -234,7 +235,7 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
 
   const Observer auto obssd = create_superdrops_observer(obsstep, dataset, maxchunk);
 
-  const Observer auto obsm = create_sdmmonitor_observer(obsstep, dataset, maxchunk);
+  const Observer auto obsm = create_sdmmonitor_observer(obsstep, dataset, maxchunk, ngbxs);
 
   return obsm >> obssd >> obsgbx >> obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
 }

@@ -61,10 +61,19 @@ struct DoCondensation {
    * @param team_member The Kokkos team member.
    * @param supers The superdroplets.
    * @param state The state.
+   * @param mo Monitor of SDM processes.
    */
   KOKKOS_FUNCTION
-  void do_condensation(const TeamMember &team_member, const subviewd_supers supers,
-                       State &state) const;
+  void do_condensation(const TeamMember &team_member, const subviewd_supers supers, State &state,
+                       const SDMMonitor auto mo) const {
+    /* superdroplet radii changes */
+    const auto totmass_condensed = superdroplets_change(team_member, supers, state);
+
+    /* resultant effect on thermodynamic state */
+    effect_on_thermodynamic_state(team_member, totmass_condensed, state);
+
+    mo.monitor_microphysics(team_member, totmass_condensed);
+  }
 
   /**
    * @brief Changes super-droplet radii according to condensation / evaporation and returns the
@@ -166,13 +175,13 @@ struct DoCondensation {
    * @param subt The microphysics time step.
    * @param supers The view of super-droplets.
    * @param state The State.
+   * @param mo Monitor of SDM processes.
    * @return The updated view super-droplets.
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers operator()(const TeamMember &team_member,
                                                     const unsigned int subt, subviewd_supers supers,
                                                     State &state, const SDMMonitor auto mo) const {
-    do_condensation(team_member, supers, state);
-    mo.monitor_microphysics();  // TODO(CB): move into do_condensation and do properly
+    do_condensation(team_member, supers, state, mo);
     return supers;
   }
 };
