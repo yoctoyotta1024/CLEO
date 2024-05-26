@@ -409,6 +409,28 @@ def assert_only_last_axis_variable(a: ak.highlevel.Array):
         )
 
 
+def ak_flatten_full(data: ak.Array) -> ak.highlevel.Array:
+    """
+    This function flattens the input array along all axes.
+    Note that no information is returned to unflatten the array again!
+
+    Parameters
+    ----------
+    data : ak.highlevel.Array
+        The input array to be flattened.
+
+    Returns
+    -------
+    ak.highlevel.Array
+        The flattened array.
+    """
+
+    while data.ndim > 1:
+        data = ak.flatten(data)
+
+    return data
+
+
 def ak_digitize_2D(
     x: ak.highlevel.Array, bins: np.ndarray, right: bool = False
 ) -> ak.highlevel.Array:
