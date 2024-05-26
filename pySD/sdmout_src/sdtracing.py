@@ -24,6 +24,7 @@ import numpy as np
 import awkward as ak
 import random
 import warnings
+from typing import Union
 
 
 def attr_for_superdroplet(sddata, Id, attr):
@@ -429,6 +430,51 @@ def ak_flatten_full(data: ak.Array) -> ak.highlevel.Array:
         data = ak.flatten(data)
 
     return data
+
+
+def ak_ragged_to_padded(
+    data: ak.Array, masked_array: bool = False
+) -> Union[np.ndarray, np.ma.MaskedArray]:
+    """
+    This function converts a ragged array to a padded array and returns it as a numpy array.
+    If the last axis has variable lengths, the array will be padded to the maximum length of the last axis.
+    This behaviour can lead to very large arrays, especilly if the array is very sparse.
+    Missing values are filled with np.nan values.
+
+    Setting the ``masked_array`` parameter to ``True`` will return a masked array instead of a regular numpy array.
+
+    Parameters
+    ----------
+    data : ak.highlevel.Array
+        The input ragged array.
+    masked_array : bool, optional
+        If set to ``True``, a masked array is returned.
+        Otherwise a regular numpy array is returned with np.nan values at the missing positions.
+        The default is ``False``.
+
+    Returns
+    -------
+    np.ndarray or np.ma.MaskedArray
+        The padded array in numpy format.
+
+    Raises
+    ------
+    ValueError
+        If the input array has variable axis lengths at other axes than the last axis.
+
+    """
+
+    assert_only_last_axis_variable(data)
+
+    pad_max = int(ak.max(ak.num(data, axis=-1)))
+    padded_data = ak.pad_none(data, pad_max, axis=-1)
+
+    padded_data_numpy = padded_data.to_numpy().astype(float)
+    padded_data_numpy.set_fill_value(np.nan)
+    if masked_array is True:
+        return padded_data_numpy
+    else:
+        return padded_data_numpy.filled()
 
 
 def ak_digitize_2D(
