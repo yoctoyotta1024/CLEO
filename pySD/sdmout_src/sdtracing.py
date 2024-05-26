@@ -925,3 +925,181 @@ def binning_by_3D_indexer(
     result = ak.unflatten(result, y)
 
     return result
+
+
+def binning_by_1D_counts(
+    data: ak.highlevel.Array,
+    counts: ak.highlevel.Array,
+) -> ak.highlevel.Array:
+    """
+    Calculates the Eulerian 2D array from the given 1D data and 1D indexer arrays.
+    The indexer array needs to have a ``int`` like dtype.
+    The output shape of the array will be given by the maximum value M in ``indexer``.
+    Output shape : T x M x var
+
+    Note
+    ----
+    - This functions uses np.bincount on the lower levels.
+    - Thus, at one point an np.ndarray of shape (M) will be created and needs to be stored in memory.
+    - This limits the capability due to memory usage.
+    - A good practice is, to extract the N unique values of the indexer array. With this, create a new indexer with values from 0 to N. You can use the numpy.digitize function for this.
+
+    >>> unique_index = np.unique(indexer)
+    >>> unique_indexer = np.digitize(indexer, unique_index)
+    >>> binning_by_1D_indexer(data, unique_indexer)
+
+    For a lagrangian tracking for non sparse outputs, it is prefered to use the lagrangian function.
+
+    Parameters
+    ----------
+    data (ak.highlevel.Array):
+        The input data array (T).
+    indexer (ak.highlevel.Array):
+        The indexer array (T) of dtype int.
+        With maximum value M.
+
+    Returns
+    -------
+    ak.highlevel.Array:
+        The calculated Eulerian array of shape (T x M x var)
+    """
+
+    if ak.sum(counts) != ak.count(data):
+        raise ValueError(
+            "The sum of counts does not match the number of elements in the data array"
+        )
+
+    # unflatten the data array using the bcount array.
+    result = ak.unflatten(data, counts, axis=0)
+    return result
+
+
+def binning_by_2D_counts(
+    data: ak.highlevel.Array, counts: ak.highlevel.Array
+) -> ak.highlevel.Array:
+    """
+    Calculates the Eulerian 3D array from the given 2D data and 2D indexer arrays.
+    The indexer array needs to have a ``int`` like dtype.
+    The output shape of the array will be given by the maximum value M in ``indexer``.
+    Output shape : T x M x var
+
+    Note
+    ----
+    - This functions uses np.bincount on the lower levels.
+    - Thus, at one point an np.ndarray of shape (T * M) will be created and needs to be stored in memory.
+    - This limits the capability due to memory usage.
+    - A good practice is, to extract the N unique values of the indexer array. With this, create a new indexer with values from 0 to N. You can use the numpy.digitize function for this.
+
+    >>> unique_index = np.unique(ak.flatten(indexer))
+    >>> unique_indexer = ak_digitize_2d(indexer, unique_index)
+    >>> binning_by_2D_indexer(data, unique_indexer)
+
+    For a lagrangian tracking for non sparse outputs, it is prefered to use the lagrangian function.
+
+    Parameters
+    ----------
+    data (ak.highlevel.Array):
+        The input data array (T x var).
+    indexer (ak.highlevel.Array):
+        The indexer array (T x var) of dtype int.
+        With maximum value M.
+
+    Returns
+    -------
+    ak.highlevel.Array:
+        The calculated Eulerian array of shape (T x M x var)
+    """
+    # indexer_unique = np.unique(ak.flatten(indexer))
+
+    data_shape = get_awkward_shape(data)
+
+    if len(data_shape) != 2:
+        raise ValueError("The data array must be 2D")
+
+    assert_only_last_axis_variable(data)
+
+    counts_shape = get_awkward_shape(counts)
+    if len(counts_shape) != 2:
+        raise ValueError("The counts array must be 2D")
+
+    N = counts_shape[1]
+
+    if ak.sum(counts) != ak.count(ak.flatten(data)):
+        raise ValueError(
+            "The sum of counts does not match the number of elements in the data array"
+        )
+
+    # The function eulerian_from_count performes this bit of code:
+    # ----------
+    # # unflatten the data array using the counts array.
+    result = ak.unflatten(data, ak.flatten(counts), axis=1)
+    # flatten this array again
+    result = ak.unflatten(ak.flatten(result), N)
+
+    return result
+
+
+def binning_by_3D_counts(
+    data: ak.highlevel.Array, counts: ak.highlevel.Array
+) -> ak.highlevel.Array:
+    """
+    This function bins the data array according to the indexer arrays values, which should be integers.
+    The resulting array will have the shape (T, N, B, var), where B is the number of unique values in the indexer array.
+
+    Note
+    ----
+    - The input arrays must have the same shape.
+    - The indexer array must have integer values.
+    - The data array can ONLY have variable axis lengths at the last axis!
+
+    Parameters
+    ----------
+    data : ak.Array
+        The input data array with shape (T, N, var).
+    indexer : ak.Array
+        The indexer array with shape (T, N, var).
+        And B unique values.
+
+    Returns
+    -------
+    result : ak.highlevel.Array
+        The binned data array with shape (T, N, B, var).
+    """
+
+    data_shape = get_awkward_shape(data)
+
+    if len(data_shape) != 3:
+        raise ValueError("The data array must be 2D")
+
+    assert_only_last_axis_variable(data)
+
+    counts_shape = get_awkward_shape(counts)
+    if len(counts_shape) != 3:
+        raise ValueError("The counts array must be 3D")
+
+    x, y, _ = get_awkward_shape(data)
+    z = counts_shape[2]
+
+    # flatten the data array
+    data_flat = ak.flatten(data, axis=1)
+    data_flat = ak.flatten(data_flat, axis=1)
+
+    if ak.sum(counts) != ak.count(data_flat):
+        raise ValueError(
+            "The sum of counts does not match the number of elements in the data array"
+        )
+
+    # to make sure the indexer has unique value for each combination od i and j along dim0, dim1, a 2D array is created.
+    # Example:
+    # T = 4, N = 3, B = 4
+    # x = 4, y = 3, z = 5
+    # [[ 0,  5, 10],
+    #  [15, 20, 25],
+    #  [30, 35, 40],
+    #  [45, 50, 55]])
+
+    result = ak.unflatten(data_flat, ak.flatten(ak.flatten(counts)))
+    result = ak.unflatten(result, z)
+    result = ak.unflatten(result, y)
+
+    return result
