@@ -23,7 +23,6 @@ e.g. for tracing their trajectories
 import numpy as np
 import awkward as ak
 import random
-from typing import Union
 import warnings
 
 
@@ -323,10 +322,7 @@ def akward_array_to_lagrange_array(
     return result_numpy
 
 
-IntegerArray = Union[np.ndarray, ak.highlevel.Array]
-
-
-def get_awkward_shape(a):
+def get_awkward_shape(a: ak.highlevel.Array):
     """
     Get the shape of the awkward array a as a list.
     Variable axis lengths are replaced by ``np.nan``.
@@ -363,6 +359,54 @@ def get_awkward_shape(a):
             else:
                 shape.append(np.nan)
     return shape
+
+
+def assert_same_shape(a: ak.highlevel.Array, b: ak.highlevel.Array):
+    """
+    Assert that the two awkward arrays have the same shape.
+    Variable axis lengths are replaced by ``np.nan``.
+
+    Parameters
+    ----------
+    a : ak.Array
+        The first input array.
+    b : ak.Array
+        The second input array.
+
+    Raises
+    ------
+    ValueError
+        If the shapes of the two arrays do not match.
+    """
+
+    shape_a = get_awkward_shape(a)
+    shape_b = get_awkward_shape(b)
+    if shape_a != shape_b:
+        raise ValueError(
+            f"The shapes of the two arrays do not match: {shape_a} != {shape_b}"
+        )
+
+
+def assert_only_last_axis_variable(a: ak.highlevel.Array):
+    """
+    Assert that the awkward array has only variable axis lengths at the last axis.
+
+    Parameters
+    ----------
+    a : ak.Array
+        The input array.
+
+    Raises
+    ------
+    ValueError
+        If the array has variable axis lengths at other axes than the last axis.
+    """
+
+    shape = get_awkward_shape(a)
+    if any([np.isnan(elem) for elem in shape[:-1]]):
+        raise ValueError(
+            "The array has variable axis lengths at other axes than the last axis."
+        )
 
 
 def ak_digitize_2D(
@@ -483,14 +527,14 @@ def ak_digitize_3D(
     return digi
 
 
-def create_counts_1D(data: IntegerArray) -> ak.highlevel.Array:
+def create_counts_1D(data: ak.highlevel.Array) -> ak.highlevel.Array:
     """
     This function creates a 1D array with the counts of unique values in the input array.
     It identifies the unique values in each subarray along axis 1.
 
     Parameters
     ----------
-    data : IntegerArray
+    data : ak.highlevel.Array
         The input array containing the data for which counts need to be calculated.
         Only ``int`` types are allowed!
         If an ``np.ndarray`` is used, the dimensions should be T x N
@@ -530,14 +574,16 @@ def create_counts_1D(data: IntegerArray) -> ak.highlevel.Array:
     return bcount
 
 
-def create_counts_2D(data: IntegerArray, flat: bool = False) -> ak.highlevel.Array:
+def create_counts_2D(
+    data: ak.highlevel.Array, flat: bool = False
+) -> ak.highlevel.Array:
     """
     This function creates a 2D array with the counts of unique values in the input array.
     It identifies the unique values in each subarray along axis 1.
 
     Parameters
     ----------
-    data : IntegerArray
+    data : ak.highlevel.Array
         The input array containing the data for which counts need to be calculated.
         Only ``int`` types are allowed!
         If an ``np.ndarray`` is used, the dimensions should be T x N
@@ -644,7 +690,8 @@ def create_counts_3D(
 
 
 def binning_by_1D_indexer(
-    data: ak.highlevel.Array, indexer: ak.highlevel.Array
+    data: ak.highlevel.Array,
+    indexer: ak.highlevel.Array,
 ) -> ak.highlevel.Array:
     """
     Calculates the Eulerian 2D array from the given 1D data and 1D indexer arrays.
@@ -678,6 +725,8 @@ def binning_by_1D_indexer(
     ak.highlevel.Array:
         The calculated Eulerian array of shape (T x M x var)
     """
+
+    assert_same_shape(data, indexer)
 
     # sort arrays by their
     argsort = ak.argsort(indexer, axis=0)
@@ -727,6 +776,10 @@ def binning_by_2D_indexer(
         The calculated Eulerian array of shape (T x M x var)
     """
     # indexer_unique = np.unique(ak.flatten(indexer))
+    assert_same_shape(data, indexer)
+    assert_only_last_axis_variable(data)
+    assert_only_last_axis_variable(indexer)
+
     N = int(ak.max(indexer)) + 1
 
     # sort arrays by their
@@ -734,7 +787,7 @@ def binning_by_2D_indexer(
     indexer_sort = indexer[argsort]
     data_sort = data[argsort]
 
-    counts = create_counts_2D(indexer_sort, flat=True)
+    counts = create_counts_2D(indexer_sort)
 
     # The function eulerian_from_count performes this bit of code:
     # ----------
@@ -773,21 +826,11 @@ def binning_by_3D_indexer(
         The binned data array with shape (T, N, B, var).
     """
 
-    shape_data = get_awkward_shape(data)
-    shape_indexer = get_awkward_shape(indexer)
+    assert_same_shape(data, indexer)
+    assert_only_last_axis_variable(data)
+    assert_only_last_axis_variable(indexer)
 
-    assert (
-        shape_data == shape_indexer
-    ), "The shapes of the data and indexer do not match!"
-
-    ndim_data = len(shape_data)
-    for idx, elem in enumerate(shape_data):
-        if idx < ndim_data - 1:
-            assert ~np.isnan(
-                elem
-            ), "The data array can ONLY have variable axis lengths at the last axis!"
-
-    x, y, _ = shape_indexer
+    x, y, _ = get_awkward_shape(indexer)
     z = int(ak.max(indexer)) + 1
 
     args = ak.argsort(indexer, axis=2)
