@@ -14,7 +14,7 @@
 buildtype=$1  # required
 path2CLEO=$2  # required
 path2build=$3 # required
-path2YAC=$4   # optional
+yacroot=$4    # optional
 
 path2buildbash=${path2CLEO}/scripts/bash/
 
@@ -25,6 +25,12 @@ if [[ "${buildtype}" == "" ||
 then
   echo "Bad inputs, please check your buildtype, path2CLEO and path2build"
 else
+
+  if [ -n "${yacroot}" ]
+  then
+      echo "CLEO build attempting to use YAC from ${yacroot}"
+  fi
+
   ### --------------------- build CLEO ------------------- ###
   if [ "${buildtype}" != "serial" ] && [ "${buildtype}" != "openmp" ] && [ "${buildtype}" != "cuda" ];
   then
@@ -40,17 +46,17 @@ else
     if [[ "${buildtype}" == "serial" ]];
     then
       echo "${path2buildbash}/build_cleo_serial.sh ${path2CLEO} ${path2build}"
-      ${path2buildbash}/build_cleo_serial.sh ${path2CLEO} ${path2build} ${path2yac}
+      ${path2buildbash}/build_cleo_serial.sh ${path2CLEO} ${path2build} ${yacroot}
 
     elif [[ "${buildtype}" == "openmp" ]];
     then
     echo "${path2buildbash}/build_cleo_openmp.sh ${path2CLEO} ${path2build}"
-      ${path2buildbash}/build_cleo_openmp.sh ${path2CLEO} ${path2build} ${path2yac}
+      ${path2buildbash}/build_cleo_openmp.sh ${path2CLEO} ${path2build} ${yacroot}
 
     elif [[ "${buildtype}" == "cuda" ]];
     then
       echo "${path2buildbash}/build_cleo_cuda_openmp.sh ${path2CLEO} ${path2build}"
-      ${path2buildbash}/build_cleo_cuda_openmp.sh ${path2CLEO} ${path2build} ${path2yac}
+      ${path2buildbash}/build_cleo_cuda_openmp.sh ${path2CLEO} ${path2build} ${yacroot}
     fi
   fi
   ### ---------------------------------------------------- ###

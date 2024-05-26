@@ -23,7 +23,7 @@ gcc="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/gcc"
 
 path2CLEO=$1    # get from command line argument
 path2build=$2   # get from command line argument
-path2YAC=$3     # only required for builds including YAC
+yacroot=$3     # only required for builds including YAC
 
 ### ------------------------------------------------------------------------ ###
 
@@ -53,12 +53,12 @@ kokkosdevice=""
 ### ---------------------------------------------------- ###
 
 ### ------------------ choose YAC build ---------------- ###
-if [ "${root4YAC}" == "" ]
+if [ "${yacroot}" == "" ]
 then
     yacflags=""
 
 else
-    yacflags="-DYAXT_ROOT=${root4YAC}/yaxt -DYAC_ROOT=${root4YAC}/yac"
+    yacflags="-DYAXT_ROOT=${yacroot}/yaxt -DYAC_ROOT=${yacroot}/yac"
     yacmodule="${path2CLEO}/libs/coupldyn_yac/cmake"
 fi
 ### ---------------------------------------------------- ###
