@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Template for Observer to Write To Dataset" href="write_to_dataset_observer.html" /><link rel="prev" title="StreamOut Observer" href="streamout_observer.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Constant Time Step Observers" href="consttstep_observer.html" /><link rel="prev" title="StreamOut Observer" href="streamout_observer.html" />
 
     <!-- Generated with Sphinx 7.3.7 and Furo 2024.05.06 -->
         <title>RunStatsObserver - CLEO 0.1.0 documentation</title>
@@ -309,7 +309,9 @@
 <li class="toctree-l3"><a class="reference internal" href="../zarr/fsstore.html">FSStore</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../zarr/store_accessor.html">StoreAccessor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../zarr/xarray_zarr_array.html">XarrayZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../zarr/xarray_metadata.html">Xarray Metadata</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../zarr/zarr_array.html">ZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../zarr/zarr_metadata.html">Zarr Metadata</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../zarr/zarr_group.html">ZarrGroup</a></li>
 </ul>
 </li>
@@ -317,6 +319,7 @@
 <li class="toctree-l3"><a class="reference internal" href="observers.html">Observers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="streamout_observer.html">StreamOut Observer</a></li>
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">RunStatsObserver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="consttstep_observer.html">Constant Time Step Observers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="write_to_dataset_observer.html">Template for Observer to Write To Dataset</a></li>
 <li class="toctree-l3"><a class="reference internal" href="parallel_write_data.html">Parallel Write Data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="collect_data_for_dataset.html">Collect Data For Dataset</a></li>
@@ -530,6 +533,17 @@
 </dl>
 </dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK16RunStatsObserver14get_sdmmonitorEv">
+<span id="_CPPv3NK16RunStatsObserver14get_sdmmonitorEv"></span><span id="_CPPv2NK16RunStatsObserver14get_sdmmonitorEv"></span><span id="RunStatsObserver::get_sdmmonitorC"></span><span class="target" id="classRunStatsObserver_1ad10e7c50caa8b8213bfc4efb12be7c6c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">SDMMonitor</span></span><span class="w"> </span><span class="k"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_sdmmonitor</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16RunStatsObserver14get_sdmmonitorEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Get null monitor for SDM processes from observer. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>monitor ‘mo’ of the observer that does nothing </p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-functions">Private Functions</p>
@@ -584,12 +598,12 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="write_to_dataset_observer.html">
+          <a class="next-page" href="consttstep_observer.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Template for Observer to Write To Dataset</div>
+                <div class="title">Constant Time Step Observers</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -614,7 +628,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 24 May 2024</div>
+              Last updated on 26 May 2024</div>
           </div>
           <div class="right-details">
             
@@ -652,6 +666,7 @@
 <li><a class="reference internal" href="#_CPPv4NK16RunStatsObserver8next_obsEKj"><code class="docutils literal notranslate"><span class="pre">RunStatsObserver::next_obs()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK16RunStatsObserver7on_stepEKj"><code class="docutils literal notranslate"><span class="pre">RunStatsObserver::on_step()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK16RunStatsObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"><code class="docutils literal notranslate"><span class="pre">RunStatsObserver::at_start_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK16RunStatsObserver14get_sdmmonitorEv"><code class="docutils literal notranslate"><span class="pre">RunStatsObserver::get_sdmmonitor()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK16RunStatsObserver13at_start_stepEv"><code class="docutils literal notranslate"><span class="pre">RunStatsObserver::at_start_step()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK16RunStatsObserver13print_summaryEv"><code class="docutils literal notranslate"><span class="pre">RunStatsObserver::print_summary()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK16RunStatsObserver13write_to_fileEv"><code class="docutils literal notranslate"><span class="pre">RunStatsObserver::write_to_file()</span></code></a></li>

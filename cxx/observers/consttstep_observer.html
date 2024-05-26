@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Superdrops Observer" href="superdrops_observer.html" /><link rel="prev" title="Time Observer" href="time_observer.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Template for Observer to Write To Dataset" href="write_to_dataset_observer.html" /><link rel="prev" title="RunStatsObserver" href="runstats_observer.html" />
 
     <!-- Generated with Sphinx 7.3.7 and Furo 2024.05.06 -->
-        <title>Gbxindex Observer - CLEO 0.1.0 documentation</title>
+        <title>Constant Time Step Observers - CLEO 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=387cc868" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -319,13 +319,13 @@
 <li class="toctree-l3"><a class="reference internal" href="observers.html">Observers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="streamout_observer.html">StreamOut Observer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="runstats_observer.html">RunStatsObserver</a></li>
-<li class="toctree-l3"><a class="reference internal" href="consttstep_observer.html">Constant Time Step Observers</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Constant Time Step Observers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="write_to_dataset_observer.html">Template for Observer to Write To Dataset</a></li>
 <li class="toctree-l3"><a class="reference internal" href="parallel_write_data.html">Parallel Write Data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="collect_data_for_dataset.html">Collect Data For Dataset</a></li>
 <li class="toctree-l3"><a class="reference internal" href="generic_collect_data.html">Generic Collect Data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="time_observer.html">Time Observer</a></li>
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Gbxindex Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="gbxindex_observer.html">Gbxindex Observer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="superdrops_observer.html">Superdrops Observer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="nsupers_observer.html">Nsupers Observer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="totnsupers_observer.html">TotNsupers Observer</a></li>
@@ -369,7 +369,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../../_sources/cxx/observers/gbxindex_observer.rst.txt" title="View this page">
+  <a class="muted-link" href="../../_sources/cxx/observers/consttstep_observer.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -389,112 +389,95 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="gbxindex-observer">
-<h1>Gbxindex Observer<a class="headerlink" href="#gbxindex-observer" title="Link to this heading">¶</a></h1>
-<p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/observers/gbxindex_observer.hpp&gt;</span></code>
-<a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/observers/gbxindex_observer.hpp">[source]</a></p>
+          <section id="constant-time-step-observers">
+<h1>Constant Time Step Observers<a class="headerlink" href="#constant-time-step-observers" title="Link to this heading">¶</a></h1>
+<p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/observers/consttstep_observer.hpp&gt;</span></code>
+<a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/observers/consttstep_observer.hpp">[source]</a></p>
 <dl class="cpp struct">
-<dt class="sig sig-object cpp" id="_CPPv415GbxIndexFunctor">
-<span id="_CPPv315GbxIndexFunctor"></span><span id="_CPPv215GbxIndexFunctor"></span><span id="GbxIndexFunctor"></span><span class="target" id="structGbxIndexFunctor"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxIndexFunctor</span></span></span><a class="headerlink" href="#_CPPv415GbxIndexFunctor" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Functor for copying gridbox indexes to a view in device memory. </p>
+<dt class="sig sig-object cpp" id="_CPPv4I_8ObsFuncsE18ConstTstepObserver">
+<span id="_CPPv3I_8ObsFuncsE18ConstTstepObserver"></span><span id="_CPPv2I_8ObsFuncsE18ConstTstepObserver"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="observers.html#_CPPv4I0E8ObsFuncs" title="ObsFuncs"><span class="n"><span class="pre">ObsFuncs</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">O</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structConstTstepObserver"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ConstTstepObserver</span></span></span><a class="headerlink" href="#_CPPv4I_8ObsFuncsE18ConstTstepObserver" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Structure <a class="reference internal" href="#structConstTstepObserver"><span class="std std-ref">ConstTstepObserver</span></a> represents a type that satisfies the concept of an observer with a constant timestep interval between observations at the start of each timestep. </p>
+<p>Struct can be used to create an observer with a constant timestep and with observation functionality as determined by the ‘do_obs’ instance of the <a class="reference internal" href="observers.html#conceptObsFuncs"><span class="std std-ref">ObsFuncs</span></a> type ‘O’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>O</strong> – Type that satisfies the <a class="reference internal" href="observers.html#conceptObsFuncs"><span class="std std-ref">ObsFuncs</span></a> concept. </p>
+</dd>
+</dl>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N15GbxIndexFunctor15GbxIndexFunctorEK14viewd_constgbxN6BufferI8uint32_tE18mirrorviewd_bufferE">
-<span id="_CPPv3N15GbxIndexFunctor15GbxIndexFunctorEK14viewd_constgbxN6BufferI8uint32_tE18mirrorviewd_bufferE"></span><span id="_CPPv2N15GbxIndexFunctor15GbxIndexFunctorEK14viewd_constgbxN6BufferI8uint32_tE18mirrorviewd_bufferE"></span><span id="GbxIndexFunctor::GbxIndexFunctor__viewd_constgbxC.Buffer:uint32_t:::mirrorviewd_buffer"></span><span class="target" id="structGbxIndexFunctor_1a60776f3c6e6eb5507d6cd513b0cca763"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxIndexFunctor</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv414viewd_constgbx" title="viewd_constgbx"><span class="n"><span class="pre">viewd_constgbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span>, <a class="reference internal" href="../zarr/buffer.html#_CPPv4I0E6Buffer" title="Buffer"><span class="n"><span class="pre">Buffer</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mirrorviewd_buffer</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">d_data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N15GbxIndexFunctor15GbxIndexFunctorEK14viewd_constgbxN6BufferI8uint32_tE18mirrorviewd_bufferE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Constructor for <a class="reference internal" href="#structGbxIndexFunctor"><span class="std std-ref">GbxIndexFunctor</span></a>. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N18ConstTstepObserver18ConstTstepObserverEKjK1O">
+<span id="_CPPv3N18ConstTstepObserver18ConstTstepObserverEKjK1O"></span><span id="_CPPv2N18ConstTstepObserver18ConstTstepObserverEKjK1O"></span><span id="ConstTstepObserver::ConstTstepObserver__unsigned-iC.OC"></span><span class="target" id="structConstTstepObserver_1a796d34afd717f452017b567e1385d0c8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ConstTstepObserver</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">interval</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_8ObsFuncsE18ConstTstepObserver" title="ConstTstepObserver::O"><span class="n"><span class="pre">O</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">o</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18ConstTstepObserver18ConstTstepObserverEKjK1O" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Construct a new <a class="reference internal" href="#structConstTstepObserver"><span class="std std-ref">ConstTstepObserver</span></a> object. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>d_gbxs</strong> – View of gridboxes on device. </p></li>
-<li><p><strong>d_data</strong> – Mirror view on device of memory to copy gridbox indexes into. </p></li>
+<li><p><strong>interval</strong> – Timestep interval. </p></li>
+<li><p><strong>o</strong> – <a class="reference internal" href="observers.html#conceptObserver"><span class="std std-ref">Observer</span></a>. </p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK15GbxIndexFunctorclEK6size_t">
-<span id="_CPPv3NK15GbxIndexFunctorclEK6size_t"></span><span id="_CPPv2NK15GbxIndexFunctorclEK6size_t"></span><span id="GbxIndexFunctor::call-operator__sCC"></span><span class="target" id="structGbxIndexFunctor_1aff3a346dc0f51e17f269833cdcdf67c1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ii</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK15GbxIndexFunctorclEK6size_t" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Operator is functor for within a Kokkos::parallel_for loop. </p>
-<p>Copies a gridbox’s gbxindex to d_data view (for each gridbox in parallel).</p>
+<dt class="sig sig-object cpp" id="_CPPv4NK18ConstTstepObserver19before_timesteppingEK14viewd_constgbx">
+<span id="_CPPv3NK18ConstTstepObserver19before_timesteppingEK14viewd_constgbx"></span><span id="_CPPv2NK18ConstTstepObserver19before_timesteppingEK14viewd_constgbx"></span><span id="ConstTstepObserver::before_timestepping__viewd_constgbxCC"></span><span class="target" id="structConstTstepObserver_1a481dc99047b31e6cd6eedf63ba839bf7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">before_timestepping</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv414viewd_constgbx" title="viewd_constgbx"><span class="n"><span class="pre">viewd_constgbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK18ConstTstepObserver19before_timesteppingEK14viewd_constgbx" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Perform operations before timestepping. </p>
+<p>Calls <code class="docutils literal notranslate"><span class="pre">before_timestepping</span></code> function of <code class="docutils literal notranslate"><span class="pre">do_obs</span></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>ii</strong> – index for the gridbox in the d_gbxs and d_data views. </p>
+<dd class="field-odd"><p><strong>d_gbxs</strong> – The view of gridboxes in device memory. </p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N15GbxIndexFunctor6d_gbxsE">
-<span id="_CPPv3N15GbxIndexFunctor6d_gbxsE"></span><span id="_CPPv2N15GbxIndexFunctor6d_gbxsE"></span><span id="GbxIndexFunctor::d_gbxs__viewd_constgbx"></span><span class="target" id="structGbxIndexFunctor_1a4677cce1048b76ab1ec66074142b609a"></span><a class="reference internal" href="../kokkosaliases.html#_CPPv414viewd_constgbx" title="viewd_constgbx"><span class="n"><span class="pre">viewd_constgbx</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">d_gbxs</span></span></span><a class="headerlink" href="#_CPPv4N15GbxIndexFunctor6d_gbxsE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>View of gridboxes. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N15GbxIndexFunctor6d_dataE">
-<span id="_CPPv3N15GbxIndexFunctor6d_dataE"></span><span id="_CPPv2N15GbxIndexFunctor6d_dataE"></span><span id="GbxIndexFunctor::d_data__Buffer:uint32_t:::mirrorviewd_buffer"></span><span class="target" id="structGbxIndexFunctor_1ad95a42cfb9057f7b3375ceabc83fecc9"></span><a class="reference internal" href="../zarr/buffer.html#_CPPv4I0E6Buffer" title="Buffer"><span class="n"><span class="pre">Buffer</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">mirrorviewd_buffer</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">d_data</span></span></span><a class="headerlink" href="#_CPPv4N15GbxIndexFunctor6d_dataE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Mirror view on device for gridbox indexes. </p>
-</dd></dl>
-
-</div>
-</dd></dl>
-
-<dl class="cpp class">
-<dt class="sig sig-object cpp" id="_CPPv4I0E16GbxindexObserver">
-<span id="_CPPv3I0E16GbxindexObserver"></span><span id="_CPPv2I0E16GbxindexObserver"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Store</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classGbxindexObserver"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxindexObserver</span></span></span><a class="headerlink" href="#_CPPv4I0E16GbxindexObserver" title="Link to this definition">¶</a><br /></dt>
-<dd><div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N16GbxindexObserver16GbxindexObserverER7DatasetI5StoreEK6size_tK6size_t">
-<span id="_CPPv3N16GbxindexObserver16GbxindexObserverER7DatasetI5StoreEK6size_tK6size_t"></span><span id="_CPPv2N16GbxindexObserver16GbxindexObserverER7DatasetI5StoreEK6size_tK6size_t"></span><span id="GbxindexObserver::GbxindexObserver__Dataset:Store:R.sC.sC"></span><span class="target" id="classGbxindexObserver_1ac69be245cbf6e2cc70ae4493f73addfd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxindexObserver</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../zarr/dataset.html#_CPPv4I0E7Dataset" title="Dataset"><span class="n"><span class="pre">Dataset</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E16GbxindexObserver" title="GbxindexObserver::Store"><span class="n"><span class="pre">Store</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dataset</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">maxchunk</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ngbxs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16GbxindexObserver16GbxindexObserverER7DatasetI5StoreEK6size_tK6size_t" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Constructor for <a class="reference internal" href="#classGbxindexObserver"><span class="std std-ref">GbxindexObserver</span></a>. </p>
+<dt class="sig sig-object cpp" id="_CPPv4NK18ConstTstepObserver18after_timesteppingEv">
+<span id="_CPPv3NK18ConstTstepObserver18after_timesteppingEv"></span><span id="_CPPv2NK18ConstTstepObserver18after_timesteppingEv"></span><span id="ConstTstepObserver::after_timesteppingC"></span><span class="target" id="structConstTstepObserver_1a95608083b53c3a9f6e2d0f06077088d3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">after_timestepping</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK18ConstTstepObserver18after_timesteppingEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Perform operations after timestepping. </p>
+<p>Calls <code class="docutils literal notranslate"><span class="pre">after_timestepping</span></code> function of <code class="docutils literal notranslate"><span class="pre">do_obs</span></code>. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK18ConstTstepObserver8next_obsEKj">
+<span id="_CPPv3NK18ConstTstepObserver8next_obsEKj"></span><span id="_CPPv2NK18ConstTstepObserver8next_obsEKj"></span><span id="ConstTstepObserver::next_obs__unsigned-iCC"></span><span class="target" id="structConstTstepObserver_1a799a53d69e6945a825169c91f3415566"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">next_obs</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK18ConstTstepObserver8next_obsEKj" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Determine the next observation time. </p>
+<p>Calculates the next observation time based on the current model time and this observer’s constant timestep between observations, ‘interval’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>t_mdl</strong> – The unsigned int parameter representing the current model timestep. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Unsigned int for the next observation timestep. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK18ConstTstepObserver7on_stepEKj">
+<span id="_CPPv3NK18ConstTstepObserver7on_stepEKj"></span><span id="_CPPv2NK18ConstTstepObserver7on_stepEKj"></span><span id="ConstTstepObserver::on_step__unsigned-iCC"></span><span class="target" id="structConstTstepObserver_1a1c0076ce6b9fecd3d47b4126719d7c3e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">on_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK18ConstTstepObserver7on_stepEKj" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Check if observer is “on step”. </p>
+<p>Checks if the current model time is on an observation timestep.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>t_mdl</strong> – The unsigned int parameter representing the current model timestep. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the current timestep is an observation timestep, false otherwise. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK18ConstTstepObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers">
+<span id="_CPPv3NK18ConstTstepObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"></span><span id="_CPPv2NK18ConstTstepObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"></span><span id="ConstTstepObserver::at_start_step__unsigned-iC.viewd_constgbxC.viewd_constsupersCC"></span><span class="target" id="structConstTstepObserver_1ad48c23c63cf1a4a88820b7c0761ef386"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">at_start_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv414viewd_constgbx" title="viewd_constgbx"><span class="n"><span class="pre">viewd_constgbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv417viewd_constsupers" title="viewd_constsupers"><span class="n"><span class="pre">viewd_constsupers</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">totsupers</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK18ConstTstepObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Perform operation at the start of a step if at appropriate interval. </p>
+<p>Calls <code class="docutils literal notranslate"><span class="pre">at_start_step</span></code> function of <code class="docutils literal notranslate"><span class="pre">do_obs</span></code> if the current model time is on an observation timestep.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>dataset</strong> – <a class="reference internal" href="../zarr/dataset.html#classDataset"><span class="std std-ref">Dataset</span></a> to write gridbox index data to. </p></li>
-<li><p><strong>maxchunk</strong> – Maximum number of elements in a chunk (1-D vector size). </p></li>
-<li><p><strong>ngbxs</strong> – Number of gridboxes in final array. </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N16GbxindexObserverD0Ev">
-<span id="_CPPv3N16GbxindexObserverD0Ev"></span><span id="_CPPv2N16GbxindexObserverD0Ev"></span><span id="GbxindexObserver::~GbxindexObserver"></span><span class="target" id="classGbxindexObserver_1ae9ef635eca9cdcc16b4379bf82c290b8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~GbxindexObserver</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16GbxindexObserverD0Ev" title="Link to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK16GbxindexObserver19before_timesteppingEK14viewd_constgbx">
-<span id="_CPPv3NK16GbxindexObserver19before_timesteppingEK14viewd_constgbx"></span><span id="_CPPv2NK16GbxindexObserver19before_timesteppingEK14viewd_constgbx"></span><span id="GbxindexObserver::before_timestepping__viewd_constgbxCC"></span><span class="target" id="classGbxindexObserver_1a6a550a2d0b04d16c062542c91c2843e8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">before_timestepping</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv414viewd_constgbx" title="viewd_constgbx"><span class="n"><span class="pre">viewd_constgbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16GbxindexObserver19before_timesteppingEK14viewd_constgbx" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Obsevers the gridboxes’ gbxindexes before timestepping. </p>
-<p>Write the gbxindex of every gridbox in d_gbxs to the gbxindex array in the dataset and assert the size of the gbxindex dimension in the dataset is correct.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>d_gbxs</strong> – View of gridboxes on device. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK16GbxindexObserver18after_timesteppingEv">
-<span id="_CPPv3NK16GbxindexObserver18after_timesteppingEv"></span><span id="_CPPv2NK16GbxindexObserver18after_timesteppingEv"></span><span id="GbxindexObserver::after_timesteppingC"></span><span class="target" id="classGbxindexObserver_1adee66ec92c129b897594f39df248bbac"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">after_timestepping</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16GbxindexObserver18after_timesteppingEv" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Placeholder for after timestepping functionality and to make class satisfy observer concept. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK16GbxindexObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers">
-<span id="_CPPv3NK16GbxindexObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"></span><span id="_CPPv2NK16GbxindexObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"></span><span id="GbxindexObserver::at_start_step__unsigned-iC.viewd_constgbxC.viewd_constsupersCC"></span><span class="target" id="classGbxindexObserver_1a697c991a5b1d042b60dbd17ab012c050"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">at_start_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv414viewd_constgbx" title="viewd_constgbx"><span class="n"><span class="pre">viewd_constgbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv417viewd_constsupers" title="viewd_constsupers"><span class="n"><span class="pre">viewd_constsupers</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">totsupers</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16GbxindexObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Placeholder for functionality at the start of each timestep and to make class satisfy observer concept. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>t_mdl</strong> – Current model timestep. </p></li>
-<li><p><strong>d_gbxs</strong> – View of gridboxes on device. </p></li>
+<li><p><strong>t_mdl</strong> – The unsigned int parameter representing the current model time. </p></li>
+<li><p><strong>d_gbxs</strong> – The view of gridboxes in device memory. </p></li>
 <li><p><strong>totsupers</strong> – View of superdrops on device. </p></li>
 </ul>
 </dd>
@@ -502,59 +485,12 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK16GbxindexObserver14get_sdmmonitorEv">
-<span id="_CPPv3NK16GbxindexObserver14get_sdmmonitorEv"></span><span id="_CPPv2NK16GbxindexObserver14get_sdmmonitorEv"></span><span id="GbxindexObserver::get_sdmmonitorC"></span><span class="target" id="classGbxindexObserver_1a63a3c2bd26dd4f13a13ab081b8b9e199"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">SDMMonitor</span></span><span class="w"> </span><span class="k"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_sdmmonitor</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16GbxindexObserver14get_sdmmonitorEv" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Get null monitor for SDM processes from observer. </p>
+<dt class="sig sig-object cpp" id="_CPPv4NK18ConstTstepObserver14get_sdmmonitorEv">
+<span id="_CPPv3NK18ConstTstepObserver14get_sdmmonitorEv"></span><span id="_CPPv2NK18ConstTstepObserver14get_sdmmonitorEv"></span><span id="ConstTstepObserver::get_sdmmonitorC"></span><span class="target" id="structConstTstepObserver_1a90c7facd663e0b711904af155540d1b0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">SDMMonitor</span></span><span class="w"> </span><span class="k"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_sdmmonitor</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK18ConstTstepObserver14get_sdmmonitorEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Get monitor for SDM processes from observer. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>monitor ‘mo’ of the observer that does nothing </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK16GbxindexObserver8next_obsEKj">
-<span id="_CPPv3NK16GbxindexObserver8next_obsEKj"></span><span id="_CPPv2NK16GbxindexObserver8next_obsEKj"></span><span id="GbxindexObserver::next_obs__unsigned-iCC"></span><span class="target" id="classGbxindexObserver_1a39766e8c0ca1625330dfe36985b072a4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">next_obs</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16GbxindexObserver8next_obsEKj" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Returns the timestep of the next observation. </p>
-<p>No observation during timestepping so function returns the largest possible timestep (largest unsigned integer).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>t_mdl</strong> – Current model timestep. </p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Next observation timestep. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK16GbxindexObserver7on_stepEKj">
-<span id="_CPPv3NK16GbxindexObserver7on_stepEKj"></span><span id="_CPPv2NK16GbxindexObserver7on_stepEKj"></span><span id="GbxindexObserver::on_step__unsigned-iCC"></span><span class="target" id="classGbxindexObserver_1a4dd69870d8f06a2a5247d1a351fba6fa"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">on_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16GbxindexObserver7on_stepEKj" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Checks if the current timestep is an observation timestep. </p>
-<p>No observation during timestepping so function always returns false.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>t_mdl</strong> – Current model timestep. </p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>boolean, false. </p>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-functions">Private Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK16GbxindexObserver18collect_gbxindexesEK14viewd_constgbx">
-<span id="_CPPv3NK16GbxindexObserver18collect_gbxindexesEK14viewd_constgbx"></span><span id="_CPPv2NK16GbxindexObserver18collect_gbxindexesEK14viewd_constgbx"></span><span id="GbxindexObserver::collect_gbxindexes__viewd_constgbxCC"></span><span class="target" id="classGbxindexObserver_1a7c9da1faeb2ac43a5b2136c2bd5376b2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../zarr/buffer.html#_CPPv4I0E6Buffer" title="Buffer"><span class="n"><span class="pre">Buffer</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">viewh_buffer</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">collect_gbxindexes</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv414viewd_constgbx" title="viewd_constgbx"><span class="n"><span class="pre">viewd_constgbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16GbxindexObserver18collect_gbxindexesEK14viewd_constgbx" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Collects gridbox indexes from g_gbxs into a host memory view. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>d_gbxs</strong> – View of the gridboxes in device memory. </p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>View in host memory of gridbox index of every gridbox in d_gbxs. </p>
+<dd class="field-odd"><p>monitor ‘mo’ of the observer </p>
 </dd>
 </dl>
 </dd></dl>
@@ -563,15 +499,15 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
 <dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N16GbxindexObserver7datasetE">
-<span id="_CPPv3N16GbxindexObserver7datasetE"></span><span id="_CPPv2N16GbxindexObserver7datasetE"></span><span id="GbxindexObserver::dataset__Dataset:Store:R"></span><span class="target" id="classGbxindexObserver_1aed66a35746d5cbb36b23338cd71a801a"></span><a class="reference internal" href="../zarr/dataset.html#_CPPv4I0E7Dataset" title="Dataset"><span class="n"><span class="pre">Dataset</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E16GbxindexObserver" title="GbxindexObserver::Store"><span class="n"><span class="pre">Store</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">dataset</span></span></span><a class="headerlink" href="#_CPPv4N16GbxindexObserver7datasetE" title="Link to this definition">¶</a><br /></dt>
-<dd><p><a class="reference internal" href="../zarr/dataset.html#classDataset"><span class="std std-ref">Dataset</span></a> to write gridbox index data to. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N18ConstTstepObserver8intervalE">
+<span id="_CPPv3N18ConstTstepObserver8intervalE"></span><span id="_CPPv2N18ConstTstepObserver8intervalE"></span><span id="ConstTstepObserver::interval__unsigned-i"></span><span class="target" id="structConstTstepObserver_1a266377e61945939ad24136f37d552c85"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">interval</span></span></span><a class="headerlink" href="#_CPPv4N18ConstTstepObserver8intervalE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>interval between observations. </p>
 </dd></dl>
 
 <dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N16GbxindexObserver9xzarr_ptrE">
-<span id="_CPPv3N16GbxindexObserver9xzarr_ptrE"></span><span id="_CPPv2N16GbxindexObserver9xzarr_ptrE"></span><span id="GbxindexObserver::xzarr_ptr__std::shared_ptr:XarrayZarrArray:Store.uint32_t::"></span><span class="target" id="classGbxindexObserver_1a56e7bc1b7440ef5dd071165c68afecb8"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../zarr/xarray_zarr_array.html#_CPPv4I00E15XarrayZarrArray" title="XarrayZarrArray"><span class="n"><span class="pre">XarrayZarrArray</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E16GbxindexObserver" title="GbxindexObserver::Store"><span class="n"><span class="pre">Store</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">uint32_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">xzarr_ptr</span></span></span><a class="headerlink" href="#_CPPv4N16GbxindexObserver9xzarr_ptrE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Pointer to gridbox index array in dataset. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N18ConstTstepObserver6do_obsE">
+<span id="_CPPv3N18ConstTstepObserver6do_obsE"></span><span id="_CPPv2N18ConstTstepObserver6do_obsE"></span><span id="ConstTstepObserver::do_obs__O"></span><span class="target" id="structConstTstepObserver_1a8ceb0010494c85045852a40e86fb438d"></span><a class="reference internal" href="#_CPPv4I_8ObsFuncsE18ConstTstepObserver" title="ConstTstepObserver::O"><span class="n"><span class="pre">O</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">do_obs</span></span></span><a class="headerlink" href="#_CPPv4N18ConstTstepObserver6do_obsE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Observation functionality. </p>
 </dd></dl>
 
 </div>
@@ -584,23 +520,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="superdrops_observer.html">
+          <a class="next-page" href="write_to_dataset_observer.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Superdrops Observer</div>
+                <div class="title">Template for Observer to Write To Dataset</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="time_observer.html">
+          <a class="prev-page" href="runstats_observer.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Time Observer</div>
+                <div class="title">RunStatsObserver</div>
                 
               </div>
             </a>
@@ -635,26 +571,17 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Gbxindex Observer</a><ul>
-<li><a class="reference internal" href="#_CPPv415GbxIndexFunctor"><code class="docutils literal notranslate"><span class="pre">GbxIndexFunctor</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N15GbxIndexFunctor15GbxIndexFunctorEK14viewd_constgbxN6BufferI8uint32_tE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">GbxIndexFunctor::GbxIndexFunctor()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15GbxIndexFunctorclEK6size_t"><code class="docutils literal notranslate"><span class="pre">GbxIndexFunctor::operator()()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15GbxIndexFunctor6d_gbxsE"><code class="docutils literal notranslate"><span class="pre">GbxIndexFunctor::d_gbxs</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15GbxIndexFunctor6d_dataE"><code class="docutils literal notranslate"><span class="pre">GbxIndexFunctor::d_data</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#_CPPv4I0E16GbxindexObserver"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N16GbxindexObserver16GbxindexObserverER7DatasetI5StoreEK6size_tK6size_t"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver::GbxindexObserver()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N16GbxindexObserverD0Ev"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver::~GbxindexObserver()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK16GbxindexObserver19before_timesteppingEK14viewd_constgbx"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver::before_timestepping()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK16GbxindexObserver18after_timesteppingEv"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver::after_timestepping()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK16GbxindexObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver::at_start_step()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK16GbxindexObserver14get_sdmmonitorEv"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver::get_sdmmonitor()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK16GbxindexObserver8next_obsEKj"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver::next_obs()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK16GbxindexObserver7on_stepEKj"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver::on_step()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK16GbxindexObserver18collect_gbxindexesEK14viewd_constgbx"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver::collect_gbxindexes()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N16GbxindexObserver7datasetE"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver::dataset</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N16GbxindexObserver9xzarr_ptrE"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver::xzarr_ptr</span></code></a></li>
+<li><a class="reference internal" href="#">Constant Time Step Observers</a><ul>
+<li><a class="reference internal" href="#_CPPv4I_8ObsFuncsE18ConstTstepObserver"><code class="docutils literal notranslate"><span class="pre">ConstTstepObserver</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N18ConstTstepObserver18ConstTstepObserverEKjK1O"><code class="docutils literal notranslate"><span class="pre">ConstTstepObserver::ConstTstepObserver()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18ConstTstepObserver19before_timesteppingEK14viewd_constgbx"><code class="docutils literal notranslate"><span class="pre">ConstTstepObserver::before_timestepping()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18ConstTstepObserver18after_timesteppingEv"><code class="docutils literal notranslate"><span class="pre">ConstTstepObserver::after_timestepping()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18ConstTstepObserver8next_obsEKj"><code class="docutils literal notranslate"><span class="pre">ConstTstepObserver::next_obs()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18ConstTstepObserver7on_stepEKj"><code class="docutils literal notranslate"><span class="pre">ConstTstepObserver::on_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18ConstTstepObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"><code class="docutils literal notranslate"><span class="pre">ConstTstepObserver::at_start_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18ConstTstepObserver14get_sdmmonitorEv"><code class="docutils literal notranslate"><span class="pre">ConstTstepObserver::get_sdmmonitor()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18ConstTstepObserver8intervalE"><code class="docutils literal notranslate"><span class="pre">ConstTstepObserver::interval</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18ConstTstepObserver6do_obsE"><code class="docutils literal notranslate"><span class="pre">ConstTstepObserver::do_obs</span></code></a></li>
 </ul>
 </li>
 </ul>

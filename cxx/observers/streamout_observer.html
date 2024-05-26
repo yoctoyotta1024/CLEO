@@ -309,7 +309,9 @@
 <li class="toctree-l3"><a class="reference internal" href="../zarr/fsstore.html">FSStore</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../zarr/store_accessor.html">StoreAccessor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../zarr/xarray_zarr_array.html">XarrayZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../zarr/xarray_metadata.html">Xarray Metadata</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../zarr/zarr_array.html">ZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../zarr/zarr_metadata.html">Zarr Metadata</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../zarr/zarr_group.html">ZarrGroup</a></li>
 </ul>
 </li>
@@ -317,6 +319,7 @@
 <li class="toctree-l3"><a class="reference internal" href="observers.html">Observers</a></li>
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">StreamOut Observer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="runstats_observer.html">RunStatsObserver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="consttstep_observer.html">Constant Time Step Observers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="write_to_dataset_observer.html">Template for Observer to Write To Dataset</a></li>
 <li class="toctree-l3"><a class="reference internal" href="parallel_write_data.html">Parallel Write Data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="collect_data_for_dataset.html">Collect Data For Dataset</a></li>
@@ -473,6 +476,17 @@
 </dl>
 </dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK17StreamOutObserver14get_sdmmonitorEv">
+<span id="_CPPv3NK17StreamOutObserver14get_sdmmonitorEv"></span><span id="_CPPv2NK17StreamOutObserver14get_sdmmonitorEv"></span><span id="StreamOutObserver::get_sdmmonitorC"></span><span class="target" id="structStreamOutObserver_1a94550c06885c25175ca8ea7efe747986"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">SDMMonitor</span></span><span class="w"> </span><span class="k"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_sdmmonitor</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK17StreamOutObserver14get_sdmmonitorEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Get null monitor for SDM processes from observer. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>monitor ‘mo’ of the observer that does nothing </p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-functions">Private Functions</p>
@@ -546,7 +560,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 24 May 2024</div>
+              Last updated on 26 May 2024</div>
           </div>
           <div class="right-details">
             
@@ -575,6 +589,7 @@
 <li><a class="reference internal" href="#_CPPv4NK17StreamOutObserver8next_obsEKj"><code class="docutils literal notranslate"><span class="pre">StreamOutObserver::next_obs()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK17StreamOutObserver7on_stepEKj"><code class="docutils literal notranslate"><span class="pre">StreamOutObserver::on_step()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK17StreamOutObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"><code class="docutils literal notranslate"><span class="pre">StreamOutObserver::at_start_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK17StreamOutObserver14get_sdmmonitorEv"><code class="docutils literal notranslate"><span class="pre">StreamOutObserver::get_sdmmonitor()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK17StreamOutObserver19streamout_statementEKjK14viewd_constgbx"><code class="docutils literal notranslate"><span class="pre">StreamOutObserver::streamout_statement()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N17StreamOutObserver8intervalE"><code class="docutils literal notranslate"><span class="pre">StreamOutObserver::interval</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N17StreamOutObserver13step2realtimeE"><code class="docutils literal notranslate"><span class="pre">StreamOutObserver::step2realtime</span></code></a></li>

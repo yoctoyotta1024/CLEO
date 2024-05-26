@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Create Gridboxes Sub-Module" href="creategbxs.html" /><link rel="prev" title="CoupledDynamics" href="coupleddynamics.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="ZarrGroup" href="zarr_group.html" /><link rel="prev" title="ZarrArray" href="zarr_array.html" />
 
     <!-- Generated with Sphinx 7.3.7 and Furo 2024.05.06 -->
-        <title>CouplingComms - CLEO 0.1.0 documentation</title>
+        <title>Zarr Metadata - CLEO 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=362ab14a" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=387cc868" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -272,13 +272,13 @@
 </ul>
 </li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../cxx.html">API: C++ Library</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of API: C++ Library</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2 current has-children"><a class="reference internal" href="runcleomod.html">RunCLEO Module</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="coupleddynamics.html">CoupledDynamics</a></li>
-<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">CouplingComms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="creategbxs.html">Create Gridboxes Sub-Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="createsupers.html">Create Super-droplets Sub-Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="runcleo.html">RunCLEO</a></li>
-<li class="toctree-l3"><a class="reference internal" href="sdmmethods.html">SDMMethods</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../runcleo/runcleomod.html">RunCLEO Module</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/coupleddynamics.html">CoupledDynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/couplingcomms.html">CouplingComms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/creategbxs.html">Create Gridboxes Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/createsupers.html">Create Super-droplets Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/runcleo.html">RunCLEO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/sdmmethods.html">SDMMethods</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../superdrops/superdropsmod.html">Superdrops Module</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Superdrops Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -302,17 +302,17 @@
 <li class="toctree-l3"><a class="reference internal" href="../superdrops/urbg.html">Randomness Generation</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../zarr/zarrmod.html">Zarr Module</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of Zarr Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../zarr/buffer.html">Buffer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../zarr/chunks.html">Chunks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../zarr/dataset.html">Dataset</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../zarr/fsstore.html">FSStore</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../zarr/store_accessor.html">StoreAccessor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../zarr/xarray_zarr_array.html">XarrayZarrArray</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../zarr/xarray_metadata.html">Xarray Metadata</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../zarr/zarr_array.html">ZarrArray</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../zarr/zarr_metadata.html">Zarr Metadata</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../zarr/zarr_group.html">ZarrGroup</a></li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="zarrmod.html">Zarr Module</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of Zarr Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="buffer.html">Buffer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="chunks.html">Chunks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dataset.html">Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fsstore.html">FSStore</a></li>
+<li class="toctree-l3"><a class="reference internal" href="store_accessor.html">StoreAccessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xarray_zarr_array.html">XarrayZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xarray_metadata.html">Xarray Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zarr_array.html">ZarrArray</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Zarr Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zarr_group.html">ZarrGroup</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../observers/observersmod.html">Observers Module</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of Observers Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -369,7 +369,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../../_sources/cxx/runcleo/couplingcomms.rst.txt" title="View this page">
+  <a class="muted-link" href="../../_sources/cxx/zarr/zarr_metadata.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -389,29 +389,95 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="couplingcomms">
-<h1>CouplingComms<a class="headerlink" href="#couplingcomms" title="Link to this heading">¶</a></h1>
-<p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/runcleo/couplingcomms.hpp&gt;</span></code>
-<a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/runcleo/couplingcomms.hpp">[source]</a></p>
-<dl class="cpp concept">
-<dt class="sig sig-object cpp" id="_CPPv4I00E13CouplingComms">
-<span id="_CPPv3I00E13CouplingComms"></span><span id="_CPPv2I00E13CouplingComms"></span><span class="target" id="conceptCouplingComms"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Comms</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CD</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CouplingComms</span></span></span><a class="headerlink" href="#_CPPv4I00E13CouplingComms" title="Link to this definition">¶</a><br /></dt>
-<dd><div class="docutils container">
-<em>#include &lt;couplingcomms.hpp&gt;</em></div>
-<p>Concept representing types that handle communication between SDM and coupled dynamics solver.</p>
-<p>A type satisfies the <a class="reference internal" href="#conceptCouplingComms"><span class="std std-ref">CouplingComms</span></a> concept if it provides the following functions:<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">send_dynamics(h_gbxs,</span> <span class="pre">coupldyn)</span></code>: Sends dynamics information from SDM view of Gridboxes <code class="docutils literal notranslate"><span class="pre">h_gbxs</span></code> to coupled dynamics solver <code class="docutils literal notranslate"><span class="pre">coupldyn</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">receive_dynamics(coupldyn,</span> <span class="pre">h_gbxs)</span></code>: Receives dynamics information from coupled dynamics solver <code class="docutils literal notranslate"><span class="pre">coupldyn</span></code> into SDM view of Gridboxes <code class="docutils literal notranslate"><span class="pre">h_gbxs</span></code>.</p></li>
-</ul>
-</p>
+          <section id="zarr-metadata">
+<h1>Zarr Metadata<a class="headerlink" href="#zarr-metadata" title="Link to this heading">¶</a></h1>
+<p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/zarr/zarr_metadata.hpp&gt;</span></code>
+<a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/zarr/zarr_metadata.hpp">[source]</a></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv413vec_to_stringRKNSt6vectorI6size_tEE">
+<span id="_CPPv313vec_to_stringRKNSt6vectorI6size_tEE"></span><span id="_CPPv213vec_to_stringRKNSt6vectorI6size_tEE"></span><span id="vec_to_string__std::vector:s:CR"></span><span class="target" id="zarr__metadata_8hpp_1a0a945bb241dbf20b05675638324cbded"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vec_to_string</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">vals</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413vec_to_stringRKNSt6vectorI6size_tEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Converts a vector of integers into a single list written as a string. </p>
+<p>Given vector of a type convertible to a string with values [a, b, c, …, z], function returns the string “[a, b, c, …, z]” with elements separated by commas and enclosed in square brackets. Function is useful for converting vectors representing the shape of chunks and arrays etc. into a string format for metadata json files.</p>
 <dl class="field-list simple">
-<dt class="field-odd">tparam Comms<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The type for communication to check against the <a class="reference internal" href="#conceptCouplingComms"><span class="std std-ref">CouplingComms</span></a> concept. </p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vals</strong> – The vector values of a type convertible to a string. </p>
 </dd>
-<dt class="field-even">tparam CD<span class="colon">:</span></dt>
-<dd class="field-even"><p>The type for the dyanmics solver to check against the <a class="reference internal" href="coupleddynamics.html#conceptCoupledDynamics"><span class="std std-ref">CoupledDynamics</span></a> concept. </p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A string representation of the vector. </p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv422make_part_zarrmetadataRKNSt6vectorI6size_tEEKNSt11string_viewE">
+<span id="_CPPv322make_part_zarrmetadataRKNSt6vectorI6size_tEEKNSt11string_viewE"></span><span id="_CPPv222make_part_zarrmetadataRKNSt6vectorI6size_tEEKNSt11string_viewE"></span><span id="make_part_zarrmetadata__std::vector:s:CR.std::string_viewC"></span><span class="target" id="zarr__metadata_8hpp_1a7fe76d2363750080f3863d6a854f2377"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">make_part_zarrmetadata</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">chunkshape</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dtype</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422make_part_zarrmetadataRKNSt6vectorI6size_tEEKNSt11string_viewE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Generates part of the metadata for a Zarr array .zarray json file. </p>
+<p>This function constructs a string containing all the compulsory metadata of a Zarr array for its .zarray json file, excluding the array’s shape.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>chunkshape</strong> – The shape of individual data chunks along each dimension. </p></li>
+<li><p><strong>dtype</strong> – The data type stored in the arrays (e.g., “&lt;f8”). </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A string view containing the partial metadata for the Zarr array. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4I0E12ZarrMetadata">
+<span id="_CPPv3I0E12ZarrMetadata"></span><span id="_CPPv2I0E12ZarrMetadata"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classZarrMetadata"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZarrMetadata</span></span></span><a class="headerlink" href="#_CPPv4I0E12ZarrMetadata" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Class for generating metadata required for a Zarr array. </p>
+<p>This class generates compulsory metadata for the Zarr array .zarray JSON file. The metadata includes information such as chunk shape, data type, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>T</strong> – The data type of the array’s elements. </p>
+</dd>
+</dl>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N12ZarrMetadata12ZarrMetadataERKNSt6vectorI6size_tEEKNSt11string_viewE">
+<span id="_CPPv3N12ZarrMetadata12ZarrMetadataERKNSt6vectorI6size_tEEKNSt11string_viewE"></span><span id="_CPPv2N12ZarrMetadata12ZarrMetadataERKNSt6vectorI6size_tEEKNSt11string_viewE"></span><span id="ZarrMetadata::ZarrMetadata__std::vector:s:CR.std::string_viewC"></span><span class="target" id="classZarrMetadata_1a29cc1b37753a6c998cf62349351529f3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZarrMetadata</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">chunkshape</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dtype</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N12ZarrMetadata12ZarrMetadataERKNSt6vectorI6size_tEEKNSt11string_viewE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Constructs a <a class="reference internal" href="#classZarrMetadata"><span class="std std-ref">ZarrMetadata</span></a> object. </p>
+<p>Constructs a <a class="reference internal" href="#classZarrMetadata"><span class="std std-ref">ZarrMetadata</span></a> object with the given chunk shape and data type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>chunkshape</strong> – The shape of the chunks used to store array data. </p></li>
+<li><p><strong>dtype</strong> – The data type of the array’s elements in Zarr format (e.g., “&lt;f8” for double). </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK12ZarrMetadataclERKNSt6vectorI6size_tEE">
+<span id="_CPPv3NK12ZarrMetadataclERKNSt6vectorI6size_tEE"></span><span id="_CPPv2NK12ZarrMetadataclERKNSt6vectorI6size_tEE"></span><span id="ZarrMetadata::call-operator__std::vector:s:CRC"></span><span class="target" id="classZarrMetadata_1ae1c11c5a6c8ec85f62df3abeccc2aab1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">arrayshape</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK12ZarrMetadataclERKNSt6vectorI6size_tEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Generates metadata for the Zarr array. </p>
+<p>Generates compulsory metadata for the Zarr array .zarray JSON file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>arrayshape</strong> – The shape of the Zarr array. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A string containing the metadata for the Zarr array. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N12ZarrMetadata17part_zarrmetadataE">
+<span id="_CPPv3N12ZarrMetadata17part_zarrmetadataE"></span><span id="_CPPv2N12ZarrMetadata17part_zarrmetadataE"></span><span id="ZarrMetadata::part_zarrmetadata__ss"></span><span class="target" id="classZarrMetadata_1a3ac38a23d8e40f3b6035b5df333492db"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">part_zarrmetadata</span></span></span><a class="headerlink" href="#_CPPv4N12ZarrMetadata17part_zarrmetadataE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Metadata required for zarr array excluding array’s shape </p>
+</dd></dl>
+
+</div>
 </dd></dl>
 
 </section>
@@ -421,23 +487,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="creategbxs.html">
+          <a class="next-page" href="zarr_group.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Create Gridboxes Sub-Module</div>
+                <div class="title">ZarrGroup</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="coupleddynamics.html">
+          <a class="prev-page" href="zarr_array.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">CoupledDynamics</div>
+                <div class="title">ZarrArray</div>
                 
               </div>
             </a>
@@ -472,8 +538,15 @@
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">CouplingComms</a><ul>
-<li><a class="reference internal" href="#_CPPv4I00E13CouplingComms"><code class="docutils literal notranslate"><span class="pre">CouplingComms</span></code></a></li>
+<li><a class="reference internal" href="#">Zarr Metadata</a><ul>
+<li><a class="reference internal" href="#_CPPv413vec_to_stringRKNSt6vectorI6size_tEE"><code class="docutils literal notranslate"><span class="pre">vec_to_string()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv422make_part_zarrmetadataRKNSt6vectorI6size_tEEKNSt11string_viewE"><code class="docutils literal notranslate"><span class="pre">make_part_zarrmetadata()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I0E12ZarrMetadata"><code class="docutils literal notranslate"><span class="pre">ZarrMetadata</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N12ZarrMetadata12ZarrMetadataERKNSt6vectorI6size_tEEKNSt11string_viewE"><code class="docutils literal notranslate"><span class="pre">ZarrMetadata::ZarrMetadata()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK12ZarrMetadataclERKNSt6vectorI6size_tEE"><code class="docutils literal notranslate"><span class="pre">ZarrMetadata::operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N12ZarrMetadata17part_zarrmetadataE"><code class="docutils literal notranslate"><span class="pre">ZarrMetadata::part_zarrmetadata</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Parallel Write Data" href="parallel_write_data.html" /><link rel="prev" title="RunStatsObserver" href="runstats_observer.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Parallel Write Data" href="parallel_write_data.html" /><link rel="prev" title="Constant Time Step Observers" href="consttstep_observer.html" />
 
     <!-- Generated with Sphinx 7.3.7 and Furo 2024.05.06 -->
         <title>Template for Observer to Write To Dataset - CLEO 0.1.0 documentation</title>
@@ -309,7 +309,9 @@
 <li class="toctree-l3"><a class="reference internal" href="../zarr/fsstore.html">FSStore</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../zarr/store_accessor.html">StoreAccessor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../zarr/xarray_zarr_array.html">XarrayZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../zarr/xarray_metadata.html">Xarray Metadata</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../zarr/zarr_array.html">ZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../zarr/zarr_metadata.html">Zarr Metadata</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../zarr/zarr_group.html">ZarrGroup</a></li>
 </ul>
 </li>
@@ -317,6 +319,7 @@
 <li class="toctree-l3"><a class="reference internal" href="observers.html">Observers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="streamout_observer.html">StreamOut Observer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="runstats_observer.html">RunStatsObserver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="consttstep_observer.html">Constant Time Step Observers</a></li>
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Template for Observer to Write To Dataset</a></li>
 <li class="toctree-l3"><a class="reference internal" href="parallel_write_data.html">Parallel Write Data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="collect_data_for_dataset.html">Collect Data For Dataset</a></li>
@@ -439,6 +442,17 @@
 </dl>
 </dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK16DoWriteToDataset14get_sdmmonitorEv">
+<span id="_CPPv3NK16DoWriteToDataset14get_sdmmonitorEv"></span><span id="_CPPv2NK16DoWriteToDataset14get_sdmmonitorEv"></span><span id="DoWriteToDataset::get_sdmmonitorC"></span><span class="target" id="classDoWriteToDataset_1a1752f9d69e8e0d15b99e2f9248afc322"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">SDMMonitor</span></span><span class="w"> </span><span class="k"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_sdmmonitor</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16DoWriteToDataset14get_sdmmonitorEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Get null monitor for SDM processes from observer. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>monitor ‘mo’ of the observer that does nothing </p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
@@ -537,14 +551,14 @@
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="runstats_observer.html">
+          <a class="prev-page" href="consttstep_observer.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">RunStatsObserver</div>
+                <div class="title">Constant Time Step Observers</div>
                 
               </div>
             </a>
@@ -558,7 +572,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 24 May 2024</div>
+              Last updated on 26 May 2024</div>
           </div>
           <div class="right-details">
             
@@ -585,6 +599,7 @@
 <li><a class="reference internal" href="#_CPPv4NK16DoWriteToDataset19before_timesteppingEK14viewd_constgbx"><code class="docutils literal notranslate"><span class="pre">DoWriteToDataset::before_timestepping()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK16DoWriteToDataset18after_timesteppingEv"><code class="docutils literal notranslate"><span class="pre">DoWriteToDataset::after_timestepping()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK16DoWriteToDataset13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"><code class="docutils literal notranslate"><span class="pre">DoWriteToDataset::at_start_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK16DoWriteToDataset14get_sdmmonitorEv"><code class="docutils literal notranslate"><span class="pre">DoWriteToDataset::get_sdmmonitor()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N16DoWriteToDataset14parallel_writeE"><code class="docutils literal notranslate"><span class="pre">DoWriteToDataset::parallel_write</span></code></a></li>
 </ul>
 </li>

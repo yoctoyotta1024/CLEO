@@ -309,7 +309,9 @@
 <li class="toctree-l3"><a class="reference internal" href="../zarr/fsstore.html">FSStore</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../zarr/store_accessor.html">StoreAccessor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../zarr/xarray_zarr_array.html">XarrayZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../zarr/xarray_metadata.html">Xarray Metadata</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../zarr/zarr_array.html">ZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../zarr/zarr_metadata.html">Zarr Metadata</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../zarr/zarr_group.html">ZarrGroup</a></li>
 </ul>
 </li>
@@ -317,6 +319,7 @@
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Observers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="streamout_observer.html">StreamOut Observer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="runstats_observer.html">RunStatsObserver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="consttstep_observer.html">Constant Time Step Observers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="write_to_dataset_observer.html">Template for Observer to Write To Dataset</a></li>
 <li class="toctree-l3"><a class="reference internal" href="parallel_write_data.html">Parallel Write Data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="collect_data_for_dataset.html">Collect Data For Dataset</a></li>
@@ -404,8 +407,8 @@
 </dd></dl>
 
 <dl class="cpp struct">
-<dt class="sig sig-object cpp" id="_CPPv4I_8Observer_8ObserverE16CombinedObserver">
-<span id="_CPPv3I_8Observer_8ObserverE16CombinedObserver"></span><span id="_CPPv2I_8Observer_8ObserverE16CombinedObserver"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E8Observer" title="Observer"><span class="n"><span class="pre">Observer</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Obs1</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0E8Observer" title="Observer"><span class="n"><span class="pre">Observer</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Obs2</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structCombinedObserver"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CombinedObserver</span></span></span><a class="headerlink" href="#_CPPv4I_8Observer_8ObserverE16CombinedObserver" title="Link to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4I_8Observer_8Observer_10SDMMonitorE16CombinedObserver">
+<span id="_CPPv3I_8Observer_8Observer_10SDMMonitorE16CombinedObserver"></span><span id="_CPPv2I_8Observer_8Observer_10SDMMonitorE16CombinedObserver"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E8Observer" title="Observer"><span class="n"><span class="pre">Observer</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Obs1</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0E8Observer" title="Observer"><span class="n"><span class="pre">Observer</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Obs2</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">SDMMonitor</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SDMMo</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structCombinedObserver"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CombinedObserver</span></span></span><a class="headerlink" href="#_CPPv4I_8Observer_8Observer_10SDMMonitorE16CombinedObserver" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Structure <a class="reference internal" href="#structCombinedObserver"><span class="std std-ref">CombinedObserver</span></a> represents a new observer formed from combination of two Observers ‘a’ and ‘b’. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
@@ -418,14 +421,15 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N16CombinedObserver16CombinedObserverEK4Obs1K4Obs2">
-<span id="_CPPv3N16CombinedObserver16CombinedObserverEK4Obs1K4Obs2"></span><span id="_CPPv2N16CombinedObserver16CombinedObserverEK4Obs1K4Obs2"></span><span id="CombinedObserver::CombinedObserver__Obs1C.Obs2C"></span><span class="target" id="structCombinedObserver_1a11b3f79d719d4bf8c43c234a6f92a139"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CombinedObserver</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_8Observer_8ObserverE16CombinedObserver" title="CombinedObserver::Obs1"><span class="n"><span class="pre">Obs1</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">obs1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_8Observer_8ObserverE16CombinedObserver" title="CombinedObserver::Obs2"><span class="n"><span class="pre">Obs2</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">obs2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16CombinedObserver16CombinedObserverEK4Obs1K4Obs2" title="Link to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N16CombinedObserver16CombinedObserverEK4Obs1K4Obs2K5SDMMo">
+<span id="_CPPv3N16CombinedObserver16CombinedObserverEK4Obs1K4Obs2K5SDMMo"></span><span id="_CPPv2N16CombinedObserver16CombinedObserverEK4Obs1K4Obs2K5SDMMo"></span><span id="CombinedObserver::CombinedObserver__Obs1C.Obs2C.SDMMoC"></span><span class="target" id="structCombinedObserver_1a03e540501cac15058e667e0199ec8f05"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CombinedObserver</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_8Observer_8Observer_10SDMMonitorE16CombinedObserver" title="CombinedObserver::Obs1"><span class="n"><span class="pre">Obs1</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">obs1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_8Observer_8Observer_10SDMMonitorE16CombinedObserver" title="CombinedObserver::Obs2"><span class="n"><span class="pre">Obs2</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">obs2</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_8Observer_8Observer_10SDMMonitorE16CombinedObserver" title="CombinedObserver::SDMMo"><span class="n"><span class="pre">SDMMo</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">mo12</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N16CombinedObserver16CombinedObserverEK4Obs1K4Obs2K5SDMMo" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Construct a new <a class="reference internal" href="#structCombinedObserver"><span class="std std-ref">CombinedObserver</span></a> object. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>obs1</strong> – First <a class="reference internal" href="#conceptObserver"><span class="std std-ref">Observer</span></a>. </p></li>
 <li><p><strong>obs2</strong> – Second <a class="reference internal" href="#conceptObserver"><span class="std std-ref">Observer</span></a>. </p></li>
+<li><p><strong>mo12</strong> – Combined Monitor from first and second observers. </p></li>
 </ul>
 </dd>
 </dl>
@@ -433,7 +437,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK16CombinedObserver19before_timesteppingEK14viewd_constgbx">
-<span id="_CPPv3NK16CombinedObserver19before_timesteppingEK14viewd_constgbx"></span><span id="_CPPv2NK16CombinedObserver19before_timesteppingEK14viewd_constgbx"></span><span id="CombinedObserver::before_timestepping__viewd_constgbxCC"></span><span class="target" id="structCombinedObserver_1a967b914e11256dae8da9037aa2c9afce"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">before_timestepping</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv414viewd_constgbx" title="viewd_constgbx"><span class="n"><span class="pre">viewd_constgbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16CombinedObserver19before_timesteppingEK14viewd_constgbx" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK16CombinedObserver19before_timesteppingEK14viewd_constgbx"></span><span id="_CPPv2NK16CombinedObserver19before_timesteppingEK14viewd_constgbx"></span><span id="CombinedObserver::before_timestepping__viewd_constgbxCC"></span><span class="target" id="structCombinedObserver_1af90db58ed674639352d8952ea65dfdf4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">before_timestepping</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv414viewd_constgbx" title="viewd_constgbx"><span class="n"><span class="pre">viewd_constgbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16CombinedObserver19before_timesteppingEK14viewd_constgbx" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Run before timestepping for combination of 2 observers. </p>
 <p>Each observer is run sequentially.</p>
 <dl class="field-list simple">
@@ -445,14 +449,14 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK16CombinedObserver18after_timesteppingEv">
-<span id="_CPPv3NK16CombinedObserver18after_timesteppingEv"></span><span id="_CPPv2NK16CombinedObserver18after_timesteppingEv"></span><span id="CombinedObserver::after_timesteppingC"></span><span class="target" id="structCombinedObserver_1af316be1b31e66abbb92f8f7a1d6e898a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">after_timestepping</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16CombinedObserver18after_timesteppingEv" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK16CombinedObserver18after_timesteppingEv"></span><span id="_CPPv2NK16CombinedObserver18after_timesteppingEv"></span><span id="CombinedObserver::after_timesteppingC"></span><span class="target" id="structCombinedObserver_1a9237be03e6bb36ca2231530781a09b4d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">after_timestepping</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16CombinedObserver18after_timesteppingEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Run after timestepping for combination of 2 observers. </p>
 <p>Each observer is run sequentially. </p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK16CombinedObserver8next_obsEKj">
-<span id="_CPPv3NK16CombinedObserver8next_obsEKj"></span><span id="_CPPv2NK16CombinedObserver8next_obsEKj"></span><span id="CombinedObserver::next_obs__unsigned-iCC"></span><span class="target" id="structCombinedObserver_1aecc0f6cf02d1133d04235fe3eeb30953"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">next_obs</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16CombinedObserver8next_obsEKj" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK16CombinedObserver8next_obsEKj"></span><span id="_CPPv2NK16CombinedObserver8next_obsEKj"></span><span id="CombinedObserver::next_obs__unsigned-iCC"></span><span class="target" id="structCombinedObserver_1a6bb90e2eb88f13257cf06d71c82b6180"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">next_obs</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16CombinedObserver8next_obsEKj" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Determine the next observation time for combination of 2 observers. </p>
 <p>For combination of 2 observers, the next observation time is the smaller out of the two possible.</p>
 <dl class="field-list simple">
@@ -467,7 +471,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK16CombinedObserver7on_stepEKj">
-<span id="_CPPv3NK16CombinedObserver7on_stepEKj"></span><span id="_CPPv2NK16CombinedObserver7on_stepEKj"></span><span id="CombinedObserver::on_step__unsigned-iCC"></span><span class="target" id="structCombinedObserver_1a4848ec80749884e8efe49a600bd74038"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">on_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16CombinedObserver7on_stepEKj" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK16CombinedObserver7on_stepEKj"></span><span id="_CPPv2NK16CombinedObserver7on_stepEKj"></span><span id="CombinedObserver::on_step__unsigned-iCC"></span><span class="target" id="structCombinedObserver_1a1e25f7287d6817e528a594dffc31fd09"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">on_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16CombinedObserver7on_stepEKj" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Check if on_step = true for combination of 2 observers. </p>
 <p>For combination of 2 observers, return on_step = true if either observer is on_step. Else return false.</p>
 <dl class="field-list simple">
@@ -482,7 +486,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK16CombinedObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers">
-<span id="_CPPv3NK16CombinedObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"></span><span id="_CPPv2NK16CombinedObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"></span><span id="CombinedObserver::at_start_step__unsigned-iC.viewd_constgbxC.viewd_constsupersCC"></span><span class="target" id="structCombinedObserver_1a4ece718adf8ea73b4eac6fc0d695fd0b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">at_start_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv414viewd_constgbx" title="viewd_constgbx"><span class="n"><span class="pre">viewd_constgbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv417viewd_constsupers" title="viewd_constsupers"><span class="n"><span class="pre">viewd_constsupers</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">totsupers</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16CombinedObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK16CombinedObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"></span><span id="_CPPv2NK16CombinedObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"></span><span id="CombinedObserver::at_start_step__unsigned-iC.viewd_constgbxC.viewd_constsupersCC"></span><span class="target" id="structCombinedObserver_1a6faf1ee7d5a4af71138e934a3f9ad35e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">at_start_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv414viewd_constgbx" title="viewd_constgbx"><span class="n"><span class="pre">viewd_constgbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv417viewd_constsupers" title="viewd_constsupers"><span class="n"><span class="pre">viewd_constsupers</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">totsupers</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16CombinedObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Run at the start of a step for combination of 2 observers. </p>
 <p>Each observer is run sequentially.</p>
 <dl class="field-list simple">
@@ -490,7 +494,19 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>t_mdl</strong> – The unsigned int parameter. </p></li>
 <li><p><strong>d_gbxs</strong> – The view of gridboxes in device memory. </p></li>
+<li><p><strong>totsupers</strong> – View of superdrops on device. </p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK16CombinedObserver14get_sdmmonitorEv">
+<span id="_CPPv3NK16CombinedObserver14get_sdmmonitorEv"></span><span id="_CPPv2NK16CombinedObserver14get_sdmmonitorEv"></span><span id="CombinedObserver::get_sdmmonitorC"></span><span class="target" id="structCombinedObserver_1a207f53731d56c7c205af7db3c0787493"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">SDMMonitor</span></span><span class="w"> </span><span class="k"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_sdmmonitor</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16CombinedObserver14get_sdmmonitorEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Get monitor for SDM processes from observer. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>monitor ‘mo’ of the observer </p>
 </dd>
 </dl>
 </dd></dl>
@@ -500,14 +516,20 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N16CombinedObserver1aE">
-<span id="_CPPv3N16CombinedObserver1aE"></span><span id="_CPPv2N16CombinedObserver1aE"></span><span id="CombinedObserver::a__Obs1"></span><span class="target" id="structCombinedObserver_1a0ef5c6a1b9e4763a79be318b3a1d04d9"></span><a class="reference internal" href="#_CPPv4I_8Observer_8ObserverE16CombinedObserver" title="CombinedObserver::Obs1"><span class="n"><span class="pre">Obs1</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">a</span></span></span><a class="headerlink" href="#_CPPv4N16CombinedObserver1aE" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N16CombinedObserver1aE"></span><span id="_CPPv2N16CombinedObserver1aE"></span><span id="CombinedObserver::a__Obs1"></span><span class="target" id="structCombinedObserver_1a3b9ae899a5b40a44edc700ef5871342c"></span><a class="reference internal" href="#_CPPv4I_8Observer_8Observer_10SDMMonitorE16CombinedObserver" title="CombinedObserver::Obs1"><span class="n"><span class="pre">Obs1</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">a</span></span></span><a class="headerlink" href="#_CPPv4N16CombinedObserver1aE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>First <a class="reference internal" href="#conceptObserver"><span class="std std-ref">Observer</span></a>. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N16CombinedObserver1bE">
-<span id="_CPPv3N16CombinedObserver1bE"></span><span id="_CPPv2N16CombinedObserver1bE"></span><span id="CombinedObserver::b__Obs2"></span><span class="target" id="structCombinedObserver_1a08badcacb0a5eec9c14fb77757e6cc31"></span><a class="reference internal" href="#_CPPv4I_8Observer_8ObserverE16CombinedObserver" title="CombinedObserver::Obs2"><span class="n"><span class="pre">Obs2</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">b</span></span></span><a class="headerlink" href="#_CPPv4N16CombinedObserver1bE" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N16CombinedObserver1bE"></span><span id="_CPPv2N16CombinedObserver1bE"></span><span id="CombinedObserver::b__Obs2"></span><span class="target" id="structCombinedObserver_1a0cdf89f894b7055f64a203aaedd720c7"></span><a class="reference internal" href="#_CPPv4I_8Observer_8Observer_10SDMMonitorE16CombinedObserver" title="CombinedObserver::Obs2"><span class="n"><span class="pre">Obs2</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">b</span></span></span><a class="headerlink" href="#_CPPv4N16CombinedObserver1bE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Second <a class="reference internal" href="#conceptObserver"><span class="std std-ref">Observer</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N16CombinedObserver2moE">
+<span id="_CPPv3N16CombinedObserver2moE"></span><span id="_CPPv2N16CombinedObserver2moE"></span><span id="CombinedObserver::mo__SDMMo"></span><span class="target" id="structCombinedObserver_1ad6157fadc406a5e885f807d08202b4e9"></span><a class="reference internal" href="#_CPPv4I_8Observer_8Observer_10SDMMonitorE16CombinedObserver" title="CombinedObserver::SDMMo"><span class="n"><span class="pre">SDMMo</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">mo</span></span></span><a class="headerlink" href="#_CPPv4N16CombinedObserver2moE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Combination of First and Second Observers’ SDMMonitors </p>
 </dd></dl>
 
 </div>
@@ -592,7 +614,19 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>t_mdl</strong> – The unsigned int for the current timestep. </p></li>
 <li><p><strong>d_gbxs</strong> – The view of gridboxes in device memory. </p></li>
+<li><p><strong>totsupers</strong> – View of superdrops on device. </p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK12NullObserver14get_sdmmonitorEv">
+<span id="_CPPv3NK12NullObserver14get_sdmmonitorEv"></span><span id="_CPPv2NK12NullObserver14get_sdmmonitorEv"></span><span id="NullObserver::get_sdmmonitorC"></span><span class="target" id="structNullObserver_1a0a322eaf92234d7530a8d57b821ac501"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">SDMMonitor</span></span><span class="w"> </span><span class="k"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_sdmmonitor</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK12NullObserver14get_sdmmonitorEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Get null monitor for SDM processes from observer. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>monitor ‘mo’ of the observer that does nothing </p>
 </dd>
 </dl>
 </dd></dl>
@@ -604,122 +638,14 @@
 <dt class="sig sig-object cpp" id="_CPPv4I0E8ObsFuncs">
 <span id="_CPPv3I0E8ObsFuncs"></span><span id="_CPPv2I0E8ObsFuncs"></span><span class="target" id="conceptObsFuncs"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">OFs</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="k"><span class="pre">concept</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ObsFuncs</span></span></span><a class="headerlink" href="#_CPPv4I0E8ObsFuncs" title="Link to this definition">¶</a><br /></dt>
 <dd><div class="docutils container">
-<em>#include &lt;observers.hpp&gt;</em></div>
-<p>Concept <a class="reference internal" href="#conceptObsFuncs"><span class="std std-ref">ObsFuncs</span></a> for all types that can be called used by <a class="reference internal" href="#structConstTstepObserver"><span class="std std-ref">ConstTstepObserver</span></a> for observation functions. </p>
-<p>Type in <a class="reference internal" href="#structConstTstepObserver"><span class="std std-ref">ConstTstepObserver</span></a> obeying <a class="reference internal" href="#conceptObsFuncs"><span class="std std-ref">ObsFuncs</span></a> makes it possible for <a class="reference internal" href="#structConstTstepObserver"><span class="std std-ref">ConstTstepObserver</span></a> to obey <a class="reference internal" href="#conceptObserver"><span class="std std-ref">Observer</span></a> concept.</p>
+<em>#include &lt;consttstep_observer.hpp&gt;</em></div>
+<p>Concept <a class="reference internal" href="#conceptObsFuncs"><span class="std std-ref">ObsFuncs</span></a> for all types that can be called used by ConsttepObserver for observation functions. </p>
+<p>Type in <a class="reference internal" href="consttstep_observer.html#structConstTstepObserver"><span class="std std-ref">ConstTstepObserver</span></a> obeying <a class="reference internal" href="#conceptObsFuncs"><span class="std std-ref">ObsFuncs</span></a> makes it possible for <a class="reference internal" href="consttstep_observer.html#structConstTstepObserver"><span class="std std-ref">ConstTstepObserver</span></a> to obey <a class="reference internal" href="#conceptObserver"><span class="std std-ref">Observer</span></a> concept.</p>
 <dl class="field-list simple">
 <dt class="field-odd">tparam O<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Type that satisfies the <a class="reference internal" href="#conceptObsFuncs"><span class="std std-ref">ObsFuncs</span></a> concept. </p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="cpp struct">
-<dt class="sig sig-object cpp" id="_CPPv4I_8ObsFuncsE18ConstTstepObserver">
-<span id="_CPPv3I_8ObsFuncsE18ConstTstepObserver"></span><span id="_CPPv2I_8ObsFuncsE18ConstTstepObserver"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E8ObsFuncs" title="ObsFuncs"><span class="n"><span class="pre">ObsFuncs</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">O</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structConstTstepObserver"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ConstTstepObserver</span></span></span><a class="headerlink" href="#_CPPv4I_8ObsFuncsE18ConstTstepObserver" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Structure <a class="reference internal" href="#structConstTstepObserver"><span class="std std-ref">ConstTstepObserver</span></a> represents a type that satisfies the concept of an observer with a constant timestep interval between observations. </p>
-<p>Struct can be used to create an observer with a constant timestep and with observation functionality as determined by the ‘do_obs’ instance of the <a class="reference internal" href="#conceptObsFuncs"><span class="std std-ref">ObsFuncs</span></a> type ‘O’.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>O</strong> – Type that satisfies the <a class="reference internal" href="#conceptObsFuncs"><span class="std std-ref">ObsFuncs</span></a> concept. </p>
-</dd>
-</dl>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N18ConstTstepObserver18ConstTstepObserverEKjK1O">
-<span id="_CPPv3N18ConstTstepObserver18ConstTstepObserverEKjK1O"></span><span id="_CPPv2N18ConstTstepObserver18ConstTstepObserverEKjK1O"></span><span id="ConstTstepObserver::ConstTstepObserver__unsigned-iC.OC"></span><span class="target" id="structConstTstepObserver_1a796d34afd717f452017b567e1385d0c8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ConstTstepObserver</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">interval</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_8ObsFuncsE18ConstTstepObserver" title="ConstTstepObserver::O"><span class="n"><span class="pre">O</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">o</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N18ConstTstepObserver18ConstTstepObserverEKjK1O" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Construct a new <a class="reference internal" href="#structConstTstepObserver"><span class="std std-ref">ConstTstepObserver</span></a> object. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>interval</strong> – Timestep interval. </p></li>
-<li><p><strong>o</strong> – <a class="reference internal" href="#conceptObserver"><span class="std std-ref">Observer</span></a>. </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK18ConstTstepObserver19before_timesteppingEK14viewd_constgbx">
-<span id="_CPPv3NK18ConstTstepObserver19before_timesteppingEK14viewd_constgbx"></span><span id="_CPPv2NK18ConstTstepObserver19before_timesteppingEK14viewd_constgbx"></span><span id="ConstTstepObserver::before_timestepping__viewd_constgbxCC"></span><span class="target" id="structConstTstepObserver_1a481dc99047b31e6cd6eedf63ba839bf7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">before_timestepping</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv414viewd_constgbx" title="viewd_constgbx"><span class="n"><span class="pre">viewd_constgbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK18ConstTstepObserver19before_timesteppingEK14viewd_constgbx" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Perform operations before timestepping. </p>
-<p>Calls <code class="docutils literal notranslate"><span class="pre">before_timestepping</span></code> function of <code class="docutils literal notranslate"><span class="pre">do_obs</span></code>.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>d_gbxs</strong> – The view of gridboxes in device memory. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK18ConstTstepObserver18after_timesteppingEv">
-<span id="_CPPv3NK18ConstTstepObserver18after_timesteppingEv"></span><span id="_CPPv2NK18ConstTstepObserver18after_timesteppingEv"></span><span id="ConstTstepObserver::after_timesteppingC"></span><span class="target" id="structConstTstepObserver_1a95608083b53c3a9f6e2d0f06077088d3"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">after_timestepping</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK18ConstTstepObserver18after_timesteppingEv" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Perform operations after timestepping. </p>
-<p>Calls <code class="docutils literal notranslate"><span class="pre">after_timestepping</span></code> function of <code class="docutils literal notranslate"><span class="pre">do_obs</span></code>. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK18ConstTstepObserver8next_obsEKj">
-<span id="_CPPv3NK18ConstTstepObserver8next_obsEKj"></span><span id="_CPPv2NK18ConstTstepObserver8next_obsEKj"></span><span id="ConstTstepObserver::next_obs__unsigned-iCC"></span><span class="target" id="structConstTstepObserver_1a799a53d69e6945a825169c91f3415566"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">next_obs</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK18ConstTstepObserver8next_obsEKj" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Determine the next observation time. </p>
-<p>Calculates the next observation time based on the current model time and this observer’s constant timestep between observations, ‘interval’.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>t_mdl</strong> – The unsigned int parameter representing the current model timestep. </p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Unsigned int for the next observation timestep. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK18ConstTstepObserver7on_stepEKj">
-<span id="_CPPv3NK18ConstTstepObserver7on_stepEKj"></span><span id="_CPPv2NK18ConstTstepObserver7on_stepEKj"></span><span id="ConstTstepObserver::on_step__unsigned-iCC"></span><span class="target" id="structConstTstepObserver_1a1c0076ce6b9fecd3d47b4126719d7c3e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">on_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK18ConstTstepObserver7on_stepEKj" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Check if observer is “on step”. </p>
-<p>Checks if the current model time is on an observation timestep.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>t_mdl</strong> – The unsigned int parameter representing the current model timestep. </p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>True if the current timestep is an observation timestep, false otherwise. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK18ConstTstepObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers">
-<span id="_CPPv3NK18ConstTstepObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"></span><span id="_CPPv2NK18ConstTstepObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"></span><span id="ConstTstepObserver::at_start_step__unsigned-iC.viewd_constgbxC.viewd_constsupersCC"></span><span class="target" id="structConstTstepObserver_1ad48c23c63cf1a4a88820b7c0761ef386"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">at_start_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv414viewd_constgbx" title="viewd_constgbx"><span class="n"><span class="pre">viewd_constgbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv417viewd_constsupers" title="viewd_constsupers"><span class="n"><span class="pre">viewd_constsupers</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">totsupers</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK18ConstTstepObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Perform operations at the start of a step. </p>
-<p>Calls <code class="docutils literal notranslate"><span class="pre">at_start_step</span></code> function of <code class="docutils literal notranslate"><span class="pre">do_obs</span></code> if the current model time is on an observation timestep.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>t_mdl</strong> – The unsigned int parameter representing the current model time. </p></li>
-<li><p><strong>d_gbxs</strong> – The view of gridboxes in device memory. </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N18ConstTstepObserver8intervalE">
-<span id="_CPPv3N18ConstTstepObserver8intervalE"></span><span id="_CPPv2N18ConstTstepObserver8intervalE"></span><span id="ConstTstepObserver::interval__unsigned-i"></span><span class="target" id="structConstTstepObserver_1a266377e61945939ad24136f37d552c85"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">interval</span></span></span><a class="headerlink" href="#_CPPv4N18ConstTstepObserver8intervalE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>interval between observations. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N18ConstTstepObserver6do_obsE">
-<span id="_CPPv3N18ConstTstepObserver6do_obsE"></span><span id="_CPPv2N18ConstTstepObserver6do_obsE"></span><span id="ConstTstepObserver::do_obs__O"></span><span class="target" id="structConstTstepObserver_1a8ceb0010494c85045852a40e86fb438d"></span><a class="reference internal" href="#_CPPv4I_8ObsFuncsE18ConstTstepObserver" title="ConstTstepObserver::O"><span class="n"><span class="pre">O</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">do_obs</span></span></span><a class="headerlink" href="#_CPPv4N18ConstTstepObserver6do_obsE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Observation functionality. </p>
-</dd></dl>
-
-</div>
 </dd></dl>
 
 </section>
@@ -759,7 +685,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 24 May 2024</div>
+              Last updated on 26 May 2024</div>
           </div>
           <div class="right-details">
             
@@ -782,15 +708,17 @@
             <ul>
 <li><a class="reference internal" href="#">Observers</a><ul>
 <li><a class="reference internal" href="#_CPPv4I0E8Observer"><code class="docutils literal notranslate"><span class="pre">Observer</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4I_8Observer_8ObserverE16CombinedObserver"><code class="docutils literal notranslate"><span class="pre">CombinedObserver</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N16CombinedObserver16CombinedObserverEK4Obs1K4Obs2"><code class="docutils literal notranslate"><span class="pre">CombinedObserver::CombinedObserver()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I_8Observer_8Observer_10SDMMonitorE16CombinedObserver"><code class="docutils literal notranslate"><span class="pre">CombinedObserver</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N16CombinedObserver16CombinedObserverEK4Obs1K4Obs2K5SDMMo"><code class="docutils literal notranslate"><span class="pre">CombinedObserver::CombinedObserver()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK16CombinedObserver19before_timesteppingEK14viewd_constgbx"><code class="docutils literal notranslate"><span class="pre">CombinedObserver::before_timestepping()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK16CombinedObserver18after_timesteppingEv"><code class="docutils literal notranslate"><span class="pre">CombinedObserver::after_timestepping()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK16CombinedObserver8next_obsEKj"><code class="docutils literal notranslate"><span class="pre">CombinedObserver::next_obs()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK16CombinedObserver7on_stepEKj"><code class="docutils literal notranslate"><span class="pre">CombinedObserver::on_step()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK16CombinedObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"><code class="docutils literal notranslate"><span class="pre">CombinedObserver::at_start_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK16CombinedObserver14get_sdmmonitorEv"><code class="docutils literal notranslate"><span class="pre">CombinedObserver::get_sdmmonitor()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N16CombinedObserver1aE"><code class="docutils literal notranslate"><span class="pre">CombinedObserver::a</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N16CombinedObserver1bE"><code class="docutils literal notranslate"><span class="pre">CombinedObserver::b</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N16CombinedObserver2moE"><code class="docutils literal notranslate"><span class="pre">CombinedObserver::mo</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv4rsK8ObserverK8Observer"><code class="docutils literal notranslate"><span class="pre">operator&gt;&gt;()</span></code></a></li>
@@ -800,20 +728,10 @@
 <li><a class="reference internal" href="#_CPPv4NK12NullObserver8next_obsEKj"><code class="docutils literal notranslate"><span class="pre">NullObserver::next_obs()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK12NullObserver7on_stepEKj"><code class="docutils literal notranslate"><span class="pre">NullObserver::on_step()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK12NullObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"><code class="docutils literal notranslate"><span class="pre">NullObserver::at_start_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK12NullObserver14get_sdmmonitorEv"><code class="docutils literal notranslate"><span class="pre">NullObserver::get_sdmmonitor()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv4I0E8ObsFuncs"><code class="docutils literal notranslate"><span class="pre">ObsFuncs</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4I_8ObsFuncsE18ConstTstepObserver"><code class="docutils literal notranslate"><span class="pre">ConstTstepObserver</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N18ConstTstepObserver18ConstTstepObserverEKjK1O"><code class="docutils literal notranslate"><span class="pre">ConstTstepObserver::ConstTstepObserver()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18ConstTstepObserver19before_timesteppingEK14viewd_constgbx"><code class="docutils literal notranslate"><span class="pre">ConstTstepObserver::before_timestepping()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18ConstTstepObserver18after_timesteppingEv"><code class="docutils literal notranslate"><span class="pre">ConstTstepObserver::after_timestepping()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18ConstTstepObserver8next_obsEKj"><code class="docutils literal notranslate"><span class="pre">ConstTstepObserver::next_obs()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18ConstTstepObserver7on_stepEKj"><code class="docutils literal notranslate"><span class="pre">ConstTstepObserver::on_step()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18ConstTstepObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"><code class="docutils literal notranslate"><span class="pre">ConstTstepObserver::at_start_step()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18ConstTstepObserver8intervalE"><code class="docutils literal notranslate"><span class="pre">ConstTstepObserver::interval</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18ConstTstepObserver6do_obsE"><code class="docutils literal notranslate"><span class="pre">ConstTstepObserver::do_obs</span></code></a></li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>

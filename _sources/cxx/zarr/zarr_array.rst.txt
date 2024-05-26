@@ -10,12 +10,6 @@ Header file: ``<libs/zarr/zarr_array.hpp>``
 .. doxygenfunction:: write_zarray_json
    :project: zarr
 
-.. doxygenfunction:: vec_to_string
-   :project: zarr
-
-.. doxygenfunction:: make_part_zarrmetadata
-   :project: zarr
-
 .. doxygenclass:: ZarrArray
    :project: zarr
    :private-members:

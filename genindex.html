@@ -307,7 +307,9 @@
 <li class="toctree-l3"><a class="reference internal" href="cxx/zarr/fsstore.html">FSStore</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cxx/zarr/store_accessor.html">StoreAccessor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cxx/zarr/xarray_zarr_array.html">XarrayZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cxx/zarr/xarray_metadata.html">Xarray Metadata</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cxx/zarr/zarr_array.html">ZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cxx/zarr/zarr_metadata.html">Zarr Metadata</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cxx/zarr/zarr_group.html">ZarrGroup</a></li>
 </ul>
 </li>
@@ -315,6 +317,7 @@
 <li class="toctree-l3"><a class="reference internal" href="cxx/observers/observers.html">Observers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cxx/observers/streamout_observer.html">StreamOut Observer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cxx/observers/runstats_observer.html">RunStatsObserver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cxx/observers/consttstep_observer.html">Constant Time Step Observers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cxx/observers/write_to_dataset_observer.html">Template for Observer to Write To Dataset</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cxx/observers/parallel_write_data.html">Parallel Write Data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cxx/observers/collect_data_for_dataset.html">Collect Data For Dataset</a></li>
@@ -527,7 +530,7 @@
 </li>
         <li><a href="cxx/observers/superdrops_observer.html#_CPPv4I0E11CollectSdId21CollectDataForDatasetI5StoreERK7DatasetI5StoreEK6size_t">CollectSdId (C++ function)</a>
 </li>
-        <li><a href="cxx/observers/superdrops_observer.html#_CPPv4I000E24CollectSuperdropVariable21CollectDataForDatasetI5StoreERK7DatasetI5StoreEK11FunctorFuncKNSt11string_viewEKNSt11string_viewEKNSt11string_viewEKdK6size_t">CollectSuperdropVariable (C++ function)</a>
+        <li><a href="cxx/observers/superdrops_observer.html#_CPPv4I000E24CollectSuperdropVariable21CollectDataForDatasetI5StoreERK7DatasetI5StoreEK11FunctorFuncKNSt11string_viewEKNSt11string_viewEKdK6size_t">CollectSuperdropVariable (C++ function)</a>
 </li>
         <li><a href="cxx/observers/thermo_observer.html#_CPPv4I0E13CollectThermo21CollectDataForDatasetI5StoreERK7DatasetI5StoreEK6size_tK6size_t">CollectThermo (C++ function)</a>
 </li>
@@ -545,12 +548,12 @@
 </li>
         <li><a href="cxx/observers/collect_data_for_dataset.html#_CPPv4N29CombinedCollectDataForDataset1aE">CombinedCollectDataForDataset::a (C++ member)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="cxx/observers/collect_data_for_dataset.html#_CPPv4N29CombinedCollectDataForDataset1bE">CombinedCollectDataForDataset::b (C++ member)</a>
 </li>
         <li><a href="cxx/observers/collect_data_for_dataset.html#_CPPv4N29CombinedCollectDataForDataset29CombinedCollectDataForDatasetEK12CollectData1K12CollectData2">CombinedCollectDataForDataset::CombinedCollectDataForDataset (C++ function)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="cxx/observers/collect_data_for_dataset.html#_CPPv4N29CombinedCollectDataForDataset7FunctorE">CombinedCollectDataForDataset::Functor (C++ struct)</a>
 </li>
         <li><a href="cxx/observers/collect_data_for_dataset.html#_CPPv4N29CombinedCollectDataForDataset7Functor9a_functorE">CombinedCollectDataForDataset::Functor::a_functor (C++ member)</a>
@@ -585,9 +588,9 @@
 </li>
         <li><a href="cxx/superdrops/microphysical_process.html#_CPPv4NK28CombinedMicrophysicalProcess7on_stepEKj">CombinedMicrophysicalProcess::on_step (C++ function)</a>
 </li>
-        <li><a href="cxx/superdrops/microphysical_process.html#_CPPv4NK28CombinedMicrophysicalProcess8run_stepERK10TeamMemberKj15subviewd_supersR5State">CombinedMicrophysicalProcess::run_step (C++ function)</a>
+        <li><a href="cxx/superdrops/microphysical_process.html#_CPPv4NK28CombinedMicrophysicalProcess8run_stepERK10TeamMemberKj15subviewd_supersR5StateK10SDMMonitor">CombinedMicrophysicalProcess::run_step (C++ function)</a>
 </li>
-        <li><a href="cxx/observers/observers.html#_CPPv4I_8Observer_8ObserverE16CombinedObserver">CombinedObserver (C++ struct)</a>
+        <li><a href="cxx/observers/observers.html#_CPPv4I_8Observer_8Observer_10SDMMonitorE16CombinedObserver">CombinedObserver (C++ struct)</a>
 </li>
         <li><a href="cxx/observers/observers.html#_CPPv4N16CombinedObserver1aE">CombinedObserver::a (C++ member)</a>
 </li>
@@ -599,7 +602,11 @@
 </li>
         <li><a href="cxx/observers/observers.html#_CPPv4NK16CombinedObserver19before_timesteppingEK14viewd_constgbx">CombinedObserver::before_timestepping (C++ function)</a>
 </li>
-        <li><a href="cxx/observers/observers.html#_CPPv4N16CombinedObserver16CombinedObserverEK4Obs1K4Obs2">CombinedObserver::CombinedObserver (C++ function)</a>
+        <li><a href="cxx/observers/observers.html#_CPPv4N16CombinedObserver16CombinedObserverEK4Obs1K4Obs2K5SDMMo">CombinedObserver::CombinedObserver (C++ function)</a>
+</li>
+        <li><a href="cxx/observers/observers.html#_CPPv4NK16CombinedObserver14get_sdmmonitorEv">CombinedObserver::get_sdmmonitor (C++ function)</a>
+</li>
+        <li><a href="cxx/observers/observers.html#_CPPv4N16CombinedObserver2moE">CombinedObserver::mo (C++ member)</a>
 </li>
         <li><a href="cxx/observers/observers.html#_CPPv4NK16CombinedObserver8next_obsEKj">CombinedObserver::next_obs (C++ function)</a>
 </li>
@@ -619,25 +626,27 @@
 </li>
         <li><a href="cxx/superdrops/microphysical_process.html#_CPPv4NK22ConstTstepMicrophysics7on_stepEKj">ConstTstepMicrophysics::on_step (C++ function)</a>
 </li>
-        <li><a href="cxx/superdrops/microphysical_process.html#_CPPv4NK22ConstTstepMicrophysics8run_stepERK10TeamMemberKj15subviewd_supersR5State">ConstTstepMicrophysics::run_step (C++ function)</a>
+        <li><a href="cxx/superdrops/microphysical_process.html#_CPPv4NK22ConstTstepMicrophysics8run_stepERK10TeamMemberKj15subviewd_supersR5StateK10SDMMonitor">ConstTstepMicrophysics::run_step (C++ function)</a>
 </li>
-        <li><a href="cxx/observers/observers.html#_CPPv4I_8ObsFuncsE18ConstTstepObserver">ConstTstepObserver (C++ struct)</a>
+        <li><a href="cxx/observers/consttstep_observer.html#_CPPv4I_8ObsFuncsE18ConstTstepObserver">ConstTstepObserver (C++ struct)</a>
 </li>
-        <li><a href="cxx/observers/observers.html#_CPPv4NK18ConstTstepObserver18after_timesteppingEv">ConstTstepObserver::after_timestepping (C++ function)</a>
+        <li><a href="cxx/observers/consttstep_observer.html#_CPPv4NK18ConstTstepObserver18after_timesteppingEv">ConstTstepObserver::after_timestepping (C++ function)</a>
 </li>
-        <li><a href="cxx/observers/observers.html#_CPPv4NK18ConstTstepObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers">ConstTstepObserver::at_start_step (C++ function)</a>
+        <li><a href="cxx/observers/consttstep_observer.html#_CPPv4NK18ConstTstepObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers">ConstTstepObserver::at_start_step (C++ function)</a>
 </li>
-        <li><a href="cxx/observers/observers.html#_CPPv4NK18ConstTstepObserver19before_timesteppingEK14viewd_constgbx">ConstTstepObserver::before_timestepping (C++ function)</a>
+        <li><a href="cxx/observers/consttstep_observer.html#_CPPv4NK18ConstTstepObserver19before_timesteppingEK14viewd_constgbx">ConstTstepObserver::before_timestepping (C++ function)</a>
 </li>
-        <li><a href="cxx/observers/observers.html#_CPPv4N18ConstTstepObserver18ConstTstepObserverEKjK1O">ConstTstepObserver::ConstTstepObserver (C++ function)</a>
+        <li><a href="cxx/observers/consttstep_observer.html#_CPPv4N18ConstTstepObserver18ConstTstepObserverEKjK1O">ConstTstepObserver::ConstTstepObserver (C++ function)</a>
 </li>
-        <li><a href="cxx/observers/observers.html#_CPPv4N18ConstTstepObserver6do_obsE">ConstTstepObserver::do_obs (C++ member)</a>
+        <li><a href="cxx/observers/consttstep_observer.html#_CPPv4N18ConstTstepObserver6do_obsE">ConstTstepObserver::do_obs (C++ member)</a>
 </li>
-        <li><a href="cxx/observers/observers.html#_CPPv4N18ConstTstepObserver8intervalE">ConstTstepObserver::interval (C++ member)</a>
+        <li><a href="cxx/observers/consttstep_observer.html#_CPPv4NK18ConstTstepObserver14get_sdmmonitorEv">ConstTstepObserver::get_sdmmonitor (C++ function)</a>
 </li>
-        <li><a href="cxx/observers/observers.html#_CPPv4NK18ConstTstepObserver8next_obsEKj">ConstTstepObserver::next_obs (C++ function)</a>
+        <li><a href="cxx/observers/consttstep_observer.html#_CPPv4N18ConstTstepObserver8intervalE">ConstTstepObserver::interval (C++ member)</a>
 </li>
-        <li><a href="cxx/observers/observers.html#_CPPv4NK18ConstTstepObserver7on_stepEKj">ConstTstepObserver::on_step (C++ function)</a>
+        <li><a href="cxx/observers/consttstep_observer.html#_CPPv4NK18ConstTstepObserver8next_obsEKj">ConstTstepObserver::next_obs (C++ function)</a>
+</li>
+        <li><a href="cxx/observers/consttstep_observer.html#_CPPv4NK18ConstTstepObserver7on_stepEKj">ConstTstepObserver::on_step (C++ function)</a>
 </li>
         <li><a href="cxx/observers/superdrops_observer.html#_CPPv410Coord1Func">Coord1Func (C++ struct)</a>
 </li>
@@ -661,7 +670,7 @@
 </li>
         <li><a href="cxx/observers/massmoments_observer.html#_CPPv4I0E22create_massmom2_xarray15XarrayZarrArrayI5StorefERK7DatasetI5StoreEKNSt11string_viewEK6size_tK6size_t">create_massmom2_xarray (C++ function)</a>
 </li>
-        <li><a href="cxx/observers/massmoments_observer.html#_CPPv4I00E24create_massmoment_xarray15XarrayZarrArrayI5Store1TERK7DatasetI5StoreEKNSt11string_viewEKNSt11string_viewEKNSt11string_viewEKdK6size_tK6size_t">create_massmoment_xarray (C++ function)</a>
+        <li><a href="cxx/observers/massmoments_observer.html#_CPPv4I00E24create_massmoment_xarray15XarrayZarrArrayI5Store1TERK7DatasetI5StoreEKNSt11string_viewEKNSt11string_viewEKdK6size_tK6size_t">create_massmoment_xarray (C++ function)</a>
 </li>
         <li><a href="cxx/runcleo/createsupers.html#_CPPv4I0E13create_supers12viewd_supersRK18SuperdropInitConds">create_supers (C++ function)</a>
 </li>
@@ -679,13 +688,13 @@
 </li>
         <li><a href="cxx/zarr/dataset.html#_CPPv4N7Dataset13add_dimensionERKNSt4pairINSt6stringE6size_tEE">Dataset::add_dimension (C++ function)</a>
 </li>
-        <li><a href="cxx/zarr/dataset.html#_CPPv4I0ENK7Dataset12create_arrayE15XarrayZarrArrayI5Store1TEKNSt11string_viewEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEE">Dataset::create_array (C++ function)</a>
+        <li><a href="cxx/zarr/dataset.html#_CPPv4I0ENK7Dataset12create_arrayE15XarrayZarrArrayI5Store1TEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEE">Dataset::create_array (C++ function)</a>
 </li>
-        <li><a href="cxx/zarr/dataset.html#_CPPv4I0EN7Dataset23create_coordinate_arrayE15XarrayZarrArrayI5Store1TEKNSt11string_viewEKNSt11string_viewEKNSt11string_viewEKdK6size_tK6size_t">Dataset::create_coordinate_array (C++ function)</a>
+        <li><a href="cxx/zarr/dataset.html#_CPPv4I0EN7Dataset23create_coordinate_arrayE15XarrayZarrArrayI5Store1TEKNSt11string_viewEKNSt11string_viewEKdK6size_tK6size_t">Dataset::create_coordinate_array (C++ function)</a>
 </li>
-        <li><a href="cxx/zarr/dataset.html#_CPPv4I0ENK7Dataset19create_ragged_arrayE15XarrayZarrArrayI5Store1TEKNSt11string_viewEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEEKNSt11string_viewE">Dataset::create_ragged_array (C++ function)</a>
+        <li><a href="cxx/zarr/dataset.html#_CPPv4I0ENK7Dataset19create_ragged_arrayE15XarrayZarrArrayI5Store1TEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEEKNSt11string_viewE">Dataset::create_ragged_array (C++ function)</a>
 </li>
-        <li><a href="cxx/zarr/dataset.html#_CPPv4I0ENK7Dataset24create_raggedcount_arrayE15XarrayZarrArrayI5Store1TEKNSt11string_viewEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEEKNSt11string_viewE">Dataset::create_raggedcount_array (C++ function)</a>
+        <li><a href="cxx/zarr/dataset.html#_CPPv4I0ENK7Dataset24create_raggedcount_arrayE15XarrayZarrArrayI5Store1TEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEEKNSt11string_viewE">Dataset::create_raggedcount_array (C++ function)</a>
 </li>
         <li><a href="cxx/zarr/dataset.html#_CPPv4N7Dataset7DatasetER5Store">Dataset::Dataset (C++ function)</a>
 </li>
@@ -755,13 +764,13 @@
 </li>
         <li><a href="cxx/superdrops/collisions/collisions.html#_CPPv4N12DoCollisions12DoCollisionsEKd11Probability14EnactCollision">DoCollisions::DoCollisions (C++ function)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="cxx/superdrops/collisions/collisions.html#_CPPv4N12DoCollisions15enact_collisionE">DoCollisions::enact_collision (C++ member)</a>
 </li>
         <li><a href="cxx/superdrops/collisions/collisions.html#_CPPv4N12DoCollisions7genpoolE">DoCollisions::genpool (C++ member)</a>
 </li>
-        <li><a href="cxx/superdrops/collisions/collisions.html#_CPPv4NK12DoCollisionsclERK10TeamMemberKj15subviewd_supersRK5State">DoCollisions::operator() (C++ function)</a>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="cxx/superdrops/collisions/collisions.html#_CPPv4NK12DoCollisionsclERK10TeamMemberKj15subviewd_supersRK5StateK10SDMMonitor">DoCollisions::operator() (C++ function)</a>
 </li>
         <li><a href="cxx/superdrops/collisions/collisions.html#_CPPv4N12DoCollisions11probabilityE">DoCollisions::probability (C++ member)</a>
 </li>
@@ -771,7 +780,7 @@
 </li>
         <li><a href="cxx/superdrops/condensation.html#_CPPv4N14DoCondensation15do_alter_thermoE">DoCondensation::do_alter_thermo (C++ member)</a>
 </li>
-        <li><a href="cxx/superdrops/condensation.html#_CPPv4NK14DoCondensation15do_condensationERK10TeamMemberK15subviewd_supersR5State">DoCondensation::do_condensation (C++ function)</a>
+        <li><a href="cxx/superdrops/condensation.html#_CPPv4NK14DoCondensation15do_condensationERK10TeamMemberK15subviewd_supersR5StateK10SDMMonitor">DoCondensation::do_condensation (C++ function)</a>
 </li>
         <li><a href="cxx/superdrops/condensation.html#_CPPv4N14DoCondensation14DoCondensationEKbKjKdKdKdKd">DoCondensation::DoCondensation (C++ function)</a>
 </li>
@@ -779,7 +788,7 @@
 </li>
         <li><a href="cxx/superdrops/condensation.html#_CPPv4N14DoCondensation4impeE">DoCondensation::impe (C++ member)</a>
 </li>
-        <li><a href="cxx/superdrops/condensation.html#_CPPv4NK14DoCondensationclERK10TeamMemberKj15subviewd_supersR5State">DoCondensation::operator() (C++ function)</a>
+        <li><a href="cxx/superdrops/condensation.html#_CPPv4NK14DoCondensationclERK10TeamMemberKj15subviewd_supersR5StateK10SDMMonitor">DoCondensation::operator() (C++ function)</a>
 </li>
         <li><a href="cxx/superdrops/condensation.html#_CPPv4NK14DoCondensation12state_changeEKdR5State">DoCondensation::state_change (C++ function)</a>
 </li>
@@ -799,6 +808,8 @@
 </li>
         <li><a href="cxx/observers/time_observer.html#_CPPv4N9DoTimeObs9DoTimeObsER7DatasetI5StoreEK6size_tKNSt8functionIFdjEEE">DoTimeObs::DoTimeObs (C++ function)</a>
 </li>
+        <li><a href="cxx/observers/time_observer.html#_CPPv4NK9DoTimeObs14get_sdmmonitorEv">DoTimeObs::get_sdmmonitor (C++ function)</a>
+</li>
         <li><a href="cxx/observers/time_observer.html#_CPPv4N9DoTimeObs16step2dimlesstimeE">DoTimeObs::step2dimlesstime (C++ member)</a>
 </li>
         <li><a href="cxx/observers/time_observer.html#_CPPv4N9DoTimeObs9xzarr_ptrE">DoTimeObs::xzarr_ptr (C++ member)</a>
@@ -817,6 +828,8 @@
 </li>
         <li><a href="cxx/observers/totnsupers_observer.html#_CPPv4N15DoTotNsupersObs15DoTotNsupersObsER7DatasetI5StoreEK6size_t">DoTotNsupersObs::DoTotNsupersObs (C++ function)</a>
 </li>
+        <li><a href="cxx/observers/totnsupers_observer.html#_CPPv4NK15DoTotNsupersObs14get_sdmmonitorEv">DoTotNsupersObs::get_sdmmonitor (C++ function)</a>
+</li>
         <li><a href="cxx/observers/totnsupers_observer.html#_CPPv4N15DoTotNsupersObs9xzarr_ptrE">DoTotNsupersObs::xzarr_ptr (C++ member)</a>
 </li>
         <li><a href="cxx/observers/totnsupers_observer.html#_CPPv4N15DoTotNsupersObsD0Ev">DoTotNsupersObs::~DoTotNsupersObs (C++ function)</a>
@@ -830,6 +843,8 @@
         <li><a href="cxx/observers/write_to_dataset_observer.html#_CPPv4NK16DoWriteToDataset19before_timesteppingEK14viewd_constgbx">DoWriteToDataset::before_timestepping (C++ function)</a>
 </li>
         <li><a href="cxx/observers/write_to_dataset_observer.html#_CPPv4N16DoWriteToDataset16DoWriteToDatasetE17ParallelWriteData">DoWriteToDataset::DoWriteToDataset (C++ function)</a>
+</li>
+        <li><a href="cxx/observers/write_to_dataset_observer.html#_CPPv4NK16DoWriteToDataset14get_sdmmonitorEv">DoWriteToDataset::get_sdmmonitor (C++ function)</a>
 </li>
         <li><a href="cxx/observers/write_to_dataset_observer.html#_CPPv4N16DoWriteToDataset14parallel_writeE">DoWriteToDataset::parallel_write (C++ member)</a>
 </li>
@@ -914,6 +929,8 @@
         <li><a href="cxx/observers/gbxindex_observer.html#_CPPv4N16GbxindexObserver7datasetE">GbxindexObserver::dataset (C++ member)</a>
 </li>
         <li><a href="cxx/observers/gbxindex_observer.html#_CPPv4N16GbxindexObserver16GbxindexObserverER7DatasetI5StoreEK6size_tK6size_t">GbxindexObserver::GbxindexObserver (C++ function)</a>
+</li>
+        <li><a href="cxx/observers/gbxindex_observer.html#_CPPv4NK16GbxindexObserver14get_sdmmonitorEv">GbxindexObserver::get_sdmmonitor (C++ function)</a>
 </li>
         <li><a href="cxx/observers/gbxindex_observer.html#_CPPv4NK16GbxindexObserver8next_obsEKj">GbxindexObserver::next_obs (C++ function)</a>
 </li>
@@ -1167,9 +1184,7 @@
   <h2>M</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="cxx/zarr/zarr_array.html#_CPPv422make_part_zarrmetadataRKNSt6vectorI6size_tEEKNSt11string_viewE">make_part_zarrmetadata (C++ function)</a>
-</li>
-        <li><a href="cxx/zarr/xarray_zarr_array.html#_CPPv420make_xarray_metadataKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorINSt6stringEEE">make_xarray_metadata (C++ function)</a>, <a href="cxx/zarr/xarray_zarr_array.html#_CPPv420make_xarray_metadataKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorINSt6stringEEEKNSt11string_viewE">[1]</a>
+        <li><a href="cxx/zarr/zarr_metadata.html#_CPPv422make_part_zarrmetadataRKNSt6vectorI6size_tEEKNSt11string_viewE">make_part_zarrmetadata (C++ function)</a>
 </li>
         <li><a href="cxx/observers/massmoments_observer.html#_CPPv415MassMomentsFunc">MassMomentsFunc (C++ struct)</a>
 </li>
@@ -1250,7 +1265,7 @@
 </li>
         <li><a href="cxx/superdrops/microphysical_process.html#_CPPv4NK24NullMicrophysicalProcess7on_stepEKj">NullMicrophysicalProcess::on_step (C++ function)</a>
 </li>
-        <li><a href="cxx/superdrops/microphysical_process.html#_CPPv4NK24NullMicrophysicalProcess8run_stepERK10TeamMemberKj15subviewd_supersR5State">NullMicrophysicalProcess::run_step (C++ function)</a>
+        <li><a href="cxx/superdrops/microphysical_process.html#_CPPv4NK24NullMicrophysicalProcess8run_stepERK10TeamMemberKj15subviewd_supersR5StateK10SDMMonitor">NullMicrophysicalProcess::run_step (C++ function)</a>
 </li>
         <li><a href="cxx/observers/observers.html#_CPPv412NullObserver">NullObserver (C++ struct)</a>
 </li>
@@ -1259,6 +1274,8 @@
         <li><a href="cxx/observers/observers.html#_CPPv4NK12NullObserver13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers">NullObserver::at_start_step (C++ function)</a>
 </li>
         <li><a href="cxx/observers/observers.html#_CPPv4NK12NullObserver19before_timesteppingEK14viewd_constgbx">NullObserver::before_timestepping (C++ function)</a>
+</li>
+        <li><a href="cxx/observers/observers.html#_CPPv4NK12NullObserver14get_sdmmonitorEv">NullObserver::get_sdmmonitor (C++ function)</a>
 </li>
         <li><a href="cxx/observers/observers.html#_CPPv4NK12NullObserver8next_obsEKj">NullObserver::next_obs (C++ function)</a>
 </li>
@@ -1526,6 +1543,8 @@
 </li>
         <li><a href="cxx/observers/runstats_observer.html#_CPPv4NK16RunStatsObserver19before_timesteppingEK14viewd_constgbx">RunStatsObserver::before_timestepping (C++ function)</a>
 </li>
+        <li><a href="cxx/observers/runstats_observer.html#_CPPv4NK16RunStatsObserver14get_sdmmonitorEv">RunStatsObserver::get_sdmmonitor (C++ function)</a>
+</li>
         <li><a href="cxx/observers/runstats_observer.html#_CPPv4N16RunStatsObserver8intervalE">RunStatsObserver::interval (C++ member)</a>
 </li>
         <li><a href="cxx/observers/runstats_observer.html#_CPPv4NK16RunStatsObserver8next_obsEKj">RunStatsObserver::next_obs (C++ function)</a>
@@ -1598,9 +1617,9 @@
 </li>
         <li><a href="cxx/runcleo/sdmmethods.html#_CPPv4N10SDMMethods15SDMMicrophysics9microphysE">SDMMethods::SDMMicrophysics::microphys (C++ member)</a>
 </li>
-        <li><a href="cxx/runcleo/sdmmethods.html#_CPPv4NK10SDMMethods15SDMMicrophysicsclEKjKjK9viewd_gbx">SDMMethods::SDMMicrophysics::operator() (C++ function)</a>
+        <li><a href="cxx/runcleo/sdmmethods.html#_CPPv4I_10SDMMonitorENK10SDMMethods15SDMMicrophysicsclEvKjKjK9viewd_gbxK5SDMMo">SDMMethods::SDMMicrophysics::operator() (C++ function)</a>
 </li>
-        <li><a href="cxx/runcleo/sdmmethods.html#_CPPv4NK10SDMMethods19superdrops_movementEKj9viewd_gbxK12viewd_supers">SDMMethods::superdrops_movement (C++ function)</a>
+        <li><a href="cxx/runcleo/sdmmethods.html#_CPPv4NK10SDMMethods19superdrops_movementEKj9viewd_gbxK12viewd_supersK10SDMMonitor">SDMMethods::superdrops_movement (C++ function)</a>
 </li>
         <li><a href="cxx/superdrops/urbg.html#_CPPv4I0E14shuffle_supers12viewd_supersK12viewd_supers4URBGI10DeviceTypeE">shuffle_supers (C++ function)</a>
 </li>
@@ -1668,14 +1687,16 @@
 </li>
         <li><a href="cxx/observers/streamout_observer.html#_CPPv4NK17StreamOutObserver19before_timesteppingEK14viewd_constgbx">StreamOutObserver::before_timestepping (C++ function)</a>
 </li>
+        <li><a href="cxx/observers/streamout_observer.html#_CPPv4NK17StreamOutObserver14get_sdmmonitorEv">StreamOutObserver::get_sdmmonitor (C++ function)</a>
+</li>
         <li><a href="cxx/observers/streamout_observer.html#_CPPv4N17StreamOutObserver8intervalE">StreamOutObserver::interval (C++ member)</a>
 </li>
         <li><a href="cxx/observers/streamout_observer.html#_CPPv4NK17StreamOutObserver8next_obsEKj">StreamOutObserver::next_obs (C++ function)</a>
 </li>
-        <li><a href="cxx/observers/streamout_observer.html#_CPPv4NK17StreamOutObserver7on_stepEKj">StreamOutObserver::on_step (C++ function)</a>
-</li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="cxx/observers/streamout_observer.html#_CPPv4NK17StreamOutObserver7on_stepEKj">StreamOutObserver::on_step (C++ function)</a>
+</li>
         <li><a href="cxx/observers/streamout_observer.html#_CPPv4N17StreamOutObserver13step2realtimeE">StreamOutObserver::step2realtime (C++ member)</a>
 </li>
         <li><a href="cxx/observers/streamout_observer.html#_CPPv4NK17StreamOutObserver19streamout_statementEKjK14viewd_constgbx">StreamOutObserver::streamout_statement (C++ function)</a>
@@ -1858,9 +1879,7 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="cxx/zarr/chunks.html#_CPPv411vec_productRKNSt6vectorI6size_tEE">vec_product (C++ function)</a>, <a href="cxx/zarr/chunks.html#_CPPv411vec_productRKNSt6vectorI6size_tEEK6size_t">[1]</a>
 </li>
-        <li><a href="cxx/zarr/zarr_array.html#_CPPv413vec_to_stringRKNSt6vectorI6size_tEE">vec_to_string (C++ function)</a>
-</li>
-        <li><a href="cxx/zarr/xarray_zarr_array.html#_CPPv416vecstr_to_stringRKNSt6vectorINSt6stringEEE">vecstr_to_string (C++ function)</a>
+        <li><a href="cxx/zarr/zarr_metadata.html#_CPPv413vec_to_stringRKNSt6vectorI6size_tEE">vec_to_string (C++ function)</a>
 </li>
         <li><a href="cxx/superdrops/terminalvelocity.html#_CPPv4I0E15VelocityFormula">VelocityFormula (C++ concept)</a>
 </li>
@@ -1868,10 +1887,10 @@
 </li>
         <li><a href="cxx/superdrops/kokkosaliases_sd.html#_CPPv417viewd_constsupers">viewd_constsupers (C++ type)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="cxx/kokkosaliases.html#_CPPv49viewd_gbx">viewd_gbx (C++ type)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="cxx/kokkosaliases.html#_CPPv411viewd_ndims">viewd_ndims (C++ type)</a>
 </li>
         <li><a href="cxx/superdrops/kokkosaliases_sd.html#_CPPv412viewd_supers">viewd_supers (C++ type)</a>
@@ -1920,6 +1939,8 @@
   <h2>X</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="cxx/zarr/xarray_metadata.html#_CPPv4I0E15xarray_metadataNSt6stringEKNSt11string_viewEKdRKNSt6vectorINSt6stringEEE">xarray_metadata (C++ function)</a>, <a href="cxx/zarr/xarray_metadata.html#_CPPv4I0E15xarray_metadataNSt6stringEKNSt11string_viewEKdRKNSt6vectorINSt6stringEEEKNSt11string_viewE">[1]</a>
+</li>
         <li><a href="cxx/observers/generic_collect_data.html#_CPPv4I00E14XarrayAndViews">XarrayAndViews (C++ struct)</a>
 </li>
         <li><a href="cxx/observers/generic_collect_data.html#_CPPv4N14XarrayAndViews6d_dataE">XarrayAndViews::d_data (C++ member)</a>
@@ -1958,7 +1979,7 @@
 </li>
         <li><a href="cxx/zarr/xarray_zarr_array.html#_CPPv4N15XarrayZarrArray14write_to_arrayEK12viewh_buffer">XarrayZarrArray::write_to_array (C++ function)</a>, <a href="cxx/zarr/xarray_zarr_array.html#_CPPv4N15XarrayZarrArray14write_to_arrayEK1T">[1]</a>
 </li>
-        <li><a href="cxx/zarr/xarray_zarr_array.html#_CPPv4N15XarrayZarrArray15XarrayZarrArrayER5StoreRKNSt13unordered_mapINSt6stringE6size_tEEKNSt11string_viewEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEE">XarrayZarrArray::XarrayZarrArray (C++ function)</a>, <a href="cxx/zarr/xarray_zarr_array.html#_CPPv4N15XarrayZarrArray15XarrayZarrArrayER5StoreRKNSt13unordered_mapINSt6stringE6size_tEEKNSt11string_viewEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEEKNSt11string_viewE">[1]</a>
+        <li><a href="cxx/zarr/xarray_zarr_array.html#_CPPv4N15XarrayZarrArray15XarrayZarrArrayER5StoreRKNSt13unordered_mapINSt6stringE6size_tEEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEE">XarrayZarrArray::XarrayZarrArray (C++ function)</a>, <a href="cxx/zarr/xarray_zarr_array.html#_CPPv4N15XarrayZarrArray15XarrayZarrArrayER5StoreRKNSt13unordered_mapINSt6stringE6size_tEEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEEKNSt11string_viewE">[1]</a>
 </li>
         <li><a href="cxx/zarr/xarray_zarr_array.html#_CPPv4N15XarrayZarrArray4zarrE">XarrayZarrArray::zarr (C++ member)</a>
 </li>
@@ -1992,20 +2013,18 @@
 </li>
         <li><a href="cxx/zarr/zarr_array.html#_CPPv4N9ZarrArray4nameE">ZarrArray::name (C++ member)</a>
 </li>
-        <li><a href="cxx/zarr/zarr_array.html#_CPPv4N9ZarrArray17part_zarrmetadataE">ZarrArray::part_zarrmetadata (C++ member)</a>
-</li>
         <li><a href="cxx/zarr/zarr_array.html#_CPPv4N9ZarrArray5storeE">ZarrArray::store (C++ member)</a>
 </li>
         <li><a href="cxx/zarr/zarr_array.html#_CPPv4N9ZarrArray15subviewh_bufferE">ZarrArray::subviewh_buffer (C++ type)</a>
 </li>
         <li><a href="cxx/zarr/zarr_array.html#_CPPv4N9ZarrArray10totnchunksE">ZarrArray::totnchunks (C++ member)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="cxx/zarr/zarr_array.html#_CPPv4N9ZarrArray8totndataE">ZarrArray::totndata (C++ member)</a>
 </li>
         <li><a href="cxx/zarr/zarr_array.html#_CPPv4N9ZarrArray12viewh_bufferE">ZarrArray::viewh_buffer (C++ type)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="cxx/zarr/zarr_array.html#_CPPv4N9ZarrArray16write_arrayshapeERKNSt6vectorI6size_tEE">ZarrArray::write_arrayshape (C++ function)</a>
 </li>
         <li><a href="cxx/zarr/zarr_array.html#_CPPv4N9ZarrArray21write_chunks_to_storeEK15subviewh_buffer">ZarrArray::write_chunks_to_store (C++ function)</a>
@@ -2014,9 +2033,9 @@
 </li>
         <li><a href="cxx/zarr/zarr_array.html#_CPPv4N9ZarrArray19write_to_zarr_arrayEK12viewh_buffer">ZarrArray::write_to_zarr_array (C++ function)</a>
 </li>
-        <li><a href="cxx/zarr/zarr_array.html#_CPPv4NK9ZarrArray13zarr_metadataERKNSt6vectorI6size_tEE">ZarrArray::zarr_metadata (C++ function)</a>
+        <li><a href="cxx/zarr/zarr_array.html#_CPPv4N9ZarrArray13zarr_metadataE">ZarrArray::zarr_metadata (C++ member)</a>
 </li>
-        <li><a href="cxx/zarr/zarr_array.html#_CPPv4N9ZarrArray9ZarrArrayER5StoreKNSt11string_viewEKNSt11string_viewERKNSt6vectorI6size_tEEKbRKNSt6vectorI6size_tEE">ZarrArray::ZarrArray (C++ function)</a>
+        <li><a href="cxx/zarr/zarr_array.html#_CPPv4N9ZarrArray9ZarrArrayER5StoreKNSt11string_viewERKNSt6vectorI6size_tEEKbRKNSt6vectorI6size_tEE">ZarrArray::ZarrArray (C++ function)</a>
 </li>
         <li><a href="cxx/zarr/zarr_array.html#_CPPv4N9ZarrArrayD0Ev">ZarrArray::~ZarrArray (C++ function)</a>
 </li>
@@ -2025,6 +2044,14 @@
         <li><a href="cxx/zarr/zarr_group.html#_CPPv4N9ZarrGroup5storeE">ZarrGroup::store (C++ member)</a>
 </li>
         <li><a href="cxx/zarr/zarr_group.html#_CPPv4N9ZarrGroup9ZarrGroupER5Store">ZarrGroup::ZarrGroup (C++ function)</a>
+</li>
+        <li><a href="cxx/zarr/zarr_metadata.html#_CPPv4I0E12ZarrMetadata">ZarrMetadata (C++ class)</a>
+</li>
+        <li><a href="cxx/zarr/zarr_metadata.html#_CPPv4NK12ZarrMetadataclERKNSt6vectorI6size_tEE">ZarrMetadata::operator() (C++ function)</a>
+</li>
+        <li><a href="cxx/zarr/zarr_metadata.html#_CPPv4N12ZarrMetadata17part_zarrmetadataE">ZarrMetadata::part_zarrmetadata (C++ member)</a>
+</li>
+        <li><a href="cxx/zarr/zarr_metadata.html#_CPPv4N12ZarrMetadata12ZarrMetadataERKNSt6vectorI6size_tEEKNSt11string_viewE">ZarrMetadata::ZarrMetadata (C++ function)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -2048,7 +2075,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 24 May 2024</div>
+              Last updated on 26 May 2024</div>
           </div>
           <div class="right-details">
             

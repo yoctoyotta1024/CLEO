@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="ZarrGroup" href="zarr_group.html" /><link rel="prev" title="XarrayZarrArray" href="xarray_zarr_array.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Zarr Metadata" href="zarr_metadata.html" /><link rel="prev" title="Xarray Metadata" href="xarray_metadata.html" />
 
     <!-- Generated with Sphinx 7.3.7 and Furo 2024.05.06 -->
         <title>ZarrArray - CLEO 0.1.0 documentation</title>
@@ -309,7 +309,9 @@
 <li class="toctree-l3"><a class="reference internal" href="fsstore.html">FSStore</a></li>
 <li class="toctree-l3"><a class="reference internal" href="store_accessor.html">StoreAccessor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="xarray_zarr_array.html">XarrayZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xarray_metadata.html">Xarray Metadata</a></li>
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">ZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zarr_metadata.html">Zarr Metadata</a></li>
 <li class="toctree-l3"><a class="reference internal" href="zarr_group.html">ZarrGroup</a></li>
 </ul>
 </li>
@@ -317,6 +319,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../observers/observers.html">Observers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../observers/streamout_observer.html">StreamOut Observer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../observers/runstats_observer.html">RunStatsObserver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/consttstep_observer.html">Constant Time Step Observers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../observers/write_to_dataset_observer.html">Template for Observer to Write To Dataset</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../observers/parallel_write_data.html">Parallel Write Data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../observers/collect_data_for_dataset.html">Collect Data For Dataset</a></li>
@@ -427,39 +430,6 @@
 </dl>
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv413vec_to_stringRKNSt6vectorI6size_tEE">
-<span id="_CPPv313vec_to_stringRKNSt6vectorI6size_tEE"></span><span id="_CPPv213vec_to_stringRKNSt6vectorI6size_tEE"></span><span id="vec_to_string__std::vector:s:CR"></span><span class="target" id="zarr__array_8hpp_1a0a945bb241dbf20b05675638324cbded"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vec_to_string</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">vals</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413vec_to_stringRKNSt6vectorI6size_tEE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Converts a vector of integers into a single list written as a string. </p>
-<p>Given vector of a type convertible to a string with values [a, b, c, …, z], function returns the string “[a, b, c, …, z]” with elements separated by commas and enclosed in square brackets. Function is useful for converting vectors representing the shape of chunks and arrays etc. into a string format for metadata json files.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>vals</strong> – The vector values of a type convertible to a string. </p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A string representation of the vector. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv422make_part_zarrmetadataRKNSt6vectorI6size_tEEKNSt11string_viewE">
-<span id="_CPPv322make_part_zarrmetadataRKNSt6vectorI6size_tEEKNSt11string_viewE"></span><span id="_CPPv222make_part_zarrmetadataRKNSt6vectorI6size_tEEKNSt11string_viewE"></span><span id="make_part_zarrmetadata__std::vector:s:CR.std::string_viewC"></span><span class="target" id="zarr__array_8hpp_1a7fe76d2363750080f3863d6a854f2377"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">make_part_zarrmetadata</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">chunkshape</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dtype</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv422make_part_zarrmetadataRKNSt6vectorI6size_tEEKNSt11string_viewE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Generates part of the metadata for a Zarr array .zarray json file. </p>
-<p>This function constructs a string containing all the compulsory metadata of a Zarr array for its .zarray json file, excluding the array’s shape.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>chunkshape</strong> – The shape of individual data chunks along each dimension. </p></li>
-<li><p><strong>dtype</strong> – The data type stored in the arrays (e.g., “&lt;f8”). </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A string view containing the partial metadata for the Zarr array. </p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4I00E9ZarrArray">
 <span id="_CPPv3I00E9ZarrArray"></span><span id="_CPPv2I00E9ZarrArray"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Store</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classZarrArray"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZarrArray</span></span></span><a class="headerlink" href="#_CPPv4I00E9ZarrArray" title="Link to this definition">¶</a><br /></dt>
@@ -476,8 +446,8 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArray9ZarrArrayER5StoreKNSt11string_viewEKNSt11string_viewERKNSt6vectorI6size_tEEKbRKNSt6vectorI6size_tEE">
-<span id="_CPPv3N9ZarrArray9ZarrArrayER5StoreKNSt11string_viewEKNSt11string_viewERKNSt6vectorI6size_tEEKbRKNSt6vectorI6size_tEE"></span><span id="_CPPv2N9ZarrArray9ZarrArrayER5StoreKNSt11string_viewEKNSt11string_viewERKNSt6vectorI6size_tEEKbRKNSt6vectorI6size_tEE"></span><span id="ZarrArray::ZarrArray__StoreR.std::string_viewC.std::string_viewC.std::vector:s:CR.bC.std::vector:s:CR"></span><span class="target" id="classZarrArray_1a16713a99eaef48558ed20964d91db63e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZarrArray</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00E9ZarrArray" title="ZarrArray::Store"><span class="n"><span class="pre">Store</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">store</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dtype</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">chunkshape</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_backend</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">reduced_arrayshape</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9ZarrArray9ZarrArrayER5StoreKNSt11string_viewEKNSt11string_viewERKNSt6vectorI6size_tEEKbRKNSt6vectorI6size_tEE" title="Link to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArray9ZarrArrayER5StoreKNSt11string_viewERKNSt6vectorI6size_tEEKbRKNSt6vectorI6size_tEE">
+<span id="_CPPv3N9ZarrArray9ZarrArrayER5StoreKNSt11string_viewERKNSt6vectorI6size_tEEKbRKNSt6vectorI6size_tEE"></span><span id="_CPPv2N9ZarrArray9ZarrArrayER5StoreKNSt11string_viewERKNSt6vectorI6size_tEEKbRKNSt6vectorI6size_tEE"></span><span id="ZarrArray::ZarrArray__StoreR.std::string_viewC.std::vector:s:CR.bC.std::vector:s:CR"></span><span class="target" id="classZarrArray_1a5eae8a2e511785dc9aa5b6710d643dd6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZarrArray</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00E9ZarrArray" title="ZarrArray::Store"><span class="n"><span class="pre">Store</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">store</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">chunkshape</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_backend</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">reduced_arrayshape</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9ZarrArray9ZarrArrayER5StoreKNSt11string_viewERKNSt6vectorI6size_tEEKbRKNSt6vectorI6size_tEE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Constructs a <a class="reference internal" href="#classZarrArray"><span class="std std-ref">ZarrArray</span></a> object. </p>
 <p>Initializes an empty Zarr array in the provided store in order to writes chunks of an array to the store via a buffer. The assertions in this constructor ensure chunks have the same number of dimensions for the array. The buffer is the size of exactly 1 chunk, and chunks’ shape is restricted such that the final array dimensions are exactly integer multiples of its chunks along all but the outermost (0th) dimension of the array. Order of data written to chunks is assumed to increment along innermost dimensions first.</p>
 <dl class="field-list simple">
@@ -485,7 +455,6 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>store</strong> – The store where the array will be stored. </p></li>
 <li><p><strong>name</strong> – The name of the array. </p></li>
-<li><p><strong>dtype</strong> – The data type stored in the arrays (e.g., “&lt;f8”). </p></li>
 <li><p><strong>chunkshape</strong> – The shape of individual data chunks along each dimension. </p></li>
 <li><p><strong>is_backend</strong> – boolean is true if zarr array is a backend of something else e.g. xarray. </p></li>
 <li><p><strong>reduced_arrayshape</strong> – The shape of the array along all but the outermost (0th) dimension. </p></li>
@@ -592,17 +561,6 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-functions">Private Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK9ZarrArray13zarr_metadataERKNSt6vectorI6size_tEE">
-<span id="_CPPv3NK9ZarrArray13zarr_metadataERKNSt6vectorI6size_tEE"></span><span id="_CPPv2NK9ZarrArray13zarr_metadataERKNSt6vectorI6size_tEE"></span><span id="ZarrArray::zarr_metadata__std::vector:s:CRC"></span><span class="target" id="classZarrArray_1afa1f32d99cc18761c818a534f79281a2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zarr_metadata</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">arrayshape</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9ZarrArray13zarr_metadataERKNSt6vectorI6size_tEE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Generates the compulsory metadata for the Zarr array .zarray json file. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>A string containing the metadata for the Zarr array. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK9ZarrArray14get_arrayshapeEv">
 <span id="_CPPv3NK9ZarrArray14get_arrayshapeEv"></span><span id="_CPPv2NK9ZarrArray14get_arrayshapeEv"></span><span id="ZarrArray::get_arrayshapeC"></span><span class="target" id="classZarrArray_1af9ce874ef7144ce6579a1af81c815d2e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_arrayshape</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9ZarrArray14get_arrayshapeEv" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Get the shape of the array based on the number of data elements and chunks written in the store. </p>
@@ -669,8 +627,8 @@
 </dd></dl>
 
 <dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArray17part_zarrmetadataE">
-<span id="_CPPv3N9ZarrArray17part_zarrmetadataE"></span><span id="_CPPv2N9ZarrArray17part_zarrmetadataE"></span><span id="ZarrArray::part_zarrmetadata__ss"></span><span class="target" id="classZarrArray_1a1a0983c8e49645b1295370f70193987e"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">part_zarrmetadata</span></span></span><a class="headerlink" href="#_CPPv4N9ZarrArray17part_zarrmetadataE" title="Link to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArray13zarr_metadataE">
+<span id="_CPPv3N9ZarrArray13zarr_metadataE"></span><span id="_CPPv2N9ZarrArray13zarr_metadataE"></span><span id="ZarrArray::zarr_metadata__ZarrMetadata:T:"></span><span class="target" id="classZarrArray_1ad26d76fcd66798b43e4bfa11054c8556"></span><a class="reference internal" href="zarr_metadata.html#_CPPv4I0E12ZarrMetadata" title="ZarrMetadata"><span class="n"><span class="pre">ZarrMetadata</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00E9ZarrArray" title="ZarrArray::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zarr_metadata</span></span></span><a class="headerlink" href="#_CPPv4N9ZarrArray13zarr_metadataE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Metadata required for zarr array excluding array’s shape </p>
 </dd></dl>
 
@@ -690,23 +648,23 @@
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="zarr_group.html">
+          <a class="next-page" href="zarr_metadata.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">ZarrGroup</div>
+                <div class="title">Zarr Metadata</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="xarray_zarr_array.html">
+          <a class="prev-page" href="xarray_metadata.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">XarrayZarrArray</div>
+                <div class="title">Xarray Metadata</div>
                 
               </div>
             </a>
@@ -720,7 +678,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 24 May 2024</div>
+              Last updated on 26 May 2024</div>
           </div>
           <div class="right-details">
             
@@ -744,10 +702,8 @@
 <li><a class="reference internal" href="#">ZarrArray</a><ul>
 <li><a class="reference internal" href="#_CPPv416good2DchunkshapeK6size_tK6size_t"><code class="docutils literal notranslate"><span class="pre">good2Dchunkshape()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I0E17write_zarray_jsonvR5StoreNSt11string_viewENSt11string_viewE"><code class="docutils literal notranslate"><span class="pre">write_zarray_json()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv413vec_to_stringRKNSt6vectorI6size_tEE"><code class="docutils literal notranslate"><span class="pre">vec_to_string()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv422make_part_zarrmetadataRKNSt6vectorI6size_tEEKNSt11string_viewE"><code class="docutils literal notranslate"><span class="pre">make_part_zarrmetadata()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I00E9ZarrArray"><code class="docutils literal notranslate"><span class="pre">ZarrArray</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N9ZarrArray9ZarrArrayER5StoreKNSt11string_viewEKNSt11string_viewERKNSt6vectorI6size_tEEKbRKNSt6vectorI6size_tEE"><code class="docutils literal notranslate"><span class="pre">ZarrArray::ZarrArray()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9ZarrArray9ZarrArrayER5StoreKNSt11string_viewERKNSt6vectorI6size_tEEKbRKNSt6vectorI6size_tEE"><code class="docutils literal notranslate"><span class="pre">ZarrArray::ZarrArray()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N9ZarrArrayD0Ev"><code class="docutils literal notranslate"><span class="pre">ZarrArray::~ZarrArray()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N9ZarrArray14get_totnchunksEv"><code class="docutils literal notranslate"><span class="pre">ZarrArray::get_totnchunks()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N9ZarrArray14get_totalndataEv"><code class="docutils literal notranslate"><span class="pre">ZarrArray::get_totalndata()</span></code></a></li>
@@ -757,7 +713,6 @@
 <li><a class="reference internal" href="#_CPPv4N9ZarrArray14write_to_arrayEK1T"><code class="docutils literal notranslate"><span class="pre">ZarrArray::write_to_array()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N9ZarrArray12viewh_bufferE"><code class="docutils literal notranslate"><span class="pre">ZarrArray::viewh_buffer</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N9ZarrArray15subviewh_bufferE"><code class="docutils literal notranslate"><span class="pre">ZarrArray::subviewh_buffer</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK9ZarrArray13zarr_metadataERKNSt6vectorI6size_tEE"><code class="docutils literal notranslate"><span class="pre">ZarrArray::zarr_metadata()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK9ZarrArray14get_arrayshapeEv"><code class="docutils literal notranslate"><span class="pre">ZarrArray::get_arrayshape()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N9ZarrArray21write_chunks_to_storeEK15subviewh_buffer"><code class="docutils literal notranslate"><span class="pre">ZarrArray::write_chunks_to_store()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N9ZarrArray5storeE"><code class="docutils literal notranslate"><span class="pre">ZarrArray::store</span></code></a></li>
@@ -766,7 +721,7 @@
 <li><a class="reference internal" href="#_CPPv4N9ZarrArray8totndataE"><code class="docutils literal notranslate"><span class="pre">ZarrArray::totndata</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N9ZarrArray6chunksE"><code class="docutils literal notranslate"><span class="pre">ZarrArray::chunks</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N9ZarrArray6bufferE"><code class="docutils literal notranslate"><span class="pre">ZarrArray::buffer</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N9ZarrArray17part_zarrmetadataE"><code class="docutils literal notranslate"><span class="pre">ZarrArray::part_zarrmetadata</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9ZarrArray13zarr_metadataE"><code class="docutils literal notranslate"><span class="pre">ZarrArray::zarr_metadata</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N9ZarrArray10is_backendE"><code class="docutils literal notranslate"><span class="pre">ZarrArray::is_backend</span></code></a></li>
 </ul>
 </li>
