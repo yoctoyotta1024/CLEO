@@ -23,6 +23,8 @@ gcc="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/gcc"
 
 path2CLEO=$1    # get from command line argument
 path2build=$2   # get from command line argument
+path2YAC=$3     # only required for builds including YAC
+
 ### ------------------------------------------------------------------------ ###
 
 ### ---------------------------------------------------- ###
@@ -50,6 +52,17 @@ kokkoshost="-DKokkos_ENABLE_OPENMP=ON"
 kokkosdevice=""
 ### ---------------------------------------------------- ###
 
+### ------------------ choose YAC build ---------------- ###
+if [ "${root4YAC}" == "" ]
+then
+    yacflags=""
+
+else
+    yacflags="-DYAXT_ROOT=${root4YAC}/yaxt -DYAC_ROOT=${root4YAC}/yac"
+    yacmodule="${path2CLEO}/libs/coupldyn_yac/cmake"
+fi
+### ---------------------------------------------------- ###
+
 ### ---------------- build CLEO with cmake ------------- ###
 echo "CXX_COMPILER=${CXX} CC_COMPILER=${CC}"
 echo "CLEO_DIR: ${path2CLEO}"
@@ -62,8 +75,10 @@ echo "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}"
 cmake -DCMAKE_CXX_COMPILER=${CXX} \
     -DCMAKE_C_COMPILER=${CC} \
     -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}" \
+    -DCMAKE_MODULE_PATH=${yacmodule} \
     -S ${path2CLEO} -B ${path2build} \
-    ${kokkosflags} ${kokkosdevice} ${kokkoshost}
+    ${kokkosflags} ${kokkosdevice} ${kokkoshost} \
+    ${yacflags}
 
 # ensure these directories exist (it's a good idea for later use)
 mkdir -p ${path2build}/bin

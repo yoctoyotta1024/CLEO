@@ -11,9 +11,10 @@
 #SBATCH --output=./build/bin/build_cleo_out.%j.out
 #SBATCH --error=./build/bin/build_cleo_err.%j.out
 
-buildtype=$1
-path2CLEO=$2
-path2build=$3
+buildtype=$1  # required
+path2CLEO=$2  # required
+path2build=$3 # required
+path2YAC=$4   # optional
 
 path2buildbash=${path2CLEO}/scripts/bash/
 
@@ -39,17 +40,17 @@ else
     if [[ "${buildtype}" == "serial" ]];
     then
       echo "${path2buildbash}/build_cleo_serial.sh ${path2CLEO} ${path2build}"
-      ${path2buildbash}/build_cleo_serial.sh ${path2CLEO} ${path2build}
+      ${path2buildbash}/build_cleo_serial.sh ${path2CLEO} ${path2build} ${path2yac}
 
     elif [[ "${buildtype}" == "openmp" ]];
     then
     echo "${path2buildbash}/build_cleo_openmp.sh ${path2CLEO} ${path2build}"
-      ${path2buildbash}/build_cleo_openmp.sh ${path2CLEO} ${path2build}
+      ${path2buildbash}/build_cleo_openmp.sh ${path2CLEO} ${path2build} ${path2yac}
 
     elif [[ "${buildtype}" == "cuda" ]];
     then
       echo "${path2buildbash}/build_cleo_cuda_openmp.sh ${path2CLEO} ${path2build}"
-      ${path2buildbash}/build_cleo_cuda_openmp.sh ${path2CLEO} ${path2build}
+      ${path2buildbash}/build_cleo_cuda_openmp.sh ${path2CLEO} ${path2build} ${path2yac}
     fi
   fi
   ### ---------------------------------------------------- ###
