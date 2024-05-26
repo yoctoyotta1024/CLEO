@@ -19,17 +19,17 @@ YAC is required if CLEO couples to dynamics using YAC and/or uses MPI domain dec
 find more information about it from `its documentation: <https://dkrz-sw.gitlab-pages.dkrz.de/yac>`_.
 
 To build CLEO with dependency on YAC, you will first need to install YAXT and YAC manually.
-(YAXT is a dependency of YAC)
+(YAXT is a dependency of YAC.)
 
 .. note::
-  The installation of YAC for CLEO is currently in development and so may require some adjustments.
+  The installation of YAC for CLEO is currently in active development and so may not be exactly as written here.
 
 How to Install YAC (and YAXT)
 #############################
 
-The easiest way to install YAXT and YAC is to run the ``install_yac.sh`` bash script found in the
-``scripts/bash/`` directory. Note you will need to provide the path to the directory where you want
-to place the installation.
+The easiest way to install YAXT and YAC is to run the ``install_yac.sh`` bash script found in
+``scripts/bash/``. Note you will need to provide the path to the directory where you want
+to put the installations.
 
 Alternatively you can download `YAXT <https://swprojects.dkrz.de/redmine/>`_ and
 `YAC <https://gitlab.dkrz.de/dkrz-sw/yac/>`_ as compressed files and then configure and compile
