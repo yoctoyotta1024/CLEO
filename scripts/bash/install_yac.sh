@@ -56,6 +56,7 @@ else
     --prefix=${root4YAC}/yaxt
   make -j 4
   make install
+  cd ${root4YAC} && rm -rf ${yaxt_version}
   ### ------------------------------------------------------ ###
 
   ### --------------------- install YAC -------------------- ###
@@ -77,5 +78,6 @@ else
     --prefix=${root4YAC}/yac
   make -j 4
   make install
+  cd ${root4YAC} && rm -rf ${yac_version}
 ### ------------------------------------------------------ ###
 fi
