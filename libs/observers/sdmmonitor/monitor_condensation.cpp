@@ -35,8 +35,8 @@ void MonitorCondensation::reset_monitor() const {
  *
  * Add totmass_condensed to current value for mass condensed since d_data was last reset.
  *
- * _Note:_ conversion of mass condensed at one timestep from double precision (8 bytes double) to
- * single precision (4 bytes float) in output.
+ * _Note:_ possible conversion of mass condensed at one timestep from double precision
+ * (8 bytes double) to single precision (4 bytes float) in output depending on datatype alias.
  *
  * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
  * @param totmass_condensed Mass condensed in one gridbox during one microphysical timestep
