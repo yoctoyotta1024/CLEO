@@ -45,6 +45,21 @@ struct MonitorMassMoments {
   void reset_monitor() const;
 
   /**
+   * @brief Write the 0th, 1st and 2nd moments of the droplet mass distribution to data views.
+   *
+   * Calculates the current mass moments and then averages them with the current values for the
+   * mass moments stored since the data views were last reset.
+   *
+   * _Note:_ possible conversion of mass moments at one timestep from double precision
+   * (8 bytes double) to single precision (4 bytes float) in output depending on datatype alias.
+   *
+   * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
+   * @param supers (sub)View of all the superdrops in one gridbox during one microphysical timestep
+   */
+  KOKKOS_FUNCTION
+  void average_massmoments(const TeamMember& team_member, const viewd_constsupers supers) const;
+
+  /**
    * @brief Placeholder function to obey SDMMonitor concept does nothing.
    *
    * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
@@ -56,16 +71,30 @@ struct MonitorMassMoments {
   /**
    * @brief Monitor 0th, 1st and 2nd moments of the droplet mass distribution
    *
-   * Averages current of mass moments with value stored since d_data was last reset.
-   *
-   * _Note:_ possible conversion of mass moments at one timestep from double precision
-   * (8 bytes double) to single precision (4 bytes float) in output depending on datatype alias.
+   * calls average_massmoments to monitor the moments of the droplet mass
+   * distribution during SDM microphysics
    *
    * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
    * @param supers (sub)View of all the superdrops in one gridbox during one microphysical timestep
    */
   KOKKOS_FUNCTION
-  void monitor_microphysics(const TeamMember& team_member, const viewd_constsupers supers) const;
+  void monitor_microphysics(const TeamMember& team_member, const viewd_constsupers supers) const {
+    average_massmoments(team_member, supers);
+  }
+
+  /**
+   * @brief Monitor 0th, 1st and 2nd moments of the droplet mass distribution
+   *
+   * calls average_massmoments to monitor the moments of the droplet mass
+   * distribution during SDM motion.
+   *
+   * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
+   * @param supers (sub)View of all the superdrops in one gridbox during one microphysical timestep
+   */
+  KOKKOS_FUNCTION
+  void monitor_motion(const TeamMember& team_member, const viewd_constsupers supers) const {
+    average_massmoments(team_member, supers);
+  }
 
   /**
    * @brief Constructor for MonitorMassMoments

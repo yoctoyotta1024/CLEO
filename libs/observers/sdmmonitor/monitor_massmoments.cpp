@@ -43,8 +43,8 @@ void MonitorMassMoments::reset_monitor() const {
  * @param supers (sub)View of all the superdrops in one gridbox during one microphysical timestep
  */
 KOKKOS_FUNCTION
-void MonitorMassMoments::monitor_microphysics(const TeamMember& team_member,
-                                              const viewd_constsupers supers) const {
+void MonitorMassMoments::average_massmoments(const TeamMember& team_member,
+                                             const viewd_constsupers supers) const {
   const auto ii = team_member.league_rank();  // position of gridbox
   const auto massmom = ii / monitor_count;    // TODO(CB): calc mass moments properly
   d_data(ii) += massmom;
