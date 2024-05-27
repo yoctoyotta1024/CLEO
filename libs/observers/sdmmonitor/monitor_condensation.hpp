@@ -47,8 +47,8 @@ struct MonitorCondensation {
    *
    * Add totmass_condensed to current value for mass condensed since d_data was last reset.
    *
-   * _Note:_ conversion of mass condensed at one timestep from double precision (8 bytes double) to
-   * single precision (4 bytes float) in output.
+   * _Note:_ possible conversion of mass condensed at one timestep from double precision
+   * (8 bytes double) to single precision (4 bytes float) in output depending on datatype alias.
    *
    * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
    * @param totmass_condensed Mass condensed in one gridbox during one microphysical timestep
@@ -79,17 +79,16 @@ struct MonitorCondensation {
 template <typename Store>
 inline Observer auto CondensationObserver(const unsigned int interval, Dataset<Store>& dataset,
                                           const size_t maxchunk, const size_t ngbxs) {
+  using Mo = MonitorCondensation;
   const auto name = std::string_view("massdelta_cond");
   const auto units = std::string_view("g");
   constexpr auto scale_factor = dlc::MASS0grams;
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
   const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
-  const auto xzarr_ptr = std::make_shared<XarrayZarrArray<Store, MonitorCondensation::datatype>>(
-      dataset.template create_array<MonitorCondensation::datatype>(name, units, scale_factor,
-                                                                   chunkshape, dimnames));
+  const auto xzarr_ptr = std::make_shared<XarrayZarrArray<Store, Mo::datatype>>(
+      dataset.template create_array<Mo::datatype>(name, units, scale_factor, chunkshape, dimnames));
 
-  const auto do_obs = DoSDMMonitorObs<Store, MonitorCondensation, MonitorCondensation::datatype>(
-      dataset, xzarr_ptr, MonitorCondensation(ngbxs));
+  const auto do_obs = DoSDMMonitorObs<Store, Mo, Mo::datatype>(dataset, xzarr_ptr, Mo(ngbxs));
   return ConstTstepObserver(interval, do_obs);
 }
 
