@@ -36,11 +36,12 @@
 /* struct satisfies SDMMonitor concept for use in do_sdmmonitor_obs to make observer */
 struct MonitorMassMoments {
   using datatype = float;
-  size_t monitor_count;  // number of calls to monitor microphysics since last reset
+  size_t monitor_microphysics_count;  // number of calls to monitor microphysics since last reset
+  size_t monitor_motion_count;        // number of calls to monitor motion since last reset
   Buffer<datatype>::mirrorviewd_buffer d_data;  // view on device copied to host by DoSDMMonitorObs
 
   /**
-   * @brief Parallel loop to fill d_data with zero value.
+   * @brief Parallel loop to fill d_data with zero value and set monitor_XXX_counts to zero.
    */
   void reset_monitor() const;
 
@@ -57,7 +58,8 @@ struct MonitorMassMoments {
    * @param supers (sub)View of all the superdrops in one gridbox during one microphysical timestep
    */
   KOKKOS_FUNCTION
-  void average_massmoments(const TeamMember& team_member, const viewd_constsupers supers) const;
+  size_t average_massmoments(const TeamMember& team_member, const viewd_constsupers supers,
+                             const size_t count) const;
 
   /**
    * @brief Placeholder function to obey SDMMonitor concept does nothing.
@@ -79,7 +81,8 @@ struct MonitorMassMoments {
    */
   KOKKOS_FUNCTION
   void monitor_microphysics(const TeamMember& team_member, const viewd_constsupers supers) const {
-    average_massmoments(team_member, supers);
+    monitor_microphysics_count =
+        average_massmoments(team_member, supers, monitor_microphysics_count);
   }
 
   /**
@@ -89,11 +92,11 @@ struct MonitorMassMoments {
    * distribution during SDM motion.
    *
    * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
-   * @param supers (sub)View of all the superdrops in one gridbox during one microphysical timestep
+   * @param supers (sub)View of all the superdrops in one gridbox during one motion timestep
    */
   KOKKOS_FUNCTION
   void monitor_motion(const TeamMember& team_member, const viewd_constsupers supers) const {
-    average_massmoments(team_member, supers);
+    monitor_motion_count = average_massmoments(team_member, supers, monitor_motion_count);
   }
 
   /**

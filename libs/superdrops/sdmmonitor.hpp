@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 25th May 2024
+ * Last Modified: Monday 27th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,16 +24,21 @@
 
 #include <concepts>
 
+#include "./kokkosaliases_sd.hpp"
+
 /**
  * @brief Concept of SDMmonitor to monitor various SDM processes.
  *
  * @tparam SDMMo Type that satisfies the SDMMonitor concept.
  */
 template <typename SDMMo>
-concept SDMMonitor = requires(SDMMo mo, const TeamMember &tm, const double d) {
-  { mo.reset_monitor() } -> std::same_as<void>;
-  { mo.monitor_microphysics(tm, d) } -> std::same_as<void>;
-};
+concept SDMMonitor =
+    requires(SDMMo mo, const TeamMember &tm, const double d, const viewd_constsupers supers) {
+      { mo.reset_monitor() } -> std::same_as<void>;
+      { mo.monitor_microphysics(tm, d) } -> std::same_as<void>;
+      { mo.monitor_microphysics(tm, supers) } -> std::same_as<void>;
+      { mo.monitor_motion(tm, supers) } -> std::same_as<void>;
+    };
 
 /**
  * @brief Structure CombinedSDMMonitor represents a new monitor formed from combination of two
@@ -77,6 +82,28 @@ struct CombinedSDMMonitor {
     a.monitor_microphysics(tm, d);
     b.monitor_microphysics(tm, d);
   }
+
+  /**
+   * @brief monitor microphysics for combination of 2 sdm monitors.
+   *
+   * Each monitor is run sequentially.
+   */
+  KOKKOS_FUNCTION
+  void monitor_microphysics(const TeamMember &tm, const viewd_constsupers supers) const {
+    a.monitor_microphysics(tm, supers);
+    b.monitor_microphysics(tm, supers);
+  }
+
+  /**
+   * @brief monitor motion for combination of 2 sdm monitors.
+   *
+   * Each monitor is run sequentially.
+   */
+  KOKKOS_FUNCTION
+  void monitor_motion(const TeamMember &tm, const viewd_constsupers supers) const {
+    a.monitor_microphysics(tm, supers);
+    b.monitor_microphysics(tm, supers);
+  }
 };
 
 /**
@@ -89,6 +116,12 @@ struct NullSDMMonitor {
 
   KOKKOS_FUNCTION
   void monitor_microphysics(const TeamMember &team_member, const double d) const {}
+
+  KOKKOS_FUNCTION
+  void monitor_microphysics(const TeamMember &team_member, const viewd_constsupers supers) const {}
+
+  KOKKOS_FUNCTION
+  void monitor_motion(const TeamMember &team_member, const viewd_constsupers supers) const {}
 };
 
 #endif  //  LIBS_SUPERDROPS_SDMMONITOR_HPP_

@@ -22,13 +22,14 @@
 #include "./monitor_massmoments.hpp"
 
 /**
- * @brief Parallel loop to fill d_data with zero value and set monitor_count to zero.
+ * @brief Parallel loop to fill d_data with zero value and set monitor_XXX_counts to zero.
  */
 void MonitorMassMoments::reset_monitor() const {
   Kokkos::parallel_for(
       "reset_monitor", Kokkos::RangePolicy(0, d_data.extent(0)),
       KOKKOS_CLASS_LAMBDA(const size_t& jj) { d_data(jj) = 0.0; });
-  monitor_count = 0;
+  monitor_microphysics_count = 0;
+  monitor_motion_count = 0;
 }
 
 /**
@@ -43,11 +44,12 @@ void MonitorMassMoments::reset_monitor() const {
  * @param supers (sub)View of all the superdrops in one gridbox during one microphysical timestep
  */
 KOKKOS_FUNCTION
-void MonitorMassMoments::average_massmoments(const TeamMember& team_member,
-                                             const viewd_constsupers supers) const {
+size_t MonitorMassMoments::average_massmoments(const TeamMember& team_member,
+                                               const viewd_constsupers supers,
+                                               const size_t count) const {
   const auto ii = team_member.league_rank();  // position of gridbox
-  const auto massmom = ii / monitor_count;    // TODO(CB): calc mass moments properly
+  const auto massmom = ii / count;            // TODO(CB): calc mass moments properly
   d_data(ii) += massmom;
 
-  ++monitor_count;
+  return count + 1;
 }

@@ -57,6 +57,24 @@ struct MonitorCondensation {
   void monitor_microphysics(const TeamMember& team_member, const double totmass_condensed) const;
 
   /**
+   * @brief Placeholder function to obey SDMMonitor concept does nothing.
+   *
+   * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
+   * @param supers (sub)View of all the superdrops in one gridbox during one microphysical timestep
+   */
+  KOKKOS_FUNCTION
+  void monitor_microphysics(const TeamMember& team_member, const viewd_constsupers supers) const {}
+
+  /**
+   * @brief Placeholder function to obey SDMMonitor concept does nothing.
+   *
+   * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
+   * @param supers (sub)View of all the superdrops in one gridbox during one motion timestep
+   */
+  KOKKOS_FUNCTION
+  void monitor_motion(const TeamMember& team_member, const viewd_constsupers supers) const {}
+
+  /**
    * @brief Constructor for MonitorCondensation
    *
    * @param ngbxs Number of gridboxes in domain.
