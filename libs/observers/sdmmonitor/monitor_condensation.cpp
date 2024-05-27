@@ -3,13 +3,13 @@
  *
  *
  * ----- CLEO -----
- * File: condensation_observer.cpp
+ * File: monitor_condensation.cpp
  * Project: sdmmonitor
  * Created Date: Wednesday 8th May 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 25th May 2024
+ * Last Modified: Monday 27th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,7 +19,7 @@
  * functionality to monitor condensation SDM microphysical process
  */
 
-#include "./condensation_observer.hpp"
+#include "./monitor_condensation.hpp"
 
 /**
  * @brief Parallel loop to fill d_data with zero value.

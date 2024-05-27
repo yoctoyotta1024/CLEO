@@ -3,13 +3,13 @@
  *
  *
  * ----- CLEO -----
- * File: condensation_observer.hpp
+ * File: monitor_condensation.hpp
  * Project: sdmmonitor
  * Created Date: Wednesday 8th May 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 25th May 2024
+ * Last Modified: Monday 27th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -20,8 +20,8 @@
  * microphysical process in each gridbox a constant interval at the start of each timestep.
  */
 
-#ifndef LIBS_OBSERVERS_SDMMONITOR_CONDENSATION_OBSERVER_HPP_
-#define LIBS_OBSERVERS_SDMMONITOR_CONDENSATION_OBSERVER_HPP_
+#ifndef LIBS_OBSERVERS_SDMMONITOR_MONITOR_CONDENSATION_HPP_
+#define LIBS_OBSERVERS_SDMMONITOR_MONITOR_CONDENSATION_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
@@ -93,4 +93,4 @@ inline Observer auto CondensationObserver(const unsigned int interval, Dataset<S
   return ConstTstepObserver(interval, do_obs);
 }
 
-#endif  //  LIBS_OBSERVERS_SDMMONITOR_CONDENSATION_OBSERVER_HPP_
+#endif  //  LIBS_OBSERVERS_SDMMONITOR_MONITOR_CONDENSATION_HPP_
