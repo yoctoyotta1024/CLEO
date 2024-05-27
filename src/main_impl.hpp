@@ -51,6 +51,7 @@
 #include "observers/observers.hpp"
 #include "observers/runstats_observer.hpp"
 #include "observers/sdmmonitor/monitor_condensation.hpp"
+#include "observers/sdmmonitor/monitor_massmoments.hpp"
 #include "observers/state_observer.hpp"
 #include "observers/streamout_observer.hpp"
 #include "observers/superdrops_observer.hpp"
@@ -206,8 +207,9 @@ template <typename Store>
 inline Observer auto create_sdmmonitor_observer(const unsigned int interval,
                                                 Dataset<Store> &dataset, const size_t maxchunk,
                                                 const size_t ngbxs) {
-  const Observer auto monitor_cond = CondensationObserver(interval, dataset, maxchunk, ngbxs);
-  return monitor_cond;
+  const Observer auto obs_cond = MonitorCondensationObserver(interval, dataset, maxchunk, ngbxs);
+  const Observer auto obs_massmoms = MonitorMassMomentsObserver(interval, dataset, maxchunk, ngbxs);
+  return obs_cond >> obs_massmoms;
 }
 
 template <typename Store>

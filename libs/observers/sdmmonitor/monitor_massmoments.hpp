@@ -120,8 +120,9 @@ struct MonitorMassMoments {
  * @return Constructed type satisfying observer concept.
  */
 template <typename Store>
-inline Observer auto MonitorMassMoments(const unsigned int interval, Dataset<Store>& dataset,
-                                        const size_t maxchunk, const size_t ngbxs) {
+inline Observer auto MonitorMassMomentsObserver(const unsigned int interval,
+                                                Dataset<Store>& dataset, const size_t maxchunk,
+                                                const size_t ngbxs) {
   using Mo = MonitorMassMoments;
   const auto name = std::string_view("massmom_todo");
   const auto units = std::string_view("todo");

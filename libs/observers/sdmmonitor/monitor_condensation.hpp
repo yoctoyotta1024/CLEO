@@ -95,8 +95,9 @@ struct MonitorCondensation {
  * @return Constructed type satisfying observer concept.
  */
 template <typename Store>
-inline Observer auto CondensationObserver(const unsigned int interval, Dataset<Store>& dataset,
-                                          const size_t maxchunk, const size_t ngbxs) {
+inline Observer auto MonitorCondensationObserver(const unsigned int interval,
+                                                 Dataset<Store>& dataset, const size_t maxchunk,
+                                                 const size_t ngbxs) {
   using Mo = MonitorCondensation;
   const auto name = std::string_view("massdelta_cond");
   const auto units = std::string_view("g");
