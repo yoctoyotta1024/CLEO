@@ -43,6 +43,7 @@ jobs:
         -DCMAKE_CXX_COMPILER=g++ \
         -DKokkos_ARCH_NATIVE=ON \
         -DKokkos_ENABLE_SERIAL=ON \
+        -DENABLE_YAC_COUPLING=ON \
         -DYAXT_ROOT=${HOME}/yaxt \
         -DYAC_ROOT=${HOME}/yac \
         -DCMAKE_MODULE_PATH=${PWD}/../libs/coupldyn_yac/cmake ..
