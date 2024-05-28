@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 27th May 2024
+ * Last Modified: Tuesday 28th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -50,8 +50,8 @@
 #include "observers/nsupers_observer.hpp"
 #include "observers/observers.hpp"
 #include "observers/runstats_observer.hpp"
-#include "observers/sdmmonitor/monitor_condensation.hpp"
-#include "observers/sdmmonitor/monitor_massmoments.hpp"
+#include "observers/sdmmonitor/monitor_condensation_observer.hpp"
+#include "observers/sdmmonitor/monitor_massmoments_observer.hpp"
 #include "observers/state_observer.hpp"
 #include "observers/streamout_observer.hpp"
 #include "observers/superdrops_observer.hpp"

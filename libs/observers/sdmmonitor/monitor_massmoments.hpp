@@ -109,31 +109,4 @@ struct MonitorMassMoments {
   }
 };
 
-/**
- * @brief Constructs an observer which writes data monitoring the mass moments during microphysics
- * and super-droplet motion to arrays with a constant observation timestep "interval".
- *
- * @tparam Store Type of store for dataset.
- * @param interval Observation timestep.
- * @param dataset Dataset to write time data to.
- * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
- * @return Constructed type satisfying observer concept.
- */
-template <typename Store>
-inline Observer auto MonitorMassMomentsObserver(const unsigned int interval,
-                                                Dataset<Store>& dataset, const size_t maxchunk,
-                                                const size_t ngbxs) {
-  using Mo = MonitorMassMoments;
-  const auto name = std::string_view("massmom_todo");
-  const auto units = std::string_view("todo");
-  constexpr auto scale_factor = 1.0;  // TODO(CB): appropriate metadata
-  const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
-  const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
-  const auto xzarr_ptr = std::make_shared<XarrayZarrArray<Store, Mo::datatype>>(
-      dataset.template create_array<Mo::datatype>(name, units, scale_factor, chunkshape, dimnames));
-
-  const auto do_obs = DoSDMMonitorObs<Store, Mo, Mo::datatype>(dataset, xzarr_ptr, Mo(ngbxs));
-  return ConstTstepObserver(interval, do_obs);
-}
-
 #endif  //  LIBS_OBSERVERS_SDMMONITOR_MONITOR_MASSMOMENTS_HPP_
