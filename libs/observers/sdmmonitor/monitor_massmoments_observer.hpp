@@ -29,6 +29,8 @@
 #include <memory>
 
 #include "../../kokkosaliases.hpp"
+#include "../consttstep_observer.hpp"
+#include "../observers.hpp"
 #include "./monitor_massmoments.hpp"
 #include "zarr/buffer.hpp"
 #include "zarr/dataset.hpp"

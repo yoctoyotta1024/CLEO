@@ -29,9 +29,6 @@
 #include <memory>
 
 #include "../../kokkosaliases.hpp"
-#include "../consttstep_observer.hpp"
-#include "../observers.hpp"
-#include "./do_sdmmonitor_obs.hpp"
 
 /* struct satisfies SDMMonitor concept for use in do_sdmmonitor_obs to make observer */
 struct MonitorMassMoments {
