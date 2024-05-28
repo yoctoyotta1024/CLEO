@@ -17,7 +17,7 @@ add_executable(divfree2D_yac EXCLUDE_FROM_ALL "main_divfree2D.cpp")
 # Add directories and link libraries to target
 target_link_libraries(divfree2D_yac PRIVATE coupldyn_yac cartesiandomain "${CLEOLIBS}")
 target_link_libraries(divfree2D_yac PUBLIC Kokkos::kokkos)
-target_include_directories(divfree2D_yac PRIVATE "${CMAKE_SOURCE_DIR}/libs" ${YAC_C_INCLUDE_DIR})
+target_include_directories(divfree2D_yac PRIVATE "${CMAKE_SOURCE_DIR}/libs")
 
 # set specific C++ compiler options for target (optional)
 #target_compile_options(divfree2D PRIVATE)

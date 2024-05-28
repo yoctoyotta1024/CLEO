@@ -75,6 +75,9 @@ jobs:
     - name: Build example spdtest
       run: cd build && make spdtest
 
+    - name: Build example divfree2D_yac
+      run: cd build && make divfree2D_yac
+
     - name: Build example yac1
       run: cd build && make yac1
 
