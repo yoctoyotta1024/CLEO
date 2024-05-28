@@ -16,8 +16,8 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Observer to output variables from a mass moments monitor of SDM processes at a constant interval
- * at the start of each timestep.
+ * Observer to output variables from a mass moments monitor of SDM processes at
+ * a constant interval at the start of each timestep.
  */
 
 #ifndef LIBS_OBSERVERS_SDMMONITOR_MONITOR_MASSMOMENTS_OBSERVER_HPP_
@@ -30,11 +30,30 @@
 
 #include "../../kokkosaliases.hpp"
 #include "../consttstep_observer.hpp"
+#include "../create_massmoments_arrays.hpp"
 #include "../observers.hpp"
 #include "./monitor_massmoments.hpp"
 #include "zarr/buffer.hpp"
 #include "zarr/dataset.hpp"
 #include "zarr/xarray_zarr_array.hpp"
+
+template <typename Store>
+struct MonitorMassMomentXarrays {
+  XarrayZarrArray<Store, uint64_t> mom0_microphys; /**< 0th mass moment from microphysics Xarray */
+  XarrayZarrArray<Store, float> mom1_microphys;    /**< 1st mass moment from microphysics Xarray */
+  XarrayZarrArray<Store, float> mom2_microphys;    /**< 2nd mass moment from microphysics Xarray */
+  XarrayZarrArray<Store, uint64_t> mom0_motion;    /**< 0th mass moment from motion Xarray */
+  XarrayZarrArray<Store, float> mom1_motion;       /**< 1st mass moment from motion Xarray */
+  XarrayZarrArray<Store, float> mom2_motion;       /**< 2nd mass moment from motion Xarray */
+
+  MonitorMassMomentXarrays(const Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs)
+      : mom0_microphys(create_massmom0_xarray(dataset, "massmom0_microphys", maxchunk, ngbxs)),
+        mom1_microphys(create_massmom1_xarray(dataset, "massmom1_microphys", maxchunk, ngbxs)),
+        mom2_microphys(create_massmom2_xarray(dataset, "massmom2_microphys", maxchunk, ngbxs)),
+        mom0_motion(create_massmom0_xarray(dataset, "massmom0_motion", maxchunk, ngbxs)),
+        mom1_motion(create_massmom1_xarray(dataset, "massmom1_motion", maxchunk, ngbxs)),
+        mom2_motion(create_massmom2_xarray(dataset, "massmom2_motion", maxchunk, ngbxs)) {}
+};
 
 /**
  * @class DoMonitorMassMomentsObs
@@ -42,21 +61,37 @@
  * process at the start of each timestep and write it to a Zarr array in an Xarray dataset.
  * @tparam Store Type of store for dataset.
  */
-template <typename Store, typename T>
+template <typename Store, typename MonitorViewsType>
 class DoMonitorMassMomentsObs {
  private:
-  using viewh_buffer = Buffer<T>::viewh_buffer;
-  Dataset<Store> &dataset;                              /**< Dataset to write time data to. */
-  std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr; /**< Pointer to array in dataset. */
-  MonitorMassMoments monitor;
+  Dataset<Store> &dataset; /**< Dataset to write time data to. */
+  std::shared_ptr<MonitorMassMomentXarrays<Store>> xzarrs_ptr; /**< Pointer to arrays in dataset. */
+  MonitorMassMoments<MonitorViewsType> monitor;
 
   /**
-   * @brief Copy data from monitor to the array in the dataset then reset monitor.
+   * @brief Copy data from d_data view on device into host view,
+   * then write to the array in the dataset.
+   */
+  template <typename T>
+  void write_to_array(const Buffer<T>::viewd_buffer d_data,
+                      MonitorMassMomentXarrays<Store> xzarr) const {
+    using viewh_buffer = Buffer<T>::viewh_buffer;
+    const auto h_data = viewh_buffer("h_data", d_data.extent(0));
+    Kokkos::deep_copy(h_data, d_data);
+    dataset.write_to_array(xzarr, h_data);
+  }
+
+  /**
+   * @brief Write each mass moment from the monitor's views to the appropriate arrays in the dataset
+   * then reset the monitor.
    */
   void at_start_step() const {
-    const auto h_data = viewh_buffer("h_data", monitor.d_data.extent(0));
-    Kokkos::deep_copy(h_data, monitor.d_data);
-    dataset.write_to_array(xzarr_ptr, h_data);
+    write_to_array(monitor.microphysics_monitor.d_massmom0, xzarrs_ptr->mom0_microphys);
+    write_to_array(monitor.microphysics_monitor.d_massmom1, xzarrs_ptr->mom1_microphys);
+    write_to_array(monitor.microphysics_monitor.d_massmom2, xzarrs_ptr->mom2_microphys);
+    write_to_array(monitor.motion_monitor.d_massmom0, xzarrs_ptr->mom0_motion);
+    write_to_array(monitor.motion_monitor.d_massmom1, xzarrs_ptr->mom1_motion);
+    write_to_array(monitor.motion_monitor.d_massmom2, xzarrs_ptr->mom2_motion);
 
     monitor.reset_monitor();
   }
@@ -65,17 +100,24 @@ class DoMonitorMassMomentsObs {
   /**
    * @brief Constructor for DoMonitorMassMomentsObs.
    * @param dataset Dataset to write monitored data to.
-   * @param xzarr_ptr Pointer to zarr array in xarray dataset.
+   * @param monitor_views Views on device for mass moments to monitor.
    */
-  DoMonitorMassMomentsObs(Dataset<Store> &dataset,
-                          const std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr,
-                          const MonitorMassMoments monitor)
-      : dataset(dataset), xzarr_ptr(xzarr_ptr), monitor(monitor) {}
+  DoMonitorMassMomentsObs(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs)
+      : dataset(dataset),
+        xzarrs_ptr(std::make_shared<MonitorMassMomentXarrays>(dataset, maxchunk, ngbxs)),
+        monitor(ngbxs) {}
 
   /**
    * @brief Destructor for DoMonitorMassMomentsObs.
    */
-  ~DoMonitorMassMomentsObs() { dataset.write_arrayshape(xzarr_ptr); }
+  ~DoMonitorMassMomentsObs() {
+    dataset.write_arrayshape(xzarrs_ptr->mom0_microphys);
+    dataset.write_arrayshape(xzarrs_ptr->mom1_microphys);
+    dataset.write_arrayshape(xzarrs_ptr->mom2_microphys);
+    dataset.write_arrayshape(xzarrs_ptr->mom0_motion);
+    dataset.write_arrayshape(xzarrs_ptr->mom1_motion);
+    dataset.write_arrayshape(xzarrs_ptr->mom2_motion);
+  }
 
   /**
    * @brief Placeholder for before timestepping functionality and to make class satisfy observer
@@ -126,17 +168,8 @@ template <typename Store>
 inline Observer auto MonitorMassMomentsObserver(const unsigned int interval,
                                                 Dataset<Store> &dataset, const size_t maxchunk,
                                                 const size_t ngbxs) {
-  using Mo = MonitorMassMoments;
-  const auto name = std::string_view("massmom_todo");
-  const auto units = std::string_view("todo");
-  constexpr auto scale_factor = 1.0;  // TODO(CB): appropriate metadata
-  const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
-  const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
-  const auto xzarr_ptr = std::make_shared<XarrayZarrArray<Store, Mo::datatype>>(
-      dataset.template create_array<Mo::datatype>(name, units, scale_factor, chunkshape, dimnames));
-
   const auto do_obs =
-      DoMonitorMassMomentsObs<Store, Mo, Mo::datatype>(dataset, xzarr_ptr, Mo(ngbxs));
+      DoMonitorMassMomentsObs<Store, MonitorMassMomentViews>(dataset, maxchunk, ngbxs);
   return ConstTstepObserver(interval, do_obs);
 }
 

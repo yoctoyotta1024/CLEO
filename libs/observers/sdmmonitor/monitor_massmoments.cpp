@@ -22,33 +22,35 @@
 #include "./monitor_massmoments.hpp"
 
 /**
- * @brief Parallel loop to fill d_data with zero value and set monitor_XXX_counts to zero.
+ * @brief Parallel loop to fill d_data with zero value
  */
-void MonitorMassMoments::reset_monitor() const {
+void MonitorMassMomentViews::reset_views() const {
   Kokkos::parallel_for(
-      "reset_monitor", Kokkos::RangePolicy(0, d_data.extent(0)),
-      KOKKOS_CLASS_LAMBDA(const size_t& jj) { d_data(jj) = 0.0; });
-  microphysics_count(0) = 0;
-  motion_count(0) = 0;
+      "reset_views", Kokkos::RangePolicy(0, d_massmom0.extent(0)),
+      KOKKOS_CLASS_LAMBDA(const size_t& jj) {
+        d_massmom0(jj) = 0;
+        d_massmom1(jj) = 0.0;
+        d_massmom2(jj) = 0.0;
+      });
 }
 
 /**
- * @brief Monitor 0th, 1st and 2nd moments of the droplet mass distribution
+ * @brief Write the 0th, 1st and 2nd moments of the droplet mass distribution to data views.
  *
- * Averages current of mass moments with value stored since d_data was last reset.
+ * Calculates the current mass moments and then overwrites the current values for the
+ * mass moments stored since the data views were last reset.
  *
  * _Note:_ possible conversion of mass moments at one timestep from double precision
- * (8 bytes double) to single precision (4 bytes float) in output depending on datatype alias.
+ * (8 bytes double) to single precision (4 bytes float) in output.
  *
  * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
- * @param supers (sub)View of all the superdrops in one gridbox during one microphysical timestep
+ * @param supers (sub)View of all the superdrops in one gridbox
  */
 KOKKOS_FUNCTION
-size_t MonitorMassMoments::average_massmoments(const TeamMember& team_member,
-                                               const viewd_constsupers supers, size_t count) const {
+void MonitorMassMomentViews::average_massmoments(const TeamMember& team_member,
+                                                 const viewd_constsupers supers) const {
   const auto ii = team_member.league_rank();  // position of gridbox
-  const auto massmom = ii / count;            // TODO(CB): calc mass moments properly
-  d_data(ii) += massmom;
-
-  return ++count;
+  d_massmom0(ii) += 1 * ii;                   // TODO(CB): WIP check build & calculate properly
+  d_massmom1(ii) += 10.0 * ii;
+  d_massmom2(ii) += 100.0 * ii;
 }

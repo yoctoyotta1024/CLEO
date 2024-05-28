@@ -30,34 +30,54 @@
 
 #include "../../kokkosaliases.hpp"
 
-/* struct satisfies SDMMonitor concept for use in do_sdmmonitor_obs to make observer */
-struct MonitorMassMoments {
-  using datatype = float;
-  using viewd_count = Kokkos::View<size_t[1]>;
-  viewd_count microphysics_count;  // number of calls to monitor microphysics since last reset
-  viewd_count motion_count;        // number of calls to monitor motion since last reset
-  Buffer<datatype>::mirrorviewd_buffer d_data;  // view on device copied to host by DoSDMMonitorObs
+struct MonitorMassMomentViews {
+  Buffer<uint64_t>::mirrorviewd_buffer d_massmom0;  // view on device for monitoring 0th mass moment
+  Buffer<float>::mirrorviewd_buffer d_massmom1;     // view on device for monitoring 1st mass moment
+  Buffer<float>::mirrorviewd_buffer d_massmom2;     // view on device for monitoring 2nd mass moment
 
   /**
-   * @brief Parallel loop to fill d_data with zero value and set monitor_XXX_counts to zero.
+   * @brief Parallel loop to fill device views with zero value
    */
-  void reset_monitor() const;
+  void reset_views() const;
 
   /**
    * @brief Write the 0th, 1st and 2nd moments of the droplet mass distribution to data views.
    *
-   * Calculates the current mass moments and then averages them with the current values for the
+   * Calculates the current mass moments and then overwrites the current values for the
    * mass moments stored since the data views were last reset.
    *
    * _Note:_ possible conversion of mass moments at one timestep from double precision
-   * (8 bytes double) to single precision (4 bytes float) in output depending on datatype alias.
+   * (8 bytes double) to single precision (4 bytes float) in output.
    *
    * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
-   * @param supers (sub)View of all the superdrops in one gridbox during one microphysical timestep
+   * @param supers (sub)View of all the superdrops in one gridbox
    */
   KOKKOS_FUNCTION
-  size_t average_massmoments(const TeamMember& team_member, const viewd_constsupers supers,
-                             size_t count) const;
+  void average_massmoments(const TeamMember& team_member, const viewd_constsupers supers) const;
+
+  explicit MonitorMassMomentViews(const size_t ngbxs)
+      : d_massmom0("d_monitor_massmom0", ngbxs),
+        d_massmom1("d_monitor_massmom1", ngbxs),
+        d_massmom2("d_monitor_massmom2", ngbxs) {
+    reset_views();
+  }
+};
+
+/* struct satisfies SDMMonitor concept in order to make observer for monitoring mass moments
+ * according to the templated MonitorViewsType e.g. 0th, 1st adn 2nd mass moments of the droplet or
+ raindroplet distributions after microphysics or motion */
+template <typename MonitorViewsType>
+struct MonitorMassMoments {
+  MonitorViewsType microphysics_monitor;  // monitoring mass moments during microphysics
+  MonitorViewsType motion_monitor;        // monitoring mass moments during motion
+
+  /**
+   * @brief Reset monitors for mass moments from both motion and microphysics.
+   */
+  void reset_monitor() const {
+    microphysics_monitor.reset_views();
+    motion_monitor.reset_views();
+  }
 
   /**
    * @brief Placeholder function to obey SDMMonitor concept does nothing.
@@ -79,7 +99,7 @@ struct MonitorMassMoments {
    */
   KOKKOS_FUNCTION
   void monitor_microphysics(const TeamMember& team_member, const viewd_constsupers supers) const {
-    microphysics_count(0) = average_massmoments(team_member, supers, microphysics_count(0));
+    microphysics_monitor.average_massmoments(team_member, supers);
   }
 
   /**
@@ -93,7 +113,7 @@ struct MonitorMassMoments {
    */
   KOKKOS_FUNCTION
   void monitor_motion(const TeamMember& team_member, const viewd_constsupers supers) const {
-    motion_count(0) = average_massmoments(team_member, supers, motion_count(0));
+    motion_monitor.average_massmoments(team_member, supers);
   }
 
   /**
@@ -101,7 +121,8 @@ struct MonitorMassMoments {
    *
    * @param ngbxs Number of gridboxes in domain.
    */
-  explicit MonitorMassMoments(const size_t ngbxs) : d_data("massmom_todo", ngbxs) {
+  explicit MonitorMassMoments(const size_t ngbxs)
+      : microphysics_monitor(ngbxs), motion_monitor(ngbxs) {
     reset_monitor();
   }
 };
