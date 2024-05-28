@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 27th May 2024
+ * Last Modified: Tuesday 28th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,8 +28,8 @@ void MonitorMassMoments::reset_monitor() const {
   Kokkos::parallel_for(
       "reset_monitor", Kokkos::RangePolicy(0, d_data.extent(0)),
       KOKKOS_CLASS_LAMBDA(const size_t& jj) { d_data(jj) = 0.0; });
-  monitor_microphysics_count = 0;
-  monitor_motion_count = 0;
+  microphysics_count(0) = 0;
+  motion_count(0) = 0;
 }
 
 /**
@@ -45,11 +45,10 @@ void MonitorMassMoments::reset_monitor() const {
  */
 KOKKOS_FUNCTION
 size_t MonitorMassMoments::average_massmoments(const TeamMember& team_member,
-                                               const viewd_constsupers supers,
-                                               const size_t count) const {
+                                               const viewd_constsupers supers, size_t count) const {
   const auto ii = team_member.league_rank();  // position of gridbox
   const auto massmom = ii / count;            // TODO(CB): calc mass moments properly
   d_data(ii) += massmom;
 
-  return count + 1;
+  return ++count;
 }

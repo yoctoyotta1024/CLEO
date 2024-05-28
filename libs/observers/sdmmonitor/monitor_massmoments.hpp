@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 27th May 2024
+ * Last Modified: Tuesday 28th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -36,8 +36,9 @@
 /* struct satisfies SDMMonitor concept for use in do_sdmmonitor_obs to make observer */
 struct MonitorMassMoments {
   using datatype = float;
-  size_t monitor_microphysics_count;  // number of calls to monitor microphysics since last reset
-  size_t monitor_motion_count;        // number of calls to monitor motion since last reset
+  using viewd_count = Kokkos::View<size_t[1]>;
+  viewd_count microphysics_count;  // number of calls to monitor microphysics since last reset
+  viewd_count motion_count;        // number of calls to monitor motion since last reset
   Buffer<datatype>::mirrorviewd_buffer d_data;  // view on device copied to host by DoSDMMonitorObs
 
   /**
@@ -59,7 +60,7 @@ struct MonitorMassMoments {
    */
   KOKKOS_FUNCTION
   size_t average_massmoments(const TeamMember& team_member, const viewd_constsupers supers,
-                             const size_t count) const;
+                             size_t count) const;
 
   /**
    * @brief Placeholder function to obey SDMMonitor concept does nothing.
@@ -81,8 +82,7 @@ struct MonitorMassMoments {
    */
   KOKKOS_FUNCTION
   void monitor_microphysics(const TeamMember& team_member, const viewd_constsupers supers) const {
-    monitor_microphysics_count =
-        average_massmoments(team_member, supers, monitor_microphysics_count);
+    microphysics_count(0) = average_massmoments(team_member, supers, microphysics_count(0));
   }
 
   /**
@@ -96,7 +96,7 @@ struct MonitorMassMoments {
    */
   KOKKOS_FUNCTION
   void monitor_motion(const TeamMember& team_member, const viewd_constsupers supers) const {
-    monitor_motion_count = average_massmoments(team_member, supers, monitor_motion_count);
+    motion_count(0) = average_massmoments(team_member, supers, motion_count(0));
   }
 
   /**
