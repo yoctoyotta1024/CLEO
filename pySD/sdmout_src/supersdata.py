@@ -1028,7 +1028,7 @@ class SupersIndexerBinned(SupersIndexer):
     - data (ak.Array): The data of the binned indexer.
     - digitized_data (ak.Array): The data of the binned indexer as digitized values.
     - metadata (dict): The metadata of the binned indexer.
-    - bin_edges (np.ndarray): The bin edges of the binned indexer.
+    - bins (np.ndarray): The bin edges of the binned indexer.
     - bin_centers (np.ndarray): The bin centers of the binned indexer.
     """
 
@@ -1036,7 +1036,7 @@ class SupersIndexerBinned(SupersIndexer):
         self,
         name: str,
         data: Union[xr.Dataset, np.ndarray, ak.Array],
-        bin_edges: np.ndarray,
+        bins: np.ndarray,
         right: bool = False,
         units: str = "",
         metadata: dict = dict(),
@@ -1052,7 +1052,7 @@ class SupersIndexerBinned(SupersIndexer):
         data : xr.Dataset or np.ndarray or ak.Array
             The data of the attribute.
             If a xr.Dataset is provided, the data is extracted from the dataset using the name of the attribute.
-        bin_edges : np.ndarray
+        bins : np.ndarray
             The bin edges of the binned indexer.
         right : bool, optional
             As from the numpy documentation:
@@ -1066,12 +1066,14 @@ class SupersIndexerBinned(SupersIndexer):
             Default is an empty dictionary.
         """
 
-        self.set_bins(bin_edges=bin_edges, right=right)
+        self.set_bins(bins=bins, right=right)
         super().__init__(name=name, data=data, units=units, metadata=metadata)
 
-        # self.set_digitized_data()
+        # make sure, that the digitized data is correct
+        # with the following function, we can make sure that the digitized data only contains necessary values and the coords fit to it.
+        self.modify_digitized_data()
 
-    def set_bins(self, bin_edges: np.ndarray, right: bool = False):
+    def set_bins(self, bins: np.ndarray, right: bool = False):
         """
         This function sets the bins of the binned indexer.
         The bins are stored in the attribute bins.
@@ -1079,17 +1081,60 @@ class SupersIndexerBinned(SupersIndexer):
 
         Parameters
         ----------
-        bin_edges : np.ndarray
+        bins : np.ndarray
             The bin edges of the binned indexer.
         """
 
         # set the bins
+        self.bins = bins
+
+        # create tuples of the bin edges
+        bin_edges = [-np.inf] + list(bins) + [np.inf]
+        bin_edges = [
+            (bin_edges[i], bin_edges[i + 1]) for i in range(len(bin_edges) - 1)
+        ]
+        # create the bin centers as the mean of the bin edges
+        bin_centers = [np.mean(bin_edges[i]) for i in range(len(bin_edges) - 1)]
+
         self.bin_edges = bin_edges
-        # set the bin centers
-        self.bin_centers = (self.bin_edges[:-1] + self.bin_edges[1:]) / 2
+        self.bin_centers = np.array(bin_centers)
         self.right = right
 
-    def set_digitized_data(self):
+    def modify_digitized_data(self):
+        """
+        If the digitized data does not include any exceeding values from the binnning process, we can neglect these indexes.
+        """
+
+        min_digitized = ak.min(self.get_digitized_data())
+        diff = min_digitized - 0
+        # for the lower bound, we remove the first bin center
+        if diff > 0:
+            # remove the values in the digitized data which are not in use
+            self.set_digitized_data(digitized_data=self.get_digitized_data() - diff)
+            # remove the exceeding bin centers and edges
+            self.bin_centers = self.bin_centers[diff:]
+            self.bin_edges = self.bin_edges[diff:]
+
+        # for the higher bound, we simply remove the bin centers which aren't in use
+        max_digitized = ak.max(self.get_digitized_data())
+        diff = len(self.bin_centers) - max_digitized
+
+        if diff > 0:
+            # remove the exceeding bin centers and edges
+            self.bin_centers = self.bin_centers[:-diff]
+            self.bin_edges = self.bin_edges[:-diff]
+
+        # make sure the coords fit
+        self.make_coord()
+
+    def make_coord(self):
+        """
+        The coord data of the indexer is the bin centers.
+        """
+
+        self.set_coord(coord=self.bin_centers)
+
+    def make_digitized_data(self):
         """
         Sets a digitized version of the data.
         It uses the numpy digitize function to digitize the data.
@@ -1112,15 +1157,15 @@ class SupersIndexerBinned(SupersIndexer):
         # digitize the data
         if self.data.ndim == 1:
             self.digitized_data = np.digitize(
-                x=self.data, bins=self.bin_edges, right=self.right
+                x=self.data, bins=self.bins, right=self.right
             )
         elif self.data.ndim == 2:
             self.digitized_data = sdtracing.ak_digitize_2D(
-                x=self.data, bins=self.bin_edges, right=self.right
+                x=self.data, bins=self.bins, right=self.right
             )
         elif self.data.ndim == 3:
             self.digitized_data = sdtracing.ak_digitize_3D(
-                x=self.data, bins=self.bin_edges, right=self.right
+                x=self.data, bins=self.bins, right=self.right
             )
         else:
             raise NotImplementedError(
