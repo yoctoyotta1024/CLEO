@@ -5,7 +5,7 @@ dependencies:
     - pre-commit
     - pytest
     - numpy
-    - awkward
+    - awkward >= 2.5.0
     - furo
     - breathe
     - sphinx
