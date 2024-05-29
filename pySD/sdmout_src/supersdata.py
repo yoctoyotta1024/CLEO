@@ -802,19 +802,26 @@ class SupersIndexer(SupersAttribute):
 
         self.set_digitized_data()
 
-    def set_digitized_data(self):
+    def set_digitized_data(self, digitized_data: Union[ak.Array, np.ndarray]):
         """
-        This function sets the digitized data of the indexer.
-        The digitized data is stored in the attribute digitized_data.
-        In this class, the digitzed data is the same as the data.
-        So the indexer should be integer values.
+        This function sets the data of the indexer.
+        The data is stored in the attribute data.
+
+        Parameters
+        ----------
+        data : ak.Array or np.ndarray
+            The data of the indexer.
         """
 
-        # digitize the data
-        self.digitized_data = self.data
+        # make sure the data has the same shape as the original data
+        sdtracing.assert_same_shape(self.data, digitized_data)
 
-        self.make_coord()
-        self.make_digitized_data()
+        if isinstance(digitized_data, np.ndarray):
+            self.digitized_data = ak.Array(digitized_data)
+        elif isinstance(digitized_data, ak.Array):
+            self.digitized_data = digitized_data
+        else:
+            raise ValueError("Data must be an ak.Array or np.ndarray")
 
     def get_digitized_data(self):
         """
