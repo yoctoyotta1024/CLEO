@@ -28,7 +28,7 @@ jobs:
         run: /usr/share/miniconda/envs/cienv/bin/doxygen --version
         shell: bash
       - name: Test with pytest
-        run: pytest .
+        run: pytest . --ignore=./builds
       - name: Generate Doxygen Documentation
         run: cd docs &&
           mkdir build &&
