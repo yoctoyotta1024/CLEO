@@ -813,6 +813,41 @@ class SupersIndexer(SupersAttribute):
         # digitize the data
         self.digitized_data = self.data
 
+    def make_coord(self):
+        """
+        This function sets the coord data of the indexer.
+        The coord data is stored in the attribute coord.
+        In this class, the coord data is the same as the unique values of the data.
+        So the indexer should be integer values.
+        """
+
+        # digitize the data
+        self.set_coord(coord=np.unique(sdtracing.ak_flatten_full(self.data)))
+
+    def set_coord(self, coord: ak.Array):
+        """
+        This function sets the coord data of the indexer.
+        The coord data is stored in the attribute coord.
+
+        Parameters
+        ----------
+        coord : np.ndarray
+            The coord data of the indexer.
+        """
+
+        self.coord = coord
+
+    def get_data(self):
+        """
+        This function returns the data of the attribute.
+
+        Returns
+        -------
+        ak.Array
+            The data of the attribute.
+        """
+        return self.digitized_data
+
     def indexer_to_indexer_binned(
         self, bin_edges: np.ndarray, right: bool = False
     ) -> "SupersIndexerBinned":
