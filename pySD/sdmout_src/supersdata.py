@@ -813,6 +813,31 @@ class SupersIndexer(SupersAttribute):
         # digitize the data
         self.digitized_data = self.data
 
+        self.make_coord()
+        self.make_digitized_data()
+
+    def get_digitized_data(self):
+        """
+        This function returns the digitized data of the attribute.
+
+        Returns
+        -------
+        ak.Array
+            The digitized data of the attribute.
+        """
+        return self.digitized_data
+
+    def make_digitized_data(self):
+        """
+        This function sets the digitized data of the indexer.
+        The digitized data is stored in the attribute digitized_data.
+        In this class, the digitzed data is the same as the data.
+        So the indexer should be integer values.
+        """
+
+        # digitize the data
+        self.digitized_data = self.data
+
     def make_coord(self):
         """
         This function sets the coord data of the indexer.
