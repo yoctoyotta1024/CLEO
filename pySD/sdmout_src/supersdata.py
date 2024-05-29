@@ -800,7 +800,8 @@ class SupersIndexer(SupersAttribute):
 
         super().__init__(name=name, data=data, units=units, metadata=metadata)
 
-        self.set_digitized_data()
+        self.make_coord()
+        self.make_digitized_data()
 
     def set_digitized_data(self, digitized_data: Union[ak.Array, np.ndarray]):
         """
@@ -944,7 +945,75 @@ class SupersIndexer(SupersAttribute):
         str
             The string representation of the attribute.
         """
-        return f"{self.name} ({self.units})\n{self.data.typestr}\n{self.digitized_data.typestr}"
+        return f"{self.name} ({self.units})\ncoord: {self.coord}\n{self.data.typestr}\n{self.digitized_data.typestr}"
+
+    def bin_attribute_by_counts(
+        self: "SupersAttribute", counts: ak.Array
+    ) -> "SupersAttribute":
+        """
+        This function bins an attribute by counts.
+        The attribute is binned by counts by creating a new attribute with the binned data.
+
+        Parameters
+        ----------
+        self : SupersAttribute
+            The attribute to be binned by counts.
+        counts : ak.Array
+            The counts to bin the attribute by.
+        """
+
+        ndim = self.data.ndim
+
+        if ndim == 1:
+            binned_data = sdtracing.binning_by_1D_counts(
+                data=self.data,
+                counts=counts,
+            )
+            binned_data_digitized = sdtracing.binning_by_1D_counts(
+                data=self.digitized_data,
+                counts=counts,
+            )
+        elif ndim == 2:
+            binned_data = sdtracing.binning_by_2D_counts(
+                data=self.data,
+                counts=counts,
+            )
+            binned_data_digitized = sdtracing.binning_by_2D_counts(
+                data=self.digitized_data,
+                counts=counts,
+            )
+        elif ndim == 3:
+            binned_data = sdtracing.binning_by_3D_counts(
+                data=self.data,
+                counts=counts,
+            )
+            binned_data_digitized = sdtracing.binning_by_3D_counts(
+                data=self.digitized_data,
+                counts=counts,
+            )
+
+        self.set_data(binned_data)
+        self.set_digitized_data(binned_data_digitized)
+
+    def sort_by(self, sort_array: ak.Array) -> "SupersAttribute":
+        """
+        This function sorts the attribute by a sort array.
+        The attribute is sorted by a sort array by creating a new attribute with the sorted data.
+
+        Parameters
+        ----------
+        self : SupersAttribute
+            The attribute to be sorted.
+        sort_array : ak.Array
+            The array to sort the attribute by.
+        """
+
+        # sort the data
+        sorted_data = self.data[sort_array]
+        sorted_digitized_data = self.digitized_data[sort_array]
+
+        self.set_data(sorted_data)
+        self.set_digitized_data(sorted_digitized_data)
 
 
 class SupersIndexerBinned(SupersIndexer):
