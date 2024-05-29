@@ -1,16 +1,15 @@
 name: cienv
 dependencies:
     - python>=3.9
+    - pip
+    - pre-commit
     - pytest
+    - numpy
+    - awkward
+    - furo
+    - breathe
     - sphinx
     - conda-forge::doxygen>=1.10.0
-    - pip
     - pip:
-      - numpy
-      - pytest
-      - sphinx
-      - furo
       - sphinx_copybutton
       - sphinxcontrib-bibtex
-      - breathe
-      - pre-commit
