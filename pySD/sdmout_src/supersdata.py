@@ -1633,6 +1633,73 @@ class SupersDataNew(SuperdropProperties):
 
         self.add_index(index=index)
 
+    def attribute_to_DataArray(self, attribute_name):
+        """
+        This function converts an attribute to a DataArray.
+        The attribute is converted to a DataArray by creating a DataArray object.
+
+        Parameters
+        ----------
+        attribute : SupersAttribute
+            The attribute to be converted to a DataArray.
+
+        Returns
+        -------
+        xr.DataArray
+            The DataArray created from the attribute.
+        """
+        attribute = self[attribute_name]
+
+        data = attribute.data
+        shape = sdtracing.get_awkward_shape(data)
+
+        number_of_variable_axis = np.sum(np.isnan(shape))
+
+        if number_of_variable_axis == 0:
+            last_dim_variable = False
+        elif number_of_variable_axis == 1:
+            try:
+                sdtracing.assert_only_last_axis_variable(data)
+                last_dim_variable = True
+            except ValueError:
+                raise ValueError("Only the last axis can be variable")
+        else:
+            raise ValueError("Only one variable axis is allowed at the last position")
+
+        coords = dict()
+        dims = list()
+        for index in self.indexes:
+            dims.append(index.name)
+            coord = index.coord
+            if isinstance(coord, np.ndarray):
+                coords[index.name] = coord
+            elif isinstance(coord, ak.Array):
+                coords[index.name] = ak.to_numpy(coord)
+            else:
+                raise ValueError("coord must be a np.ndarray or ak.Array")
+
+        if last_dim_variable is False:
+            data = ak.to_numpy(data)
+        else:
+            data = sdtracing.ak_ragged_to_padded(data)
+
+        data_shape = data.shape
+
+        while len(data_shape) > len(dims):
+            new_dim_idx = len(dims)
+            new_dim_len = data_shape[new_dim_idx]
+            new_dim_name = f"ragged_dimension_{new_dim_idx}"
+            dims.append(new_dim_name)
+            coords[new_dim_name] = np.arange(new_dim_len)
+
+        return xr.DataArray(
+            data=data,
+            dims=dims,
+            coords=coords,
+            name=attribute.name,
+            attrs=attribute.metadata,
+        )
+
 
 # %% Example usage
 
