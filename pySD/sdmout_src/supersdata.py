@@ -662,6 +662,36 @@ class SupersAttribute:
             metadata=self.metadata,
         )
 
+    def attribute_to_indexer_unique(
+        self: "SupersAttribute", new_name: Union[str, None] = None
+    ) -> "SupersIndexer":
+        """
+        This function converts an attribute to an indexer.
+        The attribute is converted to an indexer by creating a SupersIndexer object.
+
+        Parameters
+        ----------
+        attribute : SupersAttribute
+            The attribute to be converted to an indexer.
+        new_name : str, optional
+            The new name of the indexer.
+            Default is None. If None, the original name is used.
+
+        Returns
+        -------
+        SupersIndexer
+            The indexer created from the attribute.
+        """
+        if new_name is None:
+            new_name = self.name
+
+        return SupersIndexerUnique(
+            name=new_name,
+            data=self.data,
+            units=self.units,
+            metadata=self.metadata,
+        )
+
     def attribute_to_indexer_binned(
         self: "SupersAttribute",
         bins: np.ndarray,
@@ -700,36 +730,6 @@ class SupersAttribute:
             data=self.data,
             bins=bins,
             right=right,
-            units=self.units,
-            metadata=self.metadata,
-        )
-
-    def attribute_to_indexer_unique(
-        self: "SupersAttribute", new_name: Union[str, None] = None
-    ) -> "SupersIndexer":
-        """
-        This function converts an attribute to an indexer.
-        The attribute is converted to an indexer by creating a SupersIndexer object.
-
-        Parameters
-        ----------
-        attribute : SupersAttribute
-            The attribute to be converted to an indexer.
-        new_name : str, optional
-            The new name of the indexer.
-            Default is None. If None, the original name is used.
-
-        Returns
-        -------
-        SupersIndexer
-            The indexer created from the attribute.
-        """
-        if new_name is None:
-            new_name = self.name
-
-        return SupersIndexerUnique(
-            name=new_name,
-            data=self.data,
             units=self.units,
             metadata=self.metadata,
         )
@@ -912,7 +912,7 @@ class SupersIndexer(SupersAttribute):
         return self.digitized_data
 
     def indexer_to_indexer_binned(
-        self, bin_edges: np.ndarray, right: bool = False
+        self, bins: np.ndarray, right: bool = False
     ) -> "SupersIndexerBinned":
         """
         This function converts an indexer to a binned indexer.
@@ -922,7 +922,7 @@ class SupersIndexer(SupersAttribute):
         ----------
         attribute : SupersAttribute
             The attribute to be converted to a binned indexer.
-        bin_edges : np.ndarray
+        bins : np.ndarray
             The bin edges of the binned indexer.
         right : bool, optional
             As from the numpy documentation:
@@ -937,7 +937,7 @@ class SupersIndexer(SupersAttribute):
         return SupersIndexerBinned(
             name=self.name,
             data=self.data,
-            bin_edges=bin_edges,
+            bins=bins,
             right=right,
             units=self.units,
             metadata=self.metadata,
@@ -1788,38 +1788,3 @@ class SupersDataNew(SuperdropProperties):
             name=attribute.name,
             attrs=attribute.metadata,
         )
-
-
-# %% Example usage
-
-# from pySD.sdmout_src import pysetuptxt, pyzarr
-
-# setupfile = "/home/m/m301096/CLEO/data/output/raw/no_aerosols_collision_many_5012/clusters_301/eurec4a1d_setup.txt"
-# dataset = "/home/m/m301096/CLEO/data/output/raw/no_aerosols_collision_many_5012/clusters_301/eurec4a1d_sol.zarr"
-# # read in constants and intial setup from setup .txt file
-# config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=False)
-# consts = pysetuptxt.get_consts(setupfile, isprint=False)
-# # Create a first simple dataset to have the coordinates for later netcdf creation
-# sddata = SupersDataNew(dataset, consts)
-
-# print(sddata)
-
-# time_index = sddata["time"].attribute_to_indexer_binned(
-#     bin_edges=np.unique(sddata["time"].data)
-# )
-# time_index.digitized_data = time_index.digitized_data - 1
-# time_index.set_name("time_index")
-# sddata.set_attribute(attribute=time_index)
-
-# sddata.index_by_indexer(index=time_index)
-# print(sddata)
-
-# bins = np.logspace(-3, 3, 10)
-
-# radius_index = sddata["radius"].attribute_to_indexer_binned(bin_edges=bins)
-# radius_index.set_name("radius_index")
-
-# sddata.set_attribute(radius_index)
-
-# sddata.index_by_indexer(index=sddata["radius_index"])
-# print(sddata)
