@@ -426,6 +426,17 @@ class SupersAttribute:
         else:
             raise ValueError("Data must be an ak.Array or np.ndarray")
 
+    def get_data(self):
+        """
+        This function returns the data of the attribute.
+
+        Returns
+        -------
+        ak.Array
+            The data of the attribute.
+        """
+        return self.data
+
     def set_metadata(self, metadata: dict):
         """
         This function sets the metadata of the attribute.
@@ -620,7 +631,9 @@ class SupersAttribute:
             metadata=self.metadata,
         )
 
-    def attribute_to_indexer(self: "SupersAttribute") -> "SupersIndexer":
+    def attribute_to_indexer(
+        self: "SupersAttribute", new_name: Union[str, None] = None
+    ) -> "SupersIndexer":
         """
         This function converts an attribute to an indexer.
         The attribute is converted to an indexer by creating a SupersIndexer object.
@@ -629,21 +642,31 @@ class SupersAttribute:
         ----------
         attribute : SupersAttribute
             The attribute to be converted to an indexer.
+        new_name : str, optional
+            The new name of the indexer.
+            Default is None. If None, the original name is used.
 
         Returns
         -------
         SupersIndexer
             The indexer created from the attribute.
         """
+
+        if new_name is None:
+            new_name = self.name
+
         return SupersIndexer(
-            name=self.name,
+            name=new_name,
             data=self.data,
             units=self.units,
             metadata=self.metadata,
         )
 
     def attribute_to_indexer_binned(
-        self: "SupersAttribute", bin_edges: np.ndarray, right: bool = False
+        self: "SupersAttribute",
+        bins: np.ndarray,
+        new_name: Union[str, None] = None,
+        right: bool = False,
     ) -> "SupersIndexerBinned":
         """
         This function converts an attribute to a binned indexer.
@@ -653,8 +676,11 @@ class SupersAttribute:
         ----------
         attribute : SupersAttribute
             The attribute to be converted to a binned indexer.
-        bin_edges : np.ndarray
+        bins : np.ndarray
             The bin edges of the binned indexer.
+        new_name : str, optional
+            The new name of the binned indexer.
+            Default is None. If None, the original name is used.
         right : bool, optional
             As from the numpy documentation:
             Indicating whether the intervals include the right or the left bin edge.
@@ -665,10 +691,14 @@ class SupersAttribute:
         SupersIndexerBinned
             The binned indexer created from the attribute.
         """
+
+        if new_name is None:
+            new_name = self.name
+
         return SupersIndexerBinned(
-            name=self.name,
+            name=new_name,
             data=self.data,
-            bin_edges=bin_edges,
+            bins=bins,
             right=right,
             units=self.units,
             metadata=self.metadata,
