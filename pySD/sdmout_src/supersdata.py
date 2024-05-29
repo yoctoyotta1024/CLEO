@@ -1599,35 +1599,37 @@ class SupersDataNew(SuperdropProperties):
 
         """
 
+        # validate, if the indexer is already used
+        if self.is_index(index.name):
+            raise ValueError(
+                f"The index '{index.name}' is already set.\n Another indexing by it is not possible!"
+            )
+
         ndim = index.data.ndim
 
+        if ndim == 1:
+            counts = sdtracing.create_counts_1D(index.digitized_data)
+        elif ndim == 2:
+            counts = sdtracing.create_counts_2D(index.digitized_data)
+        elif ndim == 3:
+            counts = sdtracing.create_counts_3D(index.digitized_data)
+        else:
+            raise ValueError("Indexer must be 1D, 2D or 3D")
+
+        # sort all attributes by the index
+        argsort = ak.argsort(index.digitized_data)
         for attr_name in self.attributes:
-            print(attr_name)
+            attr = self[attr_name]
+            attr.sort_by(sort_array=argsort)
+
+        # add the index to the attributes
+        self.set_attribute(attribute=index)
+
+        # bin all indexer attributes
+        for attr_name in self.attributes:
             attr = self[attr_name]
 
-            if ndim == 1:
-                binned_data = sdtracing.binning_by_1D_indexer(
-                    data=attr.data,
-                    indexer=index.digitized_data,
-                )
-            elif ndim == 2:
-                binned_data = sdtracing.binning_by_2D_indexer(
-                    data=attr.data,
-                    indexer=index.digitized_data,
-                )
-            elif ndim == 3:
-                binned_data = sdtracing.binning_by_3D_indexer(
-                    data=attr.data,
-                    indexer=index.digitized_data,
-                )
-
-            binned_attribute = SupersAttribute(
-                name=attr.name,
-                data=binned_data,
-                units=attr.units,
-                metadata=attr.metadata,
-            )
-            self.set_attribute(attribute=binned_attribute)
+            attr.bin_attribute_by_counts(counts=counts)
 
         self.add_index(index=index)
 
