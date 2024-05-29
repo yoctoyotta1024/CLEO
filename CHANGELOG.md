@@ -2,6 +2,65 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.9.0](https://github.com/yoctoyotta1024/CLEO/compare/46c7b2af9c3ad3d4b1b5ecd451c574f05f5bdbe7..v0.9.0) - 2024-05-26
+#### Bug Fixes
+- way to include sdmmonitor in microphysics concept - ([4e3c21d](https://github.com/yoctoyotta1024/CLEO/commit/4e3c21d1db98af04b9c4ae427ad9c3ae3b5b2c9f)) - clara.bayley
+- way to include sdmmonitor in microphysics concept - ([47891b8](https://github.com/yoctoyotta1024/CLEO/commit/47891b8291b348dea02c97c75bd5ad44464b2830)) - clara.bayley
+- add SDMMo template parameter to microphysics concept - ([eb4b868](https://github.com/yoctoyotta1024/CLEO/commit/eb4b868de471f2de7f82d7bfd4a91b0954babb34)) - clara.bayley
+#### Build system
+- added more general MPI support to use YAC on CXX - ([46c7b2a](https://github.com/yoctoyotta1024/CLEO/commit/46c7b2af9c3ad3d4b1b5ecd451c574f05f5bdbe7)) - wiltonloch
+#### Continuous Integration
+- added the yac_3d example as a build workflow step - ([1da2dea](https://github.com/yoctoyotta1024/CLEO/commit/1da2dea94f62ab8e50e4cc2471f1d2c19d7f94d0)) - wiltonloch
+#### Documentation
+- class not struct fix typo - ([80a0e5d](https://github.com/yoctoyotta1024/CLEO/commit/80a0e5de64d6a3e5871eb438526cd4b04c62b693)) - clara.bayley
+- better title to page - ([12cdb86](https://github.com/yoctoyotta1024/CLEO/commit/12cdb861b572018bf8ca73dd8e77a02b1aabf964)) - clara.bayley
+#### Features
+- monitor for condensed mass outputs mass condensed per gbx for each output timestep - ([7b0e644](https://github.com/yoctoyotta1024/CLEO/commit/7b0e64403f8aef31c646008894490ca09b6c6cd4)) - clara.bayley
+- use C++ traits and templated functions to determine dtype string for zarr metadata and required xarray metadata given data type - ([ae017fa](https://github.com/yoctoyotta1024/CLEO/commit/ae017fa66dfad677fe96b2c18d3988765c4c166e)) - clara.bayley
+- option to use monitor observer in main - ([4cf90a8](https://github.com/yoctoyotta1024/CLEO/commit/4cf90a834a238915c497410291e60acccb9adf29)) - clara.bayley
+- placeholder struct for monitoring condensation - ([41a1fda](https://github.com/yoctoyotta1024/CLEO/commit/41a1fda47784034bf401eec0319e93f8ab5af7b3)) - clara.bayley
+- struct for combining sdmmonitors - ([69172f3](https://github.com/yoctoyotta1024/CLEO/commit/69172f31a93a4607a9937afab3c2bbe8e0105b21)) - clara.bayley
+- new struct for detecting variables within sdm subtimestepped processes - ([152fa89](https://github.com/yoctoyotta1024/CLEO/commit/152fa895d3c21c77183a4a229af265f223329537)) - clara.bayley
+- new function constraint on observers concept - ([62a1a3c](https://github.com/yoctoyotta1024/CLEO/commit/62a1a3c3543418a6e0d744ce3666e57904095012)) - clara.bayley
+#### Miscellaneous Chores
+- correct typo in comment - ([85f8072](https://github.com/yoctoyotta1024/CLEO/commit/85f8072041452b12087686dd1d13b7e4939bf79e)) - clara.bayley
+- correct comment and formatting - ([b46a0fc](https://github.com/yoctoyotta1024/CLEO/commit/b46a0fc137d3a975a4af21c925d3eec6a5aa09f8)) - clara.bayley
+- delete todos - ([03cfd09](https://github.com/yoctoyotta1024/CLEO/commit/03cfd099097f8e8aff153868eb101ca0f8af58b9)) - clara.bayley
+- rename const tstep observer - ([b40e55b](https://github.com/yoctoyotta1024/CLEO/commit/b40e55b7f0e3d65ddb0956495936234c81666d28)) - clara.bayley
+- rename - ([4c289ee](https://github.com/yoctoyotta1024/CLEO/commit/4c289eefab5b2b2d994399c615b0867abecdae52)) - clara.bayley
+- rename - ([a0a21d1](https://github.com/yoctoyotta1024/CLEO/commit/a0a21d14978987a3dfbaf4fd71587e5bd6e09af3)) - clara.bayley
+- rename file - ([d159b90](https://github.com/yoctoyotta1024/CLEO/commit/d159b90888d56a80fbce53a52215d8eb429e9d41)) - clara.bayley
+#### Refactoring
+- WIP to test monitor microphysics in condensation - ([b65bacd](https://github.com/yoctoyotta1024/CLEO/commit/b65bacdce397e7a9436d3c4b9fbe0f4b51a6879e)) - clara.bayley
+- revert to commit e3041238475c3d4ac848ce8bb34b6f9f95ddbf07 and then move sdmmonitor to superdrops library - ([9336266](https://github.com/yoctoyotta1024/CLEO/commit/933626698b94d875b3bdd8bfeade888e7d3770f4)) - clara.bayley
+- Revert "refactor: attempt to include monitor in condensation" - ([147cc9d](https://github.com/yoctoyotta1024/CLEO/commit/147cc9d5bc1a78a28d31876737c447933db39266)) - clara.bayley
+- attempt to include monitor in condensation - ([7ac5712](https://github.com/yoctoyotta1024/CLEO/commit/7ac5712e3a70fc8184fd1e54b73a110b62eb69a6)) - clara.bayley
+- sdm microphysics concept requires sdm monitor - ([02af1d2](https://github.com/yoctoyotta1024/CLEO/commit/02af1d2581fa7a3710f5b9343e121aafcd43d4e7)) - clara.bayley
+- use explicit template to aid cuda compilation - ([8dde10e](https://github.com/yoctoyotta1024/CLEO/commit/8dde10ee7485f81e78993b258a61d42e4059e5ae)) - clara.bayley
+- make sdm monitor observer generic - ([5d0b1a0](https://github.com/yoctoyotta1024/CLEO/commit/5d0b1a01b1ed28d88acbffd80eda084705354a32)) - clara.bayley
+- use buffer view type in monitor - ([bf61b09](https://github.com/yoctoyotta1024/CLEO/commit/bf61b091722c554a3fe6ec8266393286723c2a46)) - clara.bayley
+- sketch for outline of condensation observer - ([824a501](https://github.com/yoctoyotta1024/CLEO/commit/824a50133bec3568008ac9778ec0683c27b42594)) - clara.bayley
+- move sdmmonitors into subdirectory - ([b570d21](https://github.com/yoctoyotta1024/CLEO/commit/b570d217827d370a0337b44bbef7863d57192de1)) - clara.bayley
+- convert SDMMonitor into concept - ([e54c75f](https://github.com/yoctoyotta1024/CLEO/commit/e54c75fac2196f0ce5d2788be4ef04c3264797e3)) - clara.bayley
+- convert SDMMonitor into concept - ([83decb3](https://github.com/yoctoyotta1024/CLEO/commit/83decb3106f18ee4d649cdb88406bbda90a26011)) - clara.bayley
+- convert SDMMonitor into concept - ([32d146d](https://github.com/yoctoyotta1024/CLEO/commit/32d146d65ed6cdc2f6945582a2dda8d5881b69bd)) - clara.bayley
+- delete redundant files - ([d2ab7f0](https://github.com/yoctoyotta1024/CLEO/commit/d2ab7f06a9ecf050ed15606b0e9f95b0a11f1674)) - clara.bayley
+- add empty func to satisfy new const step observer - ([85cc173](https://github.com/yoctoyotta1024/CLEO/commit/85cc1734caf24d81be5ff9b517f52f6cea1e3c79)) - clara.bayley
+- const step observer also calls sdm_step func - ([21dbebc](https://github.com/yoctoyotta1024/CLEO/commit/21dbebcda7089edf0f6894fc81ffe5e913f6e9f3)) - clara.bayley
+- seperate files for const tstep observer and rename struct - ([ebfe99e](https://github.com/yoctoyotta1024/CLEO/commit/ebfe99e083f57bbe7b551949203810ce0cfb35e6)) - clara.bayley
+
+- - -
+
+## [v0.8.2](https://github.com/yoctoyotta1024/CLEO/compare/afa7b400d9b4e214239df293784e1695824a5378..v0.8.2) - 2024-05-24
+#### Bug Fixes
+- corrected build and execution for yac_3d example - ([5d3d147](https://github.com/yoctoyotta1024/CLEO/commit/5d3d14733ed4f37665425c17c57a4be194b33114)) - wiltonloch
+#### Build system
+- moved mpi and fyaml requirements from coupldyn_yac to findyac - ([60239f3](https://github.com/yoctoyotta1024/CLEO/commit/60239f3273a0dd5e1ab8d3b6d2153915c81274d3)) - wiltonloch
+#### Refactoring
+- move random number generator into collisions - ([afa7b40](https://github.com/yoctoyotta1024/CLEO/commit/afa7b400d9b4e214239df293784e1695824a5378)) - clara.bayley
+
+- - -
+
 ## [v0.8.1](https://github.com/yoctoyotta1024/CLEO/compare/a4c22eb26a906faef8d91f140fc229d7025fd537..v0.8.1) - 2024-05-08
 #### Bug Fixes
 - docs corrected message abotu ruff settings - ([3e55894](https://github.com/yoctoyotta1024/CLEO/commit/3e558940718e085da1dfa849785dce1e250ed2ff)) - clara.bayley

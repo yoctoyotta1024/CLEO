@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Wednesday 8th May 2024
+ * Last Modified: Saturday 25th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -91,9 +91,10 @@ class SDMMethods {
    * @param t_sdm Current timestep for SDM.
    * @param d_gbxs View of gridboxes on device.
    * @param totsupers View of all superdrops (both in and out of bounds of domain).
+   * @param mo Monitor of SDM processes.
    */
-  void superdrops_movement(const unsigned int t_sdm, viewd_gbx d_gbxs,
-                           const viewd_supers totsupers) const {
+  void superdrops_movement(const unsigned int t_sdm, viewd_gbx d_gbxs, const viewd_supers totsupers,
+                           const SDMMonitor auto sdmmonitor) const {
     movesupers.run_step(t_sdm, gbxmaps, d_gbxs, totsupers);
   }
 
@@ -127,18 +128,19 @@ class SDMMethods {
      * @param t_next Next timestep for SDM.
      * @param d_gbxs View of gridboxes on device.
      */
-    void operator()(const unsigned int t_sdm, const unsigned int t_next,
-                    const viewd_gbx d_gbxs) const {
+    template <SDMMonitor SDMMo>
+    void operator()(const unsigned int t_sdm, const unsigned int t_next, const viewd_gbx d_gbxs,
+                    const SDMMo sdmmonitor) const {
       // TODO(all) use scratch space for parallel region?
       const size_t ngbxs(d_gbxs.extent(0));
       Kokkos::parallel_for(
           "sdm_microphysics", TeamPolicy(ngbxs, Kokkos::AUTO()),
           KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
-            const int ii = team_member.league_rank();
+            const auto ii = team_member.league_rank();
 
             auto supers(d_gbxs(ii).supersingbx());
             for (unsigned int subt = t_sdm; subt < t_next; subt = microphys.next_step(subt)) {
-              supers = microphys.run_step(team_member, subt, supers, d_gbxs(ii).state);
+              supers = microphys.run_step(team_member, subt, supers, d_gbxs(ii).state, sdmmonitor);
             }
           });
     }
@@ -216,12 +218,14 @@ class SDMMethods {
    */
   void run_step(const unsigned int t_mdl, const unsigned int t_mdl_next, viewd_gbx d_gbxs,
                 const viewd_supers totsupers) const {
+    const SDMMonitor auto sdmmonitor = obs.get_sdmmonitor();
+
     unsigned int t_sdm(t_mdl);
     while (t_sdm < t_mdl_next) {
       const auto t_sdm_next = next_sdmstep(t_sdm, t_mdl_next);
 
-      superdrops_movement(t_sdm, d_gbxs, totsupers);  // on host and device
-      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs);    // on device
+      superdrops_movement(t_sdm, d_gbxs, totsupers, sdmmonitor);  // on host and device
+      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs, sdmmonitor);    // on device
 
       t_sdm = t_sdm_next;
     }

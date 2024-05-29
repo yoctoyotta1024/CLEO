@@ -4,17 +4,15 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
 endif()
 
 # set library name and print directory of this CMakeLists.txt (source directory of library)
-set(LIBNAME "zarr")
+set(LIBNAME "sdmmonitor")
 message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 # explicitly set library executables path to /lib in top level of build tree
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
+set(LIBRARY_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/lib)
 
 # Add executables and create library target
 set(SOURCES
-"fsstore.cpp"
-"xarray_metadata.cpp"
-"zarr_metadata.cpp"
+  "monitor_condensation.cpp"
 )
 # must use STATIC (not(!) SHARED) lib for linking to executable if build is CUDA enabled with Kokkos
 add_library("${LIBNAME}" STATIC ${SOURCES})
@@ -24,6 +22,9 @@ target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 target_include_directories(${LIBNAME} PRIVATE "${CMAKE_SOURCE_DIR}/libs") # CLEO libs directory
 
 # Link libraries to target library
+set(LINKLIBS zarr)
+target_link_libraries(${LIBNAME} PUBLIC "${LINKLIBS}")
+target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 
 # set specific C++ compiler options for target (optional)

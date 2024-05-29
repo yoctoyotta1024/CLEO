@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Wednesday 22nd May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -62,11 +62,10 @@ CollectDataForDataset<Store> auto CollectThermoVariable(const Dataset<Store> &da
                                                         const std::string_view units,
                                                         const double scale_factor,
                                                         const size_t maxchunk, const size_t ngbxs) {
-  const auto dtype = std::string_view("<f4");
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
   const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
   const auto xzarr =
-      dataset.template create_array<float>(name, units, dtype, scale_factor, chunkshape, dimnames);
+      dataset.template create_array<float>(name, units, scale_factor, chunkshape, dimnames);
   return GenericCollectData(ffunc, xzarr, ngbxs);
 }
 
@@ -137,7 +136,7 @@ struct QvapFunc {
 };
 
 /**
- * @brief Functor operator to perform a copy of the liquid ass mixing ratio "qcond" from the state
+ * @brief Functor operator to perform a copy of the liquid mass mixing ratio "qcond" from the state
  * of each gridbox to d_data within Kokkos::parallel_for loop over gridboxes with range policy.
  *
  * Signature of operator such that type can be used by GenericCollectData struct for FunctorFunc.

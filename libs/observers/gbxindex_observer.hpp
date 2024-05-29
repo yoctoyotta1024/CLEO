@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Saturday 25th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,6 +30,7 @@
 #include "../kokkosaliases.hpp"
 #include "./observers.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "superdrops/sdmmonitor.hpp"
 #include "zarr/buffer.hpp"
 #include "zarr/dataset.hpp"
 #include "zarr/xarray_zarr_array.hpp"
@@ -97,7 +98,7 @@ class GbxindexObserver {
   GbxindexObserver(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs)
       : dataset(dataset),
         xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
-            dataset.template create_coordinate_array<uint32_t>("gbxindex", "", "<u4", 1, maxchunk,
+            dataset.template create_coordinate_array<uint32_t>("gbxindex", "", 1, maxchunk,
                                                                ngbxs))) {}
 
   ~GbxindexObserver() { dataset.write_arrayshape(xzarr_ptr); }
@@ -134,6 +135,13 @@ class GbxindexObserver {
    */
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {}
+
+  /**
+   * @brief Get null monitor for SDM processes from observer.
+   *
+   * @return monitor 'mo' of the observer that does nothing
+   */
+  SDMMonitor auto get_sdmmonitor() const { return NullSDMMonitor{}; }
 
   /**
    * @brief Returns the timestep of the next observation.

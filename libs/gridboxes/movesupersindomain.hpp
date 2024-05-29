@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 4th May 2024
+ * Last Modified: Saturday 25th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -68,8 +68,7 @@ struct MoveSupersInDomain {
                              motion.superdrop_coords(gbxindex, gbxmaps, state, supers(kk));
 
                              /* optional step (1b) */
-                             // gbx.detectors -> detect_precipitation(area, drop); // TODO(CB)
-                             // detectors
+                             // monitor -> detect_precipitation(area, drop); // TODO(CB) monitor
 
                              /* step (2) */
                              motion.superdrop_gbx(gbxindex, gbxmaps, supers(kk));
@@ -79,7 +78,7 @@ struct MoveSupersInDomain {
     /* enact steps (1) and (2) movement of superdroplets
     throughout domain (i.e. for all gridboxes):
     (1) update their spatial coords according to type of motion. (device)
-    (1b) optional detect precipitation (device)
+    (1b) optional monitor / detect precipitation (device)
     (2) update their sdgbxindex accordingly (device).
     Kokkos::parallel_for([...]) is equivalent to:
     for (size_t ii(0); ii < ngbxs; ++ii) {[...]}
@@ -90,7 +89,7 @@ struct MoveSupersInDomain {
       Kokkos::parallel_for(
           "move_supers_in_gridboxes", TeamPolicy(ngbxs, Kokkos::AUTO()),
           KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
-            const int ii = team_member.league_rank();
+            const auto ii = team_member.league_rank();
 
             auto &gbx(d_gbxs(ii));
             move_supers_in_gbx(team_member, gbx.get_gbxindex(), gbxmaps, gbx.state,
@@ -112,7 +111,7 @@ struct MoveSupersInDomain {
       Kokkos::parallel_for(
           "move_supers_between_gridboxes", TeamPolicy(ngbxs, Kokkos::AUTO()),
           KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
-            const int ii = team_member.league_rank();
+            const auto ii = team_member.league_rank();
 
             auto &gbx(d_gbxs(ii));
             gbx.supersingbx.set_refs(team_member);

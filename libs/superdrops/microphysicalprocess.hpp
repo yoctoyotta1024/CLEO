@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Wednesday 8th May 2024
+ * Last Modified: Saturday 25th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -29,6 +29,7 @@
 
 #include "../cleoconstants.hpp"
 #include "./kokkosaliases_sd.hpp"
+#include "./sdmmonitor.hpp"
 #include "./state.hpp"
 #include "./superdrop.hpp"
 
@@ -39,15 +40,19 @@
  * of two time-stepping functions ("next_step" and "on_step"), as well as the constraints on the
  * "run_step" function.
  *
+ * Note: NullSDMMonitor used here as placeholder for templated run_step function that can take any
+ * type satisfying the SDMMonitor concept.
+ *
  * @tparam P The type that satisfies the MicrophysicalProcess concept.
  */
 template <typename P>
-concept MicrophysicalProcess = requires(P p, const TeamMember &tm, const unsigned int t,
-                                        subviewd_supers supers, State &state) {
-  { p.next_step(t) } -> std::convertible_to<unsigned int>;
-  { p.on_step(t) } -> std::same_as<bool>;
-  { p.run_step(tm, t, supers, state) } -> std::convertible_to<subviewd_supers>;
-};
+concept MicrophysicalProcess =
+    requires(P p, const TeamMember &tm, const unsigned int t, subviewd_supers supers, State &state,
+             const NullSDMMonitor mo) {
+      { p.next_step(t) } -> std::convertible_to<unsigned int>;
+      { p.on_step(t) } -> std::same_as<bool>;
+      { p.run_step(tm, t, supers, state, mo) } -> std::convertible_to<subviewd_supers>;
+    };
 
 /**
  * @brief Combined microphysical process struct.
@@ -105,13 +110,14 @@ struct CombinedMicrophysicalProcess {
    * @param subt The current time step.
    * @param supers The view of super-droplets.
    * @param state The state of the system / volume.
+   * @param mo Monitor of SDM processes.
    * @return The updated view of super-droplets after the process.
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers run_step(const TeamMember &team_member,
                                                   const unsigned int subt, subviewd_supers supers,
-                                                  State &state) const {
-    supers = a.run_step(team_member, subt, supers, state);
-    supers = b.run_step(team_member, subt, supers, state);
+                                                  State &state, const SDMMonitor auto mo) const {
+    supers = a.run_step(team_member, subt, supers, state, mo);
+    supers = b.run_step(team_member, subt, supers, state, mo);
     return supers;
   }
 };
@@ -165,11 +171,12 @@ struct NullMicrophysicalProcess {
    * @param subt The current time step.
    * @param supers The view of super-droplets.
    * @param state The state of the system.
+   * @param mo Monitor of SDM processes.
    * @return The unchanged view of super-droplets.
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers run_step(const TeamMember &team_member,
                                                   const unsigned int subt, subviewd_supers supers,
-                                                  State &state) const {
+                                                  State &state, const SDMMonitor auto mo) const {
     return supers;
   }
 };
@@ -180,12 +187,15 @@ struct NullMicrophysicalProcess {
  * The MicrophysicsFunc concept represents all function-like types that can be called by the
  * "run_step" function in ConstTstepMicrophysics.
  *
+ * Note: NullSDMMonitor used here as placeholder for templated run_step function that can take any
+ * type satisfying the SDMMonitor concept.
+ *
  * @tparam F The type that satisfies the MicrophysicsFunc concept.
  */
 template <typename F>
 concept MicrophysicsFunc = requires(F f, const TeamMember &tm, const unsigned int subt,
-                                    subviewd_supers supers, State &state) {
-  { f(tm, subt, supers, state) } -> std::convertible_to<subviewd_supers>;
+                                    subviewd_supers supers, State &state, const NullSDMMonitor mo) {
+  { f(tm, subt, supers, state, mo) } -> std::convertible_to<subviewd_supers>;
 };
 
 /**
@@ -241,13 +251,14 @@ struct ConstTstepMicrophysics {
    * @param subt The current time step.
    * @param supers The view of super-droplets.
    * @param state The state of the system / volume.
+   * @param mo Monitor of SDM processes.
    * @return The updated view of super-droplets after the process.
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers run_step(const TeamMember &team_member,
                                                   const unsigned int subt, subviewd_supers supers,
-                                                  State &state) const {
+                                                  State &state, const SDMMonitor auto mo) const {
     if (on_step(subt)) {
-      supers = do_microphysics(team_member, subt, supers, state);
+      supers = do_microphysics(team_member, subt, supers, state, mo);
     }
 
     return supers;

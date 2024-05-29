@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Saturday 25th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -21,29 +21,6 @@
  */
 
 #include "./condensation.hpp"
-
-/**
- * @brief Enacts condensation / evaporation microphysics.
- *
- * Enacts condensation / evaporation microphysics. Change to superdroplet radius, and
- * optionally thermodynamics of the State due to sum of water condensed via diffusion and
- * condensation / evporation of water vapour during a given timestep delt. Using equations
- * (eqn [X.YY]) from "An Introduction To Clouds From The Microscale to Climate" by Lohmann,
- * Luond and Mahrt, 1st edition.
- *
- * @param team_member The Kokkos team member.
- * @param supers The superdroplets.
- * @param state The state.
- */
-KOKKOS_FUNCTION
-void DoCondensation::do_condensation(const TeamMember &team_member, const subviewd_supers supers,
-                                     State &state) const {
-  /* superdroplet radii changes */
-  double totmass_condensed(superdroplets_change(team_member, supers, state));
-
-  /* resultant effect on thermodynamic state */
-  effect_on_thermodynamic_state(team_member, totmass_condensed, state);
-}
 
 /**
  * @brief Changes super-droplet radii according to condensation / evaporation and returns the

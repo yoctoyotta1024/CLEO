@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Wednesday 22nd May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -99,7 +99,6 @@ class Dataset {
    * @tparam T The data type of the array.
    * @param name The name of the new array.
    * @param units The units of the array data.
-   * @param dtype The data type of the array.
    * @param scale_factor The scale factor of array data.
    * @param chunkshape The shape of the chunks of the array.
    * @param dimnames The names of each dimension of the array.
@@ -107,10 +106,10 @@ class Dataset {
    */
   template <typename T>
   XarrayZarrArray<Store, T> create_array(const std::string_view name, const std::string_view units,
-                                         const std::string_view dtype, const double scale_factor,
+                                         const double scale_factor,
                                          const std::vector<size_t> &chunkshape,
                                          const std::vector<std::string> &dimnames) const {
-    return XarrayZarrArray<Store, T>(group.store, datasetdims, name, units, dtype, scale_factor,
+    return XarrayZarrArray<Store, T>(group.store, datasetdims, name, units, scale_factor,
                                      chunkshape, dimnames);
   }
 
@@ -120,7 +119,6 @@ class Dataset {
    * @tparam T The data type of the coordinate array.
    * @param name The name of the new coordinate.
    * @param units The units of the coordinate.
-   * @param dtype The data type of the coordinate.
    * @param scale_factor The scale factor of the coordinate data.
    * @param chunksize The size of each 1-D chunk of the coordinate array.
    * @param dimsize The initial size of the coordinate (number of elements along array).
@@ -129,11 +127,10 @@ class Dataset {
   template <typename T>
   XarrayZarrArray<Store, T> create_coordinate_array(const std::string_view name,
                                                     const std::string_view units,
-                                                    const std::string_view dtype,
                                                     const double scale_factor,
                                                     const size_t chunksize, const size_t dimsize) {
     add_dimension(std::pair<std::string, size_t>{name, dimsize});
-    return create_array<T>(name, units, dtype, scale_factor, std::vector<size_t>{chunksize},
+    return create_array<T>(name, units, scale_factor, std::vector<size_t>{chunksize},
                            std::vector<std::string>{std::string(name)});
   }
 
@@ -143,7 +140,6 @@ class Dataset {
    * @tparam T The data type of the array.
    * @param name The name of the new array.
    * @param units The units of the array data.
-   * @param dtype The data type of the array.
    * @param scale_factor The scale factor of array data.
    * @param chunkshape The shape of the chunks of the array.
    * @param dimnames The names of each dimension of the array.
@@ -151,11 +147,13 @@ class Dataset {
    * @return An instance of XarrayZarrArray representing the newly created ragged array.
    */
   template <typename T>
-  XarrayZarrArray<Store, T> create_ragged_array(
-      const std::string_view name, const std::string_view units, const std::string_view dtype,
-      const double scale_factor, const std::vector<size_t> &chunkshape,
-      const std::vector<std::string> &dimnames, const std::string_view sampledimname) const {
-    return XarrayZarrArray<Store, T>(group.store, datasetdims, name, units, dtype, scale_factor,
+  XarrayZarrArray<Store, T> create_ragged_array(const std::string_view name,
+                                                const std::string_view units,
+                                                const double scale_factor,
+                                                const std::vector<size_t> &chunkshape,
+                                                const std::vector<std::string> &dimnames,
+                                                const std::string_view sampledimname) const {
+    return XarrayZarrArray<Store, T>(group.store, datasetdims, name, units, scale_factor,
                                      chunkshape, dimnames, sampledimname);
   }
 
@@ -165,7 +163,6 @@ class Dataset {
    * @tparam T The data type of the array.
    * @param name The name of the new array.
    * @param units The units of the array data.
-   * @param dtype The data type of the array.
    * @param scale_factor The scale factor of array data.
    * @param chunkshape The shape of the chunks of the array.
    * @param dimnames The names of each dimension of the array.
@@ -173,11 +170,13 @@ class Dataset {
    * @return An instance of XarrayZarrArray representing the newly created raggedcount array.
    */
   template <typename T>
-  XarrayZarrArray<Store, T> create_raggedcount_array(
-      const std::string_view name, const std::string_view units, const std::string_view dtype,
-      const double scale_factor, const std::vector<size_t> &chunkshape,
-      const std::vector<std::string> &dimnames, const std::string_view sampledimname) const {
-    return XarrayZarrArray<Store, T>(group.store, datasetdims, name, units, dtype, scale_factor,
+  XarrayZarrArray<Store, T> create_raggedcount_array(const std::string_view name,
+                                                     const std::string_view units,
+                                                     const double scale_factor,
+                                                     const std::vector<size_t> &chunkshape,
+                                                     const std::vector<std::string> &dimnames,
+                                                     const std::string_view sampledimname) const {
+    return XarrayZarrArray<Store, T>(group.store, datasetdims, name, units, scale_factor,
                                      chunkshape, dimnames, sampledimname);
   }
 

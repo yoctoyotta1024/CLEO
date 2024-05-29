@@ -25,6 +25,7 @@
 
 #include <iostream>
 
+#include <mpi.h>
 extern "C" {
 #include "yac_interface.h"
 }
@@ -100,7 +101,7 @@ void CartesianDynamics::receive_fields_from_yac() {
     yac_cget(vvel_yac_id, 1, &yac_raw_data, &info, &error);
   }
 
-  for (int vertical_index = 0; vertical_index < ndims[2]; vertical_index++) {
+  for (unsigned int vertical_index = 0; vertical_index < ndims[2]; vertical_index++) {
     receive_hor_slice_from_yac(vertical_index * total_horizontal_cells,
                                vertical_index * total_u_edges, vertical_index * total_w_edges);
 

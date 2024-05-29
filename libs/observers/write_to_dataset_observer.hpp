@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 11th April 2024
+ * Last Modified: Saturday 25th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -29,8 +29,10 @@
 
 #include "../kokkosaliases.hpp"
 #include "./collect_data_for_dataset.hpp"
+#include "./consttstep_observer.hpp"
 #include "./observers.hpp"
 #include "./parallel_write_data.hpp"
+#include "superdrops/sdmmonitor.hpp"
 #include "zarr/dataset.hpp"
 
 /**
@@ -76,6 +78,13 @@ class DoWriteToDataset {
                      const viewd_constsupers totsupers) const {
     parallel_write(d_gbxs, totsupers);
   }
+
+  /**
+   * @brief Get null monitor for SDM processes from observer.
+   *
+   * @return monitor 'mo' of the observer that does nothing
+   */
+  SDMMonitor auto get_sdmmonitor() const { return NullSDMMonitor{}; }
 };
 
 /**

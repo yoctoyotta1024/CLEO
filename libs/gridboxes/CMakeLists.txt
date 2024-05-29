@@ -12,7 +12,6 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
 # Add executables and create library target
 set(SOURCES
-"detectors.cpp"
 "gridbox.cpp"
 "movesupersindomain.cpp"
 "predcorr.cpp"

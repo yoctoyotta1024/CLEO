@@ -19,5 +19,7 @@ a store which can be Xarray and NetCDF compatible.
    fsstore
    store_accessor
    xarray_zarr_array
+   xarray_metadata
    zarr_array
+   zarr_metadata
    zarr_group

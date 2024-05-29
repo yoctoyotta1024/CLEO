@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Saturday 25th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -34,6 +34,7 @@
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "superdrops/sdmmonitor.hpp"
 
 namespace dlc = dimless_constants;
 
@@ -124,6 +125,13 @@ struct StreamOutObserver {
       streamout_statement(t_mdl, d_gbxs);
     }
   }
+
+  /**
+   * @brief Get null monitor for SDM processes from observer.
+   *
+   * @return monitor 'mo' of the observer that does nothing
+   */
+  SDMMonitor auto get_sdmmonitor() const { return NullSDMMonitor{}; }
 };
 
 #endif  // LIBS_OBSERVERS_STREAMOUT_OBSERVER_HPP_

@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Saturday 25th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -29,8 +29,10 @@
 #include <memory>
 
 #include "../kokkosaliases.hpp"
+#include "./consttstep_observer.hpp"
 #include "./observers.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "superdrops/sdmmonitor.hpp"
 #include "zarr/buffer.hpp"
 #include "zarr/dataset.hpp"
 #include "zarr/xarray_zarr_array.hpp"
@@ -71,8 +73,7 @@ class DoTotNsupersObs {
   DoTotNsupersObs(Dataset<Store> &dataset, const size_t maxchunk)
       : dataset(dataset),
         xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
-            dataset.template create_array<uint32_t>("totnsupers", "", "<u4", 1, {maxchunk},
-                                                    {"time"}))) {}
+            dataset.template create_array<uint32_t>("totnsupers", "", 1, {maxchunk}, {"time"}))) {}
 
   /**
    * @brief Destructor for DoTotNsupersObs.
@@ -105,6 +106,13 @@ class DoTotNsupersObs {
                      const viewd_constsupers totsupers) const {
     at_start_step(totsupers);
   }
+
+  /**
+   * @brief Get null monitor for SDM processes from observer.
+   *
+   * @return monitor 'mo' of the observer that does nothing
+   */
+  SDMMonitor auto get_sdmmonitor() const { return NullSDMMonitor{}; }
 };
 
 /**
