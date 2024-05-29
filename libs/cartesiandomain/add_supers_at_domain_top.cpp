@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 4th May 2024
+ * Last Modified: Saturday 25th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -64,7 +64,7 @@ void move_supers_between_gridboxes_again(const viewd_gbx d_gbxs, const viewd_sup
   Kokkos::parallel_for(
       "move_supers_between_gridboxes_again", TeamPolicy(ngbxs, Kokkos::AUTO()),
       KOKKOS_LAMBDA(const TeamMember &team_member) {
-        const int ii = team_member.league_rank();
+        const auto ii = team_member.league_rank();
 
         auto &gbx(d_gbxs(ii));
         gbx.supersingbx.set_refs(team_member);
@@ -104,7 +104,7 @@ Kokkos::View<unsigned int *> remove_superdrops_from_gridboxes(const CartesianMap
   Kokkos::parallel_for(
       "remove_superdrops", TeamPolicy(ngbxs, Kokkos::AUTO()),
       KOKKOS_LAMBDA(const TeamMember &team_member) {
-        const int ii = team_member.league_rank();
+        const auto ii = team_member.league_rank();
 
         const auto ubound = gbxmaps.coord3bounds(d_gbxs(ii).get_gbxindex()).second;
         if (ubound > coord3lim) {

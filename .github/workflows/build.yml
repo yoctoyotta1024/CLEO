@@ -77,3 +77,6 @@ jobs:
 
     - name: Build example yac1
       run: cd build && make yac1
+
+    - name: Build example yac_3d
+      run: cd build && make yac_3d

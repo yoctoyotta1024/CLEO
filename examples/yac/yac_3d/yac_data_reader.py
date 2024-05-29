@@ -66,12 +66,11 @@ def read_variable_metadata(file, offset):
 
 
 def read_metadata(file):
-    # d0byte = int.from_bytes(file.read(4), "little")
+    file.read(4)
     charbytes = int.from_bytes(file.read(4), "little")
     nvars = int.from_bytes(file.read(4), "little")
     mbytes_pervar = int.from_bytes(file.read(4), "little")
-
-    # global_meta_string = file.read(charbytes).decode("UTF-8")
+    file.read(charbytes)
 
     variable_metadata = []
     offset = 4 + charbytes

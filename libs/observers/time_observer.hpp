@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Saturday 25th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -32,8 +32,10 @@
 #include <utility>
 
 #include "../kokkosaliases.hpp"
+#include "./consttstep_observer.hpp"
 #include "./observers.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "superdrops/sdmmonitor.hpp"
 #include "zarr/dataset.hpp"
 #include "zarr/xarray_zarr_array.hpp"
 
@@ -81,8 +83,7 @@ class DoTimeObs {
             const std::function<double(unsigned int)> step2dimlesstime)
       : dataset(dataset),
         xzarr_ptr(std::make_shared<XarrayZarrArray<Store, float>>(
-            dataset.template create_coordinate_array<float>("time", "s", "<f4", dlc::TIME0,
-                                                            maxchunk, 0))),
+            dataset.template create_coordinate_array<float>("time", "s", dlc::TIME0, maxchunk, 0))),
         step2dimlesstime(step2dimlesstime) {}
 
   /**
@@ -116,6 +117,13 @@ class DoTimeObs {
                      const viewd_constsupers totsupers) const {
     at_start_step(t_mdl);
   }
+
+  /**
+   * @brief Get null monitor for SDM processes from observer.
+   *
+   * @return monitor 'mo' of the observer that does nothing
+   */
+  SDMMonitor auto get_sdmmonitor() const { return NullSDMMonitor{}; }
 };
 
 /**

@@ -26,10 +26,3 @@ Header file: ``<libs/observers/observers.hpp>``
 
 .. doxygenconcept:: ObsFuncs
    :project: observers
-
-.. doxygenstruct:: ConstTstepObserver
-   :project: observers
-   :private-members:
-   :protected-members:
-   :members:
-   :undoc-members:

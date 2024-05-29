@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 4th May 2024
+ * Last Modified: Monday 27th May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -50,6 +50,7 @@
 #include "observers/nsupers_observer.hpp"
 #include "observers/observers.hpp"
 #include "observers/runstats_observer.hpp"
+#include "observers/sdmmonitor/monitor_condensation.hpp"
 #include "observers/state_observer.hpp"
 #include "observers/streamout_observer.hpp"
 #include "observers/superdrops_observer.hpp"
@@ -164,12 +165,14 @@ inline MicrophysicalProcess auto config_collisions(const Config &config, const T
 
 inline MicrophysicalProcess auto create_microphysics(const Config &config,
                                                      const Timesteps &tsteps) {
-  // const MicrophysicalProcess auto cond = config_condensation(config, tsteps);
+  const MicrophysicalProcess auto cond = config_condensation(config, tsteps);
   // const MicrophysicalProcess auto colls = config_collisions(config, tsteps);
   // return colls >> cond;
 
-  const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
-  return null;
+  // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
+  // return null;
+
+  return cond;
 }
 
 template <typename Store>
@@ -200,6 +203,14 @@ inline Observer auto create_gridboxes_observer(const unsigned int interval, Data
 }
 
 template <typename Store>
+inline Observer auto create_sdmmonitor_observer(const unsigned int interval,
+                                                Dataset<Store> &dataset, const size_t maxchunk,
+                                                const size_t ngbxs) {
+  const Observer auto monitor_cond = CondensationObserver(interval, dataset, maxchunk, ngbxs);
+  return monitor_cond;
+}
+
+template <typename Store>
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
                                      Dataset<Store> &dataset) {
   const auto obsstep = tsteps.get_obsstep();
@@ -224,7 +235,9 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
 
   const Observer auto obssd = create_superdrops_observer(obsstep, dataset, maxchunk);
 
-  return obssd >> obsgbx >> obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
+  const Observer auto obsm = create_sdmmonitor_observer(obsstep, dataset, maxchunk, ngbxs);
+
+  return obsm >> obssd >> obsgbx >> obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
 }
 
 template <typename Store>

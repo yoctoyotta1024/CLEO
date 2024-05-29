@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Wednesday 22nd May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -35,6 +35,7 @@
 
 #include "./buffer.hpp"
 #include "./chunks.hpp"
+#include "./zarr_metadata.hpp"
 
 /**
  * @brief Given maximum chunk size 'maxchunk' and length of inner dimension of one chunk of
@@ -72,68 +73,6 @@ inline void write_zarray_json(Store& store, std::string_view name, std::string_v
 }
 
 /**
- * @brief Converts a vector of integers into a single list written as a string.
- *
- * Given vector of a type convertible to a string with values [a, b, c, ..., z], function returns
- * the string "[a, b, c, ..., z]" with elements separated by commas and enclosed in square brackets.
- * Function is useful for converting vectors representing the shape of chunks and arrays etc. into
- * a string format for metadata json files.
- *
- * @param vals The vector values of a type convertible to a string.
- * @return A string representation of the vector.
- */
-inline std::string vec_to_string(const std::vector<size_t>& vals) {
-  auto vals_str = std::string{"["};
-  for (const auto& v : vals) {
-    vals_str += std::to_string(v) + ", ";
-  }
-  vals_str.erase(vals_str.size() - 2);  // delete last ", "
-  vals_str += "]";
-  return vals_str;
-}
-
-/**
- * @brief Generates part of the metadata for a Zarr array .zarray json file.
- *
- * This function constructs a string containing all the compulsory metadata of a Zarr array for its
- * .zarray json file, excluding the array's shape.
- *
- * @param chunkshape The shape of individual data chunks along each dimension.
- * @param dtype The data type stored in the arrays (e.g., "<f8").
- * @return A string view containing the partial metadata for the Zarr array.
- */
-inline std::string make_part_zarrmetadata(const std::vector<size_t>& chunkshape,
-                                          const std::string_view dtype) {
-  const auto chunkshape_str = vec_to_string(chunkshape);  // shape of each chunk of array
-  const auto order = 'C';  // layout of bytes in each chunk of array in storage ('C' or 'F')
-  const auto compressor = std::string{"null"};  // compression of data when writing to store
-  const auto fill_value = std::string{"null"};  // fill value for empty datapoints in array
-  const auto filters = std::string{"null"};     // codec configurations for compression
-  const auto zarr_format = '2';                 // storage spec. version 2
-
-  const auto part_zarrmetadata = std::string("  \"chunks\": " + chunkshape_str +
-                                             ",\n"
-                                             "  \"dtype\": \"" +
-                                             std::string(dtype) +
-                                             "\",\n"
-                                             "  \"order\": \"" +
-                                             order +
-                                             "\",\n"
-                                             "  \"compressor\": " +
-                                             compressor +
-                                             ",\n"
-                                             "  \"fill_value\": " +
-                                             fill_value +
-                                             ",\n"
-                                             "  \"filters\": " +
-                                             filters +
-                                             ",\n"
-                                             "  \"zarr_format\": " +
-                                             zarr_format);
-  return part_zarrmetadata;
-}
-
-/**
  * @brief A template class representing a Zarr array.
  *
  * This class provides functionality to write an array to a specified store via a buffer according
@@ -153,22 +92,8 @@ class ZarrArray {
   size_t totndata;               /**< Total number of elements of data in array written to store. */
   Chunks chunks;                 /**< Method to write chunks of array in store. */
   Buffer<T> buffer;              /**< Buffer to hold data before writing chunks to store. */
-  std::string part_zarrmetadata; /**< Metadata required for zarr array excluding array's shape */
+  ZarrMetadata<T> zarr_metadata; /**< Metadata required for zarr array excluding array's shape */
   bool is_backend; /**< true if zarr array is a backend of something else e.g. xarray */
-
-  /**
-   * @brief Generates the compulsory metadata for the Zarr array .zarray json file.
-   *
-   * @return A string containing the metadata for the Zarr array.
-   */
-  std::string zarr_metadata(const std::vector<size_t>& arrayshape) const {
-    const auto metadata = std::string(
-        "{\n"
-        "  \"shape\": " +
-        vec_to_string(arrayshape) + ",\n" + std::string(part_zarrmetadata) + "\n}");
-
-    return metadata;
-  }
 
   /**
    * @brief Get the shape of the array based on the number of data elements and chunks written in
@@ -249,13 +174,12 @@ class ZarrArray {
    *
    * @param store The store where the array will be stored.
    * @param name The name of the array.
-   * @param dtype The data type stored in the arrays (e.g., "<f8").
    * @param chunkshape The shape of individual data chunks along each dimension.
    * @param is_backend boolean is true if zarr array is a backend of something else e.g. xarray.
    * @param reduced_arrayshape The shape of the array along all but the outermost (0th) dimension.
    */
-  ZarrArray(Store& store, const std::string_view name, const std::string_view dtype,
-            const std::vector<size_t>& chunkshape, const bool is_backend,
+  ZarrArray(Store& store, const std::string_view name, const std::vector<size_t>& chunkshape,
+            const bool is_backend,
             const std::vector<size_t>& reduced_arrayshape = std::vector<size_t>({}))
       : store(store),
         name(name),
@@ -263,7 +187,7 @@ class ZarrArray {
         totndata(0),
         chunks(chunkshape, reduced_arrayshape),
         buffer(vec_product(chunks.get_chunkshape())),
-        part_zarrmetadata(make_part_zarrmetadata(chunkshape, dtype)),
+        zarr_metadata(chunkshape),
         is_backend(is_backend) {
     assert((chunkshape.size() == reduced_arrayshape.size() + 1) &&
            "number of dimensions of chunks must match number of dimensions of array");

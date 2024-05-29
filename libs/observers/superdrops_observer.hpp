@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 29th April 2024
+ * Last Modified: Wednesday 22nd May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -63,8 +63,8 @@ struct RaggedCount {
    */
   RaggedCount(const Dataset<Store> &dataset, const size_t maxchunk)
       : xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
-            dataset.template create_raggedcount_array<uint32_t>(
-                "raggedcount", "", "<u4", 1, {maxchunk}, {"time"}, "superdroplets"))) {}
+            dataset.template create_raggedcount_array<uint32_t>("raggedcount", "", 1, {maxchunk},
+                                                                {"time"}, "superdroplets"))) {}
 
   /**
    * @brief Writes the total number of super-droplets to the ragged count array in the dataset.
@@ -108,7 +108,6 @@ struct RaggedCount {
  * @param ffunc The functor function to apply to collect data.
  * @param name The name of the variable.
  * @param units The units of the variable.
- * @param dtype A string representing the data type of the variable.
  * @param scale_factor The scale factor of the variable.
  * @param maxchunk The maximum chunk size.
  * @return CollectDataForDataset<Store> An instance of CollectDataForDataset for collecting
@@ -117,13 +116,12 @@ struct RaggedCount {
 template <typename Store, typename T, typename FunctorFunc>
 CollectDataForDataset<Store> auto CollectSuperdropVariable(
     const Dataset<Store> &dataset, const FunctorFunc ffunc, const std::string_view name,
-    const std::string_view units, const std::string_view dtype, const double scale_factor,
-    const size_t maxchunk) {
+    const std::string_view units, const double scale_factor, const size_t maxchunk) {
   const auto chunkshape = std::vector<size_t>{maxchunk};
   const auto dimnames = std::vector<std::string>{"superdroplets"};
   const auto sampledimname = std::string_view("superdroplets");
-  const auto xzarr = dataset.template create_ragged_array<T>(name, units, dtype, scale_factor,
-                                                             chunkshape, dimnames, sampledimname);
+  const auto xzarr = dataset.template create_ragged_array<T>(name, units, scale_factor, chunkshape,
+                                                             dimnames, sampledimname);
 
   return GenericCollectData(ffunc, xzarr, 0);
 }
@@ -168,8 +166,8 @@ struct SdgbxindexFunc {
 template <typename Store>
 CollectDataForDataset<Store> auto CollectSdgbxindex(const Dataset<Store> &dataset,
                                                     const size_t maxchunk) {
-  return CollectSuperdropVariable<Store, uint32_t, SdgbxindexFunc>(
-      dataset, SdgbxindexFunc{}, "sdgbxindex", "", "<u4", 1, maxchunk);
+  return CollectSuperdropVariable<Store, uint32_t, SdgbxindexFunc>(dataset, SdgbxindexFunc{},
+                                                                   "sdgbxindex", "", 1, maxchunk);
 }
 
 /**
@@ -212,8 +210,8 @@ struct SdIdFunc {
 template <typename Store>
 CollectDataForDataset<Store> auto CollectSdId(const Dataset<Store> &dataset,
                                               const size_t maxchunk) {
-  return CollectSuperdropVariable<Store, uint32_t, SdIdFunc>(dataset, SdIdFunc{}, "sdId", "", "<u4",
-                                                             1, maxchunk);
+  return CollectSuperdropVariable<Store, uint32_t, SdIdFunc>(dataset, SdIdFunc{}, "sdId", "", 1,
+                                                             maxchunk);
 }
 
 /**
@@ -256,7 +254,7 @@ struct XiFunc {
  */
 template <typename Store>
 CollectDataForDataset<Store> auto CollectXi(const Dataset<Store> &dataset, const size_t maxchunk) {
-  return CollectSuperdropVariable<Store, uint64_t, XiFunc>(dataset, XiFunc{}, "xi", "", "<u8", 1,
+  return CollectSuperdropVariable<Store, uint64_t, XiFunc>(dataset, XiFunc{}, "xi", "", 1,
                                                            maxchunk);
 }
 
@@ -298,8 +296,8 @@ struct RadiusFunc {
 template <typename Store>
 CollectDataForDataset<Store> auto CollectRadius(const Dataset<Store> &dataset,
                                                 const size_t maxchunk) {
-  return CollectSuperdropVariable<Store, float, RadiusFunc>(
-      dataset, RadiusFunc{}, "radius", "micro-m", "<f4", dlc::R0 * 1e6, maxchunk);
+  return CollectSuperdropVariable<Store, float, RadiusFunc>(dataset, RadiusFunc{}, "radius",
+                                                            "micro-m", dlc::R0 * 1e6, maxchunk);
 }
 
 /**
@@ -340,7 +338,7 @@ struct MsolFunc {
 template <typename Store>
 CollectDataForDataset<Store> auto CollectMsol(const Dataset<Store> &dataset,
                                               const size_t maxchunk) {
-  return CollectSuperdropVariable<Store, float, MsolFunc>(dataset, MsolFunc{}, "msol", "g", "<f4",
+  return CollectSuperdropVariable<Store, float, MsolFunc>(dataset, MsolFunc{}, "msol", "g",
                                                           dlc::MASS0grams, maxchunk);
 }
 
@@ -383,7 +381,7 @@ template <typename Store>
 CollectDataForDataset<Store> auto CollectCoord3(const Dataset<Store> &dataset,
                                                 const size_t maxchunk) {
   return CollectSuperdropVariable<Store, float, Coord3Func>(dataset, Coord3Func{}, "coord3", "m",
-                                                            "<f4", dlc::COORD0, maxchunk);
+                                                            dlc::COORD0, maxchunk);
 }
 
 /**
@@ -425,7 +423,7 @@ template <typename Store>
 CollectDataForDataset<Store> auto CollectCoord1(const Dataset<Store> &dataset,
                                                 const size_t maxchunk) {
   return CollectSuperdropVariable<Store, float, Coord1Func>(dataset, Coord1Func{}, "coord1", "m",
-                                                            "<f4", dlc::COORD0, maxchunk);
+                                                            dlc::COORD0, maxchunk);
 }
 
 /**
@@ -467,7 +465,7 @@ template <typename Store>
 CollectDataForDataset<Store> auto CollectCoord2(const Dataset<Store> &dataset,
                                                 const size_t maxchunk) {
   return CollectSuperdropVariable<Store, float, Coord2Func>(dataset, Coord2Func{}, "coord2", "m",
-                                                            "<f4", dlc::COORD0, maxchunk);
+                                                            dlc::COORD0, maxchunk);
 }
 
 /**

@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Wednesday 22nd May 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -78,7 +78,7 @@ inline CollectDataForDataset<Store> auto CollectNsupers(const Dataset<Store> &da
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
   const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
   const auto xzarr =
-      dataset.template create_array<uint32_t>("nsupers", "", "<u4", 1, chunkshape, dimnames);
+      dataset.template create_array<uint32_t>("nsupers", "", 1, chunkshape, dimnames);
   return GenericCollectData(NsupersFunc{}, xzarr, ngbxs);
 }
 
