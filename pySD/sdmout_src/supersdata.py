@@ -704,6 +704,59 @@ class SupersAttribute:
             metadata=self.metadata,
         )
 
+    def bin_attribute_by_counts(
+        self: "SupersAttribute", counts: ak.Array
+    ) -> "SupersAttribute":
+        """
+        This function bins an attribute by counts.
+        The attribute is binned by counts by creating a new attribute with the binned data.
+
+        Parameters
+        ----------
+        self : SupersAttribute
+            The attribute to be binned by counts.
+        counts : ak.Array
+            The counts to bin the attribute by.
+        """
+
+        ndim = self.data.ndim
+
+        if ndim == 1:
+            binned_data = sdtracing.binning_by_1D_counts(
+                data=self.data,
+                counts=counts,
+            )
+        elif ndim == 2:
+            binned_data = sdtracing.binning_by_2D_counts(
+                data=self.data,
+                counts=counts,
+            )
+        elif ndim == 3:
+            binned_data = sdtracing.binning_by_3D_counts(
+                data=self.data,
+                counts=counts,
+            )
+
+        self.set_data(binned_data)
+
+    def sort_by(self, sort_array: ak.Array) -> "SupersAttribute":
+        """
+        This function sorts the attribute by a sort array.
+        The attribute is sorted by a sort array by creating a new attribute with the sorted data.
+
+        Parameters
+        ----------
+        self : SupersAttribute
+            The attribute to be sorted.
+        sort_array : ak.Array
+            The array to sort the attribute by.
+        """
+
+        # sort the data
+        sorted_data = self.data[sort_array]
+
+        self.set_data(sorted_data)
+
 
 class SupersIndexer(SupersAttribute):
     """
