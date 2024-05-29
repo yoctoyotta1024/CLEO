@@ -26,7 +26,7 @@ import numpy as np
 import xarray as xr
 import awkward as ak
 import os
-from typing import Union, Tuple
+from typing import Union, Tuple, Callable
 
 from pySD.sdmout_src import sdtracing
 
@@ -1691,6 +1691,95 @@ class SupersDataNew(SuperdropProperties):
             new_dim_name = f"ragged_dimension_{new_dim_idx}"
             dims.append(new_dim_name)
             coords[new_dim_name] = np.arange(new_dim_len)
+
+        return xr.DataArray(
+            data=data,
+            dims=dims,
+            coords=coords,
+            name=attribute.name,
+            attrs=attribute.metadata,
+        )
+
+    def attribute_to_DataArray_reduction(
+        self, attribute_name: str, reduction_func: Callable, kwargs: dict = {}
+    ):
+        """
+        This function converts an attribute to a DataArray.
+        The attribute is converted to a DataArray by creating a DataArray object.
+        If the last dimension is variable, the data will be reduced in dimensions by the reduction function.
+        The ``reduction_func`` must be a function which can be applied to the data.
+        Usually this should be an awkward array reduction function like ak.sum, ak.mean, ak.min, ak.max, ...
+
+
+        Parameters
+        ----------
+        attribute : SupersAttribute
+            The attribute to be converted to a DataArray.
+        reduction_func : Callable
+            The function to reduce the data in the last dimension.
+        kwargs : dict, optional
+            The keyword arguments for the reduction function.
+            Default is an empty dictionary.
+
+        Returns
+        -------
+        xr.DataArray
+            The DataArray created from the attribute.
+            And the data is reduced in the last dimension.
+        """
+        attribute = self[attribute_name]
+
+        data = attribute.data
+        shape = sdtracing.get_awkward_shape(data)
+
+        number_of_variable_axis = np.sum(np.isnan(shape))
+
+        if number_of_variable_axis == 0:
+            last_dim_variable = False
+        elif number_of_variable_axis == 1:
+            try:
+                sdtracing.assert_only_last_axis_variable(data)
+                last_dim_variable = True
+            except ValueError:
+                raise ValueError("Only the last axis can be variable")
+        else:
+            raise ValueError("Only one variable axis is allowed at the last position")
+
+        coords = dict()
+        dims = list()
+        for index in self.indexes:
+            dims.append(index.name)
+            coord = index.coord
+            if isinstance(coord, np.ndarray):
+                coords[index.name] = coord
+            elif isinstance(coord, ak.Array):
+                coords[index.name] = ak.to_numpy(coord)
+            else:
+                raise ValueError("coord must be a np.ndarray or ak.Array")
+
+        if last_dim_variable is False:
+            data = ak.to_numpy(data)
+        else:
+            data = reduction_func(data, axis=-1, **kwargs)
+            shape = sdtracing.get_awkward_shape(data)
+            if any(np.isnan(shape)):
+                raise ValueError(
+                    "The data is not reduced in a form that no variable axis is left"
+                )
+            else:
+                data = ak.to_numpy(data)
+
+        data_shape = data.shape
+
+        while len(data_shape) > len(dims):
+            new_dim_idx = len(dims)
+            new_dim_len = data_shape[new_dim_idx]
+            new_dim_name = f"ragged_dimension_{new_dim_idx}"
+            dims.append(new_dim_name)
+            coords[new_dim_name] = np.arange(new_dim_len)
+
+        attrs = attribute.metadata
+        attrs.update({"units": attribute.units})
 
         return xr.DataArray(
             data=data,
