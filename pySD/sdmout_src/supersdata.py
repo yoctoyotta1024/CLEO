@@ -490,6 +490,136 @@ class SupersAttribute:
         """
         return f"{self.name} ({self.units})\n{self.data.typestr}"
 
+    def __add__(self, other):
+        """
+        This method overloads the + operator.
+        It performs element-wise addition of the data attribute with another object.
+
+        Parameters
+        ----------
+        other : object
+            The object to be added to the data attribute.
+
+        Returns
+        -------
+        SupersAttribute
+            A new SupersAttribute object with the result of the addition.
+        """
+        if isinstance(other, SupersAttribute):
+            new_data = self.data + other.data
+        else:
+            new_data = self.data + other
+        return SupersAttribute(
+            name=self.name,
+            data=new_data,
+            units=self.units,
+            metadata=self.metadata,
+        )
+
+    def __sub__(self, other):
+        """
+        This method overloads the - operator.
+        It performs element-wise subtraction of the data attribute with another object.
+
+        Parameters
+        ----------
+        other : object
+            The object to be subtracted from the data attribute.
+
+        Returns
+        -------
+        SupersAttribute
+            A new SupersAttribute object with the result of the subtraction.
+        """
+        if isinstance(other, SupersAttribute):
+            new_data = self.data - other.data
+        else:
+            new_data = self.data - other
+        return SupersAttribute(
+            name=self.name,
+            data=new_data,
+            units=self.units,
+            metadata=self.metadata,
+        )
+
+    def __mul__(self, other):
+        """
+        This method overloads the * operator.
+        It performs element-wise multiplication of the data attribute with another object.
+
+        Parameters
+        ----------
+        other : object
+            The object to be multiplied with the data attribute.
+
+        Returns
+        -------
+        SupersAttribute
+            A new SupersAttribute object with the result of the multiplication.
+        """
+        if isinstance(other, SupersAttribute):
+            new_data = self.data * other.data
+        else:
+            new_data = self.data * other
+        return SupersAttribute(
+            name=self.name,
+            data=new_data,
+            units=self.units,
+            metadata=self.metadata,
+        )
+
+    def __truediv__(self, other):
+        """
+        This method overloads the / operator.
+        It performs element-wise division of the data attribute by another object.
+
+        Parameters
+        ----------
+        other : object
+            The object to divide the data attribute by.
+
+        Returns
+        -------
+        SupersAttribute
+            A new SupersAttribute object with the result of the division.
+        """
+        if isinstance(other, SupersAttribute):
+            new_data = self.data / other.data
+        else:
+            new_data = self.data / other
+        return SupersAttribute(
+            name=self.name,
+            data=new_data,
+            units=self.units,
+            metadata=self.metadata,
+        )
+
+    def __pow__(self, other):
+        """
+        This method overloads the ** operator.
+        It performs element-wise exponentiation of the data attribute by another object.
+
+        Parameters
+        ----------
+        other : object
+            The object to exponentiate the data attribute by.
+
+        Returns
+        -------
+        SupersAttribute
+            A new SupersAttribute object with the result of the exponentiation.
+        """
+        if isinstance(other, SupersAttribute):
+            new_data = self.data**other.data
+        else:
+            new_data = self.data**other
+        return SupersAttribute(
+            name=self.name,
+            data=new_data,
+            units=self.units,
+            metadata=self.metadata,
+        )
+
     def attribute_to_indexer(self: "SupersAttribute") -> "SupersIndexer":
         """
         This function converts an attribute to an indexer.
