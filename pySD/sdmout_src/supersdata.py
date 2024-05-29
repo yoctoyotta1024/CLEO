@@ -1373,6 +1373,20 @@ class SupersDataNew(SuperdropProperties):
         self.set_attributes_from_ds(attribute_names=self.attribute_names)
         self.set_indexes(indexes=[])
 
+        # set mass attribute
+        self.set_attribute(
+            SupersAttribute(
+                name="mass",
+                units="kg",
+                data=1e-3 * self.mass(self.get_data("radius"), self.get_data("msol")),
+            )
+        )
+
+        # set represented mass attribute
+        mass_represented = self["mass"] * self["xi"]
+        mass_represented.set_name("mass_represented")
+        self.set_attribute(mass_represented)
+
     def tryopen_dataset(self, dataset: Union[os.PathLike, xr.Dataset]) -> xr.Dataset:
         if isinstance(dataset, str):
             print("supers dataset: ", dataset)
@@ -1416,7 +1430,9 @@ class SupersDataNew(SuperdropProperties):
         except KeyError:
             print(f"Attribute {name} not found in dataset")
 
-    def set_attribute(self, attribute: SupersAttribute):
+    def set_attribute(
+        self, attribute: Union[SupersAttribute, SupersIndexer, SupersIndexerBinned]
+    ):
         """
         This function sets an attribute of the superdroplets dataset.
         """
@@ -1482,7 +1498,7 @@ class SupersDataNew(SuperdropProperties):
         """
 
         if self.is_index(index.name):
-            raise ValueError("The index is already set.")
+            raise ValueError(f"The index '{index.name}' is already set.")
         if isinstance(index, SupersIndexer) or isinstance(index, SupersIndexerBinned):
             self.indexes = self.indexes + (index,)
             self.indexes_names = self.indexes_names + (index.name,)
@@ -1508,7 +1524,7 @@ class SupersDataNew(SuperdropProperties):
 
     def get_data(self, key):
         try:
-            return self.attributes[key].data
+            return self.attributes[key].get_data()
         except KeyError:
             err = "no known return provided for " + key + " key"
             raise ValueError(err)
@@ -1537,7 +1553,8 @@ class SupersDataNew(SuperdropProperties):
 
         result += "\nIndexes:\n--------------\n"
         for index in self.indexes:
-            result += str(index) + "\n"
+            result += index.name + "\n"
+            result += str(index.coord) + "\n"
 
         return result
 
