@@ -47,7 +47,7 @@ jobs:
   publish:
     needs: build
     # Only publish documentation when merging into `origin/main`.`
-    if: "github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository_owner == 'yoctoyotta1024'"
+    if: "github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository_owner == 'nilsnevertree'"
     permissions:
       contents: write
     runs-on: ubuntu-latest
