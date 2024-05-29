@@ -28,8 +28,8 @@ path = "CHANGELOG.md"
 template = "remote"
 remote = "github.com"
 repository = "CLEO"
-owner = "yoctoyotta1024"
-authors = [{ username = "yoctoyotta1024", signature = "Clara Bayley" }]
+owner = "nilsnevertree"
+authors = [{ username = "nilsnevertree", signature = "Nils Niebaum" }]
 
 [bump_profiles]
 
