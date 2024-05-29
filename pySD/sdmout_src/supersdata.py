@@ -1173,6 +1173,113 @@ class SupersIndexerBinned(SupersIndexer):
             )
 
 
+class SupersIndexerUnique(SupersIndexer):
+    """
+    This class is used to store a binned indexers attribute of the superdroplets dataset.
+    It is a subclass of the SupersAttribute class.
+    The coords are the unique values of the data.
+
+    It has the following attributes:
+    - name (str): The name of the binned indexer.
+    - units (str): The units of the binned indexer.
+    - data (ak.Array): The data of the binned indexer.
+    - digitized_data (ak.Array): The data of the binned indexer as digitized values.
+    - metadata (dict): The metadata of the binned indexer.
+    - coord (np.ndarray): The unique values of the binned indexer / the values which can be related to the digitized data.
+    """
+
+    def __init__(
+        self,
+        name: str,
+        data: Union[xr.Dataset, np.ndarray, ak.Array],
+        units: str = "",
+        metadata: dict = dict(),
+    ):
+        """
+        The constructor of the class uses the data
+        This function extracts an attribute from a dataset and stores it in a SupersAttribute object.
+
+        Parameters
+        ----------
+        name : str
+            The name of the attribute.
+        data : xr.Dataset or np.ndarray or ak.Array
+            The data of the attribute.
+            If a xr.Dataset is provided, the data is extracted from the dataset using the name of the attribute.
+        bins : np.ndarray
+            The bin edges of the binned indexer.
+        right : bool, optional
+            As from the numpy documentation:
+            Indicating whether the intervals include the right or the left bin edge.
+            Default behavior is (right==False) indicating that the interval does not include the right edge.
+        units : str, optional
+            The units of the attribute.
+            Default is an empty string.
+        metadata : dict, optional
+            The metadata of the attribute.
+            Default is an empty dictionary.
+        """
+
+        self.set_data(data)
+
+        super().__init__(name=name, data=data, units=units, metadata=metadata)
+
+        # self.set_digitized_data()
+
+    def make_coord(self):
+        """
+        This function sets the coord data of the indexer.
+        The coord data is stored in the attribute coord.
+        In this class, the coord data is the same as the data.
+        So the indexer should be integer values.
+        """
+
+        # digitize the data
+        self.set_coord(coord=np.unique(sdtracing.ak_flatten_full(self.data)))
+
+    def make_digitized_data(self):
+        """
+        Sets a digitized version of the data.
+        It uses the numpy digitize function to digitize the data.
+
+        The digitized data is stored in the attribute digitized_data.
+
+        Note
+
+        Parameters
+        ----------
+        bins : np.ndarray
+            The bins to digitize the data to.
+        right : bool, optional
+            As from the numpy documentation:
+            Indicating whether the intervals include the right or the left bin edge.
+            Default behavior is (right==False) indicating that the interval does not include the right edge.
+
+        """
+
+        # digitize the data
+        if self.data.ndim == 1:
+            digitized_data = np.digitize(x=self.data, bins=self.coord, right=False)
+        elif self.data.ndim == 2:
+            digitized_data = sdtracing.ak_digitize_2D(
+                x=self.data, bins=self.coord, right=False
+            )
+        elif self.data.ndim == 3:
+            digitized_data = sdtracing.ak_digitize_3D(
+                x=self.data, bins=self.coord, right=False
+            )
+        else:
+            raise NotImplementedError(
+                "Only 1D, 2D and 3D arrays are supported for digitization till now."
+            )
+
+        # as the unique values are used as bins, there should be no exceeding values
+        # thus, we can remove the 0 bin and the last bin
+        digitized_data = digitized_data - 1
+
+        self.set_digitized_data(digitized_data=digitized_data)
+
+
 class SupersDataNew(SuperdropProperties):
     """
     The class is used to store the superdroplets dataset.
