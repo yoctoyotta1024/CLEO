@@ -704,6 +704,36 @@ class SupersAttribute:
             metadata=self.metadata,
         )
 
+    def attribute_to_indexer_unique(
+        self: "SupersAttribute", new_name: Union[str, None] = None
+    ) -> "SupersIndexer":
+        """
+        This function converts an attribute to an indexer.
+        The attribute is converted to an indexer by creating a SupersIndexer object.
+
+        Parameters
+        ----------
+        attribute : SupersAttribute
+            The attribute to be converted to an indexer.
+        new_name : str, optional
+            The new name of the indexer.
+            Default is None. If None, the original name is used.
+
+        Returns
+        -------
+        SupersIndexer
+            The indexer created from the attribute.
+        """
+        if new_name is None:
+            new_name = self.name
+
+        return SupersIndexerUnique(
+            name=new_name,
+            data=self.data,
+            units=self.units,
+            metadata=self.metadata,
+        )
+
     def bin_attribute_by_counts(
         self: "SupersAttribute", counts: ak.Array
     ) -> "SupersAttribute":
