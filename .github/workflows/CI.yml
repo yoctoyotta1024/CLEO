@@ -28,7 +28,7 @@ jobs:
         run: /usr/share/miniconda/envs/cienv/bin/doxygen --version
         shell: bash
       - name: Test with pytest
-        run: pytest .
+        run: pytest . --ignore=./builds
       - name: Generate Doxygen Documentation
         run: cd docs &&
           mkdir build &&
@@ -47,7 +47,7 @@ jobs:
   publish:
     needs: build
     # Only publish documentation when merging into `origin/main`.`
-    if: "github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository_owner == 'yoctoyotta1024'"
+    if: "github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository_owner == 'nilsnevertree'"
     permissions:
       contents: write
     runs-on: ubuntu-latest
