@@ -20,10 +20,10 @@ spack load cmake@3.23.1%gcc
 cleoenv=/work/mh1126/m300950/cleoenv
 
 buildtype=$1
-isyacbuild=$2
+enableyac=${2:-false}                 # "true" or otherwise
 path2CLEO=${3:-${HOME}/CLEO}
-path2build=${4:-${path2CLEO}/build} # get from command line argument
-yacroot=/work/mh1126/m300950/yac
+path2build=${4:-${path2CLEO}/build}
+yacyaxtroot=/work/mh1126/m300950/yac      # used if enableyac == "true"
 executables="cleocoupledsdm"
 ### ---------------------------------------------------- ###
 
@@ -31,13 +31,13 @@ if [[ "${buildtype}" != "" && "${path2CLEO}" != "" && "${path2build}" != "" &&
     "${executables}" != "" && "${path2CLEO}" != "${path2build}" ]]
 then
 
-  if ! [ ${isyacbuild} ]
+  if ! [ ${enableyac} == "true" ]
   then
-    yacroot="" # don't provide path to YAC if build shouldn't include it
+    yacyaxtroot="" # don't provide path to YAC if build shouldn't require it
   fi
 
   ### --------------------- build CLEO ------------------- ###
-  buildcmd="${path2CLEO}/scripts/bash/build_cleo.sh ${buildtype} ${path2CLEO} ${path2build} ${yacroot}"
+  buildcmd="${path2CLEO}/scripts/bash/build_cleo.sh ${buildtype} ${path2CLEO} ${path2build} ${enableyac} ${yacyaxtroot}"
   echo ${buildcmd}
   ${buildcmd}
   ### ---------------------------------------------------- ###

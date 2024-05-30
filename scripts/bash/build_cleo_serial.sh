@@ -21,9 +21,10 @@ spack load cmake@3.23.1%gcc
 gxx="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/g++"
 gcc="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/gcc"
 
-path2CLEO=$1    # get from command line argument
-path2build=$2   # get from command line argument
-yacroot=$3     # only required for builds including YAC
+path2CLEO=$1    # required
+path2build=$2   # required
+enableyac=$3    # required
+yacyaxtroot=$4      # required if enableyac=true
 
 ### ------------------------------------------------------------------------ ###
 
@@ -53,12 +54,12 @@ kokkosdevice=""
 ### ---------------------------------------------------- ###
 
 ### ------------------ choose YAC build ---------------- ###
-if [ "${yacroot}" == "" ]
+if ! [ "${enableyac}" == "true" ]
 then
-    yacflags=""
+    yacflags="-DENABLE_YAC_COUPLING=OFF"
 
 else
-    yacflags="-DYAXT_ROOT=${yacroot}/yaxt -DYAC_ROOT=${yacroot}/yac"
+    yacflags="-DENABLE_YAC_COUPLING=ON -DYAXT_ROOT=${yacyaxtroot}/yaxt -DYAC_ROOT=${yacyaxtroot}/yac"
     yacmodule="${path2CLEO}/libs/coupldyn_yac/cmake"
 fi
 ### ---------------------------------------------------- ###

@@ -14,7 +14,8 @@
 buildtype=$1  # required
 path2CLEO=$2  # required
 path2build=$3 # required
-yacroot=$4    # optional
+enableyac=$4  # required "true" or "false"
+yacyaxtroot=$5    # required if enableyac == "true"
 
 path2buildbash=${path2CLEO}/scripts/bash/
 
@@ -24,40 +25,50 @@ if [[ "${buildtype}" == "" ||
       "${path2CLEO}" == "${path2build}" ]]
 then
   echo "Bad inputs, please check your buildtype, path2CLEO and path2build"
+  exit 0
+
 else
-
-  if [ -n "${yacroot}" ]
-  then
-      echo "CLEO build attempting to use YAC from ${yacroot}"
-  fi
-
-  ### --------------------- build CLEO ------------------- ###
-  if [ "${buildtype}" != "serial" ] && [ "${buildtype}" != "openmp" ] && [ "${buildtype}" != "cuda" ];
-  then
-    echo "please specify the build type as 'serial', 'openmp' or 'cuda'"
-  fi
-
-  if [ "${buildtype}" == "serial" ] || [ "${buildtype}" == "openmp" ] || [ "${buildtype}" == "cuda" ];
-  then
-    echo "build type: ${buildtype}"
-    echo "path to CLEO: ${path2CLEO}"
-    echo "path to build directory: ${path2build}"
-
-    if [[ "${buildtype}" == "serial" ]];
+  # check that path to installation is set if YAC is enabled
+  if [[ ${enableyac} == "true" && "${yacyaxtroot}"  == "" ]]
     then
-      echo "${path2buildbash}/build_cleo_serial.sh ${path2CLEO} ${path2build}"
-      ${path2buildbash}/build_cleo_serial.sh ${path2CLEO} ${path2build} ${yacroot}
-
-    elif [[ "${buildtype}" == "openmp" ]];
+      echo "Bad YAC flags, if enableyac==true please provide root to YAC installation"
+      exit 0
+  else
+    ### --------------------- build CLEO ------------------- ###
+    if [ "${buildtype}" != "serial" ] && [ "${buildtype}" != "openmp" ] && [ "${buildtype}" != "cuda" ];
     then
-    echo "${path2buildbash}/build_cleo_openmp.sh ${path2CLEO} ${path2build}"
-      ${path2buildbash}/build_cleo_openmp.sh ${path2CLEO} ${path2build} ${yacroot}
-
-    elif [[ "${buildtype}" == "cuda" ]];
-    then
-      echo "${path2buildbash}/build_cleo_cuda_openmp.sh ${path2CLEO} ${path2build}"
-      ${path2buildbash}/build_cleo_cuda_openmp.sh ${path2CLEO} ${path2build} ${yacroot}
+      echo "please specify the build type as 'serial', 'openmp' or 'cuda'"
     fi
+
+    if [ "${buildtype}" == "serial" ] || [ "${buildtype}" == "openmp" ] || [ "${buildtype}" == "cuda" ];
+    then
+      echo "build type: ${buildtype}"
+      echo "path to CLEO: ${path2CLEO}"
+      echo "path to build directory: ${path2build}"
+
+      if [ ${enableyac} == "true" ]
+      then
+        echo "Build with YAC enabled from ${yacyaxtroot}/yac and ${yacyaxtroot}/yaxt"
+      else
+        echo "Build with YAC disabled"
+      fi
+
+      if [[ "${buildtype}" == "serial" ]];
+      then
+        echo "${path2buildbash}/build_cleo_serial.sh ${path2CLEO} ${path2build}"
+        ${path2buildbash}/build_cleo_serial.sh ${path2CLEO} ${path2build} ${enableyac} ${yacyaxtroot}
+
+      elif [[ "${buildtype}" == "openmp" ]];
+      then
+      echo "${path2buildbash}/build_cleo_openmp.sh ${path2CLEO} ${path2build}"
+        ${path2buildbash}/build_cleo_openmp.sh ${path2CLEO} ${path2build} ${enableyac} ${yacyaxtroot}
+
+      elif [[ "${buildtype}" == "cuda" ]];
+      then
+        echo "${path2buildbash}/build_cleo_cuda_openmp.sh ${path2CLEO} ${path2build}"
+        ${path2buildbash}/build_cleo_cuda_openmp.sh ${path2CLEO} ${path2build} ${enableyac} ${yacyaxtroot}
+      fi
+    fi
+    ### ---------------------------------------------------- ###
   fi
-  ### ---------------------------------------------------- ###
 fi
