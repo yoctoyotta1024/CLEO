@@ -20,6 +20,7 @@
 buildtype="cuda"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_divfree2D/
+enableyac=false
 executables="divfree2D"
 
 pythonscript=${path2CLEO}/examples/divfreemotion/divfree2d.py

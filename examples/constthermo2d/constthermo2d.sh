@@ -21,6 +21,7 @@
 buildtype="cuda"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_const2D/
+enableyac=false
 executables="const2D"
 
 pythonscript=${path2CLEO}/examples/constthermo2d/constthermo2d.py

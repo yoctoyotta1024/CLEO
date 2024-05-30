@@ -21,6 +21,7 @@
 buildtype="cuda"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_shima2009/
+enableyac=false
 executables="golcolls longcolls lowlistcolls"
 
 pythonscript=${path2CLEO}/examples/boxmodelcollisions/shima2009.py

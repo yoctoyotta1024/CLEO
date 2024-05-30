@@ -20,6 +20,7 @@
 buildtype="cuda"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_rshaft1D/
+enableyac=false
 executables="rshaft1D"
 
 pythonscript=${path2CLEO}/examples/rainshaft1d/rainshaft1d.py
