@@ -25,7 +25,7 @@ All notable changes to this project will be documented in this file. See [conven
 #### Miscellaneous Chores
 - correct typo in comment - ([85f8072](https://github.com/yoctoyotta1024/CLEO/commit/85f8072041452b12087686dd1d13b7e4939bf79e)) - clara.bayley
 - correct comment and formatting - ([b46a0fc](https://github.com/yoctoyotta1024/CLEO/commit/b46a0fc137d3a975a4af21c925d3eec6a5aa09f8)) - clara.bayley
-- delete todos - ([03cfd09](https://github.com/yoctoyotta1024/CLEO/commit/03cfd099097f8e8aff153868eb101ca0f8af58b9)) - clara.bayley
+- delete excess notes - ([03cfd09](https://github.com/yoctoyotta1024/CLEO/commit/03cfd099097f8e8aff153868eb101ca0f8af58b9)) - clara.bayley
 - rename const tstep observer - ([b40e55b](https://github.com/yoctoyotta1024/CLEO/commit/b40e55b7f0e3d65ddb0956495936234c81666d28)) - clara.bayley
 - rename - ([4c289ee](https://github.com/yoctoyotta1024/CLEO/commit/4c289eefab5b2b2d994399c615b0867abecdae52)) - clara.bayley
 - rename - ([a0a21d1](https://github.com/yoctoyotta1024/CLEO/commit/a0a21d14978987a3dfbaf4fd71587e5bd6e09af3)) - clara.bayley

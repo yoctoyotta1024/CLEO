@@ -69,10 +69,18 @@ couple to dynamics and/or have MPI domain decomposition.
 Note that YAC (and its YAXT dependency) need to be installed manually before you can build
 CLEO with them. You can find instructions on how to do install YAC (and YAXT) :ref:`here <_extern_yac>`.
 
-YAC also requires some additional MPI, NetCDF and yaml libraries alongside the gcc compiler which
-you can load on Levante via:
+YAC also requires some additional MPI, NetCDF and yaml libraries alongside the compatible gcc
+compiler which you can load on Levante via:
 
 .. code-block:: console
 
-  $ module load openmpi/4.1.2-gcc-11.2.0 netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0
-  $ spack load openblas@0.3.18%gcc@=11.2.0 libfyaml /fvbhgoq py-mpi4py
+  $ module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0 netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0
+  $ spack load openblas@0.3.18%gcc@=11.2.0
+
+When you want to run CLEO with YAC, you will also need to export some additional paths:
+
+.. code-block:: console
+
+  $ spack load py-numpy
+  $ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/sw/spack-levante/libfyaml-0.7.12-fvbhgo/lib
+  $ export PYTHONPATH=/work/ka1298/k202167/YAC-dev/python/
