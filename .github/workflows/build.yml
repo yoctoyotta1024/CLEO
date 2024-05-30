@@ -28,8 +28,8 @@ jobs:
 
     - name: Build YAC
       run: |
-        curl -s -L https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/release-3.0.3_p2/yac-release-3.0.3_p2.tar.gz | tar xvz
-        cd yac-release-3.0.3_p2
+        curl -s -L https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/v3.2.0_a_p2/yac-v3.2.0_a_p2.tar.gz | tar xvz
+        cd yac-v3.2.0_a_p2
         ./configure CFLAGS="-fPIC" CC=mpicc FC=mpif90 --disable-mpi-checks --with-yaxt-root=${HOME}/yaxt \
         --prefix=$HOME/yac
         make -j 4
@@ -43,6 +43,7 @@ jobs:
         -DCMAKE_CXX_COMPILER=g++ \
         -DKokkos_ARCH_NATIVE=ON \
         -DKokkos_ENABLE_SERIAL=ON \
+        -DENABLE_YAC_COUPLING=ON \
         -DYAXT_ROOT=${HOME}/yaxt \
         -DYAC_ROOT=${HOME}/yac \
         -DCMAKE_MODULE_PATH=${PWD}/../libs/coupldyn_yac/cmake ..
@@ -74,6 +75,9 @@ jobs:
 
     - name: Build example spdtest
       run: cd build && make spdtest
+
+    - name: Build example divfree2D_yac
+      run: cd build && make divfree2D_yac
 
     - name: Build example yac1
       run: cd build && make yac1

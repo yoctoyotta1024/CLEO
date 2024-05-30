@@ -27,7 +27,7 @@
 
 #include <mpi.h>
 extern "C" {
-#include "yac_interface.h"
+#include "yac.h"
 }
 
 /* return (k,i,j) indicies from idx for a flattened 3D array
