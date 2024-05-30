@@ -14,5 +14,8 @@ add_subdirectory(observers)
 # libraries particular to certain CLEO configurations #
 add_subdirectory(coupldyn_cvode EXCLUDE_FROM_ALL)
 add_subdirectory(coupldyn_fromfile EXCLUDE_FROM_ALL)
-add_subdirectory(coupldyn_yac EXCLUDE_FROM_ALL)
 add_subdirectory(cartesiandomain EXCLUDE_FROM_ALL)
+
+if(ENABLE_YAC_COUPLING)
+    add_subdirectory(coupldyn_yac EXCLUDE_FROM_ALL)
+endif()
