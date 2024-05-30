@@ -14,7 +14,7 @@
 buildtype=$1  # required
 path2CLEO=$2  # required
 path2build=$3 # required
-enableyac=$4  # required "true" or "false"
+enableyac=$4  # required "true" or otherwise
 yacyaxtroot=$5    # required if enableyac == "true"
 
 path2buildbash=${path2CLEO}/scripts/bash/

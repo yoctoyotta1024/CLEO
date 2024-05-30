@@ -31,6 +31,6 @@ script_args=""
 
 ### ---------- build, compile and run example ---------- ###
 ${path2CLEO}/examples/run_example.sh \
-  ${buildtype} ${path2CLEO} ${path2build} \
+  ${buildtype} ${path2CLEO} ${path2build} ${enableyac} \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###

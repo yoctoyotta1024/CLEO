@@ -20,7 +20,7 @@ spack load cmake@3.23.1%gcc
 cleoenv=/work/mh1126/m300950/cleoenv
 
 buildtype=$1
-enableyac=${2:-false}                 # "true" or otherwise
+enableyac=${2:-false}                     # "true" or otherwise
 path2CLEO=${3:-${HOME}/CLEO}
 path2build=${4:-${path2CLEO}/build}
 yacyaxtroot=/work/mh1126/m300950/yac      # used if enableyac == "true"

@@ -25,12 +25,14 @@
 buildtype=$1
 path2CLEO=$2
 path2build=$3
-executables="$4"
-pythonscript=$5
-script_args="$6"
+enableyac=$4      # required "true" or "false"
+executables="$5"
+pythonscript=$6
+script_args="$7"
 
 cleoenv=/work/mh1126/m300950/cleoenv
 python=${cleoenv}/bin/python3
+yacyaxtroot=/work/mh1126/m300950/yac
 spack load cmake@3.23.1%gcc
 module load python3/2022.01-gcc-11.2.0
 source activate ${cleoenv}
@@ -50,7 +52,7 @@ echo "---------------------------"
 ### ---------------------------------------------------- ###
 
 ### ---------------------- build CLEO ------------------ ###
-${path2CLEO}/scripts/bash/build_cleo.sh ${buildtype} ${path2CLEO} ${path2build}
+${path2CLEO}/scripts/bash/build_cleo.sh ${buildtype} ${path2CLEO} ${path2build} ${enableyac} ${yacyaxtroot}
 ### ---------------------------------------------------- ###
 
 ### --------- compile executable(s) from scratch ---------- ###
