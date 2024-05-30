@@ -24,8 +24,11 @@ gcc="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/gcc"
 path2CLEO=$1    # required
 path2build=$2   # required
 enableyac=$3    # required
-yacyaxtroot=$4      # required if enableyac=true
+yacyaxtroot=$4  # required if enableyac=true
 
+yac_openmpi=openmpi/4.1.2-gcc-11.2.0 # required if enableyac=true (must match gcc)
+yac_netcdf=netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0 # required if enableyac=true (must match gcc & openmp)
+yac_openblas=openblas@0.3.18%gcc@=11.2.0 # required if enableyac=true (must match gcc)
 ### ------------------------------------------------------------------------ ###
 
 ### ---------------------------------------------------- ###
@@ -57,8 +60,9 @@ kokkosdevice=""
 if ! [ "${enableyac}" == "true" ]
 then
     yacflags="-DENABLE_YAC_COUPLING=OFF"
-
 else
+    module load ${yac_openmpi} ${yac_netcdf}
+    spack load ${yac_openblas}
     yacflags="-DENABLE_YAC_COUPLING=ON -DYAXT_ROOT=${yacyaxtroot}/yaxt -DYAC_ROOT=${yacyaxtroot}/yac"
     yacmodule="${path2CLEO}/libs/coupldyn_yac/cmake"
 fi
