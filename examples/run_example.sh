@@ -65,5 +65,8 @@ ${path2CLEO}/scripts/bash/compile_cleo.sh ${cleoenv} ${buildtype} ${path2build} 
 ### --------- run model through Python script ---------- ###
 export OMP_PROC_BIND=spread
 export OMP_PLACES=threads
+
+# TODO(all): add exports to paths required if YAC is enabled
+
 ${python}  ${pythonscript} ${path2CLEO} ${path2build} ${script_args}
 ### ---------------------------------------------------- ###

@@ -28,6 +28,9 @@ else
   ### ----------------- run executable --------------- ###
   export OMP_PROC_BIND=spread
   export OMP_PLACES=threads
+
+  # TODO(all): add exports to paths required if YAC is enabled
+
   runcmd="${executable} ${configfile}"
   echo ${runcmd}
   ${runcmd}
