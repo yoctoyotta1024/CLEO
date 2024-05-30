@@ -25,7 +25,7 @@
 buildtype=$1
 path2CLEO=$2
 path2build=$3
-enableyac=$4      # required "true" or "false"
+enableyac=$4      # required "true" or otherwise
 executables="$5"
 pythonscript=$6
 script_args="$7"
