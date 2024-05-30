@@ -133,6 +133,8 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
 
   // --- Grid definition ---
   int grid_id = -1;
+  int cell_point_id = -1;
+  int edge_point_id = -1;
   std::string cleo_grid_name = "cleo_grid";
 
   int cyclic_dimension[2] = {0, 0};
@@ -140,8 +142,6 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   int total_vertices[2] = {static_cast<int>(ndims[0] + 1), static_cast<int>(ndims[1] + 1)};
   int total_edges[2] = {static_cast<int>(ndims[0] * (ndims[1] + 1)),
                         static_cast<int>(ndims[1] * (ndims[0] + 1))};
-  int cell_point_id = -1;
-  int edge_point_id = -1;
 
   vertex_longitudes = std::vector<double>(ndims[0] + 1, 0);
   vertex_latitudes = std::vector<double>(ndims[1] + 1, 0);
@@ -249,15 +249,18 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   // --- End of YAC definitions ---
   yac_cenddef();
 
+  size_t horizontal_cell_number = yac_cget_grid_size(YAC_LOCATION_CELL, grid_id);
+  size_t horizontal_edge_number = yac_cget_grid_size(YAC_LOCATION_EDGE, grid_id);
+
   // Initialization of target containers for receiving data
-  press = std::vector<double>(total_cells[0] * total_cells[1] * ndims[2], 0);
-  temp = std::vector<double>(total_cells[0] * total_cells[1] * ndims[2], 0);
-  qvap = std::vector<double>(total_cells[0] * total_cells[1] * ndims[2], 0);
-  qcond = std::vector<double>(total_cells[0] * total_cells[1] * ndims[2], 0);
-  uvel = std::vector<double>(total_edges[0] * ndims[2], 0);
-  wvel = std::vector<double>(total_edges[1] * ndims[2], 0);
-  vvel = std::vector<double>(total_cells[0] * total_cells[1] * (ndims[2] + 1), 0);
-  united_edge_data = std::vector<double>(total_edges[0] + total_edges[1], 0);
+  press = std::vector<double>(horizontal_cell_number * ndims[2], 0);
+  temp = std::vector<double>(horizontal_cell_number * ndims[2], 0);
+  qvap = std::vector<double>(horizontal_cell_number * ndims[2], 0);
+  qcond = std::vector<double>(horizontal_cell_number * ndims[2], 0);
+  uvel = std::vector<double>(ndims[0] * (ndims[1] + 1) * ndims[2], 0);
+  wvel = std::vector<double>(ndims[1] * (ndims[0] + 1) * ndims[2], 0);
+  vvel = std::vector<double>(horizontal_cell_number * (ndims[2] + 1), 0);
+  united_edge_data = std::vector<double>(horizontal_edge_number, 0);
 
   // Calls the first data retrieval from YAC to have thermodynamic data for first timestep
   receive_fields_from_yac();
