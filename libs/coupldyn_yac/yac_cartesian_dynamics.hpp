@@ -66,13 +66,6 @@ struct CartesianDynamics {
   // (Only meaningful in 3D simulations)
   std::vector<double> vvel;
 
-  /* --- YAC-specific definitions --- */
-
-  // lon and lat radian values for multiple vertices
-  // (YAC permutes these arrays to generate the final vertex positions)
-  std::vector<double> vertex_latitudes;
-  std::vector<double> vertex_longitudes;
-
   // YAC field ids
   int pressure_yac_id;
   int temp_yac_id;
