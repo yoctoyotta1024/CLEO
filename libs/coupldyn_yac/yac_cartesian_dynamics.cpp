@@ -43,13 +43,24 @@ std::array<size_t, 3> kijfromindex(const std::array<size_t, 3> &ndims, const siz
   return std::array<size_t, 3>{k, i, j};
 }
 
-void create_vertex_coordinates(const std::array<size_t, 3> ndims,
+void create_vertex_coordinates(const Config &config,
+                               const std::array<size_t, 3> ndims,
                                std::vector<double> & vertex_longitudes,
                                std::vector<double> & vertex_latitudes) {
   double lower_longitude = 0;
   double upper_longitude = ndims[0] * (2 * std::numbers::pi / (ndims[0] + 1));
   double lower_latitude = (-0.5 * std::numbers::pi * ndims[1]) / (ndims[1] + 2);
   double upper_latitude = (0.5 * std::numbers::pi * ndims[1]) / (ndims[1] + 2);
+
+  if (config.get_yac_dynamics().lower_longitude != NaNVals::dbl() &&
+      config.get_yac_dynamics().upper_longitude != NaNVals::dbl() &&
+      config.get_yac_dynamics().lower_latitude != NaNVals::dbl() &&
+      config.get_yac_dynamics().upper_latitude != NaNVals::dbl()) {
+      double lower_longitude = config.get_yac_dynamics().lower_longitude;
+      double upper_longitude = config.get_yac_dynamics().upper_longitude;
+      double lower_latitude = config.get_yac_dynamics().lower_latitude;
+      double upper_latitude = config.get_yac_dynamics().upper_latitude;
+  }
 
   // Defines the vertex longitude and latitude values in radians for grid creation
   // The values are later permuted by YAC to generate all vertex coordinates
@@ -61,7 +72,8 @@ void create_vertex_coordinates(const std::array<size_t, 3> ndims,
 }
 
 /* Creates the YAC grid and defines the cell and edge points based on ndims data */
-void create_grid_and_points_definitions(const std::array<size_t, 3> ndims,
+void create_grid_and_points_definitions(const Config &config,
+                                        const std::array<size_t, 3> ndims,
                                         const std::string grid_name,
                                         int & grid_id, int & cell_point_id, int & edge_point_id) {
   int cyclic_dimension[2] = {0, 0};
@@ -77,7 +89,7 @@ void create_grid_and_points_definitions(const std::array<size_t, 3> ndims,
   std::vector<double> edge_centers_longitudes;
   std::vector<double> edge_centers_latitudes;
 
-  create_vertex_coordinates(ndims, vertex_longitudes, vertex_latitudes);
+  create_vertex_coordinates(config, ndims, vertex_longitudes, vertex_latitudes);
 
   // Defines a regular 2D grid
   yac_cdef_grid_reg2d(grid_name.c_str(), total_vertices, cyclic_dimension,
@@ -215,7 +227,8 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   int edge_point_id = -1;
   std::string grid_name = "cleo_grid";
 
-  create_grid_and_points_definitions(ndims, grid_name, grid_id, cell_point_id, edge_point_id);
+  create_grid_and_points_definitions(config, ndims, grid_name, grid_id,
+                                     cell_point_id, edge_point_id);
 
   // --- Interpolation stack ---
   int interp_stack_id;
