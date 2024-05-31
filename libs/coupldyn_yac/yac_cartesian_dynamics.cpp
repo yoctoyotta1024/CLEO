@@ -46,13 +46,18 @@ std::array<size_t, 3> kijfromindex(const std::array<size_t, 3> &ndims, const siz
 void create_vertex_coordinates(const std::array<size_t, 3> ndims,
                                std::vector<double> & vertex_longitudes,
                                std::vector<double> & vertex_latitudes) {
+  double lower_longitude = 0;
+  double upper_longitude = ndims[0] * (2 * std::numbers::pi / (ndims[0] + 1));
+  double lower_latitude = (-0.5 * std::numbers::pi * ndims[1]) / (ndims[1] + 2);
+  double upper_latitude = (0.5 * std::numbers::pi * ndims[1]) / (ndims[1] + 2);
+
   // Defines the vertex longitude and latitude values in radians for grid creation
   // The values are later permuted by YAC to generate all vertex coordinates
   for (size_t i = 0; i < vertex_longitudes.size(); i++)
-    vertex_longitudes[i] = i * (2 * std::numbers::pi / (ndims[0] + 1));
+    vertex_longitudes[i] = lower_longitude + i * ((upper_longitude - lower_longitude) / ndims[0]);
 
   for (size_t i = 0; i < vertex_latitudes.size(); i++)
-    vertex_latitudes[i] = (-0.5 * std::numbers::pi) + (i + 1) * (std::numbers::pi / (ndims[1] + 2));
+    vertex_latitudes[i] = lower_latitude + i * ((upper_latitude - lower_latitude) / ndims[1]);
 }
 
 /* Creates the YAC grid and defines the cell and edge points based on ndims data */
