@@ -94,6 +94,10 @@ struct Config {
     return optional.fromfiledynamics;
   }
 
+  OptionalConfigParams::YacDynamicsParams get_yac_dynamics() const {
+    return optional.yac_dynamics;
+  }
+
   OptionalConfigParams::AddSupersAtDomainTopParams get_addsupersatdomaintop() const {
     return optional.addsupersatdomaintop;
   }

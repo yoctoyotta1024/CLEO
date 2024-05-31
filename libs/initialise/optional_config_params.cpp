@@ -71,6 +71,9 @@ void OptionalConfigParams::set_coupled_dynamics(const YAML::Node &config) {
   } else if (type == "cvode") {
     cvodedynamics.set_params(config);
     cvodedynamics.print_params();
+  } else if (type == "yac") {
+    yac_dynamics.set_params(config);
+    yac_dynamics.print_params();
   } else {
     throw std::invalid_argument("unknown coupled_dynamics 'type': " + type);
   }
@@ -179,6 +182,24 @@ void OptionalConfigParams::CvodeDynamicsParams::print_params() const {
             << "\nngbxs: " << ngbxs << "\nP_init: " << P_init << "\nTEMP_init: " << TEMP_init
             << "\nrelh_init: " << relh_init << "\nW_avg: " << W_avg << "\nTAU_half: " << TAU_half
             << "\nrtol: " << rtol << "\natol: " << atol
+            << "\n---------------------------------------------------------\n";
+}
+
+void OptionalConfigParams::YacDynamicsParams::set_params(const YAML::Node &config) {
+  const YAML::Node node = config["coupled_dynamics"];
+
+  assert((node["type"].as<std::string>() == "yac"));
+
+  lower_longitude = node["lower_longitude"].as<double>();
+  upper_longitude = node["upper_longitude"].as<double>();
+  lower_latitude = node["lower_latitude"].as<double>();
+  upper_latitude = node["upper_latitude"].as<double>();
+}
+
+void OptionalConfigParams::YacDynamicsParams::print_params() const {
+  std::cout << "\n-------- YacDynamics Configuration Parameters --------------"
+            << "\nlower_longitude: " << lower_longitude << "\nupper_longitude: " << upper_longitude
+            << "\nlower_latitude: " << lower_latitude << "\nupper_latitude: " << upper_latitude
             << "\n---------------------------------------------------------\n";
 }
 
