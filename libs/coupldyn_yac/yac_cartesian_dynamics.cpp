@@ -43,6 +43,18 @@ std::array<size_t, 3> kijfromindex(const std::array<size_t, 3> &ndims, const siz
   return std::array<size_t, 3>{k, i, j};
 }
 
+void create_vertex_coordinates(const std::array<size_t, 3> ndims,
+                               std::vector<double> & vertex_longitudes,
+                               std::vector<double> & vertex_latitudes) {
+  // Defines the vertex longitude and latitude values in radians for grid creation
+  // The values are later permuted by YAC to generate all vertex coordinates
+  for (size_t i = 0; i < vertex_longitudes.size(); i++)
+    vertex_longitudes[i] = i * (2 * std::numbers::pi / (ndims[0] + 1));
+
+  for (size_t i = 0; i < vertex_latitudes.size(); i++)
+    vertex_latitudes[i] = (-0.5 * std::numbers::pi) + (i + 1) * (std::numbers::pi / (ndims[1] + 2));
+}
+
 /* Creates the YAC grid and defines the cell and edge points based on ndims data */
 void create_grid_and_points_definitions(const std::array<size_t, 3> ndims,
                                         const std::string grid_name,
@@ -60,13 +72,7 @@ void create_grid_and_points_definitions(const std::array<size_t, 3> ndims,
   std::vector<double> edge_centers_longitudes;
   std::vector<double> edge_centers_latitudes;
 
-  // Defines the vertex longitude and latitude values in radians for grid creation
-  // The values are later permuted by YAC to generate all vertex coordinates
-  for (size_t i = 0; i < vertex_longitudes.size(); i++)
-    vertex_longitudes[i] = i * (2 * std::numbers::pi / (ndims[0] + 1));
-
-  for (size_t i = 0; i < vertex_latitudes.size(); i++)
-    vertex_latitudes[i] = (-0.5 * std::numbers::pi) + (i + 1) * (std::numbers::pi / (ndims[1] + 2));
+  create_vertex_coordinates(ndims, vertex_longitudes, vertex_latitudes);
 
   // Defines a regular 2D grid
   yac_cdef_grid_reg2d(grid_name.c_str(), total_vertices, cyclic_dimension,
