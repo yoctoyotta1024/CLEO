@@ -1151,8 +1151,8 @@ class SupersIndexerBinned(SupersIndexer):
 
         if diff > 0:
             # remove the exceeding bin centers and edges
-            self.bin_centers = self.bin_centers[:-diff]
-            self.bin_edges = self.bin_edges[:-diff]
+            self.bin_centers = self.bin_centers[: -diff + 1]
+            self.bin_edges = self.bin_edges[: -diff + 1]
 
         # make sure the coords fit
         self.make_coord()
