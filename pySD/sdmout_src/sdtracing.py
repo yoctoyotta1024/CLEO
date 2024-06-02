@@ -20,6 +20,7 @@ specifc superdroplets based on the sdIds
 e.g. for tracing their trajectories
 """
 
+# %%
 import numpy as np
 import awkward as ak
 import random
@@ -595,104 +596,97 @@ def ak_digitize_3D(
     return digi
 
 
-def create_counts_1D(data: ak.highlevel.Array) -> ak.highlevel.Array:
+def create_counts_1D(a: ak.highlevel.Array) -> ak.highlevel.Array:
     """
     This function creates a 1D array with the counts of unique values in the input array.
     It identifies the unique values in each subarray along axis 1.
 
     Parameters
     ----------
-    data : ak.highlevel.Array
-        The input array containing the data for which counts need to be calculated.
+    a : ak.highlevel.Array
+        The input array of shape T, containing the data for which counts need to be calculated.
+        Its maximum value ``B`` will be used to identify
+        the number of bins as ``M = B + 1``
         Only ``int`` types are allowed!
-        If an ``np.ndarray`` is used, the dimensions should be T x N
-        If an ``ak.highlevel.Array`` is used, the dimensions should be T x var
-
     Returns
     -------
     ak.highlevel.Array
-        A 1D array with the counts of unique values in the input array.
+        An array with the counts of unique values in the input array.
+        The output shape will be (M).
     """
 
     # check for int type:
 
-    assert (
-        data.ndim == 1
-    ), f"data needs to be 1 dimensional but is {data.ndim} dimensional"
+    assert a.ndim == 1, f"data needs to be 1 dimensional but is {a.ndim} dimensional"
 
-    if isinstance(data, np.ndarray):
-        dtype = data.dtype
-    elif isinstance(data, ak.highlevel.Array):
-        dtype = data.type.content.primitive
+    if isinstance(a, np.ndarray):
+        dtype = a.dtype
+    elif isinstance(a, ak.highlevel.Array):
+        dtype = a.type.content.primitive
     else:
-        raise TypeError(
-            f"The provided type of 'data': '{type(data)}' is not supported!"
-        )
+        raise TypeError(f"The provided type of 'data': '{type(a)}' is not supported!")
 
     if not np.issubdtype(dtype, np.integer):
         raise TypeError(
             f"The array must contain 'int' like dtypes but has '{dtype}'. This is not supported"
         )
 
-    M = int(ak.max(data)) + 1
-    # modified = data + np.arange(T) * M
-    # modified = ak.flatten(modified)
-    bcount = np.bincount(data)
-    bcount = ak.fill_none(ak.pad_none(bcount, M, axis=0), 0)
+    M = int(ak.max(a)) + 1
+    # create a bincount array with minimal length of the maximum value in the array
+    bcount = np.bincount(a, minlength=M)
     return bcount
 
 
-def create_counts_2D(
-    data: ak.highlevel.Array, flat: bool = False
-) -> ak.highlevel.Array:
+def create_counts_2D(a: ak.highlevel.Array, flat: bool = False) -> ak.highlevel.Array:
     """
     This function creates a 2D array with the counts of unique values in the input array.
     It identifies the unique values in each subarray along axis 1.
 
     Parameters
     ----------
-    data : ak.highlevel.Array
-        The input array containing the data for which counts need to be calculated.
+    a : ak.highlevel.Array
+        The input array of shape T x var, containing the data for which counts need to be calculated.
+        Its maximum value ``B`` will be used to identify
+        the number of bins as ``M = B + 1``
         Only ``int`` types are allowed!
-        If an ``np.ndarray`` is used, the dimensions should be T x N
-        If an ``ak.highlevel.Array`` is used, the dimensions should be T x var
     flat : bool, optional
-        If False, the output array will have the shape (T, N, B+1).
-        If True, the output array is flattened top be a 1D array of length T*N*(B+1).
+        If False, the output array will have the shape (T, M).
+        If True, the output array is flattened top be a 1D array of length T*M.
         Default is False.
     Returns
     -------
     ak.highlevel.Array
-        A 2D array with the counts of unique values in the input array.
+        An array with the counts of unique values in the input array.
+        The output shape will be (T, M) if flat is False.
+        The output shape will be (T*M) if flat is True.
+
     """
 
     # check for int type:
 
-    assert (
-        data.ndim == 2
-    ), f"data needs to be 2 dimensional but is {data.ndim} dimensional"
+    assert a.ndim == 2, f"data needs to be 2 dimensional but is {a.ndim} dimensional"
 
-    if isinstance(data, np.ndarray):
-        dtype = data.dtype
-    elif isinstance(data, ak.highlevel.Array):
-        dtype = data.type.content.content.primitive
+    if isinstance(a, np.ndarray):
+        dtype = a.dtype
+    elif isinstance(a, ak.highlevel.Array):
+        dtype = a.type.content.content.primitive
     else:
-        raise TypeError(
-            f"The provided type of 'data': '{type(data)}' is not supported!"
-        )
+        raise TypeError(f"The provided type of 'data': '{type(a)}' is not supported!")
 
     if not np.issubdtype(dtype, np.integer):
         raise TypeError(
             f"The array must contain 'int' like dtypes but has '{dtype}'. This is not supported"
         )
 
-    M = int(ak.max(data)) + 1
-    T = int(ak.num(data, axis=0))
-    # modified = data + np.arange(T) * M
-    # modified = ak.flatten(modified)
+    T = int(ak.num(a, axis=0))
+    M = int(ak.max(a)) + 1
 
-    bcount = np.bincount(ak.flatten(data + np.arange(T) * M))
-    bcount = ak.fill_none(ak.pad_none(bcount, M * T, axis=0), 0)
+    # modify the arra to have unique values
+    # for each combination of i and j along dim0, dim1
+    modified = a + np.arange(T) * M
+    modified = ak.flatten(modified)
+
+    bcount = np.bincount(modified, minlength=T * M)
 
     if flat is False:
         bcount = ak.unflatten(bcount, M)
@@ -701,57 +695,99 @@ def create_counts_2D(
         return bcount
 
 
-def create_counts_3D(
-    indexer: ak.highlevel.Array, flat: bool = False
-) -> ak.highlevel.Array:
+def create_counts_3D(a: ak.highlevel.Array, flat: bool = False) -> ak.highlevel.Array:
     """
     This function creates a 3D array with the counts of unique values in the input array.
-    For instance, if the ``indexer`` array has the shape (T, N, var) and its highest values is B, the output array will have the shape (T, N, B+1),
+    For instance, if the ``a`` array has the shape (T, N, var) and its highest values is M, the output array will have the shape (T, N, M+1),
 
     Parameters
     ----------
-    indexer : ak.highlevel.Array
-        The input array containing the integer indexing values which shall be used to create a counting array.
-        The dimensions should be T x N x var.
+    a : ak.highlevel.Array
+        The input array of shape T x N x var, containing the data for which counts need to be calculated.
+        Its maximum value ``B`` will be used to identify
+        the number of bins as ``M = B + 1``
+        Only ``int`` types are allowed!
     flat : bool, optional
-        If False, the output array will have the shape (T, N, B+1).
-        If True, the output array is flattened top be a 1D array of length T*N*(B+1).
+        If False, the output array will have the shape (T, N, M).
+        If True, the output array is flattened top be a 1D array of length T*N*M.
         Default is False.
 
     Returns
     -------
     ak.highlevel.Array
-        A 3D array with the counts of values given in the indexer array.
-        The output shape will be (T, N, B+1).
+        An array with the counts of values given in the indexer array.
+        The output shape will be (T, N, M) if flat is False.
+        The output shape will be (T*N*M) if flat is True.
+
+    Notes
+    -----
+    To make sure the indexer has unique value for each combination
+    of i and j along axis 0 and axis 1, the input array ``a`` is modified, by adding a
+    2D array to it. This 2D array is created by np.arange(0, x * y * z, z).reshape(x, y).
+
+    Example with
+    T = 4, N = 2, B = 4, M = 5
+    x = 4, y = 2, z = 5
+    >>> a = ak.Array([
+            [[0, 1], [1]],
+            [[0],    [1, 4]],
+            [[1, 3], [1]],
+            [[0],    [3, 4]]
+        ])
+    >>> add_array = np.arange(0, x * y * z, z).reshape(x, y)
+    >>> add_array
+    ... [[ 0,  5],
+    ...  [10, 15],
+    ...  [20, 25],
+    ...  [30, 35]]
+    >>> modified = a + add_array
+    >>> modified
+    ... [
+    ...  [[ 0,  1],  [ 6]],
+    ...  [[10],      [16, 19]],
+    ...  [[21, 23],  [26]],
+    ...  [[30],      [38, 39]],
+    ... ]
+
     """
 
-    shape_indexer = get_awkward_shape(indexer)
+    assert a.ndim == 3, f"data needs to be 3 dimensional but is {a.ndim} dimensional"
 
-    assert len(shape_indexer) == 3, "The indexer array must be 3D!"
-    x, y, _ = shape_indexer
-    z = int(ak.max(indexer)) + 1
+    if isinstance(a, np.ndarray):
+        dtype = a.dtype
+    elif isinstance(a, ak.highlevel.Array):
+        dtype = a.type.content.content.content.primitive
+    else:
+        raise TypeError(f"The provided type of 'data': '{type(a)}' is not supported!")
 
-    # to make sure the indexer has unique value for each combination od i and j along dim0, dim1, a 2D array is created.
+    if not np.issubdtype(dtype, np.integer):
+        raise TypeError(
+            f"The array must contain 'int' like dtypes but has '{dtype}'. This is not supported"
+        )
+
+    T, N, _ = get_awkward_shape(a)
+    M = int(ak.max(a)) + 1
+
+    # to make sure the indexer has unique value for each combination
+    # of i and j along dim0, dim1, a 2D array is created.
     # Example:
-    # T = 4, N = 3, B = 4
+    # T = 4, N = 2, M = 4
     # x = 4, y = 3, z = 5
-    # [[ 0,  5, 10],
-    #  [15, 20, 25],
-    #  [30, 35, 40],
-    #  [45, 50, 55]])
+    # [[ 0,  5],
+    #  [10, 15],
+    #  [20, 25],
+    #  [30, 35]]
 
-    add_array = np.arange(0, x * y * z, z).reshape(x, y)
+    add_array = np.arange(0, T * N * M, M).reshape(T, N)
 
-    indexer_mod = indexer + add_array
-    indexer_mod = ak.flatten(indexer_mod, axis=1)
-    indexer_mod = ak.flatten(indexer_mod, axis=1)
+    modified = a + add_array
+    modified = ak_flatten_full(modified)
 
-    bcount = np.bincount(indexer_mod)
-    bcount = ak.fill_none(ak.pad_none(bcount, x * y * z, axis=0), 0)
+    bcount = np.bincount(modified, minlength=T * N * M)
 
     if flat is False:
-        bcount = ak.unflatten(bcount, z)
-        bcount = ak.unflatten(bcount, y)
+        bcount = ak.unflatten(bcount, M)
+        bcount = ak.unflatten(bcount, N)
         return bcount
     else:
         return bcount
@@ -1029,10 +1065,10 @@ def binning_by_2D_counts(
             "The sum of counts does not match the number of elements in the data array"
         )
 
-    # The function eulerian_from_count performes this bit of code:
-    # ----------
     # # unflatten the data array using the counts array.
-    result = ak.unflatten(data, ak.flatten(counts), axis=1)
+    counts_flat = ak_flatten_full(counts)
+
+    result = ak.unflatten(data, counts_flat, axis=1)
     # flatten this array again
     result = ak.unflatten(ak.flatten(result), N)
 
@@ -1089,16 +1125,9 @@ def binning_by_3D_counts(
             "The sum of counts does not match the number of elements in the data array"
         )
 
-    # to make sure the indexer has unique value for each combination od i and j along dim0, dim1, a 2D array is created.
-    # Example:
-    # T = 4, N = 3, B = 4
-    # x = 4, y = 3, z = 5
-    # [[ 0,  5, 10],
-    #  [15, 20, 25],
-    #  [30, 35, 40],
-    #  [45, 50, 55]])
+    counts_flat = ak_flatten_full(counts)
 
-    result = ak.unflatten(data_flat, ak.flatten(ak.flatten(counts)))
+    result = ak.unflatten(data_flat, counts_flat)
     result = ak.unflatten(result, z)
     result = ak.unflatten(result, y)
 
