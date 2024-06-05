@@ -53,7 +53,6 @@ struct MoveSupersInDomain {
 
     /* enact steps (1) and (2) movement of superdroplets for 1 gridbox:
     (1) update their spatial coords according to type of motion. (device)
-    (1b) optional detect precipitation (device)
     (2) update their sdgbxindex accordingly (device).
     Kokkos::parallel_for([...]) is equivalent to:
     for (size_t kk(0); kk < supers.extent(0); ++kk) {[...]}
@@ -68,9 +67,6 @@ struct MoveSupersInDomain {
                              /* step (1) */
                              motion.superdrop_coords(gbxindex, gbxmaps, state, supers(kk));
 
-                             /* optional step (1b) */
-                             // monitor -> detect_precipitation(area, drop); // TODO(CB) monitor
-
                              /* step (2) */
                              motion.superdrop_gbx(gbxindex, gbxmaps, supers(kk));
                            });
@@ -79,7 +75,6 @@ struct MoveSupersInDomain {
     /* enact steps (1) and (2) movement of superdroplets
     throughout domain (i.e. for all gridboxes):
     (1) update their spatial coords according to type of motion. (device)
-    (1b) optional monitor / detect precipitation (device)
     (2) update their sdgbxindex accordingly (device).
     Kokkos::parallel_for([...]) is equivalent to:
     for (size_t ii(0); ii < ngbxs; ++ii) {[...]}
@@ -162,7 +157,6 @@ struct MoveSupersInDomain {
 
   /* enact movement of superdroplets throughout domain in three stages:
   (1) update their spatial coords according to type of motion. (device)
-  (1b) optional detect precipitation (device)
   (2) update their sdgbxindex accordingly (device)
   (3) move superdroplets between gridboxes (host)
   (4) (optional) apply domain boundary conditions (host and device)
