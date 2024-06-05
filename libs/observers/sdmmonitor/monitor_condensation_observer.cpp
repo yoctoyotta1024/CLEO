@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 28th May 2024
+ * Last Modified: Wednesday 5th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -44,7 +44,9 @@ void MonitorCondensation::reset_monitor() const {
 KOKKOS_FUNCTION
 void MonitorCondensation::monitor_microphysics(const TeamMember& team_member,
                                                const double totmass_condensed) const {
-  const auto ii = team_member.league_rank();  // position of gridbox
-  const auto mass_cond = static_cast<datatype>(totmass_condensed);
-  d_data(ii) += mass_cond;
+  Kokkos::single(Kokkos::PerTeam(team_member), [=]() {
+    const auto ii = team_member.league_rank();  // position of gridbox
+    const auto mass_cond = static_cast<datatype>(totmass_condensed);
+    d_data(ii) += mass_cond;
+  });
 }
