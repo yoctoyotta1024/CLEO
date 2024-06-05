@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 28th May 2024
+ * Last Modified: Wednesday 5th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -39,6 +39,32 @@
 #include "zarr/dataset.hpp"
 
 /**
+ * @brief Perform calculation of 0th, 1st, and 2nd moments of the (real)
+ * droplet mass distribution for a single gridbox through reduction over super-droplets.
+ *
+ * This operator is a functor to perform the calculation of the 0th, 1st, and 2nd moments
+ * of the droplet mass distribution in a gridbox (i.e. 0th, 3rd, and 6th moments of the
+ * droplet radius distribution) within a Kokkos::parallel_reduce range policy
+ * loop over superdroplets within a team policy loop over gridboxes.
+ *
+ * Kokkos::parallel_reduce([...]) is equivalent in serial to sum over result of:
+ * for (size_t kk(0); kk < supers.extent(0); ++kk){[...]}.
+ *
+ * _Note:_ conversion from 8 to 4-byte precision for all mass moments: mom0 from size_t
+ * (architecture dependent usually long unsigned int = 8 bytes) to 8 byte unsigned integer, and
+ * mom1 and mom2 from double (8 bytes) to float (4 bytes).
+ *
+ * @param team_member The Kokkos team member.
+ * @param supers The view of super-droplets for a gridbox (on device).
+ * @param d_mom0 The view for the 0th mass moment.
+ * @param d_mom1 The view for the 1st mass moment.
+ * @param d_mom2 The view for the 2nd mass moment.
+ */
+KOKKOS_FUNCTION
+void calculate_massmoments(const TeamMember &team_member, const viewd_constsupers supers,
+                           const auto d_mom0, const auto d_mom1, const auto d_mom2);
+
+/**
  * @brief Functor to perform calculation of 0th, 1st, and 2nd moments of the (real)
  * droplet mass distribution in each gridbox.
  *
@@ -54,17 +80,14 @@ struct MassMomentsFunc {
    * @brief Functor operator to perform calculation of 0th, 1st, and 2nd moments of the (real)
    * droplet mass distribution in each gridbox.
    *
-   * This operator is a functor to perform the calculation of the 0th, 1st, and 2nd moments
-   * of the droplet mass distribution in each gridbox (i.e. 0th, 3rd, and 6th moments of the
-   * droplet radius distribution) within a Kokkos::parallel_reduce range policy
-   * loop over superdroplets.
+   * This operator is a functor to call function to perform the calculation of the 0th, 1st, and
+   * 2nd moments of the droplet mass distribution in each gridbox (i.e. 0th, 3rd, and 6th moments
+   * of the droplet radius distribution).
    *
-   * Kokkos::parallel_reduce([...]) is equivalent in serial to sum over result of:
-   * for (size_t kk(0); kk < supers.extent(0); ++kk){[...]}.
-   *
-   * _Note:_ conversion from 8 to 4-byte precision for all mass moments: mom0 from size_t
+   * _Note:_ posisble conversion from 8 to 4-byte precision for all mass moments: mom0 from size_t
    * (architecture dependent usually long unsigned int = 8 bytes) to 8 byte unsigned integer, and
    * mom1 and mom2 from double (8 bytes) to float (4 bytes).
+   *
    * @param team_member The Kokkos team member.
    * @param d_gbxs The view of gridboxes on device.
    * @param d_mom0 The mirror view buffer for the 0th mass moment.
@@ -75,7 +98,11 @@ struct MassMomentsFunc {
   void operator()(const TeamMember &team_member, const viewd_constgbx d_gbxs,
                   Buffer<uint64_t>::mirrorviewd_buffer d_mom0,
                   Buffer<float>::mirrorviewd_buffer d_mom1,
-                  Buffer<float>::mirrorviewd_buffer d_mom2) const;
+                  Buffer<float>::mirrorviewd_buffer d_mom2) const {
+    const auto ii = team_member.league_rank();
+    const auto supers(d_gbxs(ii).supersingbx.readonly());
+    calculate_massmoments(team_member, supers, d_mom0, d_mom1, d_mom2);
+  }
 };
 
 /**
