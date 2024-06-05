@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 28th May 2024
+ * Last Modified: Wednesday 5th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -54,7 +54,7 @@ struct MonitorCondensation {
    * @param totmass_condensed Mass condensed in one gridbox during one microphysical timestep
    */
   KOKKOS_FUNCTION
-  void monitor_microphysics(const TeamMember& team_member, const double totmass_condensed) const;
+  void monitor_condensation(const TeamMember& team_member, const double totmass_condensed) const;
 
   /**
    * @brief Placeholder function to obey SDMMonitor concept does nothing.
@@ -71,8 +71,7 @@ struct MonitorCondensation {
    * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
    * @param supers (sub)View of all the superdrops in one gridbox during one motion timestep
    */
-  KOKKOS_FUNCTION
-  void monitor_motion(const TeamMember& team_member, const viewd_constsupers supers) const {}
+  void monitor_motion(const viewd_constgbx d_gbxs) const {}
 
   /**
    * @brief Constructor for MonitorCondensation

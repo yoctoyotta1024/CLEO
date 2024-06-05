@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Shin-ichiro Shima (SiS)
  * -----
- * Last Modified: Saturday 25th May 2024
+ * Last Modified: Wednesday 5th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -72,7 +72,7 @@ struct DoCondensation {
     /* resultant effect on thermodynamic state */
     effect_on_thermodynamic_state(team_member, totmass_condensed, state);
 
-    mo.monitor_microphysics(team_member, totmass_condensed);
+    mo.monitor_condensation(team_member, totmass_condensed);
   }
 
   /**

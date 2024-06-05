@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 28th May 2024
+ * Last Modified: Wednesday 5th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -47,10 +47,11 @@ void MonitorMassMomentViews::reset_views() const {
  * @param supers (sub)View of all the superdrops in one gridbox
  */
 KOKKOS_FUNCTION
-void MonitorMassMomentViews::average_massmoments(const TeamMember& team_member,
-                                                 const viewd_constsupers supers) const {
+void MonitorMassMomentViews::calculate_massmoments(const TeamMember& team_member,
+                                                   const viewd_constsupers supers) const {
   const auto ii = team_member.league_rank();  // position of gridbox
-  d_massmom0(ii) += 1 * ii;                   // TODO(CB): WIP check build & calculate properly
+
+  d_massmom0(ii) += 1 * ii;  // TODO(CB): WIP check build & calculate properly
   d_massmom1(ii) += 10.0 * ii;
   d_massmom2(ii) += 100.0 * ii;
 }

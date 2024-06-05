@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Saturday 25th May 2024
+ * Last Modified: Wednesday 5th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -34,6 +34,7 @@
 #include "observers/observers.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
+#include "superdrops/sdmmonitor.hpp"
 #include "superdrops/superdrop.hpp"
 
 /**
@@ -94,8 +95,8 @@ class SDMMethods {
    * @param mo Monitor of SDM processes.
    */
   void superdrops_movement(const unsigned int t_sdm, viewd_gbx d_gbxs, const viewd_supers totsupers,
-                           const SDMMonitor auto sdmmonitor) const {
-    movesupers.run_step(t_sdm, gbxmaps, d_gbxs, totsupers);
+                           const SDMMonitor auto mo) const {
+    movesupers.run_step(t_sdm, gbxmaps, d_gbxs, totsupers, mo);
   }
 
  public:
@@ -130,7 +131,7 @@ class SDMMethods {
      */
     template <SDMMonitor SDMMo>
     void operator()(const unsigned int t_sdm, const unsigned int t_next, const viewd_gbx d_gbxs,
-                    const SDMMo sdmmonitor) const {
+                    const SDMMo mo) const {
       // TODO(all) use scratch space for parallel region?
       const size_t ngbxs(d_gbxs.extent(0));
       Kokkos::parallel_for(
@@ -140,8 +141,10 @@ class SDMMethods {
 
             auto supers(d_gbxs(ii).supersingbx());
             for (unsigned int subt = t_sdm; subt < t_next; subt = microphys.next_step(subt)) {
-              supers = microphys.run_step(team_member, subt, supers, d_gbxs(ii).state, sdmmonitor);
+              supers = microphys.run_step(team_member, subt, supers, d_gbxs(ii).state, mo);
             }
+
+            mo.monitor_microphysics(team_member, supers);
           });
     }
   } sdm_microphysics;
@@ -218,14 +221,14 @@ class SDMMethods {
    */
   void run_step(const unsigned int t_mdl, const unsigned int t_mdl_next, viewd_gbx d_gbxs,
                 const viewd_supers totsupers) const {
-    const SDMMonitor auto sdmmonitor = obs.get_sdmmonitor();
+    const SDMMonitor auto mo = obs.get_sdmmonitor();
 
     unsigned int t_sdm(t_mdl);
     while (t_sdm < t_mdl_next) {
       const auto t_sdm_next = next_sdmstep(t_sdm, t_mdl_next);
 
-      superdrops_movement(t_sdm, d_gbxs, totsupers, sdmmonitor);  // on host and device
-      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs, sdmmonitor);    // on device
+      superdrops_movement(t_sdm, d_gbxs, totsupers, mo);  // on host and device
+      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs, mo);    // on device
 
       t_sdm = t_sdm_next;
     }

@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 25th May 2024
+ * Last Modified: Wednesday 5th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -32,6 +32,7 @@
 #include "./gridboxmaps.hpp"
 #include "./sortsupers.hpp"
 #include "superdrops/motion.hpp"
+#include "superdrops/sdmmonitor.hpp"
 #include "superdrops/superdrop.hpp"
 
 /*
@@ -149,9 +150,10 @@ struct MoveSupersInDomain {
    *
    */
   void run_step(const unsigned int t_sdm, const GbxMaps &gbxmaps, viewd_gbx d_gbxs,
-                const viewd_supers totsupers) const {
+                const viewd_supers totsupers, const SDMMonitor auto mo) const {
     if (enactmotion.motion.on_step(t_sdm)) {
       move_superdrops_in_domain(t_sdm, gbxmaps, d_gbxs, totsupers);
+      mo.monitor_motion(d_gbxs);
     }
   }
 

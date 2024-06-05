@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 28th May 2024
+ * Last Modified: Wednesday 5th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -53,7 +53,7 @@ struct MonitorMassMomentViews {
    * @param supers (sub)View of all the superdrops in one gridbox
    */
   KOKKOS_FUNCTION
-  void average_massmoments(const TeamMember& team_member, const viewd_constsupers supers) const;
+  void calculate_massmoments(const TeamMember& team_member, const viewd_constsupers supers) const;
 
   explicit MonitorMassMomentViews(const size_t ngbxs)
       : d_massmom0("d_monitor_massmom0", ngbxs),
@@ -86,12 +86,12 @@ struct MonitorMassMoments {
    * @param totmass_condensed Mass condensed in one gridbox during one microphysical timestep
    */
   KOKKOS_FUNCTION
-  void monitor_microphysics(const TeamMember& team_member, const double totmass_condensed) const {}
+  void monitor_condensation(const TeamMember& team_member, const double totmass_condensed) const {}
 
   /**
    * @brief Monitor 0th, 1st and 2nd moments of the droplet mass distribution
    *
-   * calls average_massmoments to monitor the moments of the droplet mass
+   * calls calculate_massmoments to monitor the moments of the droplet mass
    * distribution during SDM microphysics
    *
    * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
@@ -99,21 +99,22 @@ struct MonitorMassMoments {
    */
   KOKKOS_FUNCTION
   void monitor_microphysics(const TeamMember& team_member, const viewd_constsupers supers) const {
-    microphysics_monitor.average_massmoments(team_member, supers);
+    Kokkos::single(Kokkos::PerTeam(team_member),
+                   [=]() { microphysics_monitor.calculate_massmoments(team_member, supers); });
   }
 
   /**
    * @brief Monitor 0th, 1st and 2nd moments of the droplet mass distribution
    *
-   * calls average_massmoments to monitor the moments of the droplet mass
+   * calls calculate_massmoments to monitor the moments of the droplet mass
    * distribution during SDM motion.
    *
    * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
    * @param supers (sub)View of all the superdrops in one gridbox during one motion timestep
    */
-  KOKKOS_FUNCTION
-  void monitor_motion(const TeamMember& team_member, const viewd_constsupers supers) const {
-    motion_monitor.average_massmoments(team_member, supers);
+  void monitor_motion(const viewd_constgbx d_gbxs) const {
+    motion_monitor.calculate_massmoments(team_member,
+                                         supers);  // TODO(CB): calc in loop from d_gbxs
   }
 
   /**

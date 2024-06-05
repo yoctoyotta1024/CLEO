@@ -42,7 +42,7 @@ void MonitorCondensation::reset_monitor() const {
  * @param totmass_condensed Mass condensed in one gridbox during one microphysical timestep
  */
 KOKKOS_FUNCTION
-void MonitorCondensation::monitor_microphysics(const TeamMember& team_member,
+void MonitorCondensation::monitor_condensation(const TeamMember& team_member,
                                                const double totmass_condensed) const {
   Kokkos::single(Kokkos::PerTeam(team_member), [=]() {
     const auto ii = team_member.league_rank();  // position of gridbox

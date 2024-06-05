@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 28th May 2024
+ * Last Modified: Wednesday 5th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -33,6 +33,7 @@
 #include "../create_massmoments_arrays.hpp"
 #include "../observers.hpp"
 #include "./monitor_massmoments.hpp"
+#include "superdrops/sdmmonitor.hpp"
 #include "zarr/buffer.hpp"
 #include "zarr/dataset.hpp"
 #include "zarr/xarray_zarr_array.hpp"

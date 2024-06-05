@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 27th May 2024
+ * Last Modified: Wednesday 5th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -32,13 +32,13 @@
  * @tparam SDMMo Type that satisfies the SDMMonitor concept.
  */
 template <typename SDMMo>
-concept SDMMonitor =
-    requires(SDMMo mo, const TeamMember &tm, const double d, const viewd_constsupers supers) {
-      { mo.reset_monitor() } -> std::same_as<void>;
-      { mo.monitor_microphysics(tm, d) } -> std::same_as<void>;
-      { mo.monitor_microphysics(tm, supers) } -> std::same_as<void>;
-      { mo.monitor_motion(tm, supers) } -> std::same_as<void>;
-    };
+concept SDMMonitor = requires(SDMMo mo, const TeamMember &tm, const double d,
+                              const viewd_constsupers supers, const viewd_constgbx d_gbxs) {
+  { mo.reset_monitor() } -> std::same_as<void>;
+  { mo.monitor_condensation(tm, d) } -> std::same_as<void>;
+  { mo.monitor_microphysics(tm, supers) } -> std::same_as<void>;
+  { mo.monitor_motion(tm, d_gbxs) } -> std::same_as<void>;
+};
 
 /**
  * @brief Structure CombinedSDMMonitor represents a new monitor formed from combination of two
@@ -78,9 +78,9 @@ struct CombinedSDMMonitor {
    * Each monitor is run sequentially.
    */
   KOKKOS_FUNCTION
-  void monitor_microphysics(const TeamMember &tm, const double d) const {
-    a.monitor_microphysics(tm, d);
-    b.monitor_microphysics(tm, d);
+  void monitor_condensation(const TeamMember &tm, const double d) const {
+    a.monitor_condensation(tm, d);
+    b.monitor_condensation(tm, d);
   }
 
   /**
@@ -99,10 +99,9 @@ struct CombinedSDMMonitor {
    *
    * Each monitor is run sequentially.
    */
-  KOKKOS_FUNCTION
-  void monitor_motion(const TeamMember &tm, const viewd_constsupers supers) const {
-    a.monitor_microphysics(tm, supers);
-    b.monitor_microphysics(tm, supers);
+  void monitor_motion(const viewd_constgbx d_gbxs) const {
+    a.monitor_motion(d_gbxs);
+    b.monitor_motion(d_gbxs);
   }
 };
 
@@ -115,13 +114,12 @@ struct NullSDMMonitor {
   void reset_monitor() const {}
 
   KOKKOS_FUNCTION
-  void monitor_microphysics(const TeamMember &team_member, const double d) const {}
+  void monitor_condensation(const TeamMember &team_member, const double d) const {}
 
   KOKKOS_FUNCTION
   void monitor_microphysics(const TeamMember &team_member, const viewd_constsupers supers) const {}
 
-  KOKKOS_FUNCTION
-  void monitor_motion(const TeamMember &team_member, const viewd_constsupers supers) const {}
+  void monitor_motion(const viewd_constgbx d_gbxs) const {}
 };
 
 #endif  //  LIBS_SUPERDROPS_SDMMONITOR_HPP_
