@@ -51,7 +51,7 @@ void MonitorMassMomentViews::calculate_massmoments(const TeamMember& team_member
                                                    const viewd_constsupers supers) const {
   const auto ii = team_member.league_rank();  // position of gridbox
 
-  d_massmom0(ii) += 1 * ii;  // TODO(CB): WIP check build & calculate properly
+  d_massmom0(ii) += 1 * ii;  // TODO(CB): call observer.hpp calculate_massmoments instead
   d_massmom1(ii) += 10.0 * ii;
   d_massmom2(ii) += 100.0 * ii;
 }

@@ -113,8 +113,15 @@ struct MonitorMassMoments {
    * @param supers (sub)View of all the superdrops in one gridbox during one motion timestep
    */
   void monitor_motion(const viewd_constgbx d_gbxs) const {
-    motion_monitor.calculate_massmoments(team_member,
-                                         supers);  // TODO(CB): calc in loop from d_gbxs
+    Kokkos::parallel_for(
+        "monitor_motion", TeamPolicy(ngbxs, Kokkos::AUTO()),
+        KOKKOS_CLASS_LAMBDA(const TeamMember& team_member) {
+          Kokkos::single(Kokkos::PerTeam(team_member), [=]() {
+            const auto ii = team_member.league_rank();
+            const auto supers(d_gbxs(ii).supersingbx.readonly());
+            motion_monitor.calculate_massmoments(team_member, supers);
+          });
+        });
   }
 
   /**
