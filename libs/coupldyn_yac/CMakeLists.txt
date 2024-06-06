@@ -13,8 +13,8 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 message(STATUS "Using YAC installation from: ${YAC_ROOT}")
 message(STATUS "Using YAXT installation from: ${YAXT_ROOT}")
 
-find_package(MPI)
-find_package(YAC)
+find_package(MPI REQUIRED)
+find_package(YAC REQUIRED)
 
 # Add executables and create library target
 set(SOURCES
