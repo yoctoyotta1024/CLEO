@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.12.0](https://github.com/yoctoyotta1024/CLEO/compare/4a7710eb552ff14fc2caa21baf712b2d86ecf663..v0.12.0) - 2024-06-06
+#### Features
+- new bash script to run yac divfree2d example - ([4a7710e](https://github.com/yoctoyotta1024/CLEO/commit/4a7710eb552ff14fc2caa21baf712b2d86ecf663)) - clara.bayley
+#### Miscellaneous Chores
+- add notes - ([84160fd](https://github.com/yoctoyotta1024/CLEO/commit/84160fdbc191108755d1d60904b664454e8ab41d)) - clara.bayley
+
+- - -
+
 ## [v0.11.0](https://github.com/yoctoyotta1024/CLEO/compare/5ddd84535e29462079c6d61a60fcdd3c4bfcd3e3..v0.11.0) - 2024-06-06
 #### Bug Fixes
 - corrected args passed to run speedtest example - ([fa5e4c5](https://github.com/yoctoyotta1024/CLEO/commit/fa5e4c5ba6583eaeb2cc62a451528b31e0c47121)) - clara.bayley
