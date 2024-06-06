@@ -1,16 +1,15 @@
 #!/bin/bash
-#SBATCH --job-name=shima2009
-#SBATCH --partition=gpu
+#SBATCH --job-name=yac_3d
+#SBATCH --partition=compute
 #SBATCH --nodes=1
-#SBATCH --gpus=4
 #SBATCH --ntasks-per-node=128
 #SBATCH --mem=30G
-#SBATCH --time=00:10:00
+#SBATCH --time=00:05:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./shima2009_out.%j.out
-#SBATCH --error=./shima2009_err.%j.out
+#SBATCH --output=./yac_3d_out.%j.out
+#SBATCH --error=./yac_3d_err.%j.out
 
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
@@ -18,15 +17,15 @@
 ### ---- build type, directories, the executable(s) ---- ###
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
-buildtype="cuda"
+buildtype="openmp"
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_shima2009/
-enableyac=false
-executables="golcolls longcolls lowlistcolls"
+path2build=${HOME}/CLEO/build_yac3d/
+enableyac=true
+executables="yac_3d"
 
-pythonscript=${path2CLEO}/examples/boxmodelcollisions/shima2009.py
-configfile=${path2CLEO}/examples/boxmodelcollisions/shima2009_config.yaml
-script_args="${configfile} golovin long lowlist"
+pythonscript=${path2CLEO}/examples/yac/yac_3d/yac_3d_fromfile.py
+configfile=${path2CLEO}/examples/yac/yac_3d/src/config/yac1_fromfile_config.yaml
+script_args="${configfile}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

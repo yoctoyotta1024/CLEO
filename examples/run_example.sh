@@ -25,12 +25,14 @@
 buildtype=$1
 path2CLEO=$2
 path2build=$3
-executables="$4"
-pythonscript=$5
-script_args="$6"
+enableyac=$4      # required "true" or otherwise
+executables="$5"
+pythonscript=$6
+script_args="$7"
 
 cleoenv=/work/mh1126/m300950/cleoenv
 python=${cleoenv}/bin/python3
+yacyaxtroot=/work/mh1126/m300950/yac
 spack load cmake@3.23.1%gcc
 module load python3/2022.01-gcc-11.2.0
 source activate ${cleoenv}
@@ -43,6 +45,7 @@ echo "----- Running Example -----"
 echo "buildtype:  ${buildtype}"
 echo "path2CLEO: ${path2CLEO}"
 echo "path2build: ${path2build}"
+echo "enableyac: ${enableyac}"
 echo "executables: ${executables}"
 echo "pythonscript: ${pythonscript}"
 echo "script_args: ${script_args}"
@@ -50,7 +53,7 @@ echo "---------------------------"
 ### ---------------------------------------------------- ###
 
 ### ---------------------- build CLEO ------------------ ###
-${path2CLEO}/scripts/bash/build_cleo.sh ${buildtype} ${path2CLEO} ${path2build}
+${path2CLEO}/scripts/bash/build_cleo.sh ${buildtype} ${path2CLEO} ${path2build} ${enableyac} ${yacyaxtroot}
 ### ---------------------------------------------------- ###
 
 ### --------- compile executable(s) from scratch ---------- ###
@@ -62,5 +65,8 @@ ${path2CLEO}/scripts/bash/compile_cleo.sh ${cleoenv} ${buildtype} ${path2build} 
 ### --------- run model through Python script ---------- ###
 export OMP_PROC_BIND=spread
 export OMP_PLACES=threads
+
+# TODO(all): add exports to paths required if YAC is enabled
+
 ${python}  ${pythonscript} ${path2CLEO} ${path2build} ${script_args}
 ### ---------------------------------------------------- ###

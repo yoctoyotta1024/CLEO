@@ -20,6 +20,7 @@
 buildtype="cuda"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_eurec4a1D/
+enableyac=false
 executables="eurec4a1D"
 
 configfile=${path2CLEO}/examples/eurec4a1d/src/config/eurec4a1d_config.yaml
@@ -31,6 +32,6 @@ script_args=""
 
 ### ---------- build, compile and run example ---------- ###
 ${path2CLEO}/examples/run_example.sh \
-  ${buildtype} ${path2CLEO} ${path2build} \
+  ${buildtype} ${path2CLEO} ${path2build} ${enableyac} \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###

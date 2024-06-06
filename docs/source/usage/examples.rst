@@ -42,6 +42,10 @@ You will need to configure ```examples/run_example.sh``` in the following ways:
 
   replace the path in the line stating ``python=[...]`` with the path to your Python interpreter.
 
+* Set the path to your YAC and YAXT installations
+
+  replace ``yacyaxtroot=[...]`` with the path to the directory containing your yac and yaxt
+  directories, or to ``yacyaxtroot=""`` if you do not intend to run an example that requires YAC.
 
 You can optionally configure the bash script specific to each example in the following ways:
 

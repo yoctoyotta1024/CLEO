@@ -20,6 +20,7 @@
 buildtype="openmp"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_yac1/
+enableyac=false
 executables="yac1"
 
 pythonscript=${path2CLEO}/examples/yac/fromfile/yac1_fromfile.py
@@ -31,6 +32,6 @@ script_args="${configfile}"
 
 ### ---------- build, compile and run example ---------- ###
 ${path2CLEO}/examples/run_example.sh \
-  ${buildtype} ${path2CLEO} ${path2build} \
+  ${buildtype} ${path2CLEO} ${path2build} ${enableyac} \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###

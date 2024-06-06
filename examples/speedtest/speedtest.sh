@@ -19,6 +19,7 @@
 ### ---------------------------------------------------- ###
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_spdtest/
+enableyac=false
 executables="spdtest"
 
 pythonscript=${path2CLEO}/examples/speedtest/speedtest.py
@@ -46,7 +47,7 @@ do
 
   ### ---------- build, compile and run example ---------- ###
   ${path2CLEO}/examples/run_example.sh \
-    ${buildtype} ${path2CLEO} ${path2build_test} \
+    ${buildtype} ${path2CLEO} ${path2build} ${enableyac} \
     "${executables}" ${pythonscript} "${script_args}"
   ### ---------------------------------------------------- ###
 done

@@ -63,16 +63,24 @@ You can install Python packages to an existing Conda (or Mamba) environment via:
 YAC
 ---
 
-.. note::
-  The installation of YAC for CLEO is currently in development and may require some manual installation.
-
 YAC is one of the :doc:`external libraries<extern>` which CLEO may require in order to
 couple to dynamics and/or have MPI domain decomposition.
 
-YAC requires some additional MPI, NetCDF and yaml libraries alongside the gcc compiler. You can
-load them on Levante via:
+Note that YAC (and its YAXT dependency) need to be installed manually before you can build
+CLEO with them. You can find instructions on how to do install YAC (and YAXT) :ref:`here <_extern_yac>`.
+
+YAC also requires some additional MPI, NetCDF and yaml libraries alongside the compatible gcc
+compiler which you can load on Levante via:
 
 .. code-block:: console
 
-  $ module load openmpi/4.1.2-gcc-11.2.0 netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0
-  $ spack load openblas@0.3.18%gcc@=11.2.0 libfyaml /fvbhgoq py-mpi4py
+  $ module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0 netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0
+  $ spack load openblas@0.3.18%gcc@=11.2.0
+
+When you want to run CLEO with YAC, you will also need to export some additional paths:
+
+.. code-block:: console
+
+  $ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/sw/spack-levante/libfyaml-0.7.12-fvbhgo/lib
+  $ export PYTHONPATH=/your/path/to/yac/python/
+  $ spack load py-numpy

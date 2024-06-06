@@ -20,6 +20,7 @@
 buildtype="openmp"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_adia0D/
+enableyac=false
 executables="adia0D"
 
 pythonscript=${path2CLEO}/examples/adiabaticparcel/as2017.py
@@ -31,6 +32,6 @@ script_args="${configfile}"
 
 ### ---------- build, compile and run example ---------- ###
 ${path2CLEO}/examples/run_example.sh \
-  ${buildtype} ${path2CLEO} ${path2build} \
+  ${buildtype} ${path2CLEO} ${path2build} ${enableyac} \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###
