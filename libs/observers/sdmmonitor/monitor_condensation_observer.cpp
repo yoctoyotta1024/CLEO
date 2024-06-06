@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 5th June 2024
+ * Last Modified: Thursday 6th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,7 +19,7 @@
  * functionality to monitor condensation SDM microphysical process
  */
 
-#include "./monitor_condensation.hpp"
+#include "./monitor_condensation_observer.hpp"
 
 /**
  * @brief Parallel loop to fill d_data with zero value.
@@ -44,7 +44,7 @@ void MonitorCondensation::reset_monitor() const {
 KOKKOS_FUNCTION
 void MonitorCondensation::monitor_condensation(const TeamMember& team_member,
                                                const double totmass_condensed) const {
-  Kokkos::single(Kokkos::PerTeam(team_member), [=]() {
+  Kokkos::single(Kokkos::PerTeam(team_member), [=, this]() {
     const auto ii = team_member.league_rank();  // position of gridbox
     const auto mass_cond = static_cast<datatype>(totmass_condensed);
     d_data(ii) += mass_cond;

@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 5th June 2024
+ * Last Modified: Thursday 6th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -29,6 +29,7 @@
 #include <memory>
 
 #include "../../kokkosaliases.hpp"
+#include "zarr/buffer.hpp"
 
 struct MonitorMassMomentViews {
   Buffer<uint64_t>::mirrorviewd_buffer d_massmom0;  // view on device for monitoring 0th mass moment
@@ -99,8 +100,9 @@ struct MonitorMassMoments {
    */
   KOKKOS_FUNCTION
   void monitor_microphysics(const TeamMember& team_member, const viewd_constsupers supers) const {
-    Kokkos::single(Kokkos::PerTeam(team_member),
-                   [=]() { microphysics_monitor.calculate_massmoments(team_member, supers); });
+    Kokkos::single(Kokkos::PerTeam(team_member), [=, this]() {
+      microphysics_monitor.calculate_massmoments(team_member, supers);
+    });
   }
 
   /**
@@ -113,10 +115,11 @@ struct MonitorMassMoments {
    * @param supers (sub)View of all the superdrops in one gridbox during one motion timestep
    */
   void monitor_motion(const viewd_constgbx d_gbxs) const {
+    const size_t ngbxs(d_gbxs.extent(0));
     Kokkos::parallel_for(
         "monitor_motion", TeamPolicy(ngbxs, Kokkos::AUTO()),
         KOKKOS_CLASS_LAMBDA(const TeamMember& team_member) {
-          Kokkos::single(Kokkos::PerTeam(team_member), [=]() {
+          Kokkos::single(Kokkos::PerTeam(team_member), [=, this]() {
             const auto ii = team_member.league_rank();
             const auto supers(d_gbxs(ii).supersingbx.readonly());
             motion_monitor.calculate_massmoments(team_member, supers);
