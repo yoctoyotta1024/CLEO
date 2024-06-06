@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=yac1
+#SBATCH --job-name=yac_3d
 #SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
@@ -8,8 +8,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./yac1_out.%j.out
-#SBATCH --error=./yac1_err.%j.out
+#SBATCH --output=./yac_3d_out.%j.out
+#SBATCH --error=./yac_3d_err.%j.out
 
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###

@@ -21,8 +21,8 @@ root4YAC=$1 # absolute path for YAC and YAXT installations
 yaxt_source=https://swprojects.dkrz.de/redmine/attachments/download/529/yaxt-0.10.0.tar.gz
 yaxt_version=yaxt-0.10.0 # must match yaxt_source
 
-yac_source=https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/release-3.0.3_p2/yac-release-3.0.3_p2.tar.gz
-yac_version=yac-release-3.0.3_p2 # must match yac_source
+yac_source=https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/v3.2.0_a_p2/yac-v3.2.0_a_p2.tar.gz
+yac_version=yac-v3.2.0_a_p2 # must match yac_source
 
 gcc=gcc/11.2.0-gcc-11.2.0
 openmpi=openmpi/4.1.2-gcc-11.2.0
