@@ -19,8 +19,8 @@ jobs:
 
     - name: Build YAXT
       run: |
-        curl -s -L https://swprojects.dkrz.de/redmine/attachments/download/529/yaxt-0.10.0.tar.gz | tar xvz
-        cd yaxt-0.10.0
+        curl -s -L https://swprojects.dkrz.de/redmine/attachments/download/534/yaxt-0.11.1.tar.gz | tar xvz
+        cd yaxt-0.11.1
         ./configure --without-regard-for-quality --without-example-programs --without-perf-programs --with-pic \
         --prefix=$HOME/yaxt
         make -j 4
