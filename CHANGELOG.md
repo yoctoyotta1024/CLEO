@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.10.1](https://github.com/yoctoyotta1024/CLEO/compare/9d74ef1f02a0c325e895399a3ea02d8851cc69a1..v0.10.1) - 2024-06-06
+#### Bug Fixes
+- update yaxt version in CI - ([0e31ed3](https://github.com/yoctoyotta1024/CLEO/commit/0e31ed3ca9e7ef8561b1c266c9ab8681c09527b2)) - clara.bayley
+- update yac version in CI - ([0b1a4bd](https://github.com/yoctoyotta1024/CLEO/commit/0b1a4bdd7773066ac4827bdf8acce37417d7f333)) - clara.bayley
+#### Refactoring
+- update flags and compilers used to install yac - ([24302fc](https://github.com/yoctoyotta1024/CLEO/commit/24302fcc97bd9bf7ea20e02eeca43811eb8609d4)) - clara.bayley
+- update yaxt version - ([9d74ef1](https://github.com/yoctoyotta1024/CLEO/commit/9d74ef1f02a0c325e895399a3ea02d8851cc69a1)) - clara.bayley
+
+- - -
+
 ## [v0.10.0](https://github.com/yoctoyotta1024/CLEO/compare/7423cef79d566206c38bf00eec41ae2c42f4aeb0..v0.10.0) - 2024-06-06
 #### Bug Fixes
 - fix LAPACK FLAGS to off for cvode sundials options - ([a1c9a31](https://github.com/yoctoyotta1024/CLEO/commit/a1c9a3144b59504bf1d06e1a3bdfc113e292c503)) - clara.bayley
