@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 24th May 2024
+ * Last Modified: Thursday 6th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -134,7 +134,9 @@ inline MicrophysicalProcess auto CollCoal(const unsigned int interval,
   const auto DELT = int2realtime(interval);
 
   const DoCoalescence coal{};
-  const DoCollisions<Probability, DoCoalescence> colls(DELT, collcoalprob, coal);
+  const MicrophysicsFunc auto colls =
+      DoCollisions<Probability, DoCoalescence>(DELT, collcoalprob, coal);
+
   return ConstTstepMicrophysics(interval, colls);
 }
 

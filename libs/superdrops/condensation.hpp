@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Shin-ichiro Shima (SiS)
  * -----
- * Last Modified: Wednesday 5th June 2024
+ * Last Modified: Thursday 6th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -208,7 +208,8 @@ inline MicrophysicalProcess auto Condensation(
   const auto delt = step2dimlesstime(interval);    // dimensionless time equivlent to interval
   const auto subdelt = realtime2dimless(SUBDELT);  // dimensionless time equivlent to SUBDELT [s]
 
-  const auto do_cond = DoCondensation(do_alter_thermo, niters, delt, maxrtol, maxatol, subdelt);
+  const MicrophysicsFunc auto do_cond =
+      DoCondensation(do_alter_thermo, niters, delt, maxrtol, maxatol, subdelt);
 
   return ConstTstepMicrophysics(interval, do_cond);
 }

@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 24th May 2024
+ * Last Modified: Thursday 6th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -95,7 +95,8 @@ inline MicrophysicalProcess auto CollBu(const unsigned int interval,
   const auto DELT = double{int2realtime(interval)};
 
   const DoBreakup bu(nfrags);
-  const DoCollisions<Probability, DoBreakup<NFrags>> colls(DELT, collbuprob, bu);
+  const MicrophysicsFunc auto colls =
+      DoCollisions<Probability, DoBreakup<NFrags>>(DELT, collbuprob, bu);
 
   return ConstTstepMicrophysics(interval, colls);
 }
