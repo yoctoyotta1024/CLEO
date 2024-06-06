@@ -29,6 +29,9 @@
 /**
  * @brief Concept of SDMmonitor to monitor various SDM processes.
  *
+ * _Note:_ Constraints missing `{ mo.monitor_motion(d_gbxs) } -> std::same_as<void>;` to avoid
+ * adding constraint over templated type "d_gbxs".
+ *
  * @tparam SDMMo Type that satisfies the SDMMonitor concept.
  */
 template <typename SDMMo>
@@ -37,7 +40,6 @@ concept SDMMonitor =
       { mo.reset_monitor() } -> std::same_as<void>;
       { mo.monitor_condensation(tm, d) } -> std::same_as<void>;
       { mo.monitor_microphysics(tm, supers) } -> std::same_as<void>;
-      { mo.monitor_motion };
     };
 
 /**
