@@ -18,8 +18,8 @@
 
 root4YAC=$1 # absolute path for YAC and YAXT installations
 
-yaxt_source=https://swprojects.dkrz.de/redmine/attachments/download/529/yaxt-0.10.0.tar.gz
-yaxt_version=yaxt-0.10.0 # must match yaxt_source
+yaxt_source=https://swprojects.dkrz.de/redmine/attachments/download/534/yaxt-0.11.1.tar.gz
+yaxt_version=yaxt-0.11.1 # must match yaxt_source
 
 yac_source=https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/v3.2.0_a_p2/yac-v3.2.0_a_p2.tar.gz
 yac_version=yac-v3.2.0_a_p2 # must match yac_source
