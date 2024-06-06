@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 5th June 2024
+ * Last Modified: Thursday 6th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,7 +23,7 @@
 #include "./massmoments_observer.hpp"
 
 /**
- * @brief Perform calculation of 0th, 1st, and 2nd moments of the (real)
+ * @brief Performs calculation of 0th, 1st, and 2nd moments of the (real)
  * droplet mass distribution for a single gridbox through reduction over super-droplets.
  *
  * This operator is a functor to perform the calculation of the 0th, 1st, and 2nd moments
@@ -47,6 +47,7 @@
 KOKKOS_FUNCTION
 void calculate_massmoments(const TeamMember &team_member, const viewd_constsupers supers,
                            const auto d_mom0, const auto d_mom1, const auto d_mom2) {
+  const auto ii = team_member.league_rank();
   const size_t nsupers(supers.extent(0));
 
   Kokkos::parallel_reduce(
@@ -67,13 +68,13 @@ void calculate_massmoments(const TeamMember &team_member, const viewd_constsuper
 }
 
 /**
- * @brief Functor operator to perform calculation of 0th, 1st, and 2nd moments of the (real)
- * droplet mass distribution in each gridbox.
+ * @brief Performs calculation of 0th, 1st, and 2nd moments of the (real) raindroplet mass
+ * distribution in each gridbox.
  *
  * This operator is a functor to perform the calculation of the 0th, 1st, and 2nd moments
- * of the droplet mass distribution in each gridbox (i.e. 0th, 3rd, and 6th moments of the
+ * of the raindroplet mass distribution in each gridbox (i.e. 0th, 3rd, and 6th moments of the
  * droplet radius distribution) within a Kokkos::parallel_for range policy
- * loop over superdroplets.
+ * loop over superdroplets within a team policy loop over gridboxes.
  *
  * A raindroplet is a droplet with a radius >= rlim = 40microns.
  *
@@ -85,20 +86,18 @@ void calculate_massmoments(const TeamMember &team_member, const viewd_constsuper
  * mom1 and mom2 from double (8 bytes) to float (4 bytes).
  *
  * @param team_member The Kokkos team member.
- * @param d_gbxs The view of gridboxes on device.
+ * @param supers The view of super-droplets for a gridbox (on device).
  * @param d_mom0 The mirror view buffer for the 0th mass moment.
  * @param d_mom1 The mirror view buffer for the 1st mass moment.
  * @param d_mom2 The mirror view buffer for the 2nd mass moment.
  */
 KOKKOS_FUNCTION
-void RaindropsMassMomentsFunc::operator()(const TeamMember &team_member,
-                                          const viewd_constgbx d_gbxs,
-                                          Buffer<uint64_t>::mirrorviewd_buffer d_mom0,
-                                          Buffer<float>::mirrorviewd_buffer d_mom1,
-                                          Buffer<float>::mirrorviewd_buffer d_mom2) const {
+void calculate_rainmassmoments(const TeamMember &team_member, const viewd_constsupers supers,
+                               Buffer<uint64_t>::mirrorviewd_buffer d_mom0,
+                               Buffer<float>::mirrorviewd_buffer d_mom1,
+                               Buffer<float>::mirrorviewd_buffer d_mom2) {
   constexpr double rlim(40e-6 / dlc::R0);  // dimless minimum radius of raindrop
   const auto ii = team_member.league_rank();
-  const auto supers(d_gbxs(ii).supersingbx.readonly());
 
   const size_t nsupers(supers.extent(0));
   Kokkos::parallel_reduce(
