@@ -111,8 +111,7 @@ struct MonitorMassMoments {
    */
   KOKKOS_FUNCTION
   void monitor_microphysics(const TeamMember& team_member, const viewd_constsupers supers) const {
-    Kokkos::single(Kokkos::PerTeam(team_member),
-                   [=, this]() { microphysics_moms.fetch_massmoments(team_member, supers); });
+    microphysics_moms.fetch_massmoments(team_member, supers);
   }
 
   /**
@@ -129,11 +128,9 @@ struct MonitorMassMoments {
     Kokkos::parallel_for(
         "monitor_motion", TeamPolicy(ngbxs, Kokkos::AUTO()),
         KOKKOS_CLASS_LAMBDA(const TeamMember& team_member) {
-          Kokkos::single(Kokkos::PerTeam(team_member), [=, this]() {
-            const auto ii = team_member.league_rank();
-            const auto supers(d_gbxs(ii).supersingbx.readonly());
-            motion_moms.fetch_massmoments(team_member, supers);
-          });
+          const auto ii = team_member.league_rank();
+          const auto supers(d_gbxs(ii).supersingbx.readonly());
+          motion_moms.fetch_massmoments(team_member, supers);
         });
   }
 
