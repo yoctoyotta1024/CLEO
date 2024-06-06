@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 4th May 2024
+ * Last Modified: Thursday 6th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -48,6 +48,7 @@
 #include "observers/nsupers_observer.hpp"
 #include "observers/observers.hpp"
 #include "observers/runstats_observer.hpp"
+#include "observers/sdmmonitor/monitor_condensation_observer.hpp"
 #include "observers/state_observer.hpp"
 #include "observers/streamout_observer.hpp"
 #include "observers/superdrops_observer.hpp"
@@ -166,7 +167,9 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
 
   const Observer auto obssd = create_superdrops_observer(obsstep, dataset, maxchunk);
 
-  return obssd >> obsgbx >> obs6 >> obs5 >> obs3 >> obs2 >> obs1 >> obs0;
+  const Observer auto obs_cond = MonitorCondensationObserver(obsstep, dataset, maxchunk, ngbxs);
+
+  return obs_cond >> obssd >> obsgbx >> obs6 >> obs5 >> obs3 >> obs2 >> obs1 >> obs0;
 }
 
 template <typename Store>
