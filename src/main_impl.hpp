@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 27th May 2024
+ * Last Modified: Thursday 6th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -50,7 +50,8 @@
 #include "observers/nsupers_observer.hpp"
 #include "observers/observers.hpp"
 #include "observers/runstats_observer.hpp"
-#include "observers/sdmmonitor/monitor_condensation.hpp"
+#include "observers/sdmmonitor/monitor_condensation_observer.hpp"
+#include "observers/sdmmonitor/monitor_massmoments_observer.hpp"
 #include "observers/state_observer.hpp"
 #include "observers/streamout_observer.hpp"
 #include "observers/superdrops_observer.hpp"
@@ -113,8 +114,8 @@ inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
 }
 
 inline auto create_boundary_conditions(const Config &config) {
-  return AddSupersAtDomainTop(config.get_addsupersatdomaintop());
-  // return NullBoundaryConditions{};
+  // return AddSupersAtDomainTop(config.get_addsupersatdomaintop());
+  return NullBoundaryConditions{};
 }
 
 template <GridboxMaps GbxMaps>
@@ -206,8 +207,10 @@ template <typename Store>
 inline Observer auto create_sdmmonitor_observer(const unsigned int interval,
                                                 Dataset<Store> &dataset, const size_t maxchunk,
                                                 const size_t ngbxs) {
-  const Observer auto monitor_cond = CondensationObserver(interval, dataset, maxchunk, ngbxs);
-  return monitor_cond;
+  const Observer auto obs_cond = MonitorCondensationObserver(interval, dataset, maxchunk, ngbxs);
+  const Observer auto obs_massmoms = MonitorMassMomentsObserver(interval, dataset, maxchunk, ngbxs);
+
+  return obs_cond >> obs_massmoms;
 }
 
 template <typename Store>

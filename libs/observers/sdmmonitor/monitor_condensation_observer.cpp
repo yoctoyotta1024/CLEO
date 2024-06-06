@@ -3,13 +3,13 @@
  *
  *
  * ----- CLEO -----
- * File: monitor_condensation.cpp
+ * File: monitor_condensation_observer.cpp
  * Project: sdmmonitor
  * Created Date: Wednesday 8th May 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 27th May 2024
+ * Last Modified: Thursday 6th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,7 +19,7 @@
  * functionality to monitor condensation SDM microphysical process
  */
 
-#include "./monitor_condensation.hpp"
+#include "./monitor_condensation_observer.hpp"
 
 /**
  * @brief Parallel loop to fill d_data with zero value.
@@ -42,9 +42,11 @@ void MonitorCondensation::reset_monitor() const {
  * @param totmass_condensed Mass condensed in one gridbox during one microphysical timestep
  */
 KOKKOS_FUNCTION
-void MonitorCondensation::monitor_microphysics(const TeamMember& team_member,
+void MonitorCondensation::monitor_condensation(const TeamMember& team_member,
                                                const double totmass_condensed) const {
-  const auto ii = team_member.league_rank();  // position of gridbox
-  const auto mass_cond = static_cast<datatype>(totmass_condensed);
-  d_data(ii) += mass_cond;
+  Kokkos::single(Kokkos::PerTeam(team_member), [=, this]() {
+    const auto ii = team_member.league_rank();
+    const auto mass_cond = static_cast<datatype>(totmass_condensed);
+    d_data(ii) += mass_cond;
+  });
 }

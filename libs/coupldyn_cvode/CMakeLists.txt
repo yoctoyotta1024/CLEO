@@ -10,11 +10,6 @@ message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 # explicitly set library executables path to /lib in top level of build tree
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
-# Enable but don't use Sundials' LAPACK option
-option(ENABLE_LAPACK "enable LAPACK" OFF)
-unset(LAPACK_WORKS)
-message("Enable and use LAPACK: ${ENABLE_LAPACK} ${LAPACK_WORKS}")
-
 # fetch CVODE libraries and make available
 include(FetchContent)
 FetchContent_Declare(

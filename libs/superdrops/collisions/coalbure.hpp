@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 24th May 2024
+ * Last Modified: Thursday 6th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -146,7 +146,8 @@ inline MicrophysicalProcess auto CoalBuRe(const unsigned int interval,
   const auto DELT = double{int2realtime(interval)};
 
   const DoCoalBuRe<NFrags, Flag> coalbure(nfrags, coalbure_flag);
-  const DoCollisions<Probability, DoCoalBuRe<NFrags, Flag>> colls(DELT, collprob, coalbure);
+  const MicrophysicsFunc auto colls =
+      DoCollisions<Probability, DoCoalBuRe<NFrags, Flag>>(DELT, collprob, coalbure);
 
   return ConstTstepMicrophysics(interval, colls);
 }

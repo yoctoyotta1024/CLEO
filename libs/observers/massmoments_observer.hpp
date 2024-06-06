@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 22nd May 2024
+ * Last Modified: Thursday 6th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,12 +30,71 @@
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
 #include "./collect_data_for_dataset.hpp"
+#include "./create_massmoments_arrays.hpp"
 #include "./generic_collect_data.hpp"
 #include "./observers.hpp"
 #include "./write_to_dataset_observer.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/superdrop.hpp"
 #include "zarr/dataset.hpp"
+
+/**
+ * @brief Performs calculation of 0th, 1st, and 2nd moments of the (real)
+ * droplet mass distribution for a single gridbox through reduction over super-droplets.
+ *
+ * This operator is a functor to perform the calculation of the 0th, 1st, and 2nd moments
+ * of the droplet mass distribution in a gridbox (i.e. 0th, 3rd, and 6th moments of the
+ * droplet radius distribution) within a Kokkos::parallel_reduce range policy
+ * loop over superdroplets within a team policy loop over gridboxes.
+ *
+ * Kokkos::parallel_reduce([...]) is equivalent in serial to sum over result of:
+ * for (size_t kk(0); kk < supers.extent(0); ++kk){[...]}.
+ *
+ * _Note:_ conversion from 8 to 4-byte precision for all mass moments: mom0 from size_t
+ * (architecture dependent usually long unsigned int = 8 bytes) to 8 byte unsigned integer, and
+ * mom1 and mom2 from double (8 bytes) to float (4 bytes).
+ *
+ * @param team_member The Kokkos team member.
+ * @param supers The view of super-droplets for a gridbox (on device).
+ * @param d_mom0 The view for the 0th mass moment.
+ * @param d_mom1 The view for the 1st mass moment.
+ * @param d_mom2 The view for the 2nd mass moment.
+ */
+KOKKOS_FUNCTION
+void calculate_massmoments(const TeamMember &team_member, const viewd_constsupers supers,
+                           Buffer<uint64_t>::mirrorviewd_buffer d_mom0,
+                           Buffer<float>::mirrorviewd_buffer d_mom1,
+                           Buffer<float>::mirrorviewd_buffer d_mom2);
+
+/**
+ * @brief Performs calculation of 0th, 1st, and 2nd moments of the (real) raindroplet mass
+ * distribution in each gridbox.
+ *
+ * This operator is a functor to perform the calculation of the 0th, 1st, and 2nd moments
+ * of the raindroplet mass distribution in each gridbox (i.e. 0th, 3rd, and 6th moments of the
+ * droplet radius distribution) within a Kokkos::parallel_for range policy
+ * loop over superdroplets within a team policy loop over gridboxes.
+ *
+ * A raindroplet is a droplet with a radius >= rlim = 40microns.
+ *
+ * Kokkos::parallel_reduce([...]) is equivalent in serial to sum over result of:
+ * for (size_t kk(0); kk < supers.extent(0); ++kk){[...]}.
+ *
+ * _Note:_ conversion from 8 to 4-byte precision for all mass moments: mom0 from size_t
+ * (architecture dependent usually long unsigned int = 8 bytes) to 8 byte unsigned integer, and
+ * mom1 and mom2 from double (8 bytes) to float (4 bytes).
+ *
+ * @param team_member The Kokkos team member.
+ * @param supers The view of super-droplets for a gridbox (on device).
+ * @param d_mom0 The mirror view buffer for the 0th mass moment.
+ * @param d_mom1 The mirror view buffer for the 1st mass moment.
+ * @param d_mom2 The mirror view buffer for the 2nd mass moment.
+ */
+KOKKOS_FUNCTION
+void calculate_rainmassmoments(const TeamMember &team_member, const viewd_constsupers supers,
+                               Buffer<uint64_t>::mirrorviewd_buffer d_mom0,
+                               Buffer<float>::mirrorviewd_buffer d_mom1,
+                               Buffer<float>::mirrorviewd_buffer d_mom2);
 
 /**
  * @brief Functor to perform calculation of 0th, 1st, and 2nd moments of the (real)
@@ -53,17 +112,14 @@ struct MassMomentsFunc {
    * @brief Functor operator to perform calculation of 0th, 1st, and 2nd moments of the (real)
    * droplet mass distribution in each gridbox.
    *
-   * This operator is a functor to perform the calculation of the 0th, 1st, and 2nd moments
-   * of the droplet mass distribution in each gridbox (i.e. 0th, 3rd, and 6th moments of the
-   * droplet radius distribution) within a Kokkos::parallel_reduce range policy
-   * loop over superdroplets.
+   * This operator is a functor to call function to perform the calculation of the 0th, 1st, and
+   * 2nd moments of the droplet mass distribution in each gridbox (i.e. 0th, 3rd, and 6th moments
+   * of the droplet radius distribution).
    *
-   * Kokkos::parallel_reduce([...]) is equivalent in serial to sum over result of:
-   * for (size_t kk(0); kk < supers.extent(0); ++kk){[...]}.
-   *
-   * _Note:_ conversion from 8 to 4-byte precision for all mass moments: mom0 from size_t
+   * _Note:_ possible conversion from 8 to 4-byte precision for all mass moments: mom0 from size_t
    * (architecture dependent usually long unsigned int = 8 bytes) to 8 byte unsigned integer, and
    * mom1 and mom2 from double (8 bytes) to float (4 bytes).
+   *
    * @param team_member The Kokkos team member.
    * @param d_gbxs The view of gridboxes on device.
    * @param d_mom0 The mirror view buffer for the 0th mass moment.
@@ -74,7 +130,11 @@ struct MassMomentsFunc {
   void operator()(const TeamMember &team_member, const viewd_constgbx d_gbxs,
                   Buffer<uint64_t>::mirrorviewd_buffer d_mom0,
                   Buffer<float>::mirrorviewd_buffer d_mom1,
-                  Buffer<float>::mirrorviewd_buffer d_mom2) const;
+                  Buffer<float>::mirrorviewd_buffer d_mom2) const {
+    const auto ii = team_member.league_rank();
+    const auto supers(d_gbxs(ii).supersingbx.readonly());
+    calculate_massmoments(team_member, supers, d_mom0, d_mom1, d_mom2);
+  }
 };
 
 /**
@@ -95,17 +155,12 @@ struct RaindropsMassMomentsFunc {
    * @brief Functor operator to perform calculation of 0th, 1st, and 2nd moments of the (real)
    * droplet mass distribution in each gridbox.
    *
-   * This operator is a functor to perform the calculation of the 0th, 1st, and 2nd moments
-   * of the droplet mass distribution in each gridbox (i.e. 0th, 3rd, and 6th moments of the
-   * droplet radius distribution) within a Kokkos::parallel_for range policy
-   * loop over superdroplets.
+   * This operator is a functor to call function for the calculation of the 0th, 1st, and 2nd
+   * moments of the raindroplet mass distribution in each gridbox (i.e. 0th, 3rd, and 6th moments of
+   * the droplet radius distribution) within a Kokkos::parallel_for range policy loop over
+   * superdroplets.
    *
-   * A raindroplet is a droplet with a radius >= rlim = 40microns.
-   *
-   * Kokkos::parallel_reduce([...]) is equivalent in serial to sum over result of:
-   * for (size_t kk(0); kk < supers.extent(0); ++kk){[...]}.
-   *
-   * _Note:_ conversion from 8 to 4-byte precision for all mass moments: mom0 from size_t
+   * _Note:_ possible conversion from 8 to 4-byte precision for all mass moments: mom0 from size_t
    * (architecture dependent usually long unsigned int = 8 bytes) to 8 byte unsigned integer, and
    * mom1 and mom2 from double (8 bytes) to float (4 bytes).
    *
@@ -119,7 +174,11 @@ struct RaindropsMassMomentsFunc {
   void operator()(const TeamMember &team_member, const viewd_constgbx d_gbxs,
                   Buffer<uint64_t>::mirrorviewd_buffer d_mom0,
                   Buffer<float>::mirrorviewd_buffer d_mom1,
-                  Buffer<float>::mirrorviewd_buffer d_mom2) const;
+                  Buffer<float>::mirrorviewd_buffer d_mom2) const {
+    const auto ii = team_member.league_rank();
+    const auto supers(d_gbxs(ii).supersingbx.readonly());
+    calculate_rainmassmoments(team_member, supers, d_mom0, d_mom1, d_mom2);
+  }
 };
 
 /**
@@ -281,97 +340,6 @@ struct CollectMassMoments {
    */
   void reallocate_views(const size_t sz) const {}
 };
-
-/**
- * @brief Creates an XarrayZarrArray for storing the mass moments of each gridbox in a dataset.
- *
- * @tparam Store The type of data store in the dataset.
- * @tparam T The type of the mass moment data to store in the XarrayZarrArray.
- * @param dataset The dataset where the XarrayZarrArray will be created.
- * @param name The name of the Xarray.
- * @param units The units of the mass moment data.
- * @param scale_factor The scale factor for the data.
- * @param maxchunk The maximum chunk size (number of elements) for the Xarray.
- * @param ngbxs The number of gridboxes.
- * @return XarrayZarrArray<Store, T> The created XarrayZarrArray.
- */
-template <typename Store, typename T>
-XarrayZarrArray<Store, T> create_massmoment_xarray(const Dataset<Store> &dataset,
-                                                   const std::string_view name,
-                                                   const std::string_view units,
-                                                   const double scale_factor, const size_t maxchunk,
-                                                   const size_t ngbxs) {
-  const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
-  const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
-  return dataset.template create_array<T>(name, units, scale_factor, chunkshape, dimnames);
-}
-
-/**
- * @brief Creates an XarrayZarrArray for storing the 0th mass moment in a dataset.
- *
- * Calls create_massmoment_xarray for data that is represented by 8 byte unsigned integers with
- * no units and is called "name" - e.g. the 0th mass moment of a droplet distribution.
- *
- * @tparam Store The type of data store in the dataset.
- * @param dataset The dataset where the XarrayZarrArray will be created.
- * @param name The name of the (0th mass moment) Xarray.
- * @param maxchunk The maximum chunk size for the Xarray (number of elements).
- * @param ngbxs The number of gridboxes.
- * @return XarrayZarrArray<Store, uint64_t> The created XarrayZarrArray (for the 0th mass moment).
- */
-template <typename Store>
-XarrayZarrArray<Store, uint64_t> create_massmom0_xarray(const Dataset<Store> &dataset,
-                                                        const std::string_view name,
-                                                        const size_t maxchunk, const size_t ngbxs) {
-  const auto units = std::string_view("");
-  return create_massmoment_xarray<Store, uint64_t>(dataset, name, units, 1, maxchunk, ngbxs);
-}
-
-/**
- * @brief Creates an XarrayZarrArray for storing the 1st mass moment in a dataset.
- *
- * Calls create_massmoment_xarray for data that is represented by 4 byte float with
- * units "g" and is called "name" - e.g. the 1st mass moment of a droplet distribution.
- *
- * @tparam Store The type of data store in the dataset.
- * @param dataset The dataset where the XarrayZarrArray will be created.
- * @param name The name of the (1st mass moment) Xarray.
- * @param maxchunk The maximum chunk size for the Xarray (number of elements).
- * @param ngbxs The number of gridboxes.
- * @return XarrayZarrArray<Store, uint64_t> The created XarrayZarrArray (for the 1st mass moment).
- */
-template <typename Store>
-XarrayZarrArray<Store, float> create_massmom1_xarray(const Dataset<Store> &dataset,
-                                                     const std::string_view name,
-                                                     const size_t maxchunk, const size_t ngbxs) {
-  const auto units = std::string_view("g");
-  constexpr auto scale_factor = dlc::MASS0grams;
-  return create_massmoment_xarray<Store, float>(dataset, name, units, scale_factor, maxchunk,
-                                                ngbxs);
-}
-
-/**
- * @brief Creates an XarrayZarrArray for storing the 2nd mass moment in a dataset.
- *
- * Calls create_massmoment_xarray for data that is represented by 4 byte float with
- * units "g^2" and is called "name" - e.g. the 2nd mass moment of a droplet distribution.
- *
- * @tparam Store The type of data store in the dataset.
- * @param dataset The dataset where the XarrayZarrArray will be created.
- * @param name The name of the (2nd mass moment) Xarray.
- * @param maxchunk The maximum chunk size for the Xarray (number of elements).
- * @param ngbxs The number of gridboxes.
- * @return XarrayZarrArray<Store, uint64_t> The created XarrayZarrArray (for the 2nd mass moment).
- */
-template <typename Store>
-XarrayZarrArray<Store, float> create_massmom2_xarray(const Dataset<Store> &dataset,
-                                                     const std::string_view name,
-                                                     const size_t maxchunk, const size_t ngbxs) {
-  const auto units = std::string_view("g^2");
-  constexpr auto scale_factor = dlc::MASS0grams * dlc::MASS0grams;
-  return create_massmoment_xarray<Store, float>(dataset, name, units, scale_factor, maxchunk,
-                                                ngbxs);
-}
 
 /**
  * @brief Constructs an observer which writes mass moments of droplet distribution at start of

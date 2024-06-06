@@ -27,24 +27,29 @@ spack load cmake@3.23.1%gcc
 module load gcc/11.2.0-gcc-11.2.0
 source activate ${cleoenv}
 
-# load nvhpc compilers if compiling cuda build
-if [[ "${buildtype}" == "cuda" ]]
+if [ "${buildtype}" != "serial" ] && [ "${buildtype}" != "openmp" ] && [ "${buildtype}" != "cuda" ];
 then
-  module load nvhpc/23.9-gcc-11.2.0
-fi
-### ---------------------------------------------------- ###
-
-if [[ "${buildtype}" == "" ||
-      "${path2build}" == "" ||
-      "${executables}" == "" ]]
-then
-  echo "Bad inputs, please check your buildtype, path2build and executables"
+  echo "please specify the build type as 'serial', 'openmp' or 'cuda'"
 else
-  ### ---------------- compile executables --------------- ###
-  echo "path to build directory: ${path2build}"
-  echo "executables: ${executables}"
-
-  cd ${path2build}
-  make -j 128 ${executables}
+  # load nvhpc compilers if compiling cuda build
+  if [[ "${buildtype}" == "cuda" ]]
+  then
+    module load nvhpc/23.9-gcc-11.2.0
+  fi
   ### ---------------------------------------------------- ###
+
+  if [[ "${buildtype}" == "" ||
+        "${path2build}" == "" ||
+        "${executables}" == "" ]]
+  then
+    echo "Bad inputs, please check your buildtype, path2build and executables"
+  else
+    ### ---------------- compile executables --------------- ###
+    echo "path to build directory: ${path2build}"
+    echo "executables: ${executables}"
+
+    cd ${path2build}
+    make -j 128 ${executables}
+    ### ---------------------------------------------------- ###
+  fi
 fi
