@@ -391,33 +391,45 @@
         <article role="main" id="furo-main-content">
           <section id="external-libraries">
 <h1>External Libraries<a class="headerlink" href="#external-libraries" title="Link to this heading">¶</a></h1>
-<p>CLEO depends upon Kokkos and may depend upon some additional external libraries such as YAC and
-<code class="docutils literal notranslate"><span class="pre">yaml-cpp</span></code> depending on your setup. These are automatically built using CMAKE and compiled if
-required.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The installation of YAC for CLEO is currently in development and may require some manual installation.</p>
-</div>
+<p>CLEO depends upon Kokkos and may depend upon some additional external libraries such as <code class="docutils literal notranslate"><span class="pre">YAC</span></code> and
+<code class="docutils literal notranslate"><span class="pre">yaml-cpp</span></code> depending on your setup.</p>
 <section id="kokkos">
 <h2>Kokkos<a class="headerlink" href="#kokkos" title="Link to this heading">¶</a></h2>
 <p>All builds of CLEO require Kokkos in order to implement thread parallelism. You can read more about
 how we use Kokkos on <a class="reference internal" href="../intro/kokkos.html"><span class="doc">our page about Kokkos</span></a>.</p>
+<p>The Kokkos libaries for CLEO are automatically built using CMAKE and compiled if required.</p>
 </section>
 <section id="yac">
-<h2>YAC<a class="headerlink" href="#yac" title="Link to this heading">¶</a></h2>
+<span id="extern-yac"></span><h2>YAC<a class="headerlink" href="#yac" title="Link to this heading">¶</a></h2>
 <p>YAC is required if CLEO couples to dynamics using YAC and/or uses MPI domain decompoisiton. You can
 find more information about it from <a class="reference external" href="https://dkrz-sw.gitlab-pages.dkrz.de/yac">its documentation:</a>.</p>
-<p>TODO(all): Detail how to install YAC for CLEO.</p>
+<p>To build CLEO with dependency on YAC, you will first need to install YAXT and YAC manually.
+(YAXT is a dependency of YAC.)</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The installation of YAC for CLEO is currently in active development and so may not be exactly as written here.</p>
+</div>
+<section id="how-to-install-yac-and-yaxt">
+<h3>How to Install YAC (and YAXT)<a class="headerlink" href="#how-to-install-yac-and-yaxt" title="Link to this heading">¶</a></h3>
+<p>The easiest way to install YAXT and YAC is to run the <code class="docutils literal notranslate"><span class="pre">install_yac.sh</span></code> bash script found in
+<code class="docutils literal notranslate"><span class="pre">scripts/bash/</span></code>. Note you will need to provide the path to the directory where you want
+to put the installations.</p>
+<p>Alternatively you can download <a class="reference external" href="https://swprojects.dkrz.de/redmine/">YAXT</a> and
+<a class="reference external" href="https://gitlab.dkrz.de/dkrz-sw/yac/">YAC</a> as compressed files and then configure and compile
+them yourself.</p>
+</section>
 </section>
 <section id="yaml-cpp">
 <h2>yaml-cpp<a class="headerlink" href="#yaml-cpp" title="Link to this heading">¶</a></h2>
 <p>CLEO’s <code class="docutils literal notranslate"><span class="pre">initialise</span></code> library depends on the <code class="docutils literal notranslate"><span class="pre">`yaml-cpp`</span></code> package to read and write YAML files. You
 can find more information about it from <a class="reference external" href="https://github.com/jbeder/yaml-cpp">its repository:</a>.</p>
+<p>The yaml-cpp library for CLEO is automatically built using CMAKE and compiled if required.</p>
 </section>
 <section id="cvode">
 <h2>CVODE<a class="headerlink" href="#cvode" title="Link to this heading">¶</a></h2>
 <p>CLEO’s <code class="docutils literal notranslate"><span class="pre">coupldyn_cvode</span></code> library requires the SUNDIALS CVODE package. You can find more information
 about it from <a class="reference external" href="https://computing.llnl.gov/projects/sundials/cvode">its webpage:</a>.</p>
+<p>The CVODE libraries for CLEO are automatically built using CMAKE and compiled if required.</p>
 </section>
 </section>
 
@@ -456,7 +468,7 @@ about it from <a class="reference external" href="https://computing.llnl.gov/pro
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 30 May 2024</div>
+              Last updated on 06 June 2024</div>
           </div>
           <div class="right-details">
             
@@ -479,7 +491,10 @@ about it from <a class="reference external" href="https://computing.llnl.gov/pro
             <ul>
 <li><a class="reference internal" href="#">External Libraries</a><ul>
 <li><a class="reference internal" href="#kokkos">Kokkos</a></li>
-<li><a class="reference internal" href="#yac">YAC</a></li>
+<li><a class="reference internal" href="#yac">YAC</a><ul>
+<li><a class="reference internal" href="#how-to-install-yac-and-yaxt">How to Install YAC (and YAXT)</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#yaml-cpp">yaml-cpp</a></li>
 <li><a class="reference internal" href="#cvode">CVODE</a></li>
 </ul>

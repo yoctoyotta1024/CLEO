@@ -439,16 +439,20 @@ issue</a> on our GitHub repository to notify us.</p>
 </section>
 <section id="yac">
 <h2>YAC<a class="headerlink" href="#yac" title="Link to this heading">¶</a></h2>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The installation of YAC for CLEO is currently in development and may require some manual installation.</p>
-</div>
 <p>YAC is one of the <a class="reference internal" href="extern.html"><span class="doc">external libraries</span></a> which CLEO may require in order to
 couple to dynamics and/or have MPI domain decomposition.</p>
-<p>YAC requires some additional MPI, NetCDF and yaml libraries alongside the gcc compiler. You can
-load them on Levante via:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module<span class="w"> </span>load<span class="w"> </span>openmpi/4.1.2-gcc-11.2.0<span class="w"> </span>netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0
-<span class="gp">$ </span>spack<span class="w"> </span>load<span class="w"> </span>openblas@0.3.18%gcc@<span class="o">=</span><span class="m">11</span>.2.0<span class="w"> </span>libfyaml<span class="w"> </span>/fvbhgoq<span class="w"> </span>py-mpi4py
+<p>Note that YAC (and its YAXT dependency) need to be installed manually before you can build
+CLEO with them. You can find instructions on how to do install YAC (and YAXT) <span class="xref std std-ref">here</span>.</p>
+<p>YAC also requires some additional MPI, NetCDF and yaml libraries alongside the compatible gcc
+compiler which you can load on Levante via:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>module<span class="w"> </span>load<span class="w"> </span>gcc/11.2.0-gcc-11.2.0<span class="w"> </span>openmpi/4.1.2-gcc-11.2.0<span class="w"> </span>netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0
+<span class="gp">$ </span>spack<span class="w"> </span>load<span class="w"> </span>openblas@0.3.18%gcc@<span class="o">=</span><span class="m">11</span>.2.0
+</pre></div>
+</div>
+<p>When you want to run CLEO with YAC, you will also need to export some additional paths:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span><span class="si">${</span><span class="nv">LD_LIBRARY_PATH</span><span class="si">}</span>:/sw/spack-levante/libfyaml-0.7.12-fvbhgo/lib
+<span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">PYTHONPATH</span><span class="o">=</span>/your/path/to/yac/python/
+<span class="gp">$ </span>spack<span class="w"> </span>load<span class="w"> </span>py-numpy
 </pre></div>
 </div>
 </section>
@@ -489,7 +493,7 @@ load them on Levante via:</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 30 May 2024</div>
+              Last updated on 06 June 2024</div>
           </div>
           <div class="right-details">
             
