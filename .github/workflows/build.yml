@@ -28,8 +28,8 @@ jobs:
 
     - name: Build YAC
       run: |
-        curl -s -L https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/v3.2.0_a_p2/yac-v3.2.0_a_p2.tar.gz | tar xvz
-        cd yac-v3.2.0_a_p2
+        curl -s -L https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/v3.2.0_b_p1/yac-v3.2.0_b_p1.tar.gz | tar xvz
+        cd yac-v3.2.0_b_p1
         ./configure CFLAGS="-fPIC" CC=mpicc FC=mpif90 --disable-mpi-checks --with-yaxt-root=${HOME}/yaxt \
         --prefix=$HOME/yac
         make -j 4
