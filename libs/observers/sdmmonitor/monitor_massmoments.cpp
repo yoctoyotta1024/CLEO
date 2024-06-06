@@ -27,7 +27,7 @@
 void MonitorMassMomentViews::reset_views() const {
   Kokkos::parallel_for(
       "reset_views", Kokkos::RangePolicy(0, d_mom0.extent(0)),
-      KOKKOS_CLASS_LAMBDA(const size_t& jj) {
+      KOKKOS_CLASS_LAMBDA(const size_t jj) {
         d_mom0(jj) = 0;
         d_mom1(jj) = 0.0;
         d_mom2(jj) = 0.0;

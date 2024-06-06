@@ -75,7 +75,7 @@ class DoMonitorMassMomentsObs {
    */
   template <typename T>
   void write_to_array(const Buffer<T>::mirrorviewd_buffer d_data,
-                      XarrayZarrArray<Store, T> xzarr) const {
+                      XarrayZarrArray<Store, T> &xzarr) const {
     using viewh_buffer = Buffer<T>::viewh_buffer;
     const auto h_data = viewh_buffer("h_data", d_data.extent(0));
     Kokkos::deep_copy(h_data, d_data);
