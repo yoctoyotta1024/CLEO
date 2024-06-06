@@ -82,6 +82,7 @@ else
     spack load ${yac_openblas}
     yacflags="-DENABLE_YAC_COUPLING=ON -DYAXT_ROOT=${yacyaxtroot}/yaxt -DYAC_ROOT=${yacyaxtroot}/yac"
     yacmodule="${path2CLEO}/libs/coupldyn_yac/cmake"
+    echo "YAC FLAGS: ${yacflags} -DCMAKE_MODULE_PATH=${yacmodule}"
 fi
 ### ---------------------------------------------------- ###
 

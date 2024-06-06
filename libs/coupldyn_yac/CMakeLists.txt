@@ -10,6 +10,9 @@ message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 # explicitly set library executables path to /lib in top level of build tree
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
+message(STATUS "Using YAC installation from: ${YAC_ROOT}")
+message(STATUS "Using YAXT installation from: ${YAXT_ROOT}")
+
 find_package(MPI)
 find_package(YAC)
 
