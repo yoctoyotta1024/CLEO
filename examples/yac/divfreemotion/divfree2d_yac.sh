@@ -12,6 +12,8 @@
 #SBATCH --output=./divfree2d_yac_out.%j.out
 #SBATCH --error=./divfree2d_yac_err.%j.out
 
+# TODO(all): python script(s) for example and fix MPI linker error
+
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
 ### ------ You MUST edit these lines to set your ------- ###
