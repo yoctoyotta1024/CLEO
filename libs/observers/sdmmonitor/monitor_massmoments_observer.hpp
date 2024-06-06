@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 5th June 2024
+ * Last Modified: Thursday 6th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -74,8 +74,8 @@ class DoMonitorMassMomentsObs {
    * then write to the array in the dataset.
    */
   template <typename T>
-  void write_to_array(const Buffer<T>::viewd_buffer d_data,
-                      MonitorMassMomentXarrays<Store> xzarr) const {
+  void write_to_array(const Buffer<T>::mirrorviewd_buffer d_data,
+                      XarrayZarrArray<Store, T> xzarr) const {
     using viewh_buffer = Buffer<T>::viewh_buffer;
     const auto h_data = viewh_buffer("h_data", d_data.extent(0));
     Kokkos::deep_copy(h_data, d_data);
@@ -105,7 +105,7 @@ class DoMonitorMassMomentsObs {
    */
   DoMonitorMassMomentsObs(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs)
       : dataset(dataset),
-        xzarrs_ptr(std::make_shared<MonitorMassMomentXarrays>(dataset, maxchunk, ngbxs)),
+        xzarrs_ptr(std::make_shared<MonitorMassMomentXarrays<Store>>(dataset, maxchunk, ngbxs)),
         monitor(ngbxs) {}
 
   /**

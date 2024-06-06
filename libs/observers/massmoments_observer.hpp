@@ -62,7 +62,9 @@
  */
 KOKKOS_FUNCTION
 void calculate_massmoments(const TeamMember &team_member, const viewd_constsupers supers,
-                           const auto d_mom0, const auto d_mom1, const auto d_mom2);
+                           Buffer<uint64_t>::mirrorviewd_buffer d_mom0,
+                           Buffer<float>::mirrorviewd_buffer d_mom1,
+                           Buffer<float>::mirrorviewd_buffer d_mom2);
 
 /**
  * @brief Performs calculation of 0th, 1st, and 2nd moments of the (real) raindroplet mass
