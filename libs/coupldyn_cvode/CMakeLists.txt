@@ -11,8 +11,8 @@ message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
 
 # Enable but don't use Sundials' LAPACK option
-option(ENABLE_LAPACK "enable LAPACK" ON)
-option(LAPACK_WORKS "use LAPACK" OFF)
+option(ENABLE_LAPACK "enable LAPACK" OFF)
+unset(LAPACK_WORKS)
 message("Enable and use LAPACK: ${ENABLE_LAPACK} ${LAPACK_WORKS}")
 
 # fetch CVODE libraries and make available
