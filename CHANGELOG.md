@@ -2,6 +2,45 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.11.0](https://github.com/yoctoyotta1024/CLEO/compare/5ddd84535e29462079c6d61a60fcdd3c4bfcd3e3..v0.11.0) - 2024-06-06
+#### Bug Fixes
+- corrected args passed to run speedtest example - ([fa5e4c5](https://github.com/yoctoyotta1024/CLEO/commit/fa5e4c5ba6583eaeb2cc62a451528b31e0c47121)) - clara.bayley
+- remove unwanted single thread commands - ([648045a](https://github.com/yoctoyotta1024/CLEO/commit/648045ab2add330f3770d589aa7d75cfcad085d5)) - clara.bayley
+- missing pass by reference for xzarr - ([53a72fc](https://github.com/yoctoyotta1024/CLEO/commit/53a72fc0e4ab98ba51cf75681fa1001c89db3539)) - clara.bayley
+- minor bug fixes - ([2e956f6](https://github.com/yoctoyotta1024/CLEO/commit/2e956f6b53773d7822826bde467cb79181b7817c)) - clara.bayley
+- sdmmonitor concept cannot take d_gbxs in constraints - ([51cbb09](https://github.com/yoctoyotta1024/CLEO/commit/51cbb09a87f39cfc71800ef70dd186dbecefb861)) - clara.bayley
+- minor bug fixes e.g. capture pointer to class instance in lambdas - ([30567a7](https://github.com/yoctoyotta1024/CLEO/commit/30567a7eebda686d81f457bea9b25fbd52434d7a)) - clara.bayley
+- single thread barrier to monitor condensation - ([5fd86bb](https://github.com/yoctoyotta1024/CLEO/commit/5fd86bb33d530985f6a534efac1f8dd3d2e88df4)) - clara.bayley
+- count is modifyable in view - ([b95b6f2](https://github.com/yoctoyotta1024/CLEO/commit/b95b6f25917a7ba661bb56154be5a39dba319388)) - clara.bayley
+#### Documentation
+- note on missing constraint on SDMMonitor - ([020658b](https://github.com/yoctoyotta1024/CLEO/commit/020658b3cf4f9d030f32515e4695c7dc618f4e27)) - clara.bayley
+#### Features
+- new files for monitoring mass moments during SDM - ([5919ca9](https://github.com/yoctoyotta1024/CLEO/commit/5919ca9ac8dcc429978f16eaea9e33c7adacb3cc)) - clara.bayley
+- new files for monitoring mass moments during SDM - ([5ddd845](https://github.com/yoctoyotta1024/CLEO/commit/5ddd84535e29462079c6d61a60fcdd3c4bfcd3e3)) - clara.bayley
+#### Miscellaneous Chores
+- renaming and remove comments - ([e5ea219](https://github.com/yoctoyotta1024/CLEO/commit/e5ea2191ed23662a3222330ac3ec1ec0a28f28c7)) - clara.bayley
+#### Refactoring
+- extend time for SLURM jobs - ([a8b9494](https://github.com/yoctoyotta1024/CLEO/commit/a8b94948ce858a1331996049ad05a49376f0d77b)) - clara.bayley
+- flag in bash to check valid buildtype - ([57e137b](https://github.com/yoctoyotta1024/CLEO/commit/57e137b53eea998587b87826bddbf5491ce96944)) - clara.bayley
+- delete attempt to set LAPACK flags in sundials - ([c61e489](https://github.com/yoctoyotta1024/CLEO/commit/c61e4891158698d00f2298f7419cdc3401d92cf1)) - clara.bayley
+- rename and use actual calc massmoms function - ([511f767](https://github.com/yoctoyotta1024/CLEO/commit/511f7672dd3adf7f5f00a9b9716dfd4a13d90d85)) - clara.bayley
+- move rainmassmoms calc out of functor into seperate function - ([53a7f39](https://github.com/yoctoyotta1024/CLEO/commit/53a7f393b5ac06f438f8150b62feb29ee4f49c28)) - clara.bayley
+- include func concept in type - ([460c1c6](https://github.com/yoctoyotta1024/CLEO/commit/460c1c66e3825e1a28e3bbcb90e4621274338dcb)) - clara.bayley
+- include condensation monitor in eurec4a example - ([59b61b2](https://github.com/yoctoyotta1024/CLEO/commit/59b61b2d9c2a8e56016e349ddfa3fa33cfbe03a9)) - clara.bayley
+- single thread for calc massmoments call in monitoring motion - ([2087fde](https://github.com/yoctoyotta1024/CLEO/commit/2087fdeebb77265a7d40e813c90c509040cb01e2)) - clara.bayley
+- place plugs for monitoring condensation, microphysics and motion - ([d3e7f02](https://github.com/yoctoyotta1024/CLEO/commit/d3e7f0238b82657caab1969ea71bf899b818c787)) - clara.bayley
+- place plugs for monitoring condensation, microphysics and motion - ([09e24a0](https://github.com/yoctoyotta1024/CLEO/commit/09e24a0e429290314afd4c46e1e41f6dca31b7e3)) - clara.bayley
+- move function for mass moments calc out of functor - ([cff8c3a](https://github.com/yoctoyotta1024/CLEO/commit/cff8c3af818d00a4a28e6bc4a6eb3abaa2ca3188)) - clara.bayley
+- extend mass moments monitors to all 3 mass moments for microphys and motion - ([865c8cf](https://github.com/yoctoyotta1024/CLEO/commit/865c8cf130a8e21c57dbe0753534842850158f93)) - clara.bayley
+- move observers array creation to seperate file - ([6dc11a9](https://github.com/yoctoyotta1024/CLEO/commit/6dc11a9265d7e17ce071deaa771e77ad2a9fa76b)) - clara.bayley
+- rename and move mass moments observer to seperate file - ([e532a0c](https://github.com/yoctoyotta1024/CLEO/commit/e532a0c58fa8cd288d6f87e8c28ad5c9e2ea0b8e)) - clara.bayley
+- rename and move mass moments observer to seperate file - ([5486919](https://github.com/yoctoyotta1024/CLEO/commit/5486919a0b2e9e254c8a077b27236b4825014b40)) - clara.bayley
+- rename and move mass moments observer to seperate file - ([9e6f8bf](https://github.com/yoctoyotta1024/CLEO/commit/9e6f8bf566f642df1201c1b134708bf81d1c53bc)) - clara.bayley
+- include mass moments monitoring observer - ([ee74de9](https://github.com/yoctoyotta1024/CLEO/commit/ee74de9b5e1ff02aae9e3f876692a3369f42341f)) - clara.bayley
+- extend SDMMonitor concept for mass moments monitoring - ([f172672](https://github.com/yoctoyotta1024/CLEO/commit/f17267215c0440330c32f754344bf288cb22ec27)) - clara.bayley
+
+- - -
+
 ## [v0.10.1](https://github.com/yoctoyotta1024/CLEO/compare/9d74ef1f02a0c325e895399a3ea02d8851cc69a1..v0.10.1) - 2024-06-06
 #### Bug Fixes
 - update yaxt version in CI - ([0e31ed3](https://github.com/yoctoyotta1024/CLEO/commit/0e31ed3ca9e7ef8561b1c266c9ab8681c09527b2)) - clara.bayley
