@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=eurec4a1d
+#SBATCH --job-name=divfree2d_yac
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
 #SBATCH --gpus=4
@@ -9,25 +9,26 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./eurec4a1d_out.%j.out
-#SBATCH --error=./eurec4a1d_err.%j.out
+#SBATCH --output=./divfree2d_yac_out.%j.out
+#SBATCH --error=./divfree2d_yac_err.%j.out
 
-# TODO(all): python script(s) for example
+# TODO(all): python script(s) for example and fix MPI linker error
 
+### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
 ### ------ You MUST edit these lines to set your ------- ###
 ### ---- build type, directories, the executable(s) ---- ###
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
-buildtype="cuda"
+buildtype="openmp"
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_eurec4a1D/
-enableyac=false
-executables="eurec4a1D"
+path2build=${HOME}/CLEO/build_divfree2D_yac/
+enableyac=true
+executables="divfree2D_yac"
 
-configfile=${path2CLEO}/examples/eurec4a1d/src/config/eurec4a1d_config.yaml
-pythonscript=""
-script_args=""
+pythonscript=${path2CLEO}/examples/yac/divfreemotion/divfree2d_yac.py
+configfile=${path2CLEO}/examples/yac/divfreemotion/src/config/divfree2d_config.yaml
+script_args="${configfile}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

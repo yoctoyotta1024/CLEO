@@ -11,6 +11,8 @@
 #SBATCH --output=./yac_3d_out.%j.out
 #SBATCH --error=./yac_3d_err.%j.out
 
+# TODO(all): python script(s) for example and fix MPI linker error
+
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
 ### ------ You MUST edit these lines to set your ------- ###
