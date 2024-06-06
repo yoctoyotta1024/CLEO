@@ -2,6 +2,44 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.10.0](https://github.com/yoctoyotta1024/CLEO/compare/7423cef79d566206c38bf00eec41ae2c42f4aeb0..v0.10.0) - 2024-06-06
+#### Bug Fixes
+- fix LAPACK FLAGS to off for cvode sundials options - ([a1c9a31](https://github.com/yoctoyotta1024/CLEO/commit/a1c9a3144b59504bf1d06e1a3bdfc113e292c503)) - clara.bayley
+- more messages for YAC install directory and fix to LAPACK dependency with SUNDIALS - ([09fce52](https://github.com/yoctoyotta1024/CLEO/commit/09fce5277d3e4a856036d69eda4a1f99fce1eee2)) - clara.bayley
+- add packages to load if building with YAC - ([87da022](https://github.com/yoctoyotta1024/CLEO/commit/87da022e011fbd773737b3c674c42b12f28138ec)) - clara.bayley
+- missing set of enableyac in examples bash scripts - ([bb25192](https://github.com/yoctoyotta1024/CLEO/commit/bb25192c9d0565036e435051421383eef19ebf53)) - clara.bayley
+- typo in cmake flag for setting C compiler - ([7c4298a](https://github.com/yoctoyotta1024/CLEO/commit/7c4298a1ba73134edcf9d636f6d3f31c253da125)) - clara.bayley
+#### Build system
+- added the ENABLE_YAC_COUPLING flag to guard the coupldyn_yac build - ([00792a6](https://github.com/yoctoyotta1024/CLEO/commit/00792a67e66408a15f016c9e42f369cffe6bcdb2)) - wiltonloch
+#### Continuous Integration
+- updated yac version to v3.2.0_a_p2 - ([b512d28](https://github.com/yoctoyotta1024/CLEO/commit/b512d287466b23690732bc7b3a325b6e3ba3acff)) - wiltonloch
+- added divfree2D_yac example as a build workflow step - ([7150405](https://github.com/yoctoyotta1024/CLEO/commit/715040531cc4d532aaca469ef658e745c7c1c04d)) - wiltonloch
+#### Documentation
+- corrected instruction for requirements to run CLEO with YAC - ([30bef82](https://github.com/yoctoyotta1024/CLEO/commit/30bef824a5ac50841c81743599b7b891db8ed49b)) - clara.bayley
+- note on configuring examples to run with yac or not - ([0abb9bf](https://github.com/yoctoyotta1024/CLEO/commit/0abb9bf04100820cbc5ec3e7fbd193a7af6b7f3c)) - clara.bayley
+- updated info in packages required for YAC, plus modify changelog to remove annoying todo message - ([282062c](https://github.com/yoctoyotta1024/CLEO/commit/282062c53b1197dc19c976432f755d8ab02541a5)) - clara.bayley
+- how to install YAC info - ([f3703ff](https://github.com/yoctoyotta1024/CLEO/commit/f3703ff16e61870ee1ec5583009e9180fa97aaa8)) - clara.bayley
+- how to install YAC info - ([ffffda3](https://github.com/yoctoyotta1024/CLEO/commit/ffffda31972a006798cfcc46d77dfb22378e6350)) - clara.bayley
+#### Features
+- new files created for easily running yac_3d example - ([94456b1](https://github.com/yoctoyotta1024/CLEO/commit/94456b19c21fbc559a9d5b3d875d377d80a27f46)) - clara.bayley
+- option to build YAC added to build CLEO helper scripts - ([2b4a79b](https://github.com/yoctoyotta1024/CLEO/commit/2b4a79b0349a468e454effd5944e2db9dc175c74)) - clara.bayley
+- option to build YAC added to build CLEO helper scripts - ([de5e7ec](https://github.com/yoctoyotta1024/CLEO/commit/de5e7ec45880c47a0d279863ae01af0633a6b56d)) - clara.bayley
+- new bash script for installing YAC and YAXT on levante - ([af94452](https://github.com/yoctoyotta1024/CLEO/commit/af94452980b76808911154aeb0b0d3f9fa509d65)) - clara.bayley
+- new bash script for installing YAC and YAXT on levante - ([dbb9f4d](https://github.com/yoctoyotta1024/CLEO/commit/dbb9f4dfca7797967bfa2b3c1cb68e457f877228)) - clara.bayley
+#### Miscellaneous Chores
+- renaming - ([54c42d9](https://github.com/yoctoyotta1024/CLEO/commit/54c42d91c14c68decbf0000454de438c0a6a46d6)) - clara.bayley
+- rename files - ([7423cef](https://github.com/yoctoyotta1024/CLEO/commit/7423cef79d566206c38bf00eec41ae2c42f4aeb0)) - clara.bayley
+#### Refactoring
+- add required to find packages for YAC build - ([b552086](https://github.com/yoctoyotta1024/CLEO/commit/b5520860b9422044bf4c337a9986d059044890af)) - clara.bayley
+- delete work-in-progress scripts - ([30ff4f5](https://github.com/yoctoyotta1024/CLEO/commit/30ff4f5443b4f84130c987c63e3773225d27465f)) - clara.bayley
+- update yac version in installation and minor rename to bash - ([73e2aae](https://github.com/yoctoyotta1024/CLEO/commit/73e2aaea7b4ef17a600fc1405b48a5386a970403)) - clara.bayley
+- copy inputfiles python script from fromfile example - ([bac06ab](https://github.com/yoctoyotta1024/CLEO/commit/bac06abb841ac2413bbe0918ced9db5622e6674e)) - clara.bayley
+- amend comment - ([77acf3b](https://github.com/yoctoyotta1024/CLEO/commit/77acf3b715eee6f8906982cfd60d2afb61dff975)) - clara.bayley
+- update bash scripts to pass in enableyac flag to CLEO build script - ([8f23fb2](https://github.com/yoctoyotta1024/CLEO/commit/8f23fb29ac2e3eb505397867c3d921fc608175c1)) - clara.bayley
+- edits to building with YAC scripts to pass enable/disable flag to cmake with/without yac and yaxt root directory - ([b53936b](https://github.com/yoctoyotta1024/CLEO/commit/b53936bef609b5015e7b8a1c57ec5277acdf6942)) - clara.bayley
+
+- - -
+
 ## [v0.9.0](https://github.com/yoctoyotta1024/CLEO/compare/46c7b2af9c3ad3d4b1b5ecd451c574f05f5bdbe7..v0.9.0) - 2024-05-26
 #### Bug Fixes
 - way to include sdmmonitor in microphysics concept - ([4e3c21d](https://github.com/yoctoyotta1024/CLEO/commit/4e3c21d1db98af04b9c4ae427ad9c3ae3b5b2c9f)) - clara.bayley
