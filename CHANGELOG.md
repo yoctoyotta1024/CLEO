@@ -27,7 +27,7 @@ All notable changes to this project will be documented in this file. See [conven
 #### Documentation
 - corrected instruction for requirements to run CLEO with YAC - ([30bef82](https://github.com/yoctoyotta1024/CLEO/commit/30bef824a5ac50841c81743599b7b891db8ed49b)) - clara.bayley
 - note on configuring examples to run with yac or not - ([0abb9bf](https://github.com/yoctoyotta1024/CLEO/commit/0abb9bf04100820cbc5ec3e7fbd193a7af6b7f3c)) - clara.bayley
-- updated info in packages required for YAC, plus modify changelog to remove annoying todo message - ([282062c](https://github.com/yoctoyotta1024/CLEO/commit/282062c53b1197dc19c976432f755d8ab02541a5)) - clara.bayley
+- updated info in packages required for YAC, plus modify changelog to remove annoying message - ([282062c](https://github.com/yoctoyotta1024/CLEO/commit/282062c53b1197dc19c976432f755d8ab02541a5)) - clara.bayley
 - how to install YAC info - ([f3703ff](https://github.com/yoctoyotta1024/CLEO/commit/f3703ff16e61870ee1ec5583009e9180fa97aaa8)) - clara.bayley
 - how to install YAC info - ([ffffda3](https://github.com/yoctoyotta1024/CLEO/commit/ffffda31972a006798cfcc46d77dfb22378e6350)) - clara.bayley
 #### Features

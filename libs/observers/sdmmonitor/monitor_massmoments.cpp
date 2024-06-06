@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 5th June 2024
+ * Last Modified: Thursday 6th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,11 +26,11 @@
  */
 void MonitorMassMomentViews::reset_views() const {
   Kokkos::parallel_for(
-      "reset_views", Kokkos::RangePolicy(0, d_massmom0.extent(0)),
+      "reset_views", Kokkos::RangePolicy(0, d_mom0.extent(0)),
       KOKKOS_CLASS_LAMBDA(const size_t& jj) {
-        d_massmom0(jj) = 0;
-        d_massmom1(jj) = 0.0;
-        d_massmom2(jj) = 0.0;
+        d_mom0(jj) = 0;
+        d_mom1(jj) = 0.0;
+        d_mom2(jj) = 0.0;
       });
 }
 
@@ -51,7 +51,8 @@ void MonitorMassMomentViews::calculate_massmoments(const TeamMember& team_member
                                                    const viewd_constsupers supers) const {
   const auto ii = team_member.league_rank();  // position of gridbox
 
-  d_massmom0(ii) += 1 * ii;  // TODO(CB): call observer.hpp calculate_massmoments instead
-  d_massmom1(ii) += 10.0 * ii;
-  d_massmom2(ii) += 100.0 * ii;
+  d_mom0(ii) =
+      static_cast<uint64_t>(ii);  // TODO(CB): WIP call observer.hpp calculate_massmoments instead
+  d_mom1(ii) = static_cast<float>(10.0 * ii);
+  d_mom2(ii) = static_cast<float>(100.0 * ii);
 }

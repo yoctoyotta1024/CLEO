@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 28th May 2024
+ * Last Modified: Thursday 6th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -114,8 +114,8 @@ inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
 }
 
 inline auto create_boundary_conditions(const Config &config) {
-  return AddSupersAtDomainTop(config.get_addsupersatdomaintop());
-  // return NullBoundaryConditions{};
+  // return AddSupersAtDomainTop(config.get_addsupersatdomaintop());
+  return NullBoundaryConditions{};
 }
 
 template <GridboxMaps GbxMaps>
@@ -209,6 +209,7 @@ inline Observer auto create_sdmmonitor_observer(const unsigned int interval,
                                                 const size_t ngbxs) {
   const Observer auto obs_cond = MonitorCondensationObserver(interval, dataset, maxchunk, ngbxs);
   const Observer auto obs_massmoms = MonitorMassMomentsObserver(interval, dataset, maxchunk, ngbxs);
+
   return obs_cond >> obs_massmoms;
 }
 

@@ -87,12 +87,12 @@ class DoMonitorMassMomentsObs {
    * then reset the monitor.
    */
   void at_start_step() const {
-    write_to_array(monitor.microphysics_monitor.d_massmom0, xzarrs_ptr->mom0_microphys);
-    write_to_array(monitor.microphysics_monitor.d_massmom1, xzarrs_ptr->mom1_microphys);
-    write_to_array(monitor.microphysics_monitor.d_massmom2, xzarrs_ptr->mom2_microphys);
-    write_to_array(monitor.motion_monitor.d_massmom0, xzarrs_ptr->mom0_motion);
-    write_to_array(monitor.motion_monitor.d_massmom1, xzarrs_ptr->mom1_motion);
-    write_to_array(monitor.motion_monitor.d_massmom2, xzarrs_ptr->mom2_motion);
+    write_to_array(monitor.microphysics_monitor.d_mom0, xzarrs_ptr->mom0_microphys);
+    write_to_array(monitor.microphysics_monitor.d_mom1, xzarrs_ptr->mom1_microphys);
+    write_to_array(monitor.microphysics_monitor.d_mom2, xzarrs_ptr->mom2_microphys);
+    write_to_array(monitor.motion_monitor.d_mom0, xzarrs_ptr->mom0_motion);
+    write_to_array(monitor.motion_monitor.d_mom1, xzarrs_ptr->mom1_motion);
+    write_to_array(monitor.motion_monitor.d_mom2, xzarrs_ptr->mom2_motion);
 
     monitor.reset_monitor();
   }

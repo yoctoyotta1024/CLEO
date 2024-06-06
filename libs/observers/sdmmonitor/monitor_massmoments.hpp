@@ -32,9 +32,9 @@
 #include "zarr/buffer.hpp"
 
 struct MonitorMassMomentViews {
-  Buffer<uint64_t>::mirrorviewd_buffer d_massmom0;  // view on device for monitoring 0th mass moment
-  Buffer<float>::mirrorviewd_buffer d_massmom1;     // view on device for monitoring 1st mass moment
-  Buffer<float>::mirrorviewd_buffer d_massmom2;     // view on device for monitoring 2nd mass moment
+  Buffer<uint64_t>::mirrorviewd_buffer d_mom0;  // view on device for monitoring 0th mass moment
+  Buffer<float>::mirrorviewd_buffer d_mom1;     // view on device for monitoring 1st mass moment
+  Buffer<float>::mirrorviewd_buffer d_mom2;     // view on device for monitoring 2nd mass moment
 
   /**
    * @brief Parallel loop to fill device views with zero value
@@ -57,9 +57,9 @@ struct MonitorMassMomentViews {
   void calculate_massmoments(const TeamMember& team_member, const viewd_constsupers supers) const;
 
   explicit MonitorMassMomentViews(const size_t ngbxs)
-      : d_massmom0("d_monitor_massmom0", ngbxs),
-        d_massmom1("d_monitor_massmom1", ngbxs),
-        d_massmom2("d_monitor_massmom2", ngbxs) {
+      : d_mom0("d_monitor_mom0", ngbxs),
+        d_mom1("d_monitor_mom1", ngbxs),
+        d_mom2("d_monitor_mom2", ngbxs) {
     reset_views();
   }
 };

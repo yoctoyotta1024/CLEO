@@ -45,7 +45,7 @@ KOKKOS_FUNCTION
 void MonitorCondensation::monitor_condensation(const TeamMember& team_member,
                                                const double totmass_condensed) const {
   Kokkos::single(Kokkos::PerTeam(team_member), [=, this]() {
-    const auto ii = team_member.league_rank();  // position of gridbox
+    const auto ii = team_member.league_rank();
     const auto mass_cond = static_cast<datatype>(totmass_condensed);
     d_data(ii) += mass_cond;
   });

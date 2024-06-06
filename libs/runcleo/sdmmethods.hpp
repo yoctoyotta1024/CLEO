@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Wednesday 5th June 2024
+ * Last Modified: Thursday 6th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -132,7 +132,7 @@ class SDMMethods {
     template <SDMMonitor SDMMo>
     void operator()(const unsigned int t_sdm, const unsigned int t_next, const viewd_gbx d_gbxs,
                     const SDMMo mo) const {
-      // TODO(all) use scratch space for parallel region?
+      // TODO(all) use scratch space for parallel region
       const size_t ngbxs(d_gbxs.extent(0));
       Kokkos::parallel_for(
           "sdm_microphysics", TeamPolicy(ngbxs, Kokkos::AUTO()),
