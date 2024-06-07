@@ -56,7 +56,8 @@ struct CartesianDynamics {
   std::vector<double> press, temp, qvap, qcond;
 
   // Container for all edge-centered data (as in data in each edge center)
-  std::vector<double> united_edge_data;
+  std::vector<double> uvel_edge_data;
+  std::vector<double> wvel_edge_data;
 
   // Target for lon and lat edge data respectively
   // (these are copied from united_edge_data after receiving from YAC)
@@ -71,7 +72,8 @@ struct CartesianDynamics {
   int temp_yac_id;
   int qvap_yac_id;
   int qcond_yac_id;
-  int hor_wind_velocities_yac_id;
+  int eastward_wind_yac_id;
+  int northward_wind_yac_id;
   int vvel_yac_id;
 
   /* --- Private functions --- */

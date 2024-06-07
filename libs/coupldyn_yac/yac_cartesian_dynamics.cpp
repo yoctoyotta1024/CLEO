@@ -155,20 +155,26 @@ void CartesianDynamics::receive_hor_slice_from_yac(int cell_offset, int u_edges_
   yac_raw_data = qcond.data() + cell_offset;
   yac_cget(qcond_yac_id, 1, &yac_raw_data, &info, &error);
 
-  yac_raw_data = united_edge_data.data();
-  yac_cget(hor_wind_velocities_yac_id, 1, &yac_raw_data, &info, &error);
+  yac_raw_data = uvel_edge_data.data();
+  yac_cget(eastward_wind_yac_id, 1, &yac_raw_data, &info, &error);
+
+  yac_raw_data = wvel_edge_data.data();
+  yac_cget(northward_wind_yac_id, 1, &yac_raw_data, &info, &error);
 
   // Splits the horizontal edge data into its components in uvel and wvel
-  std::vector<double>::iterator source_it = united_edge_data.begin();
+  std::vector<double>::iterator source_uvel_it = uvel_edge_data.begin();
+  std::vector<double>::iterator source_wvel_it = wvel_edge_data.begin();
   std::vector<double>::iterator uvel_it = uvel.begin() + u_edges_offset;
   std::vector<double>::iterator wvel_it = wvel.begin() + w_edges_offset;
   for (size_t lat_index = 0; lat_index < (ndims[1] + 1) * 2 - 1; lat_index++) {
     if (lat_index % 2 == 0) {
-      for (size_t index = 0; index < ndims[0]; index++, uvel_it++, source_it++)
-        *uvel_it = *source_it;
+      for (size_t index = 0; index < ndims[0];
+           index++, uvel_it++, source_uvel_it++, source_wvel_it++)
+        *uvel_it = *source_uvel_it;
     } else {
-      for (size_t index = 0; index < ndims[0] + 1; index++, wvel_it++, source_it++)
-        *wvel_it = *source_it;
+      for (size_t index = 0; index < ndims[0] + 1;
+           index++, wvel_it++, source_uvel_it++, source_wvel_it++)
+        *wvel_it = *source_wvel_it;
     }
   }
 }
@@ -251,32 +257,41 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   yac_cdef_field("qcond", component_id, &cell_point_id, num_point_sets, collection_size, "PT1M",
                  YAC_TIME_UNIT_ISO_FORMAT, &qcond_yac_id);
 
+  yac_cdef_field("eastward_wind", component_id, &edge_point_id,
+                 num_point_sets, collection_size, "PT1M",
+                 YAC_TIME_UNIT_ISO_FORMAT, &eastward_wind_yac_id);
+
+  yac_cdef_field("northward_wind", component_id, &edge_point_id,
+                 num_point_sets, collection_size, "PT1M",
+                 YAC_TIME_UNIT_ISO_FORMAT, &northward_wind_yac_id);
+
   yac_cdef_field("vvel", component_id, &cell_point_id, num_point_sets, collection_size, "PT1M",
                  YAC_TIME_UNIT_ISO_FORMAT, &vvel_yac_id);
 
-  yac_cdef_field("hor_wind_velocities", component_id, &edge_point_id, num_point_sets,
-                 collection_size, "PT1M", YAC_TIME_UNIT_ISO_FORMAT, &hor_wind_velocities_yac_id);
-
   // --- Field coupling definitions ---
-  yac_cdef_couple("yac_reader", "yac_reader_grid", "pressure", "cleo", "cleo_grid", "pressure",
+  yac_cdef_couple("icon_data_reader", "bubble_grid", "pressure", "cleo", "cleo_grid", "pressure",
                   "PT1M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE, interp_stack_id, 0, 0);
 
-  yac_cdef_couple("yac_reader", "yac_reader_grid", "temperature", "cleo", "cleo_grid",
+  yac_cdef_couple("icon_data_reader", "bubble_grid", "temperature", "cleo", "cleo_grid",
                   "temperature", "PT1M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
                   interp_stack_id, 0, 0);
 
-  yac_cdef_couple("yac_reader", "yac_reader_grid", "qvap", "cleo", "cleo_grid", "qvap", "PT1M",
+  yac_cdef_couple("icon_data_reader", "bubble_grid", "qvap", "cleo", "cleo_grid", "qvap", "PT1M",
                   YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE, interp_stack_id, 0, 0);
 
-  yac_cdef_couple("yac_reader", "yac_reader_grid", "qcond", "cleo", "cleo_grid", "qcond", "PT1M",
+  yac_cdef_couple("icon_data_reader", "bubble_grid", "qcond", "cleo", "cleo_grid", "qcond", "PT1M",
                   YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE, interp_stack_id, 0, 0);
 
-  yac_cdef_couple("yac_reader", "yac_reader_grid", "vvel", "cleo", "cleo_grid", "vvel", "PT1M",
+  yac_cdef_couple("icon_data_reader", "bubble_grid", "eastward_wind",
+                  "cleo", "cleo_grid", "eastward_wind", "PT1M",
                   YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE, interp_stack_id, 0, 0);
 
-  yac_cdef_couple("yac_reader", "yac_reader_grid", "hor_wind_velocities", "cleo", "cleo_grid",
-                  "hor_wind_velocities", "PT1M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
-                  interp_stack_id, 0, 0);
+  yac_cdef_couple("icon_data_reader", "bubble_grid", "northward_wind",
+                  "cleo", "cleo_grid", "northward_wind", "PT1M",
+                  YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE, interp_stack_id, 0, 0);
+
+  yac_cdef_couple("icon_data_reader", "bubble_grid", "vvel", "cleo", "cleo_grid", "vvel", "PT1M",
+                  YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE, interp_stack_id, 0, 0);
 
   // --- End of YAC definitions ---
   yac_cenddef();
@@ -292,7 +307,8 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   uvel = std::vector<double>(ndims[0] * (ndims[1] + 1) * ndims[2], 0);
   wvel = std::vector<double>(ndims[1] * (ndims[0] + 1) * ndims[2], 0);
   vvel = std::vector<double>(horizontal_cell_number * (ndims[2] + 1), 0);
-  united_edge_data = std::vector<double>(horizontal_edge_number, 0);
+  uvel_edge_data = std::vector<double>(horizontal_edge_number, 0);
+  wvel_edge_data = std::vector<double>(horizontal_edge_number, 0);
 
   // Calls the first data retrieval from YAC to have thermodynamic data for first timestep
   receive_fields_from_yac();
