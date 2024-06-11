@@ -43,6 +43,96 @@ std::array<size_t, 3> kijfromindex(const std::array<size_t, 3> &ndims, const siz
   return std::array<size_t, 3>{k, i, j};
 }
 
+void create_vertex_coordinates(const Config &config,
+                               const std::array<size_t, 3> ndims,
+                               std::vector<double> & vertex_longitudes,
+                               std::vector<double> & vertex_latitudes) {
+  double lower_longitude = 0;
+  double upper_longitude = ndims[0] * (2 * std::numbers::pi / (ndims[0] + 1));
+  double lower_latitude = (-0.5 * std::numbers::pi * ndims[1]) / (ndims[1] + 2);
+  double upper_latitude = (0.5 * std::numbers::pi * ndims[1]) / (ndims[1] + 2);
+
+  if (config.get_yac_dynamics().lower_longitude != NaNVals::dbl() &&
+      config.get_yac_dynamics().upper_longitude != NaNVals::dbl() &&
+      config.get_yac_dynamics().lower_latitude != NaNVals::dbl() &&
+      config.get_yac_dynamics().upper_latitude != NaNVals::dbl()) {
+      double lower_longitude = config.get_yac_dynamics().lower_longitude;
+      double upper_longitude = config.get_yac_dynamics().upper_longitude;
+      double lower_latitude = config.get_yac_dynamics().lower_latitude;
+      double upper_latitude = config.get_yac_dynamics().upper_latitude;
+  }
+
+  // Defines the vertex longitude and latitude values in radians for grid creation
+  // The values are later permuted by YAC to generate all vertex coordinates
+  for (size_t i = 0; i < vertex_longitudes.size(); i++)
+    vertex_longitudes[i] = lower_longitude + i * ((upper_longitude - lower_longitude) / ndims[0]);
+
+  for (size_t i = 0; i < vertex_latitudes.size(); i++)
+    vertex_latitudes[i] = lower_latitude + i * ((upper_latitude - lower_latitude) / ndims[1]);
+}
+
+/* Creates the YAC grid and defines the cell and edge points based on ndims data */
+void create_grid_and_points_definitions(const Config &config,
+                                        const std::array<size_t, 3> ndims,
+                                        const std::string grid_name,
+                                        int & grid_id, int & cell_point_id, int & edge_point_id) {
+  int cyclic_dimension[2] = {0, 0};
+  int total_cells[2] = {static_cast<int>(ndims[0]), static_cast<int>(ndims[1])};
+  int total_vertices[2] = {static_cast<int>(ndims[0] + 1), static_cast<int>(ndims[1] + 1)};
+  int total_edges[2] = {static_cast<int>(ndims[0] * (ndims[1] + 1)),
+                        static_cast<int>(ndims[1] * (ndims[0] + 1))};
+
+  auto vertex_longitudes = std::vector<double>(ndims[0] + 1, 0);
+  auto vertex_latitudes = std::vector<double>(ndims[1] + 1, 0);
+  auto cell_center_longitudes = std::vector<double>(ndims[0]);
+  auto cell_center_latitudes = std::vector<double>(ndims[1]);
+  std::vector<double> edge_centers_longitudes;
+  std::vector<double> edge_centers_latitudes;
+
+  create_vertex_coordinates(config, ndims, vertex_longitudes, vertex_latitudes);
+
+  // Defines a regular 2D grid
+  yac_cdef_grid_reg2d(grid_name.c_str(), total_vertices, cyclic_dimension,
+                      vertex_longitudes.data(), vertex_latitudes.data(), &grid_id);
+
+  // --- Point definitions ---
+  // Defines the cell center longitude and latitude values in radians
+  // The values are later permuted by YAC to generate all cell center coordinates
+  for (size_t i = 0; i < cell_center_longitudes.size(); i++)
+    cell_center_longitudes[i] = vertex_longitudes[i]
+                                + (vertex_longitudes[i + 1] - vertex_longitudes[i]) / 2;
+
+  for (size_t i = 0; i < cell_center_latitudes.size(); i++)
+    cell_center_latitudes[i] = vertex_latitudes[i]
+                               + (vertex_latitudes[i + 1] - vertex_latitudes[i]) / 2;
+
+  // Defines the edge center longitude and latitude values in radians.
+  // Since it is not possible to generate edge center coordinates with a single
+  // permutation of longitude and latitude values, usage of the
+  // yac_cdef_points_unstruct is required. The call then takes x and y arrays,
+  // with the actual radian coordinates for each edge center point. Therefore,
+  // these arrays will have a size equal to the number of edges.
+  for (size_t lat_index = 0; lat_index < vertex_latitudes.size() * 2 - 1; lat_index++) {
+    if (lat_index % 2 == 0) {
+      edge_centers_longitudes.insert(edge_centers_longitudes.end(), cell_center_longitudes.begin(),
+                                     cell_center_longitudes.end());
+      edge_centers_latitudes.insert(edge_centers_latitudes.end(), cell_center_longitudes.size(),
+                                    vertex_latitudes[lat_index / 2]);
+    } else {
+      edge_centers_longitudes.insert(edge_centers_longitudes.end(), vertex_longitudes.begin(),
+                                     vertex_longitudes.end());
+      edge_centers_latitudes.insert(edge_centers_latitudes.end(), vertex_longitudes.size(),
+                                    cell_center_latitudes[(lat_index - 1) / 2]);
+    }
+  }
+
+  yac_cdef_points_reg2d(grid_id, total_cells, YAC_LOCATION_CELL, cell_center_longitudes.data(),
+                        cell_center_latitudes.data(), &cell_point_id);
+  yac_cdef_points_unstruct(grid_id, total_edges[0] + total_edges[1], YAC_LOCATION_EDGE,
+                           edge_centers_longitudes.data(), edge_centers_latitudes.data(),
+                           &edge_point_id);
+}
+
 /* This subroutine receives thermodynamic data from YAC for a horizontal slice
  * of the domain. This horizontal slice is defined in the u and w directions.
  * The received values are press, temp, qvap, qcond defined on the cell-centers.
@@ -72,7 +162,7 @@ void CartesianDynamics::receive_hor_slice_from_yac(int cell_offset, int u_edges_
   std::vector<double>::iterator source_it = united_edge_data.begin();
   std::vector<double>::iterator uvel_it = uvel.begin() + u_edges_offset;
   std::vector<double>::iterator wvel_it = wvel.begin() + w_edges_offset;
-  for (size_t lat_index = 0; lat_index < vertex_latitudes.size() * 2 - 1; lat_index++) {
+  for (size_t lat_index = 0; lat_index < (ndims[1] + 1) * 2 - 1; lat_index++) {
     if (lat_index % 2 == 0) {
       for (size_t index = 0; index < ndims[0]; index++, uvel_it++, source_it++)
         *uvel_it = *source_it;
@@ -133,70 +223,12 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
 
   // --- Grid definition ---
   int grid_id = -1;
-  std::string cleo_grid_name = "cleo_grid";
-
-  int cyclic_dimension[2] = {0, 0};
-  int total_cells[2] = {static_cast<int>(ndims[0]), static_cast<int>(ndims[1])};
-  int total_vertices[2] = {static_cast<int>(ndims[0] + 1), static_cast<int>(ndims[1] + 1)};
-  int total_edges[2] = {static_cast<int>(ndims[0] * (ndims[1] + 1)),
-                        static_cast<int>(ndims[1] * (ndims[0] + 1))};
   int cell_point_id = -1;
   int edge_point_id = -1;
+  std::string grid_name = "cleo_grid";
 
-  vertex_longitudes = std::vector<double>(ndims[0] + 1, 0);
-  vertex_latitudes = std::vector<double>(ndims[1] + 1, 0);
-  auto cell_center_longitudes = std::vector<double>(ndims[0]);
-  auto cell_center_latitudes = std::vector<double>(ndims[1]);
-  std::vector<double> edge_centers_longitudes;
-  std::vector<double> edge_centers_latitudes;
-
-  // Defines the vertex longitude and latitude values in radians for grid creation
-  // The values are later permuted by YAC to generate all vertex coordinates
-  for (size_t i = 0; i < vertex_longitudes.size(); i++)
-    vertex_longitudes[i] = i * (2 * std::numbers::pi / (ndims[0] + 1));
-
-  for (size_t i = 0; i < vertex_latitudes.size(); i++)
-    vertex_latitudes[i] = (-0.5 * std::numbers::pi) + (i + 1) * (std::numbers::pi / (ndims[1] + 2));
-
-  // Defines a regular 2D grid
-  yac_cdef_grid_reg2d(cleo_grid_name.c_str(), total_vertices, cyclic_dimension,
-                      vertex_longitudes.data(), vertex_latitudes.data(), &grid_id);
-
-  // --- Point definitions ---
-
-  // Defines the cell center longitude and latitude values in radians
-  // The values are later permuted by YAC to generate all cell center coordinates
-  for (size_t i = 0; i < cell_center_longitudes.size(); i++)
-    cell_center_longitudes[i] = vertex_longitudes[i] + std::numbers::pi / (ndims[0] + 2);
-
-  for (size_t i = 0; i < cell_center_latitudes.size(); i++)
-    cell_center_latitudes[i] = vertex_latitudes[i] + std::numbers::pi / (2 * (ndims[1] + 3));
-
-  // Defines the edge center longitude and latitude values in radians.
-  // Since it is not possible to generate edge center coordinates with a single
-  // permutation of longitude and latitude values, usage of the
-  // yac_cdef_points_unstruct is required. The call then takes x and y arrays,
-  // with the actual radian coordinates for each edge center point. Therefore,
-  // these arrays will have a size equal to the number of edges.
-  for (size_t lat_index = 0; lat_index < vertex_latitudes.size() * 2 - 1; lat_index++) {
-    if (lat_index % 2 == 0) {
-      edge_centers_longitudes.insert(edge_centers_longitudes.end(), cell_center_longitudes.begin(),
-                                     cell_center_longitudes.end());
-      edge_centers_latitudes.insert(edge_centers_latitudes.end(), cell_center_longitudes.size(),
-                                    vertex_latitudes[lat_index / 2]);
-    } else {
-      edge_centers_longitudes.insert(edge_centers_longitudes.end(), vertex_longitudes.begin(),
-                                     vertex_longitudes.end());
-      edge_centers_latitudes.insert(edge_centers_latitudes.end(), vertex_longitudes.size(),
-                                    cell_center_latitudes[(lat_index - 1) / 2]);
-    }
-  }
-
-  yac_cdef_points_reg2d(grid_id, total_cells, YAC_LOCATION_CELL, cell_center_longitudes.data(),
-                        cell_center_latitudes.data(), &cell_point_id);
-  yac_cdef_points_unstruct(grid_id, total_edges[0] + total_edges[1], YAC_LOCATION_EDGE,
-                           edge_centers_longitudes.data(), edge_centers_latitudes.data(),
-                           &edge_point_id);
+  create_grid_and_points_definitions(config, ndims, grid_name, grid_id,
+                                     cell_point_id, edge_point_id);
 
   // --- Interpolation stack ---
   int interp_stack_id;
@@ -249,15 +281,18 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   // --- End of YAC definitions ---
   yac_cenddef();
 
+  size_t horizontal_cell_number = yac_cget_grid_size(YAC_LOCATION_CELL, grid_id);
+  size_t horizontal_edge_number = yac_cget_grid_size(YAC_LOCATION_EDGE, grid_id);
+
   // Initialization of target containers for receiving data
-  press = std::vector<double>(total_cells[0] * total_cells[1] * ndims[2], 0);
-  temp = std::vector<double>(total_cells[0] * total_cells[1] * ndims[2], 0);
-  qvap = std::vector<double>(total_cells[0] * total_cells[1] * ndims[2], 0);
-  qcond = std::vector<double>(total_cells[0] * total_cells[1] * ndims[2], 0);
-  uvel = std::vector<double>(total_edges[0] * ndims[2], 0);
-  wvel = std::vector<double>(total_edges[1] * ndims[2], 0);
-  vvel = std::vector<double>(total_cells[0] * total_cells[1] * (ndims[2] + 1), 0);
-  united_edge_data = std::vector<double>(total_edges[0] + total_edges[1], 0);
+  press = std::vector<double>(horizontal_cell_number * ndims[2], 0);
+  temp = std::vector<double>(horizontal_cell_number * ndims[2], 0);
+  qvap = std::vector<double>(horizontal_cell_number * ndims[2], 0);
+  qcond = std::vector<double>(horizontal_cell_number * ndims[2], 0);
+  uvel = std::vector<double>(ndims[0] * (ndims[1] + 1) * ndims[2], 0);
+  wvel = std::vector<double>(ndims[1] * (ndims[0] + 1) * ndims[2], 0);
+  vvel = std::vector<double>(horizontal_cell_number * (ndims[2] + 1), 0);
+  united_edge_data = std::vector<double>(horizontal_edge_number, 0);
 
   // Calls the first data retrieval from YAC to have thermodynamic data for first timestep
   receive_fields_from_yac();
