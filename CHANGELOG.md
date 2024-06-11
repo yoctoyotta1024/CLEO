@@ -2,6 +2,21 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.13.0](https://github.com/yoctoyotta1024/CLEO/compare/b8cdcab0aedab3e2f0f2e0fc9086a06f0fe566d6..v0.13.0) - 2024-06-11
+#### Features
+- optional lat lon bound parameters applied to vertex coordinates creation - ([cb88b57](https://github.com/yoctoyotta1024/CLEO/commit/cb88b576856d577c621e20aa4bb4d618efd0d50f)) - wiltonloch
+- added lat and lon bounds as optional parameters to yac dynamics - ([47f5b77](https://github.com/yoctoyotta1024/CLEO/commit/47f5b77391a90f499e50108240b469be9cc29d88)) - wiltonloch
+#### Miscellaneous Chores
+- renamed python data reader specifying target cleo data - ([05fef44](https://github.com/yoctoyotta1024/CLEO/commit/05fef44fb967d8cb0984bd6630c240a7e4240b88)) - wiltonloch
+#### Refactoring
+- added explit lat and lon bounds for vertex coordinates calculations - ([869854a](https://github.com/yoctoyotta1024/CLEO/commit/869854a5aa6523dd2f2355a302f8712ba87a7e4e)) - wiltonloch
+- encapsulated vertex coordinates calculation - ([751e426](https://github.com/yoctoyotta1024/CLEO/commit/751e426093b0bd329d0836888fd55ed1335fb651)) - wiltonloch
+- made cell center lat and lon calculations dependent only on vertex lat and lon - ([5364e6a](https://github.com/yoctoyotta1024/CLEO/commit/5364e6a6e21d2467b06fe6dee6eced3a78332909)) - wiltonloch
+- encapsulated grid and points definition and removed vertex lat and lon arrays from CartesianDynamics - ([4c9d488](https://github.com/yoctoyotta1024/CLEO/commit/4c9d488fadc8200019ca7449fbc5f0587d92eabe)) - wiltonloch
+- grouped yac id declarations and replaced total cells and edges by yac calls for target arrays creation - ([b8cdcab](https://github.com/yoctoyotta1024/CLEO/commit/b8cdcab0aedab3e2f0f2e0fc9086a06f0fe566d6)) - wiltonloch
+
+- - -
+
 ## [v0.12.0](https://github.com/yoctoyotta1024/CLEO/compare/4a7710eb552ff14fc2caa21baf712b2d86ecf663..v0.12.0) - 2024-06-06
 #### Features
 - new bash script to run yac divfree2d example - ([4a7710e](https://github.com/yoctoyotta1024/CLEO/commit/4a7710eb552ff14fc2caa21baf712b2d86ecf663)) - clara.bayley
