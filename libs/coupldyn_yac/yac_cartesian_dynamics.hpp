@@ -55,10 +55,6 @@ struct CartesianDynamics {
   // Containers for cell-centered fields
   std::vector<double> press, temp, qvap, qcond;
 
-  // Container for all edge-centered data (as in data in each edge center)
-  std::vector<double> uvel_edge_data;
-  std::vector<double> wvel_edge_data;
-
   // Target for lon and lat edge data respectively
   // (these are copied from united_edge_data after receiving from YAC)
   std::vector<double> uvel, wvel;

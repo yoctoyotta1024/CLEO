@@ -194,81 +194,6 @@ void CartesianDynamics::receive_field_collections_from_yac() {
   receive_yac_field(W_EDGE, northward_wind_yac_id, yac_raw_edge_data, wvel, ndims[2]);
 }
 
-/* This subroutine receives thermodynamic data from YAC for a horizontal slice
- * of the domain. This horizontal slice is defined in the u and w directions.
- * The received values are press, temp, qvap, qcond defined on the cell-centers.
- * united_edge_data receives the data for all the edge-centers, and component
- * velocities are then placed in uvel and wvel according to their positions.*/
-void CartesianDynamics::receive_hor_slice_from_yac(int cell_offset, int u_edges_offset,
-                                                   int w_edges_offset) {
-  int info, error;
-  double *yac_raw_data = NULL;
-
-  yac_raw_data = press.data() + cell_offset;
-  yac_cget(pressure_yac_id, 1, &yac_raw_data, &info, &error);
-
-  yac_raw_data = temp.data() + cell_offset;
-  yac_cget(temp_yac_id, 1, &yac_raw_data, &info, &error);
-
-  yac_raw_data = qvap.data() + cell_offset;
-  yac_cget(qvap_yac_id, 1, &yac_raw_data, &info, &error);
-
-  yac_raw_data = qcond.data() + cell_offset;
-  yac_cget(qcond_yac_id, 1, &yac_raw_data, &info, &error);
-
-  yac_raw_data = uvel_edge_data.data();
-  yac_cget(eastward_wind_yac_id, 1, &yac_raw_data, &info, &error);
-
-  yac_raw_data = wvel_edge_data.data();
-  yac_cget(northward_wind_yac_id, 1, &yac_raw_data, &info, &error);
-
-  // Splits the horizontal edge data into its components in uvel and wvel
-  std::vector<double>::iterator source_uvel_it = uvel_edge_data.begin();
-  std::vector<double>::iterator source_wvel_it = wvel_edge_data.begin();
-  std::vector<double>::iterator uvel_it = uvel.begin() + u_edges_offset;
-  std::vector<double>::iterator wvel_it = wvel.begin() + w_edges_offset;
-  for (size_t lat_index = 0; lat_index < (ndims[1] + 1) * 2 - 1; lat_index++) {
-    if (lat_index % 2 == 0) {
-      for (size_t index = 0; index < ndims[0];
-           index++, uvel_it++, source_uvel_it++, source_wvel_it++)
-        *uvel_it = *source_uvel_it;
-    } else {
-      for (size_t index = 0; index < ndims[0] + 1;
-           index++, wvel_it++, source_uvel_it++, source_wvel_it++)
-        *wvel_it = *source_wvel_it;
-    }
-  }
-}
-
-/* This subroutine is the main entry point for receiving data from YAC.
- * It checks the dimensionality of the simulation based on the config data.
- * For 2D simulations it simply becomes a wrapper for receive_hor_slice_from_yac.
- * For 3D simulations, for each vertical level, it runs receive_hor_slice_from_yac
- * and gets the cell-centered vertical wind velocities.*/
-void CartesianDynamics::receive_fields_from_yac() {
-  int total_horizontal_cells = ndims[0] * ndims[1];
-  int total_u_edges = ndims[0] * (ndims[1] + 1);
-  int total_w_edges = ndims[1] * (ndims[0] + 1);
-
-  int info, error;
-  double *yac_raw_data = NULL;
-
-  if (config.get_nspacedims() == 3) {
-    yac_raw_data = vvel.data();
-    yac_cget(vvel_yac_id, 1, &yac_raw_data, &info, &error);
-  }
-
-  for (unsigned int vertical_index = 0; vertical_index < ndims[2]; vertical_index++) {
-    receive_hor_slice_from_yac(vertical_index * total_horizontal_cells,
-                               vertical_index * total_u_edges, vertical_index * total_w_edges);
-
-    if (config.get_nspacedims() == 3) {
-      yac_raw_data += total_horizontal_cells;
-      yac_cget(vvel_yac_id, 1, &yac_raw_data, &info, &error);
-    }
-  }
-}
-
 CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
                                      const unsigned int nsteps)
     : ndims(i_ndims),
@@ -386,8 +311,6 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   uvel = std::vector<double>(ndims[0] * (ndims[1] + 1) * ndims[2], 0);
   wvel = std::vector<double>(ndims[1] * (ndims[0] + 1) * ndims[2], 0);
   vvel = std::vector<double>(horizontal_cell_number * (ndims[2] + 1), 0);
-  uvel_edge_data = std::vector<double>(horizontal_edge_number, 0);
-  wvel_edge_data = std::vector<double>(horizontal_edge_number, 0);
 
   // Calls the first data retrieval from YAC to have thermodynamic data for first timestep
   receive_field_collections_from_yac();
