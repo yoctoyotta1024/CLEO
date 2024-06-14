@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=shima2009
+#SBATCH --job-name=breakup
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
 #SBATCH --gpus=4
@@ -9,8 +9,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./shima2009_out.%j.out
-#SBATCH --error=./shima2009_err.%j.out
+#SBATCH --output=./breakup_out.%j.out
+#SBATCH --error=./breakup_err.%j.out
 
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
@@ -22,11 +22,11 @@ buildtype="cuda"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_colls0D/
 enableyac=false
-executables="golcolls longcolls"
+executables="lowlistcolls"
 
-pythonscript=${path2CLEO}/examples/boxmodelcollisions/shima2009.py
-configfile=${path2CLEO}/examples/boxmodelcollisions/shima2009_config.yaml
-script_args="${configfile} golovin long1 long2"
+pythonscript=${path2CLEO}/examples/boxmodelcollisions/breakup.py
+configfile=${path2CLEO}/examples/boxmodelcollisions/breakup_config.yaml
+script_args="${configfile} lowlist"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

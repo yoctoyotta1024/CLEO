@@ -111,13 +111,49 @@ to the third column of figure 5 from Arabas and Shima 2017 :cite:`arabasshima201
 
 Box Model Collisions
 --------------------
-These examples are for a 0-D box model with various collision-coalescence kernels.
+These examples are for a 0-D box model with various collision kernels. The setup mimics that in
+Shima et al. 2009 section 5.1.4 :cite:`shima2009`. Note that due to the randomness of the initial
+super-droplet conditions and the collision algorithm, each run of these examples will not be
+completely identical, but they should be reasonably similar, and have the same mean behaviour.
+
+The Collision Kernels
+#####################
+
+**Golovin**
+
+This example models collision-coalescence using Golovin's kernel.
+
+The plot produced, by default called ``~/CLEO/build_colls0D/bin/golovin_validation.png``, should be similar to
+Fig.2(a) of Shima et al. 2009 :cite:p:`shima2009`.
+
+**Long**
+
+This example models collision-coalescence using Long's collision efficiency as given by equation
+13 of Simmel et al. 2002 :cite:`simmel2002`.
+
+The plot produced, by default called ``~/CLEO/build_colls0D/bin/long_validation.png``, should be similar to
+Fig.2(b) of Shima et al. 2009 :cite:p:`shima2009`.
+
+**Low and List**
+
+This example models collision-coalescence using the hydrodynamic kernel with Long's collision
+efficiency as given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`, and the coalescence
+efficiency from Low and List 1982(a) :cite:`lowlist1982a` (see also McFarquhar
+2004 :cite:`mcfarquhar2004`).
+
+This example produces a plot, by default called ``~/CLEO/build_colls0D/bin/lowlist_validation.png``.
+
+Running the Box Model Collisions Examples
+##########################################
 
 1. Navigate to the ``boxmodelcollisions/`` directory, e.g.
 
 .. code-block:: console
 
   $ cd ~/CLEO/examples/boxmodelcollisions/
+
+a) Shima et al. 2009
+####################
 
 2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example.sh`` and
 ``examples/boxmodelcollisions/shima2009.sh``.
@@ -128,37 +164,40 @@ These examples are for a 0-D box model with various collision-coalescence kernel
 
   $ ./shima2009.sh
 
-By default the golovin, long, and lowlist executables will be compiled and run. You can change this
-by editing ``script_args="[...] golovin long lowlist`` in ``shima2009.sh``.
+By default the golovin exectuable and two examples using the long executable will be compiled and
+run. You can change this by editing ``script_args="[...] golovin long1 long2`` in ``shima2009.sh``.
 
-Note that due to the randomness of the initial super-droplet conditions and the
-collision-coalescence algorithm, each run of these examples will not be completely identical, but
-they should be reasonably similar, and have the same mean behaviour.
+**Golovin**
 
-a) Golovin
-##########
 This example models collision-coalescence using Golovin's kernel.
 
-The plot produced, by default called ``~/CLEO/build_shima2009/bin/golovin_validation.png``, should be similar to
-Fig.2(a) of Shima et al. 2009 :cite:p:`shima2009`.
+The plot produced, by default called ``~/CLEO/build_colls0D/bin/golovin_validation.png``, should be
+comparable to Fig.2(a) of Shima et al. 2009 :cite:p:`shima2009`.
 
-b) Long
-#######
-This example models collision-coalescence using Long's collision efficiency as given by equation
-13 of Simmel et al. 2002 :cite:`simmel2002`.
+**Long1 and Long2**
 
-The plot produced, by default called ``~/CLEO/build_shima2009/bin/long_validation.png``, should be similar to
-Fig.2(b) of Shima et al. 2009 :cite:p:`shima2009`.
+These examples model collision-coalescence using Long's collision efficiency as given by equation
+13 of Simmel et al. 2002 :cite:`simmel2002`. The two examples use different initial conditions and
+collision timesteps, as in Shima et al. 2009 :cite:p:`shima2009`.
 
-c) Low and List
-###############
-This example models collision-coalescence using the hydrodynamic kernel with Long's collision
-efficiency as given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`, and the coalescence
-efficiency from Low and List 1982(a) :cite:`lowlist1982a` (see also McFarquhar
-2004 :cite:`mcfarquhar2004`).
+The plots produced, by default called ``~/CLEO/build_colls0D/bin/long_validation_1.png`` and
+``~/CLEO/build_colls0D/bin/long_validation_2.png``, should be comparable to
+Fig.2(b) and Fig.2(c) of Shima et al. 2009 :cite:p:`shima2009`.
 
-This example produces a plot, by default called ``~/CLEO/build_shima2009/bin/lowlist_validation.png``.
+b) Breakup
+##########
 
+2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example.sh`` and
+``examples/boxmodelcollisions/breakup.sh``.
+
+3. Execute the bash script ``breakup.sh``, e.g.
+
+.. code-block:: console
+
+  $ ./breakup.sh
+
+By default kernels including collision-coalescence, breakup and rebound will be compiled and
+run. You can change this by editing ``script_args="[...] lowlist etc.`` in ``breakup.sh``.
 
 Divergence Free Motion
 ----------------------

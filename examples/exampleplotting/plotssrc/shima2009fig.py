@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 15th April 2024
+Last Modified: Friday 14th June 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -39,6 +39,7 @@ def plot_validation_figure(
     n_a,
     r_a,
     smoothsig,
+    xlims=[10, 5000],
     savename="",
     withgol=False,
 ):
@@ -49,7 +50,7 @@ def plot_validation_figure(
     non_nanradius = ak.nan_to_none(sddata["radius"])
     rspan = [ak.min(non_nanradius), ak.max(non_nanradius)]
 
-    fig, ax, ax_err = setup_validation_figure(witherr=witherr)
+    fig, ax, ax_err = setup_validation_figure(witherr, xlims)
 
     for n in range(len(tplt)):
         ind = np.argmin(abs(time - tplt[n]))
@@ -87,7 +88,7 @@ def plot_validation_figure(
     return fig, ax
 
 
-def setup_validation_figure(witherr):
+def setup_validation_figure(witherr, xlims):
     if witherr:
         gd = dict(height_ratios=[5, 1])
         fig, [ax, ax_err] = plt.subplots(
@@ -96,7 +97,6 @@ def setup_validation_figure(witherr):
     else:
         fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
 
-    xlims = [10, 5000]
     ax.set_xscale("log")
     ax.set_xlim(xlims)
     ax.set_xlabel("radius, r, /\u03BCm")
