@@ -133,6 +133,95 @@ void create_grid_and_points_definitions(const Config &config,
                            &edge_point_id);
 }
 
+void CartesianDynamics::receive_yac_field(unsigned int field_type,
+                                          unsigned int yac_field_id,
+                                          double ** yac_raw_data,
+                                          std::vector<double> & target_array,
+                                          size_t vertical_levels) {
+  int info, error;
+  int total_horizontal_cells = ndims[0] * ndims[1];
+  bool edge_dimension = false;
+  std::vector<double>::iterator target_it = target_array.begin();
+
+  yac_cget(yac_field_id, vertical_levels, yac_raw_data, &info, &error);
+
+  switch (field_type) {
+    case 0:
+      for (int i = 0; i < vertical_levels; i++)
+        for (int j = 0; j < total_horizontal_cells; j++)
+          target_array[i * total_horizontal_cells + j] = yac_raw_data[i][j];
+      return;
+
+    case 1:
+      edge_dimension = false;
+      break;
+
+    case 2:
+      edge_dimension = true;
+      break;
+  }
+
+  for (size_t vertical_index = 0; vertical_index < ndims[2]; vertical_index++) {
+    unsigned int source_index = 0;
+    for (size_t lat_index = 0; lat_index < (ndims[1] + 1) * 2 - 1; lat_index++) {
+      if (lat_index % 2 == edge_dimension) {
+        for (size_t index = 0; index < ndims[0] + edge_dimension;
+             index++, target_it++, source_index++)
+          *target_it = yac_raw_data[vertical_index][source_index];
+      } else
+        source_index += ndims[0] + !edge_dimension;
+    }
+  }
+}
+
+/* This subroutine is the main entry point for receiving data from YAC.
+ * It checks the dimensionality of the simulation based on the config data. */
+void CartesianDynamics::receive_field_collections_from_yac() {
+  int info, error;
+
+  int total_horizontal_cells = ndims[0] * ndims[1];
+  int total_horizontal_edges = 2 * ndims[0] * ndims[1] + ndims[0] + ndims[1];
+  enum field_types {
+    CELL,
+    U_EDGE,
+    W_EDGE
+  };
+
+  double ** yac_raw_cell_data = new double * [ndims[2]];
+  double ** yac_raw_edge_data = new double * [ndims[2]];
+  double ** yac_raw_vertical_wind_data = new double * [ndims[2] + 1];
+
+  for (int i = 0; i < ndims[2]; i++) {
+    yac_raw_cell_data[i] = new double[total_horizontal_cells];
+    yac_raw_edge_data[i] = new double[total_horizontal_edges];
+  }
+
+  for (int i = 0; i < ndims[2] + 1; i++)
+    yac_raw_vertical_wind_data[i] = new double[total_horizontal_cells];
+
+  receive_yac_field(CELL, temp_yac_id, yac_raw_cell_data, temp, ndims[2]);
+  receive_yac_field(CELL, pressure_yac_id, yac_raw_cell_data, press, ndims[2]);
+  receive_yac_field(CELL, qvap_yac_id, yac_raw_cell_data, qvap, ndims[2]);
+  receive_yac_field(CELL, qcond_yac_id, yac_raw_cell_data, qcond, ndims[2]);
+
+  receive_yac_field(CELL, vvel_yac_id, yac_raw_vertical_wind_data, vvel, ndims[2] + 1);
+
+  receive_yac_field(U_EDGE, eastward_wind_yac_id, yac_raw_edge_data, uvel, ndims[2]);
+  receive_yac_field(W_EDGE, northward_wind_yac_id, yac_raw_edge_data, wvel, ndims[2]);
+
+  for (int i = 0; i < ndims[2]; i++) {
+    delete yac_raw_cell_data[i];
+    delete yac_raw_edge_data[i];
+  }
+
+  for (int i = 0; i < ndims[2] + 1; i++)
+    delete yac_raw_vertical_wind_data[i];
+
+  delete [] yac_raw_cell_data;
+  delete [] yac_raw_edge_data;
+  delete [] yac_raw_vertical_wind_data;
+}
+
 /* This subroutine receives thermodynamic data from YAC for a horizontal slice
  * of the domain. This horizontal slice is defined in the u and w directions.
  * The received values are press, temp, qvap, qcond defined on the cell-centers.
