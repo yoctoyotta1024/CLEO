@@ -54,6 +54,15 @@ def create_yac_unstructured_grid(grid_filname):
     return grid
 
 
+def prepare_data_for_yac(source):
+    vertical_levels = len(source[:, 1])
+    horizontal_size = len(source[1, :])
+    target = np.empty(shape=(vertical_levels, 1, horizontal_size))
+    for level in range(vertical_levels):
+        target[level, 0, :] = source[level, :]
+    return target
+
+
 data_filename = "aes_bubble_atm_3d_ml_20080801T000000Z.nc"
 grid_filename = "aes_bubble_atm_cgrid_ml.nc"
 
@@ -67,36 +76,32 @@ grid = create_yac_unstructured_grid(grid_filename)
 
 # --- Field definitions ---
 press = Field.create(
-    "pressure", component, grid.cell_points, 1, "PT1M", TimeUnit.ISO_FORMAT
+    "pressure", component, grid.cell_points, 3, "PT1M", TimeUnit.ISO_FORMAT
 )
 temp = Field.create(
-    "temperature", component, grid.cell_points, 1, "PT1M", TimeUnit.ISO_FORMAT
+    "temperature", component, grid.cell_points, 3, "PT1M", TimeUnit.ISO_FORMAT
 )
-qvap = Field.create("qvap", component, grid.cell_points, 1, "PT1M", TimeUnit.ISO_FORMAT)
+qvap = Field.create("qvap", component, grid.cell_points, 3, "PT1M", TimeUnit.ISO_FORMAT)
 qcond = Field.create(
-    "qcond", component, grid.cell_points, 1, "PT1M", TimeUnit.ISO_FORMAT
+    "qcond", component, grid.cell_points, 3, "PT1M", TimeUnit.ISO_FORMAT
 )
 eastward_wind = Field.create(
-    "eastward_wind", component, grid.cell_points, 1, "PT1M", TimeUnit.ISO_FORMAT
+    "eastward_wind", component, grid.cell_points, 3, "PT1M", TimeUnit.ISO_FORMAT
 )
 northward_wind = Field.create(
-    "northward_wind", component, grid.cell_points, 1, "PT1M", TimeUnit.ISO_FORMAT
+    "northward_wind", component, grid.cell_points, 3, "PT1M", TimeUnit.ISO_FORMAT
 )
-vvel = Field.create("vvel", component, grid.cell_points, 1, "PT1M", TimeUnit.ISO_FORMAT)
+vvel = Field.create("vvel", component, grid.cell_points, 4, "PT1M", TimeUnit.ISO_FORMAT)
 
 yac.enddef()
 
 dataset = Dataset(data_filename)
 
 for step in range(5):
-    print("ICON data reader started sending step", step)
-    vvel.put(dataset["wa"][step, 0, :])
-    for height in range(3):
-        temp.put(dataset["ta"][step, height, :])
-        press.put(dataset["pfull"][step, height, :])
-        qvap.put(dataset["hus"][step, height, :])
-        qcond.put(dataset["clw"][step, height, :])
-        eastward_wind.put(dataset["ua"][step, height, :])
-        northward_wind.put(dataset["va"][step, height, :])
-        vvel.put(dataset["wa"][step, height + 1, :])
-    print("ICON data reader finished sending step", step)
+    temp.put(prepare_data_for_yac(dataset["ta"][step, 0:3, :]))
+    press.put(prepare_data_for_yac(dataset["pfull"][step, 0:3, :]))
+    qvap.put(prepare_data_for_yac(dataset["hus"][step, 0:3, :]))
+    qcond.put(prepare_data_for_yac(dataset["clw"][step, 0:3, :]))
+    vvel.put(prepare_data_for_yac(dataset["wa"][step, 0:4, :]))
+    eastward_wind.put(prepare_data_for_yac(dataset["ua"][step, 0:3, :]))
+    northward_wind.put(prepare_data_for_yac(dataset["va"][step, 0:3, :]))

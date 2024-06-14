@@ -332,29 +332,35 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
 
   // --- Field definitions ---
   int num_point_sets = 1;
-  int collection_size = 1;
+  int horizontal_fields_collection_size = ndims[2];
+  int vertical_winds_collection_size = ndims[2] + 1;
 
-  yac_cdef_field("pressure", component_id, &cell_point_id, num_point_sets, collection_size, "PT1M",
+  yac_cdef_field("pressure", component_id, &cell_point_id,
+                 num_point_sets, horizontal_fields_collection_size, "PT1M",
                  YAC_TIME_UNIT_ISO_FORMAT, &pressure_yac_id);
 
-  yac_cdef_field("temperature", component_id, &cell_point_id, num_point_sets, collection_size,
-                 "PT1M", YAC_TIME_UNIT_ISO_FORMAT, &temp_yac_id);
+  yac_cdef_field("temperature", component_id, &cell_point_id,
+                 num_point_sets, horizontal_fields_collection_size, "PT1M",
+                 YAC_TIME_UNIT_ISO_FORMAT, &temp_yac_id);
 
-  yac_cdef_field("qvap", component_id, &cell_point_id, num_point_sets, collection_size, "PT1M",
+  yac_cdef_field("qvap", component_id, &cell_point_id,
+                 num_point_sets, horizontal_fields_collection_size, "PT1M",
                  YAC_TIME_UNIT_ISO_FORMAT, &qvap_yac_id);
 
-  yac_cdef_field("qcond", component_id, &cell_point_id, num_point_sets, collection_size, "PT1M",
+  yac_cdef_field("qcond", component_id, &cell_point_id,
+                 num_point_sets, horizontal_fields_collection_size, "PT1M",
                  YAC_TIME_UNIT_ISO_FORMAT, &qcond_yac_id);
 
   yac_cdef_field("eastward_wind", component_id, &edge_point_id,
-                 num_point_sets, collection_size, "PT1M",
+                 num_point_sets, horizontal_fields_collection_size, "PT1M",
                  YAC_TIME_UNIT_ISO_FORMAT, &eastward_wind_yac_id);
 
   yac_cdef_field("northward_wind", component_id, &edge_point_id,
-                 num_point_sets, collection_size, "PT1M",
+                 num_point_sets, horizontal_fields_collection_size, "PT1M",
                  YAC_TIME_UNIT_ISO_FORMAT, &northward_wind_yac_id);
 
-  yac_cdef_field("vvel", component_id, &cell_point_id, num_point_sets, collection_size, "PT1M",
+  yac_cdef_field("vvel", component_id, &cell_point_id,
+                 num_point_sets, vertical_winds_collection_size, "PT1M",
                  YAC_TIME_UNIT_ISO_FORMAT, &vvel_yac_id);
 
   // --- Field coupling definitions ---
@@ -400,7 +406,7 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   wvel_edge_data = std::vector<double>(horizontal_edge_number, 0);
 
   // Calls the first data retrieval from YAC to have thermodynamic data for first timestep
-  receive_fields_from_yac();
+  receive_field_collections_from_yac();
 
   std::cout << "Finished setting up YAC for receiving:\n"
                "  pressure,\n  temperature,\n"
