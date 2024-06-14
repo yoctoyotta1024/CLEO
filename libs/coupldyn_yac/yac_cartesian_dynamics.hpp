@@ -76,6 +76,11 @@ struct CartesianDynamics {
   int northward_wind_yac_id;
   int vvel_yac_id;
 
+  // Containers to receive data from YAC
+  double ** yac_raw_cell_data;
+  double ** yac_raw_edge_data;
+  double ** yac_raw_vertical_wind_data;
+
   /* --- Private functions --- */
 
   /* depending on nspacedims, read in data

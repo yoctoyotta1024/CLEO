@@ -177,27 +177,11 @@ void CartesianDynamics::receive_yac_field(unsigned int field_type,
 /* This subroutine is the main entry point for receiving data from YAC.
  * It checks the dimensionality of the simulation based on the config data. */
 void CartesianDynamics::receive_field_collections_from_yac() {
-  int info, error;
-
-  int total_horizontal_cells = ndims[0] * ndims[1];
-  int total_horizontal_edges = 2 * ndims[0] * ndims[1] + ndims[0] + ndims[1];
   enum field_types {
     CELL,
     U_EDGE,
     W_EDGE
   };
-
-  double ** yac_raw_cell_data = new double * [ndims[2]];
-  double ** yac_raw_edge_data = new double * [ndims[2]];
-  double ** yac_raw_vertical_wind_data = new double * [ndims[2] + 1];
-
-  for (int i = 0; i < ndims[2]; i++) {
-    yac_raw_cell_data[i] = new double[total_horizontal_cells];
-    yac_raw_edge_data[i] = new double[total_horizontal_edges];
-  }
-
-  for (int i = 0; i < ndims[2] + 1; i++)
-    yac_raw_vertical_wind_data[i] = new double[total_horizontal_cells];
 
   receive_yac_field(CELL, temp_yac_id, yac_raw_cell_data, temp, ndims[2]);
   receive_yac_field(CELL, pressure_yac_id, yac_raw_cell_data, press, ndims[2]);
@@ -208,18 +192,6 @@ void CartesianDynamics::receive_field_collections_from_yac() {
 
   receive_yac_field(U_EDGE, eastward_wind_yac_id, yac_raw_edge_data, uvel, ndims[2]);
   receive_yac_field(W_EDGE, northward_wind_yac_id, yac_raw_edge_data, wvel, ndims[2]);
-
-  for (int i = 0; i < ndims[2]; i++) {
-    delete yac_raw_cell_data[i];
-    delete yac_raw_edge_data[i];
-  }
-
-  for (int i = 0; i < ndims[2] + 1; i++)
-    delete yac_raw_vertical_wind_data[i];
-
-  delete [] yac_raw_cell_data;
-  delete [] yac_raw_edge_data;
-  delete [] yac_raw_vertical_wind_data;
 }
 
 /* This subroutine receives thermodynamic data from YAC for a horizontal slice
@@ -394,6 +366,18 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   size_t horizontal_cell_number = yac_cget_grid_size(YAC_LOCATION_CELL, grid_id);
   size_t horizontal_edge_number = yac_cget_grid_size(YAC_LOCATION_EDGE, grid_id);
 
+  yac_raw_cell_data = new double * [ndims[2]];
+  yac_raw_edge_data = new double * [ndims[2]];
+  yac_raw_vertical_wind_data = new double * [ndims[2] + 1];
+
+  for (int i = 0; i < ndims[2]; i++) {
+    yac_raw_cell_data[i] = new double[horizontal_cell_number];
+    yac_raw_edge_data[i] = new double[horizontal_edge_number];
+  }
+
+  for (int i = 0; i < ndims[2] + 1; i++)
+    yac_raw_vertical_wind_data[i] = new double[horizontal_cell_number];
+
   // Initialization of target containers for receiving data
   press = std::vector<double>(horizontal_cell_number * ndims[2], 0);
   temp = std::vector<double>(horizontal_cell_number * ndims[2], 0);
@@ -420,7 +404,21 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   std::cout << "--- cartesian dynamics from YAC: success ---\n";
 }
 
-CartesianDynamics::~CartesianDynamics() { yac_cfinalize(); }
+CartesianDynamics::~CartesianDynamics() {
+  for (int i = 0; i < ndims[2]; i++) {
+    delete yac_raw_cell_data[i];
+    delete yac_raw_edge_data[i];
+  }
+
+  for (int i = 0; i < ndims[2] + 1; i++)
+    delete yac_raw_vertical_wind_data[i];
+
+  delete [] yac_raw_cell_data;
+  delete [] yac_raw_edge_data;
+  delete [] yac_raw_vertical_wind_data;
+
+  yac_cfinalize();
+}
 
 /* depending on nspacedims, read in data
 for 1-D, 2-D or 3-D wind velocity components */
