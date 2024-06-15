@@ -43,11 +43,26 @@ class SampleRadiiShima2009:
         exponential distirubiton in volume"""
 
         if nbins:
-            vols = np.random.exponential(scale=self.vol0, size=nbins)  # [m^3]
-            radii = np.power(3.0 / (4.0 * np.pi) * vols, 1.0 / 3.0)
+            radii = self.sample_truncated_volume_exponential(nbins)
+            print(len(radii))
             return radii  # [m]
         else:
             return np.array([])
+
+    def sample_truncated_volume_exponential(self, nbins):
+        """sample volume exponential rejecting samples which result
+        in radii outside rspan[0] <= r <= rspan[1] until nbins number of sample
+        radii are found"""
+        radii_sample = []
+        while len(radii_sample) < nbins:
+            n = nbins - len(radii_sample)
+            vols = np.random.exponential(self.vol0, n)  # [m^3]
+            radii = np.power(3.0 / (4.0 * np.pi) * vols, 1.0 / 3.0)
+            in_range = np.where(radii >= self.rspan[0], radii, 0)
+            in_range = np.where(radii <= self.rspan[1], in_range, 0)
+            radii_sample.extend(in_range[in_range > 0])
+
+        return np.array(radii_sample)[:nbins]
 
 
 class SampleXiShima2009:
