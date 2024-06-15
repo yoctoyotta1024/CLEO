@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 6th June 2024
+ * Last Modified: Saturday 15th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -68,8 +68,7 @@ struct MonitorCondensation {
   /**
    * @brief Placeholder function to obey SDMMonitor concept does nothing.
    *
-   * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
-   * @param supers (sub)View of all the superdrops in one gridbox during one motion timestep
+   * @param d_gbxs The view of gridboxes in device memory.
    */
   void monitor_motion(const viewd_constgbx d_gbxs) const {}
 
@@ -91,6 +90,7 @@ struct MonitorCondensation {
  * @param interval Observation timestep.
  * @param dataset Dataset to write time data to.
  * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
+ * @param ngbxs The number of gridboxes.
  * @return Constructed type satisfying observer concept.
  */
 template <typename Store>

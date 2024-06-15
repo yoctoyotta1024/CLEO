@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 22nd May 2024
+ * Last Modified: Saturday 15th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -50,6 +50,7 @@
  * @param dataset The dataset to write the wind velocity component to.
  * @param ffunc The functor function to collect the wind velocity component from within a parallel
  * range policy over gridboxes.
+ * @param name Name of the array in the store where the chunk will be written.
  * @param maxchunk The maximum chunk size (number of elements).
  * @param ngbxs The number of gridboxes.
  * @return CollectDataForDataset<Store> An instance satisfying the CollectDataForDataset concept for

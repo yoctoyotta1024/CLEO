@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 6th June 2024
+ * Last Modified: Saturday 15th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -120,8 +120,7 @@ struct MonitorMassMoments {
    * calls fetch_massmoments to monitor the moments of the droplet mass
    * distribution during SDM motion.
    *
-   * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
-   * @param supers (sub)View of all the superdrops in one gridbox during one motion timestep
+   * @param d_gbxs The view of gridboxes in device memory.
    */
   void monitor_motion(const viewd_constgbx d_gbxs) const {
     const size_t ngbxs(d_gbxs.extent(0));

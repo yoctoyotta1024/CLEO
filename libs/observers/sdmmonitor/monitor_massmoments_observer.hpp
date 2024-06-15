@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 6th June 2024
+ * Last Modified: Saturday 15th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -101,7 +101,8 @@ class DoMonitorMassMomentsObs {
   /**
    * @brief Constructor for DoMonitorMassMomentsObs.
    * @param dataset Dataset to write monitored data to.
-   * @param monitor_views Views on device for mass moments to monitor.
+   * @param maxchunk The maximum chunk size (number of elements) for Xarrays.
+   * @param ngbxs The number of gridboxes.
    */
   DoMonitorMassMomentsObs(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs)
       : dataset(dataset),
@@ -163,6 +164,7 @@ class DoMonitorMassMomentsObs {
  * @param interval Observation timestep.
  * @param dataset Dataset to write time data to.
  * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
+ * @param ngbxs The number of gridboxes.
  * @return Constructed type satisfying observer concept.
  */
 template <typename Store>

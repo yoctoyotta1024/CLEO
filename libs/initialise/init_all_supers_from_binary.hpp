@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 19th April 2024
+ * Last Modified: Saturday 15th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -78,7 +78,6 @@ struct InitAllSupersFromBinary {
    * Calls constructor for InitAllSupersFromBinary wiht additional assert to sanity check
    * condfiguration matches initialisation expected by this struct.
    *
-   * @param maxnsupers The expected initial total number of super-droplets
    * @param config Configuration for member variables.
    *
    */

@@ -131,8 +131,8 @@ Fig.2(a) of Shima et al. 2009 :cite:p:`shima2009`.
 This example models collision-coalescence using Long's collision efficiency as given by equation
 13 of Simmel et al. 2002 :cite:`simmel2002`.
 
-The plot produced, by default called ``~/CLEO/build_colls0D/bin/long_validation.png``, should be similar to
-Fig.2(b) of Shima et al. 2009 :cite:p:`shima2009`.
+The plot produced, by default called ``~/CLEO/build_colls0D/bin/long_validation_[X].png``, should be
+similar to Fig.2(b) of Shima et al. 2009 :cite:p:`shima2009`.
 
 **Low and List**
 
@@ -178,7 +178,8 @@ comparable to Fig.2(a) of Shima et al. 2009 :cite:p:`shima2009`.
 
 These examples model collision-coalescence using Long's collision efficiency as given by equation
 13 of Simmel et al. 2002 :cite:`simmel2002`. The two examples use different initial conditions and
-collision timesteps, as in Shima et al. 2009 :cite:p:`shima2009`.
+collision timesteps, as in Shima et al. 2009 :cite:p:`shima2009`. However the setup of the long2
+example is not exactly that which makes Fig.2(c) in Shima et al. 2009.
 
 The plots produced, by default called ``~/CLEO/build_colls0D/bin/long_validation_1.png`` and
 ``~/CLEO/build_colls0D/bin/long_validation_2.png``, should be comparable to

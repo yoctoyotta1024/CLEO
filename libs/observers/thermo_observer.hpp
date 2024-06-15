@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 22nd May 2024
+ * Last Modified: Saturday 15th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -50,6 +50,9 @@
  * @param dataset The dataset to write the variable to.
  * @param ffunc The functor function to collect the variable from within a parallel range policy
  * over gridboxes.
+ * @param name The name of the new coordinate.
+ * @param units The units of the coordinate.
+ * @param scale_factor The scale factor of the coordinate data.
  * @param maxchunk The maximum chunk size (number of elements).
  * @param ngbxs The number of gridboxes.
  * @return CollectDataForDataset<Store> An instance satisfying the CollectDataForDataset concept for
