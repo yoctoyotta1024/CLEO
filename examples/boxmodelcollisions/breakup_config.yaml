@@ -55,4 +55,4 @@ outputdata:
 microphysics:
   breakup:
     constnfrags:
-      nfrags: 5                                               # average no. of fragments per droplet breakup
+      nfrags: 5.0                                             # average no. of fragments per droplet breakup

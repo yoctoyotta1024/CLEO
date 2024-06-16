@@ -44,7 +44,6 @@ then
 
   ### ---------------- compile executables --------------- ###
   cd ${path2build} && make clean
-
   compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${cleoenv} ${buildtype} ${path2build} ${executables}"
   echo ${compilecmd}
   ${compilecmd}

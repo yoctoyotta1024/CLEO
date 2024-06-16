@@ -49,6 +49,11 @@ void OptionalConfigParams::set_microphysics(const YAML::Node &config) {
     condensation.set_params(config);
     condensation.print_params();
   }
+
+  if (node["breakup"]) {
+    breakup.set_params(config);
+    breakup.print_params();
+  }
 }
 
 void OptionalConfigParams::set_initsupers(const YAML::Node &config) {
