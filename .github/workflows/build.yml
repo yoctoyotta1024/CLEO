@@ -61,6 +61,12 @@ jobs:
     - name: Build example lowlistcolls
       run: cd build && make lowlistcolls
 
+    - name: Build example testikstraubcolls
+      run: cd build && make szakallurbichcolls
+
+    - name: Build example szakallurbichcolls
+      run: cd build && make szakallurbichcolls
+
     - name: Build example const2D
       run: cd build && make const2D
 
