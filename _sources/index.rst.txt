@@ -30,8 +30,8 @@ Time to get involved! Start by :doc:`installing CLEO<usage/installation>` and ex
    :caption: Contents:
 
    intro/intro
-   usage/requirements
    usage/extern
+   usage/requirements
    usage/installation
    usage/examples
    usage/quickstart

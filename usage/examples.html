@@ -224,8 +224,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../intro/kokkos.html">Kokkos Thread Parallelism</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="extern.html">External Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
@@ -481,13 +481,39 @@ to the third column of figure 5 from Arabas and Shima 2017 <span id="id4">[<a cl
 </section>
 <section id="box-model-collisions">
 <h2>Box Model Collisions<a class="headerlink" href="#box-model-collisions" title="Link to this heading">¶</a></h2>
-<p>These examples are for a 0-D box model with various collision-coalescence kernels.</p>
+<p>These examples are for a 0-D box model with various collision kernels. The setup mimics that in
+Shima et al. 2009 section 5.1.4 <span id="id5">[<a class="reference internal" href="../references.html#id31" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">SKK+09</a>]</span>. Note that due to the randomness of the initial
+super-droplet conditions and the collision algorithm, each run of these examples will not be
+completely identical, but they should be reasonably similar, and have the same mean behaviour.</p>
+<section id="the-collision-kernels">
+<h3>The Collision Kernels<a class="headerlink" href="#the-collision-kernels" title="Link to this heading">¶</a></h3>
+<p><strong>Golovin</strong></p>
+<p>This example models collision-coalescence using Golovin’s kernel.</p>
+<p>The plot produced, by default called <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_colls0D/bin/golovin_validation.png</span></code>, should be similar to
+Fig.2(a) of Shima et al. 2009 <span id="id6">[<a class="reference internal" href="../references.html#id31" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">SKK+09</a>]</span>.</p>
+<p><strong>Long</strong></p>
+<p>This example models collision-coalescence using Long’s collision efficiency as given by equation
+13 of Simmel et al. 2002 <span id="id7">[<a class="reference internal" href="../references.html#id32" title="Martin Simmel, Thomas Trautmann, and Gerd Tetzlaff. Numerical solution of the stochastic collection equation—comparison of the linear discrete method with other methods. Atmospheric Research, 61(2):135-148, 2002. URL: https://www.sciencedirect.com/science/article/pii/S0169809501001314, doi:https://doi.org/10.1016/S0169-8095(01)00131-4.">STT02</a>]</span>.</p>
+<p>The plot produced, by default called <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_colls0D/bin/long_validation_[X].png</span></code>, should be
+similar to Fig.2(b) of Shima et al. 2009 <span id="id8">[<a class="reference internal" href="../references.html#id31" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">SKK+09</a>]</span>.</p>
+<p><strong>Low and List</strong></p>
+<p>This example models collision-coalescence using the hydrodynamic kernel with Long’s collision
+efficiency as given by equation 13 of Simmel et al. 2002 <span id="id9">[<a class="reference internal" href="../references.html#id32" title="Martin Simmel, Thomas Trautmann, and Gerd Tetzlaff. Numerical solution of the stochastic collection equation—comparison of the linear discrete method with other methods. Atmospheric Research, 61(2):135-148, 2002. URL: https://www.sciencedirect.com/science/article/pii/S0169809501001314, doi:https://doi.org/10.1016/S0169-8095(01)00131-4.">STT02</a>]</span>, and the coalescence
+efficiency from Low and List 1982(a) <span id="id10">[<a class="reference internal" href="../references.html#id21" title="T. B. Low and Roland List. Collision, coalescence and breakup of raindrops. part i: experimentally established coalescence efficiencies and fragment size distributions in breakup. Journal of Atmospheric Sciences, 39(7):1591 - 1606, 1982. URL: https://journals.ametsoc.org/view/journals/atsc/39/7/1520-0469_1982_039_1591_ccabor_2_0_co_2.xml, doi:https://doi.org/10.1175/1520-0469(1982)039&lt;1591:CCABOR&gt;2.0.CO;2.">LL82</a>]</span> (see also McFarquhar
+2004 <span id="id11">[<a class="reference internal" href="../references.html#id24" title="Greg M. McFarquhar. A new representation of collision-induced breakup of raindrops and its implications for the shapes of raindrop size distributions. Journal of the Atmospheric Sciences, 61(7):777 - 794, 2004. URL: https://journals.ametsoc.org/view/journals/atsc/61/7/1520-0469_2004_061_0777_anrocb_2.0.co_2.xml, doi:https://doi.org/10.1175/1520-0469(2004)061&lt;0777:ANROCB&gt;2.0.CO;2.">McF04</a>]</span>).</p>
+<p>This example produces a plot, by default called <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_colls0D/bin/lowlist_validation.png</span></code>.</p>
+</section>
+<section id="running-the-box-model-collisions-examples">
+<h3>Running the Box Model Collisions Examples<a class="headerlink" href="#running-the-box-model-collisions-examples" title="Link to this heading">¶</a></h3>
 <ol class="arabic simple">
 <li><p>Navigate to the <code class="docutils literal notranslate"><span class="pre">boxmodelcollisions/</span></code> directory, e.g.</p></li>
 </ol>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>~/CLEO/examples/boxmodelcollisions/
 </pre></div>
 </div>
+</section>
+<section id="a-shima-et-al-2009">
+<h3>a) Shima et al. 2009<a class="headerlink" href="#a-shima-et-al-2009" title="Link to this heading">¶</a></h3>
 <p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example.sh</span></code> and
 <code class="docutils literal notranslate"><span class="pre">examples/boxmodelcollisions/shima2009.sh</span></code>.</p>
 <ol class="arabic simple" start="3">
@@ -496,31 +522,33 @@ to the third column of figure 5 from Arabas and Shima 2017 <span id="id4">[<a cl
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./shima2009.sh
 </pre></div>
 </div>
-<p>By default the golovin, long, and lowlist executables will be compiled and run. You can change this
-by editing <code class="docutils literal notranslate"><span class="pre">script_args=&quot;[...]</span> <span class="pre">golovin</span> <span class="pre">long</span> <span class="pre">lowlist</span></code> in <code class="docutils literal notranslate"><span class="pre">shima2009.sh</span></code>.</p>
-<p>Note that due to the randomness of the initial super-droplet conditions and the
-collision-coalescence algorithm, each run of these examples will not be completely identical, but
-they should be reasonably similar, and have the same mean behaviour.</p>
-<section id="a-golovin">
-<h3>a) Golovin<a class="headerlink" href="#a-golovin" title="Link to this heading">¶</a></h3>
+<p>By default the golovin exectuable and two examples using the long executable will be compiled and
+run. You can change this by editing <code class="docutils literal notranslate"><span class="pre">script_args=&quot;[...]</span> <span class="pre">golovin</span> <span class="pre">long1</span> <span class="pre">long2</span></code> in <code class="docutils literal notranslate"><span class="pre">shima2009.sh</span></code>.</p>
+<p><strong>Golovin</strong></p>
 <p>This example models collision-coalescence using Golovin’s kernel.</p>
-<p>The plot produced, by default called <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_shima2009/bin/golovin_validation.png</span></code>, should be similar to
-Fig.2(a) of Shima et al. 2009 <span id="id5">[<a class="reference internal" href="../references.html#id31" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">SKK+09</a>]</span>.</p>
+<p>The plot produced, by default called <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_colls0D/bin/golovin_validation.png</span></code>, should be
+comparable to Fig.2(a) of Shima et al. 2009 <span id="id12">[<a class="reference internal" href="../references.html#id31" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">SKK+09</a>]</span>.</p>
+<p><strong>Long1 and Long2</strong></p>
+<p>These examples model collision-coalescence using Long’s collision efficiency as given by equation
+13 of Simmel et al. 2002 <span id="id13">[<a class="reference internal" href="../references.html#id32" title="Martin Simmel, Thomas Trautmann, and Gerd Tetzlaff. Numerical solution of the stochastic collection equation—comparison of the linear discrete method with other methods. Atmospheric Research, 61(2):135-148, 2002. URL: https://www.sciencedirect.com/science/article/pii/S0169809501001314, doi:https://doi.org/10.1016/S0169-8095(01)00131-4.">STT02</a>]</span>. The two examples use different initial conditions and
+collision timesteps, as in Shima et al. 2009 <span id="id14">[<a class="reference internal" href="../references.html#id31" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">SKK+09</a>]</span>. However the setup of the long2
+example is not exactly that which makes Fig.2(c) in Shima et al. 2009.</p>
+<p>The plots produced, by default called <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_colls0D/bin/long_validation_1.png</span></code> and
+<code class="docutils literal notranslate"><span class="pre">~/CLEO/build_colls0D/bin/long_validation_2.png</span></code>, should be comparable to
+Fig.2(b) and Fig.2(c) of Shima et al. 2009 <span id="id15">[<a class="reference internal" href="../references.html#id31" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">SKK+09</a>]</span>.</p>
 </section>
-<section id="b-long">
-<h3>b) Long<a class="headerlink" href="#b-long" title="Link to this heading">¶</a></h3>
-<p>This example models collision-coalescence using Long’s collision efficiency as given by equation
-13 of Simmel et al. 2002 <span id="id6">[<a class="reference internal" href="../references.html#id32" title="Martin Simmel, Thomas Trautmann, and Gerd Tetzlaff. Numerical solution of the stochastic collection equation—comparison of the linear discrete method with other methods. Atmospheric Research, 61(2):135-148, 2002. URL: https://www.sciencedirect.com/science/article/pii/S0169809501001314, doi:https://doi.org/10.1016/S0169-8095(01)00131-4.">STT02</a>]</span>.</p>
-<p>The plot produced, by default called <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_shima2009/bin/long_validation.png</span></code>, should be similar to
-Fig.2(b) of Shima et al. 2009 <span id="id7">[<a class="reference internal" href="../references.html#id31" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">SKK+09</a>]</span>.</p>
-</section>
-<section id="c-low-and-list">
-<h3>c) Low and List<a class="headerlink" href="#c-low-and-list" title="Link to this heading">¶</a></h3>
-<p>This example models collision-coalescence using the hydrodynamic kernel with Long’s collision
-efficiency as given by equation 13 of Simmel et al. 2002 <span id="id8">[<a class="reference internal" href="../references.html#id32" title="Martin Simmel, Thomas Trautmann, and Gerd Tetzlaff. Numerical solution of the stochastic collection equation—comparison of the linear discrete method with other methods. Atmospheric Research, 61(2):135-148, 2002. URL: https://www.sciencedirect.com/science/article/pii/S0169809501001314, doi:https://doi.org/10.1016/S0169-8095(01)00131-4.">STT02</a>]</span>, and the coalescence
-efficiency from Low and List 1982(a) <span id="id9">[<a class="reference internal" href="../references.html#id21" title="T. B. Low and Roland List. Collision, coalescence and breakup of raindrops. part i: experimentally established coalescence efficiencies and fragment size distributions in breakup. Journal of Atmospheric Sciences, 39(7):1591 - 1606, 1982. URL: https://journals.ametsoc.org/view/journals/atsc/39/7/1520-0469_1982_039_1591_ccabor_2_0_co_2.xml, doi:https://doi.org/10.1175/1520-0469(1982)039&lt;1591:CCABOR&gt;2.0.CO;2.">LL82</a>]</span> (see also McFarquhar
-2004 <span id="id10">[<a class="reference internal" href="../references.html#id24" title="Greg M. McFarquhar. A new representation of collision-induced breakup of raindrops and its implications for the shapes of raindrop size distributions. Journal of the Atmospheric Sciences, 61(7):777 - 794, 2004. URL: https://journals.ametsoc.org/view/journals/atsc/61/7/1520-0469_2004_061_0777_anrocb_2.0.co_2.xml, doi:https://doi.org/10.1175/1520-0469(2004)061&lt;0777:ANROCB&gt;2.0.CO;2.">McF04</a>]</span>).</p>
-<p>This example produces a plot, by default called <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_shima2009/bin/lowlist_validation.png</span></code>.</p>
+<section id="b-breakup">
+<h3>b) Breakup<a class="headerlink" href="#b-breakup" title="Link to this heading">¶</a></h3>
+<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example.sh</span></code> and
+<code class="docutils literal notranslate"><span class="pre">examples/boxmodelcollisions/breakup.sh</span></code>.</p>
+<ol class="arabic simple" start="3">
+<li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">breakup.sh</span></code>, e.g.</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./breakup.sh
+</pre></div>
+</div>
+<p>By default kernels including collision-coalescence, breakup and rebound will be compiled and
+run. You can change this by editing <code class="docutils literal notranslate"><span class="pre">script_args=&quot;[...]</span> <span class="pre">lowlist</span> <span class="pre">etc.</span></code> in <code class="docutils literal notranslate"><span class="pre">breakup.sh</span></code>.</p>
 </section>
 </section>
 <section id="divergence-free-motion">
@@ -679,9 +707,10 @@ script.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#box-model-collisions">Box Model Collisions</a><ul>
-<li><a class="reference internal" href="#a-golovin">a) Golovin</a></li>
-<li><a class="reference internal" href="#b-long">b) Long</a></li>
-<li><a class="reference internal" href="#c-low-and-list">c) Low and List</a></li>
+<li><a class="reference internal" href="#the-collision-kernels">The Collision Kernels</a></li>
+<li><a class="reference internal" href="#running-the-box-model-collisions-examples">Running the Box Model Collisions Examples</a></li>
+<li><a class="reference internal" href="#a-shima-et-al-2009">a) Shima et al. 2009</a></li>
+<li><a class="reference internal" href="#b-breakup">b) Breakup</a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#divergence-free-motion">Divergence Free Motion</a></li>

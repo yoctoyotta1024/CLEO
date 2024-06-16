@@ -11,8 +11,6 @@ how we use Kokkos on :doc:`our page about Kokkos<../intro/kokkos>`.
 
 The Kokkos libaries for CLEO are automatically built using CMAKE and compiled if required.
 
-.. _extern_yac:
-
 YAC
 ---
 YAC is required if CLEO couples to dynamics using YAC and/or uses MPI domain decompoisiton. You can

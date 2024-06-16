@@ -224,8 +224,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../../intro/kokkos.html">Kokkos Thread Parallelism</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../usage/requirements.html">Requirements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/extern.html">External Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/requirements.html">Requirements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/quickstart.html">Quickstart</a></li>
@@ -421,8 +421,7 @@
 <li><p><strong>couplstep</strong> – Coupling timestep. </p></li>
 <li><p><strong>gbxmaps</strong> – object that is type of GridboxMaps. </p></li>
 <li><p><strong>microphys</strong> – object that is type of <a class="reference internal" href="../superdrops/microphysical_process.html#conceptMicrophysicalProcess"><span class="std std-ref">MicrophysicalProcess</span></a>. </p></li>
-<li><p><strong>motion</strong> – object that is type of super-droplets’ Motion. </p></li>
-<li><p><strong>boundary_conds</strong> – object for domain boundary conditions. </p></li>
+<li><p><strong>movesupers</strong> – object that is type of super-droplets’ Motion. </p></li>
 <li><p><strong>obs</strong> – object that is type of <a class="reference internal" href="../observers/observers.html#conceptObserver"><span class="std std-ref">Observer</span></a>. </p></li>
 </ul>
 </dd>
@@ -583,6 +582,7 @@
 <li><p><strong>t_sdm</strong> – Current timestep for SDM. </p></li>
 <li><p><strong>t_next</strong> – Next timestep for SDM. </p></li>
 <li><p><strong>d_gbxs</strong> – View of gridboxes on device. </p></li>
+<li><p><strong>mo</strong> – SDMMonitor to use. </p></li>
 </ul>
 </dd>
 </dl>

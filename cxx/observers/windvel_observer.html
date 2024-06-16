@@ -224,8 +224,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../../intro/kokkos.html">Kokkos Thread Parallelism</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../usage/requirements.html">Requirements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/extern.html">External Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/requirements.html">Requirements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/quickstart.html">Quickstart</a></li>
@@ -403,6 +403,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>dataset</strong> – The dataset to write the wind velocity component to. </p></li>
 <li><p><strong>ffunc</strong> – The functor function to collect the wind velocity component from within a parallel range policy over gridboxes. </p></li>
+<li><p><strong>name</strong> – Name of the array in the store where the chunk will be written. </p></li>
 <li><p><strong>maxchunk</strong> – The maximum chunk size (number of elements). </p></li>
 <li><p><strong>ngbxs</strong> – The number of gridboxes. </p></li>
 </ul>
