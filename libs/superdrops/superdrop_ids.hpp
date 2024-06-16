@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Friday 3rd May 2024
+ * Last Modified: Saturday 15th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -68,7 +68,7 @@ struct IntID {
      *
      * _Note:_ This generator assumes the ID was thread-safe generated (i.e., is unique).
      *
-     * @param id The value to use for generating the next SD identity.
+     * @param kk The value to use for generating the next SD identity.
      * @return SD identity.
      */
     KOKKOS_INLINE_FUNCTION IntID set(const unsigned int kk) { return {static_cast<size_t>(kk)}; }

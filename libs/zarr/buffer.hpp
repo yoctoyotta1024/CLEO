@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Saturday 15th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -163,7 +163,7 @@ struct Buffer {
    * @tparam Store The type of the memory store.
    * @param store Reference to the store object.
    * @param name Name of the array in the store.
-   * @param chunk_str Name of the chunk of the array to write in the store.
+   * @param chunk_label Name of the chunk of the array to write in the store.
    */
   template <typename Store>
   void write_buffer_to_chunk(Store& store, std::string_view name, const std::string& chunk_label) {

@@ -9,7 +9,7 @@ Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 7th May 2024
+Last Modified: Friday 14th June 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -27,16 +27,37 @@ from ..gbxboundariesbinary_src.read_gbxboundaries import get_gbxvols_from_gridfi
 
 
 def plot_initGBxs_distribs(
-    configfile, constsfile, initsupersfile, gridfile, binpath, savefig, gbxs2plt
+    configfile,
+    constsfile,
+    initsupersfile,
+    gridfile,
+    binpath,
+    savefig,
+    gbxs2plt,
+    savelabel="",
 ):
     """plot initial superdroplet distribution from initsupersfile binary
     of every gridbox with index in gbx2plts"""
 
     plot_initGBxs_attrdistribs(
-        configfile, constsfile, initsupersfile, gridfile, binpath, savefig, gbxs2plt
+        configfile,
+        constsfile,
+        initsupersfile,
+        gridfile,
+        binpath,
+        savefig,
+        gbxs2plt,
+        savelabel,
     )
     plot_initGBxs_dropletmasses(
-        configfile, constsfile, initsupersfile, gridfile, binpath, savefig, gbxs2plt
+        configfile,
+        constsfile,
+        initsupersfile,
+        gridfile,
+        binpath,
+        savefig,
+        gbxs2plt,
+        savelabel,
     )
 
 
@@ -155,7 +176,14 @@ def plot_initdistribs(attrs, gbxvols, gbxidxs):
 
 
 def plot_initGBxs_attrdistribs(
-    configfile, constsfile, initsupersfile, gridfile, binpath, savefig, gbxs2plt
+    configfile,
+    constsfile,
+    initsupersfile,
+    gridfile,
+    binpath,
+    savefig,
+    gbxs2plt,
+    savelabel,
 ):
     """plot initial superdroplet distribution from initsupersfile binary
     of every gridbox with index in gbx2plts"""
@@ -165,13 +193,13 @@ def plot_initGBxs_attrdistribs(
 
     if isinstance(gbxs2plt, int):
         gbxidxs = [gbxs2plt]
-        savename = binpath + "initGBx" + str(gbxs2plt) + "_distrib.png"
+        savename = binpath + "initGBx" + str(gbxs2plt) + "_distrib" + savelabel + ".png"
     elif gbxs2plt == "all":
         gbxidxs = np.unique(attrs.sdgbxindex)
-        savename = binpath + "initallGBxs_distribs.png"
+        savename = binpath + "initallGBxs_distribs" + savelabel + ".png"
     else:
         gbxidxs = gbxs2plt
-        savename = binpath + "initGBxs_distribs.png"
+        savename = binpath + "initGBxs_distribs" + savelabel + ".png"
 
     fig, axs, lines = plot_initdistribs(attrs, gbxvols, gbxidxs)
 
@@ -349,7 +377,14 @@ def plot_coorddist(ax, hedgs, coord3, radius, coordnum):
 
 
 def plot_initGBxs_dropletmasses(
-    configfile, constsfile, initsupersfile, gridfile, binpath, savefig, gbxs2plt
+    configfile,
+    constsfile,
+    initsupersfile,
+    gridfile,
+    binpath,
+    savefig,
+    gbxs2plt,
+    savelabel,
 ):
     """plot initial superdroplet mass distributions
     from initsupersfile binary of every gridbox with index
@@ -361,13 +396,15 @@ def plot_initGBxs_dropletmasses(
 
     if isinstance(gbxs2plt, int):
         gbxidxs = [gbxs2plt]
-        savename = binpath + "initGBx" + str(gbxs2plt) + "_dropletmasses.png"
+        savename = (
+            binpath + "initGBx" + str(gbxs2plt) + "_dropletmasses" + savelabel + ".png"
+        )
     elif gbxs2plt == "all":
         gbxidxs = np.unique(attrs.sdgbxindex)
-        savename = binpath + "initallGBxs_dropletmasses.png"
+        savename = binpath + "initallGBxs_dropletmasses" + savelabel + ".png"
     else:
         gbxidxs = gbxs2plt
-        savename = binpath + "initGBxs_dropletmasses.png"
+        savename = binpath + "initGBxs_dropletmasses" + savelabel + ".png"
 
     fig, axs, lines = plot_massdistribs(
         attrs, gbxvols, gbxidxs, inputs["RHO_L"], inputs["RHO_SOL"]

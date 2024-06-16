@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Thursday 6th June 2024
+ * Last Modified: Saturday 15th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -128,6 +128,7 @@ class SDMMethods {
      * @param t_sdm Current timestep for SDM.
      * @param t_next Next timestep for SDM.
      * @param d_gbxs View of gridboxes on device.
+     * @param mo SDMMonitor to use.
      */
     template <SDMMonitor SDMMo>
     void operator()(const unsigned int t_sdm, const unsigned int t_next, const viewd_gbx d_gbxs,
@@ -159,8 +160,7 @@ class SDMMethods {
    * @param couplstep Coupling timestep.
    * @param gbxmaps object that is type of GridboxMaps.
    * @param microphys object that is type of MicrophysicalProcess.
-   * @param motion object that is type of super-droplets' Motion.
-   * @param boundary_conds object for domain boundary conditions.
+   * @param movesupers object that is type of super-droplets' Motion.
    * @param obs object that is type of Observer.
    */
   SDMMethods(const unsigned int couplstep, const GbxMaps gbxmaps, const Microphys microphys,

@@ -1,7 +1,7 @@
 # ----- CLEO -----
-# File: shima2009_config.yaml
+# File: breakup_config.yaml
 # Project: config
-# Created Date: Wednesday 17th April 2024
+# Created Date: Friday 14th June 2024
 # Author: Clara Bayley (CB)
 # Additional Contributors:
 # -----
@@ -25,11 +25,11 @@
 domain:
   nspacedims: 0                                                 # no. of spatial dimensions to model
   ngbxs: 1                                                      # total number of Gbxs
-  maxnsupers: 16384                                             # maximum number of SDs
+  maxnsupers: 8192                                              # maximum number of SDs
 
 timesteps:
   CONDTSTEP: 200                                                # time between SD condensation [s]
-  COLLTSTEP: 0.1                                                # time between SD collision [s]
+  COLLTSTEP: 1                                                  # time between SD collision [s]
   MOTIONTSTEP: 200                                              # time between SDM motion [s]
   COUPLTSTEP: 2000                                              # time between dynamic couplings [s]
   OBSTSTEP: 200                                                 # time between SDM observations [s]
@@ -38,15 +38,15 @@ timesteps:
 ### Initialisation Parameters ###
 inputfiles:
   constants_filename: ../libs/cleoconstants.hpp                 # name of file for values of physical constants
-  grid_filename: ./share/shima2009_dimlessGBxboundaries.dat     # binary filename for initialisation of GBxs / GbxMaps
+  grid_filename: ./share/breakup_dimlessGBxboundaries.dat       # binary filename for initialisation of GBxs / GbxMaps
 
 initsupers:
   type: frombinary                                              # type of initialisation of super-droplets
-  initsupers_filename: /home/m/m300950/CLEO/build_colls0D//share/shima2009_dimlessSDsinit_2.dat # binary filename for initialisation of SDs
+  initsupers_filename: ./share/breakup_dimlessSDsinit.dat       # binary filename for initialisation of SDs
 
 ### Output Parameters ###
 outputdata:
-  setup_filename: ./bin/shima2009_setup.txt                     # .txt filename to copy configuration to
-  stats_filename: ./bin/shima2009_stats.txt                     # .txt file to output runtime statistics to
-  zarrbasedir: ./bin/shima2009_sol.zarr                         # zarr store base directory
+  setup_filename: ./bin/breakup_setup.txt                     # .txt filename to copy configuration to
+  stats_filename: ./bin/breakup_stats.txt                     # .txt file to output runtime statistics to
+  zarrbasedir: ./bin/breakup_sol.zarr                         # zarr store base directory
   maxchunk: 2500000                                             # maximum no. of elements in chunks of zarr store array

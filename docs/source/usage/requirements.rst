@@ -67,7 +67,8 @@ YAC is one of the :doc:`external libraries<extern>` which CLEO may require in or
 couple to dynamics and/or have MPI domain decomposition.
 
 Note that YAC (and its YAXT dependency) need to be installed manually before you can build
-CLEO with them. You can find instructions on how to do install YAC (and YAXT) :ref:`here <_extern_yac>`.
+CLEO with them. You can find instructions on how to do install YAC (and YAXT) in the
+external libraries section.
 
 YAC also requires some additional MPI, NetCDF and yaml libraries alongside the compatible gcc
 compiler which you can load on Levante via:

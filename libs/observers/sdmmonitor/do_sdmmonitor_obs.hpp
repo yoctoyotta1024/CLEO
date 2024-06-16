@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 6th June 2024
+ * Last Modified: Saturday 15th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -64,6 +64,7 @@ class DoSDMMonitorObs {
    * @brief Constructor for DoSDMMonitorObs.
    * @param dataset Dataset to write monitored data to.
    * @param xzarr_ptr Pointer to zarr array in xarray dataset.
+   * @param monitor SDMMonitor to use.
    */
   DoSDMMonitorObs(Dataset<Store> &dataset,
                   const std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr, const SDMMo monitor)
