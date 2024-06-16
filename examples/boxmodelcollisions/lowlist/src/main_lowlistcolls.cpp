@@ -81,16 +81,15 @@ inline auto create_movement(const CartesianMaps &gbxmaps) {
 inline MicrophysicalProcess auto create_microphysics(const Config &config,
                                                      const Timesteps &tsteps) {
   const auto c = config.get_breakup();
-
   const PairProbability auto buprob = LowListBuProb();
   const NFragments auto nfrags = ConstNFrags(c.constnfrags.nfrags);
   const MicrophysicalProcess auto bu =
       CollBu(tsteps.get_collstep(), &step2realtime, buprob, nfrags);
 
   const PairProbability auto coalprob = LowListCoalProb();
-  const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(), &step2realtime, coalprob);
+  const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime, coalprob);
 
-  return colls >> bu;
+  return coal >> bu;
 }
 
 template <typename Store>
