@@ -49,6 +49,8 @@
 #include "runcleo/couplingcomms.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
+#include "superdrops/collisions/breakup.hpp"
+#include "superdrops/collisions/breakup_nfrags.hpp"
 #include "superdrops/collisions/coalescence.hpp"
 #include "superdrops/collisions/lowlistprob.hpp"
 #include "superdrops/microphysicalprocess.hpp"
