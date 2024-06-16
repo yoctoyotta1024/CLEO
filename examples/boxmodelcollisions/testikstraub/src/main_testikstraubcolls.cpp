@@ -51,8 +51,12 @@
 #include "runcleo/couplingcomms.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
-// #include "superdrops/collisions/coalescence.hpp"
-// #include "superdrops/collisions/lowlistprob.hpp" WIP
+#include "superdrops/collisions/breakup.hpp"
+#include "superdrops/collisions/breakup_nfrags.hpp"
+#include "superdrops/collisions/coalbure.hpp"
+#include "superdrops/collisions/coalbure_flag.hpp"
+#include "superdrops/collisions/coalescence.hpp"
+#include "superdrops/collisions/longhydroprob.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "zarr/dataset.hpp"
@@ -80,7 +84,11 @@ inline auto create_movement(const CartesianMaps &gbxmaps) {
 
 inline MicrophysicalProcess auto create_microphysics(const Config &config,
                                                      const Timesteps &tsteps) {
-  // WIP (see includes too)
+  const PairProbability auto collprob = LongHydroProb();
+  const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
+  const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
+  const MicrophysicalProcess auto colls =
+      CoalBuRe(tsteps.get_collstep(), &step2realtime, collprob, nfrags, coalbure_flag);
   return colls;
 }
 
