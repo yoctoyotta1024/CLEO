@@ -55,9 +55,6 @@ struct CartesianDynamics {
   // Containers for cell-centered fields
   std::vector<double> press, temp, qvap, qcond;
 
-  // Container for all edge-centered data (as in data in each edge center)
-  std::vector<double> united_edge_data;
-
   // Target for lon and lat edge data respectively
   // (these are copied from united_edge_data after receiving from YAC)
   std::vector<double> uvel, wvel;
@@ -71,8 +68,14 @@ struct CartesianDynamics {
   int temp_yac_id;
   int qvap_yac_id;
   int qcond_yac_id;
-  int hor_wind_velocities_yac_id;
+  int eastward_wind_yac_id;
+  int northward_wind_yac_id;
   int vvel_yac_id;
+
+  // Containers to receive data from YAC
+  double ** yac_raw_cell_data;
+  double ** yac_raw_edge_data;
+  double ** yac_raw_vertical_wind_data;
 
   /* --- Private functions --- */
 
@@ -121,6 +124,10 @@ struct CartesianDynamics {
   /* Public call to receive data from YAC
    * If the problem is 2D turns into a wrapper for receive_hor_slice_from_yac */
   void receive_fields_from_yac();
+  void receive_field_collections_from_yac();
+  void receive_yac_field(unsigned int field_type, unsigned int yac_field_id,
+                         double ** yac_raw_data, std::vector<double> & target_array,
+                         size_t vertical_levels);
 };
 
 /* type satisfying CoupledDyanmics solver concept
@@ -133,7 +140,9 @@ struct YacDynamics {
   std::shared_ptr<CartesianDynamics> dynvars;  // pointer to (thermo)dynamic variables
 
   /* Calls the get operations to receive data from YAC for each of the fields of interest */
-  void run_dynamics(const unsigned int t_mdl) const { dynvars->receive_fields_from_yac(); }
+  void run_dynamics(const unsigned int t_mdl) const {
+    dynvars->receive_field_collections_from_yac();
+  }
 
  public:
   YacDynamics(const Config &config, const unsigned int couplstep, const std::array<size_t, 3> ndims,
