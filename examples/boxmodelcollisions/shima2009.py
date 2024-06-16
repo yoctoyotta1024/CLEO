@@ -75,7 +75,7 @@ ygrid = np.asarray([0, 100])
 ### --- settings for initial superdroplets --- ###
 # settings for superdroplet coordinates
 nsupers_1 = {0: 4096}
-nsupers_2 = {0: 16384}
+nsupers_2 = {0: 8192}
 coord_params = ["false"]
 
 # settings for superdroplet attributes
