@@ -2,6 +2,20 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.14.0](https://github.com/yoctoyotta1024/CLEO/compare/98566bb40ae938dbfd6065bdeb0efdfa46b68385..v0.14.0) - 2024-06-16
+#### Features
+- created subroutines to receive multiple horizontal levels from yac at once using yac collections - ([70cfa84](https://github.com/yoctoyotta1024/CLEO/commit/70cfa8406b964854b8df5f86f3525ee68b684e7f)) - wiltonloch
+- changed cleo coupling to receive data from ICON's bubble test data reader - ([2bbf2bd](https://github.com/yoctoyotta1024/CLEO/commit/2bbf2bd9872ba789dc07211d51c4cff3a76251ad)) - wiltonloch
+- added new python script to read data from ICON's bubble test - ([98566bb](https://github.com/yoctoyotta1024/CLEO/commit/98566bb40ae938dbfd6065bdeb0efdfa46b68385)) - wiltonloch
+#### Miscellaneous Chores
+- removed vertical slice-based subroutines to receive fields from yac - ([cc7ce27](https://github.com/yoctoyotta1024/CLEO/commit/cc7ce273b0200b0015358e218185a4219651f79f)) - wiltonloch
+#### Performance Improvements
+- added yac data containers as members of CartesianDynamics to have only one allocation and deallocation - ([6bed606](https://github.com/yoctoyotta1024/CLEO/commit/6bed6064a5f0146763fa5d7f0bc40bf1669724f0)) - wiltonloch
+#### Refactoring
+- redefined fields to receive all vertical levels at once - ([dbb572a](https://github.com/yoctoyotta1024/CLEO/commit/dbb572a555533f3a8c7e327f2e41ecda7df34a77)) - wiltonloch
+
+- - -
+
 ## [v0.13.0](https://github.com/yoctoyotta1024/CLEO/compare/b8cdcab0aedab3e2f0f2e0fc9086a06f0fe566d6..v0.13.0) - 2024-06-11
 #### Features
 - optional lat lon bound parameters applied to vertex coordinates creation - ([cb88b57](https://github.com/yoctoyotta1024/CLEO/commit/cb88b576856d577c621e20aa4bb4d618efd0d50f)) - wiltonloch
