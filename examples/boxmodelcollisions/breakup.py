@@ -179,22 +179,15 @@ def run_exectuable(path2build, kernel, configfile):
     os.system(executable + " " + configfile)
 
 
-def plot_results(
+def plot_onekernel_results(
     gridfile,
     setupfile,
     dataset,
     numconc,
     volexpr0,
     t2plts,
-    smoothsigconst,
-    xlims,
-    plotwitherr,
-    withgol,
     savename,
 ):
-    ### ------------------------------------------------------------ ###
-    ### ----------------------- PLOT RESULTS ----------------------- ###
-    ### ------------------------------------------------------------ ###
     # read in constants and intial setup from setup .txt file
     config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
     consts = pysetuptxt.get_consts(setupfile, isprint=True)
@@ -205,9 +198,13 @@ def plot_results(
 
     # make and save plot
     savename = savefigpath + savename
+    xlims = [10, 5000]
+    smoothsigconst = 0.62
     smoothsig = smoothsigconst * (
         config["maxnsupers"] ** (-1 / 5)
     )  # = ~0.2 for guassian smoothing
+    plotwitherr = False
+    withgol = False
     fig, ax = shima2009fig.plot_validation_figure(
         plotwitherr,
         time,
@@ -236,24 +233,16 @@ for kernel in kernels:
 ### ------------------------------------------------------------ ###
 for kernel in kernels:
     t2plts = [0, 600, 1200, 1800, 2400]
-    smoothsigconst = 0.62
-    xlims = [10, 5000]
-    plotwitherr = False
-    withgol = False
     savename = kernel + "_validation.png"
     params = get_params(path2build, kernel)
 
-    plot_results(
+    plot_onekernel_results(
         gridfile,
         params["setup_filename"],
         params["zarrbasedir"],
         numconc,
         volexpr0,
         t2plts,
-        smoothsigconst,
-        xlims,
-        plotwitherr,
-        withgol,
         savename,
     )
 ### ------------------------------------------------------------ ###
