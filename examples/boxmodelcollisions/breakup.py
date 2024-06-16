@@ -9,7 +9,7 @@ Created Date: Friday 14th June 2024
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 14th June 2024
+Last Modified: Sunday 16th June 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -17,7 +17,7 @@ https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
 Script generates input files, runs CLEO 0-D box model executables for
-collisions with selected collision kernels with breakup (e.g.Low and Lists's)
+collisions with selected collision kernels with breakup (e.g. Low and Lists's)
 to create data. Then plots results analgous to Shima et al. 2009 Fig. 2(b)
 """
 
@@ -38,6 +38,7 @@ sys.path.append(
 )  # for imports from example plotting package
 
 from plotssrc import shima2009fig
+from pySD import editconfigfile
 from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
 from pySD.initsuperdropsbinary_src import rgens, probdists, attrsgen
 from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
@@ -55,10 +56,6 @@ binpath = path2build + "/bin/"
 sharepath = path2build + "/share/"
 initSDsfile = sharepath + "breakup_dimlessSDsinit.dat"
 gridfile = sharepath + "breakup_dimlessGBxboundaries.dat"
-
-# path and file names for plotting results
-setupfile = binpath + "breakup_setup.txt"
-dataset = binpath + "breakup_sol.zarr"
 
 # booleans for [making, saving] initialisation figures
 isfigures = [True, True]
@@ -141,11 +138,42 @@ if isfigures[0]:
 ### ---------------------------------------------------------------- ###
 
 
-def run_exectuable(path2build, dataset, executable, configfile):
+def get_executable(path2build, kernel):
+    executables = {
+        "lowlist": "lowlistcolls",
+        "szakallurbich": "szakallurbichcolls",
+        "testikstraub": "testikstraubcolls",
+    }
+    executable = (
+        path2build
+        + "/examples/boxmodelcollisions/"
+        + kernel
+        + "/src/"
+        + executables[kernel]
+    )
+
+    return executable
+
+
+def get_params(path2build, kernel):
+    params = {
+        "setup_filename": path2build + "bin/" + kernel + "_setup.txt",
+        "stats_filename": path2build + "bin/" + kernel + "_stats.txt",
+        "zarrbasedir": path2build + "bin/" + kernel + "_sol.zarr",
+    }
+
+    return params
+
+
+def run_exectuable(path2build, kernel, configfile):
     """delete existing dataset, the run exectuable with given config file"""
+    params = get_params(path2build, kernel)
+    editconfigfile.edit_config_params(configfile, params)
+
+    executable = get_executable(path2build, kernel)
     os.chdir(path2build)
     os.system("pwd")
-    os.system("rm -rf " + dataset)  # delete any existing dataset
+    os.system("rm -rf " + params["zarrbasedir"])  # delete any existing dataset
     print("Executable: " + executable)
     print("Config file: " + configfile)
     os.system(executable + " " + configfile)
@@ -195,28 +223,30 @@ def plot_results(
     )
 
 
-if "lowlist" in kernels:
-    ### ------------------------------------------------------------ ###
-    ### -------------------- RUN CLEO EXECUTABLE ------------------- ###
-    ### ------------------------------------------------------------ ###
-    executable = path2build + "/examples/boxmodelcollisions/lowlist/src/lowlistcolls"
-    run_exectuable(path2build, dataset, executable, configfile)
-    ### ------------------------------------------------------------ ###
-    ### ------------------------------------------------------------ ###
+### ------------------------------------------------------------ ###
+### ---------- RUN CLEO EXECUTABLES FOR EACH KERNEL ------------ ###
+### ------------------------------------------------------------ ###
+for kernel in kernels:
+    run_exectuable(path2build, kernel, configfile)
+### ------------------------------------------------------------ ###
+### ------------------------------------------------------------ ###
 
-    ### ------------------------------------------------------------ ###
-    ### ----------------------- PLOT RESULTS ----------------------- ###
-    ### ------------------------------------------------------------ ###
-    t2plts = [0, 600, 1200, 1800, 2400, 3600]
+### ------------------------------------------------------------ ###
+### ----------------------- PLOT RESULTS ----------------------- ###
+### ------------------------------------------------------------ ###
+for kernel in kernels:
+    t2plts = [0, 600, 1200, 1800, 2400]
     smoothsigconst = 0.62
     xlims = [10, 5000]
     plotwitherr = False
     withgol = False
-    savename = "lowlist_validation.png"
+    savename = kernel + "_validation.png"
+    params = get_params(path2build, kernel)
+
     plot_results(
         gridfile,
-        setupfile,
-        dataset,
+        params["setup_filename"],
+        params["zarrbasedir"],
         numconc,
         volexpr0,
         t2plts,
@@ -226,5 +256,5 @@ if "lowlist" in kernels:
         withgol,
         savename,
     )
-    ### ------------------------------------------------------------ ###
-    ### ------------------------------------------------------------ ###
+### ------------------------------------------------------------ ###
+### ------------------------------------------------------------ ###
