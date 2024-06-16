@@ -80,8 +80,10 @@ inline auto create_movement(const CartesianMaps &gbxmaps) {
 
 inline MicrophysicalProcess auto create_microphysics(const Config &config,
                                                      const Timesteps &tsteps) {
+  const auto c = config.get_breakup();
+
   const PairProbability auto buprob = LowListBuProb();
-  const NFragments auto nfrags = ConstNFrags(5.0);
+  const NFragments auto nfrags = ConstNFrags(c.constnfrags.nfrags);
   const MicrophysicalProcess auto bu =
       CollBu(tsteps.get_collstep(), &step2realtime, buprob, nfrags);
 

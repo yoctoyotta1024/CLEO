@@ -83,8 +83,10 @@ inline auto create_movement(const CartesianMaps &gbxmaps) {
 
 inline MicrophysicalProcess auto create_microphysics(const Config &config,
                                                      const Timesteps &tsteps) {
+  const auto c = config.get_breakup();
+
   const PairProbability auto collprob = LongHydroProb();
-  const NFragments auto nfrags = ConstNFrags(5.0);
+  const NFragments auto nfrags = ConstNFrags(c.constnfrags.nfrags);
   const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag{};
   const MicrophysicalProcess auto colls =
       CoalBuRe(tsteps.get_collstep(), &step2realtime, collprob, nfrags, coalbure_flag);

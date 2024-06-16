@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 1st May 2024
+ * Last Modified: Sunday 16th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -104,6 +104,17 @@ void OptionalConfigParams::CondensationParams::print_params() const {
   std::cout << "\n-------- Condensation Configuration Parameters --------------"
             << "\ndo_alter_thermo: " << do_alter_thermo << "\nniters: " << niters
             << "\nSUBSTEP: " << SUBTSTEP << "\nrtol: " << rtol << "\natol: " << atol
+            << "\n---------------------------------------------------------\n";
+}
+
+void OptionalConfigParams::BreakupParams::set_params(const YAML::Node &config) {
+  const YAML::Node node = config["microphysics"]["breakup"]["constnfrags"];
+  constnfrags.nfrags = node["nfrags"].as<double>();
+}
+
+void OptionalConfigParams::BreakupParams::print_params() const {
+  std::cout << "\n-------- Breakup Configuration Parameters --------------"
+            << "\nConstNFrags nfrags: " << constnfrags.nfrags
             << "\n---------------------------------------------------------\n";
 }
 

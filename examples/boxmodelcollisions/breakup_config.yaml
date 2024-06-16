@@ -49,4 +49,10 @@ outputdata:
   setup_filename: ./bin/breakup_setup.txt                     # .txt filename to copy configuration to
   stats_filename: ./bin/breakup_stats.txt                     # .txt file to output runtime statistics to
   zarrbasedir: ./bin/breakup_sol.zarr                         # zarr store base directory
-  maxchunk: 2500000                                             # maximum no. of elements in chunks of zarr store array
+  maxchunk: 2500000                                           # maximum no. of elements in chunks of zarr store array
+
+### Microphysics Parameters ###
+microphysics:
+  breakup:
+    constnfrags:
+      nfrags: 5                                               # average no. of fragments per droplet breakup
