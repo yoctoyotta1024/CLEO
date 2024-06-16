@@ -24,6 +24,7 @@ to create data. Then plots results analgous to Shima et al. 2009 Fig. 2(b)
 import os
 import sys
 import numpy as np
+import awkward as ak
 import matplotlib.pyplot as plt
 from pathlib import Path
 
@@ -39,7 +40,7 @@ sys.path.append(
 
 from plotssrc import shima2009fig
 from pySD import editconfigfile
-from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
+from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat, sdtracing
 from pySD.initsuperdropsbinary_src import rgens, probdists, attrsgen
 from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
 from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
@@ -179,26 +180,39 @@ def run_exectuable(path2build, kernel, configfile):
     os.system(executable + " " + configfile)
 
 
-def plot_onekernel_results(
-    gridfile,
-    setupfile,
-    dataset,
-    numconc,
-    volexpr0,
-    t2plts,
-    savename,
-):
+def get_kernel_results(path2build, kernel):
+    """read in time, sddata and setup for given kernel"""
+    params = get_params(path2build, kernel)
+    setupfile = params["setup_filename"]
+    dataset = params["zarrbasedir"]
+
     # read in constants and intial setup from setup .txt file
     config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
     consts = pysetuptxt.get_consts(setupfile, isprint=True)
-    gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
 
+    # read in seom data from dataset
     time = pyzarr.get_time(dataset).secs
     sddata = pyzarr.get_supers(dataset, consts)
 
+    return config, consts, time, sddata
+
+
+def plot_onekernel_results(
+    gridfile,
+    path2build,
+    kernel,
+    numconc,
+    volexpr0,
+    xlims,
+    t2plts,
+    savename,
+):
+    # read in data
+    config, consts, time, sddata = get_kernel_results(path2build, kernel)
+    gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
+
     # make and save plot
     savename = savefigpath + savename
-    xlims = [10, 5000]
     smoothsigconst = 0.62
     smoothsig = smoothsigconst * (
         config["maxnsupers"] ** (-1 / 5)
@@ -220,6 +234,58 @@ def plot_onekernel_results(
     )
 
 
+def plot_allkernels_results(gridfile, path2build, kernels, xlims, t2plts, savename):
+    styles = {
+        "lowlist": "-.",
+        "szakallurbich": "--",
+        "testikstraub": "-",
+    }
+    colormap = plt.get_cmap("plasma")
+    colors = [colormap(i) for i in np.linspace(0, 1, len(t2plts))]
+    witherr = False
+
+    fig, ax = shima2009fig.setup_validation_figure(witherr, xlims)[0:2]
+    for kernel in kernels:
+        # read in data
+        config, consts, time, sddata = get_kernel_results(path2build, kernel)
+        domainvol = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)[
+            "domainvol"
+        ]
+        smoothsig = 0.62 * (
+            config["maxnsupers"] ** (-1 / 5)
+        )  # = ~0.2 for guassian smoothing
+
+        attrs2sel = ["radius", "xi"]
+        selsddata = sdtracing.attributes_at_times(sddata, time, t2plts, attrs2sel)
+
+        nbins = 500
+        non_nanradius = ak.nan_to_none(sddata["radius"])
+        rspan = [ak.min(non_nanradius), ak.max(non_nanradius)]
+
+        for n in range(len(t2plts)):
+            radius = selsddata["radius"][n]
+            xi = selsddata["xi"][n]
+            hist, hcens = shima2009fig.calc_massdens_distrib(
+                rspan, nbins, domainvol, xi, radius, sddata, smoothsig
+            )
+            if n == 0:
+                ax.plot(
+                    hcens, hist, label=kernel, color=colors[n], linestyle=styles[kernel]
+                )
+            else:
+                ax.plot(hcens, hist, color=colors[n], linestyle=styles[kernel])
+
+    ax.legend()
+    fig.tight_layout()
+
+    if savename != "":
+        fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
+        print("Figure .png saved as: " + savename)
+    plt.show()
+
+    return fig, ax
+
+
 ### ------------------------------------------------------------ ###
 ### ---------- RUN CLEO EXECUTABLES FOR EACH KERNEL ------------ ###
 ### ------------------------------------------------------------ ###
@@ -233,17 +299,23 @@ for kernel in kernels:
 ### ------------------------------------------------------------ ###
 for kernel in kernels:
     t2plts = [0, 600, 1200, 1800, 2400]
+    xlims = [10, 5000]
     savename = kernel + "_validation.png"
-    params = get_params(path2build, kernel)
-
     plot_onekernel_results(
         gridfile,
-        params["setup_filename"],
-        params["zarrbasedir"],
+        path2build,
+        kernel,
         numconc,
         volexpr0,
+        xlims,
         t2plts,
         savename,
     )
+
+
+t2plts = [0, 600, 1200, 1800, 2400]
+xlims = [10, 5000]
+savename = "breakup_validation.png"
+plot_allkernels_results(gridfile, path2build, kernels, xlims, t2plts, savename)
 ### ------------------------------------------------------------ ###
 ### ------------------------------------------------------------ ###
