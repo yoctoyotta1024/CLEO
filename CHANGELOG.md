@@ -2,6 +2,20 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.15.0](https://github.com/yoctoyotta1024/CLEO/compare/f9fabde881fafaf459dbaaad846e72a3d38dd5f0..v0.15.0) - 2024-06-16
+#### Documentation
+- fixes to minor typos and examples docs - ([8422a27](https://github.com/yoctoyotta1024/CLEO/commit/8422a278c649b88828d5988d1449688433ad4abd)) - clara.bayley
+#### Features
+- new method for initial SD conditions for shima 2009 example - ([1dd7769](https://github.com/yoctoyotta1024/CLEO/commit/1dd7769f4893767ed516db0156d27a3bc69b5e0c)) - clara.bayley
+#### Miscellaneous Chores
+- fix formatting - ([9ab82ad](https://github.com/yoctoyotta1024/CLEO/commit/9ab82adbc02ec5feab79b3fa79b8c2009ab54522)) - clara.bayley
+#### Performance Improvements
+- configuration of shima 2009 example altered slightly - ([15fa197](https://github.com/yoctoyotta1024/CLEO/commit/15fa197594b6094ca50728cb47b9ea4e9dcd6d3b)) - clara.bayley
+#### Refactoring
+- split shima2009 examples from breakup example - ([f9fabde](https://github.com/yoctoyotta1024/CLEO/commit/f9fabde881fafaf459dbaaad846e72a3d38dd5f0)) - clara.bayley
+
+- - -
+
 ## [v0.14.0](https://github.com/yoctoyotta1024/CLEO/compare/98566bb40ae938dbfd6065bdeb0efdfa46b68385..v0.14.0) - 2024-06-16
 #### Features
 - created subroutines to receive multiple horizontal levels from yac at once using yac collections - ([70cfa84](https://github.com/yoctoyotta1024/CLEO/commit/70cfa8406b964854b8df5f86f3525ee68b684e7f)) - wiltonloch
