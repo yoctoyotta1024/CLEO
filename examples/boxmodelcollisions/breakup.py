@@ -212,7 +212,6 @@ def plot_onekernel_results(
     gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
 
     # make and save plot
-    savename = savefigpath + savename
     smoothsigconst = 0.62
     smoothsig = smoothsigconst * (
         config["maxnsupers"] ** (-1 / 5)
@@ -300,7 +299,7 @@ for kernel in kernels:
 for kernel in kernels:
     t2plts = [0, 600, 1200, 1800, 2400]
     xlims = [10, 5000]
-    savename = kernel + "_validation.png"
+    savename = savefigpath + kernel + "_validation.png"
     plot_onekernel_results(
         gridfile,
         path2build,
@@ -315,7 +314,7 @@ for kernel in kernels:
 
 t2plts = [0, 600, 1200, 1800, 2400]
 xlims = [10, 5000]
-savename = "breakup_validation.png"
+savename = savefigpath + "breakup_validation.png"
 plot_allkernels_results(gridfile, path2build, kernels, xlims, t2plts, savename)
 ### ------------------------------------------------------------ ###
 ### ------------------------------------------------------------ ###
