@@ -235,16 +235,27 @@ def plot_onekernel_results(
 
 
 def plot_allkernels_results(gridfile, path2build, kernels, xlims, t2plts, savename):
+    def blank_axis(ax, xlims, ylims):
+        ax2.set_xlim(xlims)
+        ax2.set_ylim(ylims)
+        for spine in ax.spines.values():
+            spine.set_visible(False)
+        ax.set_xticks([])  # Remove x-axis tick marks
+        ax.set_yticks([])  # Remove y-axis tick marks
+        ax.set_xticklabels([])  # Remove x-axis tick labels
+        ax.set_yticklabels([])  # Remove y-axis tick labels
+
     styles = {
-        "lowlist": "-.",
-        "szakallurbich": "--",
-        "testikstraub": "-",
+        "long": ["Long (coal only)", "grey", 0.8],
+        "lowlist": ["Low & List", "blue", 1.0],
+        "szakallurbich": ["Szakall & Urbich", "green", 1.0],
+        "testikstraub": ["Testik + Straub", "purple", 1.0],
     }
-    colormap = plt.get_cmap("plasma")
-    colors = [colormap(i) for i in np.linspace(0, 1, len(t2plts))]
+    linestyles = ["dotted", "dashdot", (0, (3, 1, 1, 1)), "dashed", "solid"]
     witherr = False
 
     fig, ax = shima2009fig.setup_validation_figure(witherr, xlims)[0:2]
+    ax2 = ax.twinx()
     for kernel in kernels:
         # read in data
         config, consts, time, sddata = get_kernel_results(path2build, kernel)
@@ -268,14 +279,38 @@ def plot_allkernels_results(gridfile, path2build, kernels, xlims, t2plts, savena
             hist, hcens = shima2009fig.calc_massdens_distrib(
                 rspan, nbins, domainvol, xi, radius, sddata, smoothsig
             )
-            if n == 0:
+            if kernel == "long":
+                ind = np.argmin(abs(time - t2plts[n]))
+                tlab = "t = {:.2f}s".format(time[ind])
+                ax2.plot(
+                    hcens,
+                    hist,
+                    label=tlab,
+                    color="k",
+                    linestyle=linestyles[n],
+                    linewidth=0.5,
+                )
+            if linestyles[n] == "solid":
                 ax.plot(
-                    hcens, hist, label=kernel, color=colors[n], linestyle=styles[kernel]
+                    hcens,
+                    hist,
+                    label=styles[kernel][0],
+                    color=styles[kernel][1],
+                    linestyle=linestyles[n],
+                    linewidth=styles[kernel][2],
                 )
             else:
-                ax.plot(hcens, hist, color=colors[n], linestyle=styles[kernel])
+                ax.plot(
+                    hcens,
+                    hist,
+                    color=styles[kernel][1],
+                    linestyle=linestyles[n],
+                    linewidth=styles[kernel][2],
+                )
 
-    ax.legend()
+    ax.legend(loc="lower left")
+    ax2.legend(loc="lower right")
+    blank_axis(ax2, ax.get_xlim(), ax.get_ylim())
     fig.tight_layout()
 
     if savename != "":
