@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 6th June 2024
+ * Last Modified: Monday 17th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -133,7 +133,7 @@ irrespective of whether scaled probability, prob > 1 */
 template <NFragments NFrags>
 KOKKOS_FUNCTION unsigned int DoBreakup<NFrags>::breakup_gamma(const double prob,
                                                               const double phi) const {
-  if (phi < (prob - floor(prob))) {
+  if (phi < (prob - Kokkos::floor(prob))) {
     return 1;
   } else {  // if phi >= (prob - floor(prob))
     return 0;
