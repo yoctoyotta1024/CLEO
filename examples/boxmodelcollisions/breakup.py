@@ -9,7 +9,7 @@ Created Date: Friday 14th June 2024
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Sunday 16th June 2024
+Last Modified: Monday 17th June 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -141,6 +141,7 @@ if isfigures[0]:
 
 def get_executable(path2build, kernel):
     executables = {
+        "long": "longcolls",
         "lowlist": "lowlistcolls",
         "szakallurbich": "szakallurbichcolls",
         "testikstraub": "testikstraubcolls",
