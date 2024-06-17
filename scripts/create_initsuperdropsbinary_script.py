@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 1st May 2024
+Last Modified: Monday 17th June 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -25,7 +25,7 @@ import numpy as np
 from pathlib import Path
 
 sys.path.append(sys.argv[1])  # path to pySD (same as to CLEO)
-from pySD.initsuperdropsbinary_src import crdgens, rgens, dryrgens, probdists, attrsgen
+from pySD.initsuperdropsbinary_src import rgens, dryrgens, probdists, attrsgen
 from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
 from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
 
@@ -54,20 +54,20 @@ initsupersfile = (
 
 ### --- Number of Superdroplets per Gridbox --- ###
 ### ---        (an int or dict of ints)     --- ###
-zlim = 800
-npergbx = 1024
+# zlim = 800
+# npergbx = 8192
 # nsupers =  crdgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim) # supers where z <= zlim
-nsupers = crdgens.nsupers_at_domain_top(
-    gridfile, constsfile, npergbx, zlim
-)  # supers where z >= zlim
-# nsupers = 100
+# nsupers = crdgens.nsupers_at_domain_top(
+#     gridfile, constsfile, npergbx, zlim
+# )  # supers where z >= zlim
+nsupers = 8192
 ### ------------------------------------------- ###
 
 ### --- Choice of Superdroplet Radii Generator --- ###
 # monor                = 0.05e-6                        # all SDs have this same radius [m]
 # radiigen  =  rgens.MonoAttrGen(monor)                 # all SDs have the same radius [m]
 
-rspan = [1e-8, 1e-4]  # min and max range of radii to sample [m]
+rspan = [5e-9, 1e-6]  # min and max range of radii to sample [m]
 radiigen = rgens.SampleLog10RadiiGen(rspan)  # radii are sampled from rspan [m]
 ### ---------------------------------------------- ###
 
@@ -86,20 +86,16 @@ dryradiigen = dryrgens.ScaledRadiiGen(dryr_sf)  # dryradii are 1/sf of radii [m]
 # numconc              = 512e6                         # total no. conc of real droplets [m^-3]
 # xiprobdist = probdists.DiracDelta(dirac0)
 
-# # geomeans           = [0.075e-6]                  # lnnormal modes' geometric mean droplet radius [m]
-# # geosigs            = [1.5]                       # lnnormal modes' geometric standard deviation
-# # scalefacs          = [1]                         # relative heights of modes
+# geomeans           = [0.075e-6]                  # lnnormal modes' geometric mean droplet radius [m]
+# geosigs            = [1.5]                       # lnnormal modes' geometric standard deviation
+# scalefacs          = [1]                         # relative heights of modes
 # geomeans             = [0.02e-6, 0.2e-6, 3.5e-6]
 # geosigs              = [1.55, 2.3, 2]
 # scalefacs            = [1, 0.3, 0.025]
-# # # geomeans             = [0.02e-6, 0.15e-6]
-# # # geosigs              = [1.4, 1.6]
-# # # scalefacs            = [0.06, 0.04]
-# numconc = np.sum(scalefacs) * 5e8
-geomeans = [0.2e-6, 3.5e-6]
-geosigs = [2.3, 2]
-scalefacs = [1, 2]
-numconc = np.sum(scalefacs) * 2e8
+geomeans = [0.02e-6, 0.15e-6]
+geosigs = [1.4, 1.6]
+scalefacs = [0.6, 0.4]
+numconc = np.sum(scalefacs) * 1e9
 xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
 
 # volexpr0             = 30.531e-6                   # peak of volume exponential distribution [m]
@@ -125,8 +121,8 @@ xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
 ### --- Choice of Superdroplet Coord3 Generator --- ###
 # monocoord3           = 1000                        # all SDs have this same coord3 [m]
 # coord3gen            =  crdgens.MonoCoordGen(monocoord3)
-coord3gen = crdgens.SampleCoordGen(True)  # sample coord3 range randomly or not
-# coord3gen            = None                        # do not generate superdroplet coord3s
+# coord3gen = crdgens.SampleCoordGen(True)  # sample coord3 range randomly or not
+coord3gen = None  # do not generate superdroplet coord3s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord1 Generator --- ###
