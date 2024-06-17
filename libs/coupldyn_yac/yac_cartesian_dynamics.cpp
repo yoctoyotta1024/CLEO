@@ -139,7 +139,7 @@ void CartesianDynamics::receive_yac_field(unsigned int field_type,
                                           std::vector<double> & target_array,
                                           size_t vertical_levels) {
   int info, error;
-  int total_horizontal_cells = ndims[0] * ndims[1];
+  unsigned int total_horizontal_cells = ndims[0] * ndims[1];
   bool edge_dimension = false;
   std::vector<double>::iterator target_it = target_array.begin();
 
@@ -147,8 +147,8 @@ void CartesianDynamics::receive_yac_field(unsigned int field_type,
 
   switch (field_type) {
     case 0:
-      for (int i = 0; i < vertical_levels; i++)
-        for (int j = 0; j < total_horizontal_cells; j++)
+      for (size_t i = 0; i < vertical_levels; i++)
+        for (size_t j = 0; j < total_horizontal_cells; j++)
           target_array[i * total_horizontal_cells + j] = yac_raw_data[i][j];
       return;
 
@@ -295,12 +295,12 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   yac_raw_edge_data = new double * [ndims[2]];
   yac_raw_vertical_wind_data = new double * [ndims[2] + 1];
 
-  for (int i = 0; i < ndims[2]; i++) {
+  for (size_t i = 0; i < ndims[2]; i++) {
     yac_raw_cell_data[i] = new double[horizontal_cell_number];
     yac_raw_edge_data[i] = new double[horizontal_edge_number];
   }
 
-  for (int i = 0; i < ndims[2] + 1; i++)
+  for (size_t i = 0; i < ndims[2] + 1; i++)
     yac_raw_vertical_wind_data[i] = new double[horizontal_cell_number];
 
   // Initialization of target containers for receiving data
@@ -328,12 +328,12 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
 }
 
 CartesianDynamics::~CartesianDynamics() {
-  for (int i = 0; i < ndims[2]; i++) {
+  for (size_t i = 0; i < ndims[2]; i++) {
     delete yac_raw_cell_data[i];
     delete yac_raw_edge_data[i];
   }
 
-  for (int i = 0; i < ndims[2] + 1; i++)
+  for (size_t i = 0; i < ndims[2] + 1; i++)
     delete yac_raw_vertical_wind_data[i];
 
   delete [] yac_raw_cell_data;
