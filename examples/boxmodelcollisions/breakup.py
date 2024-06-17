@@ -251,7 +251,7 @@ def plot_allkernels_results(gridfile, path2build, kernels, xlims, t2plts, savena
         "szakallurbich": ["Szakall & Urbich", "green", 1.0],
         "testikstraub": ["Testik + Straub", "purple", 1.0],
     }
-    linestyles = ["dotted", "dashdot", (0, (3, 1, 1, 1)), "dashed", "solid"]
+    linestyles = ["dotted", (0, (3, 1, 1, 1)), "dashed", "dashdot", "solid"]
     witherr = False
 
     fig, ax = shima2009fig.setup_validation_figure(witherr, xlims)[0:2]
