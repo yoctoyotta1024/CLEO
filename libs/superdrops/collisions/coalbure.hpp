@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 6th June 2024
+ * Last Modified: Monday 17th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -56,24 +56,44 @@ struct DoCoalBuRe {
   DoBreakup<NFrags> bu; /**< Instance of DoBreakup with specified no. of fragments calculation. */
   Flag coalbure_flag;   /**< Instance of CoalBuReFlag indicating the action to perform. */
 
+  /*
+  rescale random number phi be in desired range of [0, 1] to account for fact that if a
+  collision occurs (i.e. if gamma != 0) then phi lies in range [0, prob - floor(prob)] rather than
+  [0, 1].
+  * _Note:_ This function is assumed to be consitent with collision_gamma(...) and must be.
+  */
+  KOKKOS_FUNCTION
+  uint64_t rescale_phi(const double prob, const double phi) const {
+    return phi / (prob - Kokkos::floor(prob));
+  }
+
   /**
-   * @brief Calculates the value of the gamma factor in collision-coalescence.
+   * @brief Calculates the value of the gamma factor in Monte Carlo collision.
    *
-   * This function calculates the value of the gamma factor in collision-coalescence
-   * based on the given probability of collision.
+   * This function calculates the value of the gamma factor for collisions
+   * based on the given probability of collisions. The calculation is as described for
+   * collision-coalescence in Shima et al. 2009 but applied to collisions (which may result in
+   * coalescence, rebound or breakup) not just collision-coalescence.
    *
    * _Note:_ Probability is probability of collision *NOT* collision-coalescence.
    *
-   * @param xi1 Xi value of the first superdroplet.
-   * @param xi2 Xi value of the second superdroplet.
-   * @param prob Probability of collision.
-   * @param phi Phi value.
-   * @return The calculated gamma factor.
+   * @param xi1 The multiplicity of the first super-droplet.
+   * @param xi2 The multiplicity of the second super-droplet.
+   * @param prob The probability of collision.
+   * @param phi Random number in the range [0.0, 1.0].
+   * @return The calculated value of the collision gamma factor.
    */
   KOKKOS_FUNCTION
   uint64_t collision_gamma(const uint64_t xi1, const uint64_t xi2, const double prob,
                            const double phi) const {
-    return coal.coalescence_gamma(xi1, xi2, prob, phi);
+    uint64_t gamma = Kokkos::floor(prob);  // if phi >= (prob - floor(prob))
+    if (phi < (prob - gamma)) {
+      ++gamma;
+    }
+
+    const auto maxgamma = xi1 / xi2;  // same as floor() for positive ints
+
+    return Kokkos::fmin(gamma, maxgamma);
   }
 
   /**
@@ -177,7 +197,8 @@ KOKKOS_FUNCTION bool DoCoalBuRe<NFrags, Flag>::operator()(Superdrop &drop1, Supe
   /* 2. enact collision between pair
   of superdroplets if gamma is not zero */
   if (gamma != 0) {
-    return coalesce_breakup_or_rebound(gamma, phi, drop1, drop2);
+    const double phi_collision = rescale_phi(prob, phi);
+    return coalesce_breakup_or_rebound(gamma, phi_collision, drop1, drop2);
   }
 
   return 0;
