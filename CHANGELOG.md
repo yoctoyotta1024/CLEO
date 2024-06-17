@@ -2,6 +2,34 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.16.0](https://github.com/yoctoyotta1024/CLEO/compare/aea9fd925dd71f85beede067e3a8992847d41ed4..v0.16.0) - 2024-06-17
+#### Bug Fixes
+- typos in executables - ([18f6072](https://github.com/yoctoyotta1024/CLEO/commit/18f60721d03160917e1091fc47a5933d5bbe38be)) - clara.bayley
+- typo in build for CI - ([5ffc281](https://github.com/yoctoyotta1024/CLEO/commit/5ffc281532e1e4d5870e6fa1d7fd8219de9d8ded)) - clara.bayley
+- set brekaup params in config construction (also minor formatting) - ([51559cd](https://github.com/yoctoyotta1024/CLEO/commit/51559cdc71bd1a838f9c11f478c43af44257c5ca)) - clara.bayley
+#### Features
+- add long kernel to breakup example - ([9b24c0c](https://github.com/yoctoyotta1024/CLEO/commit/9b24c0c9fa71ca19d6c1edd0b73e0d3ef814e2f5)) - clara.bayley
+- more plots for breakup example - ([6471a14](https://github.com/yoctoyotta1024/CLEO/commit/6471a14e88597b4b1c2e480098336fa16677c5be)) - clara.bayley
+- more plots for breakup example - ([9ac3f98](https://github.com/yoctoyotta1024/CLEO/commit/9ac3f98c36e62be411d1d83ebba2949b5ccb0473)) - clara.bayley
+- include szakallurbich and testikstraub executables in breakup example - ([3999e55](https://github.com/yoctoyotta1024/CLEO/commit/3999e55948cae12bf0a28b8eebc629f3447f8dba)) - clara.bayley
+- seperate cmake for boxmodelcollisions executable - ([b25719c](https://github.com/yoctoyotta1024/CLEO/commit/b25719cc8ff618d54f4bd0842aea24cc9bad529b)) - clara.bayley
+- allow optional constnfrags nfrags a config parameter - ([0ad3329](https://github.com/yoctoyotta1024/CLEO/commit/0ad33298a0432f00ec05fbf608109c8c82286002)) - clara.bayley
+- add new examples to CI build - ([3a48037](https://github.com/yoctoyotta1024/CLEO/commit/3a480377970fa76352afcbbc49001ecb0e38088a)) - clara.bayley
+- include breakup in lowlist example - ([ab28c5e](https://github.com/yoctoyotta1024/CLEO/commit/ab28c5effb08dfcc5de3058d9df20c99c59bfec1)) - clara.bayley
+- include breakup in lowlist example - ([c5a5dab](https://github.com/yoctoyotta1024/CLEO/commit/c5a5dab7d40db69eb4639deeced3129c11dd1dd4)) - clara.bayley
+- new files for breakup executables - ([aea9fd9](https://github.com/yoctoyotta1024/CLEO/commit/aea9fd925dd71f85beede067e3a8992847d41ed4)) - clara.bayley
+#### Miscellaneous Chores
+- format - ([73f765f](https://github.com/yoctoyotta1024/CLEO/commit/73f765fcf13b0228e476e29bf6357761a7f763ba)) - clara.bayley
+#### Performance Improvements
+- beautify figures - ([54586f7](https://github.com/yoctoyotta1024/CLEO/commit/54586f7974d957b5ccfb1972a1f904356cf45a93)) - clara.bayley
+#### Refactoring
+- minor reordering of line styles - ([6b5113d](https://github.com/yoctoyotta1024/CLEO/commit/6b5113d1b58c1be15be23d251b9dc437b0b619e7)) - clara.bayley
+- better plotting funcs - ([e8be503](https://github.com/yoctoyotta1024/CLEO/commit/e8be5030d599e6867d981529f74a1735974a5098)) - clara.bayley
+- configure microphys for new breakup examples - ([6f9a436](https://github.com/yoctoyotta1024/CLEO/commit/6f9a4361c237075577eef57a48b873acf093409e)) - clara.bayley
+- change nsupers in shima 2nd example - ([dc3fe62](https://github.com/yoctoyotta1024/CLEO/commit/dc3fe628b50632f06134868b51e3a1aae3873c74)) - clara.bayley
+
+- - -
+
 ## [v0.15.0](https://github.com/yoctoyotta1024/CLEO/compare/f9fabde881fafaf459dbaaad846e72a3d38dd5f0..v0.15.0) - 2024-06-16
 #### Documentation
 - fixes to minor typos and examples docs - ([8422a27](https://github.com/yoctoyotta1024/CLEO/commit/8422a278c649b88828d5988d1449688433ad4abd)) - clara.bayley
