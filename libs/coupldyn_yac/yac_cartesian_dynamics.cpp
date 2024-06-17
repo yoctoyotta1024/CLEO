@@ -56,10 +56,10 @@ void create_vertex_coordinates(const Config &config,
       config.get_yac_dynamics().upper_longitude != NaNVals::dbl() &&
       config.get_yac_dynamics().lower_latitude != NaNVals::dbl() &&
       config.get_yac_dynamics().upper_latitude != NaNVals::dbl()) {
-      double lower_longitude = config.get_yac_dynamics().lower_longitude;
-      double upper_longitude = config.get_yac_dynamics().upper_longitude;
-      double lower_latitude = config.get_yac_dynamics().lower_latitude;
-      double upper_latitude = config.get_yac_dynamics().upper_latitude;
+      lower_longitude = config.get_yac_dynamics().lower_longitude;
+      upper_longitude = config.get_yac_dynamics().upper_longitude;
+      lower_latitude = config.get_yac_dynamics().lower_latitude;
+      upper_latitude = config.get_yac_dynamics().upper_latitude;
   }
 
   // Defines the vertex longitude and latitude values in radians for grid creation
