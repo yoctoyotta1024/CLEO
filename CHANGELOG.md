@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.16.1](https://github.com/yoctoyotta1024/CLEO/compare/a021794b0cd03474220ceccdc3d5eaab859a48d5..v0.16.1) - 2024-06-17
+#### Bug Fixes
+- fix missing re-scaling factor in phi calculation - ([a021794](https://github.com/yoctoyotta1024/CLEO/commit/a021794b0cd03474220ceccdc3d5eaab859a48d5)) - clara.bayley
+#### Miscellaneous Chores
+- docstring - ([89b52b4](https://github.com/yoctoyotta1024/CLEO/commit/89b52b455699bd6850a45c28c75e672b69dd3933)) - clara.bayley
+- kokkos namespace explicit - ([a452daf](https://github.com/yoctoyotta1024/CLEO/commit/a452dafd2a4a8ee4bf8e2938f71773dfe25abb7f)) - clara.bayley
+
+- - -
+
 ## [v0.16.0](https://github.com/yoctoyotta1024/CLEO/compare/aea9fd925dd71f85beede067e3a8992847d41ed4..v0.16.0) - 2024-06-17
 #### Bug Fixes
 - typos in executables - ([18f6072](https://github.com/yoctoyotta1024/CLEO/commit/18f60721d03160917e1091fc47a5933d5bbe38be)) - clara.bayley
