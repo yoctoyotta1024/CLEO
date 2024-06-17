@@ -62,6 +62,20 @@ struct DoCoalBuRe {
   [0, 1].
   * _Note:_ This function is assumed to be consitent with collision_gamma(...) and must be.
   */
+
+  /**
+   * @brief Rescales a random number phi to be in the desired range [0, 1].
+   *
+   * This function adjusts the value of phi to account for the fact that if a collision occurs
+   * (i.e., if gamma != 0), then phi lies in the range [0, prob - floor(prob)] instead of [0, 1].
+   *
+   * @note This function is assumed to be consistent with collision_gamma(...) and must be.
+   *
+   * @param prob The probability of collision.
+   * @param phi Random number, assumed to be in the range [0.0, prob - floor(prob)].
+   *
+   * @return The rescaled value of phi as a uint64_t.
+   */
   KOKKOS_FUNCTION
   uint64_t rescale_phi(const double prob, const double phi) const {
     return phi / (prob - Kokkos::floor(prob));
