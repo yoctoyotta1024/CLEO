@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 19th April 2024
+ * Last Modified: Sunday 16th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -82,6 +82,8 @@ struct Config {
     return optional.condensation;
   }
 
+  OptionalConfigParams::BreakupParams get_breakup() const { return optional.breakup; }
+
   OptionalConfigParams::InitSupersFromBinaryParams get_initsupersfrombinary() const {
     return optional.initsupersfrombinary;
   }
@@ -94,9 +96,7 @@ struct Config {
     return optional.fromfiledynamics;
   }
 
-  OptionalConfigParams::YacDynamicsParams get_yac_dynamics() const {
-    return optional.yac_dynamics;
-  }
+  OptionalConfigParams::YacDynamicsParams get_yac_dynamics() const { return optional.yac_dynamics; }
 
   OptionalConfigParams::AddSupersAtDomainTopParams get_addsupersatdomaintop() const {
     return optional.addsupersatdomaintop;

@@ -33,7 +33,7 @@ timesteps:
   MOTIONTSTEP: 200                                              # time between SDM motion [s]
   COUPLTSTEP: 2000                                              # time between dynamic couplings [s]
   OBSTSTEP: 200                                                 # time between SDM observations [s]
-  T_END: 3800                                                   # time span of integration from 0s to T_END [s]
+  T_END: 2400                                                   # time span of integration from 0s to T_END [s]
 
 ### Initialisation Parameters ###
 inputfiles:
@@ -46,7 +46,13 @@ initsupers:
 
 ### Output Parameters ###
 outputdata:
-  setup_filename: ./bin/breakup_setup.txt                     # .txt filename to copy configuration to
-  stats_filename: ./bin/breakup_stats.txt                     # .txt file to output runtime statistics to
-  zarrbasedir: ./bin/breakup_sol.zarr                         # zarr store base directory
-  maxchunk: 2500000                                             # maximum no. of elements in chunks of zarr store array
+  setup_filename: /home/m/m300950/CLEO/build_colls0D/bin/testikstraub_setup.txt  # .txt filename to copy configuration to
+  stats_filename: /home/m/m300950/CLEO/build_colls0D/bin/testikstraub_stats.txt  # .txt file to output runtime statistics to
+  zarrbasedir: /home/m/m300950/CLEO/build_colls0D/bin/testikstraub_sol.zarr  # zarr store base directory
+  maxchunk: 2500000                                           # maximum no. of elements in chunks of zarr store array
+
+### Microphysics Parameters ###
+microphysics:
+  breakup:
+    constnfrags:
+      nfrags: 5.0                                             # average no. of fragments per droplet breakup

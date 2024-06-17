@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 6th June 2024
+ * Last Modified: Sunday 16th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -137,7 +137,7 @@ inline MicrophysicalProcess auto config_condensation(const Config &config,
 
 inline MicrophysicalProcess auto config_collisions(const Config &config, const Timesteps &tsteps) {
   // const PairProbability auto collprob = LongHydroProb();
-  // // const NFragments auto nfrags = ConstNFrags(5.0);
+  // // const NFragments auto nfrags = ConstNFrags(config.get_breakup().constnfrags.nfrags);
   // const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
   // // const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag{};
   // const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
@@ -149,7 +149,7 @@ inline MicrophysicalProcess auto config_collisions(const Config &config, const T
   // return colls;
 
   // const PairProbability auto buprob = LowListBuProb();
-  // const NFragments auto nfrags = ConstNFrags(5.0);
+  // const NFragments auto nfrags = ConstNFrags(config.get_breakup().constnfrags.nfrags);
   // const MicrophysicalProcess auto bu = CollBu(tsteps.get_collstep(),
   //                                             &step2realtime,
   //                                             buprob,

@@ -22,11 +22,11 @@ buildtype="cuda"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_colls0D/
 enableyac=false
-executables="lowlistcolls"
+executables="longcolls lowlistcolls szakallurbichcolls testikstraubcolls"
 
 pythonscript=${path2CLEO}/examples/boxmodelcollisions/breakup.py
 configfile=${path2CLEO}/examples/boxmodelcollisions/breakup_config.yaml
-script_args="${configfile} lowlist"
+script_args="${configfile} long lowlist szakallurbich testikstraub"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

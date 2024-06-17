@@ -9,7 +9,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 14th June 2024
+Last Modified: Sunday 16th June 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -75,7 +75,7 @@ ygrid = np.asarray([0, 100])
 ### --- settings for initial superdroplets --- ###
 # settings for superdroplet coordinates
 nsupers_1 = {0: 4096}
-nsupers_2 = {0: 16384}
+nsupers_2 = {0: 8192}
 coord_params = ["false"]
 
 # settings for superdroplet attributes
@@ -206,9 +206,6 @@ def plot_results(
     withgol,
     savename,
 ):
-    ### ------------------------------------------------------------ ###
-    ### ----------------------- PLOT RESULTS ----------------------- ###
-    ### ------------------------------------------------------------ ###
     # read in constants and intial setup from setup .txt file
     config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
     consts = pysetuptxt.get_consts(setupfile, isprint=True)

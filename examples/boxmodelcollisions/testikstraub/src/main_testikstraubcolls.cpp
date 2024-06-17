@@ -3,9 +3,9 @@
  *
  *
  * ----- CLEO -----
- * File: main_lowlistcolls.cpp
+ * File: main_testikstraubcolls.cpp
  * Project: src
- * Created Date: Thursday 12th October 2023
+ * Created Date: Sunday 16th June 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
@@ -16,9 +16,11 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * runs the CLEO super-droplet model (SDM) for 0-D box model with Low and List's kernel.
+ * runs the CLEO super-droplet model (SDM) for 0-D box model with coalescence, rebound and
+ * breakup with glag decided based on section 4 of Testik et al. 2011 (figure 12) as well
+ * as coalescence efficiency from Straub et al. 2010.
  * After make/compiling, execute for example via:
- * ./src/lowlistcolls ../src/config/config.yaml
+ * ./src/testikstraubcolls ../src/config/config.yaml
  */
 
 #include <Kokkos_Core.hpp>
@@ -51,8 +53,10 @@
 #include "runcleo/sdmmethods.hpp"
 #include "superdrops/collisions/breakup.hpp"
 #include "superdrops/collisions/breakup_nfrags.hpp"
+#include "superdrops/collisions/coalbure.hpp"
+#include "superdrops/collisions/coalbure_flag.hpp"
 #include "superdrops/collisions/coalescence.hpp"
-#include "superdrops/collisions/lowlistprob.hpp"
+#include "superdrops/collisions/longhydroprob.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "zarr/dataset.hpp"
@@ -80,16 +84,12 @@ inline auto create_movement(const CartesianMaps &gbxmaps) {
 
 inline MicrophysicalProcess auto create_microphysics(const Config &config,
                                                      const Timesteps &tsteps) {
-  const auto c = config.get_breakup();
-  const PairProbability auto buprob = LowListBuProb();
-  const NFragments auto nfrags = ConstNFrags(c.constnfrags.nfrags);
-  const MicrophysicalProcess auto bu =
-      CollBu(tsteps.get_collstep(), &step2realtime, buprob, nfrags);
-
-  const PairProbability auto coalprob = LowListCoalProb();
-  const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime, coalprob);
-
-  return coal >> bu;
+  const PairProbability auto collprob = LongHydroProb();
+  const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
+  const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
+  const MicrophysicalProcess auto colls =
+      CoalBuRe(tsteps.get_collstep(), &step2realtime, collprob, nfrags, coalbure_flag);
+  return colls;
 }
 
 template <typename Store>

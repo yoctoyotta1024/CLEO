@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 1st May 2024
+ * Last Modified: Sunday 16th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -66,6 +66,14 @@ struct OptionalConfigParams {
     double rtol = NaNVals::dbl();          /**< relative tolerance for implicit Euler integration */
     double atol = NaNVals::dbl();          /**< abolute tolerance for implicit Euler integration */
   } condensation;
+
+  struct BreakupParams {
+    void set_params(const YAML::Node& config);
+    void print_params() const;
+    struct ConstNFragsParams {
+      double nfrags = NaNVals::dbl(); /**< average no. of fragments per droplet breakup */
+    } constnfrags;
+  } breakup;
 
   /*** Super-Droplet Initialisation Parameters ***/
   struct InitSupersFromBinaryParams {

@@ -58,7 +58,6 @@ ${path2CLEO}/scripts/bash/build_cleo.sh ${buildtype} ${path2CLEO} ${path2build} 
 
 ### --------- compile executable(s) from scratch ---------- ###
 cd ${path2build} && make clean
-
 ${path2CLEO}/scripts/bash/compile_cleo.sh ${cleoenv} ${buildtype} ${path2build} "${executables}"
 ### ---------------------------------------------------- ###
 
