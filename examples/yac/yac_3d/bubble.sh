@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=yac_3d
+#SBATCH --job-name=bubble
 #SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
@@ -8,8 +8,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./yac_3d_out.%j.out
-#SBATCH --error=./yac_3d_err.%j.out
+#SBATCH --output=./bubble_out.%j.out
+#SBATCH --error=./bubble_err.%j.out
 
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
@@ -25,7 +25,8 @@ executables="yac_3d"
 
 pythonscript=${path2CLEO}/examples/yac/yac_3d/bubble.py
 configfile=${path2CLEO}/examples/yac/yac_3d/src/config/bubble_config.yaml
-script_args="${configfile}"
+python4bubble="/work/mh1126/m300950/cleoenv/bin/python3"
+script_args="${configfile} ${python4bubble}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
