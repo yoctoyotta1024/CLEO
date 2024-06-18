@@ -183,7 +183,6 @@ struct ImplicitIterations {
    * @param subdelt Time over which to integrate ODE
    * @param rprev Radius at the previous timestep.
    * @param rsqrd Current radius squared.
-   * @param subdelt Change in time to forward integrate ODE over.
    * @return RHS of g(z) / z * subdelt evaluted at rqrd.
    */
   KOKKOS_FUNCTION double ode_gfunc(const ODEConstants &odeconsts, const double subdelt,
@@ -199,7 +198,6 @@ struct ImplicitIterations {
    * @param odeconsts Constants of ODE during integration
    * @param subdelt Time over which to integrate ODE
    * @param rsqrd Current radius squared.
-   * @param subdelt Change in time to forward integrate ODE over.
    * @return RHS of dg(z)/dz * subdelt evaluted at rqrd.
    */
   KOKKOS_FUNCTION double ode_gfuncderivative(const ODEConstants &odeconsts, const double subdelt,
@@ -267,7 +265,7 @@ class ImplicitEuler {
    * 0 < Z < infinity.
 
   * @param odeconsts Constants of ODE during integration
-  * @param subdelt Timestep to integrate over.
+  * @param subdelt Time over which to integrate ODE over.
   * @return boolean = true if solution is guarenteed to be unique.
   */
   KOKKOS_FUNCTION bool second_unique_criteria(const ImplicitIterations::ODEConstants &odeconsts,
@@ -278,10 +276,13 @@ class ImplicitEuler {
     return (subdelt <= deltcrit);
   }
 
+  KOKKOS_FUNCTION double ImplicitEuler::solve_with_adaptive_subtimestepping(
+      const ODEConstants &odeconsts, const double delt, const double rprev, double ziter) const;
+
  public:
   /**
    * @brief Constructor for ImplicitEuler class.
-   * @param delt Time step to integrate ODE using implcit Euler method.
+   * @param delt Time over which to integrate ODE using implcit Euler method.
    * @param maxniters Maximum no. iterations of Newton Raphson Method.
    * @param rtol Relative tolerance for implicit Euler method.
    * @param atol Absolute tolerance for implicit Euler method.

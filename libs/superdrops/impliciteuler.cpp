@@ -54,8 +54,7 @@ KOKKOS_FUNCTION double ImplicitEuler::solve_condensation(
   if (ucrit1 || ucrit2) {
     rsqrd = implit.integrate_condensation_ode(odeconsts, delt, rprev, ziter);
   } else {
-    const auto subdelt = delt;
-    rsqrd = implit.integrate_condensation_ode(odeconsts, subdelt, rprev, ziter);
+    rsqrd = solve_with_adaptive_subtimestepping(odeconsts, delt, rprev, ziter);
   }
 
   return Kokkos::sqrt(rsqrd);
@@ -92,6 +91,14 @@ KOKKOS_FUNCTION bool ImplicitEuler::first_unique_criteria(
   const bool is_subactivated_saturation = (odeconsts.s_ratio <= 1.0 + Kokkos::pow(sqrdval, 0.5));
 
   return (is_unactivated && is_subactivated_saturation);
+}
+
+KOKKOS_FUNCTION double ImplicitEuler::solve_with_adaptive_subtimestepping(
+    const ODEConstants &odeconsts, const double delt, const double rprev, double ziter) const {
+  const auto subdelt = delt;
+  ziter = implit.integrate_condensation_ode(odeconsts, subdelt, rprev, ziter);
+
+  return ziter;
 }
 
 // /**
@@ -131,7 +138,7 @@ KOKKOS_FUNCTION bool ImplicitEuler::first_unique_criteria(
  * upto maxniters number of further iterations, checking for convergence after each one.
  *
  * @param odeconsts Constants of ODE during integration
- * @param subdelt time over which to integrate ODE
+ * @param subdelt Time over which to integrate ODE
  * @param rprev Radius of droplet at previous timestep.
  */
 KOKKOS_FUNCTION
@@ -295,7 +302,6 @@ Kokkos::pair<double, bool> ImplicitIterations::iterate_rootfinding_algorithm(
  * @param subdelt Time over which to integrate ODE
  * @param rprev Radius at the previous timestep.
  * @param rsqrd Current radius squared.
- * @param subdelt Change in time to forward integrate ODE over.
  * @return RHS of g(z) / z * subdelt evaluted at rqrd.
  */
 KOKKOS_FUNCTION double ImplicitIterations::ode_gfunc(const ODEConstants &odeconsts,
@@ -321,7 +327,6 @@ KOKKOS_FUNCTION double ImplicitIterations::ode_gfunc(const ODEConstants &odecons
  * @param odeconsts Constants of ODE during integration
  * @param subdelt Time over which to integrate ODE
  * @param rsqrd Current radius squared.
- * @param subdelt Change in time to forward integrate ODE over.
  * @return RHS of dg(z)/dz * subdelt evaluted at rqrd.
  */
 KOKKOS_FUNCTION double ImplicitIterations::ode_gfuncderivative(const ODEConstants &odeconsts,
