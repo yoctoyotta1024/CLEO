@@ -24,7 +24,7 @@ enableyac=true
 executables="yac_3d"
 
 pythonscript=${path2CLEO}/examples/yac/yac_3d/bubble.py
-configfile=${path2CLEO}/examples/yac/yac_3d/src/config/yac1_fromfile_config.yaml
+configfile=${path2CLEO}/examples/yac/yac_3d/src/config/bubble_config.yaml
 script_args="${configfile}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

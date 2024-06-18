@@ -37,14 +37,14 @@ import bubble_inputfiles
 # path and filenames for creating initial SD conditions
 binpath = path2build + "/bin/"
 sharepath = path2build + "/share/"
-gridfile = sharepath + "yac_3d_dimlessGBxboundaries.dat"
-initSDsfile = sharepath + "yac_3d_dimlessSDsinit.dat"
+gridfile = sharepath + "bubble_dimlessGBxboundaries.dat"
+initSDsfile = sharepath + "bubble_dimlessSDsinit.dat"
 savefigpath = path2build + "/bin/"  # directory for saving figures
 SDgbxs2plt = [0]  # gbxindex of SDs to plot (nb. "all" can be very slow)
 
 # path and file names for plotting results
-setupfile = binpath + "yac_3d_setup.txt"
-dataset = binpath + "yac_3d_sol.zarr"
+setupfile = binpath + "bubble_setup.txt"
+dataset = binpath + "bubble_sol.zarr"
 
 ### ---------------------------------------------------------------- ###
 ### ------------------- BINARY FILES GENERATION--------------------- ###

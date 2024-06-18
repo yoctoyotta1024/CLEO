@@ -1,6 +1,6 @@
 ---
 # ----- CLEO -----
-# File: yac1_fromfile_config.txt
+# File: bubble_config.txt
 # Project: config
 # Created Date: Thursday 18th April 2024
 # Author: Clara Bayley (CB)
@@ -15,7 +15,7 @@
 # Copyright (c) 2023 MPI-M, Clara Bayley
 # -----
 # File Description:
-# Configuration file for test of YAC with 3D time varying thermodyanamics example.
+# Configuration file for test of YAC with 3D time varying thermodynamics form ICON bubble example.
 # Note: The inital superdroplets data read from file "initsupers_filename" can be made with
 # CLEO's pySD module (see Python script "create_initsuperdropsbinary_script.py" for usage).
 # Likewise the "grid_filename" can be made using pySD (see "create_gbxboundariesbinary_script.py"),
@@ -39,15 +39,15 @@ timesteps:
 ### Initialisation Parameters ###
 inputfiles:
   constants_filename : ../libs/cleoconstants.hpp          # name of file for values of physical constants
-  grid_filename : ./share/yac1_dimlessGBxboundaries.dat   # binary filename for initialisation of GBxs / GbxMaps
+  grid_filename : ./share/bubble_dimlessGBxboundaries.dat   # binary filename for initialisation of GBxs / GbxMaps
 
 initsupers:
   type: frombinary                                        # type of initialisation of super-droplets
-  initsupers_filename : ./share/yac1_dimlessSDsinit.dat   # binary filename for initialisation of SDs
+  initsupers_filename : ./share/bubble_dimlessSDsinit.dat   # binary filename for initialisation of SDs
 
 ### Output Parameters ###
 outputdata:
-  setup_filename : ./bin/yac1_setup.txt                   # .txt filename to copy configuration to
-  stats_filename : ./bin/yac1_stats.txt                   # .txt file to output runtime statistics to
-  zarrbasedir : ./bin/yac1_sol.zarr                       # zarr store base directory
+  setup_filename : ./bin/bubble_setup.txt                   # .txt filename to copy configuration to
+  stats_filename : ./bin/bubble_stats.txt                   # .txt file to output runtime statistics to
+  zarrbasedir : ./bin/bubble_sol.zarr                       # zarr store base directory
   maxchunk : 2500000                                      # maximum no. of elements in chunks of zarr store array

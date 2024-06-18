@@ -1,6 +1,6 @@
 """
 ----- CLEO -----
-File: yac_3d_bubble_inputfiles.py
+File: bubble_inputfiles.py
 Project: yac_3d
 Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
