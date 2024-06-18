@@ -11,8 +11,6 @@
 #SBATCH --output=./yac_3d_out.%j.out
 #SBATCH --error=./yac_3d_err.%j.out
 
-# TODO(all): python script(s) for example and fix MPI linker error
-
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
 ### ------ You MUST edit these lines to set your ------- ###
@@ -21,11 +19,11 @@
 ### ---------------------------------------------------- ###
 buildtype="openmp"
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_yac3d/
+path2build=${HOME}/CLEO/build_bubble/
 enableyac=true
 executables="yac_3d"
 
-pythonscript=${path2CLEO}/examples/yac/yac_3d/yac_3d_fromfile.py
+pythonscript=${path2CLEO}/examples/yac/yac_3d/bubble.py
 configfile=${path2CLEO}/examples/yac/yac_3d/src/config/yac1_fromfile_config.yaml
 script_args="${configfile}"
 ### ---------------------------------------------------- ###
