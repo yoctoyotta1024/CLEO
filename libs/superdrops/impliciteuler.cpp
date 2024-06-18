@@ -120,7 +120,6 @@ KOKKOS_FUNCTION double ImplicitEuler::solve_with_adaptive_subtimestepping(
   auto remdelt = delt;  // remaining time required to integrate over.
   while (remdelt > 0.0) {
     const auto subdelt = Kokkos::fmin(mindelt, remdelt);
-    ziter = implit.initialguess(odeconsts, rprev);
     ziter = implit.integrate_condensation_ode(odeconsts, subdelt, rprev, ziter);
     rprev = Kokkos::pow(ziter, 0.5);
     remdelt -= subdelt;
