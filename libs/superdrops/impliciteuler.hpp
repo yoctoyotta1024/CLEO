@@ -264,7 +264,6 @@ class ImplicitEuler {
    * (and derivation in appendix C).
    *
    * @param odeconsts Constants of ODE during integration
-   * @param subdelt Time over which to integrate ODE over.
    * @return Critical time step for unique solution.
    */
   KOKKOS_FUNCTION double critial_timestep(const ImplicitIterations::ODEConstants &odeconsts) const {

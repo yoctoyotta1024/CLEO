@@ -6,7 +6,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 8th April 2024
+ * Last Modified: Tuesday 18th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -53,3 +53,6 @@ B1 0.420606 1.80625 14.7943          # test F (new observers / data output libra
 
 C0 0.314786 1.66355 13.6694          # test G (new observers / data output libraries)
 C1 0.305725 1.64846 13.7267          # test G (new observers / data output libraries)
+
+A0 0.529342 1.48977 16.2189          # (new) test A after change to condensation at v0.17.1
+A1 0.527819 1.46074 16.8407          # (new) test A after change to condensation at v0.17.1
