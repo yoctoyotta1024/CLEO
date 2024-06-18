@@ -4,6 +4,7 @@ dependencies:
     - pytest
     - sphinx
     - conda-forge::doxygen>=1.10.0
+    - openmpi
     - pip
     - pip:
       - -r requirements.txt
