@@ -2,6 +2,33 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.17.0](https://github.com/yoctoyotta1024/CLEO/compare/4e9c3712c9acb976c71612cfe3fc59d40aae6d25..v0.17.0) - 2024-06-18
+#### Bug Fixes
+- fixed bug in substepping routine where incorrect rprev was used - ([9a9bf17](https://github.com/yoctoyotta1024/CLEO/commit/9a9bf174ab30a761fc937d9d0c107b9c21a5ee6c)) - clara.bayley
+#### Continuous Integration
+- added more restrictive compiler flags to treat all warnings as errors - ([9f6e01a](https://github.com/yoctoyotta1024/CLEO/commit/9f6e01ad633114969a5ceb5412348aa95de02a2a)) - wiltonloch
+#### Documentation
+- fix docstring typos - ([64b2daf](https://github.com/yoctoyotta1024/CLEO/commit/64b2daf0c0f59e69d3c3c79cd55edb1df36cd430)) - clara.bayley
+#### Features
+- new condensation method complete. removed unnecessary initial guess in substepping routine - ([f8034ef](https://github.com/yoctoyotta1024/CLEO/commit/f8034ef5b6f77708553fd1edb693df4365a2882d)) - clara.bayley
+- adaptive sub-timestepping routine for solving non-unique g(Z) in implicit method - ([4cb6f2d](https://github.com/yoctoyotta1024/CLEO/commit/4cb6f2d4ae5d678b629f140868631f8e1a000ed1)) - clara.bayley
+- adaptive sub-timestepping routine for solving non-unique g(Z) in implicit method - ([67fcf2b](https://github.com/yoctoyotta1024/CLEO/commit/67fcf2b1578b38111d264d18178ae75c52675069)) - clara.bayley
+- add in tests of uniqueness to condensation ODE solving - ([153677e](https://github.com/yoctoyotta1024/CLEO/commit/153677e5f1f5541419ee3cfaa36c8f104676eb78)) - clara.bayley
+#### Miscellaneous Chores
+- **(yac_coupling)** added correct unsigned type to sizes and iterators - ([f5880ab](https://github.com/yoctoyotta1024/CLEO/commit/f5880abcf82ba094769d2af8972614d5c6fa6885)) - wiltonloch
+- **(yac_coupling)** removing double declaration of coordinate bounds variables - ([63827e8](https://github.com/yoctoyotta1024/CLEO/commit/63827e8be0b126fc1bcbe3125911e0252735bfa0)) - wiltonloch
+- formatting - ([f6d2c03](https://github.com/yoctoyotta1024/CLEO/commit/f6d2c03a6ad767602ba693c9ac151346883b184b)) - clara.bayley
+- comment formatting - ([a94c0c4](https://github.com/yoctoyotta1024/CLEO/commit/a94c0c40d0aff901a5db4e273051c3c4180d0a81)) - clara.bayley
+#### Refactoring
+- nsupers correct for condensation testing setup - ([2df742f](https://github.com/yoctoyotta1024/CLEO/commit/2df742fef1e1f40cded9a5a8eec669f9973dd4c1)) - clara.bayley
+- standard config for condensation - ([9f08cd4](https://github.com/yoctoyotta1024/CLEO/commit/9f08cd4093863bc15c4a6dc75a1e8c4901036e07)) - clara.bayley
+- update config params for condensation's implicit method - ([d79a3c0](https://github.com/yoctoyotta1024/CLEO/commit/d79a3c07aef93aa9a14f3cdca562d252801e3a2f)) - clara.bayley
+- reorganise functions for implicit euler method, work in progress - ([5a0e2e0](https://github.com/yoctoyotta1024/CLEO/commit/5a0e2e02e4c17b6184a293f864220ee92208f88d)) - clara.bayley
+- using adia0D 0-D model setup for testing - ([cfdaa47](https://github.com/yoctoyotta1024/CLEO/commit/cfdaa47bbfde540e2e73a90adb5b8ad48927ede5)) - clara.bayley
+- using adia0D 0-D model setup for testing - ([4e9c371](https://github.com/yoctoyotta1024/CLEO/commit/4e9c3712c9acb976c71612cfe3fc59d40aae6d25)) - clara.bayley
+
+- - -
+
 ## [v0.16.1](https://github.com/yoctoyotta1024/CLEO/compare/a021794b0cd03474220ceccdc3d5eaab859a48d5..v0.16.1) - 2024-06-17
 #### Bug Fixes
 - fix missing re-scaling factor in phi calculation - ([a021794](https://github.com/yoctoyotta1024/CLEO/commit/a021794b0cd03474220ceccdc3d5eaab859a48d5)) - clara.bayley
