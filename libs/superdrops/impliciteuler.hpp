@@ -307,8 +307,9 @@ class ImplicitEuler {
    * @param ziter Initial guess for ziter.
    * @return Updated radius^2 for time = t + delt
    */
-  KOKKOS_FUNCTION double ImplicitEuler::solve_with_adaptive_subtimestepping(
-      const ODEConstants &odeconsts, const double delt, const double rprev, double ziter) const;
+  KOKKOS_FUNCTION double solve_with_adaptive_subtimestepping(
+      const ImplicitIterations::ODEConstants &odeconsts, const double delt, const double rprev,
+      double ziter) const;
 
  public:
   /**
