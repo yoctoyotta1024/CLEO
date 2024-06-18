@@ -323,15 +323,18 @@ class ImplicitEuler {
    */
   ImplicitEuler(const double delt, const size_t maxniters, const double rtol, const double atol,
                 const double minsubdelt)
-      : delt(delt), minsubdelt(minsubdelt), implit(maxniters, rtol, atol) {}
+      : delt(delt), minsubdelt(minsubdelt), implit(maxniters, rtol, atol) {
+    assert((delt >= minsubdelt) &&
+           "timestep must be as least as large as subtimestep for implicit method");
+  }
 
   /**
    * @brief Integrates the condensation / evaporation ODE employing the Implicit Euler method
    * similarly to Matsushima et. al, 2023.
    *
-   * Forward timestep previous radius 'rprev' by delt using an Implicit Euler method (possibly with
-   * sub-timestepping) to integrate the condensation/evaporation ODE using fixed thermodynamics from
-   * the start of the timestep.
+   * Forward timestep previous radius 'rprev' by delt using an Implicit Euler method (possibly
+   * with sub-timestepping) to integrate the condensation/evaporation ODE using fixed
+   * thermodynamics from the start of the timestep.
    *
    * @param s_ratio The saturation ratio.
    * @param kohler_ab A pair containing 'a' and 'b' factors for Kohler curve in that order.
