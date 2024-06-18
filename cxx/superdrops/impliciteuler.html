@@ -393,209 +393,10 @@
 <h1>Implicit Euler Method for Condensation<a class="headerlink" href="#implicit-euler-method-for-condensation" title="Link to this heading">¶</a></h1>
 <p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/superdrops/impliciteuler.hpp&gt;</span></code>
 <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/superdrops/impliciteuler.hpp">[source]</a></p>
-<dl class="cpp struct">
-<dt class="sig sig-object cpp" id="_CPPv417ImplicitIteration">
-<span id="_CPPv317ImplicitIteration"></span><span id="_CPPv217ImplicitIteration"></span><span id="ImplicitIteration"></span><span class="target" id="structImplicitIteration"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ImplicitIteration</span></span></span><a class="headerlink" href="#_CPPv417ImplicitIteration" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Struct defining parameters and methods for iterations of the Implicit Euler Method. </p>
-<p>This struct defines parameters and methods for performing an iterations of the implicit method. E.g. struct defines the number of iterations to try before testing convergence, the timestep of the method, it’s relative and absolute tolerances, and methods for computing the initial guess for and performing the Newton-Raphson root finding.</p>
-<p>_Note: abbreviation NR = Newton Raphson (Method) </p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK17ImplicitIteration12initialguessEKd">
-<span id="_CPPv3NK17ImplicitIteration12initialguessEKd"></span><span id="_CPPv2NK17ImplicitIteration12initialguessEKd"></span><span id="ImplicitIteration::initialguess__doubleCC"></span><span class="target" id="structImplicitIteration_1a16d6ac2bda6198060878f218a6fa3b30"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialguess</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rprev</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK17ImplicitIteration12initialguessEKd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Returns appropriate initial guess (ie. a reasonable guess) for the Newton-Raphson method. </p>
-<p>This method returns an initial guess for the Newton-Raphson method based on the given radius from the previous timestep and the current supersaturation ratio.</p>
-<p>Guess is supposed to be a reasonable value for initial ‘ziter’ to use as first iteration of NR method in rootfinding algorithm for timestepping condensation/evaporation ODE. Here the guess criteria are as in SCALE-SDM for making initial guess for given droplet much greater than its (activation radius)^2 if the supersaturation &gt; its activation supersaturation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>rprev</strong> – Radius of droplet at previous timestep. </p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Initial guess for ziter. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK17ImplicitIteration18initialguess_shimaEKd">
-<span id="_CPPv3NK17ImplicitIteration18initialguess_shimaEKd"></span><span id="_CPPv2NK17ImplicitIteration18initialguess_shimaEKd"></span><span id="ImplicitIteration::initialguess_shima__doubleCC"></span><span class="target" id="structImplicitIteration_1adac4f151d54ccf5b76ed600ad7113e17"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">initialguess_shima</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rprev</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK17ImplicitIteration18initialguess_shimaEKd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Returns appropriate initial guess (ie. a reasonable guess) for the Newton-Raphson method. </p>
-<p>This method returns an initial guess for the Newton-Raphson method based on the given radius from the previous timestep and the current supersaturation ratio.</p>
-<p>Guess is supposed to be a reasonable value for initial ‘ziter’ to use as first iteration of NR method in rootfinding algorithm for timestepping condensation/evaporation ODE. Here the guess criteria are adapted from SCALE-SDM. Second criteria is that initial guess &gt;= ‘r1sqrd’, where r1 is the equilibrium radius of a given droplet when s_ratio=1.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>rprev</strong> – Radius of droplet at previous timestep. </p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Initial guess for ziter. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK17ImplicitIteration25newtonraphson_niterationsEKdd">
-<span id="_CPPv3NK17ImplicitIteration25newtonraphson_niterationsEKdd"></span><span id="_CPPv2NK17ImplicitIteration25newtonraphson_niterationsEKdd"></span><span id="ImplicitIteration::newtonraphson_niterations__doubleC.doubleC"></span><span class="target" id="structImplicitIteration_1a795044ca657a53be6375f9cc4635efe1"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">newtonraphson_niterations</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rprev</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ziter</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK17ImplicitIteration25newtonraphson_niterationsEKdd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Performs Newton-Raphson iterations with a fixed number of iterations. </p>
-<p>This method performs Newton-Raphson iterations for a fixed number of iterations, then tests for convergence and continues with futher iterations until convergence occurs or or until the maximum number of iterations is reached.</p>
-<p>Funciton intergrates (timesteps) condensation ODE by delt given initial guess for ziter, (which is usually radius^squared from previous timestep). Uses Newton Raphson iterative method to find new value of the radius that converges on the root of the polynomial g(ziter) within the tolerances of the ImpIter instance. After ‘niters’ iterations, convergence criteria is tested and futher iterations undertaken if polynomial root has not yet been converged upon.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>rprev</strong> – Radius at previous timestep </p></li>
-<li><p><strong>ziter</strong> – The current guess for ziter. </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The updated value of ziter. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK17ImplicitIteration28newtonraphson_untilconvergedEKjKdd">
-<span id="_CPPv3NK17ImplicitIteration28newtonraphson_untilconvergedEKjKdd"></span><span id="_CPPv2NK17ImplicitIteration28newtonraphson_untilconvergedEKjKdd"></span><span id="ImplicitIteration::newtonraphson_untilconverged__unsigned-iC.doubleC.doubleC"></span><span class="target" id="structImplicitIteration_1a0a14ad125c47c8157f64cc0432abfc59"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">newtonraphson_untilconverged</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">iterlimit</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rprev</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ziter</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK17ImplicitIteration28newtonraphson_untilconvergedEKjKdd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Performs Newton-Raphson iterations until convergence. </p>
-<p>After every iteration, convergence criteria is tested and error is raised if method does not converge within ‘iterlimit’ iterations. Otherwise returns new value for the radius (which is the radius at timestep ‘t+subdelt’. Refer to section 5.1.2 Shima et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>iterlimit</strong> – The maxiumum number of iterations to attempt. </p></li>
-<li><p><strong>rprev</strong> – Radius at the previous timestep. </p></li>
-<li><p><strong>ziter</strong> – The current guess for ziter. </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The updated value of ziter. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK17ImplicitIteration29iterate_rootfinding_algorithmEKdd">
-<span id="_CPPv3NK17ImplicitIteration29iterate_rootfinding_algorithmEKdd"></span><span id="_CPPv2NK17ImplicitIteration29iterate_rootfinding_algorithmEKdd"></span><span id="ImplicitIteration::iterate_rootfinding_algorithm__doubleC.doubleC"></span><span class="target" id="structImplicitIteration_1ab0b92599f9aee4d736cc41dd0705cfda"></span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">bool</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">iterate_rootfinding_algorithm</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rprev</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ziter</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK17ImplicitIteration29iterate_rootfinding_algorithmEKdd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Perform one iteration of the Newton-Raphson rootfinding algorithm. </p>
-<p>This function performs one iteration of the Newton-Raphson rootfinding algorithm and returns the updated value of radius^2 alongside a boolean indicating whether the algorithm has converged.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>rprev</strong> – Radius at the previous timestep. </p></li>
-<li><p><strong>ziter</strong> – The current guess for ziter. </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A pair indicating whether to continue iterating and the updated value of ziter. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK17ImplicitIteration9ode_gfuncEKdKd">
-<span id="_CPPv3NK17ImplicitIteration9ode_gfuncEKdKd"></span><span id="_CPPv2NK17ImplicitIteration9ode_gfuncEKdKd"></span><span id="ImplicitIteration::ode_gfunc__doubleC.doubleCC"></span><span class="target" id="structImplicitIteration_1a44ee10b85229f7d9c005a60727b53c9c"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ode_gfunc</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rprev</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rsqrd</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK17ImplicitIteration9ode_gfuncEKdKd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Returns the value of g(z) / z * delt for the ODE. </p>
-<p>This method computes the value of g(z) / z * delt used in the root-finding Newton-Raphson method for the dr/dt condensation / evaporation ODE.</p>
-<p>ODE is for radial growth/shrink of each superdroplet due to condensation and diffusion of water vapour according to equations from “An Introduction To Clouds….” (see note at top of file).</p>
-<p><em>Note:</em> z = ziter = radius^2.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>rprev</strong> – Radius at the previous timestep. </p></li>
-<li><p><strong>rsqrd</strong> – Current radius squared. </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>RHS of g(z) / z * delt evaluted at rqrd. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK17ImplicitIteration19ode_gfuncderivativeEKd">
-<span id="_CPPv3NK17ImplicitIteration19ode_gfuncderivativeEKd"></span><span id="_CPPv2NK17ImplicitIteration19ode_gfuncderivativeEKd"></span><span id="ImplicitIteration::ode_gfuncderivative__doubleCC"></span><span class="target" id="structImplicitIteration_1a640919a00cc4fecce381fcb8ea7007bc"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ode_gfuncderivative</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rsqrd</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK17ImplicitIteration19ode_gfuncderivativeEKd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Returns the value of the derivative of g(z) with respect to z. </p>
-<p>This method computes the value of dg(z)/dz * delt, where dg(z)/dz is the derivative of g(z) with respect to z=rsqr. g(z) is polynomial to find root of using Newton Raphson Method consistent as in ode_gfunc(…).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>rsqrd</strong> – Current radius squared. </p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>RHS of dg(z)/dz * delt evaluted at rqrd. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK17ImplicitIteration15isnot_convergedEKdKd">
-<span id="_CPPv3NK17ImplicitIteration15isnot_convergedEKdKd"></span><span id="_CPPv2NK17ImplicitIteration15isnot_convergedEKdKd"></span><span id="ImplicitIteration::isnot_converged__doubleC.doubleCC"></span><span class="target" id="structImplicitIteration_1a8be114cf356b3e96c8b289f875722d22"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">isnot_converged</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gfunciter</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gfuncprev</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK17ImplicitIteration15isnot_convergedEKdKd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Returns true if the Newton-Raphson iterations have <em>not</em> yet converged. </p>
-<p>This method checks if the Newton-Raphson iterations have converged based on a standard local error test: |iteration - previous iteration| &lt; RTOL * |iteration| + ATOL.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>gfunciter</strong> – g(z) of current iteration </p></li>
-<li><p><strong>gfuncprev</strong> – g(z) of previous iteration </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>boolean=true if not yet converged, false otherwise </p>
-</dd>
-</dl>
-</dd></dl>
-
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenstruct: Cannot find class “ImplicitIteration” in doxygen xml output for project “libs” from directory: ../build/doxygen/xml/</p>
 </div>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N17ImplicitIteration6nitersE">
-<span id="_CPPv3N17ImplicitIteration6nitersE"></span><span id="_CPPv2N17ImplicitIteration6nitersE"></span><span id="ImplicitIteration::niters__unsigned-i"></span><span class="target" id="structImplicitIteration_1adc17ad8733f0521bba6479a39e6fd673"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">niters</span></span></span><a class="headerlink" href="#_CPPv4N17ImplicitIteration6nitersE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Number of NR iterations to try before testing convergence. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N17ImplicitIteration7subdeltE">
-<span id="_CPPv3N17ImplicitIteration7subdeltE"></span><span id="_CPPv2N17ImplicitIteration7subdeltE"></span><span id="ImplicitIteration::subdelt__double"></span><span class="target" id="structImplicitIteration_1a81dc3cc60ef99ccdd0cd0c564d33feef"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">subdelt</span></span></span><a class="headerlink" href="#_CPPv4N17ImplicitIteration7subdeltE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Timestep of implicit method (at each substep &gt;= niter NR iterations occur). </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N17ImplicitIteration4rtolE">
-<span id="_CPPv3N17ImplicitIteration4rtolE"></span><span id="_CPPv2N17ImplicitIteration4rtolE"></span><span id="ImplicitIteration::rtol__double"></span><span class="target" id="structImplicitIteration_1a9caeee2098eb32dfb4abc9bc1e29f488"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rtol</span></span></span><a class="headerlink" href="#_CPPv4N17ImplicitIteration4rtolE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Relative tolerance for convergence of NR method. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N17ImplicitIteration4atolE">
-<span id="_CPPv3N17ImplicitIteration4atolE"></span><span id="_CPPv2N17ImplicitIteration4atolE"></span><span id="ImplicitIteration::atol__double"></span><span class="target" id="structImplicitIteration_1afc9b3c232a3d4f226116aabeeeb5092f"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">atol</span></span></span><a class="headerlink" href="#_CPPv4N17ImplicitIteration4atolE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Absolute tolerance for convergence of NR method. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N17ImplicitIteration7s_ratioE">
-<span id="_CPPv3N17ImplicitIteration7s_ratioE"></span><span id="_CPPv2N17ImplicitIteration7s_ratioE"></span><span id="ImplicitIteration::s_ratio__double"></span><span class="target" id="structImplicitIteration_1a298b431071114afb6cb6f15ba6b0044b"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">s_ratio</span></span></span><a class="headerlink" href="#_CPPv4N17ImplicitIteration7s_ratioE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Supersaturation ratio. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N17ImplicitIteration4akohE">
-<span id="_CPPv3N17ImplicitIteration4akohE"></span><span id="_CPPv2N17ImplicitIteration4akohE"></span><span id="ImplicitIteration::akoh__double"></span><span class="target" id="structImplicitIteration_1af54e6cd3da1d8120cb78165bec3a4c95"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">akoh</span></span></span><a class="headerlink" href="#_CPPv4N17ImplicitIteration4akohE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Kelvin factor in Kohler theory “a”. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N17ImplicitIteration4bkohE">
-<span id="_CPPv3N17ImplicitIteration4bkohE"></span><span id="_CPPv2N17ImplicitIteration4bkohE"></span><span id="ImplicitIteration::bkoh__double"></span><span class="target" id="structImplicitIteration_1a99191f57907a22b174376fe032d853bc"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bkoh</span></span></span><a class="headerlink" href="#_CPPv4N17ImplicitIteration4bkohE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Raoult factor in Kohler theory “b”. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N17ImplicitIteration7ffactorE">
-<span id="_CPPv3N17ImplicitIteration7ffactorE"></span><span id="_CPPv2N17ImplicitIteration7ffactorE"></span><span id="ImplicitIteration::ffactor__double"></span><span class="target" id="structImplicitIteration_1a4ca85b94e3ff5bb44950fd587f92baf1"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ffactor</span></span></span><a class="headerlink" href="#_CPPv4N17ImplicitIteration7ffactorE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Sum of heat and vapor diffusion factors. </p>
-</dd></dl>
-
-</div>
-</dd></dl>
-
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv413ImplicitEuler">
 <span id="_CPPv313ImplicitEuler"></span><span id="_CPPv213ImplicitEuler"></span><span id="ImplicitEuler"></span><span class="target" id="classImplicitEuler"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ImplicitEuler</span></span></span><a class="headerlink" href="#_CPPv413ImplicitEuler" title="Link to this definition">¶</a><br /></dt>
@@ -604,45 +405,125 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N13ImplicitEuler13ImplicitEulerEKjKdKdKdKd">
-<span id="_CPPv3N13ImplicitEuler13ImplicitEulerEKjKdKdKdKd"></span><span id="_CPPv2N13ImplicitEuler13ImplicitEulerEKjKdKdKdKd"></span><span id="ImplicitEuler::ImplicitEuler__unsigned-iC.doubleC.doubleC.doubleC.doubleC"></span><span class="target" id="classImplicitEuler_1a9972f248249d8ce783068eb9d7cf8eda"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ImplicitEuler</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">niters</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">delt</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">maxrtol</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">maxatol</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">subdelt</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13ImplicitEuler13ImplicitEulerEKjKdKdKdKd" title="Link to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N13ImplicitEuler13ImplicitEulerEKdK6size_tKdKdKd">
+<span id="_CPPv3N13ImplicitEuler13ImplicitEulerEKdK6size_tKdKdKd"></span><span id="_CPPv2N13ImplicitEuler13ImplicitEulerEKdK6size_tKdKdKd"></span><span id="ImplicitEuler::ImplicitEuler__doubleC.sC.doubleC.doubleC.doubleC"></span><span class="target" id="classImplicitEuler_1a7f89729dea28743b8d7f6ac276edd970"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ImplicitEuler</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">delt</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">maxniters</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rtol</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">atol</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">minsubdelt</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13ImplicitEuler13ImplicitEulerEKdK6size_tKdKdKd" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Constructor for <a class="reference internal" href="#classImplicitEuler"><span class="std std-ref">ImplicitEuler</span></a> class. </p>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK13ImplicitEuler29solve_condensation_matsushimaEKdKN6Kokkos4pairIddEEKdKd">
-<span id="_CPPv3NK13ImplicitEuler29solve_condensation_matsushimaEKdKN6Kokkos4pairIddEEKdKd"></span><span id="_CPPv2NK13ImplicitEuler29solve_condensation_matsushimaEKdKN6Kokkos4pairIddEEKdKd"></span><span id="ImplicitEuler::solve_condensation_matsushima__doubleC.Kokkos::pair:double.double:C.doubleC.doubleCC"></span><span class="target" id="classImplicitEuler_1a09502e4fb186491a6f45501548b344f7"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">solve_condensation_matsushima</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">s_ratio</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">akoh_bkoh</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ffactor</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rprev</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13ImplicitEuler29solve_condensation_matsushimaEKdKN6Kokkos4pairIddEEKdKd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Integrates the condensation / evaporation ODE employing the Implicit Euler method as in Matsushima et al, 2023. </p>
-<p>Forward timestep previous radius ‘rprev’ by delt using an Implicit Euler method to integrate the condensation/evaporation ODE. Implict timestepping equation defined in section 5.1.2 of Shima et al. 2009 and is root of polynomial g(z) = 0, where z = [R_i(t+delt)]^squared.</p>
-<p>Newton Raphson iterations are used to converge towards the root of g(z) within the tolerances of an ImpIter instance. Tolerances, maxium number of iterations and sub-timestepping are adjusted based on the uniqueness criteria of the polynomial g(z). Uniqueness criteria, ucrit1 and / or ucrit2, assume that solution to g(ziter)=0 is unique and therefore Newton Raphson root finding algorithm converges quickly. This means method can be used with comparitively large tolerances and timesteps, and the maximum number of iterations is small. Refer to section 5.1.2 of Shima et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>delt</strong> – Time over which to integrate ODE using implcit Euler method. </p></li>
+<li><p><strong>maxniters</strong> – Maximum no. iterations of Newton Raphson Method. </p></li>
+<li><p><strong>rtol</strong> – Relative tolerance for implicit Euler method. </p></li>
+<li><p><strong>atol</strong> – Absolute tolerance for implicit Euler method. </p></li>
+<li><p><strong>minsubdelt</strong> – Minimum subtimestep in cases of substepping implicit Euler method. <code class="docutils literal notranslate"></code></p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK13ImplicitEuler18solve_condensationEKdKN6Kokkos4pairIddEEKdKd">
-<span id="_CPPv3NK13ImplicitEuler18solve_condensationEKdKN6Kokkos4pairIddEEKdKd"></span><span id="_CPPv2NK13ImplicitEuler18solve_condensationEKdKN6Kokkos4pairIddEEKdKd"></span><span id="ImplicitEuler::solve_condensation__doubleC.Kokkos::pair:double.double:C.doubleC.doubleCC"></span><span class="target" id="classImplicitEuler_1a1b63b1f169ce60e723acf83e602d543b"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">solve_condensation</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">s_ratio</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">akoh_bkoh</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ffactor</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rprev</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13ImplicitEuler18solve_condensationEKdKN6Kokkos4pairIddEEKdKd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Integrates the condensation / evaporation ODE employing the Implicit Euler method as in Shima et. al, 2023 with adjustments for near-supersaturation conditions. </p>
-<p>Forward timestep previous radius ‘rprev’ by delt using an Implicit Euler method to integrate the condensation/evaporation ODE. Implict timestepping equation defined in section 5.1.2 of Shima et al. 2009 and is root of polynomial g(z) = 0, where z = [R_i(t+delt)]^squared.</p>
-<p>Newton Raphson iterations are used to converge towards the root of g(z) within the tolerances of an ImpIter instance. Tolerances, maxium number of iterations and sub-timestepping are adjusted when near to supersaturation=1 (when activation / deactivation may occur). Far from activation, solution to g(ziter)=0 is usually unique and Newton Raphson root finding algorithm converges quickly. This means method can be used with comparitively large tolerances and timesteps, and the maximum number of iterations is small. </p>
+<span id="_CPPv3NK13ImplicitEuler18solve_condensationEKdKN6Kokkos4pairIddEEKdKd"></span><span id="_CPPv2NK13ImplicitEuler18solve_condensationEKdKN6Kokkos4pairIddEEKdKd"></span><span id="ImplicitEuler::solve_condensation__doubleC.Kokkos::pair:double.double:C.doubleC.doubleCC"></span><span class="target" id="classImplicitEuler_1aaa12334f972a01ad4c0ccdf441182151"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">solve_condensation</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">s_ratio</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">kohler_ab</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ffactor</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rprev</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13ImplicitEuler18solve_condensationEKdKN6Kokkos4pairIddEEKdKd" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Integrates the condensation / evaporation ODE employing the Implicit Euler method similarly to Matsushima et. al, 2023. </p>
+<p>Forward timestep previous radius ‘rprev’ by delt using an Implicit Euler method (possibly with sub-timestepping) to integrate the condensation/evaporation ODE using fixed thermodynamics from the start of the timestep.</p>
+<p>
+Forward timestep previous radius ‘rprev’ by delt using an Implicit Euler method (possibly with sub-timestepping) to integrate the condensation/evaporation ODE using fixed thermodynamics from the start of the timestep. Sub-timestepping employed when unique solution to g(Z) within required radius range is not guarenteed. Criteria as in appendix C of Matsushima et. al, 2023 except minimum sub-timestep is limited by minsubdelt.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s_ratio</strong> – The saturation ratio. </p></li>
+<li><p><strong>kohler_ab</strong> – A pair containing ‘a’ and ‘b’ factors for Kohler curve in that order. </p></li>
+<li><p><strong>ffactor</strong> – The sum of the diffusion factors. </p></li>
+<li><p><strong>rprev</strong> – Previous radius at time = t </p></li>
+<li><p><strong>s_ratio</strong> – The saturation ratio. </p></li>
+<li><p><strong>kohler_ab</strong> – A pair containing ‘a’ and ‘b’ factors for Kohler curve in that order. </p></li>
+<li><p><strong>ffactor</strong> – The sum of the diffusion factors. </p></li>
+<li><p><strong>rprev</strong> – Previous radius at time = t </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Updated radius for time = t + delt</p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Updated radius for time = t + delt </p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-functions">Private Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK13ImplicitEuler25substepped_implicitmethodERK17ImplicitIterationKjKd">
-<span id="_CPPv3NK13ImplicitEuler25substepped_implicitmethodERK17ImplicitIterationKjKd"></span><span id="_CPPv2NK13ImplicitEuler25substepped_implicitmethodERK17ImplicitIterationKjKd"></span><span id="ImplicitEuler::substepped_implicitmethod__ImplicitIterationCR.unsigned-iC.doubleCC"></span><span class="target" id="classImplicitEuler_1aa66232e1b02866abf2893ae8e4652252"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">substepped_implicitmethod</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv417ImplicitIteration" title="ImplicitIteration"><span class="n"><span class="pre">ImplicitIteration</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">implit</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nsubsteps</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rprev</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13ImplicitEuler25substepped_implicitmethodERK17ImplicitIterationKjKd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Performs the implicit method with sub-stepping. </p>
-<p>This method performs the implicit method with substepping, iterating over the substeps to compute the implicit method for each substep.</p>
+<dt class="sig sig-object cpp" id="_CPPv4NK13ImplicitEuler21first_unique_criteriaERKN18ImplicitIterations12ODEConstantsEKdKd">
+<span id="_CPPv3NK13ImplicitEuler21first_unique_criteriaERKN18ImplicitIterations12ODEConstantsEKdKd"></span><span id="_CPPv2NK13ImplicitEuler21first_unique_criteriaERKN18ImplicitIterations12ODEConstantsEKdKd"></span><span id="ImplicitEuler::first_unique_criteria__ImplicitIterations::ODEConstantsCR.doubleC.doubleCC"></span><span class="target" id="classImplicitEuler_1a84392239a3ee0acaa9a3882ddd24c038"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">first_unique_criteria</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">ImplicitIterations</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ODEConstants</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">odeconsts</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rprev</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ziter</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13ImplicitEuler21first_unique_criteriaERKN18ImplicitIterations12ODEConstantsEKdKd" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Test of uniqueness criteria for un-activated droplets in environment with supersaturation less than its activation supersaturation. </p>
+<p>Returns true if solution to g(Z) is guarenteed to be unique because it meets the uniquenes criteria of Case 2 from Matsushima et al. 2023 (see appendix C), namely that there is only one real root to g(Z) in the range 0 &lt; Z &lt; critical_R^2, where critical_R is the critical i.e. activation radius of the droplet. Here we use the less stringent constrain that S &lt;= S_crit rather than S &lt;= 1, and we ensure the current value for ziter is also less than the critical_R as it must be to guarentee solution in range 0 &lt; R &lt; critical_R is converged upon.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>implit</strong> – object defining implicit iterations. </p></li>
-<li><p><strong>nsubsteps</strong> – number of substeps to perform. </p></li>
-<li><p><strong>rprev</strong> – Radius of droplet at previous timestep. </p></li>
+<li><p><strong>odeconsts</strong> – Constants of ODE during integration </p></li>
+<li><p><strong>rprev</strong> – Radius at previous timestep </p></li>
+<li><p><strong>ziter</strong> – Current guess for ziter. </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>New value for droplet radius. </p>
+<dd class="field-even"><p>Boolean = true if solution is guarenteed to be unique. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13ImplicitEuler16critial_timestepERKN18ImplicitIterations12ODEConstantsE">
+<span id="_CPPv3NK13ImplicitEuler16critial_timestepERKN18ImplicitIterations12ODEConstantsE"></span><span id="_CPPv2NK13ImplicitEuler16critial_timestepERKN18ImplicitIterations12ODEConstantsE"></span><span id="ImplicitEuler::critial_timestep__ImplicitIterations::ODEConstantsCRC"></span><span class="target" id="classImplicitEuler_1a662192083a51d56fc5116046d82dca0f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">critial_timestep</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">ImplicitIterations</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ODEConstants</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">odeconsts</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13ImplicitEuler16critial_timestepERKN18ImplicitIterations12ODEConstantsE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Calculates largest timestep which guarentees uniqueness of solution to g(Z) polynomial. </p>
+<p>Returns the largest possible timestep that can be undertaken in which g(Z) has only one real root to g(Z) in the range 0 &lt; Z &lt; infinity. See Case 1 from Matsushima et al. 2023 (and derivation in appendix C).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>odeconsts</strong> – Constants of ODE during integration </p></li>
+<li><p><strong>subdelt</strong> – Time over which to integrate ODE over. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Critical time step for unique solution. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13ImplicitEuler22second_unique_criteriaERKN18ImplicitIterations12ODEConstantsEKd">
+<span id="_CPPv3NK13ImplicitEuler22second_unique_criteriaERKN18ImplicitIterations12ODEConstantsEKd"></span><span id="_CPPv2NK13ImplicitEuler22second_unique_criteriaERKN18ImplicitIterations12ODEConstantsEKd"></span><span id="ImplicitEuler::second_unique_criteria__ImplicitIterations::ODEConstantsCR.doubleCC"></span><span class="target" id="classImplicitEuler_1a3a8614e298de2059e3c4ce62eb6268d4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">second_unique_criteria</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">ImplicitIterations</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ODEConstants</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">odeconsts</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">subdelt</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13ImplicitEuler22second_unique_criteriaERKN18ImplicitIterations12ODEConstantsEKd" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Test of uniqueness criteria for small enough timestep. </p>
+<p>Returns true if solution to g(Z) is guarenteed to be unique because it meets the uniquenes criteria of Case 1 from Matsushima et al. 2023 (see appendix C), namely that the timestep is small enough to guarentee there is only one real root to g(Z) in the range 0 &lt; Z &lt; infinity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>odeconsts</strong> – Constants of ODE during integration </p></li>
+<li><p><strong>subdelt</strong> – Time over which to integrate ODE over. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Boolean = true if solution is guarenteed to be unique. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13ImplicitEuler35solve_with_adaptive_subtimesteppingERKN18ImplicitIterations12ODEConstantsEKddd">
+<span id="_CPPv3NK13ImplicitEuler35solve_with_adaptive_subtimesteppingERKN18ImplicitIterations12ODEConstantsEKddd"></span><span id="_CPPv2NK13ImplicitEuler35solve_with_adaptive_subtimesteppingERKN18ImplicitIterations12ODEConstantsEKddd"></span><span id="ImplicitEuler::solve_with_adaptive_subtimestepping__ImplicitIterations::ODEConstantsCR.doubleC.double.doubleC"></span><span class="target" id="classImplicitEuler_1adfec5750207fb6d02d0f891f053fbf45"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">solve_with_adaptive_subtimestepping</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">ImplicitIterations</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ODEConstants</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">odeconsts</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">delt</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rprev</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ziter</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13ImplicitEuler35solve_with_adaptive_subtimesteppingERKN18ImplicitIterations12ODEConstantsEKddd" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Integrates the condensation / evaporation ODE employing the Implicit Euler method similarly to Matsushima et. al, 2023 with an adaptive timestepping subroutine. </p>
+<p>Forward timestep previous radius ‘rprev’ by delt using an Implicit Euler method with sub-timestepping to integrate the condensation/evaporation ODE using fixed thermodynamics from the start of the timestep. Sub-timestepping employed to try to ensure uique solution to g(Z) as Matsushima et. al, 2023 except minimum sub-timestep is limited by minsubdelt. If critdelt &lt; minsubdelt the uniqueness is not guarenteed. Reducing minsubdelt therefore increases the likelyhood of having a unique solution to g(Z), i.e. the accuracy of the solver is increased.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>odeconsts</strong> – Constants of ODE during integration </p></li>
+<li><p><strong>delt</strong> – Time over which to integrate ODE over. </p></li>
+<li><p><strong>rprev</strong> – Previous radius at time = t </p></li>
+<li><p><strong>ziter</strong> – Initial guess for ziter. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Updated radius^2 for time = t + delt </p>
 </dd>
 </dl>
 </dd></dl>
@@ -651,33 +532,21 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
 <dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N13ImplicitEuler6nitersE">
-<span id="_CPPv3N13ImplicitEuler6nitersE"></span><span id="_CPPv2N13ImplicitEuler6nitersE"></span><span id="ImplicitEuler::niters__unsigned-i"></span><span class="target" id="classImplicitEuler_1adf8130ad300457021e85f902394a1192"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">niters</span></span></span><a class="headerlink" href="#_CPPv4N13ImplicitEuler6nitersE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Suggested number of iterations for Newton Raphson method before testing for convergence. </p>
-</dd></dl>
-
-<dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N13ImplicitEuler4deltE">
 <span id="_CPPv3N13ImplicitEuler4deltE"></span><span id="_CPPv2N13ImplicitEuler4deltE"></span><span id="ImplicitEuler::delt__double"></span><span class="target" id="classImplicitEuler_1a4454bb8c2dcb20151f5ec832f52c335d"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">delt</span></span></span><a class="headerlink" href="#_CPPv4N13ImplicitEuler4deltE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Timestep of ODE solver (at each step implicit method is called). </p>
 </dd></dl>
 
 <dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N13ImplicitEuler7maxrtolE">
-<span id="_CPPv3N13ImplicitEuler7maxrtolE"></span><span id="_CPPv2N13ImplicitEuler7maxrtolE"></span><span id="ImplicitEuler::maxrtol__double"></span><span class="target" id="classImplicitEuler_1a8045189060f4e43a0fa78500b942aaa8"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxrtol</span></span></span><a class="headerlink" href="#_CPPv4N13ImplicitEuler7maxrtolE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Adjustable relative tolerance for convergence of NR method. </p>
+<dt class="sig sig-object cpp" id="_CPPv4N13ImplicitEuler10minsubdeltE">
+<span id="_CPPv3N13ImplicitEuler10minsubdeltE"></span><span id="_CPPv2N13ImplicitEuler10minsubdeltE"></span><span id="ImplicitEuler::minsubdelt__double"></span><span class="target" id="classImplicitEuler_1aec326152f0257f84ee938a6f56169141"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">minsubdelt</span></span></span><a class="headerlink" href="#_CPPv4N13ImplicitEuler10minsubdeltE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Minimum subtimestep in cases of substepping </p>
 </dd></dl>
 
 <dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N13ImplicitEuler7maxatolE">
-<span id="_CPPv3N13ImplicitEuler7maxatolE"></span><span id="_CPPv2N13ImplicitEuler7maxatolE"></span><span id="ImplicitEuler::maxatol__double"></span><span class="target" id="classImplicitEuler_1a0f0ade8b26048b62ca8051bc4bfd7f6b"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maxatol</span></span></span><a class="headerlink" href="#_CPPv4N13ImplicitEuler7maxatolE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Adjustable absolute tolerance for convergence of NR method. </p>
-</dd></dl>
-
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N13ImplicitEuler7subdeltE">
-<span id="_CPPv3N13ImplicitEuler7subdeltE"></span><span id="_CPPv2N13ImplicitEuler7subdeltE"></span><span id="ImplicitEuler::subdelt__double"></span><span class="target" id="classImplicitEuler_1a9382c2956083473178c3e6dac357dc05"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">subdelt</span></span></span><a class="headerlink" href="#_CPPv4N13ImplicitEuler7subdeltE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Number of substeps to intergation when supersat close to 1 (0 = false). </p>
+<dt class="sig sig-object cpp" id="_CPPv4N13ImplicitEuler6implitE">
+<span id="_CPPv3N13ImplicitEuler6implitE"></span><span id="_CPPv2N13ImplicitEuler6implitE"></span><span id="ImplicitEuler::implit__ImplicitIterations"></span><span class="target" id="classImplicitEuler_1a5ad86c1a56d4df50d1bda1d0704b9081"></span><span class="n"><span class="pre">ImplicitIterations</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">implit</span></span></span><a class="headerlink" href="#_CPPv4N13ImplicitEuler6implitE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Performs Newton Raphson Iterations of Implicit Method </p>
 </dd></dl>
 
 </div>
@@ -742,35 +611,16 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Implicit Euler Method for Condensation</a><ul>
-<li><a class="reference internal" href="#_CPPv417ImplicitIteration"><code class="docutils literal notranslate"><span class="pre">ImplicitIteration</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4NK17ImplicitIteration12initialguessEKd"><code class="docutils literal notranslate"><span class="pre">ImplicitIteration::initialguess()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK17ImplicitIteration18initialguess_shimaEKd"><code class="docutils literal notranslate"><span class="pre">ImplicitIteration::initialguess_shima()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK17ImplicitIteration25newtonraphson_niterationsEKdd"><code class="docutils literal notranslate"><span class="pre">ImplicitIteration::newtonraphson_niterations()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK17ImplicitIteration28newtonraphson_untilconvergedEKjKdd"><code class="docutils literal notranslate"><span class="pre">ImplicitIteration::newtonraphson_untilconverged()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK17ImplicitIteration29iterate_rootfinding_algorithmEKdd"><code class="docutils literal notranslate"><span class="pre">ImplicitIteration::iterate_rootfinding_algorithm()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK17ImplicitIteration9ode_gfuncEKdKd"><code class="docutils literal notranslate"><span class="pre">ImplicitIteration::ode_gfunc()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK17ImplicitIteration19ode_gfuncderivativeEKd"><code class="docutils literal notranslate"><span class="pre">ImplicitIteration::ode_gfuncderivative()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK17ImplicitIteration15isnot_convergedEKdKd"><code class="docutils literal notranslate"><span class="pre">ImplicitIteration::isnot_converged()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N17ImplicitIteration6nitersE"><code class="docutils literal notranslate"><span class="pre">ImplicitIteration::niters</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N17ImplicitIteration7subdeltE"><code class="docutils literal notranslate"><span class="pre">ImplicitIteration::subdelt</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N17ImplicitIteration4rtolE"><code class="docutils literal notranslate"><span class="pre">ImplicitIteration::rtol</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N17ImplicitIteration4atolE"><code class="docutils literal notranslate"><span class="pre">ImplicitIteration::atol</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N17ImplicitIteration7s_ratioE"><code class="docutils literal notranslate"><span class="pre">ImplicitIteration::s_ratio</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N17ImplicitIteration4akohE"><code class="docutils literal notranslate"><span class="pre">ImplicitIteration::akoh</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N17ImplicitIteration4bkohE"><code class="docutils literal notranslate"><span class="pre">ImplicitIteration::bkoh</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N17ImplicitIteration7ffactorE"><code class="docutils literal notranslate"><span class="pre">ImplicitIteration::ffactor</span></code></a></li>
-</ul>
-</li>
 <li><a class="reference internal" href="#_CPPv413ImplicitEuler"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N13ImplicitEuler13ImplicitEulerEKjKdKdKdKd"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::ImplicitEuler()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK13ImplicitEuler29solve_condensation_matsushimaEKdKN6Kokkos4pairIddEEKdKd"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::solve_condensation_matsushima()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13ImplicitEuler13ImplicitEulerEKdK6size_tKdKdKd"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::ImplicitEuler()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK13ImplicitEuler18solve_condensationEKdKN6Kokkos4pairIddEEKdKd"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::solve_condensation()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK13ImplicitEuler25substepped_implicitmethodERK17ImplicitIterationKjKd"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::substepped_implicitmethod()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N13ImplicitEuler6nitersE"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::niters</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13ImplicitEuler21first_unique_criteriaERKN18ImplicitIterations12ODEConstantsEKdKd"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::first_unique_criteria()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13ImplicitEuler16critial_timestepERKN18ImplicitIterations12ODEConstantsE"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::critial_timestep()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13ImplicitEuler22second_unique_criteriaERKN18ImplicitIterations12ODEConstantsEKd"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::second_unique_criteria()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13ImplicitEuler35solve_with_adaptive_subtimesteppingERKN18ImplicitIterations12ODEConstantsEKddd"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::solve_with_adaptive_subtimestepping()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N13ImplicitEuler4deltE"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::delt</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N13ImplicitEuler7maxrtolE"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::maxrtol</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N13ImplicitEuler7maxatolE"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::maxatol</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N13ImplicitEuler7subdeltE"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::subdelt</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13ImplicitEuler10minsubdeltE"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::minsubdelt</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13ImplicitEuler6implitE"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::implit</span></code></a></li>
 </ul>
 </li>
 </ul>
