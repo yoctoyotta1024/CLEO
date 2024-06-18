@@ -136,7 +136,7 @@ KOKKOS_FUNCTION double ImplicitEuler::solve_with_adaptive_subtimestepping(
  * the condensation/evaporation ODE. Implict timestepping equation defined in section 5.1.2 of
  * Shima et al. 2009 and is root of polynomial g(z) = 0, where z = [R_i(t+delt)]^squared.
  *
- * Uses at least 2 iterations of the Newton Raphson method and then checks if convergence
+ * Uses at least 'niters' iterations of the Newton Raphson method and then checks if convergence
  * criteria has been met (if a root of the g(Z) polynomial has been converged upon), else performs
  * upto maxniters number of further iterations, checking for convergence after each one.
  *
@@ -148,8 +148,9 @@ KOKKOS_FUNCTION
 double ImplicitIterations::integrate_condensation_ode(const ODEConstants &odeconsts,
                                                       const double subdelt, const double rprev,
                                                       double ziter) const {
+  const size_t niters = 2;
   const auto result =
-      newtonraphson_niterations(odeconsts, subdelt, rprev, ziter, 2);  // ziter, is_converged
+      newtonraphson_niterations(odeconsts, subdelt, rprev, ziter, niters);  // ziter, is_converged
 
   if (result.second) {
     return result.first;
