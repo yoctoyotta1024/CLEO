@@ -29,7 +29,7 @@ domain:
   maxnsupers: 1024                                     # maximum number of SDs
 
 timesteps:
-  CONDTSTEP : 1                                        # time between SD condensation [s]
+  CONDTSTEP : 0.1                                      # time between SD condensation [s]
   COLLTSTEP : 1                                        # time between SD collision [s]
   MOTIONTSTEP : 1                                      # time between SDM motion [s]
   COUPLTSTEP : 2                                       # time between dynamic couplings [s]

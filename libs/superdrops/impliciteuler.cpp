@@ -115,7 +115,7 @@ KOKKOS_FUNCTION double ImplicitEuler::solve_with_adaptive_subtimestepping(
     const ImplicitIterations::ODEConstants &odeconsts, const double delt, const double rprev,
     double ziter) const {
   const auto critdelt = critial_timestep(odeconsts);
-  const auto mindelt = Kokkos::fmin(critdelt, minsubdelt);
+  const auto mindelt = Kokkos::fmax(critdelt, minsubdelt);
 
   auto remdelt = delt;  // remaining time required to integrate over.
   while (remdelt > 0.0) {
