@@ -37,8 +37,8 @@
  * @param s_ratio The saturation ratio.
  * @param kohler_ab A pair containing 'a' and 'b' factors for Kohler curve in that order.
  * @param ffactor The sum of the diffusion factors.
- * @param rprev previous radius at time = t
- * @return updated radius for time = t + delt
+ * @param rprev Previous radius at time = t
+ * @return Updated radius for time = t + delt
  */
 KOKKOS_FUNCTION double ImplicitEuler::solve_condensation(
     const double s_ratio, const Kokkos::pair<double, double> kohler_ab, const double ffactor,
@@ -75,7 +75,7 @@ KOKKOS_FUNCTION double ImplicitEuler::solve_condensation(
  * @param odeconsts Constants of ODE during integration
  * @param rprev Radius at previous timestep
  * @param ziter Current guess for ziter.
- * @return boolean = true if solution is guarenteed to be unique.
+ * @return Boolean = true if solution is guarenteed to be unique.
  */
 KOKKOS_FUNCTION bool ImplicitEuler::first_unique_criteria(
     const ImplicitIterations::ODEConstants &odeconsts, const double rprev,
@@ -93,37 +93,38 @@ KOKKOS_FUNCTION bool ImplicitEuler::first_unique_criteria(
   return (is_unactivated && is_subactivated_saturation);
 }
 
+/**
+ * @brief Integrates the condensation / evaporation ODE employing the Implicit Euler method
+ * similarly to Matsushima et. al, 2023 with an adaptive timestepping subroutine.
+ *
+ * Forward timestep previous radius 'rprev' by delt using an Implicit Euler method with
+ * sub-timestepping to integrate the condensation/evaporation ODE using fixed thermodynamics from
+ * the start of the timestep. Sub-timestepping employed to try to ensure uique solution to g(Z)
+ * as Matsushima et. al, 2023 except minimum sub-timestep is limited by minsubdelt.
+ * If critdelt < minsubdelt the uniqueness is not guarenteed. Reducing minsubdelt therefore
+ * increases the likelyhood of having a unique solution to g(Z), i.e. the accuracy of the
+ * solver is increased.
+ *
+ * @param odeconsts Constants of ODE during integration
+ * @param delt Time over which to integrate ODE over.
+ * @param rprev Previous radius at time = t
+ * @param ziter Initial guess for ziter.
+ * @return Updated radius^2 for time = t + delt
+ */
 KOKKOS_FUNCTION double ImplicitEuler::solve_with_adaptive_subtimestepping(
     const ODEConstants &odeconsts, const double delt, const double rprev, double ziter) const {
-  const auto subdelt = delt;
-  ziter = implit.integrate_condensation_ode(odeconsts, subdelt, rprev, ziter);
+  const auto critdelt = critial_timestep(odeconsts);
+  const auto mindelt = Kokkos::fmin(critdelt, minsubdelt);
+
+  auto remdelt = delt;  // remaining time required to integrate over.
+  while (remdelt > 0.0) {
+    const auto subdelt = Kokkos::fmin(mindelt, remdelt);
+    ziter = implit.integrate_condensation_ode(odeconsts, subdelt, rprev, ziter);
+    remdelt -= subdelt;
+  }
 
   return ziter;
 }
-
-// /**
-//  *  TODO(CB): WIP ->
-//  *
-//  * @brief Performs the implicit method with sub-stepping.
-//  *
-//  * This method performs the implicit method with substepping, iterating over the substeps to
-//  * compute the implicit method for each substep.
-//  *
-//  * @param implit object defining implicit iterations.
-//  * @param nsubsteps number of substeps to perform.
-//  * @param rprev Radius of droplet at previous timestep.
-//  * @return New value for droplet radius.
-//  */
-// KOKKOS_FUNCTION double substepped_implicitmethod(const ImplicitIteration &implit,
-//                                                                 const unsigned int nsubsteps,
-//                                                                 const double rprev) const {
-//   auto subr = rprev;
-//   for (unsigned int n(0); n < nsubsteps; ++n) {
-//     auto init_ziter = double{implit.initialguess(subr)};
-//     subr = implit.newtonraphson_niterations(subr, init_ziter);
-//   }
-//   return subr;
-// }
 
 /**
  * @brief Integrates the condensation / evaporation ODE for radius^2 from t -> t+ subdelt.

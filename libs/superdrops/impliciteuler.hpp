@@ -209,9 +209,9 @@ struct ImplicitIterations {
    * This method checks if the Newton-Raphson iterations have converged based on a standard
    * local error test: |iteration - previous iteration| < RTOL * |iteration| + ATOL.
    *
-   * @param gfunciter value proportional to g(z) for current iteration
-   * @param gfuncprev value proportional to g(z) for previous iteration
-   * @return boolean=true if converged, false otherwise
+   * @param gfunciter Value proportional to g(z) for current iteration
+   * @param gfuncprev Value proportional to g(z) for previous iteration
+   * @return Boolean=true if converged, false otherwise
    */
   KOKKOS_FUNCTION
   bool check_for_convergence(const double gfunciter, const double gfuncprev) const {
@@ -251,10 +251,26 @@ class ImplicitEuler {
    * @param odeconsts Constants of ODE during integration
    * @param rprev Radius at previous timestep
    * @param ziter Current guess for ziter.
-   * @return boolean = true if solution is guarenteed to be unique.
+   * @return Boolean = true if solution is guarenteed to be unique.
    */
   KOKKOS_FUNCTION bool first_unique_criteria(const ImplicitIterations::ODEConstants &odeconsts,
                                              const double rprev, const double ziter) const;
+
+  /**
+   * @brief Calculates largest timestep which guarentees uniqueness of solution to g(Z) polynomial.
+   *
+   * Returns the largest possible timestep that can be undertaken in which g(Z) has only one real
+   * root to g(Z) in the range 0 < Z < infinity. See Case 1 from Matsushima et al. 2023
+   * (and derivation in appendix C).
+   *
+   * @param odeconsts Constants of ODE during integration
+   * @param subdelt Time over which to integrate ODE over.
+   * @return Critical time step for unique solution.
+   */
+  KOKKOS_FUNCTION double critial_timestep(const ImplicitIterations::ODEConstants &odeconsts) const {
+    const double cuberoot = Kokkos::pow(5.0 * odeconsts.bkoh / odeconsts.akoh, 1.5);
+    return 2.5 * odeconsts.ffactor / odeconsts.akoh * cuberoot;
+  }
 
   /**
    * @brief Test of uniqueness criteria for small enough timestep.
@@ -263,19 +279,34 @@ class ImplicitEuler {
    * uniquenes criteria of Case 1 from Matsushima et al. 2023 (see appendix C), namely that the
    * timestep is small enough to guarentee there is only one real root to g(Z) in the range
    * 0 < Z < infinity.
-
-  * @param odeconsts Constants of ODE during integration
-  * @param subdelt Time over which to integrate ODE over.
-  * @return boolean = true if solution is guarenteed to be unique.
-  */
+   *
+   * @param odeconsts Constants of ODE during integration
+   * @param subdelt Time over which to integrate ODE over.
+   * @return Boolean = true if solution is guarenteed to be unique.
+   */
   KOKKOS_FUNCTION bool second_unique_criteria(const ImplicitIterations::ODEConstants &odeconsts,
                                               const double subdelt) const {
-    const double cuberoot = Kokkos::pow(5.0 * odeconsts.bkoh / odeconsts.akoh, 1.5);
-    const double deltcrit = 2.5 * odeconsts.ffactor / odeconsts.akoh * cuberoot;
-
-    return (subdelt <= deltcrit);
+    return (subdelt <= critial_timestep(odeconsts));
   }
 
+  /**
+   * @brief Integrates the condensation / evaporation ODE employing the Implicit Euler method
+   * similarly to Matsushima et. al, 2023 with an adaptive timestepping subroutine.
+   *
+   * Forward timestep previous radius 'rprev' by delt using an Implicit Euler method with
+   * sub-timestepping to integrate the condensation/evaporation ODE using fixed thermodynamics from
+   * the start of the timestep. Sub-timestepping employed to try to ensure uique solution to g(Z)
+   * as Matsushima et. al, 2023 except minimum sub-timestep is limited by minsubdelt.
+   * If critdelt < minsubdelt the uniqueness is not guarenteed. Reducing minsubdelt therefore
+   * increases the likelyhood of having a unique solution to g(Z), i.e. the accuracy of the
+   * solver is increased.
+   *
+   * @param odeconsts Constants of ODE during integration
+   * @param delt Time over which to integrate ODE over.
+   * @param rprev Previous radius at time = t
+   * @param ziter Initial guess for ziter.
+   * @return Updated radius^2 for time = t + delt
+   */
   KOKKOS_FUNCTION double ImplicitEuler::solve_with_adaptive_subtimestepping(
       const ODEConstants &odeconsts, const double delt, const double rprev, double ziter) const;
 
