@@ -29,7 +29,7 @@ domain:
   maxnsupers: 1024                                     # maximum number of SDs
 
 timesteps:
-  CONDTSTEP : 0.1                                      # time between SD condensation [s]
+  CONDTSTEP : 1                                        # time between SD condensation [s]
   COLLTSTEP : 1                                        # time between SD collision [s]
   MOTIONTSTEP : 1                                      # time between SDM motion [s]
   COUPLTSTEP : 2                                       # time between dynamic couplings [s]
@@ -58,9 +58,9 @@ microphysics:
   condensation:
     do_alter_thermo : true                             # true = cond/evap alters the thermodynamic state
     maxniters : 50                                     # maximum no. iterations of Newton Raphson Method
-    MINSUBTSTEP : 0.001                                # minimum subtimestep in cases of substepping [s]
+    MINSUBTSTEP : 0.01                                 # minimum subtimestep in cases of substepping [s]
     rtol : 0.0                                         # relative tolerance for implicit Euler integration
-    atol : 0.01                                        # abolute tolerance for implicit Euler integration
+    atol : 0.001                                       # abolute tolerance for implicit Euler integration
   # breakup:
   #   constnfrags:
   #     nfrags: 5.0                                      # average no. of fragments per droplet breakup

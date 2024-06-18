@@ -112,7 +112,7 @@ KOKKOS_FUNCTION bool ImplicitEuler::first_unique_criteria(
  * @return Updated radius^2 for time = t + delt
  */
 KOKKOS_FUNCTION double ImplicitEuler::solve_with_adaptive_subtimestepping(
-    const ImplicitIterations::ODEConstants &odeconsts, const double delt, const double rprev,
+    const ImplicitIterations::ODEConstants &odeconsts, const double delt, double rprev,
     double ziter) const {
   const auto critdelt = critial_timestep(odeconsts);
   const auto mindelt = Kokkos::fmax(critdelt, minsubdelt);
@@ -120,7 +120,9 @@ KOKKOS_FUNCTION double ImplicitEuler::solve_with_adaptive_subtimestepping(
   auto remdelt = delt;  // remaining time required to integrate over.
   while (remdelt > 0.0) {
     const auto subdelt = Kokkos::fmin(mindelt, remdelt);
+    ziter = implit.initialguess(odeconsts, rprev);
     ziter = implit.integrate_condensation_ode(odeconsts, subdelt, rprev, ziter);
+    rprev = Kokkos::pow(ziter, 0.5);
     remdelt -= subdelt;
   }
 
