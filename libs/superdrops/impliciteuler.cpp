@@ -30,10 +30,9 @@
  *
  * Forward timestep previous radius 'rprev' by delt using an Implicit Euler method (possibly with
  * sub-timestepping) to integrate the condensation/evaporation ODE using fixed thermodynamics from
- * the start of the timestep.
- *
- * Sub-timestepping is used to ensure solution to g(Z) is unique, unless timestep is less than
- * minsubdelt.  TODO(CB): WIP <-
+ * the start of the timestep. Sub-timestepping employed when unique solution to g(Z) within
+ * required radius range is not guarenteed. Criteria as in appendix C of Matsushima et. al, 2023
+ * except minimum sub-timestep is limited by minsubdelt.
  *
  * @param s_ratio The saturation ratio.
  * @param kohler_ab A pair containing 'a' and 'b' factors for Kohler curve in that order.
@@ -46,9 +45,53 @@ KOKKOS_FUNCTION double ImplicitEuler::solve_condensation(
     const double rprev) const {
   const auto odeconsts =
       ImplicitIterations::ODEConstants{s_ratio, kohler_ab.first, kohler_ab.second, ffactor};
-  const auto subdelt = delt;
-  const auto rsqrd = implit.integrate_condensation_ode(odeconsts, subdelt, rprev);
+
+  auto ziter = implit.initialguess(odeconsts, rprev);
+  const bool ucrit1 = first_unique_criteria(odeconsts, rprev, ziter);
+  const bool ucrit2 = second_unique_criteria(odeconsts, delt);
+
+  auto rsqrd = double{0.0};
+  if (ucrit1 || ucrit2) {
+    rsqrd = implit.integrate_condensation_ode(odeconsts, delt, rprev, ziter);
+  } else {
+    const auto subdelt = delt;
+    rsqrd = implit.integrate_condensation_ode(odeconsts, subdelt, rprev, ziter);
+  }
+
   return Kokkos::sqrt(rsqrd);
+}
+
+/**
+ * @brief Test of uniqueness criteria for un-activated droplets in environment with
+ * supersaturation less than its activation supersaturation.
+ *
+ * Returns true if solution to g(Z) is guarenteed to be unique because it meets the
+ * uniquenes criteria of Case 2 from Matsushima et al. 2023 (see appendix C), namely that there
+ * is only one real root to g(Z) in the range 0 < Z < critical_R^2, where critical_R is the
+ * critical i.e. activation radius of the droplet. Here we use the less stringent constrain
+ * that S <= S_crit rather than S <= 1, and we ensure the current value for ziter is also less
+ * than the critical_R as it must be to guarentee solution in range 0 < R < critical_R
+ * is converged upon.
+ *
+ * @param odeconsts Constants of ODE during integration
+ * @param rprev Radius at previous timestep
+ * @param ziter Current guess for ziter.
+ * @return boolean = true if solution is guarenteed to be unique.
+ */
+KOKKOS_FUNCTION bool ImplicitEuler::first_unique_criteria(
+    const ImplicitIterations::ODEConstants &odeconsts, const double rprev,
+    const double ziter) const {
+  const double akoh = odeconsts.akoh;
+  const double bkoh = odeconsts.bkoh;
+
+  const double rcritsqrd = 3.0 * bkoh / akoh;
+  const bool is_ziter_unactivated = ziter < rcritsqrd;
+  const bool is_unactivated = (rprev * rprev < rcritsqrd && is_ziter_unactivated);
+
+  const double sqrdval = 4.0 * akoh * akoh * akoh / 27.0 / bkoh;
+  const bool is_subactivated_saturation = (odeconsts.s_ratio <= 1.0 + Kokkos::pow(sqrdval, 0.5));
+
+  return (is_unactivated && is_subactivated_saturation);
 }
 
 // /**
@@ -91,10 +134,10 @@ KOKKOS_FUNCTION double ImplicitEuler::solve_condensation(
  * @param subdelt time over which to integrate ODE
  * @param rprev Radius of droplet at previous timestep.
  */
-KOKKOS_FUNCTION double ImplicitIterations::integrate_condensation_ode(const ODEConstants &odeconsts,
-                                                                      const double subdelt,
-                                                                      const double rprev) const {
-  auto ziter = initialguess(odeconsts, rprev);
+KOKKOS_FUNCTION
+double ImplicitIterations::integrate_condensation_ode(const ODEConstants &odeconsts,
+                                                      const double subdelt, const double rprev,
+                                                      double ziter) const {
   const auto result =
       newtonraphson_niterations(odeconsts, subdelt, rprev, ziter, 2);  // ziter, is_converged
 
@@ -292,57 +335,3 @@ KOKKOS_FUNCTION double ImplicitIterations::ode_gfuncderivative(const ODEConstant
 
   return 1 - alpha * beta;
 }
-
-// /**
-//  * TODO(CB): WIP ->
-//  *
-//  * @brief Integrates the condensation / evaporation ODE employing the Implicit Euler method
-//  * as in Matsushima et al, 2023.
-//  *
-//  * Forward timestep previous radius 'rprev' by delt using an Implicit Euler method to integrate
-//  * the condensation/evaporation ODE. Implict timestepping equation defined in section 5.1.2 of
-//  * Shima et al. 2009 and is root of polynomial g(z) = 0, where z = [R_i(t+delt)]^squared.
-//  *
-//  * Newton Raphson iterations are used to converge towards the root of g(z) within the tolerances
-//  * of an ImpIter instance. Tolerances, maxium number of iterations and sub-timestepping are
-//  * adjusted based on the uniqueness criteria of the polynomial g(z). Uniqueness criteria, ucrit1
-//  * and / or ucrit2, assume that solution to g(ziter)=0 is unique and therefore Newton Raphson
-//  root
-//  * finding algorithm converges quickly. This means method can be used with comparitively large
-//  * tolerances and timesteps, and the maximum number of iterations is small. Refer to
-//  section 5.1.2
-//  * of Shima et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details.
-//  */
-// KOKKOS_FUNCTION double ImplicitEuler::solve_condensation_matsushima(
-//     const double s_ratio, const Kokkos::pair<double, double> kohler_ab, const double ffactor,
-//     const double rprev) const {
-//   const auto akoh = double{kohler_ab.first};
-//   const auto bkoh = double{kohler_ab.second};
-
-//   const auto max_uniquedelt = double{2.5 * ffactor / akoh * Kokkos::pow(5.0 * bkoh / akoh, 1.5)};
-//   const auto ract_ratio = double{rprev * rprev * akoh / 3.0 / bkoh};
-
-//   const auto ucrit1 = bool{(s_ratio <= 1.0 && ract_ratio < 1.0)};
-//   const auto ucrit2 = bool{delt <= max_uniquedelt};
-
-//   /* at least one criteria is met such that there is unique solution */
-//   if (ucrit1 || ucrit2) {
-//     const ImplicitIteration implit{niters, delt, maxrtol, maxatol, s_ratio, akoh, bkoh, ffactor};
-//     auto init_ziter = double{implit.initialguess(rprev)};
-//     return implit.newtonraphson_niterations(rprev, init_ziter);
-
-//     /* In general there may be > 0 spurious solutions.
-//     Convergence may be slower so allow >= 3 Newton Raphson
-//     iterations (could also refine tolerances) */
-//   } else {
-//     auto subt = double{Kokkos::fmax(
-//         max_uniquedelt,
-//         subdelt)};  // Kokkos compatible equivalent to std::max() for floating point numbers
-//     const auto nsubs = (unsigned int)Kokkos::ceil(delt / subt);
-//     subt = delt / static_cast<double>(nsubs);
-
-//     const ImplicitIteration implit{niters, subt, maxrtol, maxatol, s_ratio, akoh, bkoh, ffactor};
-
-//     return substepped_implicitmethod(implit, nsubs, rprev);
-//   }
-// }

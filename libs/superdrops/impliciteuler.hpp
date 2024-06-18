@@ -82,11 +82,12 @@ struct ImplicitIterations {
    * @param odeconsts Constants of ODE during integration
    * @param subdelt Time over which to integrate ODE
    * @param rprev Radius of droplet at previous timestep.
+   * @param ziter Initial value for ziter.
    */
   KOKKOS_FUNCTION double integrate_condensation_ode(const ODEConstants &odeconsts,
-                                                    const double subdelt, const double rprev) const;
+                                                    const double subdelt, const double rprev,
+                                                    double ziter) const;
 
- private:
   /**
    * @brief Returns appropriate initial guess (ie. a reasonable guess) for the Newton-Raphson
    * method.
@@ -105,6 +106,7 @@ struct ImplicitIterations {
    */
   KOKKOS_FUNCTION double initialguess(const ODEConstants &odeconsts, const double rprev) const;
 
+ private:
   /**
    * @brief Performs niters number of Newton-Raphson iterations.
    *
@@ -236,6 +238,46 @@ class ImplicitEuler {
   double minsubdelt; /**< Minimum subtimestep in cases of substepping */
   ImplicitIterations implit; /**< Performs Newton Raphson Iterations of Implicit Method */
 
+  /**
+   * @brief Test of uniqueness criteria for un-activated droplets in environment with
+   * supersaturation less than its activation supersaturation.
+   *
+   * Returns true if solution to g(Z) is guarenteed to be unique because it meets the
+   * uniquenes criteria of Case 2 from Matsushima et al. 2023 (see appendix C), namely that there
+   * is only one real root to g(Z) in the range 0 < Z < critical_R^2, where critical_R is the
+   * critical i.e. activation radius of the droplet. Here we use the less stringent constrain
+   * that S <= S_crit rather than S <= 1, and we ensure the current value for ziter is also less
+   * than the critical_R as it must be to guarentee solution in range 0 < R < critical_R
+   * is converged upon.
+   *
+   * @param odeconsts Constants of ODE during integration
+   * @param rprev Radius at previous timestep
+   * @param ziter Current guess for ziter.
+   * @return boolean = true if solution is guarenteed to be unique.
+   */
+  KOKKOS_FUNCTION bool first_unique_criteria(const ImplicitIterations::ODEConstants &odeconsts,
+                                             const double rprev, const double ziter) const;
+
+  /**
+   * @brief Test of uniqueness criteria for small enough timestep.
+   *
+   * Returns true if solution to g(Z) is guarenteed to be unique because it meets the
+   * uniquenes criteria of Case 1 from Matsushima et al. 2023 (see appendix C), namely that the
+   * timestep is small enough to guarentee there is only one real root to g(Z) in the range
+   * 0 < Z < infinity.
+
+  * @param odeconsts Constants of ODE during integration
+  * @param subdelt Timestep to integrate over.
+  * @return boolean = true if solution is guarenteed to be unique.
+  */
+  KOKKOS_FUNCTION bool second_unique_criteria(const ImplicitIterations::ODEConstants &odeconsts,
+                                              const double subdelt) const {
+    const double cuberoot = Kokkos::pow(5.0 * odeconsts.bkoh / odeconsts.akoh, 1.5);
+    const double deltcrit = 2.5 * odeconsts.ffactor / odeconsts.akoh * cuberoot;
+
+    return (subdelt <= deltcrit);
+  }
+
  public:
   /**
    * @brief Constructor for ImplicitEuler class.
@@ -248,9 +290,7 @@ class ImplicitEuler {
    */
   ImplicitEuler(const double delt, const size_t maxniters, const double rtol, const double atol,
                 const double minsubdelt)
-      : delt(delt), minsubdelt(minsubdelt), implit(maxniters, rtol, atol) {
-    // TODO(CB): WIP new config params to match this constructor and re-order constructor args
-  }
+      : delt(delt), minsubdelt(minsubdelt), implit(maxniters, rtol, atol) {}
 
   /**
    * @brief Integrates the condensation / evaporation ODE employing the Implicit Euler method
