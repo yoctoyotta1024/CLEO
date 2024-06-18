@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 17th April 2024
+Last Modified: Monday 17th June 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -51,12 +51,11 @@ gridfile = (
 )  # note this should match config.yaml
 
 ### input parameters for zcoords of gridbox boundaries
-zmax = 820  # maximum z coord [m]
+zmax = 20  # maximum z coord [m]
 zmin = 0  # minimum z coord [m]
 zdelta = 20  # even spacing
-# zgrid = [zmin, zmax, zdelta]
+zgrid = [zmin, zmax, zdelta]
 # zgrid = np.arange(zmin, zmax+zdelta, zdelta)
-zgrid = np.concatenate((np.arange(zmin, zmax, zdelta), np.array([850])))
 
 ### input parameters for x coords of gridbox boundaries
 xgrid = [0, 20, 20]

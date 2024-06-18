@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 21st April 2024
+ * Last Modified: Tuesday 18th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -34,25 +34,59 @@
 namespace dlc = dimless_constants;
 
 /**
- * @brief Struct defining parameters and methods for iterations of the Implicit Euler Method.
+ * @brief Struct for performing iterations of the Implicit Euler Method.
  *
  * This struct defines parameters and methods for performing an iterations of the implicit method.
- * E.g. struct defines the number of iterations to try before testing convergence, the timestep of
- * the method, it's relative and absolute tolerances, and methods for computing the initial guess
- * for and performing the Newton-Raphson root finding.
  *
  * _Note: abbreviation NR = Newton Raphson (Method)
  *
  */
-struct ImplicitIteration {
-  unsigned int niters;  ///< Number of NR iterations to try before testing convergence.
-  double subdelt;  ///< Timestep of implicit method (at each substep >= niter NR iterations occur).
-  double rtol;     ///< Relative tolerance for convergence of NR method.
-  double atol;     ///< Absolute tolerance for convergence of NR method.
-  double s_ratio;  ///< Supersaturation ratio.
-  double akoh;     ///< Kelvin factor in Kohler theory "a".
-  double bkoh;     ///< Raoult factor in Kohler theory "b".
-  double ffactor;  ///< Sum of heat and vapor diffusion factors.
+struct ImplicitIterations {
+ private:
+  size_t maxniters; /**< Maximum no. iterations of Newton Raphson Method */
+  double rtol;      /**< Relative tolerance for convergence of NR method. */
+  double atol;      /**< Absolute tolerance for convergence of NR method. */
+
+ public:
+  /**
+   * @brief Struct for constants of ODE during integration
+   */
+  struct ODEConstants {
+    double s_ratio;  ///< Supersaturation ratio.
+    double akoh;     ///< Kelvin factor in Kohler theory "a".
+    double bkoh;     ///< Raoult factor in Kohler theory "b".
+    double ffactor;  ///< Sum of heat and vapor diffusion factors.
+  };
+
+  /**
+   * @brief Constructor for ImplicitIterations class.
+   * @param maxniters Maximum no. iterations of Newton Raphson Method.
+   * @param rtol Relative tolerance for implicit Euler method.
+   * @param atol Absolute tolerance for implicit Euler method.
+   */
+  ImplicitIterations(const size_t maxniters, const double rtol, const double atol)
+      : maxniters(maxniters), rtol(rtol), atol(atol) {}
+
+  /**
+   * @brief Integrates the condensation / evaporation ODE for radius^2 from t -> t+ subdelt.
+   *
+   * Employs the Implicit Euler method (with potential sub-timestepping based on uniqueness criteria
+   * of Matsushima et. al), 2023 to forward timestep previous radius 'rprev' by subdelt according to
+   * the condensation/evaporation ODE. Implict timestepping equation defined in section 5.1.2 of
+   * Shima et al. 2009 and is root of polynomial g(z) = 0, where z = [R_i(t+delt)]^squared.
+   *
+   * Uses at least 2 iterations of the Newton Raphson method and then checks if convergence
+   * criteria has been met (if a root of the g(Z) polynomial has been converged upon), else performs
+   * upto maxniters number of further iterations, checking for convergence after each one.
+   *
+   * @param odeconsts Constants of ODE during integration
+   * @param subdelt Time over which to integrate ODE
+   * @param rprev Radius of droplet at previous timestep.
+   * @param ziter Initial value for ziter.
+   */
+  KOKKOS_FUNCTION double integrate_condensation_ode(const ODEConstants &odeconsts,
+                                                    const double subdelt, const double rprev,
+                                                    double ziter) const;
 
   /**
    * @brief Returns appropriate initial guess (ie. a reasonable guess) for the Newton-Raphson
@@ -66,84 +100,77 @@ struct ImplicitIteration {
    * criteria are as in SCALE-SDM for making initial guess for given droplet much greater
    * than its (activation radius)^2 if the supersaturation > its activation supersaturation.
    *
+   * @param odeconsts Constants of ODE during integration
    * @param rprev Radius of droplet at previous timestep.
    * @return Initial guess for ziter.
    */
-  KOKKOS_FUNCTION double initialguess(const double rprev) const;
+  KOKKOS_FUNCTION double initialguess(const ODEConstants &odeconsts, const double rprev) const;
 
+ private:
   /**
-   * @brief Returns appropriate initial guess (ie. a reasonable guess) for the Newton-Raphson
-   * method.
+   * @brief Performs niters number of Newton-Raphson iterations.
    *
-   * This method returns an initial guess for the Newton-Raphson method based on
-   * the given radius from the previous timestep and the current supersaturation ratio.
-   *
-   * Guess is supposed to be a reasonable value for initial 'ziter' to use as first iteration of NR
-   * method in rootfinding algorithm for timestepping condensation/evaporation ODE. Here the guess
-   * criteria are adapted from SCALE-SDM. Second criteria is that initial guess >= 'r1sqrd', where
-   * r1 is the equilibrium radius of a given droplet when s_ratio=1.
-   *
-   * @param rprev Radius of droplet at previous timestep.
-   * @return Initial guess for ziter.
-   */
-  KOKKOS_FUNCTION
-  double initialguess_shima(const double rprev) const;
-
-  /**
-   * @brief Performs Newton-Raphson iterations with a fixed number of iterations.
-   *
-   * This method performs Newton-Raphson iterations for a fixed number of iterations,
-   * then tests for convergence and continues with futher iterations until convergence occurs or
-   * or until the maximum number of iterations is reached.
-   *
-   * Funciton intergrates (timesteps) condensation ODE by delt given initial guess for ziter,
+   * Function integrates (timesteps) condensation ODE by delt given initial guess for ziter,
    * (which is usually radius^squared from previous timestep). Uses Newton Raphson iterative method
-   * to find new value of the radius that converges on the root of the polynomial g(ziter) within
-   * the tolerances of the ImpIter instance. After 'niters' iterations, convergence criteria is
-   * tested and futher iterations undertaken if polynomial root has not yet been converged upon.
+   * with 'niters' number of iterations then returns updated ziter and boolean which is true if
+   * rootfinding has passed convergence test.
    *
+   * @param odeconsts Constants of ODE during integration
+   * @param subdelt Time over which to integrate ODE
    * @param rprev Radius at previous timestep
    * @param ziter The current guess for ziter.
+   * @param niters Number of iterations of NR method to perform
    * @return The updated value of ziter.
    */
-  KOKKOS_FUNCTION
-  double newtonraphson_niterations(const double rprev, double ziter) const;
-
+  KOKKOS_FUNCTION Kokkos::pair<double, bool> newtonraphson_niterations(
+      const ODEConstants &odeconsts, const double subdelt, const double rprev, double ziter,
+      const size_t niters) const;
   /**
-   * @brief Performs Newton-Raphson iterations until convergence.
+   *
+   * @brief Performs Newton-Raphson iterations until convergence or maximum number of
+   * iterations is reached.
    *
    * After every iteration, convergence criteria is tested and error is raised if method does not
-   * converge within 'iterlimit' iterations. Otherwise returns new value for the radius (which is
-   * the radius at timestep 't+subdelt'. Refer to section 5.1.2 Shima et al. 2009 and
-   * section 3.3.3 of Matsushima et al. 2023 for more details.
+   * converge within 'niterslimit' iterations. Otherwise once convergence test is passed, function
+   * returns the new value for the ziter (which is the radius^2 at timestep 't+delt'). Refer to
+   * section 5.1.2 Shima et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details.
    *
-   * @param iterlimit The maxiumum number of iterations to attempt.
+   * @param odeconsts Constants of ODE during integration
+   * @param subdelt Time over which to integrate ODE
+   * @param niterslimit The maxiumum number of iterations to attempt.
    * @param rprev Radius at the previous timestep.
    * @param ziter The current guess for ziter.
    * @return The updated value of ziter.
    */
-  KOKKOS_FUNCTION
-  double newtonraphson_untilconverged(const unsigned int iterlimit, const double rprev,
-                                      double ziter) const;
+  KOKKOS_FUNCTION double newtonraphson_untilconverged(const ODEConstants &odeconsts,
+                                                      const size_t niterslimit,
+                                                      const double subdelt, const double rprev,
+                                                      double ziter) const;
 
   /**
    * @brief Perform one iteration of the Newton-Raphson rootfinding algorithm.
    *
-   * This function performs one iteration of the Newton-Raphson rootfinding algorithm and returns
-   * the updated value of radius^2 alongside a boolean indicating whether the algorithm has
-   * converged.
+   * This function performs one iteration of the Newton-Raphson rootfinding algorithm, i.e.
+   * ziter^(m) -> ziter^(m+1) for iteration m+1 starting at m=1. Returns the updated value of ziter
+   * alongside a boolean which is true if the new value of ziter passes the convergence test.
    *
+   * _Note:_ ziter is limited to >= 1e-8 so it's always > 0.0
+   *
+   * @param odeconsts Constants of ODE during integration
+   * @param subdelt Time over which to integrate ODE
    * @param rprev Radius at the previous timestep.
    * @param ziter The current guess for ziter.
-   * @return A pair indicating whether to continue iterating and the updated value of ziter.
+   * @return A pair of the updated ziter and a boolean which is true if a root is converged upon.
    */
-  KOKKOS_FUNCTION Kokkos::pair<bool, double> iterate_rootfinding_algorithm(const double rprev,
-                                                                           double ziter) const;
+  KOKKOS_FUNCTION
+  Kokkos::pair<double, bool> iterate_rootfinding_algorithm(const ODEConstants &odeconsts,
+                                                           const double subdelt, const double rprev,
+                                                           double ziter) const;
 
   /**
-   * @brief Returns the value of g(z) / z * delt for the ODE.
+   * @brief Returns the value of g(z) / z * subdelt for the ODE.
    *
-   * This method computes the value of g(z) / z * delt used in the root-finding
+   * This method computes the value of g(z) / z * subdelt used in the root-finding
    * Newton-Raphson method for the dr/dt condensation / evaporation ODE.
    *
    * ODE is for radial growth/shrink of each superdroplet due to condensation and diffusion
@@ -152,42 +179,46 @@ struct ImplicitIteration {
    *
    * _Note:_ z = ziter = radius^2.
    *
+   * @param odeconsts Constants of ODE during integration
+   * @param subdelt Time over which to integrate ODE
    * @param rprev Radius at the previous timestep.
    * @param rsqrd Current radius squared.
-   * @return RHS of g(z) / z * delt evaluted at rqrd.
+   * @return RHS of g(z) / z * subdelt evaluted at rqrd.
    */
-  KOKKOS_FUNCTION
-  double ode_gfunc(const double rprev, const double rsqrd) const;
+  KOKKOS_FUNCTION double ode_gfunc(const ODEConstants &odeconsts, const double subdelt,
+                                   const double rprev, const double rsqrd) const;
 
   /**
    * @brief Returns the value of the derivative of g(z) with respect to z.
    *
-   * This method computes the value of dg(z)/dz * delt, where dg(z)/dz is the derivative of
+   * This method computes the value of dg(z)/dz * subdelt, where dg(z)/dz is the derivative of
    * g(z) with respect to z=rsqr. g(z) is polynomial to find root of using Newton Raphson Method
    * consistent as in ode_gfunc(...).
    *
+   * @param odeconsts Constants of ODE during integration
+   * @param subdelt Time over which to integrate ODE
    * @param rsqrd Current radius squared.
-   * @return RHS of dg(z)/dz * delt evaluted at rqrd.
+   * @return RHS of dg(z)/dz * subdelt evaluted at rqrd.
    */
-  KOKKOS_FUNCTION
-  double ode_gfuncderivative(const double rsqrd) const;
+  KOKKOS_FUNCTION double ode_gfuncderivative(const ODEConstants &odeconsts, const double subdelt,
+                                             const double rsqrd) const;
 
   /**
-   * @brief Returns true if the Newton-Raphson iterations have *not* yet converged.
+   * @brief Returns true if the Newton-Raphson iterations have converged.
    *
    * This method checks if the Newton-Raphson iterations have converged based on a standard
    * local error test: |iteration - previous iteration| < RTOL * |iteration| + ATOL.
    *
-   * @param gfunciter g(z) of current iteration
-   * @param gfuncprev  g(z) of previous iteration
-   * @return boolean=true if not yet converged, false otherwise
+   * @param gfunciter Value proportional to g(z) for current iteration
+   * @param gfuncprev Value proportional to g(z) for previous iteration
+   * @return Boolean=true if converged, false otherwise
    */
   KOKKOS_FUNCTION
-  bool isnot_converged(const double gfunciter, const double gfuncprev) const {
+  bool check_for_convergence(const double gfunciter, const double gfuncprev) const {
     const auto converged = double{rtol * Kokkos::abs(gfunciter) + atol};
     const auto currentvalue = double{Kokkos::abs(gfunciter - gfuncprev)};
 
-    return (currentvalue >= converged);  // true means it's not yet converged
+    return (currentvalue < converged);  // true means converged
   }
 };
 
@@ -201,75 +232,119 @@ struct ImplicitIteration {
  */
 class ImplicitEuler {
  private:
-  unsigned int niters;
-  /**< Suggested number of iterations for Newton Raphson method before testing for convergence. */
-  double delt;    /**< Timestep of ODE solver (at each step implicit method is called). */
-  double maxrtol; /**< Adjustable relative tolerance for convergence of NR method. */
-  double maxatol; /**< Adjustable absolute tolerance for convergence of NR method. */
-  double subdelt; /**< Number of substeps to intergation when supersat close to 1 (0 = false). */
+  double delt;       /**< Timestep of ODE solver (at each step implicit method is called). */
+  double minsubdelt; /**< Minimum subtimestep in cases of substepping */
+  ImplicitIterations implit; /**< Performs Newton Raphson Iterations of Implicit Method */
 
   /**
-   * @brief Performs the implicit method with sub-stepping.
+   * @brief Test of uniqueness criteria for un-activated droplets in environment with
+   * supersaturation less than its activation supersaturation.
    *
-   * This method performs the implicit method with substepping, iterating over the substeps to
-   * compute the implicit method for each substep.
+   * Returns true if solution to g(Z) is guarenteed to be unique because it meets the
+   * uniquenes criteria of Case 2 from Matsushima et al. 2023 (see appendix C), namely that there
+   * is only one real root to g(Z) in the range 0 < Z < critical_R^2, where critical_R is the
+   * critical i.e. activation radius of the droplet. Here we use the less stringent constrain
+   * that S <= S_crit rather than S <= 1, and we ensure the current value for ziter is also less
+   * than the critical_R as it must be to guarentee solution in range 0 < R < critical_R
+   * is converged upon.
    *
-   * @param implit object defining implicit iterations.
-   * @param nsubsteps number of substeps to perform.
-   * @param rprev Radius of droplet at previous timestep.
-   * @return New value for droplet radius.
+   * @param odeconsts Constants of ODE during integration
+   * @param rprev Radius at previous timestep
+   * @param ziter Current guess for ziter.
+   * @return Boolean = true if solution is guarenteed to be unique.
    */
-  KOKKOS_FUNCTION
-  double substepped_implicitmethod(const ImplicitIteration &implit, const unsigned int nsubsteps,
-                                   const double rprev) const;
+  KOKKOS_FUNCTION bool first_unique_criteria(const ImplicitIterations::ODEConstants &odeconsts,
+                                             const double rprev, const double ziter) const;
+
+  /**
+   * @brief Calculates largest timestep which guarentees uniqueness of solution to g(Z) polynomial.
+   *
+   * Returns the largest possible timestep that can be undertaken in which g(Z) has only one real
+   * root to g(Z) in the range 0 < Z < infinity. See Case 1 from Matsushima et al. 2023
+   * (and derivation in appendix C).
+   *
+   * @param odeconsts Constants of ODE during integration
+   * @param subdelt Time over which to integrate ODE over.
+   * @return Critical time step for unique solution.
+   */
+  KOKKOS_FUNCTION double critial_timestep(const ImplicitIterations::ODEConstants &odeconsts) const {
+    const double cuberoot = Kokkos::pow(5.0 * odeconsts.bkoh / odeconsts.akoh, 1.5);
+    return 2.5 * odeconsts.ffactor / odeconsts.akoh * cuberoot;
+  }
+
+  /**
+   * @brief Test of uniqueness criteria for small enough timestep.
+   *
+   * Returns true if solution to g(Z) is guarenteed to be unique because it meets the
+   * uniquenes criteria of Case 1 from Matsushima et al. 2023 (see appendix C), namely that the
+   * timestep is small enough to guarentee there is only one real root to g(Z) in the range
+   * 0 < Z < infinity.
+   *
+   * @param odeconsts Constants of ODE during integration
+   * @param subdelt Time over which to integrate ODE over.
+   * @return Boolean = true if solution is guarenteed to be unique.
+   */
+  KOKKOS_FUNCTION bool second_unique_criteria(const ImplicitIterations::ODEConstants &odeconsts,
+                                              const double subdelt) const {
+    return (subdelt <= critial_timestep(odeconsts));
+  }
+
+  /**
+   * @brief Integrates the condensation / evaporation ODE employing the Implicit Euler method
+   * similarly to Matsushima et. al, 2023 with an adaptive timestepping subroutine.
+   *
+   * Forward timestep previous radius 'rprev' by delt using an Implicit Euler method with
+   * sub-timestepping to integrate the condensation/evaporation ODE using fixed thermodynamics from
+   * the start of the timestep. Sub-timestepping employed to try to ensure uique solution to g(Z)
+   * as Matsushima et. al, 2023 except minimum sub-timestep is limited by minsubdelt.
+   * If critdelt < minsubdelt the uniqueness is not guarenteed. Reducing minsubdelt therefore
+   * increases the likelyhood of having a unique solution to g(Z), i.e. the accuracy of the
+   * solver is increased.
+   *
+   * @param odeconsts Constants of ODE during integration
+   * @param delt Time over which to integrate ODE over.
+   * @param rprev Previous radius at time = t
+   * @param ziter Initial guess for ziter.
+   * @return Updated radius^2 for time = t + delt
+   */
+  KOKKOS_FUNCTION double solve_with_adaptive_subtimestepping(
+      const ImplicitIterations::ODEConstants &odeconsts, const double delt, double rprev,
+      double ziter) const;
 
  public:
   /**
    * @brief Constructor for ImplicitEuler class.
+   * @param delt Time over which to integrate ODE using implcit Euler method.
+   * @param maxniters Maximum no. iterations of Newton Raphson Method.
+   * @param rtol Relative tolerance for implicit Euler method.
+   * @param atol Absolute tolerance for implicit Euler method.
+   * @param minsubdelt Minimum subtimestep in cases of substepping implicit Euler method.
+   * @p
    */
-  ImplicitEuler(const unsigned int niters, const double delt, const double maxrtol,
-                const double maxatol, const double subdelt)
-      : niters(niters), delt(delt), maxrtol(maxrtol), maxatol(maxatol), subdelt(subdelt) {}
+  ImplicitEuler(const double delt, const size_t maxniters, const double rtol, const double atol,
+                const double minsubdelt)
+      : delt(delt), minsubdelt(minsubdelt), implit(maxniters, rtol, atol) {
+    assert((delt >= minsubdelt) &&
+           "timestep must be as least as large as subtimestep for implicit method");
+  }
 
   /**
    * @brief Integrates the condensation / evaporation ODE employing the Implicit Euler method
-   * as in Matsushima et al, 2023.
+   * similarly to Matsushima et. al, 2023.
    *
-   * Forward timestep previous radius 'rprev' by delt using an Implicit Euler method to integrate
-   * the condensation/evaporation ODE. Implict timestepping equation defined in section 5.1.2 of
-   * Shima et al. 2009 and is root of polynomial g(z) = 0, where z = [R_i(t+delt)]^squared.
+   * Forward timestep previous radius 'rprev' by delt using an Implicit Euler method (possibly
+   * with sub-timestepping) to integrate the condensation/evaporation ODE using fixed
+   * thermodynamics from the start of the timestep.
    *
-   * Newton Raphson iterations are used to converge towards the root of g(z) within the tolerances
-   * of an ImpIter instance. Tolerances, maxium number of iterations and sub-timestepping are
-   * adjusted based on the uniqueness criteria of the polynomial g(z). Uniqueness criteria, ucrit1
-   * and / or ucrit2, assume that solution to g(ziter)=0 is unique and therefore Newton Raphson root
-   * finding algorithm converges quickly. This means method can be used with comparitively large
-   * tolerances and timesteps, and the maximum number of iterations is small. Refer to section 5.1.2
-   * of Shima et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details.
+   * @param s_ratio The saturation ratio.
+   * @param kohler_ab A pair containing 'a' and 'b' factors for Kohler curve in that order.
+   * @param ffactor The sum of the diffusion factors.
+   * @param rprev Previous radius at time = t
+   * @return Updated radius for time = t + delt
    */
-  KOKKOS_FUNCTION
-  double solve_condensation_matsushima(const double s_ratio,
-                                       const Kokkos::pair<double, double> akoh_bkoh,
-                                       const double ffactor, const double rprev) const;
-
-  /**
-   * @brief Integrates the condensation / evaporation ODE employing the Implicit Euler method
-   * as in Shima et. al, 2023 with adjustments for near-supersaturation conditions.
-   *
-   * Forward timestep previous radius 'rprev' by delt using an Implicit Euler method to integrate
-   * the condensation/evaporation ODE. Implict timestepping equation defined in section 5.1.2 of
-   * Shima et al. 2009 and is root of polynomial g(z) = 0, where z = [R_i(t+delt)]^squared.
-   *
-   * Newton Raphson iterations are used to converge towards the root of g(z) within the tolerances
-   * of an ImpIter instance. Tolerances, maxium number of iterations and sub-timestepping are
-   * adjusted when near to supersaturation=1 (when activation / deactivation may occur). Far from
-   * activation, solution to g(ziter)=0 is usually unique and Newton Raphson root finding algorithm
-   * converges quickly. This means method can be used with comparitively large tolerances and
-   * timesteps, and the maximum number of iterations is small.
-   */
-  KOKKOS_FUNCTION
-  double solve_condensation(const double s_ratio, const Kokkos::pair<double, double> akoh_bkoh,
-                            const double ffactor, const double rprev) const;
+  KOKKOS_FUNCTION double solve_condensation(const double s_ratio,
+                                            const Kokkos::pair<double, double> kohler_ab,
+                                            const double ffactor, const double rprev) const;
 };
 
 #endif  // LIBS_SUPERDROPS_IMPLICITEULER_HPP_
