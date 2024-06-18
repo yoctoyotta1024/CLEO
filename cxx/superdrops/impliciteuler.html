@@ -479,10 +479,7 @@ Forward timestep previous radius ‘rprev’ by delt using an Implicit Euler met
 <p>Returns the largest possible timestep that can be undertaken in which g(Z) has only one real root to g(Z) in the range 0 &lt; Z &lt; infinity. See Case 1 from Matsushima et al. 2023 (and derivation in appendix C).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>odeconsts</strong> – Constants of ODE during integration </p></li>
-<li><p><strong>subdelt</strong> – Time over which to integrate ODE over. </p></li>
-</ul>
+<dd class="field-odd"><p><strong>odeconsts</strong> – Constants of ODE during integration </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Critical time step for unique solution. </p>
