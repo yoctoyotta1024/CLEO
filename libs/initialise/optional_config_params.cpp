@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 16th June 2024
+ * Last Modified: Tuesday 18th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -99,16 +99,16 @@ void OptionalConfigParams::CondensationParams::set_params(const YAML::Node &conf
   const YAML::Node node = config["microphysics"]["condensation"];
 
   do_alter_thermo = node["do_alter_thermo"].as<bool>();
-  niters = node["niters"].as<unsigned int>();
-  SUBTSTEP = node["SUBTSTEP"].as<double>();
+  maxniters = node["maxniters"].as<size_t>();
+  MINSUBTSTEP = node["MINSUBTSTEP"].as<double>();
   rtol = node["rtol"].as<double>();
   atol = node["atol"].as<double>();
 }
 
 void OptionalConfigParams::CondensationParams::print_params() const {
   std::cout << "\n-------- Condensation Configuration Parameters --------------"
-            << "\ndo_alter_thermo: " << do_alter_thermo << "\nniters: " << niters
-            << "\nSUBSTEP: " << SUBTSTEP << "\nrtol: " << rtol << "\natol: " << atol
+            << "\ndo_alter_thermo: " << do_alter_thermo << "\nmaxniters: " << maxniters
+            << "\nMINSUBSTEP: " << MINSUBTSTEP << "\nrtol: " << rtol << "\natol: " << atol
             << "\n---------------------------------------------------------\n";
 }
 

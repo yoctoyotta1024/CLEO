@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 17th June 2024
+ * Last Modified: Tuesday 18th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -58,6 +58,12 @@ struct ImplicitIterations {
     double ffactor;  ///< Sum of heat and vapor diffusion factors.
   };
 
+  /**
+   * @brief Constructor for ImplicitIterations class.
+   * @param maxniters Maximum no. iterations of Newton Raphson Method.
+   * @param rtol Relative tolerance for implicit Euler method.
+   * @param atol Absolute tolerance for implicit Euler method.
+   */
   ImplicitIterations(const size_t maxniters, const double rtol, const double atol)
       : maxniters(maxniters), rtol(rtol), atol(atol) {}
 
@@ -98,6 +104,7 @@ struct ImplicitIterations {
    * @return Initial guess for ziter.
    */
   KOKKOS_FUNCTION double initialguess(const ODEConstants &odeconsts, const double rprev) const;
+
   /**
    * @brief Performs niters number of Newton-Raphson iterations.
    *
@@ -122,20 +129,21 @@ struct ImplicitIterations {
    * iterations is reached.
    *
    * After every iteration, convergence criteria is tested and error is raised if method does not
-   * converge within 'maxniters' iterations. Otherwise once convergence test is passed, function
+   * converge within 'niterslimit' iterations. Otherwise once convergence test is passed, function
    * returns the new value for the ziter (which is the radius^2 at timestep 't+delt'). Refer to
    * section 5.1.2 Shima et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details.
    *
    * @param odeconsts Constants of ODE during integration
    * @param subdelt Time over which to integrate ODE
-   * @param maxniters The maxiumum number of iterations to attempt.
+   * @param niterslimit The maxiumum number of iterations to attempt.
    * @param rprev Radius at the previous timestep.
    * @param ziter The current guess for ziter.
    * @return The updated value of ziter.
    */
   KOKKOS_FUNCTION double newtonraphson_untilconverged(const ODEConstants &odeconsts,
-                                                      const size_t maxniters, const double subdelt,
-                                                      const double rprev, double ziter) const;
+                                                      const size_t niterslimit,
+                                                      const double subdelt, const double rprev,
+                                                      double ziter) const;
 
   /**
    * @brief Perform one iteration of the Newton-Raphson rootfinding algorithm.
@@ -231,8 +239,14 @@ class ImplicitEuler {
  public:
   /**
    * @brief Constructor for ImplicitEuler class.
+   * @param delt Time step to integrate ODE using implcit Euler method.
+   * @param maxniters Maximum no. iterations of Newton Raphson Method.
+   * @param rtol Relative tolerance for implicit Euler method.
+   * @param atol Absolute tolerance for implicit Euler method.
+   * @param minsubdelt Minimum subtimestep in cases of substepping implicit Euler method.
+   * @p
    */
-  ImplicitEuler(const size_t maxniters, const double delt, const double rtol, const double atol,
+  ImplicitEuler(const double delt, const size_t maxniters, const double rtol, const double atol,
                 const double minsubdelt)
       : delt(delt), minsubdelt(minsubdelt), implit(maxniters, rtol, atol) {
     // TODO(CB): WIP new config params to match this constructor and re-order constructor args

@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 16th June 2024
+ * Last Modified: Tuesday 18th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -60,11 +60,11 @@ struct OptionalConfigParams {
   struct CondensationParams {
     void set_params(const YAML::Node& config);
     void print_params() const;
-    bool do_alter_thermo = false;          /**< true = cond/evap alters the thermodynamic state */
-    unsigned int niters = NaNVals::uint(); /**< suggested no. iterations of Newton Raphson Method */
-    double SUBTSTEP = NaNVals::dbl();      /**< smallest subtimestep in cases of substepping [s] */
-    double rtol = NaNVals::dbl();          /**< relative tolerance for implicit Euler integration */
-    double atol = NaNVals::dbl();          /**< abolute tolerance for implicit Euler integration */
+    bool do_alter_thermo = false;        /**< true = cond/evap alters the thermodynamic state */
+    size_t maxniters = NaNVals::sizet(); /**< maximum no. iterations of Newton Raphson Method */
+    double MINSUBTSTEP = NaNVals::dbl(); /**< minimum subtimestep in cases of substepping [s] */
+    double rtol = NaNVals::dbl();        /**< relative tolerance for implicit Euler integration */
+    double atol = NaNVals::dbl();        /**< abolute tolerance for implicit Euler integration */
   } condensation;
 
   struct BreakupParams {

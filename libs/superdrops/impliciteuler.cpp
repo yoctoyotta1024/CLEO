@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 17th June 2024
+ * Last Modified: Tuesday 18th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -157,7 +157,7 @@ KOKKOS_FUNCTION Kokkos::pair<double, bool> ImplicitIterations::newtonraphson_nit
     const size_t niters) const {
   auto is_converged = false;
 
-  for (unsigned int iter(0); iter < niters; ++iter) {
+  for (size_t iter(0); iter < niters; ++iter) {
     const auto result =
         iterate_rootfinding_algorithm(odeconsts, subdelt, rprev, ziter);  // ziter, is_converged
     ziter = result.first;
@@ -179,25 +179,25 @@ KOKKOS_FUNCTION Kokkos::pair<double, bool> ImplicitIterations::newtonraphson_nit
  *
  * @param odeconsts Constants of ODE during integration
  * @param subdelt Time over which to integrate ODE
- * @param maxniters The maxiumum number of iterations to attempt.
+ * @param niterslimit The maxiumum number of iterations to attempt.
  * @param rprev Radius at the previous timestep.
  * @param ziter The current guess for ziter.
  * @return The updated value of ziter.
  */
 KOKKOS_FUNCTION double ImplicitIterations::newtonraphson_untilconverged(
-    const ODEConstants &odeconsts, const size_t maxniters, const double subdelt, const double rprev,
-    double ziter) const {
+    const ODEConstants &odeconsts, const size_t niterslimit, const double subdelt,
+    const double rprev, double ziter) const {
   auto is_converged = bool{false};
-  auto iter = size_t{1};
+  auto niter = size_t{1};
 
   while (!is_converged) {
-    assert((iter <= maxniters) &&
+    assert((niter <= niterslimit) &&
            "No root converged upon within max number of iterations of Newton Raphson Method.");
     const auto result =
         iterate_rootfinding_algorithm(odeconsts, subdelt, rprev, ziter);  // ziter, is_converged
     ziter = result.first;
     is_converged = result.second;
-    iter += 1;
+    niter += 1;
   }
 
   return ziter;

@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 19th April 2024
+ * Last Modified: Tuesday 18th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -101,8 +101,8 @@ inline MicrophysicalProcess auto config_condensation(const Config &config,
                                                      const Timesteps &tsteps) {
   const auto c = config.get_condensation();
 
-  return Condensation(tsteps.get_condstep(), &step2dimlesstime, c.do_alter_thermo, c.niters, c.rtol,
-                      c.atol, c.SUBTSTEP, &realtime2dimless);
+  return Condensation(tsteps.get_condstep(), &step2dimlesstime, c.do_alter_thermo, c.maxniters,
+                      c.rtol, c.atol, c.MINSUBTSTEP, &realtime2dimless);
 }
 
 inline MicrophysicalProcess auto config_collisions(const Config &config, const Timesteps &tsteps) {

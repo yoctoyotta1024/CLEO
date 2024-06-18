@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Shin-ichiro Shima (SiS)
  * -----
- * Last Modified: Thursday 6th June 2024
+ * Last Modified: Tuesday 18th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -154,15 +154,15 @@ struct DoCondensation {
   /**
    * @brief Constructs a DoCondensation object.
    * @param do_alter_thermo Whether to alter the thermodynamics of the State.
-   * @param niters Number of iterations of implicit Euler method.
    * @param delt Time step to integrate ODE using implcit Euler method.
-   * @param maxrtol Maximum relative tolerance for implicit Euler method.
-   * @param maxatol Maximum absolute tolerance for implicit Euler method.
-   * @param subdelt Sub-time step size in implicit Euler method.
+   * @param maxniters Maximum no. iterations of Newton Raphson Method.
+   * @param rtol Relative tolerance for implicit Euler method.
+   * @param atol Absolute tolerance for implicit Euler method.
+   * @param minsubdelt Minimum subtimestep in cases of substepping implicit Euler method.
    */
-  DoCondensation(const bool do_alter_thermo, const unsigned int niters, const double delt,
-                 const double maxrtol, const double maxatol, const double subdelt)
-      : do_alter_thermo(do_alter_thermo), impe(niters, delt, maxrtol, maxatol, subdelt) {}
+  DoCondensation(const bool do_alter_thermo, const double delt, const size_t maxniters,
+                 const double rtol, const double atol, const double minsubdelt)
+      : do_alter_thermo(do_alter_thermo), impe(delt, maxniters, rtol, atol, minsubdelt) {}
 
   /**
    * @brief Operator used as an "adaptor" for using condensation as the function-like type
@@ -192,24 +192,23 @@ struct DoCondensation {
  *
  * @param interval The constant time-step for condensation.
  * @param do_alter_thermo Whether to alter the thermodynamic state after condensation / evaporation.
- * @param niters Number of iterations of implicit Euler method.
+ * @param maxniters Maximum no. iterations of Newton Raphson Method.
  * @param step2dimlesstime A function to convert 'interval' time-step to a dimensionless time.
- * @param maxrtol Maximum relative tolerance for implicit Euler method.
- * @param maxatol Maximum absolute tolerance for implicit Euler method.
- * @param SUBDELT The sub-time step of implicit Euler method.
+ * @param rtol Relative tolerance for implicit Euler method.
+ * @param atol Absolute tolerance for implicit Euler method.
+ * @param MINSUBDELT Minimum subtimestep in cases of substepping implicit Euler method.
  * @param realtime2dimless A function to convert a real-time to a dimensionless time.
  * @return The constructed microphysical process for condensation / evaporation.
  */
 inline MicrophysicalProcess auto Condensation(
     const unsigned int interval, const std::function<double(unsigned int)> step2dimlesstime,
-    const bool do_alter_thermo, const unsigned int niters, const double maxrtol,
-    const double maxatol, const double SUBDELT,
-    const std::function<double(double)> realtime2dimless) {
-  const auto delt = step2dimlesstime(interval);    // dimensionless time equivlent to interval
-  const auto subdelt = realtime2dimless(SUBDELT);  // dimensionless time equivlent to SUBDELT [s]
+    const bool do_alter_thermo, const size_t maxniters, const double rtol, const double atol,
+    const double MINSUBDELT, const std::function<double(double)> realtime2dimless) {
+  const auto delt = step2dimlesstime(interval);  // dimensionless time equivalent to interval
+  const auto minsubdelt = realtime2dimless(MINSUBDELT);  // dimensionless SUBDELT [s]
 
   const MicrophysicsFunc auto do_cond =
-      DoCondensation(do_alter_thermo, niters, delt, maxrtol, maxatol, subdelt);
+      DoCondensation(do_alter_thermo, delt, maxniters, rtol, atol, minsubdelt);
 
   return ConstTstepMicrophysics(interval, do_cond);
 }
