@@ -39,9 +39,10 @@ fyaml_root=/sw/spack-levante/libfyaml-0.7.12-fvbhgo # must match with `spack loc
 CC=/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpicc # must match gcc
 FC=/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpif90 # must match gcc
 
-if [ "${root4YAC}" == "" ]
+if [[ "${root4YAC}" == "" ||
+      "${cleoenv}" == "" ]]
 then
-  echo "Bad input, please specify absolute path for where you want to install YAC"
+  echo "Bad input, please specify absolute path for where you want to install YAC and environment with python for python bindings"
 else
   module load ${gcc} ${openmpi} ${netcdf} ${hdf5} ${inteloneapi}
   spack load ${fyaml}
