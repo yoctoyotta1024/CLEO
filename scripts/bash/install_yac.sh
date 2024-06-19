@@ -72,6 +72,7 @@ else
     MKL_CLIBS="`pkg-config --libs mkl-static-lp64-seq`" \
     MKL_CFLAGS="`pkg-config --cflags mkl-static-lp64-seq`" \
     LDFLAGS="-lm" \
+    --enable-python-bindings \
     --disable-mpi-checks \
     --with-yaxt-root=${root4YAC}/yaxt \
     --with-netcdf-root=${netcdf_root} \
