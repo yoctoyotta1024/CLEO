@@ -1,7 +1,7 @@
 """
 ----- CLEO -----
-File: bubble_inputfiles.py
-Project: bubble
+File: bubble3d_inputfiles.py
+Project: bubble3d
 Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:

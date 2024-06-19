@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=bubble
+#SBATCH --job-name=bubble3d
 #SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
@@ -8,8 +8,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./bubble_out.%j.out
-#SBATCH --error=./bubble_err.%j.out
+#SBATCH --output=./bubble3d_out.%j.out
+#SBATCH --error=./bubble3d_err.%j.out
 
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
