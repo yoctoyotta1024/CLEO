@@ -3,20 +3,20 @@ Copyright (c) 2024 MPI-M, Clara Bayley
 
 
 ----- CLEO -----
-File: bubble.py
-Project: yac_3d
+File: bubble3d.py
+Project: bubble3d
 Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 18th June 2024
+Last Modified: Wednesday 19th June 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
-Script generates input files, then runs CLEO executable "yac_3d" to
+Script generates input files, then runs CLEO executable "bubble3D" to
 piggyback ICON bubble test case
 """
 
@@ -28,7 +28,7 @@ path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
 configfile = sys.argv[3]
 
-import bubble_inputfiles
+import bubble3d_inputfiles
 
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
@@ -62,7 +62,7 @@ else:
 os.system("rm " + gridfile)
 os.system("rm " + initSDsfile)
 
-bubble_inputfiles.main(
+bubble3d_inputfiles.main(
     path2CLEO, path2build, configfile, gridfile, initSDsfile, SDgbxs2plt
 )
 ### ---------------------------------------------------------------- ###
@@ -77,12 +77,12 @@ def run_exectuable(path2CLEO, path2build, configfile, dataset):
     os.chdir(path2build)
     os.system("pwd")
     os.system("rm -rf " + dataset)  # delete any existing dataset
-    executable = path2build + "/examples/yac/yac_3d/src/yac_3d"
+    executable = path2build + "/examples/yac/bubble3d/src/bubble3D"
     print("Executable: " + executable)
     print("Config file: " + configfile)
 
     cleoproc = executable + " " + configfile
-    pythonproc = path2CLEO + "/examples/yac/yac_3d/yac_icon_data_reader.py"
+    pythonproc = path2CLEO + "/examples/yac/bubble3d/yac_icon_data_reader.py"
     cmd = "mpiexec -n 1 " + cleoproc + " : -n 1 python " + pythonproc
     os.system(cmd)
 

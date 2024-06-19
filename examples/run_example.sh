@@ -65,11 +65,7 @@ ${path2CLEO}/scripts/bash/compile_cleo.sh ${cleoenv} ${buildtype} ${path2build} 
 export OMP_PROC_BIND=spread
 export OMP_PLACES=threads
 
-# TODO(all): only add exports to paths if YAC is enabled
-spack load py-numpy
-export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/sw/spack-levante/libfyaml-0.7.12-fvbhgo/lib
-export PYTHONPATH=/work/ka1298/k202167/YAC-dev/python/:$PYTHONPATH
-echo $PYTHONPATH
+# TODO(all) add exports etc. required if YAC enabled
 
 ${python} ${pythonscript} ${path2CLEO} ${path2build} ${script_args}
 ### ---------------------------------------------------- ###

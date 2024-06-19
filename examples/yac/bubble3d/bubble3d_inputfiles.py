@@ -1,12 +1,12 @@
 """
 ----- CLEO -----
 File: bubble_inputfiles.py
-Project: yac_3d
+Project: bubble
 Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 18th June 2024
+Last Modified: Wednesday 19th June 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License

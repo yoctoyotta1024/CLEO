@@ -19,12 +19,12 @@
 ### ---------------------------------------------------- ###
 buildtype="openmp"
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_bubble/
+path2build=${HOME}/CLEO/build_yac/
 enableyac=true
-executables="yac_3d"
+executables="bubble3D"
 
-pythonscript=${path2CLEO}/examples/yac/yac_3d/bubble.py
-configfile=${path2CLEO}/examples/yac/yac_3d/src/config/bubble_config.yaml
+pythonscript=${path2CLEO}/examples/yac/bubble3d/bubble3d.py
+configfile=${path2CLEO}/examples/yac/bubble3d/src/config/bubble3d_config.yaml
 script_args="${configfile}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
