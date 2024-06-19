@@ -25,8 +25,7 @@ executables="yac_3d"
 
 pythonscript=${path2CLEO}/examples/yac/yac_3d/bubble.py
 configfile=${path2CLEO}/examples/yac/yac_3d/src/config/bubble_config.yaml
-python4bubble="/work/mh1126/m300950/cleoenv/bin/python3"
-script_args="${configfile} ${python4bubble}"
+script_args="${configfile}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

@@ -27,7 +27,6 @@ from pathlib import Path
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
 configfile = sys.argv[3]
-python4bubble = sys.argv[4]
 
 import bubble_inputfiles
 
@@ -83,8 +82,8 @@ def run_exectuable(path2CLEO, path2build, configfile, dataset):
     print("Config file: " + configfile)
 
     cleoproc = executable + " " + configfile
-    pythonproc = path2CLEO + "/examples/yac/yac_3d/yac_cleo_data_reader.py"
-    cmd = "mpiexec -n 1 " + cleoproc + " : -n 1 " + python4bubble + " " + pythonproc
+    pythonproc = path2CLEO + "/examples/yac/yac_3d/yac_icon_data_reader.py"
+    cmd = "mpiexec -n 1 " + cleoproc + " : -n 1 python " + pythonproc
     os.system(cmd)
 
 
