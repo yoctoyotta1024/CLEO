@@ -13,3 +13,5 @@ zarr
 pre-commit
 mpi4py
 ruamel.yaml
+cython>=0.29.31
+netCDF4

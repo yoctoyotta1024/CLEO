@@ -17,6 +17,9 @@
 ### ------------------------------------------------------- ###
 
 root4YAC=$1 # absolute path for YAC and YAXT installations
+cleoenv=$2  # environment with python you will use to run yac (if using python bindings)
+module load python3/2022.01-gcc-11.2.0
+source activate ${cleoenv}
 
 yaxt_source=https://swprojects.dkrz.de/redmine/attachments/download/534/yaxt-0.11.1.tar.gz
 yaxt_version=yaxt-0.11.1 # must match yaxt_source
@@ -81,6 +84,6 @@ else
     --prefix=${root4YAC}/yac
   make -j 8
   make install
-  cd ${root4YAC} && rm -rf ${yac_version}
-### ------------------------------------------------------ ###
+  cd ${root4YAC} && mv ${yac_version}/python ${root4YAC}/yac/ && rm -rf ${yac_version}
+  ### ------------------------------------------------------ ###
 fi
