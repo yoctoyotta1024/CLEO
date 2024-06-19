@@ -17,8 +17,6 @@
 ### ------------------------------------------------------- ###
 
 root4YAC=$1 # absolute path for YAC and YAXT installations
-spack load py-cython@0.29.33/f4ph2my  # >=0.29.31 with gcc11.2.0 for YAC python bindings TODO(CB): explain
-spack load py-pip@23.0%gcc@=11.2.0/vptl52b # >=21.3 with gcc11.2.0 for YAC python bindings
 
 yaxt_source=https://swprojects.dkrz.de/redmine/attachments/download/534/yaxt-0.11.1.tar.gz
 yaxt_version=yaxt-0.11.1 # must match yaxt_source
@@ -64,6 +62,10 @@ else
   ### ------------------------------------------------------ ###
 
   ## --------------------- install YAC -------------------- ###
+  # TODO(CB): clean up and explain spack upstream at /work/mh1126/m300950/sw/spack-m300950 required
+  spack load py-cython@0.29.33/f4ph2my  # >=0.29.31 with gcc11.2.0 for YAC python bindings TODO(CB): explain
+  spack load py-pip@23.0%gcc@=11.2.0/vptl52b # >=21.3 with gcc11.2.0 for YAC python bindings
+
   cd ${root4YAC} && pwd
   curl -s -L ${yac_source} | tar xvz
   cd ${yac_version}
@@ -83,6 +85,7 @@ else
     --prefix=${root4YAC}/yac
   make -j 8
   make install
-  cd ${root4YAC} && mv ${yac_version}/python ${root4YAC}/yac/ && rm -rf ${yac_version}
+  # TODO(CB): see if moving python bindings to directory of yac installation works
+  # cd ${root4YAC} && mv ${yac_version}/python ${root4YAC}/yac/ && rm -rf ${yac_version}
   ### ------------------------------------------------------ ###
 fi

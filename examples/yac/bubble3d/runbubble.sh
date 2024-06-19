@@ -14,7 +14,7 @@ module load python3/2022.01-gcc-11.2.0 # version of python must match the YAC py
 module load openmpi/4.1.2-gcc-11.2.0 # same mpi as loaded for the build
 
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/sw/spack-levante/libfyaml-0.7.12-fvbhgo/lib
-export PYTHONPATH=/work/mh1126/m300950/yac/yac-v3.2.0/python/:$PYTHONPATH # path to python bindings
+export PYTHONPATH=${$PYTHONPATH}:/work/mh1126/m300950/yac/yac-v3.2.0/python # path to python bindings
 
 export OMP_PROC_BIND=spread
 export OMP_PLACES=threads
