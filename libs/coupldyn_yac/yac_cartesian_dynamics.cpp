@@ -24,6 +24,7 @@
 #include "coupldyn_yac/yac_cartesian_dynamics.hpp"
 
 #include <iostream>
+#include <cmath>
 
 #include <mpi.h>
 extern "C" {
@@ -52,10 +53,10 @@ void create_vertex_coordinates(const Config &config,
   double lower_latitude = (-0.5 * std::numbers::pi * ndims[1]) / (ndims[1] + 2);
   double upper_latitude = (0.5 * std::numbers::pi * ndims[1]) / (ndims[1] + 2);
 
-  if (config.get_yac_dynamics().lower_longitude != NaNVals::dbl() &&
-      config.get_yac_dynamics().upper_longitude != NaNVals::dbl() &&
-      config.get_yac_dynamics().lower_latitude != NaNVals::dbl() &&
-      config.get_yac_dynamics().upper_latitude != NaNVals::dbl()) {
+  if (!std::isnan(config.get_yac_dynamics().lower_longitude) &&
+      !std::isnan(config.get_yac_dynamics().upper_longitude) &&
+      !std::isnan(config.get_yac_dynamics().lower_latitude) &&
+      !std::isnan(config.get_yac_dynamics().upper_latitude)) {
       lower_longitude = config.get_yac_dynamics().lower_longitude;
       upper_longitude = config.get_yac_dynamics().upper_longitude;
       lower_latitude = config.get_yac_dynamics().lower_latitude;
