@@ -24,7 +24,7 @@ module load nvhpc/23.9-gcc-11.2.0
 spack load cmake@3.23.1%gcc
 source activate /work/mh1126/m300950/cleoenv
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/roughpaper/build/
+path2build=${HOME}/CLEO/roughpaper/scratch/build/
 gxx="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/g++"
 gcc="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/gcc"
 ### ---------------------------------------------------- ###
@@ -39,8 +39,10 @@ gcc="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/gcc"
 CC=${gcc}               # C
 CXX=${gxx}              # C++
 
-CMAKE_CXX_FLAGS="-Werror -Wno-error=unused-parameter -Wall -Wextra -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
-# CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"                            # performance
+## for correctness and debugging (note -gdwarf-4 not possible for nvc++) use:
+CMAKE_CXX_FLAGS="-Werror -Wno-unused-parameter -Wall -Wextra -pedantic -g -gdwarf-4 -O0 -mpc64"
+# for performance use:
+# CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"
 ### ---------------------------------------------------- ###
 
 ### --------------- choose CUDA compiler --------------- ###
@@ -77,7 +79,7 @@ echo "KOKKOS_HOST_PARALLELISM: ${kokkoshost}"
 echo "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}"
 
 # delete any existing "test" executable
-rm ${path2build}/roughpaper/test
+rm ${path2build}/roughpaper/scratch/test
 
 # build then compile in parallel
 if [[ ${dobuild} == "build" ]];
@@ -96,5 +98,5 @@ fi
 export OMP_PROC_BIND=spread
 export OMP_PLACES=threads
 
-${path2CLEO}/roughpaper/build/roughpaper/test
+${path2CLEO}/roughpaper/scratch/build/roughpaper/scratch/test
 ### ---------------------------------------------------- ###
