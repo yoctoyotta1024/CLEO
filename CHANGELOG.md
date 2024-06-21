@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.19.0](https://github.com/yoctoyotta1024/CLEO/compare/eece61da0c37e039b8327af87d03cf558833297a..v0.19.0) - 2024-06-21
+#### Features
+- rough paper hpp to print size of gridboxes and superdroplets - ([94615ff](https://github.com/yoctoyotta1024/CLEO/commit/94615ffc9b5f98f8ee8aa5b28cdd1263c4b1d1de)) - clara.bayley
+- rough paper hpp to print size of gridboxes and superdroplets - ([eece61d](https://github.com/yoctoyotta1024/CLEO/commit/eece61da0c37e039b8327af87d03cf558833297a)) - clara.bayley
+
+- - -
+
 ## [v0.18.1](https://github.com/yoctoyotta1024/CLEO/compare/38b44b63d0bc5ba28187628564679bd8506b4063..v0.18.1) - 2024-06-21
 #### Bug Fixes
 - add fallthrough statements to show logic of switch is intentional - ([38b44b6](https://github.com/yoctoyotta1024/CLEO/commit/38b44b63d0bc5ba28187628564679bd8506b4063)) - clara.bayley
