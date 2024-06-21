@@ -5,13 +5,14 @@
 *.ipynb
 *.gif
 *.tar.gz
+
 .vscode
 .ipynb_checkpoints
 .DS_Store
 __pycache__
 .clang-format
+
 build*/
-bin
 docs/source/_autosummary
-examples/examplesolutions/
-roughpaper/share
+examples/examplesolutions
+roughpaper/scratch/share
