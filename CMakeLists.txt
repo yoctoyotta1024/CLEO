@@ -21,12 +21,12 @@ set(CXX_EXTENSIONS ON)
 # install Kokkos for project
 set(kokkospath ${CMAKE_SOURCE_DIR}/extern/kokkos)
 message(STATUS "Using Kokkos installation from: ${kokkospath}")
-add_subdirectory(${kokkospath})
+add_subdirectory(${kokkospath} ${CMAKE_BINARY_DIR}/kokkos)
 
 # install yaml-cpp for project
 set(yamlcpppath ${CMAKE_SOURCE_DIR}/extern/yaml-cpp)
 message(STATUS "Using yaml-cpp installation from: ${yamlcpppath}")
-add_subdirectory(${yamlcpppath})
+add_subdirectory(${yamlcpppath} ${CMAKE_BINARY_DIR}/yaml-cpp)
 
 # print default compiler flags
 message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
