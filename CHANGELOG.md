@@ -2,6 +2,20 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.20.0](https://github.com/yoctoyotta1024/CLEO/compare/8be2d7068d098a9a80c8abfe5b3aa64b86954ee7..v0.20.0) - 2024-06-21
+#### Features
+- add binary dir to cmake for CLEO externs - ([5cb5b52](https://github.com/yoctoyotta1024/CLEO/commit/5cb5b52c984d03ee6bbddfdd933473b2858df388)) - clara.bayley
+#### Miscellaneous Chores
+- format .gitignore - ([8be2d70](https://github.com/yoctoyotta1024/CLEO/commit/8be2d7068d098a9a80c8abfe5b3aa64b86954ee7)) - clara.bayley
+#### Refactoring
+- move src into roughpaper - ([102ad41](https://github.com/yoctoyotta1024/CLEO/commit/102ad41b8df53f16a2978ae6f51ed080642eb112)) - clara.bayley
+- move src into roughpaper - ([1d4e3a0](https://github.com/yoctoyotta1024/CLEO/commit/1d4e3a02647ca101487979fc0c77a1cd2020b5ae)) - clara.bayley
+- change compiler flags for correctness and debugging - ([0b5931b](https://github.com/yoctoyotta1024/CLEO/commit/0b5931b2f686f66402fcca3f5847cb72d8c5b709)) - clara.bayley
+- move roughpaper into roughpaper/scratch - ([c657fd2](https://github.com/yoctoyotta1024/CLEO/commit/c657fd29ce22f0c51ab0fad8ed9ac4c4ddbf0dfd)) - clara.bayley
+- move roughpaper into roughpaper/scratch - ([723f7d4](https://github.com/yoctoyotta1024/CLEO/commit/723f7d46991ab4d5605daeb29ccec3ae6ccb6e1b)) - clara.bayley
+
+- - -
+
 ## [v0.19.0](https://github.com/yoctoyotta1024/CLEO/compare/eece61da0c37e039b8327af87d03cf558833297a..v0.19.0) - 2024-06-21
 #### Features
 - rough paper hpp to print size of gridboxes and superdroplets - ([94615ff](https://github.com/yoctoyotta1024/CLEO/commit/94615ffc9b5f98f8ee8aa5b28cdd1263c4b1d1de)) - clara.bayley
