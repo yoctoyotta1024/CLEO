@@ -17,6 +17,8 @@
 ### --- default compiler(s) (and python environment) --- ###
 ### ----  and paths for CLEO and build directories  ---- ###
 ### ---------------------------------------------------- ###
+dobuild=$1 # == "build" or otherwise
+
 module load gcc/11.2.0-gcc-11.2.0
 module load nvhpc/23.9-gcc-11.2.0
 spack load cmake@3.23.1%gcc
@@ -37,7 +39,7 @@ gcc="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/gcc"
 CC=${gcc}               # C
 CXX=${gxx}              # C++
 
-CMAKE_CXX_FLAGS="-Werror -Wall -Wextra -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
+CMAKE_CXX_FLAGS="-Werror -Wno-error=unused-parameter -Wall -Wextra -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
 # CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"                            # performance
 ### ---------------------------------------------------- ###
 
@@ -78,7 +80,7 @@ echo "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}"
 rm ${path2build}/roughpaper/test
 
 # build then compile in parallel
-if [[ $1 == "build" ]];
+if [[ ${dobuild} == "build" ]];
 then
   cmake -DCMAKE_CXX_COMPILER=${CXX} \
       -DCMAKE_C_COMPILER=${CC} \
