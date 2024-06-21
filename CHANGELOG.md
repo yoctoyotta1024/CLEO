@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.18.0](https://github.com/yoctoyotta1024/CLEO/compare/edb4dd3654440336ad52ab07f309532509014326..v0.18.0) - 2024-06-21
+#### Features
+- new helper script to run examples - ([5eb6ecb](https://github.com/yoctoyotta1024/CLEO/commit/5eb6ecb19ea10831ee72f71a31958470dfa0f9d7)) - clara.bayley
+#### Refactoring
+- move is_null_supers function content into collisions and delete redundant file - ([553cab0](https://github.com/yoctoyotta1024/CLEO/commit/553cab03ba4db8df44ba0bea785b2cf2cb23721a)) - clara.bayley
+- move is_null_superdrop function to coalescence - ([ce99402](https://github.com/yoctoyotta1024/CLEO/commit/ce994023e9eb5e4ea257e39c3facf62ef50eb4de)) - clara.bayley
+- minor doc fix and more explicit variable naming - ([1c89e09](https://github.com/yoctoyotta1024/CLEO/commit/1c89e0948d9bd4e39fcd928471c9413b0414bdd7)) - clara.bayley
+- reduce minsubstep in speed test example - ([edb4dd3](https://github.com/yoctoyotta1024/CLEO/commit/edb4dd3654440336ad52ab07f309532509014326)) - clara.bayley
+
+- - -
+
 ## [v0.17.0](https://github.com/yoctoyotta1024/CLEO/compare/4e9c3712c9acb976c71612cfe3fc59d40aae6d25..v0.17.0) - 2024-06-18
 #### Bug Fixes
 - fixed bug in substepping routine where incorrect rprev was used - ([9a9bf17](https://github.com/yoctoyotta1024/CLEO/commit/9a9bf174ab30a761fc937d9d0c107b9c21a5ee6c)) - clara.bayley
