@@ -393,6 +393,21 @@
 <h1>Coalescence<a class="headerlink" href="#coalescence" title="Link to this heading">¶</a></h1>
 <p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/superdrops/collisions/coalescence.hpp&gt;</span></code>
 <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/superdrops/collisions/coalescence.hpp">[source]</a></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv417is_null_superdropRK9Superdrop">
+<span id="_CPPv317is_null_superdropRK9Superdrop"></span><span id="_CPPv217is_null_superdropRK9Superdrop"></span><span id="is_null_superdrop__SuperdropCR"></span><span class="target" id="coalescence_8hpp_1abab7e5a1c8b0ed207f9bb2c89e931f70"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_null_superdrop</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417is_null_superdropRK9Superdrop" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Raises an error if the multiplicity of the super-droplet is 0. </p>
+<p>This function checks if the given superdrop is null by verifying its multiplicity. It asserts that the multiplicity (<code class="docutils literal notranslate"><span class="pre">xi</span></code>) of the superdrop is greater than 0. If the multiplicity is 0, an assertion error is raised.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>drop</strong> – A reference to the <code class="docutils literal notranslate"><a class="reference internal" href="../superdrop.html#classSuperdrop"><span class="std std-ref"><span class="pre">Superdrop</span></span></a></code> object to be checked. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Always returns 0 (=false). </p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv413DoCoalescence">
 <span id="_CPPv313DoCoalescence"></span><span id="_CPPv213DoCoalescence"></span><span id="DoCoalescence"></span><span class="target" id="structDoCoalescence"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DoCoalescence</span></span></span><a class="headerlink" href="#_CPPv413DoCoalescence" title="Link to this definition">¶</a><br /></dt>
@@ -557,7 +572,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 18 June 2024</div>
+              Last updated on 21 June 2024</div>
           </div>
           <div class="right-details">
             
@@ -579,6 +594,7 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Coalescence</a><ul>
+<li><a class="reference internal" href="#_CPPv417is_null_superdropRK9Superdrop"><code class="docutils literal notranslate"><span class="pre">is_null_superdrop()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv413DoCoalescence"><code class="docutils literal notranslate"><span class="pre">DoCoalescence</span></code></a><ul>
 <li><a class="reference internal" href="#_CPPv4NK13DoCoalescenceclER9SuperdropR9SuperdropKdKd"><code class="docutils literal notranslate"><span class="pre">DoCoalescence::operator()()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK13DoCoalescence17coalescence_gammaEK8uint64_tK8uint64_tKdKd"><code class="docutils literal notranslate"><span class="pre">DoCoalescence::coalescence_gamma()</span></code></a></li>
