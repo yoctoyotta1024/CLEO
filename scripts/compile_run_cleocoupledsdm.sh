@@ -26,8 +26,8 @@ buildtype=$1
 path2CLEO=${2:-${HOME}/CLEO}
 path2build=${3:-${path2CLEO}/build} # get from command line argument
 executable="cleocoupledsdm"
-configfile=${path2CLEO}/src/config/config.yaml
-run_executable=${path2build}/src/${executable}
+configfile=${path2CLEO}/roughpaper/src/config/config.yaml
+run_executable=${path2build}/roughpaper/src/${executable}
 
 ### ---------------------------------------------------- ###
 

@@ -33,7 +33,6 @@ message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 
 # add directories of CLEO libray and main program
 add_subdirectory(libs)
-add_subdirectory(src)
 
 # add directories for specific examples of CLEO
 add_subdirectory(examples EXCLUDE_FROM_ALL)
