@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 17th June 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -101,7 +101,6 @@ KOKKOS_FUNCTION bool DoCoalescence::coalesce_superdroplet_pair(const uint64_t ga
 
     /* if xi1 = xi2 = 1 before coalesence, then xi1=0 now */
     return is_null_superdrop(drop1);
-    // return if_null_superdrop(drop1);
   }
 
   assert((xi1 >= gamma * xi2) &&

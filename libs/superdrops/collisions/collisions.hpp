@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 25th May 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -29,7 +29,6 @@
 
 #include "../../cleoconstants.hpp"
 #include "../kokkosaliases_sd.hpp"
-#include "../nullsuperdrops.hpp"
 #include "../sdmmonitor.hpp"
 #include "../state.hpp"
 #include "../superdrop.hpp"
@@ -169,7 +168,7 @@ struct DoCollisions {
    *
    * Function uses Kokkos nested parallelism for paralelism over supers inside parallelised loop
    * for member 'teamMember'.
-   * In serial Kokkos::parallel_reduce([...]) is equivalent to summing nnull over for loop:
+   * In serial Kokkos::parallel_reduce([...]) is equivalent to summing numnull over for loop:
    * for (size_t jj(0); jj < npairs; ++jj) {[...]}.
    *
    * _NOTE:_ function assumes supers is already randomly shuffled and these superdrops are
@@ -187,18 +186,18 @@ struct DoCollisions {
     const auto scale_p = double{nsupers * (nsupers - 1.0) / (2.0 * npairs)};
     const auto VOLUME = double{volume * dlc::VOL0};  // volume in which collisions occur [m^3]
 
-    auto totnnull = size_t{0};  // number of null superdrops
+    auto totnumnull = size_t{0};  // number of null superdrops
     Kokkos::parallel_reduce(
         Kokkos::TeamThreadRange(team_member, npairs),
-        [&, this](const size_t jj, size_t &nnull) {
+        [&, this](const size_t jj, size_t &numnull) {
           const auto kk = size_t{jj * 2};
           const auto isnull =
               collide_superdroplet_pair(supers(kk), supers(kk + 1), scale_p, VOLUME);
-          nnull += static_cast<size_t>(isnull);
+          numnull += static_cast<size_t>(isnull);
         },
-        totnnull);
+        totnumnull);
 
-    return totnnull;
+    return totnumnull;
   }
 
   /**
@@ -222,9 +221,10 @@ struct DoCollisions {
     supers = one_shuffle_supers(team_member, supers, genpool);
 
     /* collide all randomly generated pairs of SDs */
-    size_t nnull(collide_supers(team_member, supers, volume));  // number of null superdrops
+    const auto totnumnull = collide_supers(team_member, supers, volume);
 
-    return is_null_supers(supers, nnull);
+    assert((totnumnull == 0) && "no null superdrops should exist");
+    return supers;
   }
 
  public:

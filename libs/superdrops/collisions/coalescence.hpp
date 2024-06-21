@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 6th June 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,9 +28,23 @@
 #include <functional>
 
 #include "../microphysicalprocess.hpp"
-#include "../nullsuperdrops.hpp"
 #include "../superdrop.hpp"
 #include "./collisions.hpp"
+
+/**
+ * @brief Raises an error if the multiplicity of the super-droplet is 0.
+ *
+ * This function checks if the given superdrop is null by verifying its multiplicity.
+ * It asserts that the multiplicity (`xi`) of the superdrop is greater than 0.
+ * If the multiplicity is 0, an assertion error is raised.
+ *
+ * @param drop A reference to the `Superdrop` object to be checked.
+ * @return Always returns 0 (=false).
+ */
+KOKKOS_INLINE_FUNCTION bool is_null_superdrop(const Superdrop &drop) {
+  assert((drop.get_xi() > 0) && "superdrop xi < 1, null drop in coalescence");
+  return 0;
+}
 
 struct DoCoalescence {
  private:
