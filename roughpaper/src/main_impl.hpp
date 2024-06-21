@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 18th June 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,8 +19,8 @@
  * Header file for main.cpp to run the CLEO super-droplet model (SDM).
  */
 
-#ifndef SRC_MAIN_IMPL_HPP_
-#define SRC_MAIN_IMPL_HPP_
+#ifndef ROUGHPAPER_SRC_MAIN_IMPL_HPP_
+#define ROUGHPAPER_SRC_MAIN_IMPL_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <cmath>
@@ -254,4 +254,4 @@ inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset<St
   return SDMMethods(couplstep, gbxmaps, microphys, movesupers, obs);
 }
 
-#endif  // SRC_MAIN_IMPL_HPP_
+#endif  // ROUGHPAPER_SRC_MAIN_IMPL_HPP_
