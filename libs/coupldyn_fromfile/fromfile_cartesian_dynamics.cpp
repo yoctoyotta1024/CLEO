@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -125,10 +125,12 @@ std::string CartesianDynamics::set_winds_from_binaries(
       vvel_yfaces = thermodynamicvar_from_binary(config.vvel);
       get_vvel = get_vvel_from_binary();
       infoend = ", u";
+      [[fallthrough]];
     case 2:  // 3-D or 2-D model
       uvel_xfaces = thermodynamicvar_from_binary(config.uvel);
       get_uvel = get_uvel_from_binary();
       infoend = ", v" + infoend;
+      [[fallthrough]];
     case 1:  // 3-D, 2-D or 1-D model
       wvel_zfaces = thermodynamicvar_from_binary(config.wvel);
       get_wvel = get_wvel_from_binary();
@@ -229,11 +231,13 @@ void CartesianDynamics::check_thermodynamics_vectorsizes(const unsigned int nspa
     {
       const size_t vsz = nsteps * ndims[0] * ndims[1] * (ndims[2] + 1);
       is_size(vvel_yfaces, vsz);
+      [[fallthrough]];
     }
     case 2:  // 3-D or 2-D model
     {
       const size_t usz = nsteps * ndims[0] * (ndims[1] + 1) * ndims[2];
       is_size(uvel_xfaces, usz);
+      [[fallthrough]];
     }
     case 1:  // 3-D, 2-D or 1-D model
     {
