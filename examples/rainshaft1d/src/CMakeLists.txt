@@ -17,7 +17,7 @@ add_executable(rshaft1D EXCLUDE_FROM_ALL "main_rshaft1D.cpp")
 # Add directories and link libraries to target
 target_link_libraries(rshaft1D PRIVATE coupldyn_fromfile cartesiandomain "${CLEOLIBS}")
 target_link_libraries(rshaft1D PUBLIC Kokkos::kokkos)
-target_include_directories(rshaft1D PRIVATE "${CMAKE_SOURCE_DIR}/libs") # CLEO libs directory
+target_include_directories(rshaft1D PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
 
 # set specific C++ compiler options for target (optional)
 #target_compile_options(rshaft1D PRIVATE)

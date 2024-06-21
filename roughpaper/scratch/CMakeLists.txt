@@ -6,7 +6,7 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
 endif()
 
 # set project name and print directory of this CMakeLists.txt (source directory of project)
-project("roughpaper/scratch/test")
+project("roughpaper_scratch_test")
 message("${PROJECT_NAME} PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 #set compiler flags
@@ -21,7 +21,7 @@ add_executable(test main.cpp)
 # Add directories and link libraries to target
 target_link_libraries(test PRIVATE ${CLEOLIBS})
 target_link_libraries(test PUBLIC Kokkos::kokkos)
-target_include_directories(test PRIVATE "${CMAKE_SOURCE_DIR}/libs") # CLEO libs directory
+target_include_directories(test PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
 target_include_directories(test PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 
 # set C++ properties for target

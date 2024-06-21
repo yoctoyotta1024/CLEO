@@ -4,7 +4,7 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
 endif()
 
 # set project name and print directory of this CMakeLists.txt (source directory of project)
-project("cleocoupledsdm")
+project("roughpaper_src_cleocoupledsdm")
 message("${PROJECT_NAME} PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 # Set libraries from CLEO to link with executable
@@ -16,7 +16,7 @@ add_executable(cleocoupledsdm main.cpp)
 # Add directories and link libraries to target
 target_link_libraries(cleocoupledsdm PRIVATE coupldyn_fromfile cartesiandomain ${CLEOLIBS})
 target_link_libraries(cleocoupledsdm PUBLIC Kokkos::kokkos)
-target_include_directories(cleocoupledsdm PRIVATE "${CMAKE_SOURCE_DIR}/libs") # CLEO libs directory
+target_include_directories(cleocoupledsdm PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
 target_include_directories(cleocoupledsdm PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 
 # set specific C++ compiler options for target (optional)

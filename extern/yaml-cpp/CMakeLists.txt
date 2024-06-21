@@ -13,4 +13,4 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(yaml-cpp)
 
-message(STATUS "yaml-cpp installation in: ${CMAKE_BINARY_DIR}/_deps/yaml-cpp")
+message(STATUS "yaml-cpp installation in: ${CMAKE_CURRENT_BINARY_DIR}")

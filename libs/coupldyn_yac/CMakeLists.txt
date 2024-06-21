@@ -8,7 +8,7 @@ set(LIBNAME "coupldyn_yac")
 message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 # explicitly set library executables path to /lib in top level of build tree
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib)
+set(LIBRARY_OUTPUT_PATH ${CLEO_BINARY_DIR}/lib)
 
 message(STATUS "Using YAC installation from: ${YAC_ROOT}")
 message(STATUS "Using YAXT installation from: ${YAXT_ROOT}")
@@ -28,7 +28,7 @@ enable_language(C)
 # Add directories for target library
 # target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 target_include_directories(${LIBNAME} PRIVATE ${YAC_C_INCLUDE_DIR}) # YAC source directory
-target_include_directories(${LIBNAME} PRIVATE "${CMAKE_SOURCE_DIR}/libs") # CLEO libs directory
+target_include_directories(${LIBNAME} PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
 
 # Link libraries to target library
 set(LINKLIBS initialise gridboxes superdrops)

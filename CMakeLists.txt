@@ -6,11 +6,14 @@
 cmake_minimum_required(VERSION 3.18.0)
 # cmake_minimum_required(VERSION 3.21.1) ### if using Kokkos with nvc++ compiler on Levante
 
-project(project
+project(CLEO
   LANGUAGES CXX
   DESCRIPTION "CLEO by Clara Bayley and other developers"
   VERSION 0.1.0
 )
+
+message("CLEO_SOURCE_DIR: ${CLEO_SOURCE_DIR}")
+message("CLEO_BINARY_DIR: ${CLEO_BINARY_DIR}")
 
 # ensure C++ compiler uses certain settings
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
@@ -19,14 +22,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CXX_EXTENSIONS ON)
 
 # install Kokkos for project
-set(kokkospath ${CMAKE_SOURCE_DIR}/extern/kokkos)
+set(kokkospath ${CLEO_SOURCE_DIR}/extern/kokkos)
 message(STATUS "Using Kokkos installation from: ${kokkospath}")
-add_subdirectory(${kokkospath} ${CMAKE_BINARY_DIR}/kokkos)
+add_subdirectory(${kokkospath} ${CLEO_BINARY_DIR}/kokkos)
 
 # install yaml-cpp for project
-set(yamlcpppath ${CMAKE_SOURCE_DIR}/extern/yaml-cpp)
+set(yamlcpppath ${CLEO_SOURCE_DIR}/extern/yaml-cpp)
 message(STATUS "Using yaml-cpp installation from: ${yamlcpppath}")
-add_subdirectory(${yamlcpppath} ${CMAKE_BINARY_DIR}/yaml-cpp)
+add_subdirectory(${yamlcpppath} ${CLEO_BINARY_DIR}/yaml-cpp)
 
 # print default compiler flags
 message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")

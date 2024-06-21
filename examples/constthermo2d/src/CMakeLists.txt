@@ -17,7 +17,7 @@ add_executable(const2D EXCLUDE_FROM_ALL "main_const2D.cpp")
 # Add directories and link libraries to target
 target_link_libraries(const2D PRIVATE coupldyn_fromfile cartesiandomain "${CLEOLIBS}")
 target_link_libraries(const2D PUBLIC Kokkos::kokkos)
-target_include_directories(const2D PRIVATE "${CMAKE_SOURCE_DIR}/libs") # CLEO libs directory
+target_include_directories(const2D PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
 
 # set specific C++ compiler options for target (optional)
 #target_compile_options(const2D PRIVATE)

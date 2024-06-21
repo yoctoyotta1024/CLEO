@@ -23,6 +23,7 @@ set(SOURCES
 add_library("${LIBNAME}" STATIC ${SOURCES})
 
 # Add directories and link libraries for target library
+# target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 
 # set specific C++ compiler options for target (optional)

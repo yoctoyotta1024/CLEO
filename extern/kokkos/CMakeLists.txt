@@ -16,7 +16,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC") # Kokkos needs -fPIC flag
 FetchContent_MakeAvailable(Kokkos)
 set(CMAKE_CXX_FLAGS "${FLAGS_B4}")
 
-message(STATUS "Kokkos installation in: ${CMAKE_BINARY_DIR}/_deps/Kokkos")
+message(STATUS "Kokkos installation in: ${CMAKE_CURRENT_BINARY_DIR}")
 
 # print information about compilers for C++ (and possibly CUDA)
 if(${Kokkos_ENABLE_CUDA})
