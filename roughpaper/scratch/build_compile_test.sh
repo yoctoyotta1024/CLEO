@@ -39,8 +39,10 @@ gcc="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/gcc"
 CC=${gcc}               # C
 CXX=${gxx}              # C++
 
-CMAKE_CXX_FLAGS="-Werror -Wno-error=unused-parameter -Wall -Wextra -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
-# CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"                            # performance
+## for correctness and debugging (note -gdwarf-4 not possible for nvc++) use:
+CMAKE_CXX_FLAGS="-Werror -Wno-unused-parameter -Wall -Wextra -pedantic -g -gdwarf-4 -O0 -mpc64"
+# for performance use:
+# CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"
 ### ---------------------------------------------------- ###
 
 ### --------------- choose CUDA compiler --------------- ###

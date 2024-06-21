@@ -41,8 +41,10 @@ yac_openblas=openblas@0.3.18%gcc@=11.2.0 # required if enableyac=true (must matc
 CC=${gcc}               # C
 CXX=${gxx}              # C++
 
-# CMAKE_CXX_FLAGS="-Werror -Wall -Wextra -pedantic -g -gdwarf-4 -O0 -mpc64"      # correctness and debugging (note -gdwarf-4 not possible for nvc++)
-CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"                            # performance
+## for correctness and debugging (note -gdwarf-4 not possible for nvc++) use:
+# CMAKE_CXX_FLAGS="-Werror -Wno-unused-parameter -Wall -Wextra -pedantic -g -gdwarf-4 -O0 -mpc64"
+# for performance use:
+CMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3"
 ### ---------------------------------------------------- ###
 
 ### ------------ choose Kokkos configuration ----------- ###
