@@ -206,8 +206,6 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
 
   // -- YAC initialization and calendar definitions ---
   yac_cinit();
-  yac_cdef_calendar(YAC_PROLEPTIC_GREGORIAN);
-  yac_cdef_datetime("1850-01-01T00:00:00", "1850-12-31T00:00:00");
 
   // --- Component definition ---
   std::string component_name = "cleo";

@@ -68,10 +68,11 @@ grid_filename = "aes_bubble_atm_cgrid_ml.nc"
 
 yac = YAC()
 
+def_calendar(Calendar.PROLEPTIC_GREGORIAN)
+yac.def_datetime("2008-08-01T00:00:00Z", "2008-08-01T02:00:00Z")
+
 component_name = "icon_data_reader"
 component = yac.def_comp(component_name)
-
-def_calendar(Calendar.PROLEPTIC_GREGORIAN)
 grid = create_yac_unstructured_grid(grid_filename)
 
 # --- Field definitions ---
