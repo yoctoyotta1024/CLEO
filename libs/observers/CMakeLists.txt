@@ -10,7 +10,8 @@ message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 add_subdirectory(sdmmonitor)
 
 # explicitly set library executables path to /lib in top level of build tree
-set(LIBRARY_OUTPUT_PATH ${CLEO_BINARY_DIR}/lib)
+set(LIB_BINARY_DIR ${CLEO_BINARY_DIR}/lib)
+
 
 # Add executables and create library target
 set(SOURCES
@@ -35,6 +36,7 @@ target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 
 # set C++ properties for target
 set_target_properties(${LIBNAME} PROPERTIES
+  LIBRARY_OUTPUT_DIRECTORY ${LIB_BINARY_DIR}
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)
