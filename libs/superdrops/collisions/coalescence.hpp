@@ -28,7 +28,6 @@
 #include <functional>
 
 #include "../microphysicalprocess.hpp"
-#include "../nullsuperdrops.hpp"
 #include "../superdrop.hpp"
 #include "./collisions.hpp"
 
