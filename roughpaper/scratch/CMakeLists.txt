@@ -6,7 +6,7 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
 endif()
 
 # set project name and print directory of this CMakeLists.txt (source directory of project)
-project("roughpaper/test")
+project("roughpaper/scratch/test")
 message("${PROJECT_NAME} PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 #set compiler flags

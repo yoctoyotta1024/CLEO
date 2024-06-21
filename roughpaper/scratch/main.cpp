@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: main.cpp
- * Project: roughpaper
+ * Project: scratch
  * Created Date: Monday 29th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -177,7 +177,7 @@ int main(int argc, char *argv[]) {
   Kokkos::Timer kokkostimer;
 
   /* Read input parameters from configuration file(s) */
-  const Config config("/home/m/m300950/CLEO/roughpaper/share/config.yaml");
+  const Config config("/home/m/m300950/CLEO/roughpaper/scratch/share/config.yaml");
   const Timesteps tsteps(config.get_timesteps());
 
   /* Create zarr store for writing output to storage */
