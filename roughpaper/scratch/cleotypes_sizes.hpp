@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: cleotypes_sizes.hpp
- * Project: roughpaper
+ * Project: scratch
  * Created Date: Friday 21st June 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -18,8 +18,8 @@
  * File Description:
  */
 
-#ifndef ROUGHPAPER_CLEOTYPES_SIZES_HPP_
-#define ROUGHPAPER_CLEOTYPES_SIZES_HPP_
+#ifndef ROUGHPAPER_SCRATCH_CLEOTYPES_SIZES_HPP_
+#define ROUGHPAPER_SCRATCH_CLEOTYPES_SIZES_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <iostream>
@@ -106,4 +106,4 @@ void print_type_sizes(int argc, char *argv[]) {
   Kokkos::finalize();
 }
 
-#endif  // ROUGHPAPER_CLEOTYPES_SIZES_HPP_
+#endif  // ROUGHPAPER_SCRATCH_CLEOTYPES_SIZES_HPP_
