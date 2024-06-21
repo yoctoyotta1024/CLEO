@@ -30,7 +30,7 @@
 #include "../../kokkosaliases.hpp"
 #include "observers/consttstep_observer.hpp"
 #include "observers/observers.hpp"
-#include "sdmmonitor/do_sdmmonitor_obs.hpp"
+#include "observers/sdmmonitor/do_sdmmonitor_obs.hpp"
 
 /* struct satisfies SDMMonitor concept for use in do_sdmmonitor_obs to make observer */
 struct MonitorCondensation {

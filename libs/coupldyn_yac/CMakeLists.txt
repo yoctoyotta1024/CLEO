@@ -26,7 +26,8 @@ add_library("${LIBNAME}" STATIC ${SOURCES})
 enable_language(C)
 
 # Add directories for target library
-target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}" ${YAC_C_INCLUDE_DIR})
+# target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
+target_include_directories(${LIBNAME} PRIVATE ${YAC_C_INCLUDE_DIR}) # YAC source directory
 target_include_directories(${LIBNAME} PRIVATE "${CMAKE_SOURCE_DIR}/libs") # CLEO libs directory
 
 # Link libraries to target library

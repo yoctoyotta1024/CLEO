@@ -26,7 +26,7 @@
 #include <Kokkos_Core.hpp>
 #include <concepts>
 
-#include "collisions/collisionkinetics.hpp"
+#include "./collisionkinetics.hpp"
 
 /* Objects that are of type 'NFragments'
 take a pair of superdroplets and returns

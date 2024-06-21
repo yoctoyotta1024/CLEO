@@ -28,10 +28,10 @@
 #include <concepts>
 
 #include "../cleoconstants.hpp"
-#include "superdrops/kokkosaliases_sd.hpp"
-#include "superdrops/sdmmonitor.hpp"
-#include "superdrops/state.hpp"
-#include "superdrops/superdrop.hpp"
+#include "kokkosaliases_sd.hpp"
+#include "sdmmonitor.hpp"
+#include "state.hpp"
+#include "superdrop.hpp"
 
 /**
  * @brief Concept of a microphysical process.

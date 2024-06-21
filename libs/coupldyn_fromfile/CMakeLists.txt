@@ -19,7 +19,7 @@ set(SOURCES
 add_library("${LIBNAME}" STATIC ${SOURCES})
 
 # Add directories for target library
-target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
+#target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 target_include_directories(${LIBNAME} PRIVATE "${CMAKE_SOURCE_DIR}/libs") # CLEO libs directory
 
 # Link libraries to target library

@@ -29,9 +29,9 @@
 #include <functional>
 #include <random>
 
-#include "collisions/collisionkinetics.hpp"
-#include "superdrops/superdrop.hpp"
-#include "superdrops/terminalvelocity.hpp"
+#include "../superdrop.hpp"
+#include "../terminalvelocity.hpp"
+#include "./collisionkinetics.hpp"
 
 /* operator returns flag indicating rebound or
 coalescence or breakup. If flag = 1 -> coalescence.

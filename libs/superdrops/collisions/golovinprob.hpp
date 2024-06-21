@@ -28,7 +28,7 @@
 #define LIBS_SUPERDROPS_COLLISIONS_GOLOVINPROB_HPP_
 
 #include "../../cleoconstants.hpp"
-#include "superdrops/superdrop.hpp"
+#include "../superdrop.hpp"
 
 namespace dlc = dimless_constants;
 

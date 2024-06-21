@@ -23,7 +23,7 @@
  * requirements of the VelocityFormula concept
  */
 
-#include "./terminalvelocity.hpp"
+#include "terminalvelocity.hpp"
 
 /**
  * @brief Returns the mass of a droplet as if it's all water [gramms] to use as 'x' according to

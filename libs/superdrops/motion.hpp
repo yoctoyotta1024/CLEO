@@ -25,8 +25,8 @@
 #include <concepts>
 
 #include "../cleoconstants.hpp"
-#include "superdrops/state.hpp"
-#include "superdrops/superdrop.hpp"
+#include "state.hpp"
+#include "superdrop.hpp"
 
 /* concept for superdrop motion is all types that
 meet requirements (constraints) of these two timstepping

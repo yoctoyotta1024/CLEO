@@ -27,8 +27,8 @@
 #include <Kokkos_Random.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 
-#include "superdrops/kokkosaliases_sd.hpp"
-#include "superdrops/superdrop.hpp"
+#include "kokkosaliases_sd.hpp"
+#include "superdrop.hpp"
 
 /**
  * @brief Struct wrapping Kokkos random number generator.

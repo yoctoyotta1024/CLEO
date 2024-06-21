@@ -25,8 +25,8 @@
 #ifndef LIBS_SUPERDROPS_SUPERDROP_HPP_
 #define LIBS_SUPERDROPS_SUPERDROP_HPP_
 
-#include "superdrops/superdrop_attrs.hpp"
-#include "superdrops/superdrop_ids.hpp"
+#include "superdrop_attrs.hpp"
+#include "superdrop_ids.hpp"
 
 /**
  * @brief Class representing a super-droplet (synonyms: superdroplet, superdrop, SD).

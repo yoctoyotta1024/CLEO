@@ -22,8 +22,7 @@
  * to Climate" by Lohmann, Luond and Mahrt, 1st edition.
  */
 
-
-#include "./superdrop_attrs.hpp"
+#include "superdrop_attrs.hpp"
 
 /**
  * @brief Change the radius of droplet.

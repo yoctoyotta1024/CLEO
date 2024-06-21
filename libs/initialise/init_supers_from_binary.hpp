@@ -29,10 +29,10 @@
 #include <string>
 #include <vector>
 
+#include "initialise/init_all_supers_from_binary.hpp"
 #include "initialise/initialconditions.hpp"
 #include "initialise/optional_config_params.hpp"
 #include "initialise/readbinary.hpp"
-#include "initialisse/init_all_supers_from_binary.hpp"
 #include "superdrops/superdrop.hpp"
 
 /* struct containing functions which return data for the initial conditions needed to create

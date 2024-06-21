@@ -22,7 +22,7 @@
  * Luond and Mahrt, 1st edition." and Shima et al. 2009
  */
 
-#include "./impliciteuler.hpp"
+#include "impliciteuler.hpp"
 
 /**
  * @brief Integrates the condensation / evaporation ODE employing the Implicit Euler method

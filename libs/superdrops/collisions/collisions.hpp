@@ -28,11 +28,11 @@
 #include <random>
 
 #include "../../cleoconstants.hpp"
-#include "superdrops/kokkosaliases_sd.hpp"
-#include "superdrops/sdmmonitor.hpp"
-#include "superdrops/state.hpp"
-#include "superdrops/superdrop.hpp"
-#include "superdrops/urbg.hpp"
+#include "../kokkosaliases_sd.hpp"
+#include "../sdmmonitor.hpp"
+#include "../state.hpp"
+#include "../superdrop.hpp"
+#include "../urbg.hpp"
 
 namespace dlc = dimless_constants;
 

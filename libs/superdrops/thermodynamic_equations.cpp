@@ -23,7 +23,7 @@
  * and Mahrt, 1st edition.
  */
 
-#include "./thermodynamic_equations.hpp"
+#include "thermodynamic_equations.hpp"
 
 /**
  * @brief Calculate the equilibrium vapor pressure of water over liquid water,

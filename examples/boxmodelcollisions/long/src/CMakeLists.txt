@@ -17,7 +17,7 @@ add_executable(longcolls EXCLUDE_FROM_ALL "main_longcolls.cpp")
 # Add directories and link libraries to target
 target_link_libraries(longcolls PRIVATE cartesiandomain "${CLEOLIBS}")
 target_link_libraries(longcolls PUBLIC Kokkos::kokkos)
-target_include_directories(longcolls PRIVATE "${CMAKE_SOURCE_DIR}/libs")
+target_include_directories(longcolls PRIVATE "${CMAKE_SOURCE_DIR}/libs") # CLEO libs directory
 
 # set specific C++ compiler options for target (optional)
 #target_compile_options(longcolls PRIVATE)

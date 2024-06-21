@@ -27,7 +27,7 @@
 #include <Kokkos_Pair.hpp>
 #include <Kokkos_Random.hpp>
 
-#include "superdrops/superdrop.hpp"
+#include "superdrop.hpp"
 
 /* Defines aliases for the (default Kokkos) execution spaces and memory spaces for parallelism. */
 using ExecSpace =

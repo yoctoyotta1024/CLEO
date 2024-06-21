@@ -27,9 +27,9 @@
 #include <cassert>
 #include <functional>
 
-#include "collisions/collisions.hpp"
-#include "superdrops/microphysicalprocess.hpp"
-#include "superdrops/superdrop.hpp"
+#include "../microphysicalprocess.hpp"
+#include "../superdrop.hpp"
+#include "./collisions.hpp"
 
 /**
  * @brief Raises an error if the multiplicity of the super-droplet is 0.

@@ -32,7 +32,7 @@
 #include "observers/consttstep_observer.hpp"
 #include "observers/create_massmoments_arrays.hpp"
 #include "observers/observers.hpp"
-#include "sdmmonitor/monitor_massmoments.hpp"
+#include "observers/sdmmonitor/monitor_massmoments.hpp"
 #include "superdrops/sdmmonitor.hpp"
 #include "zarr/buffer.hpp"
 #include "zarr/dataset.hpp"

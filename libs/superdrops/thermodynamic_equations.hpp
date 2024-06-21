@@ -28,7 +28,7 @@
 #include <cassert>
 
 #include "../cleoconstants.hpp"
-#include "superdrops/superdrop.hpp"
+#include "superdrop.hpp"
 
 namespace dlc = dimless_constants;
 namespace DC = dimmed_constants;

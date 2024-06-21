@@ -29,10 +29,10 @@
 #include <concepts>
 #include <functional>
 
-#include "collisions/breakup_nfrags.hpp"
-#include "collisions/collisions.hpp"
-#include "superdrops/microphysicalprocess.hpp"
-#include "superdrops/superdrop.hpp"
+#include "../microphysicalprocess.hpp"
+#include "../superdrop.hpp"
+#include "./breakup_nfrags.hpp"
+#include "./collisions.hpp"
 
 template <NFragments NFrags>
 struct DoBreakup {

@@ -20,7 +20,7 @@
  * microphysical process in SDM
  */
 
-#include "./condensation.hpp"
+#include "condensation.hpp"
 
 /**
  * @brief Changes super-droplet radii according to condensation / evaporation and returns the

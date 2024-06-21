@@ -26,7 +26,7 @@
 #include <concepts>
 
 #include "../cleoconstants.hpp"
-#include "superdrops/superdrop.hpp"
+#include "superdrop.hpp"
 
 namespace dlc = dimless_constants;
 

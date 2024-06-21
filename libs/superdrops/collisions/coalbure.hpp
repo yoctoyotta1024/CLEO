@@ -30,14 +30,14 @@
 #include <concepts>
 #include <functional>
 
-#include "collisions/breakup.hpp"
-#include "collisions/breakup_nfrags.hpp"
-#include "collisions/coalbure_flag.hpp"
-#include "collisions/coalescence.hpp"
-#include "collisions/collisionkinetics.hpp"
-#include "collisions/collisions.hpp"
-#include "superdrops/microphysicalprocess.hpp"
-#include "superdrops/superdrop.hpp"
+#include "../microphysicalprocess.hpp"
+#include "../superdrop.hpp"
+#include "./breakup.hpp"
+#include "./breakup_nfrags.hpp"
+#include "./coalbure_flag.hpp"
+#include "./coalescence.hpp"
+#include "./collisionkinetics.hpp"
+#include "./collisions.hpp"
 
 /**
  * @brief DoCoalBuRe = DoCoalescenceBreakupRebound, i.e. enacts collision-coalescence, breakup, or
