@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 19th April 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,6 +24,7 @@
 #include <concepts>
 #include <iostream>
 
+#include "./cleotypes_sizes.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
 #include "cartesiandomain/null_boundary_conditions.hpp"
@@ -171,6 +172,8 @@ inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset<St
 }
 
 int main(int argc, char *argv[]) {
+  print_type_sizes(argc, argv);
+
   Kokkos::Timer kokkostimer;
 
   /* Read input parameters from configuration file(s) */
@@ -206,6 +209,8 @@ int main(int argc, char *argv[]) {
   std::cout << "-------------------------------\n"
                "Total Program Duration: "
             << ttot << "s \n-------------------------------\n";
+
+  return 0;
 }
-/* ---------------------------------------------------------------------------------------------- */
-/* ---------------------------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------------------------------*/
+/* ----------------------------------------------------------------------------------------------*/
