@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.18.1](https://github.com/yoctoyotta1024/CLEO/compare/38b44b63d0bc5ba28187628564679bd8506b4063..v0.18.1) - 2024-06-21
+#### Bug Fixes
+- add fallthrough statements to show logic of switch is intentional - ([38b44b6](https://github.com/yoctoyotta1024/CLEO/commit/38b44b63d0bc5ba28187628564679bd8506b4063)) - clara.bayley
+#### Refactoring
+- more clarity and supress unused parameter warning in test build - ([27b6e25](https://github.com/yoctoyotta1024/CLEO/commit/27b6e25450f3bf7f97d286a58a70d102b4060f39)) - clara.bayley
+
+- - -
+
 ## [v0.18.0](https://github.com/yoctoyotta1024/CLEO/compare/edb4dd3654440336ad52ab07f309532509014326..v0.18.0) - 2024-06-21
 #### Features
 - new helper script to run examples - ([5eb6ecb](https://github.com/yoctoyotta1024/CLEO/commit/5eb6ecb19ea10831ee72f71a31958470dfa0f9d7)) - clara.bayley
