@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,16 +22,15 @@
  * that satisfy the requirements of the PairProbability concept (see collisions.hpp)
  */
 
-
 #ifndef LIBS_SUPERDROPS_COLLISIONS_LONGHYDROPROB_HPP_
 #define LIBS_SUPERDROPS_COLLISIONS_LONGHYDROPROB_HPP_
 
 #include <Kokkos_Core.hpp>
 
 #include "../../cleoconstants.hpp"
-#include "../superdrop.hpp"
-#include "../terminalvelocity.hpp"
-#include "./hydrodynamicprob.hpp"
+#include "collisions/hydrodynamicprob.hpp"
+#include "superdrops/superdrop.hpp"
+#include "superdrops/terminalvelocity.hpp"
 
 namespace dlc = dimless_constants;
 

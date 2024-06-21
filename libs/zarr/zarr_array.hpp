@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 22nd May 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -33,9 +33,9 @@
 #include <string_view>
 #include <vector>
 
-#include "./buffer.hpp"
-#include "./chunks.hpp"
-#include "./zarr_metadata.hpp"
+#include "zarr/buffer.hpp"
+#include "zarr/chunks.hpp"
+#include "zarr/zarr_metadata.hpp"
 
 /**
  * @brief Given maximum chunk size 'maxchunk' and length of inner dimension of one chunk of

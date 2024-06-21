@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 17th June 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,14 +30,14 @@
 #include <concepts>
 #include <functional>
 
-#include "../microphysicalprocess.hpp"
-#include "../superdrop.hpp"
-#include "./breakup.hpp"
-#include "./breakup_nfrags.hpp"
-#include "./coalbure_flag.hpp"
-#include "./coalescence.hpp"
-#include "./collisionkinetics.hpp"
-#include "./collisions.hpp"
+#include "collisions/breakup.hpp"
+#include "collisions/breakup_nfrags.hpp"
+#include "collisions/coalbure_flag.hpp"
+#include "collisions/coalescence.hpp"
+#include "collisions/collisionkinetics.hpp"
+#include "collisions/collisions.hpp"
+#include "superdrops/microphysicalprocess.hpp"
+#include "superdrops/superdrop.hpp"
 
 /**
  * @brief DoCoalBuRe = DoCoalescenceBreakupRebound, i.e. enacts collision-coalescence, breakup, or

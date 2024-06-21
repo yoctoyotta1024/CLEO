@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 25th May 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -32,9 +32,9 @@
 #include <utility>
 
 #include "../kokkosaliases.hpp"
-#include "./consttstep_observer.hpp"
-#include "./observers.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "observers/consttstep_observer.hpp"
+#include "observers/observers.hpp"
 #include "superdrops/sdmmonitor.hpp"
 #include "zarr/dataset.hpp"
 #include "zarr/xarray_zarr_array.hpp"

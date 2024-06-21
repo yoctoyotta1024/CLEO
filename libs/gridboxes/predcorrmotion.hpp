@@ -1,3 +1,24 @@
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
+ *
+ * ----- CLEO -----
+ * File: predcorrmotion.hpp
+ * Project: gridboxes
+ * Created Date: Friday 3rd May 2024
+ * Author: Clara Bayley (CB)
+ * Additional Contributors:
+ * -----
+ * Last Modified: Friday 21st June 2024
+ * Modified By: CB
+ * -----
+ * License: BSD 3-Clause "New" or "Revised" License
+ * https://opensource.org/licenses/BSD-3-Clause
+ * -----
+ * File Description:
+ */
+
+
 /* Copyright (c) 2023 MPI-M, Clara Bayley
  *
  * ----- CLEO -----
@@ -24,12 +45,11 @@
 #ifndef LIBS_GRIDBOXES_PREDCORRMOTION_HPP_
 #define LIBS_GRIDBOXES_PREDCORRMOTION_HPP_
 
+#include <Kokkos_Core.hpp>
 #include <cassert>
 #include <functional>
 
-#include <Kokkos_Core.hpp>
-
-#include "./predcorr.hpp"
+#include "gridboxes/predcorr.hpp"
 #include "superdrops/superdrop.hpp"
 #include "superdrops/terminalvelocity.hpp"
 

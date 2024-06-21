@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TB)
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,7 +28,7 @@
 #include <span>
 #include <string_view>
 
-#include "./store_accessor.hpp"
+#include "zarr/store_accessor.hpp"
 
 /**
  * @brief A file system store e.g. for Zarr arrays or groups.

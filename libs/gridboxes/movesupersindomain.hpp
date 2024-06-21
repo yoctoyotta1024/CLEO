@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 5th June 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,9 +28,9 @@
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
-#include "./gridbox.hpp"
-#include "./gridboxmaps.hpp"
-#include "./sortsupers.hpp"
+#include "gridboxes/gridbox.hpp"
+#include "gridboxes/gridboxmaps.hpp"
+#include "gridboxes/sortsupers.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/sdmmonitor.hpp"
 #include "superdrops/superdrop.hpp"

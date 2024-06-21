@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Sunday 16th June 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,9 +28,9 @@
 #include <string>
 #include <vector>
 
-#include "./copyfiles2txt.hpp"
-#include "./optional_config_params.hpp"
-#include "./required_config_params.hpp"
+#include "initialise/copyfiles2txt.hpp"
+#include "initialise/optional_config_params.hpp"
+#include "initialise/required_config_params.hpp"
 
 /**
  * @brief Struct storing configuration parameters read from a YAML file.

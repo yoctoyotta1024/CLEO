@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Shin-ichiro Shima (SiS)
  * -----
- * Last Modified: Tuesday 18th June 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,13 +30,13 @@
 #include <concepts>
 
 #include "../cleoconstants.hpp"
-#include "./impliciteuler.hpp"
-#include "./kokkosaliases_sd.hpp"
-#include "./microphysicalprocess.hpp"
-#include "./sdmmonitor.hpp"
-#include "./state.hpp"
-#include "./superdrop.hpp"
-#include "./thermodynamic_equations.hpp"
+#include "superdrops/impliciteuler.hpp"
+#include "superdrops/kokkosaliases_sd.hpp"
+#include "superdrops/microphysicalprocess.hpp"
+#include "superdrops/sdmmonitor.hpp"
+#include "superdrops/state.hpp"
+#include "superdrops/superdrop.hpp"
+#include "superdrops/thermodynamic_equations.hpp"
 
 namespace dlc = dimless_constants;
 

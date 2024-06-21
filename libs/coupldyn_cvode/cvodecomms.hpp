@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: cvodecomms.hpp
@@ -7,15 +9,14 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 31st October 2023
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * send and receive dynamics functions for
- * SDM when coupled to the CVODE ODE solver
+ * send and receive dynamics functions for SDM when coupled to the CVODE ODE solver
  */
 
 #ifndef LIBS_COUPLDYN_CVODE_CVODECOMMS_HPP_
@@ -25,7 +26,7 @@
 #include <vector>
 
 #include "../kokkosaliases.hpp"
-#include "./cvodedynamics.hpp"
+#include "coupldyn_cvode/cvodedynamics.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/state.hpp"
 
