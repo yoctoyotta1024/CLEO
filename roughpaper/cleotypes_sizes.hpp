@@ -57,10 +57,10 @@ struct Superdrop2 {
 };
 
 struct SuperdropAttrs2 {
+  SoluteProperties solute;
   uint64_t xi;
   double radius;
   double msol;
-  SoluteProperties solute;
 };
 
 void print_type_sizes(int argc, char *argv[]) {
@@ -97,7 +97,7 @@ void print_type_sizes(int argc, char *argv[]) {
     std::cout << "\nSDAttrs: " << sizeof(SuperdropAttrs) << "\n";
     std::cout << "re-ordered SDAttrs: " << sizeof(SuperdropAttrs2) << "\n";
     std::cout << "no padding: " << sizeof(uint64_t) + 2 * sizeof(double) + sizeof(SoluteProperties)
-              << " <- is solute actually 8 bytes?? \n";
+              << "\n";
     std::cout << "  xi: " << sizeof(uint64_t) << "\n";
     std::cout << "  radius: " << sizeof(double) << "\n";
     std::cout << "  msol: " << sizeof(double) << "\n";
