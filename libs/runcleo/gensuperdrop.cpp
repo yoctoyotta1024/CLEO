@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 19th April 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -57,8 +57,10 @@ std::array<double, 3> GenSuperdrop::coords_at(const unsigned int kk) const {
   switch (nspacedims) {
     case 3:  // 3-D model
       coords312[2] = initdata.coord2s.at(kk);
+      [[fallthrough]];
     case 2:  // 3-D or 2-D model
       coords312[1] = initdata.coord1s.at(kk);
+      [[fallthrough]];
     case 1:  // 3-D, 2-D or 1-D model
       coords312[0] = initdata.coord3s.at(kk);
   }

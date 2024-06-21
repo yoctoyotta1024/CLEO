@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 18th June 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -163,8 +163,10 @@ void OptionalConfigParams::FromFileDynamicsParams::set_params(const YAML::Node &
   switch (nspacedims) {
     case 3:  // 3-D model
       vvel = fspath_from_yaml("vvel");
+      [[fallthrough]];
     case 2:  // 3-D or 2-D model
       uvel = fspath_from_yaml("uvel");
+      [[fallthrough]];
     case 1:  // 3-D, 2-D or 1-D model
       wvel = fspath_from_yaml("wvel");
   }
