@@ -39,7 +39,7 @@ def create_yac_unstructured_grid(grid_filname):
 
     cell_vertex_indices = map_vertices(vertices)
 
-    grid_name = "bubble_grid"
+    grid_name = "icon_atmos_grid"
     grid = UnstructuredGrid(
         grid_name,
         np.ones(no_cells) * nv,
@@ -71,7 +71,7 @@ yac = YAC()
 def_calendar(Calendar.PROLEPTIC_GREGORIAN)
 yac.def_datetime("2008-08-01T00:00:00Z", "2008-08-01T02:00:00Z")
 
-component_name = "icon_data_reader"
+component_name = "atm"
 component = yac.def_comp(component_name)
 grid = create_yac_unstructured_grid(grid_filename)
 

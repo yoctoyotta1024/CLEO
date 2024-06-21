@@ -260,28 +260,28 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
                  YAC_TIME_UNIT_ISO_FORMAT, &vvel_yac_id);
 
   // --- Field coupling definitions ---
-  yac_cdef_couple("icon_data_reader", "bubble_grid", "pressure", "cleo", "cleo_grid", "pressure",
+  yac_cdef_couple("atm", "icon_atmos_grid", "pressure", "cleo", "cleo_grid", "pressure",
                   "PT1M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE, interp_stack_id, 0, 0);
 
-  yac_cdef_couple("icon_data_reader", "bubble_grid", "temperature", "cleo", "cleo_grid",
+  yac_cdef_couple("atm", "icon_atmos_grid", "temperature", "cleo", "cleo_grid",
                   "temperature", "PT1M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
                   interp_stack_id, 0, 0);
 
-  yac_cdef_couple("icon_data_reader", "bubble_grid", "qvap", "cleo", "cleo_grid", "qvap", "PT1M",
+  yac_cdef_couple("atm", "icon_atmos_grid", "qvap", "cleo", "cleo_grid", "qvap", "PT1M",
                   YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE, interp_stack_id, 0, 0);
 
-  yac_cdef_couple("icon_data_reader", "bubble_grid", "qcond", "cleo", "cleo_grid", "qcond", "PT1M",
+  yac_cdef_couple("atm", "icon_atmos_grid", "qcond", "cleo", "cleo_grid", "qcond", "PT1M",
                   YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE, interp_stack_id, 0, 0);
 
-  yac_cdef_couple("icon_data_reader", "bubble_grid", "eastward_wind",
+  yac_cdef_couple("atm", "icon_atmos_grid", "eastward_wind",
                   "cleo", "cleo_grid", "eastward_wind", "PT1M",
                   YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE, interp_stack_id, 0, 0);
 
-  yac_cdef_couple("icon_data_reader", "bubble_grid", "northward_wind",
+  yac_cdef_couple("atm", "icon_atmos_grid", "northward_wind",
                   "cleo", "cleo_grid", "northward_wind", "PT1M",
                   YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE, interp_stack_id, 0, 0);
 
-  yac_cdef_couple("icon_data_reader", "bubble_grid", "vvel", "cleo", "cleo_grid", "vvel", "PT1M",
+  yac_cdef_couple("atm", "icon_atmos_grid", "vvel", "cleo", "cleo_grid", "vvel", "PT1M",
                   YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE, interp_stack_id, 0, 0);
 
   // --- End of YAC definitions ---
