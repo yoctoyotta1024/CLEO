@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,7 +28,7 @@
 #include <cassert>
 
 #include "../cleoconstants.hpp"
-#include "./superdrop.hpp"
+#include "superdrop.hpp"
 
 namespace dlc = dimless_constants;
 namespace DC = dimmed_constants;

@@ -7,8 +7,6 @@ endif()
 set(LIBNAME "superdrops")
 message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 
-add_subdirectory(collisions)
-
 # explicitly set library executables path to /lib in top level of build tree
 set(LIBRARY_OUTPUT_PATH  ${CMAKE_BINARY_DIR}/lib)
 
@@ -25,10 +23,10 @@ set(SOURCES
 add_library("${LIBNAME}" STATIC ${SOURCES})
 
 # Add directories and link libraries for target library
+# target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 set(LINKLIBS collisions)
 target_link_libraries(${LIBNAME} PUBLIC "${LINKLIBS}")
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
-target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 
 # set specific C++ compiler options for target (optional)
 #target_compile_options(${LIBNAME} PRIVATE)
@@ -38,3 +36,5 @@ set_target_properties(${LIBNAME} PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)
+
+add_subdirectory(collisions)

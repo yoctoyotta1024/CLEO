@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 6th June 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,7 +24,7 @@
 
 #include <concepts>
 
-#include "./kokkosaliases_sd.hpp"
+#include "kokkosaliases_sd.hpp"
 
 /**
  * @brief Concept of SDMmonitor to monitor various SDM processes.

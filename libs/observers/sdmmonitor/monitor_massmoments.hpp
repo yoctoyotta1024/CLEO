@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 15th June 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -29,7 +29,7 @@
 #include <memory>
 
 #include "../../kokkosaliases.hpp"
-#include "../massmoments_observer.hpp"
+#include "observers/massmoments_observer.hpp"
 #include "zarr/buffer.hpp"
 
 struct MonitorMassMomentViews {

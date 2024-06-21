@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -29,7 +29,7 @@
 #include <string_view>
 #include <vector>
 
-#include "./buffer.hpp"
+#include "zarr/buffer.hpp"
 
 /**
  * @brief Calculates the product of all elements in a vector of size_t numbers.

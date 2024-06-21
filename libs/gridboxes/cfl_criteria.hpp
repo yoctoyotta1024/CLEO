@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 6th March 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -21,13 +21,12 @@
  * condition (ie. CFL criteria)
  */
 
-
 #ifndef LIBS_GRIDBOXES_CFL_CRITERIA_HPP_
 #define LIBS_GRIDBOXES_CFL_CRITERIA_HPP_
 
 #include <Kokkos_Core.hpp>
 
-#include "./gridboxmaps.hpp"
+#include "gridboxes/gridboxmaps.hpp"
 
 /* sdstep = change in superdroplet coordinate position.
 returns *false* if cfl criterion, C = sdstep / gridstep, > 1 */
@@ -42,7 +41,8 @@ bool cfl_criterion(const double gridstep, const double sdstep) {
   gridstep is calculated from the gridbox boundaries map */
 template <GridboxMaps GbxMaps>
 KOKKOS_INLINE_FUNCTION bool cfl_criteria(const GbxMaps &gbxmaps, const unsigned int gbxindex,
-                                  const double delta3, const double delta1, const double delta2) {
+                                         const double delta3, const double delta1,
+                                         const double delta2) {
   double gridstep(gbxmaps.coord3bounds(gbxindex).second - gbxmaps.coord3bounds(gbxindex).first);
   bool cfl(cfl_criterion(gridstep, delta3));
 

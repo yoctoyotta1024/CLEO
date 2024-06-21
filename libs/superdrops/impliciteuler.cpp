@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 18th June 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,7 +22,7 @@
  * Luond and Mahrt, 1st edition." and Shima et al. 2009
  */
 
-#include "./impliciteuler.hpp"
+#include "impliciteuler.hpp"
 
 /**
  * @brief Integrates the condensation / evaporation ODE employing the Implicit Euler method

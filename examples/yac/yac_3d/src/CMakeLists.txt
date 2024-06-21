@@ -17,7 +17,7 @@ add_executable(yac_3d EXCLUDE_FROM_ALL "main_yac1.cpp")
 # Add directories and link libraries to target
 target_link_libraries(yac_3d PRIVATE coupldyn_yac cartesiandomain "${CLEOLIBS}")
 target_link_libraries(yac_3d PUBLIC Kokkos::kokkos)
-target_include_directories(yac_3d PRIVATE "${CMAKE_SOURCE_DIR}/libs")
+target_include_directories(yac_3d PRIVATE "${CMAKE_SOURCE_DIR}/libs") # CLEO libs directory
 
 # set specific C++ compiler options for target (optional)
 #target_compile_options(yac1 PRIVATE)

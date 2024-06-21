@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Saturday 25th May 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,10 +28,10 @@
 #include <concepts>
 
 #include "../cleoconstants.hpp"
-#include "./kokkosaliases_sd.hpp"
-#include "./sdmmonitor.hpp"
-#include "./state.hpp"
-#include "./superdrop.hpp"
+#include "kokkosaliases_sd.hpp"
+#include "sdmmonitor.hpp"
+#include "state.hpp"
+#include "superdrop.hpp"
 
 /**
  * @brief Concept of a microphysical process.

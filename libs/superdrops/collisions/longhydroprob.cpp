@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -21,7 +21,6 @@
  * of Long's Hydrodynamic Kernel. Probability calculations are contained in structures
  * that satisfy the requirements of the PairProbability concept (see collisions.hpp)
  */
-
 
 #include "./longhydroprob.hpp"
 

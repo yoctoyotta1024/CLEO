@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 22nd May 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,8 +30,8 @@
 #include <utility>
 #include <vector>
 
-#include "./xarray_zarr_array.hpp"
-#include "./zarr_group.hpp"
+#include "zarr/xarray_zarr_array.hpp"
+#include "zarr/zarr_group.hpp"
 
 /**
  * @brief A class representing a dataset made from a Zarr group (i.e. collection of Zarr arrays)

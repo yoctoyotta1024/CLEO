@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 15th June 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -29,10 +29,10 @@
 #include <memory>
 
 #include "../../kokkosaliases.hpp"
-#include "../consttstep_observer.hpp"
-#include "../create_massmoments_arrays.hpp"
-#include "../observers.hpp"
-#include "./monitor_massmoments.hpp"
+#include "observers/consttstep_observer.hpp"
+#include "observers/create_massmoments_arrays.hpp"
+#include "observers/observers.hpp"
+#include "observers/sdmmonitor/monitor_massmoments.hpp"
 #include "superdrops/sdmmonitor.hpp"
 #include "zarr/buffer.hpp"
 #include "zarr/dataset.hpp"

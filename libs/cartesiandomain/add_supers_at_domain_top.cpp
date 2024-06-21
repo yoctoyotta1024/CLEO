@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 25th May 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -20,7 +20,7 @@
  * for Cartesian GridBox Maps, Motion of Super-Droplets and MoveSupersInDomain
  */
 
-#include "cartesiandomain/add_supers_at_domain_top.hpp"
+#include "./add_supers_at_domain_top.hpp"
 
 Kokkos::View<unsigned int *> remove_superdrops_from_gridboxes(const CartesianMaps &gbxmaps,
                                                               const viewd_gbx d_gbxs,

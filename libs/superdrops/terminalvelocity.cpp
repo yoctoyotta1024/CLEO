@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 15th June 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,7 +23,7 @@
  * requirements of the VelocityFormula concept
  */
 
-#include "./terminalvelocity.hpp"
+#include "terminalvelocity.hpp"
 
 /**
  * @brief Returns the mass of a droplet as if it's all water [gramms] to use as 'x' according to

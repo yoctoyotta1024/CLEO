@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 25th May 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,10 +28,10 @@
 #include <iostream>
 
 #include "../kokkosaliases.hpp"
-#include "./collect_data_for_dataset.hpp"
-#include "./consttstep_observer.hpp"
-#include "./observers.hpp"
-#include "./parallel_write_data.hpp"
+#include "observers/collect_data_for_dataset.hpp"
+#include "observers/consttstep_observer.hpp"
+#include "observers/observers.hpp"
+#include "observers/parallel_write_data.hpp"
 #include "superdrops/sdmmonitor.hpp"
 #include "zarr/dataset.hpp"
 

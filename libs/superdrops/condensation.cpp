@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 25th May 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -20,7 +20,7 @@
  * microphysical process in SDM
  */
 
-#include "./condensation.hpp"
+#include "condensation.hpp"
 
 /**
  * @brief Changes super-droplet radii according to condensation / evaporation and returns the

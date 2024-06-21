@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -20,12 +20,11 @@
  * Used e.g. by the DoBreakup struct.
  */
 
-
 #ifndef LIBS_SUPERDROPS_COLLISIONS_BREAKUP_NFRAGS_HPP_
 #define LIBS_SUPERDROPS_COLLISIONS_BREAKUP_NFRAGS_HPP_
 
-#include <concepts>
 #include <Kokkos_Core.hpp>
+#include <concepts>
 
 #include "./collisionkinetics.hpp"
 
@@ -74,8 +73,8 @@ struct CollisionKineticEnergyNFrags {
   double operator()(const Superdrop &drop1, const Superdrop &drop2) const {
     constexpr double alpha = 1.5;
     constexpr double beta = 0.135;
-    constexpr double ckemax = 16.49789599/1000000;  // [J]
-    constexpr double epsilon = 11.0 / 6.0;  // = 2.5 - 2/3
+    constexpr double ckemax = 16.49789599 / 1000000;  // [J]
+    constexpr double epsilon = 11.0 / 6.0;            // = 2.5 - 2/3
 
     const auto terminalv = RogersGKTerminalVelocity{};
     const auto cke = collision_kinetic_energy(drop1.get_radius(), drop2.get_radius(),
@@ -83,7 +82,7 @@ struct CollisionKineticEnergyNFrags {
 
     const auto cke_cap = double{Kokkos::fmin(ckemax, cke)};  // limit cke to less than ckemax
 
-    const auto gamma = double{Kokkos::pow(cke_cap*1e6, beta)};  // cke converted to micro-Joules
+    const auto gamma = double{Kokkos::pow(cke_cap * 1e6, beta)};  // cke converted to micro-Joules
     const auto nfrags = double{1.0 / (alpha - gamma) + epsilon};
 
     return nfrags;

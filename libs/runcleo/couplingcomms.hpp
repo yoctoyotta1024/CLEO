@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 8th February 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -27,7 +27,7 @@
 #include <concepts>
 
 #include "../kokkosaliases.hpp"
-#include "./coupleddynamics.hpp"
+#include "runcleo/coupleddynamics.hpp"
 
 /**
  * @concept CouplingComms
@@ -43,11 +43,10 @@
  * @tparam CD The type for the dyanmics solver to check against the CoupledDynamics concept.
  */
 template <typename Comms, typename CD>
-concept CouplingComms =
-    requires(Comms s, CD &coupldyn, viewh_gbx h_gbxs) {
-      { s.template send_dynamics<CD>(h_gbxs, coupldyn) } -> std::same_as<void>;
-      { s.template receive_dynamics<CD>(coupldyn, h_gbxs) } -> std::same_as<void>;
-    };
+concept CouplingComms = requires(Comms s, CD &coupldyn, viewh_gbx h_gbxs) {
+  { s.template send_dynamics<CD>(h_gbxs, coupldyn) } -> std::same_as<void>;
+  { s.template receive_dynamics<CD>(coupldyn, h_gbxs) } -> std::same_as<void>;
+};
 
 /**
  * @struct NullComms

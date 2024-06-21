@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -33,13 +33,13 @@ limited to lower_bound <= coord <= upper_bound. */
 KOKKOS_FUNCTION
 double interpolation(const Kokkos::pair<double, double> bounds,
                      const Kokkos::pair<double, double> vel, const double sdcoord) {
-    const auto coord = double{Kokkos::fmin(
-        bounds.second, Kokkos::fmax(bounds.first, sdcoord))};   // limit coord to within bounds
+  const auto coord = double{Kokkos::fmin(
+      bounds.second, Kokkos::fmax(bounds.first, sdcoord))};  // limit coord to within bounds
 
-    const auto alpha = double{(coord - bounds.first) / (bounds.second - bounds.first)};
+  const auto alpha = double{(coord - bounds.first) / (bounds.second - bounds.first)};
 
-    const auto interp =
-        double{alpha * vel.second + (1 - alpha) * vel.first};   // simple linear interpolation
+  const auto interp =
+      double{alpha * vel.second + (1 - alpha) * vel.first};  // simple linear interpolation
 
-    return interp;
+  return interp;
 }

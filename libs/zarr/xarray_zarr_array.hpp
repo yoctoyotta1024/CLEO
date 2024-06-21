@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 15th June 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -32,8 +32,8 @@
 #include <unordered_map>
 #include <vector>
 
-#include "./xarray_metadata.hpp"
-#include "./zarr_array.hpp"
+#include "zarr/xarray_metadata.hpp"
+#include "zarr/zarr_array.hpp"
 
 /**
  * @brief Write attributes string to a store under a .zattrs key.

@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: motion.hpp
@@ -7,15 +9,14 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 19th December 2023
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * concept for motion of superdroplets
- * by changing their spatial coordinates
+ * concept for motion of superdroplets by changing their spatial coordinates
  */
 
 #ifndef LIBS_SUPERDROPS_MOTION_HPP_
@@ -24,8 +25,8 @@
 #include <concepts>
 
 #include "../cleoconstants.hpp"
-#include "./state.hpp"
-#include "./superdrop.hpp"
+#include "state.hpp"
+#include "superdrop.hpp"
 
 /* concept for superdrop motion is all types that
 meet requirements (constraints) of these two timstepping

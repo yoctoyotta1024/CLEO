@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,8 +22,7 @@
  * to Climate" by Lohmann, Luond and Mahrt, 1st edition.
  */
 
-
-#include "./superdrop_attrs.hpp"
+#include "superdrop_attrs.hpp"
 
 /**
  * @brief Change the radius of droplet.

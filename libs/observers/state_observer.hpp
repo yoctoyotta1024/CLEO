@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -32,12 +32,12 @@
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
-#include "./collect_data_for_dataset.hpp"
-#include "./generic_collect_data.hpp"
-#include "./thermo_observer.hpp"
-#include "./windvel_observer.hpp"
-#include "./write_to_dataset_observer.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "observers/collect_data_for_dataset.hpp"
+#include "observers/generic_collect_data.hpp"
+#include "observers/thermo_observer.hpp"
+#include "observers/windvel_observer.hpp"
+#include "observers/write_to_dataset_observer.hpp"
 #include "zarr/dataset.hpp"
 
 /**

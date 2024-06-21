@@ -9,16 +9,15 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * struct obeying coupleddynamics concept for
- * dynamics solver in CLEO where coupling is
- * two-way to cvode adiabatic parcel ODE solver
+ * struct obeying coupleddynamics concept for dynamics solver in CLEO where coupling is two-way
+ * to cvode adiabatic parcel ODE solver
  */
 
 #ifndef LIBS_COUPLDYN_CVODE_CVODEDYNAMICS_HPP_
@@ -37,7 +36,7 @@
 #include <vector>
 
 #include "../cleoconstants.hpp"
-#include "./differentialfuncs.hpp"
+#include "coupldyn_cvode/differentialfuncs.hpp"
 #include "initialise/optional_config_params.hpp"
 
 namespace dlc = dimless_constants;

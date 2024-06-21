@@ -17,7 +17,7 @@ add_executable(lowlistcolls EXCLUDE_FROM_ALL "main_lowlistcolls.cpp")
 # Add directories and link libraries to target
 target_link_libraries(lowlistcolls PRIVATE cartesiandomain "${CLEOLIBS}")
 target_link_libraries(lowlistcolls PUBLIC Kokkos::kokkos)
-target_include_directories(lowlistcolls PRIVATE "${CMAKE_SOURCE_DIR}/libs")
+target_include_directories(lowlistcolls PRIVATE "${CMAKE_SOURCE_DIR}/libs") # CLEO libs directory
 
 # set specific C++ compiler options for target (optional)
 #target_compile_options(lowlistcolls PRIVATE)

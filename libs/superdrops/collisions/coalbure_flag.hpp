@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -21,28 +21,24 @@
  * coalescence or rebound should occur.
  */
 
-
 #ifndef LIBS_SUPERDROPS_COLLISIONS_COALBURE_FLAG_HPP_
 #define LIBS_SUPERDROPS_COLLISIONS_COALBURE_FLAG_HPP_
 
+#include <Kokkos_Core.hpp>
 #include <concepts>
 #include <functional>
 #include <random>
 
-#include <Kokkos_Core.hpp>
-
-#include "./collisionkinetics.hpp"
 #include "../superdrop.hpp"
 #include "../terminalvelocity.hpp"
+#include "./collisionkinetics.hpp"
 
 /* operator returns flag indicating rebound or
 coalescence or breakup. If flag = 1 -> coalescence.
 If flag = 2 -> breakup. Otherwise -> rebound. */
 template <typename F>
 concept CoalBuReFlag = requires(F f, const double phi, const Superdrop &d1, const Superdrop &d2) {
-  {
-    f(phi, d1, d2)
-  } -> std::convertible_to<unsigned int>;
+  { f(phi, d1, d2) } -> std::convertible_to<unsigned int>;
 };
 
 struct SUCoalBuReFlag {
@@ -107,4 +103,4 @@ struct TSCoalBuReFlag {
   unsigned int operator()(const double phi, const Superdrop &drop1, const Superdrop &drop2) const;
 };
 
-#endif   // LIBS_SUPERDROPS_COLLISIONS_COALBURE_FLAG_HPP_
+#endif  // LIBS_SUPERDROPS_COLLISIONS_COALBURE_FLAG_HPP_

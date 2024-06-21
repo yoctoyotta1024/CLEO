@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 19th April 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -29,10 +29,10 @@
 #include <string>
 #include <vector>
 
-#include "./init_all_supers_from_binary.hpp"
-#include "./initialconditions.hpp"
-#include "./optional_config_params.hpp"
-#include "./readbinary.hpp"
+#include "initialise/init_all_supers_from_binary.hpp"
+#include "initialise/initialconditions.hpp"
+#include "initialise/optional_config_params.hpp"
+#include "initialise/readbinary.hpp"
 #include "superdrops/superdrop.hpp"
 
 /* struct containing functions which return data for the initial conditions needed to create

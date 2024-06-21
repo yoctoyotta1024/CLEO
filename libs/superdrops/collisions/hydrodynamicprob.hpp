@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,7 +19,6 @@
  * Probability of some kind of collision  event between two (real) droplets
  * using the hydrodynamic (i.e. gravitational) kernel
  */
-
 
 #ifndef LIBS_SUPERDROPS_COLLISIONS_HYDRODYNAMICPROB_HPP_
 #define LIBS_SUPERDROPS_COLLISIONS_HYDRODYNAMICPROB_HPP_

@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 15th June 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -32,9 +32,9 @@
 #include <string_view>
 #include <vector>
 
-#include "./initialconditions.hpp"
-#include "./optional_config_params.hpp"
-#include "./readbinary.hpp"
+#include "initialise/initialconditions.hpp"
+#include "initialise/optional_config_params.hpp"
+#include "initialise/readbinary.hpp"
 #include "superdrops/superdrop.hpp"
 
 /* check all the vectors in the initdata struct all have sizes consistent with one another

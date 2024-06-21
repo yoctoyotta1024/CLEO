@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,14 +26,13 @@
 #ifndef LIBS_GRIDBOXES_PREDCORR_HPP_
 #define LIBS_GRIDBOXES_PREDCORR_HPP_
 
+#include <Kokkos_Core.hpp>
+#include <Kokkos_Pair.hpp>
 #include <cassert>
 #include <functional>
 
-#include <Kokkos_Core.hpp>
-#include <Kokkos_Pair.hpp>
-
-#include "./cfl_criteria.hpp"
-#include "./gridboxmaps.hpp"
+#include "gridboxes/cfl_criteria.hpp"
+#include "gridboxes/gridboxmaps.hpp"
 #include "superdrops/state.hpp"
 #include "superdrops/superdrop.hpp"
 #include "superdrops/terminalvelocity.hpp"
@@ -54,8 +53,8 @@ equations in Grabowski et al. 2018 */
 template <GridboxMaps GbxMaps, VelocityFormula TV>
 struct PredCorr {
  private:
-  const double delt;    // equivalent of motionstep as dimensionless time
-  const TV terminalv;   // returns terminal velocity given a superdroplet
+  const double delt;   // equivalent of motionstep as dimensionless time
+  const TV terminalv;  // returns terminal velocity given a superdroplet
 
   /* method to interpolate coord3 wind velocity component (w)
   defined on coord3 faces of a gridbox to a superdroplet's
@@ -96,7 +95,7 @@ struct PredCorr {
     vel3 -= terminal;
 
     /* predictor coords given velocity at previous coords */
-    coord3 += vel3 * delt;   // move by w wind + terminal velocity
+    coord3 += vel3 * delt;  // move by w wind + terminal velocity
 
     /* corrector velocities based on predicted coords */
     auto corrvel3 = interp_wvel(gbxindex, gbxmaps, state, coord3);
@@ -117,7 +116,7 @@ struct PredCorr {
     const auto vel1 = interp_uvel(gbxindex, gbxmaps, state, coord1);
 
     /* predictor coords given velocity at previous coords */
-    coord1 += vel1 * delt;   // move by u wind
+    coord1 += vel1 * delt;  // move by u wind
 
     /* corrector velocities based on predicted coords */
     const auto corrvel1 = interp_uvel(gbxindex, gbxmaps, state, coord1);
@@ -137,7 +136,7 @@ struct PredCorr {
     const auto vel2 = interp_vvel(gbxindex, gbxmaps, state, coord2);
 
     /* predictor coords given velocity at previous coords */
-    coord2 += vel2 * delt;   // move by v wind
+    coord2 += vel2 * delt;  // move by v wind
 
     /* corrector velocities based on predicted coords */
     const auto corrvel2 = interp_vvel(gbxindex, gbxmaps, state, coord2);
@@ -174,4 +173,4 @@ struct PredCorr {
   }
 };
 
-#endif   // LIBS_GRIDBOXES_PREDCORR_HPP_
+#endif  // LIBS_GRIDBOXES_PREDCORR_HPP_

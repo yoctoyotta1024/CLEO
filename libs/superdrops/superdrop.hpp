@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 29th April 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -25,8 +25,8 @@
 #ifndef LIBS_SUPERDROPS_SUPERDROP_HPP_
 #define LIBS_SUPERDROPS_SUPERDROP_HPP_
 
-#include "./superdrop_attrs.hpp"
-#include "./superdrop_ids.hpp"
+#include "superdrop_attrs.hpp"
+#include "superdrop_ids.hpp"
 
 /**
  * @brief Class representing a super-droplet (synonyms: superdroplet, superdrop, SD).

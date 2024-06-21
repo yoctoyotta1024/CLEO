@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 11th March 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -21,15 +21,14 @@
  * concept (see collisions.hpp)
  */
 
-
 #ifndef LIBS_SUPERDROPS_COLLISIONS_LOWLISTPROB_HPP_
 #define LIBS_SUPERDROPS_COLLISIONS_LOWLISTPROB_HPP_
 
 #include <Kokkos_Core.hpp>
 
+#include "../superdrop.hpp"
 #include "./collisionkinetics.hpp"
 #include "./longhydroprob.hpp"
-#include "../superdrop.hpp"
 
 /* Probability of collision-coalescence of a pair of
 droplets as formulated in Shima et al. 2009 equation 3,

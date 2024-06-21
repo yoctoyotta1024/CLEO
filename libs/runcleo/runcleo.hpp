@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Wednesday 8th May 2024
+ * Last Modified: Friday 21st June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -31,16 +31,16 @@
 #include <string>
 
 #include "../kokkosaliases.hpp"
-#include "./coupleddynamics.hpp"
-#include "./couplingcomms.hpp"
-#include "./creategbxs.hpp"
-#include "./createsupers.hpp"
-#include "./sdmmethods.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/movesupersindomain.hpp"
 #include "initialise/initialconditions.hpp"
 #include "observers/observers.hpp"
+#include "runcleo/coupleddynamics.hpp"
+#include "runcleo/couplingcomms.hpp"
+#include "runcleo/creategbxs.hpp"
+#include "runcleo/createsupers.hpp"
+#include "runcleo/sdmmethods.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/superdrop.hpp"
