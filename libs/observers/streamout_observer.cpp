@@ -47,5 +47,5 @@ void StreamOutObserver::streamout_statement(const unsigned int t_mdl,
             << ", (Gbx" << gbx.get_gbxindex() << ": [T, p, qv, qc] = ["
             << gbx.state.temp * dlc::TEMP0 << "K, " << gbx.state.press * dlc::P0 << "Pa, "
             << std::scientific << std::setprecision(4) << gbx.state.qvap << ", " << gbx.state.qcond
-            << "], nsupers = " << gbx.supersingbx.nsupers() << ")\n";
+            << "], nsupers = " << gbx.supersingbx.nsupers() << ")" << std::endl;
 }
