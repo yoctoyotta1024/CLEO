@@ -8,7 +8,8 @@ set(LIBNAME "coupldyn_yac")
 message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 # explicitly set library executables path to /lib in top level of build tree
-set(LIBRARY_OUTPUT_PATH ${CLEO_BINARY_DIR}/lib)
+set(LIB_BINARY_DIR ${CLEO_BINARY_DIR}/lib)
+
 
 message(STATUS "Using YAC installation from: ${YAC_ROOT}")
 message(STATUS "Using YAXT installation from: ${YAXT_ROOT}")
@@ -40,6 +41,7 @@ target_link_libraries("${LIBNAME}" PRIVATE YAC::YAC MPI::MPI_CXX)
 
 # set C++ properties for target
 set_target_properties(${LIBNAME} PROPERTIES
+  LIBRARY_OUTPUT_DIRECTORY ${LIB_BINARY_DIR}
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)
