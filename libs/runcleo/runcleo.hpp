@@ -58,6 +58,7 @@
  * @tparam GbxMaps Type of GridboxMaps.
  * @tparam Microphys Type of MicrophysicalProcess.
  * @tparam M Type of Motion.
+ * @tparam BoundaryConditions Type of boundary conditions for super-droplet movement.
  * @tparam Obs Type of Observer.
  * @tparam Comms Type of CouplingComms.
  */
@@ -92,16 +93,54 @@ class RunCLEO {
    * SDMMethods objects.
    *
    * @param gbxs DualView of gridboxes.
-   * @return 0 on success.
    */
-  int prepare_to_timestep(const dualview_constgbx gbxs) const {
+  void prepare_to_timestep(const dualview_constgbx gbxs) const {
     std::cout << "\n--- prepare timestepping ---\n";
 
     coupldyn.prepare_to_timestep();
     sdm.prepare_to_timestep(gbxs.view_device());
 
     std::cout << "--- prepare timestepping: success ---\n";
-    return 0;
+  }
+
+  /**
+   * @brief Get the size of the next timestep.
+   *
+   * This function calculates and returns the next step size to take based on the
+   * current model time, `t_mdl` and the coupling and obs times
+   * obtained from the `sdm` object; `t_coupl` and `t_obs` respectively.
+   *
+   * @param t_mdl The current timestep of the model.
+   * @return The size of the next timestep.
+   *
+   * @details
+   * The size of the next timestep is determined by finding the smaller out of the
+   * step to the next coupling time and the next observation time. The next coupling
+   * time is calculated after receiving the size of the coupling timestep (a constant)
+   * using the `sdm.get_couplstep()` function. The time of the next observation
+   * is obtained from the `sdm.obs.next_obs()` function.
+   *
+   * The size of the next timestep is then calculated as `t_next - t_mdl`,
+   * where `t_next` is the time closer to `t_mdl` out of `next_coupl`
+   * and `next_obs`. The function uses explicit implementation of C++ standard
+   * library's `std::min` to find `t_next` to make it GPU compatible.
+   *
+   * @see SDMMethods::get_couplstep()
+   */
+  unsigned int get_next_step(const unsigned int t_mdl) const {
+    const auto next_couplstep = [&, t_mdl]() {
+      const auto interval = (unsigned int)sdm.get_couplstep();
+      return ((t_mdl / interval) + 1) * interval;
+    };
+
+    /* t_next is sooner out of time for next coupl or obs */
+    const auto next_coupl = (unsigned int)next_couplstep();
+    const auto next_obs = (unsigned int)sdm.obs.next_obs(t_mdl);
+    const auto t_next(!(next_coupl < next_obs)
+                          ? next_obs
+                          : next_coupl);  // return smaller of two unsigned ints (see std::min)
+
+    return t_next;  // stepsize = t_next - t_mdl
   }
 
   /**
@@ -115,7 +154,6 @@ class RunCLEO {
    * @param t_end End time for timestepping.
    * @param gbxs DualView of gridboxes.
    * @param totsupers View of all superdroplets (both in and out of bounds of domain).
-   * @return 0 on success.
    */
   void timestep_cleo(const unsigned int t_end, const dualview_gbx gbxs,
                      const viewd_supers totsupers) const {
@@ -160,6 +198,18 @@ class RunCLEO {
   }
 
   /**
+   * @brief Run timestep of Coupled Dynamics.
+   *
+   * This function runs the Coupled Dynamics on host from t_mdl to t_next.
+   *
+   * @param t_mdl Current timestep of the coupled model.
+   * @param t_next Next timestep of the coupled model.
+   */
+  void coupldyn_step(const unsigned int t_mdl, const unsigned int t_next) const {
+    coupldyn.run_step(t_mdl, t_next);
+  }
+
+  /**
    * @brief Start of every SDM timestep.
    *
    * This function is called at the start of every timestep. It includes
@@ -198,46 +248,6 @@ class RunCLEO {
   }
 
   /**
-   * @brief Get the size of the next timestep.
-   *
-   * This function calculates and returns the next step size to take based on the
-   * current model time, `t_mdl` and the coupling and obs times
-   * obtained from the `sdm` object; `t_coupl` and `t_obs` respectively.
-   *
-   * @param t_mdl The current timestep of the model.
-   * @return The size of the next timestep.
-   *
-   * @details
-   * The size of the next timestep is determined by finding the smaller out of the
-   * step to the next coupling time and the next observation time. The next coupling
-   * time is calculated after receiving the size of the coupling timestep (a constant)
-   * using the `sdm.get_couplstep()` function. The time of the next observation
-   * is obtained from the `sdm.obs.next_obs()` function.
-   *
-   * The size of the next timestep is then calculated as `t_next - t_mdl`,
-   * where `t_next` is the time closer to `t_mdl` out of `next_coupl`
-   * and `next_obs`. The function uses explicit implementation of C++ standard
-   * library's `std::min` to find `t_next` to make it GPU compatible.
-   *
-   * @see SDMMethods::get_couplstep()
-   */
-  unsigned int get_next_step(const unsigned int t_mdl) const {
-    const auto next_couplstep = [&, t_mdl]() {
-      const auto interval = (unsigned int)sdm.get_couplstep();
-      return ((t_mdl / interval) + 1) * interval;
-    };
-
-    /* t_next is sooner out of time for next coupl or obs */
-    const auto next_coupl = (unsigned int)next_couplstep();
-    const auto next_obs = (unsigned int)sdm.obs.next_obs(t_mdl);
-    const auto t_next(!(next_coupl < next_obs)
-                          ? next_obs
-                          : next_coupl);  // return smaller of two unsigned ints (see std::min)
-
-    return t_next;  // stepsize = t_next - t_mdl
-  }
-
-  /**
    * @brief Run timestep of CLEO's Super-Droplet Model (SDM).
    *
    * This function runs SDM on both host and device from `t_mdl` to `t_next`.
@@ -252,18 +262,6 @@ class RunCLEO {
     gbxs.sync_device();  // get device up to date with host
     sdm.run_step(t_mdl, t_next, gbxs.view_device(), totsupers);
     gbxs.modify_device();  // mark device view of gbxs as modified
-  }
-
-  /**
-   * @brief Run timestep of Coupled Dynamics.
-   *
-   * This function runs the Coupled Dynamics on host from t_mdl to t_next.
-   *
-   * @param t_mdl Current timestep of the coupled model.
-   * @param t_next Next timestep of the coupled model.
-   */
-  void coupldyn_step(const unsigned int t_mdl, const unsigned int t_next) const {
-    coupldyn.run_step(t_mdl, t_next);
   }
 
  public:
@@ -299,7 +297,6 @@ class RunCLEO {
    *
    * @param initconds InitialConditions object containing initial conditions.
    * @param t_end End time for timestepping.
-   * @return 0 on success.
    */
   void operator()(const InitialConditions auto &initconds, const unsigned int t_end) const {
     // create runtime objects
