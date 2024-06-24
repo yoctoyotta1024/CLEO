@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Monday 24th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,7 +26,7 @@
  */
 void MonitorCondensation::reset_monitor() const {
   Kokkos::parallel_for(
-      "reset_monitor", Kokkos::RangePolicy(0, d_data.extent(0)),
+      "reset_monitor", Kokkos::RangePolicy<ExecSpace>(0, d_data.extent(0)),
       KOKKOS_CLASS_LAMBDA(const size_t& jj) { d_data(jj) = 0.0; });
 }
 

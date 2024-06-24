@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Monday 24th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -42,7 +42,7 @@ struct MonitorMassMomentViews {
    */
   void reset_views() const {
     Kokkos::parallel_for(
-        "reset_views", Kokkos::RangePolicy(0, d_mom0.extent(0)),
+        "reset_views", Kokkos::RangePolicy<ExecSpace>(0, d_mom0.extent(0)),
         KOKKOS_CLASS_LAMBDA(const size_t jj) {
           d_mom0(jj) = 0;
           d_mom1(jj) = 0.0;
