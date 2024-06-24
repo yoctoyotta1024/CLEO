@@ -58,7 +58,7 @@ class DoTotNsupersObs {
    * @param totsupers View of all the superdroplets to count (on device memory but metadata for
    * extent of view is available on host).
    */
-  void at_start_step(const viewd_constsupers totsupers) const {
+  void at_step(const viewd_constsupers totsupers) const {
     const auto data = static_cast<uint32_t>(totsupers.extent(0));
     dataset.write_to_array(xzarr_ptr, data);
   }
@@ -99,9 +99,9 @@ class DoTotNsupersObs {
    * @param d_gbxs View of gridboxes on device.
    * @param totsupers View of superdrops on device.
    */
-  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
-                     const viewd_constsupers totsupers) const {
-    at_start_step(totsupers);
+  void at_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
+               const viewd_constsupers totsupers) const {
+    at_step(totsupers);
   }
 
   /**

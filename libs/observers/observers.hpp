@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 25th May 2024
+ * Last Modified: Monday 24th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -44,8 +44,8 @@ concept Observer = requires(Obs obs, unsigned int t, const viewd_constgbx d_gbxs
   { obs.on_step(t) } -> std::same_as<bool>;
   { obs.before_timestepping(d_gbxs) } -> std::same_as<void>;
   { obs.after_timestepping() } -> std::same_as<void>;
-  { obs.at_start_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
-  { obs.get_sdmmonitor() };
+  { obs.at_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
+  {obs.get_sdmmonitor()};
 };
 
 /**
@@ -132,10 +132,10 @@ struct CombinedObserver {
    * @param d_gbxs The view of gridboxes in device memory.
    * @param totsupers View of superdrops on device.
    */
-  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
-                     const viewd_constsupers totsupers) const {
-    a.at_start_step(t_mdl, d_gbxs, totsupers);
-    b.at_start_step(t_mdl, d_gbxs, totsupers);
+  void at_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
+               const viewd_constsupers totsupers) const {
+    a.at_step(t_mdl, d_gbxs, totsupers);
+    b.at_step(t_mdl, d_gbxs, totsupers);
   }
 
   /**
@@ -212,8 +212,8 @@ struct NullObserver {
    * @param d_gbxs The view of gridboxes in device memory.
    * @param totsupers View of superdrops on device.
    */
-  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
-                     const viewd_constsupers totsupers) const {}
+  void at_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
+               const viewd_constsupers totsupers) const {}
 
   /**
    * @brief Get null monitor for SDM processes from observer.

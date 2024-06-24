@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 25th May 2024
+ * Last Modified: Monday 24th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -82,7 +82,7 @@ class RunStatsObserver {
    * Plug function does nothing but exists in case of need to add functionality
    * at the start of a timestep.
    */
-  void at_start_step() const {}
+  void at_step() const {}
 
   /**
    * @brief Prints a summary of runtime statistics to the terminal window.
@@ -159,10 +159,10 @@ class RunStatsObserver {
    * @param d_gbxs View of grid boxes.
    * @param totsupers View of super grids.
    */
-  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
-                     const viewd_constsupers totsupers) const {
+  void at_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
+               const viewd_constsupers totsupers) const {
     if (on_step(t_mdl)) {
-      at_start_step();
+      at_step();
     }
   }
 

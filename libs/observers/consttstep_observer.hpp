@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 25th May 2024
+ * Last Modified: Monday 24th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -42,8 +42,8 @@ concept ObsFuncs = requires(OFs ofs, unsigned int t, const viewd_constgbx d_gbxs
                             const viewd_constsupers totsupers) {
   { ofs.before_timestepping(d_gbxs) } -> std::same_as<void>;
   { ofs.after_timestepping() } -> std::same_as<void>;
-  { ofs.at_start_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
-  { ofs.get_sdmmonitor() };
+  { ofs.at_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
+  {ofs.get_sdmmonitor()};
 };
 
 /**
@@ -114,17 +114,17 @@ struct ConstTstepObserver {
   /**
    * @brief Perform operation at the start of a step if at appropriate interval.
    *
-   * Calls `at_start_step` function of `do_obs` if the current model time is on
+   * Calls `at_step` function of `do_obs` if the current model time is on
    * an observation timestep.
    *
    * @param t_mdl The unsigned int parameter representing the current model time.
    * @param d_gbxs The view of gridboxes in device memory.
    * @param totsupers View of superdrops on device.
    */
-  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
-                     const viewd_constsupers totsupers) const {
+  void at_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
+               const viewd_constsupers totsupers) const {
     if (on_step(t_mdl)) {
-      do_obs.at_start_step(t_mdl, d_gbxs, totsupers);
+      do_obs.at_step(t_mdl, d_gbxs, totsupers);
     }
   }
 

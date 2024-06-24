@@ -39,17 +39,17 @@
  * @brief Templated class for writing data from gridboxes and/or superdroplets to a dataset at the
  * constant time intervals by calling the operator of the ParallelWriteData type at the start of
  * each step.
- * @tparam ParallelWriteData Type of function-like object to call during at_start_step.
+ * @tparam ParallelWriteData Type of function-like object to call during at_step.
  */
 template <typename ParallelWriteData>
 class DoWriteToDataset {
  private:
-  ParallelWriteData parallel_write; /**< Function-like object to call during at_start_step. */
+  ParallelWriteData parallel_write; /**< Function-like object to call during at_step. */
 
  public:
   /**
    * @brief Constructor for DoWriteToDataset.
-   * @param parallel_write Function-like object to call during at_start_step.
+   * @param parallel_write Function-like object to call during at_step.
    */
   explicit DoWriteToDataset(ParallelWriteData parallel_write) : parallel_write(parallel_write) {}
 
@@ -66,13 +66,13 @@ class DoWriteToDataset {
   void after_timestepping() const {}
 
   /**
-   * @brief Calls the parallel_write function during at_start_step.
+   * @brief Calls the parallel_write function during at_step.
    * @param t_mdl Current model time.
    * @param d_gbxs View of gridboxes.
    * @param totsupers View of superdroplets.
    */
-  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
-                     const viewd_constsupers totsupers) const {
+  void at_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
+               const viewd_constsupers totsupers) const {
     parallel_write(d_gbxs, totsupers);
   }
 
@@ -87,9 +87,9 @@ class DoWriteToDataset {
 /**
  * @brief Constructs an observer to write data from gridboxes and/or superdroplets to a dataset at a
  * constant time interval according to the ParallelWriteData struct.
- * @tparam ParallelWriteData Type of function-like object to call during at_start_step.
+ * @tparam ParallelWriteData Type of function-like object to call during at_step.
  * @param interval Constant timestep interval.
- * @param parallel_write Function-like object to call during at_start_step.
+ * @param parallel_write Function-like object to call during at_step.
  * @return Constructed observer.
  */
 template <typename ParallelWriteData>

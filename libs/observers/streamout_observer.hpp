@@ -120,8 +120,8 @@ struct StreamOutObserver {
    * @param d_gbxs View of grid boxes.
    * @param totsupers View of super grids.
    */
-  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
-                     const viewd_constsupers totsupers) const {
+  void at_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
+               const viewd_constsupers totsupers) const {
     if (on_step(t_mdl)) {
       streamout_statement(t_mdl, d_gbxs);
     }

@@ -62,7 +62,7 @@ class DoTimeObs {
    *
    * @param t_mdl Current model time.
    */
-  void at_start_step(const unsigned int t_mdl) const {
+  void at_step(const unsigned int t_mdl) const {
     const auto ntimes = size_t{dataset.get_dimension("time") + 1};
     const auto timedim = std::pair<std::string, size_t>({"time", ntimes});
     dataset.set_dimension(timedim);
@@ -110,9 +110,9 @@ class DoTimeObs {
    * @param d_gbxs View of gridboxes on device.
    * @param totsupers View of superdrops on device.
    */
-  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
-                     const viewd_constsupers totsupers) const {
-    at_start_step(t_mdl);
+  void at_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
+               const viewd_constsupers totsupers) const {
+    at_step(t_mdl);
   }
 
   /**

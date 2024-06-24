@@ -85,7 +85,7 @@ class DoMonitorMassMomentsObs {
    * @brief Write each mass moment from the monitor's views to the appropriate arrays in the dataset
    * then reset the monitor.
    */
-  void at_start_step() const {
+  void at_step() const {
     write_to_array(monitor.microphysics_moms.d_mom0, xzarrs_ptr->mom0_microphys);
     write_to_array(monitor.microphysics_moms.d_mom1, xzarrs_ptr->mom1_microphys);
     write_to_array(monitor.microphysics_moms.d_mom2, xzarrs_ptr->mom2_microphys);
@@ -140,9 +140,9 @@ class DoMonitorMassMomentsObs {
    * @param d_gbxs View of gridboxes on device.
    * @param totsupers View of superdrops on device.
    */
-  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
-                     const viewd_constsupers totsupers) const {
-    at_start_step();
+  void at_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
+               const viewd_constsupers totsupers) const {
+    at_step();
   }
 
   /**

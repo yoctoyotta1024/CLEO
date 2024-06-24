@@ -50,7 +50,7 @@ class DoSDMMonitorObs {
   /**
    * @brief Copy data from monitor to the array in the dataset then reset monitor.
    */
-  void at_start_step() const {
+  void at_step() const {
     const auto h_data = viewh_buffer("h_data", monitor.d_data.extent(0));
     Kokkos::deep_copy(h_data, monitor.d_data);
     dataset.write_to_array(xzarr_ptr, h_data);
@@ -94,9 +94,9 @@ class DoSDMMonitorObs {
    * @param d_gbxs View of gridboxes on device.
    * @param totsupers View of superdrops on device.
    */
-  void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
-                     const viewd_constsupers totsupers) const {
-    at_start_step();
+  void at_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
+               const viewd_constsupers totsupers) const {
+    at_step();
   }
 
   /**
