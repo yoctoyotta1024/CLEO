@@ -146,7 +146,7 @@ class RunCLEO {
   }
 
   /**
-   * @brief At initial conditions before timestepping routine begins.
+   * @brief Execute at initial conditions before timestepping routine begins.
    *
    * This function is called once at the start of the simulation before
    * any actions have occured in the timestepping routine. It calls the
