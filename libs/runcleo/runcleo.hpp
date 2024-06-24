@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Monday 24th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -70,6 +70,21 @@ class RunCLEO {
   const Comms &comms; /**< CouplingComms object. */
 
   /**
+   * @brief Check if coupling between SDM and Coupled Dynamics is correct.
+   *
+   * This function checks if the coupling timestep of the Dynamics Solver and
+   * SDM are equal. Throws an exception if they are not.
+   */
+  void check_coupling() const {
+    if (sdm.get_couplstep() != coupldyn.get_couplstep()) {
+      const std::string err(
+          "coupling timestep of dynamics "
+          "solver and CLEO SDM are not equal");
+      throw std::invalid_argument(err);
+    }
+  }
+
+  /**
    * @brief Prepare SDM and Coupled Dynamics for timestepping.
    *
    * This function prepares the SDM and Coupled Dynamics for timestepping. It
@@ -90,80 +105,96 @@ class RunCLEO {
   }
 
   /**
-   * @brief Check if coupling between SDM and Coupled Dynamics is correct.
-   *
-   * This function checks if the coupling timestep of the Dynamics Solver and
-   * SDM are equal. Throws an exception if they are not.
-   */
-  void check_coupling() const {
-    if (sdm.get_couplstep() != coupldyn.get_couplstep()) {
-      const std::string err(
-          "coupling timestep of dynamics "
-          "solver and CLEO SDM are not equal");
-      throw std::invalid_argument(err);
-    }
-  }
-
-  /**
    * @brief Timestep CLEO from t=0 to t=t_end.
    *
    * This function performs the main timestepping loop for CLEO from the initial
    * time (t_mdl=0) to the specified end time (t_mdl=t_end). It calls RunCLEO's
-   * `start_step`, `coupldyn_step`, `sdm_step`, and `proceed_to_next_step`
-   * functions in a loop until timestepping is complete.
+   * `get_next_step`, `coupldyn_step`, `start_sdm_step`, `sdm_step`, and
+   * `end_sdm_step` functions in a loop until timestepping is complete.
    *
    * @param t_end End time for timestepping.
    * @param gbxs DualView of gridboxes.
    * @param totsupers View of all superdroplets (both in and out of bounds of domain).
    * @return 0 on success.
    */
-  int timestep_cleo(const unsigned int t_end, const dualview_gbx gbxs,
-                    const viewd_supers totsupers) const {
+  void timestep_cleo(const unsigned int t_end, const dualview_gbx gbxs,
+                     const viewd_supers totsupers) const {
     std::cout << "\n--- timestepping ---\n";
 
-    unsigned int t_mdl(0);
-    while (t_mdl <= t_end) {
-      /* start step (in general involves coupling) */
-      const auto t_next = (unsigned int)start_step(t_mdl, gbxs);
+    unsigned int t_mdl = 0;
+    at_initial_conditions(t_mdl, gbxs);
+    while (t_mdl < t_end) {
+      const auto t_next = get_next_step(t_mdl);
 
-      /* advance dynamics solver (optionally concurrent to SDM) */
+      /* advance Dynamics Solver (optionally asynchronous to SDM) */
       coupldyn_step(t_mdl, t_next);
 
-      /* advance SDM (optionally concurrent to dynamics solver) */
+      /* start step (in general involves coupling: Dynamics -> SDM) */
+      start_sdm_step(t_mdl, gbxs);
+
+      /* advance SDM (optionally asynchronous to Dynamics Solver) */
       sdm_step(t_mdl, t_next, gbxs, totsupers);
 
-      /* proceed to next step (in general involves coupling) */
-      t_mdl = proceed_to_next_step(t_next, gbxs);
+      /* end SDM step (in general involves coupling SDM -> Dynamics) */
+      end_sdm_step(t_next, gbxs);
+
+      /* proceed to next step */
+      t_mdl = t_next;
     }
 
     std::cout << "--- timestepping: success ---\n";
-    return 0;
   }
 
   /**
-   * @brief Start of every timestep.
+   * @brief At initial conditions before timestepping routine begins.
    *
-   * This function is called at the start of every timestep. It includes
-   * 1) communication of dynamics fields from the Dynamics Solver to the States
-   * of CLEO's Gridboxes, 2) calling the `at_start_step` function of SDMMethods
-   * (e.g. to make observations), and 3) returning the size of the timestep to
-   * take now given the current timestep `t_mdl`.
+   * This function is called once at the start of the simulation before
+   * any actions have occured in the timestepping routine. It calls the
+   * `at_initial_conditions` function of the SDMMethods (e.g. to make an observation).
    *
    * @param t_mdl Current timestep of the coupled model.
    * @param gbxs DualView of gridboxes.
-   * @return Size of the next timestep.
    */
-  unsigned int start_step(const unsigned int t_mdl, dualview_gbx gbxs) const {
+  void at_initial_conditions(const unsigned int t_mdl, dualview_gbx gbxs) const {
+    sdm.at_initial_conditions(t_mdl, gbxs);
+  }
+
+  /**
+   * @brief Start of every SDM timestep.
+   *
+   * This function is called at the start of every timestep. It includes
+   * communication of dynamics fields from the Dynamics Solver to the States
+   * of CLEO's Gridboxes.
+   *
+   * @param t_mdl Current timestep of the coupled model.
+   * @param gbxs DualView of gridboxes.
+   */
+  void start_sdm_step(const unsigned int t_mdl, dualview_gbx gbxs) const {
     if (t_mdl % sdm.get_couplstep() == 0) {
       gbxs.sync_host();
       comms.receive_dynamics(coupldyn, gbxs.view_host());
       gbxs.modify_host();
     }
+  }
+
+  /**
+   * @brief End of every SDM timestep.
+   *
+   * This function is called at the end of every timestep, i.e. when t_mld = t_next.
+   * It includes 1) calling the `at_end_step` function of SDMMethods (e.g. to make observations),
+   * and 2) possible communication from the States of CLEO's Gridboxes to the Coupled Dynamics.
+   *
+   * @param t_mdl Current timestep of the coupled model.
+   * @param gbxs DualView of gridboxes.
+   */
+  void end_sdm_step(const unsigned int t_mdl, dualview_gbx gbxs) const {
+    if (t_mdl % sdm.get_couplstep() == 0) {
+      gbxs.sync_host();
+      comms.send_dynamics(gbxs.view_host(), coupldyn);
+    }
 
     gbxs.sync_device();
-    sdm.at_start_step(t_mdl, gbxs);
-
-    return get_next_step(t_mdl);
+    sdm.at_end_step(t_mdl, gbxs);
   }
 
   /**
@@ -185,8 +216,8 @@ class RunCLEO {
    *
    * The size of the next timestep is then calculated as `t_next - t_mdl`,
    * where `t_next` is the time closer to `t_mdl` out of `next_coupl`
-   * and `next_obs`. The function uses Kokkos' version of C++ standard
-   * library's `std::min` to find `t_next` (also GPU compatible).
+   * and `next_obs`. The function uses explicit implementation of C++ standard
+   * library's `std::min` to find `t_next` to make it GPU compatible.
    *
    * @see SDMMethods::get_couplstep()
    */
@@ -235,26 +266,6 @@ class RunCLEO {
     coupldyn.run_step(t_mdl, t_next);
   }
 
-  /**
-   * @brief Proceed to the next timestep.
-   *
-   * This function returns the incremented timestep (`t_mdl` to `t_next`).
-   * It is also where communication from the States of CLEO's
-   * Gridboxes to the Coupled Dynamics may occur.
-   *
-   * @param t_next Next timestep of the coupled model.
-   * @param gbxs DualView of gridboxes.
-   * @return Incremented timestep.
-   */
-  unsigned int proceed_to_next_step(unsigned int t_next, dualview_gbx gbxs) const {
-    if (t_next % sdm.get_couplstep() == 0) {
-      gbxs.sync_host();
-      comms.send_dynamics(gbxs.view_host(), coupldyn);
-    }
-
-    return t_next;
-  }
-
  public:
   /**
    * @brief Constructor for RunCLEO.
@@ -290,7 +301,7 @@ class RunCLEO {
    * @param t_end End time for timestepping.
    * @return 0 on success.
    */
-  int operator()(const InitialConditions auto &initconds, const unsigned int t_end) const {
+  void operator()(const InitialConditions auto &initconds, const unsigned int t_end) const {
     // create runtime objects
     viewd_supers totsupers(create_supers(initconds.initsupers));
     dualview_gbx gbxs(create_gbxs(sdm.gbxmaps, initconds.initgbxs, totsupers));
@@ -300,8 +311,6 @@ class RunCLEO {
 
     // do timestepping from t=0 to t=t_end
     timestep_cleo(t_end, gbxs, totsupers);
-
-    return 0;
   }
 };
 
