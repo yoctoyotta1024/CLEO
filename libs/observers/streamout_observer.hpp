@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 25th May 2024
+ * Last Modified: Monday 24th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -78,7 +78,8 @@ struct StreamOutObserver {
    * @param d_gbxs View of grid boxes.
    */
   void before_timestepping(const viewd_constgbx d_gbxs) const {
-    std::cout << "observer includes StreamOutObserver\n";
+    std::cout << "Observer includes StreamOutObserver with timestep = " << step2realtime(interval)
+              << "s\n";
   }
 
   /**

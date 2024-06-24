@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Monday 24th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -25,7 +25,6 @@
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
-#include <iostream>
 #include <memory>
 
 #include "../../kokkosaliases.hpp"
@@ -125,9 +124,7 @@ class DoMonitorMassMomentsObs {
    * @brief Placeholder for before timestepping functionality and to make class satisfy observer
    * concept.
    */
-  void before_timestepping(const viewd_constgbx d_gbxs) const {
-    std::cout << "observer includes SDM monitor observer\n";
-  }
+  void before_timestepping(const viewd_constgbx d_gbxs) const {}
 
   /**
    * @brief Placeholder for after timestepping functionality and to make class satisfy observer

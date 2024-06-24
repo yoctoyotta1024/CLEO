@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Monday 24th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,7 +24,6 @@
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
-#include <iostream>
 #include <memory>
 
 #include "../kokkosaliases.hpp"
@@ -112,8 +111,6 @@ class GbxindexObserver {
    * @param d_gbxs View of gridboxes on device.
    */
   void before_timestepping(const viewd_constgbx d_gbxs) const {
-    std::cout << "observer includes gbxindex observer\n";
-
     auto h_data = collect_gbxindexes(d_gbxs);
     dataset.write_to_array(xzarr_ptr, h_data);
     assert((dataset.get_dimension("gbxindex") == h_data.extent(0)) &&
