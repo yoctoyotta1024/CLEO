@@ -148,7 +148,7 @@ class RunCLEO {
   /**
    * @brief Execute at initial conditions before timestepping routine begins.
    *
-   * This function is called once at the start of the simulation before
+   * This function is called only once at the start of the simulation before
    * any actions have occured in the timestepping routine. It calls the
    * `at_initial_conditions` function of the SDMMethods (e.g. to make an observation).
    *
