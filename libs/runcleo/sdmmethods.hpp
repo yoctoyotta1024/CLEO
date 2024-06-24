@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Saturday 15th June 2024
+ * Last Modified: Monday 24th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -192,19 +192,35 @@ class SDMMethods {
   void prepare_to_timestep(const viewd_constgbx d_gbxs) const { obs.before_timestepping(d_gbxs); }
 
   /**
-   * @brief Execute at the start of each coupled model timestep.
+   * @brief Execute at initial conditions before timestepping routine begins.
    *
-   * This function is called at the start of each coupled model timestep
-   * (i.e. at start of `t_mdl`) and includes calls to the observer's `at_start_step`
-   * function for both the domain and individual gridboxes.
+   * This function is called only once at the start of the simulation before
+   * any actions have occured in the timestepping routine. It calls to the observer's `at_step`
+   * function for both the domain super-droplets and individual gridboxes.
    *
    * @param t_mdl Current timestep of the coupled model.
    * @param gbxs Dualview of gridboxes (on host and on device).
    */
-  void at_start_step(const unsigned int t_mdl, const dualview_gbx gbxs) const {
+  void at_initial_conditions(const unsigned int t_mdl, const dualview_gbx gbxs) const {
     const auto d_gbxs = gbxs.view_device();
     const auto domain_totsupers = gbxs.view_host()(0).domain_totsupers_readonly();
-    obs.at_start_step(t_mdl, d_gbxs, domain_totsupers);
+    obs.at_step(t_mdl, d_gbxs, domain_totsupers);
+  }
+
+  /**
+   * @brief Execute at the end of each coupled model timestep.
+   *
+   * This function is called at the end of each coupled model timestep
+   * (i.e. at `t_mdl = t_next`) and includes calls to the observer's `at_step`
+   * function for both the domain super-droplets and individual gridboxes.
+   *
+   * @param t_mdl Current timestep of the coupled model.
+   * @param gbxs Dualview of gridboxes (on host and on device).
+   */
+  void at_end_step(const unsigned int t_mdl, const dualview_gbx gbxs) const {
+    const auto d_gbxs = gbxs.view_device();
+    const auto domain_totsupers = gbxs.view_host()(0).domain_totsupers_readonly();
+    obs.at_step(t_mdl, d_gbxs, domain_totsupers);
   }
 
   /**
