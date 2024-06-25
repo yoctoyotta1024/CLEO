@@ -77,22 +77,26 @@ grid = create_yac_unstructured_grid(grid_filename)
 
 # --- Field definitions ---
 press = Field.create(
-    "pressure", component, grid.cell_points, 3, "PT1M", TimeUnit.ISO_FORMAT
+    "pressure", component, grid.cell_points, 3, "PT30M", TimeUnit.ISO_FORMAT
 )
 temp = Field.create(
-    "temperature", component, grid.cell_points, 3, "PT1M", TimeUnit.ISO_FORMAT
+    "temperature", component, grid.cell_points, 3, "PT30M", TimeUnit.ISO_FORMAT
 )
-qvap = Field.create("qvap", component, grid.cell_points, 3, "PT1M", TimeUnit.ISO_FORMAT)
+qvap = Field.create(
+    "qvap", component, grid.cell_points, 3, "PT30M", TimeUnit.ISO_FORMAT
+)
 qcond = Field.create(
-    "qcond", component, grid.cell_points, 3, "PT1M", TimeUnit.ISO_FORMAT
+    "qcond", component, grid.cell_points, 3, "PT30M", TimeUnit.ISO_FORMAT
 )
 eastward_wind = Field.create(
-    "eastward_wind", component, grid.cell_points, 3, "PT1M", TimeUnit.ISO_FORMAT
+    "eastward_wind", component, grid.cell_points, 3, "PT30M", TimeUnit.ISO_FORMAT
 )
 northward_wind = Field.create(
-    "northward_wind", component, grid.cell_points, 3, "PT1M", TimeUnit.ISO_FORMAT
+    "northward_wind", component, grid.cell_points, 3, "PT30M", TimeUnit.ISO_FORMAT
 )
-vvel = Field.create("vvel", component, grid.cell_points, 4, "PT1M", TimeUnit.ISO_FORMAT)
+vvel = Field.create(
+    "vvel", component, grid.cell_points, 4, "PT30M", TimeUnit.ISO_FORMAT
+)
 
 yac.enddef()
 
