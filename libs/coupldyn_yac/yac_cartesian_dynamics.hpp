@@ -126,7 +126,7 @@ struct CartesianDynamics {
   void receive_fields_from_yac();
   void receive_yac_field(unsigned int field_type, unsigned int yac_field_id,
                          double ** yac_raw_data, std::vector<double> & target_array,
-                         size_t vertical_levels);
+                         size_t vertical_levels, double conversion_factor);
 };
 
 /* type satisfying CoupledDyanmics solver concept

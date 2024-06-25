@@ -22,6 +22,7 @@
  */
 
 #include "coupldyn_yac/yac_cartesian_dynamics.hpp"
+#include "cleoconstants.hpp"
 
 #include <iostream>
 #include <cmath>
@@ -138,7 +139,8 @@ void CartesianDynamics::receive_yac_field(unsigned int field_type,
                                           unsigned int yac_field_id,
                                           double ** yac_raw_data,
                                           std::vector<double> & target_array,
-                                          size_t vertical_levels) {
+                                          size_t vertical_levels,
+                                          double conversion_factor = 1.0) {
   int info, error;
   unsigned int total_horizontal_cells = ndims[0] * ndims[1];
   bool edge_dimension = false;
@@ -150,7 +152,7 @@ void CartesianDynamics::receive_yac_field(unsigned int field_type,
     case 0:
       for (size_t i = 0; i < vertical_levels; i++)
         for (size_t j = 0; j < total_horizontal_cells; j++)
-          target_array[i * total_horizontal_cells + j] = yac_raw_data[i][j];
+          target_array[i * total_horizontal_cells + j] = yac_raw_data[i][j] / conversion_factor;
       return;
 
     case 1:
@@ -168,7 +170,7 @@ void CartesianDynamics::receive_yac_field(unsigned int field_type,
       if (lat_index % 2 == edge_dimension) {
         for (size_t index = 0; index < ndims[0] + edge_dimension;
              index++, target_it++, source_index++)
-          *target_it = yac_raw_data[vertical_index][source_index];
+          *target_it = yac_raw_data[vertical_index][source_index] / conversion_factor;
       } else
         source_index += ndims[0] + !edge_dimension;
     }
@@ -184,15 +186,20 @@ void CartesianDynamics::receive_fields_from_yac() {
     W_EDGE
   };
 
-  receive_yac_field(CELL, temp_yac_id, yac_raw_cell_data, temp, ndims[2]);
-  receive_yac_field(CELL, pressure_yac_id, yac_raw_cell_data, press, ndims[2]);
+  receive_yac_field(CELL, temp_yac_id, yac_raw_cell_data,
+                    temp, ndims[2], dimless_constants::TEMP0);
+  receive_yac_field(CELL, pressure_yac_id, yac_raw_cell_data,
+                    press, ndims[2], dimless_constants::P0);
   receive_yac_field(CELL, qvap_yac_id, yac_raw_cell_data, qvap, ndims[2]);
   receive_yac_field(CELL, qcond_yac_id, yac_raw_cell_data, qcond, ndims[2]);
 
-  receive_yac_field(CELL, vvel_yac_id, yac_raw_vertical_wind_data, vvel, ndims[2] + 1);
+  receive_yac_field(CELL, vvel_yac_id, yac_raw_vertical_wind_data,
+                    vvel, ndims[2] + 1, dimless_constants::W0);
 
-  receive_yac_field(U_EDGE, eastward_wind_yac_id, yac_raw_edge_data, uvel, ndims[2]);
-  receive_yac_field(W_EDGE, northward_wind_yac_id, yac_raw_edge_data, wvel, ndims[2]);
+  receive_yac_field(U_EDGE, eastward_wind_yac_id, yac_raw_edge_data,
+                    uvel, ndims[2], dimless_constants::W0);
+  receive_yac_field(W_EDGE, northward_wind_yac_id, yac_raw_edge_data,
+                    wvel, ndims[2], dimless_constants::W0);
 }
 
 CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
