@@ -177,7 +177,7 @@ void CartesianDynamics::receive_yac_field(unsigned int field_type,
 
 /* This subroutine is the main entry point for receiving data from YAC.
  * It checks the dimensionality of the simulation based on the config data. */
-void CartesianDynamics::receive_field_collections_from_yac() {
+void CartesianDynamics::receive_fields_from_yac() {
   enum field_types {
     CELL,
     U_EDGE,
@@ -316,7 +316,7 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   vvel = std::vector<double>(horizontal_cell_number * (ndims[2] + 1), 0);
 
   // Calls the first data retrieval from YAC to have thermodynamic data for first timestep
-  receive_field_collections_from_yac();
+  receive_fields_from_yac();
 
   std::cout << "Finished setting up YAC for receiving:\n"
                "  pressure,\n  temperature,\n"
