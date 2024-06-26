@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Monday 24th June 2024
+ * Last Modified: Wednesday 26th June 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -168,7 +168,7 @@ class RunCLEO {
       coupldyn_step(t_mdl, t_next);
 
       /* start step (in general involves coupling: Dynamics -> SDM) */
-      start_sdm_step(t_mdl, gbxs);
+      start_sdm_step(t_next, gbxs);
 
       /* advance SDM (optionally asynchronous to Dynamics Solver) */
       sdm_step(t_mdl, t_next, gbxs, totsupers);
@@ -216,11 +216,11 @@ class RunCLEO {
    * communication of dynamics fields from the Dynamics Solver to the States
    * of CLEO's Gridboxes.
    *
-   * @param t_mdl Current timestep of the coupled model.
+   * @param t_next Next timestep of the coupled model.
    * @param gbxs DualView of gridboxes.
    */
-  void start_sdm_step(const unsigned int t_mdl, dualview_gbx gbxs) const {
-    if (t_mdl % sdm.get_couplstep() == 0) {
+  void start_sdm_step(const unsigned int t_next, dualview_gbx gbxs) const {
+    if (t_next % sdm.get_couplstep() == 0) {
       gbxs.sync_host();
       comms.receive_dynamics(coupldyn, gbxs.view_host());
       gbxs.modify_host();
@@ -230,7 +230,7 @@ class RunCLEO {
   /**
    * @brief End of every SDM timestep.
    *
-   * This function is called at the end of every timestep, i.e. when t_mld = t_next.
+   * This function is called at the end of every timestep, i.e. when t_mdl = t_next.
    * It includes 1) calling the `at_end_step` function of SDMMethods (e.g. to make observations),
    * and 2) possible communication from the States of CLEO's Gridboxes to the Coupled Dynamics.
    *
