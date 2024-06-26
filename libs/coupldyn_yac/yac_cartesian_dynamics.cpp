@@ -54,15 +54,17 @@ void create_vertex_coordinates(const Config &config,
   double lower_latitude = (-0.5 * std::numbers::pi * ndims[1]) / (ndims[1] + 2);
   double upper_latitude = (0.5 * std::numbers::pi * ndims[1]) / (ndims[1] + 2);
 
-  if (!std::isnan(config.get_yac_dynamics().lower_longitude) &&
-      !std::isnan(config.get_yac_dynamics().upper_longitude) &&
-      !std::isnan(config.get_yac_dynamics().lower_latitude) &&
-      !std::isnan(config.get_yac_dynamics().upper_latitude)) {
+  if (!std::isnan(config.get_yac_dynamics().lower_longitude))
       lower_longitude = config.get_yac_dynamics().lower_longitude;
+
+  if (!std::isnan(config.get_yac_dynamics().upper_longitude))
       upper_longitude = config.get_yac_dynamics().upper_longitude;
+
+  if (!std::isnan(config.get_yac_dynamics().lower_latitude))
       lower_latitude = config.get_yac_dynamics().lower_latitude;
+
+  if (!std::isnan(config.get_yac_dynamics().upper_latitude))
       upper_latitude = config.get_yac_dynamics().upper_latitude;
-  }
 
   // Defines the vertex longitude and latitude values in radians for grid creation
   // The values are later permuted by YAC to generate all vertex coordinates
