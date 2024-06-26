@@ -36,6 +36,7 @@
 
 #include "initialise/config.hpp"
 
+
 /* contains 1-D vector for each (thermo)dynamic
 variable which is ordered by gridbox at every timestep
 e.g. press = [p_gbx0(t0), p_gbx1(t0), ,... , p_gbxN(t0),
@@ -70,7 +71,7 @@ struct CartesianDynamics {
   int qcond_yac_id;
   int eastward_wind_yac_id;
   int northward_wind_yac_id;
-  int vvel_yac_id;
+  int vertical_wind_yac_id;
 
   // Containers to receive data from YAC
   double ** yac_raw_cell_data;
