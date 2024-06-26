@@ -167,13 +167,13 @@ class RunCLEO {
       /* advance Dynamics Solver (optionally asynchronous to SDM) */
       coupldyn_step(t_mdl, t_next);
 
-      /* start step (in general involves coupling: Dynamics -> SDM) */
+      /* start step (in general involves coupling: Dynamics @ t=t_next -> SDM @ t=t_mdl) */
       start_sdm_step(t_next, gbxs);
 
       /* advance SDM (optionally asynchronous to Dynamics Solver) */
       sdm_step(t_mdl, t_next, gbxs, totsupers);
 
-      /* end SDM step (in general involves coupling SDM -> Dynamics) */
+      /* end SDM step (in general involves coupling SDM @ t=t_next -> Dynamics @ t=t_next) */
       end_sdm_step(t_next, gbxs);
 
       /* proceed to next step */
