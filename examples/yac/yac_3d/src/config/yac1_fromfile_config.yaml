@@ -51,3 +51,8 @@ outputdata:
   stats_filename : ./bin/yac1_stats.txt                   # .txt file to output runtime statistics to
   zarrbasedir : ./bin/yac1_sol.zarr                       # zarr store base directory
   maxchunk : 2500000                                      # maximum no. of elements in chunks of zarr store array
+
+coupled_dynamics:
+  type: yac
+  lower_latitude: -0.157079632
+  upper_latitude: 0.157079632

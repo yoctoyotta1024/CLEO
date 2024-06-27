@@ -36,6 +36,7 @@
 
 #include "initialise/config.hpp"
 
+
 /* contains 1-D vector for each (thermo)dynamic
 variable which is ordered by gridbox at every timestep
 e.g. press = [p_gbx0(t0), p_gbx1(t0), ,... , p_gbxN(t0),
@@ -70,7 +71,7 @@ struct CartesianDynamics {
   int qcond_yac_id;
   int eastward_wind_yac_id;
   int northward_wind_yac_id;
-  int vvel_yac_id;
+  int vertical_wind_yac_id;
 
   // Containers to receive data from YAC
   double ** yac_raw_cell_data;
@@ -124,10 +125,9 @@ struct CartesianDynamics {
   /* Public call to receive data from YAC
    * If the problem is 2D turns into a wrapper for receive_hor_slice_from_yac */
   void receive_fields_from_yac();
-  void receive_field_collections_from_yac();
   void receive_yac_field(unsigned int field_type, unsigned int yac_field_id,
                          double ** yac_raw_data, std::vector<double> & target_array,
-                         size_t vertical_levels);
+                         size_t vertical_levels, double conversion_factor);
 };
 
 /* type satisfying CoupledDyanmics solver concept
@@ -141,7 +141,7 @@ struct YacDynamics {
 
   /* Calls the get operations to receive data from YAC for each of the fields of interest */
   void run_dynamics(const unsigned int t_mdl) const {
-    dynvars->receive_field_collections_from_yac();
+    dynvars->receive_fields_from_yac();
   }
 
  public:

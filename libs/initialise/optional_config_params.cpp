@@ -208,10 +208,17 @@ void OptionalConfigParams::YacDynamicsParams::set_params(const YAML::Node &confi
 
   assert((node["type"].as<std::string>() == "yac"));
 
-  lower_longitude = node["lower_longitude"].as<double>();
-  upper_longitude = node["upper_longitude"].as<double>();
-  lower_latitude = node["lower_latitude"].as<double>();
-  upper_latitude = node["upper_latitude"].as<double>();
+  if (node["lower_longitude"])
+    lower_longitude = node["lower_longitude"].as<double>();
+
+  if (node["upper_longitude"])
+    upper_longitude = node["upper_longitude"].as<double>();
+
+  if (node["lower_latitude"])
+    lower_latitude = node["lower_latitude"].as<double>();
+
+  if (node["upper_latitude"])
+    upper_latitude = node["upper_latitude"].as<double>();
 }
 
 void OptionalConfigParams::YacDynamicsParams::print_params() const {

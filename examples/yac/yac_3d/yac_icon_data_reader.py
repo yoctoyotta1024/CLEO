@@ -39,7 +39,7 @@ def create_yac_unstructured_grid(grid_filname):
 
     cell_vertex_indices = map_vertices(vertices)
 
-    grid_name = "bubble_grid"
+    grid_name = "icon_atmos_grid"
     grid = UnstructuredGrid(
         grid_name,
         np.ones(no_cells) * nv,
@@ -68,40 +68,45 @@ grid_filename = "aes_bubble_atm_cgrid_ml.nc"
 
 yac = YAC()
 
-component_name = "icon_data_reader"
-component = yac.def_comp(component_name)
-
 def_calendar(Calendar.PROLEPTIC_GREGORIAN)
+yac.def_datetime("2008-08-01T00:00:00Z", "2008-08-01T02:00:00Z")
+
+component_name = "atm"
+component = yac.def_comp(component_name)
 grid = create_yac_unstructured_grid(grid_filename)
 
 # --- Field definitions ---
 press = Field.create(
-    "pressure", component, grid.cell_points, 3, "PT1M", TimeUnit.ISO_FORMAT
+    "pressure", component, grid.cell_points, 25, "PT30M", TimeUnit.ISO_FORMAT
 )
 temp = Field.create(
-    "temperature", component, grid.cell_points, 3, "PT1M", TimeUnit.ISO_FORMAT
+    "temperature", component, grid.cell_points, 25, "PT30M", TimeUnit.ISO_FORMAT
 )
-qvap = Field.create("qvap", component, grid.cell_points, 3, "PT1M", TimeUnit.ISO_FORMAT)
+qvap = Field.create(
+    "qvap", component, grid.cell_points, 25, "PT30M", TimeUnit.ISO_FORMAT
+)
 qcond = Field.create(
-    "qcond", component, grid.cell_points, 3, "PT1M", TimeUnit.ISO_FORMAT
+    "qcond", component, grid.cell_points, 25, "PT30M", TimeUnit.ISO_FORMAT
 )
 eastward_wind = Field.create(
-    "eastward_wind", component, grid.cell_points, 3, "PT1M", TimeUnit.ISO_FORMAT
+    "eastward_wind", component, grid.cell_points, 25, "PT30M", TimeUnit.ISO_FORMAT
 )
 northward_wind = Field.create(
-    "northward_wind", component, grid.cell_points, 3, "PT1M", TimeUnit.ISO_FORMAT
+    "northward_wind", component, grid.cell_points, 25, "PT30M", TimeUnit.ISO_FORMAT
 )
-vvel = Field.create("vvel", component, grid.cell_points, 4, "PT1M", TimeUnit.ISO_FORMAT)
+vertical_wind = Field.create(
+    "vertical_wind", component, grid.cell_points, 26, "PT30M", TimeUnit.ISO_FORMAT
+)
 
 yac.enddef()
 
 dataset = Dataset(data_filename)
 
 for step in range(5):
-    temp.put(prepare_data_for_yac(dataset["ta"][step, 0:3, :]))
-    press.put(prepare_data_for_yac(dataset["pfull"][step, 0:3, :]))
-    qvap.put(prepare_data_for_yac(dataset["hus"][step, 0:3, :]))
-    qcond.put(prepare_data_for_yac(dataset["clw"][step, 0:3, :]))
-    vvel.put(prepare_data_for_yac(dataset["wa"][step, 0:4, :]))
-    eastward_wind.put(prepare_data_for_yac(dataset["ua"][step, 0:3, :]))
-    northward_wind.put(prepare_data_for_yac(dataset["va"][step, 0:3, :]))
+    temp.put(prepare_data_for_yac(dataset["ta"][step, 0:25, :]))
+    press.put(prepare_data_for_yac(dataset["pfull"][step, 0:25, :]))
+    qvap.put(prepare_data_for_yac(dataset["hus"][step, 0:25, :]))
+    qcond.put(prepare_data_for_yac(dataset["clw"][step, 0:25, :]))
+    vertical_wind.put(prepare_data_for_yac(dataset["wa"][step, 0:26, :]))
+    eastward_wind.put(prepare_data_for_yac(dataset["ua"][step, 0:25, :]))
+    northward_wind.put(prepare_data_for_yac(dataset["va"][step, 0:25, :]))
