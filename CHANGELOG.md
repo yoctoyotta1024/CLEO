@@ -2,6 +2,27 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.21.0](https://github.com/yoctoyotta1024/CLEO/compare/d8908a94f520210b94193916644dceb2d7c1ac76..v0.21.0) - 2024-06-27
+#### Bug Fixes
+- fixed coupling dimension order and added enum labels for indexing - ([1dcb012](https://github.com/yoctoyotta1024/CLEO/commit/1dcb012192b3931db1da5b9dca9fdffcb520d1e9)) - wiltonloch
+- added conversion factor to receive_yac_field to get data in the correct units for CLEO - ([e786de4](https://github.com/yoctoyotta1024/CLEO/commit/e786de4f762f0f08b926a9e08ff2cd461e5fc869)) - wiltonloch
+- added explicit cpp std endl to avoid output srun's multicomponent output suppression - ([16a87b8](https://github.com/yoctoyotta1024/CLEO/commit/16a87b83f34eb7006bf0fe92e20935bb12be9255)) - wiltonloch
+- added more robust comparison for NaN values in the yac coupling - ([b6feaf5](https://github.com/yoctoyotta1024/CLEO/commit/b6feaf502eb7b7426b02d4364e549d55298d906b)) - wiltonloch
+#### Features
+- **(config)** allowing partial boundaries to be defined for the CLEO YAC grid - ([d2bdcb7](https://github.com/yoctoyotta1024/CLEO/commit/d2bdcb748bc91650a63fbf9cc3c3043c1cdb0872)) - wiltonloch
+#### Miscellaneous Chores
+- use cleo project for binary and source directories in cmake - ([33e0a58](https://github.com/yoctoyotta1024/CLEO/commit/33e0a58dc915aa97f2b163e2c97c2fb404a67e80)) - clara.bayley
+- tidy up includes - ([2ec727b](https://github.com/yoctoyotta1024/CLEO/commit/2ec727bc2df4b3617a4fd83a54ccc36c9e7d020c)) - clara.bayley
+- correct includes and formatting - ([d8908a9](https://github.com/yoctoyotta1024/CLEO/commit/d8908a94f520210b94193916644dceb2d7c1ac76)) - clara.bayley
+#### Refactoring
+- renamed subroutine that receives all the fields from YAC - ([976fe21](https://github.com/yoctoyotta1024/CLEO/commit/976fe218dae19267cf806bf4fec85817950813d1)) - wiltonloch
+- changed field and coupling timesteps to match the ones in ICON - ([b1fb996](https://github.com/yoctoyotta1024/CLEO/commit/b1fb996be81fbda84db5de9bf21b1e3c82a99a6b)) - wiltonloch
+- changed python reader script component and grid names to match ICON's - ([eeb3475](https://github.com/yoctoyotta1024/CLEO/commit/eeb3475252176002e26463dd93fb7d65e4cf00e7)) - wiltonloch
+- moved yac calendar and datetime definition from CLEO to the reader python script - ([22efad5](https://github.com/yoctoyotta1024/CLEO/commit/22efad5edbd298355090ad4b8364a51023c2e9d8)) - wiltonloch
+- update method to set library path - ([84c0669](https://github.com/yoctoyotta1024/CLEO/commit/84c06690a55e7d804d6c5c4c79875e0a8e62d5a0)) - clara.bayley
+
+- - -
+
 ## [v0.20.0](https://github.com/yoctoyotta1024/CLEO/compare/8be2d7068d098a9a80c8abfe5b3aa64b86954ee7..v0.20.0) - 2024-06-21
 #### Features
 - add binary dir to cmake for CLEO externs - ([5cb5b52](https://github.com/yoctoyotta1024/CLEO/commit/5cb5b52c984d03ee6bbddfdd933473b2858df388)) - clara.bayley
