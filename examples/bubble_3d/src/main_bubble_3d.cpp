@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: main_yac1.cpp
+ * File: main_bubble_3d.cpp
  * Project: src
  * Created Date: Friday 22nd March 2024
  * Author: Clara Bayley (CB)
@@ -16,9 +16,9 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * runs the CLEO super-droplet model (SDM) for yac_3d example using YAC.
+ * runs the CLEO super-droplet model (SDM) for bubble_3d example using YAC.
  * after make/compiling, execute for example via:
- * ./src/yac1 ../src/config/config.yaml
+ * ./src/bubble_3d ../src/config/config.yaml
  */
 
 #include <Kokkos_Core.hpp>

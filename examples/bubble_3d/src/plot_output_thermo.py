@@ -17,7 +17,7 @@ https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
 Python functions used to make plots of CLEO's thermodynamics output for
-yac_3d example.
+bubble_3d example.
 """
 
 import numpy as np
