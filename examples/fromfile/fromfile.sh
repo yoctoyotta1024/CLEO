@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=yac1
+#SBATCH --job-name=fromfile
 #SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
@@ -8,8 +8,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./yac1_out.%j.out
-#SBATCH --error=./yac1_err.%j.out
+#SBATCH --output=./fromfile_out.%j.out
+#SBATCH --error=./fromfile_err.%j.out
 
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
@@ -19,12 +19,12 @@
 ### ---------------------------------------------------- ###
 buildtype="openmp"
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_yac1/
+path2build=${HOME}/CLEO/build_fromfile/
 enableyac=false
-executables="yac1"
+executables="fromfile"
 
-pythonscript=${path2CLEO}/examples/yac/fromfile/yac1_fromfile.py
-configfile=${path2CLEO}/examples/yac/fromfile/src/config/yac1_fromfile_config.yaml
+pythonscript=${path2CLEO}/examples/fromfile/fromfile.py
+configfile=${path2CLEO}/examples/fromfile/src/config/fromfile_config.yaml
 script_args="${configfile}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: main_yac1.cpp
+ * File: main_fromfile.cpp
  * Project: src
  * Created Date: Friday 22nd March 2024
  * Author: Clara Bayley (CB)
@@ -16,9 +16,9 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * runs the CLEO super-droplet model (SDM) for 3-D setup as control for yac_3d example
+ * runs the CLEO super-droplet model (SDM) for 3-D setup reading data from file
  * after make/compiling, execute for example via:
- * ./src/yac1 ../src/config/config.yaml
+ * ./src/fromfile ../src/config/config.yaml
  */
 
 #include <Kokkos_Core.hpp>

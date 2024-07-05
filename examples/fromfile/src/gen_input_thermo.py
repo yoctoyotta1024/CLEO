@@ -16,7 +16,7 @@ License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
-Python functions used by yac1_fromfile example to make thermo and wind fields
+Python functions used by fromfile example to make thermo and wind fields
 for CLEO to run example with 3-D time-varying thermodynamics.
 """
 

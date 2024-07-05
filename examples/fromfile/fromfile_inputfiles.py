@@ -1,6 +1,6 @@
 """
 ----- CLEO -----
-File: yac1_fromfile_inputfiles.py
+File: fromfile_inputfiles.py
 Project: fromfile
 Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
@@ -15,9 +15,8 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script generates input files for 3D example with time varying
-thermodynamics read from binary files to test that YAC can send
-the data to CLEO correctly.
+Script generates input files for 3D example with time varying thermodynamics
+read from binary files.
 """
 
 import sys
