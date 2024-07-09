@@ -11,7 +11,7 @@
 #SBATCH --output=./bubble3d_out.%j.out
 #SBATCH --error=./bubble3d_err.%j.out
 
-# TODO(all): python script(s) for example and fix MPI linker error
+# TODO(all): complete python script(s) for example (and fix MPI linker error?)
 
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
