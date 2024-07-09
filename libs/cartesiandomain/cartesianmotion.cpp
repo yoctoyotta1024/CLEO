@@ -166,9 +166,10 @@ KOKKOS_FUNCTION unsigned int change_to_backwards_coord3nghbr(const unsigned int 
 
   const auto incre = (unsigned int)1;  // increment
   // drop was at lower z edge of domain (now moving below it)
-  if (beyond_domainboundary(idx, incre, gbxmaps.get_ndim(0))) {
-    beyonddomain_backwards_coord3(gbxmaps, idx, nghbr, drop);
-  }
+  if (nghbr < gbxmaps.get_total_local_gridboxes())
+      if (beyond_domainboundary(idx, incre, gbxmaps.get_ndim(0))) {
+        beyonddomain_backwards_coord3(gbxmaps, idx, nghbr, drop);
+      }
 
   drop.set_sdgbxindex(nghbr);
   return nghbr;  // gbxindex of z backwards (down) neighbour
@@ -184,9 +185,10 @@ KOKKOS_FUNCTION unsigned int change_to_forwards_coord3nghbr(const unsigned int i
 
   const auto incre = (unsigned int)1;  // increment
   // drop was upper z edge of domain (now moving above it)
-  if (beyond_domainboundary(idx + incre, incre, gbxmaps.get_ndim(0))) {
-    beyonddomain_forwards_coord3(gbxmaps, idx, nghbr, drop);
-  }
+  if (nghbr < gbxmaps.get_total_local_gridboxes())
+      if (beyond_domainboundary(idx + incre, incre, gbxmaps.get_ndim(0))) {
+        beyonddomain_forwards_coord3(gbxmaps, idx, nghbr, drop);
+      }
 
   drop.set_sdgbxindex(nghbr);
   return nghbr;  // gbxindex of z forwards (up) neighbour
@@ -203,9 +205,10 @@ KOKKOS_FUNCTION unsigned int change_to_backwards_coord1nghbr(const unsigned int 
   const auto ndims(gbxmaps.get_ndims());
   const auto incre = (unsigned int)ndims(0);  // increment
   // at lower x edge of domain
-  if (beyond_domainboundary(idx, incre, ndims(1))) {
-    beyonddomain_backwards_coord1(gbxmaps, idx, nghbr, drop);
-  }
+  if (nghbr < gbxmaps.get_total_local_gridboxes())
+      if (beyond_domainboundary(idx, incre, ndims(1))) {
+        beyonddomain_backwards_coord1(gbxmaps, idx, nghbr, drop);
+      }
 
   drop.set_sdgbxindex(nghbr);
   return nghbr;  // gbxindex of x backwards (behind) neighbour
@@ -222,9 +225,10 @@ KOKKOS_FUNCTION unsigned int change_to_forwards_coord1nghbr(const unsigned int i
   const auto ndims(gbxmaps.get_ndims());
   const auto incre = (unsigned int)ndims(0);  // increment
   // at lower x edge of domain
-  if (beyond_domainboundary(idx + incre, incre, ndims(1))) {
-    beyonddomain_forwards_coord1(gbxmaps, idx, nghbr, drop);
-  }
+  if (nghbr < gbxmaps.get_total_local_gridboxes())
+      if (beyond_domainboundary(idx + incre, incre, ndims(1))) {
+        beyonddomain_forwards_coord1(gbxmaps, idx, nghbr, drop);
+      }
 
   drop.set_sdgbxindex(nghbr);
   return nghbr;  // gbxindex of x forwards (infront) neighbour
@@ -242,9 +246,10 @@ KOKKOS_FUNCTION unsigned int change_to_backwards_coord2nghbr(const unsigned int 
   const auto incre = (unsigned int)ndims(0) *
                      ndims(1);  // no. gridboxes in z direction * no. gridboxes in x direction
   // at lower y edge of domain
-  if (beyond_domainboundary(idx, incre, ndims(2))) {
-    beyonddomain_backwards_coord2(gbxmaps, idx, nghbr, drop);
-  }
+  if (nghbr < gbxmaps.get_total_local_gridboxes())
+      if (beyond_domainboundary(idx, incre, ndims(2))) {
+        beyonddomain_backwards_coord2(gbxmaps, idx, nghbr, drop);
+      }
 
   drop.set_sdgbxindex(nghbr);
   return nghbr;  // gbxindex of y backwards (left) neighbour
@@ -262,9 +267,10 @@ KOKKOS_FUNCTION unsigned int change_to_forwards_coord2nghbr(const unsigned int i
   const auto incre = (unsigned int)ndims(0) *
                      ndims(1);  // no. gridboxes in z direction * no. gridboxes in x direction
   // at upper y edge of domain
-  if (beyond_domainboundary(idx + incre, incre, ndims(2))) {
-    beyonddomain_forwards_coord2(gbxmaps, idx, nghbr, drop);
-  }
+  if (nghbr < gbxmaps.get_total_local_gridboxes())
+      if (beyond_domainboundary(idx + incre, incre, ndims(2))) {
+        beyonddomain_forwards_coord2(gbxmaps, idx, nghbr, drop);
+      }
 
   drop.set_sdgbxindex(nghbr);
   return nghbr;  // gbxindex of y forwards (right) neighbour
