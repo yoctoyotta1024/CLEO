@@ -84,3 +84,6 @@ jobs:
 
     - name: Build example bubble3D
       run: cd build && make bubble3D
+
+    - name: Build example fromfile
+      run: cd build && make fromfile
