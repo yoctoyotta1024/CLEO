@@ -5,35 +5,15 @@
  * ----- CLEO -----
  * File: predcorrmotion.hpp
  * Project: gridboxes
- * Created Date: Friday 3rd May 2024
- * Author: Clara Bayley (CB)
- * Additional Contributors:
- * -----
- * Last Modified: Friday 21st June 2024
- * Modified By: CB
- * -----
- * License: BSD 3-Clause "New" or "Revised" License
- * https://opensource.org/licenses/BSD-3-Clause
- * -----
- * File Description:
- */
-
-
-/* Copyright (c) 2023 MPI-M, Clara Bayley
- *
- * ----- CLEO -----
- * File: predcorrmotion.hpp
- * Project: gridboxes
  * Created Date: Tuesday 19th December 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 30th December 2023
+ * Last Modified: Tuesday 9th July 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
- * -----
  * -----
  * File Description:
  * Generic struct satisfying Motion concept for

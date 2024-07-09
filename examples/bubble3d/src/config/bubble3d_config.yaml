@@ -1,6 +1,6 @@
 ---
 # ----- CLEO -----
-# File: bubble_3d_config.txt
+# File: bubble3d_config.txt
 # Project: config
 # Created Date: Thursday 18th April 2024
 # Author: Clara Bayley (CB)
@@ -39,17 +39,17 @@ timesteps:
 ### Initialisation Parameters ###
 inputfiles:
   constants_filename : ../libs/cleoconstants.hpp          # name of file for values of physical constants
-  grid_filename : ./share/bubble_3d_dimlessGBxboundaries.dat   # binary filename for initialisation of GBxs / GbxMaps
+  grid_filename : ./share/bubble3d_dimlessGBxboundaries.dat   # binary filename for initialisation of GBxs / GbxMaps
 
 initsupers:
   type: frombinary                                        # type of initialisation of super-droplets
-  initsupers_filename : ./share/bubble_3d_dimlessSDsinit.dat   # binary filename for initialisation of SDs
+  initsupers_filename : ./share/bubble3d_dimlessSDsinit.dat   # binary filename for initialisation of SDs
 
 ### Output Parameters ###
 outputdata:
-  setup_filename : ./bin/bubble_3d_setup.txt                   # .txt filename to copy configuration to
-  stats_filename : ./bin/bubble_3d_stats.txt                   # .txt file to output runtime statistics to
-  zarrbasedir : ./bin/bubble_3d_sol.zarr                       # zarr store base directory
+  setup_filename : ./bin/bubble3d_setup.txt                   # .txt filename to copy configuration to
+  stats_filename : ./bin/bubble3d_stats.txt                   # .txt file to output runtime statistics to
+  zarrbasedir : ./bin/bubble3d_sol.zarr                       # zarr store base directory
   maxchunk : 2500000                                      # maximum no. of elements in chunks of zarr store array
 
 coupled_dynamics:

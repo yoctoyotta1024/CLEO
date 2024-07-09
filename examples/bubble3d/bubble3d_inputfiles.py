@@ -3,8 +3,8 @@ Copyright (c) 2024 MPI-M, Clara Bayley
 
 
 ----- CLEO -----
-File: fromfile_inputfiles.py
-Project: fromfile
+File: bubble3d_inputfiles.py
+Project: bubble3d
 Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
@@ -16,20 +16,19 @@ License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
-Script generates input files for 3D example with time varying thermodynamics
-read from binary files.
+Script generates input files for 3D example with time varying
+thermodynamics read from ICON output of bubble test case by YAC
 """
 
 import sys
 
 
-def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofile):
+def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, SDgbxs2plt):
     import numpy as np
     import matplotlib.pyplot as plt
 
     sys.path.append(path2CLEO)  # for imports from pySD package
 
-    from src import gen_input_thermo
     from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
     from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
     from pySD.initsuperdropsbinary_src import (
@@ -40,8 +39,7 @@ def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofile):
         attrsgen,
     )
     from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
-    from pySD.thermobinary_src import create_thermodynamics as cthermo
-    from pySD.thermobinary_src import read_thermodynamics as rthermo
+    from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
 
     ### ---------------------------------------------------------------- ###
     ### ----------------------- INPUT PARAMETERS ----------------------- ###
@@ -69,17 +67,6 @@ def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofile):
     dryr_sf = 1.0  # scale factor for dry radii [m]
     numconc = 5e8  # total no. conc of real droplets [m^-3]
     randcoord = False  # sample SD spatial coordinates randomly or not
-
-    ### --- settings for 2D Thermodynamics --- ###
-    PRESSz0 = 101500  # [Pa]
-    TEMPz0 = 300  # [K]
-    qvapz0 = 0.05  # [Kg/Kg]
-    qcondz0 = 0.001  # [Kg/Kg]
-    WMAX = 1.5  # [m/s]
-    Zlength = 1500  # [m]
-    Xlength = 1500  # [m]
-    VMAX = 1.0  # [m/s]
-    Ylength = 300  # [m]
     ### ---------------------------------------------------------------- ###
     ### ---------------------------------------------------------------- ###
 
@@ -92,14 +79,6 @@ def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofile):
     ### ----- write gridbox boundaries binary ----- ###
     cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
     rgrid.print_domain_info(constsfile, gridfile)
-
-    ### ----- write thermodynamics binaries ----- ###
-    thermodyngen = gen_input_thermo.TimeVarying3DThermo(
-        PRESSz0, TEMPz0, qvapz0, qcondz0, WMAX, Zlength, Xlength, VMAX, Ylength
-    )
-    cthermo.write_thermodynamics_binary(
-        thermofile, thermodyngen, configfile, constsfile, gridfile
-    )
 
     ### ----- write initial superdroplets binary ----- ###
     nsupers = crdgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
@@ -120,8 +99,14 @@ def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofile):
     ### ----- show (and save) plots of binary file data ----- ###
     if isfigures[0]:
         rgrid.plot_gridboxboundaries(constsfile, gridfile, savefigpath, isfigures[1])
-        rthermo.plot_thermodynamics(
-            constsfile, configfile, gridfile, thermofile, savefigpath, isfigures[1]
+        rsupers.plot_initGBxs_distribs(
+            configfile,
+            constsfile,
+            initSDsfile,
+            gridfile,
+            savefigpath,
+            isfigures[1],
+            SDgbxs2plt,
         )
         plt.close()
     ### ---------------------------------------------------------------- ###

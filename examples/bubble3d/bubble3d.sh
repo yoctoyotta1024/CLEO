@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=bubble_3d
+#SBATCH --job-name=bubble3d
 #SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
@@ -8,10 +8,10 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./bubble_3d_out.%j.out
-#SBATCH --error=./bubble_3d_err.%j.out
+#SBATCH --output=./bubble3d_out.%j.out
+#SBATCH --error=./bubble3d_err.%j.out
 
-# TODO(all): python script(s) for example and fix MPI linker error
+# TODO(all): complete python script(s) for example (and fix MPI linker error?)
 
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
@@ -23,10 +23,10 @@ buildtype="openmp"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_bubble3d/
 enableyac=true
-executables="bubble_3d"
+executables="bubble3D"
 
-pythonscript=${path2CLEO}/examples/bubble_3d/bubble_3d_fromfile.py
-configfile=${path2CLEO}/examples/bubble_3d/src/config/bubble_3d_config.yaml
+pythonscript=${path2CLEO}/examples/bubble3d/bubble3d.py
+configfile=${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml
 script_args="${configfile}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
