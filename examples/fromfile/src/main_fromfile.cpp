@@ -27,6 +27,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <string_view>
+#include "mpi.h"
 
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"
@@ -142,6 +143,8 @@ int main(int argc, char *argv[]) {
     throw std::invalid_argument("configuration file(s) not specified");
   }
 
+  MPI_Init(&argc, &argv);
+
   Kokkos::Timer kokkostimer;
 
   /* Read input parameters from configuration file(s) */
@@ -177,6 +180,8 @@ int main(int argc, char *argv[]) {
 
   const auto ttot = double{kokkostimer.seconds()};
   std::cout << "-----\n Total Program Duration: " << ttot << "s \n-----\n";
+
+  MPI_Finalize();
 
   return 0;
 }
