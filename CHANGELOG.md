@@ -2,6 +2,32 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.22.0](https://github.com/yoctoyotta1024/CLEO/compare/e80b45263ba73cbf0f933714d45bea13d35dd487..v0.22.0) - 2024-07-09
+#### Continuous Integration
+- removing now inexistent yac examples - ([be38da0](https://github.com/yoctoyotta1024/CLEO/commit/be38da091294569f5ee2e2810f8be926a4576b76)) - wiltonloch
+#### Features
+- files created for running bubble3d example through python scripts like for other examples - ([15aff21](https://github.com/yoctoyotta1024/CLEO/commit/15aff211e90112d95de69b71b5f43689f0314a32)) - clara.bayley
+#### Miscellaneous Chores
+- restore fromfile example's CMakeLists.txt - ([96e3dd0](https://github.com/yoctoyotta1024/CLEO/commit/96e3dd0f5666d98c08767a71a0feaf4d1925f3b9)) - clara.bayley
+- restore fromfile example - ([0cd1722](https://github.com/yoctoyotta1024/CLEO/commit/0cd17222e8c85b2236056042f5f8e8c15351b7bc)) - clara.bayley
+- update todo note - ([9ebee4d](https://github.com/yoctoyotta1024/CLEO/commit/9ebee4d45edac8c916016727d8bbf595725c4a8e)) - clara.bayley
+- rename file for consistency - ([2fe57d6](https://github.com/yoctoyotta1024/CLEO/commit/2fe57d65a94e92baaed9a6b391a4aa9564613862)) - clara.bayley
+- delete unused files - ([ebe4583](https://github.com/yoctoyotta1024/CLEO/commit/ebe4583ee8faff13ff966a8a491810daa24e3a83)) - clara.bayley
+- format header - ([7f33833](https://github.com/yoctoyotta1024/CLEO/commit/7f33833e7f0df6173d0c380e7c78ca1797c204df)) - clara.bayley
+- format header - ([f566239](https://github.com/yoctoyotta1024/CLEO/commit/f566239aaa6a00d4179d74383ae313b80155f38b)) - clara.bayley
+- delete already deleted subdir from cmake - ([cdd81bc](https://github.com/yoctoyotta1024/CLEO/commit/cdd81bc70d681485611459a6a25229c74982f7d7)) - clara.bayley
+- rename executable to be consistent with other examples - ([7d10046](https://github.com/yoctoyotta1024/CLEO/commit/7d1004679fb419da7b4cc505d7a0c2cd8bc53a00)) - clara.bayley
+- rename bubble_3d to bubble3d to be consistent with other examples - ([026e9d2](https://github.com/yoctoyotta1024/CLEO/commit/026e9d2e2cec7682a3d6797828b6d7ef0c8aedf5)) - clara.bayley
+- simplified yac example folder and renamed it to bubble_3d - ([8dc0692](https://github.com/yoctoyotta1024/CLEO/commit/8dc069248316a8ea3a727d25c0cce8a6a11055e6)) - wiltonloch
+- removed all yac mentions in the fromfile example - ([8677e3c](https://github.com/yoctoyotta1024/CLEO/commit/8677e3c565d27bf5022a95b0e4f971f3edfc8371)) - wiltonloch
+- moved fromfile example from inside yac to dedicated example folder - ([5198220](https://github.com/yoctoyotta1024/CLEO/commit/5198220f1b47ebf747490d1dd9d458532ef9828a)) - wiltonloch
+- removed yac divfreemotion stale example - ([e80b452](https://github.com/yoctoyotta1024/CLEO/commit/e80b45263ba73cbf0f933714d45bea13d35dd487)) - wiltonloch
+#### Refactoring
+- add fromfile to CI builds - ([0fb1168](https://github.com/yoctoyotta1024/CLEO/commit/0fb11680293af85a5b91a32f17b5c70326230fba)) - clara.bayley
+- delete unwanted example of fromfile 3d dynamics - ([ea9176d](https://github.com/yoctoyotta1024/CLEO/commit/ea9176dd40f75648bfec941d47d49356f3927bb0)) - clara.bayley
+
+- - -
+
 ## [v0.21.0](https://github.com/yoctoyotta1024/CLEO/compare/d8908a94f520210b94193916644dceb2d7c1ac76..v0.21.0) - 2024-06-27
 #### Bug Fixes
 - fixed coupling dimension order and added enum labels for indexing - ([1dcb012](https://github.com/yoctoyotta1024/CLEO/commit/1dcb012192b3931db1da5b9dca9fdffcb520d1e9)) - wiltonloch
