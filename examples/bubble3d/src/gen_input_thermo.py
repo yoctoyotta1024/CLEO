@@ -5,6 +5,27 @@ Copyright (c) 2024 MPI-M, Clara Bayley
 ----- CLEO -----
 File: gen_input_thermo.py
 Project: src
+Created Date: Tuesday 9th July 2024
+Author: Clara Bayley (CB)
+Additional Contributors:
+-----
+Last Modified: Tuesday 9th July 2024
+Modified By: CB
+-----
+License: BSD 3-Clause "New" or "Revised" License
+https://opensource.org/licenses/BSD-3-Clause
+-----
+File Description:
+"""
+
+
+"""
+Copyright (c) 2024 MPI-M, Clara Bayley
+
+
+----- CLEO -----
+File: gen_input_thermo.py
+Project: src
 Created Date: Monday 25th March 2024
 Author: Clara Bayley (CB)
 Additional Contributors:
@@ -16,7 +37,7 @@ License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
-Python functions used by bubble_3d example to make thermo and wind fields
+Python functions used by bubble3d example to make thermo and wind fields
 for CLEO to run example with 3-D time-varying thermodynamics.
 """
 
