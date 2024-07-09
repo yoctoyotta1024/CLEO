@@ -41,24 +41,23 @@ else
   module load ${gcc} ${openmpi} ${netcdf}
   spack load ${pycython}
 
-  # ### --------------------- install YAXT ------------------- ###
-  # cd ${root4YAC} && pwd
-  # curl -s -L ${yaxt_source} | tar xvz
-  # cd ${yaxt_version}
-  # ./configure \
-  #   CC=${CC} FC=${FC} \
-  #   CFLAGS="-O0 -g -Wall -fPIC" \
-  #   FCFLAGS="-O0 -g -Wall -cpp -fimplicit-none" \
-  #   --without-regard-for-quality \
-  #   --without-example-programs \
-  #   --without-perf-programs \
-  #   --with-pic \
-  #   --prefix=${root4YAC}/yaxt
-  # make -j 8
-  # make install
-  # # TODO(CB): see if you can still delete yaxt source
-  # # cd ${root4YAC} && rm -rf ${yaxt_version}
-  # ### ------------------------------------------------------ ###
+  ### --------------------- install YAXT ------------------- ###
+  cd ${root4YAC} && pwd
+  curl -s -L ${yaxt_source} | tar xvz
+  cd ${yaxt_version}
+  ./configure \
+    CC=${CC} FC=${FC} \
+    CFLAGS="-O0 -g -Wall -fPIC" \
+    FCFLAGS="-O0 -g -Wall -cpp -fimplicit-none" \
+    --without-regard-for-quality \
+    --without-example-programs \
+    --without-perf-programs \
+    --with-pic \
+    --prefix=${root4YAC}/yaxt
+  make -j 8
+  make install
+  cd ${root4YAC} && rm -rf ${yaxt_version}
+  ### ------------------------------------------------------ ###
 
   ## --------------------- install YAC -------------------- ###
   # python bindings made in yac_version directory (note this is not yac directory!)
