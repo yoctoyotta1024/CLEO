@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=yac_3d
+#SBATCH --job-name=fromfile
 #SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
@@ -8,10 +8,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./yac_3d_out.%j.out
-#SBATCH --error=./yac_3d_err.%j.out
-
-# TODO(all): python script(s) for example and fix MPI linker error
+#SBATCH --output=./fromfile_out.%j.out
+#SBATCH --error=./fromfile_err.%j.out
 
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
@@ -21,12 +19,12 @@
 ### ---------------------------------------------------- ###
 buildtype="openmp"
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_yac3d/
-enableyac=true
-executables="yac_3d"
+path2build=${HOME}/CLEO/build_fromfile/
+enableyac=false
+executables="fromfile"
 
-pythonscript=${path2CLEO}/examples/yac/yac_3d/yac_3d_fromfile.py
-configfile=${path2CLEO}/examples/yac/yac_3d/src/config/yac1_fromfile_config.yaml
+pythonscript=${path2CLEO}/examples/fromfile/fromfile.py
+configfile=${path2CLEO}/examples/fromfile/src/config/fromfile_config.yaml
 script_args="${configfile}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

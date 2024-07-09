@@ -82,11 +82,5 @@ jobs:
     - name: Build example spdtest
       run: cd build && make spdtest
 
-    - name: Build example divfree2D_yac
-      run: cd build && make divfree2D_yac
-
-    - name: Build example yac1
-      run: cd build && make yac1
-
-    - name: Build example yac_3d
-      run: cd build && make yac_3d
+    - name: Build example bubble_3d
+      run: cd build && make bubble_3d

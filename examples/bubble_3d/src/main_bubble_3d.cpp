@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: main_yac1.cpp
+ * File: main_bubble_3d.cpp
  * Project: src
  * Created Date: Friday 22nd March 2024
  * Author: Clara Bayley (CB)
@@ -16,9 +16,9 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * runs the CLEO super-droplet model (SDM) for 3-D setup as control for yac_3d example
+ * runs the CLEO super-droplet model (SDM) for bubble_3d example using YAC.
  * after make/compiling, execute for example via:
- * ./src/yac1 ../src/config/config.yaml
+ * ./src/bubble_3d ../src/config/config.yaml
  */
 
 #include <Kokkos_Core.hpp>
@@ -32,8 +32,8 @@
 #include "cartesiandomain/cartesianmotion.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
 #include "cartesiandomain/null_boundary_conditions.hpp"
-#include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
-#include "coupldyn_fromfile/fromfilecomms.hpp"
+#include "coupldyn_yac/yac_cartesian_dynamics.hpp"
+#include "coupldyn_yac/yac_comms.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "initialise/config.hpp"
 #include "initialise/init_all_supers_from_binary.hpp"
@@ -63,7 +63,7 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
 
   const auto nsteps = (unsigned int)(std::ceil(t_end / couplstep) + 1);
 
-  return FromFileDynamics(config.get_fromfiledynamics(), couplstep, ndims, nsteps);
+  return YacDynamics(config, couplstep, ndims, nsteps);
 }
 
 inline InitialConditions auto create_initconds(const Config &config) {
@@ -167,7 +167,7 @@ int main(int argc, char *argv[]) {
         create_coupldyn(config, sdm.gbxmaps, tsteps.get_couplstep(), tsteps.get_t_end()));
 
     /* coupling between coupldyn and SDM */
-    const CouplingComms<FromFileDynamics> auto comms = FromFileComms{};
+    const CouplingComms<YacDynamics> auto comms = YacComms{};
 
     /* Run CLEO (SDM coupled to dynamics solver) */
     const RunCLEO runcleo(sdm, coupldyn, comms);

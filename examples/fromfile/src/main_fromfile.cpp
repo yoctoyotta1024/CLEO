@@ -3,9 +3,9 @@
  *
  *
  * ----- CLEO -----
- * File: main_divfree2D.cpp
+ * File: main_fromfile.cpp
  * Project: src
- * Created Date: Monday 8th April 2024
+ * Created Date: Friday 22nd March 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
@@ -16,9 +16,9 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * runs the CLEO super-droplet model (SDM) for divergence free motion example using YAC.
+ * runs the CLEO super-droplet model (SDM) for 3-D setup reading data from file
  * after make/compiling, execute for example via:
- * ./src/divfree2D_yac ../src/config/config.yaml
+ * ./src/fromfile ../src/config/config.yaml
  */
 
 #include <Kokkos_Core.hpp>
@@ -32,8 +32,8 @@
 #include "cartesiandomain/cartesianmotion.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
 #include "cartesiandomain/null_boundary_conditions.hpp"
-#include "coupldyn_yac/yac_cartesian_dynamics.hpp"
-#include "coupldyn_yac/yac_comms.hpp"
+#include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
+#include "coupldyn_fromfile/fromfilecomms.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "initialise/config.hpp"
 #include "initialise/init_all_supers_from_binary.hpp"
@@ -42,6 +42,7 @@
 #include "initialise/timesteps.hpp"
 #include "observers/gbxindex_observer.hpp"
 #include "observers/observers.hpp"
+#include "observers/state_observer.hpp"
 #include "observers/streamout_observer.hpp"
 #include "observers/superdrops_observer.hpp"
 #include "observers/time_observer.hpp"
@@ -62,7 +63,7 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
 
   const auto nsteps = (unsigned int)(std::ceil(t_end / couplstep) + 1);
 
-  return YacDynamics(config, couplstep, ndims, nsteps);
+  return FromFileDynamics(config.get_fromfiledynamics(), couplstep, ndims, nsteps);
 }
 
 inline InitialConditions auto create_initconds(const Config &config) {
@@ -97,12 +98,12 @@ template <typename Store>
 inline Observer auto create_superdrops_observer(const unsigned int interval,
                                                 Dataset<Store> &dataset, const int maxchunk) {
   CollectDataForDataset<Store> auto sdid = CollectSdId(dataset, maxchunk);
-  CollectDataForDataset<Store> auto sdgbxindex = CollectSdgbxindex(dataset, maxchunk);
   CollectDataForDataset<Store> auto coord3 = CollectCoord3(dataset, maxchunk);
   CollectDataForDataset<Store> auto coord1 = CollectCoord1(dataset, maxchunk);
+  CollectDataForDataset<Store> auto coord2 = CollectCoord2(dataset, maxchunk);
 
-  const auto collect_sddata = coord1 >> coord3 >> sdgbxindex >> sdid;
-  return SuperdropsObserver(interval, dataset, maxchunk, collect_sddata);
+  const auto collect_data = coord2 >> coord1 >> coord3 >> sdid;
+  return SuperdropsObserver(interval, dataset, maxchunk, collect_data);
 }
 
 template <typename Store>
@@ -110,14 +111,19 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
                                      Dataset<Store> &dataset) {
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
+  const auto ngbxs = config.get_ngbxs();
 
   const Observer auto obs0 = StreamOutObserver(obsstep, &step2realtime);
 
   const Observer auto obs1 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
 
+  const Observer auto obs2 = GbxindexObserver(dataset, maxchunk, ngbxs);
+
+  const Observer auto obs3 = StateObserver(obsstep, dataset, maxchunk, ngbxs);
+
   const Observer auto obssd = create_superdrops_observer(obsstep, dataset, maxchunk);
 
-  return obssd >> obs1 >> obs0;
+  return obssd >> obs3 >> obs2 >> obs1 >> obs0;
 }
 
 template <typename Store>
@@ -161,7 +167,7 @@ int main(int argc, char *argv[]) {
         create_coupldyn(config, sdm.gbxmaps, tsteps.get_couplstep(), tsteps.get_t_end()));
 
     /* coupling between coupldyn and SDM */
-    const CouplingComms<YacDynamics> auto comms = YacComms{};
+    const CouplingComms<FromFileDynamics> auto comms = FromFileComms{};
 
     /* Run CLEO (SDM coupled to dynamics solver) */
     const RunCLEO runcleo(sdm, coupldyn, comms);

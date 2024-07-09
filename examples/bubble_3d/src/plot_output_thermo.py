@@ -17,7 +17,7 @@ https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
 Python functions used to make plots of CLEO's thermodynamics output for
-yac1_fromfile example.
+bubble_3d example.
 """
 
 import numpy as np
@@ -58,7 +58,7 @@ def plot_domain_thermodynamics_timeseries(time, gbxs, thermo, winds, savedir):
     for key in labels.keys():
         try:
             data4d = thermo[key]
-        except ValueError:
+        except KeyError:
             data4d = winds[key]
 
         plot_timeseries_domain_slices(
