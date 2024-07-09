@@ -85,3 +85,16 @@ else
   # cd ${root4YAC} && mv ${yac_version}/python ${root4YAC}/yac/ && rm -rf ${yac_version}
   ### ------------------------------------------------------ ###
 fi
+
+
+# ./configure CC=/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpicc \
+#   FC=/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpif90 \
+#   CFLAGS="-O0 -g -Wall -fPIC" FCFLAGS="-O0 -g -Wall -cpp -fimplicit-none" \
+#   LDFLAGS="-lm" \
+#   --disable-mpi-checks \
+#   --with-yaxt-root=/work/mh1126/m300950/yac/yaxt \
+#   --with-netcdf-root=/sw/spack-levante/netcdf-c-4.8.1-6qheqr \
+#   --with-fyaml-root=/sw/spack-levante/libfyaml-0.7.12-fvbhgo \
+#   --enable-rpaths  \
+#   --enable-python-bindings \
+#   --prefix=/work/mh1126/m300950/yac/yac
