@@ -83,5 +83,5 @@ When you want to run CLEO with YAC, you will also need to export some additional
 .. code-block:: console
 
   $ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/sw/spack-levante/libfyaml-0.7.12-fvbhgo/lib
-  $ export PYTHONPATH=/your/path/to/yac/python/
+  $ export PYTHONPATH=${PYTHONPATH}:/your/path/to/yac/python/
   $ spack load py-numpy

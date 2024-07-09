@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=installyac
+#SBATCH --job-name=install_yac
 #SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
@@ -8,8 +8,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./build/bin/installyac_out.%j.out
-#SBATCH --error=./build/bin/installyac_err.%j.out
+#SBATCH --output=./build/bin/install_yac_out.%j.out
+#SBATCH --error=./build/bin/install_yac_err.%j.out
 
 ### ------------------------------------------------------- ###
 ### running script sucessfully installs YAC and YAXT for
@@ -21,17 +21,15 @@ root4YAC=$1 # absolute path for YAC and YAXT installations
 yaxt_source=https://swprojects.dkrz.de/redmine/attachments/download/534/yaxt-0.11.1.tar.gz
 yaxt_version=yaxt-0.11.1 # must match yaxt_source
 
-yac_source=https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/v3.2.0_b_p1/yac-v3.2.0_b_p1.tar.gz
-yac_version=yac-v3.2.0_b_p1 # must match yac_source
+yac_source=https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/v3.2.0/yac-v3.2.0.tar.gz
+yac_version=yac-v3.2.0 # must match yac_source
 
 gcc=gcc/11.2.0-gcc-11.2.0
 openmpi=openmpi/4.1.2-gcc-11.2.0
-hdf5=hdf5/1.12.1-openmpi-4.1.2-gcc-11.2.0
-inteloneapi=intel-oneapi-mkl/2022.0.1-gcc-11.2.0
 netcdf=netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0 # must match gcc and openmpi
 netcdf_root=/sw/spack-levante/netcdf-c-4.8.1-6qheqr # must match with `module show ${netcdf}`
-fyaml=libfyaml
 fyaml_root=/sw/spack-levante/libfyaml-0.7.12-fvbhgo # must match with `spack location -i libfyaml``
+pycython=py-cython@0.29.33%gcc@=11.2.0/j7b4fa
 
 CC=/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpicc # must match gcc
 FC=/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpif90 # must match gcc
