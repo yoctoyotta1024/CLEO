@@ -59,6 +59,7 @@ struct CartesianMaps {
   kokkos_uintmap to_forward_coord2nghbr;
 
   /* additional gridbox / domain information */
+  unsigned int total_local_gridboxes;
   kokkos_dblmaph to_area;    // map from gbxindex to horizontal (x-y planar) area of gridbox on host
   kokkos_dblmaph to_volume;  // map from gbxindex to volume of gridbox on host
   viewd_ndims ndims;  // dimensions (ie. no. gridboxes) in [coord3, coord1, coord2] directions
@@ -78,6 +79,7 @@ struct CartesianMaps {
         to_forward_coord1nghbr(kokkos_uintmap(ngbxs)),
         to_back_coord2nghbr(kokkos_uintmap(ngbxs)),
         to_forward_coord2nghbr(kokkos_uintmap(ngbxs)),
+        total_local_gridboxes(ngbxs),
         to_area(kokkos_dblmaph(ngbxs)),
         to_volume(kokkos_dblmaph(ngbxs)),
         ndims("ndims") {}
@@ -168,6 +170,14 @@ struct CartesianMaps {
   void set_ndims_via_copy(const viewd_ndims::HostMirror h_ndims) {
     Kokkos::deep_copy(ndims, h_ndims);
   }
+
+  KOKKOS_INLINE_FUNCTION
+  void set_total_local_gridboxes(const unsigned int total_local_gridboxes) {
+        this->total_local_gridboxes = total_local_gridboxes;
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  unsigned int get_total_local_gridboxes() const { return total_local_gridboxes; }
 
   /* on host device, throws error if maps are not all
   the same size, else returns size of maps */
