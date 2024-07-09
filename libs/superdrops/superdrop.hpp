@@ -289,6 +289,40 @@ class Superdrop {
     coord1 += delta1;
     coord2 += delta2;
   }
+
+  KOKKOS_INLINE_FUNCTION
+  void serialize_double_components(std::vector<double>::iterator target) const {
+    *target++ = coord3;
+    *target++ = coord1;
+    *target++ = coord2;
+    *target++ = attrs.radius;
+    *target   = attrs.msol;
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  void serialize_uint_components(std::vector<unsigned int>::iterator target) {
+    *target = sdgbxindex;
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  void serialize_uint64_components(std::vector<uint64_t>::iterator target) {
+    *target = attrs.xi;
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  void deserialize_components(std::vector<unsigned int>::iterator uint_source,
+                              std::vector<uint64_t>::iterator uint64_source,
+                              std::vector<double>::iterator double_source) {
+    sdgbxindex   = *uint_source;
+
+    attrs.xi     = *uint64_source;
+
+    coord3       = *double_source++;
+    coord1       = *double_source++;
+    coord2       = *double_source++;
+    attrs.radius = *double_source++;
+    attrs.msol   = *double_source;
+  }
 };
 
 #endif  // LIBS_SUPERDROPS_SUPERDROP_HPP_
