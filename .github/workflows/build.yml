@@ -82,5 +82,5 @@ jobs:
     - name: Build example spdtest
       run: cd build && make spdtest
 
-    - name: Build example bubble_3d
-      run: cd build && make bubble_3d
+    - name: Build example bubble3D
+      run: cd build && make bubble3D

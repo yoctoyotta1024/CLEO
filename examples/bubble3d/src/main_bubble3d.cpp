@@ -18,7 +18,7 @@
  * File Description:
  * runs the CLEO super-droplet model (SDM) for bubble3d example using YAC.
  * after make/compiling, execute for example via:
- * ./src/bubble_3d ../src/config/config.yaml
+ * ./src/bubble3D ../src/config/config.yaml
  */
 
 #include <Kokkos_Core.hpp>
