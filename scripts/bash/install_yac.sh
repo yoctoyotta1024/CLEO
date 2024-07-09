@@ -38,28 +38,30 @@ if [ "${root4YAC}" == "" ]
 then
   echo "Bad input, please specify absolute path for where you want to install YAC"
 else
-  module load ${gcc} ${openmpi} ${netcdf} ${hdf5} ${inteloneapi}
-  spack load ${fyaml}
+  module load ${gcc} ${openmpi} ${netcdf}
+  spack load ${pycython}
 
-  ### --------------------- install YAXT ------------------- ###
-  cd ${root4YAC} && pwd
-  curl -s -L ${yaxt_source} | tar xvz
-  cd ${yaxt_version}
-  ./configure \
-    CC=${CC} FC=${FC} \
-    CFLAGS="-O0 -g -Wall -fPIC" \
-    FCFLAGS="-O0 -g -Wall -cpp -fimplicit-none" \
-    --without-regard-for-quality \
-    --without-example-programs \
-    --without-perf-programs \
-    --with-pic \
-    --prefix=${root4YAC}/yaxt
-  make -j 8
-  make install
-  cd ${root4YAC} && rm -rf ${yaxt_version}
-  ### ------------------------------------------------------ ###
+  # ### --------------------- install YAXT ------------------- ###
+  # cd ${root4YAC} && pwd
+  # curl -s -L ${yaxt_source} | tar xvz
+  # cd ${yaxt_version}
+  # ./configure \
+  #   CC=${CC} FC=${FC} \
+  #   CFLAGS="-O0 -g -Wall -fPIC" \
+  #   FCFLAGS="-O0 -g -Wall -cpp -fimplicit-none" \
+  #   --without-regard-for-quality \
+  #   --without-example-programs \
+  #   --without-perf-programs \
+  #   --with-pic \
+  #   --prefix=${root4YAC}/yaxt
+  # make -j 8
+  # make install
+  # # TODO(CB): see if you can still delete yaxt source
+  # # cd ${root4YAC} && rm -rf ${yaxt_version}
+  # ### ------------------------------------------------------ ###
 
   ## --------------------- install YAC -------------------- ###
+  # python bindings made in yac_version directory (note this is not yac directory!)
   cd ${root4YAC} && pwd
   curl -s -L ${yac_source} | tar xvz
   cd ${yac_version}
@@ -75,9 +77,11 @@ else
     --with-netcdf-root=${netcdf_root} \
     --with-fyaml-root=${fyaml_root} \
     --enable-rpaths \
+    --enable-python-bindings \
     --prefix=${root4YAC}/yac
   make -j 8
   make install
-  cd ${root4YAC} && rm -rf ${yac_version}
-### ------------------------------------------------------ ###
+  # TODO(CB): see if moving python bindings to directory of yac installation works
+  # cd ${root4YAC} && mv ${yac_version}/python ${root4YAC}/yac/ && rm -rf ${yac_version}
+  ### ------------------------------------------------------ ###
 fi
