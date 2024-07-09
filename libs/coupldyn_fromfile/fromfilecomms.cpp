@@ -20,6 +20,7 @@
  */
 
 #include "coupldyn_fromfile/fromfilecomms.hpp"
+#include "mpi.h"
 
 /* update Gridboxes' states using information received
 from FromFileDynamics solver for 1-way coupling to CLEO SDM.
@@ -29,10 +30,14 @@ when in serial */
 template <typename CD>
 void FromFileComms::receive_dynamics(const FromFileDynamics &ffdyn, const viewh_gbx h_gbxs) const {
   const size_t ngbxs(h_gbxs.extent(0));
+  int my_rank;
+
+  MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+  int global_offset = my_rank * ngbxs;
 
   Kokkos::parallel_for(
       "receive_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
-      [=, *this](const size_t ii) { update_gridbox_state(ffdyn, ii, h_gbxs(ii)); });
+      [=, *this](const size_t ii) { update_gridbox_state(ffdyn, global_offset + ii, h_gbxs(ii)); });
 }
 
 /* updates the state of a gridbox using information
