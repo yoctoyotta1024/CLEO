@@ -66,9 +66,5 @@ export OMP_PROC_BIND=spread
 export OMP_PLACES=threads
 
 # TODO(all): add exports to paths required if YAC is enabled
-# module load openmpi/4.1.2-gcc-11.2.0
-# export PYTHONPATH=/work/ka1298/k202167/remotes/cleo/new/yaxt_yac_installations/yac-v3.2.0/python
-# export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/sw/spack-levante/libfyaml-0.7.12-fvbhgo/lib
-# spack load py-netcdf4
 ${python} ${pythonscript} ${path2CLEO} ${path2build} ${script_args}
 ### ---------------------------------------------------- ###
