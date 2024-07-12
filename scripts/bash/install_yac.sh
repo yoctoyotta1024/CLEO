@@ -38,6 +38,7 @@ if [ "${root4YAC}" == "" ]
 then
   echo "Bad input, please specify absolute path for where you want to install YAC"
 else
+set -x
   module load ${gcc} ${openmpi} ${netcdf}
   spack load ${pycython}
 
@@ -83,6 +84,7 @@ else
   # TODO(CB): see if moving python bindings to directory of yac installation works
   # cd ${root4YAC} && mv ${yac_version}/python ${root4YAC}/yac/ && rm -rf ${yac_version}
   ### ------------------------------------------------------ ###
+set +x
 fi
 
 
