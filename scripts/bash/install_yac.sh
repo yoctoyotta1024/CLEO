@@ -69,8 +69,6 @@ set -x
     CC=${CC} FC=${FC} \
     CFLAGS="-O0 -g -Wall -fPIC" \
     FCFLAGS="-O0 -g -Wall -cpp -fimplicit-none" \
-    MKL_CLIBS="`pkg-config --libs mkl-static-lp64-seq`" \
-    MKL_CFLAGS="`pkg-config --cflags mkl-static-lp64-seq`" \
     LDFLAGS="-lm" \
     --disable-mpi-checks \
     --with-yaxt-root=${root4YAC}/yaxt \
