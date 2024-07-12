@@ -67,6 +67,16 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
   return FromFileDynamics(config.get_fromfiledynamics(), couplstep, ndims, nsteps);
 }
 
+inline unsigned int calculate_gridboxes_per_process(unsigned int total_gridboxes) {
+  int comm_size;
+  unsigned int gridboxes_per_process;
+
+  MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
+  gridboxes_per_process = total_gridboxes / comm_size;
+
+  return gridboxes_per_process;
+}
+
 inline InitialConditions auto create_initconds(const Config &config) {
   const InitAllSupersFromBinary initsupers(config.get_initsupersfrombinary());
   const InitGbxsNull initgbxs(config.get_ngbxs());
