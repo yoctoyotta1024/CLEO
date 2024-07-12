@@ -220,6 +220,26 @@ void set_2Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
   }
 }
 
+kkpair_size_t correct_neighbor_indices(kkpair_size_t neighbours,
+                                       const unsigned int total_local_gridboxes,
+                                       unsigned int gridboxes_slice_start,
+                                       unsigned int gridboxes_slice_end) {
+  // If the neighbour index is not local sum total_local_gridboxes so that it
+  // can be identified later If the neighbour index is local convert it to a
+  // local index by subtracting gridboxes_slice_start
+  if (neighbours.first < gridboxes_slice_start || neighbours.first >= gridboxes_slice_end)
+    neighbours.first += total_local_gridboxes;
+  else
+    neighbours.first -= gridboxes_slice_start;
+
+  if (neighbours.second < gridboxes_slice_start || neighbours.second >= gridboxes_slice_end)
+    neighbours.second += total_local_gridboxes;
+  else
+    neighbours.second -= gridboxes_slice_start;
+
+  return neighbours;
+}
+
 /* Sets all coord[X]bounds maps (for X = x, y, z)
 using gfb data as well as back and forward neighbours
 maps assuming periodic or finite boundary conditions
