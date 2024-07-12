@@ -37,7 +37,7 @@
 #include "coupldyn_fromfile/fromfilecomms.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "initialise/config.hpp"
-#include "initialise/init_all_supers_from_binary.hpp"
+#include "initialise/init_supers_from_binary.hpp"
 #include "initialise/initgbxsnull.hpp"
 #include "initialise/initialconditions.hpp"
 #include "initialise/timesteps.hpp"
@@ -78,15 +78,19 @@ inline unsigned int calculate_gridboxes_per_process(unsigned int total_gridboxes
 }
 
 inline InitialConditions auto create_initconds(const Config &config) {
-  const InitAllSupersFromBinary initsupers(config.get_initsupersfrombinary());
-  const InitGbxsNull initgbxs(config.get_ngbxs());
+  unsigned int gridboxes_per_process = calculate_gridboxes_per_process(config.get_ngbxs());
+
+  const InitGbxsNull initgbxs(gridboxes_per_process);
+  const InitSupersFromBinary initsupers(config.get_initsupersfrombinary(), gridboxes_per_process);
 
   return InitConds(initsupers, initgbxs);
 }
 
 inline GridboxMaps auto create_gbxmaps(const Config &config) {
+  int gridboxes_per_process = calculate_gridboxes_per_process(config.get_ngbxs());
   const auto gbxmaps = create_cartesian_maps(config.get_ngbxs(), config.get_nspacedims(),
-                                             config.get_grid_filename());
+                                             config.get_grid_filename(),
+                                             gridboxes_per_process);
   return gbxmaps;
 }
 
@@ -122,7 +126,7 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
                                      Dataset<Store> &dataset) {
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
-  const auto ngbxs = config.get_ngbxs();
+  const auto ngbxs = calculate_gridboxes_per_process(config.get_ngbxs());
 
   const Observer auto obs0 = StreamOutObserver(obsstep, &step2realtime);
 

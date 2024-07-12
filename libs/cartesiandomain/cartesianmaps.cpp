@@ -22,12 +22,17 @@
  */
 
 #include "cartesiandomain/cartesianmaps.hpp"
+#include "mpi.h"
 
 /* on host, throws error if maps are not all
 the same size, else returns size of maps */
 size_t CartesianMaps::maps_size() const {
   const auto h_ndims(ndims_hostcopy());
-  const size_t sz(h_ndims(0) * h_ndims(1) * h_ndims(2) + 1);  // ngbxs + 1 for out of bounds key
+  // const size_t sz(h_ndims(0) * h_ndims(1) * h_ndims(2) + 1);  // ngbxs + 1 for out of bounds key
+  int comm_size;
+  MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
+  // ngbxs + 1 for out of bounds key
+  const size_t sz((h_ndims(0) * h_ndims(1) * h_ndims(2))/comm_size + 1);
 
   if (to_coord3bounds.size() != sz || to_coord1bounds.size() != sz ||
       to_coord2bounds.size() != sz || to_back_coord3nghbr.size() != sz ||

@@ -22,6 +22,8 @@
  * coordinate (upper and lower) boundaries
  */
 
+#include <iostream>
+#include "mpi.h"
 #include "cartesiandomain/createcartesianmaps.hpp"
 
 void check_ngridboxes(const CartesianMaps &gbxmaps, const size_t ngbxs);
@@ -39,7 +41,9 @@ void set_1Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps);
 
 void set_2Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps);
 
-void set_3Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps);
+void set_3Dmodel_maps(const GbxBoundsFromBinary &gfb,
+                      const unsigned int total_local_gridboxes,
+                      CartesianMaps &gbxmaps);
 
 /* bounds for CartesianMaps of gridboxes along
 directions of model not used e.g. in 1-D model,
@@ -62,13 +66,19 @@ however the area and volume of each gridbox remains finite.
 E.g. In the 0-D case, the bounds maps all have 1 {key, value} where
 key=gbxidx=0 and value = {max, min} numerical limits, meanwhile volume
 function returns a value determined from the gridfile 'grid_filename' */
-CartesianMaps create_cartesian_maps(const size_t ngbxs, const unsigned int nspacedims,
-                                    const std::filesystem::path grid_filename) {
+CartesianMaps create_cartesian_maps(const size_t total_global_gridboxes,
+                                    const unsigned int nspacedims,
+                                    const std::filesystem::path grid_filename,
+                                    size_t total_local_gridboxes) {
   std::cout << "\n--- create cartesian gridbox maps ---\n";
 
-  const GbxBoundsFromBinary gfb(ngbxs, nspacedims, grid_filename);
+  const GbxBoundsFromBinary gfb(total_global_gridboxes, nspacedims, grid_filename);
 
   CartesianMaps gbxmaps(gfb.get_ngbxs());
+
+  // Checks whether the run is not supposed to be parallel
+  if (total_local_gridboxes == 0)
+    total_local_gridboxes = total_global_gridboxes;
 
   set_maps_ndims(gfb.ndims, gbxmaps);
   set_model_areas_vols(gfb, gbxmaps);
@@ -85,13 +95,14 @@ CartesianMaps create_cartesian_maps(const size_t ngbxs, const unsigned int nspac
       set_2Dmodel_maps(gfb, gbxmaps);
       break;
     case 3:
-      set_3Dmodel_maps(gfb, gbxmaps);
+      set_3Dmodel_maps(gfb, total_local_gridboxes, gbxmaps);
       break;
     default:
       throw std::invalid_argument("nspacedims > 3 is invalid ");
   }
 
-  check_ngridboxes(gbxmaps, ngbxs);
+  check_ngridboxes(gbxmaps, total_global_gridboxes);
+  gbxmaps.set_total_local_gridboxes(total_local_gridboxes);
 
   std::cout << "--- create cartesian gridbox maps: success ---\n";
 
@@ -244,23 +255,45 @@ kkpair_size_t correct_neighbor_indices(kkpair_size_t neighbours,
 using gfb data as well as back and forward neighbours
 maps assuming periodic or finite boundary conditions
 in cartesian domain */
-void set_3Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
+void set_3Dmodel_maps(const GbxBoundsFromBinary &gfb,
+                      const unsigned int total_local_gridboxes,
+                      CartesianMaps &gbxmaps) {
+  int my_rank;
   const auto ndims(gfb.ndims);
 
-  for (auto idx : gfb.gbxidxs) {
+  MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+
+  unsigned int gridboxes_slice_start = total_local_gridboxes * my_rank;
+  unsigned int gridboxes_slice_end = gridboxes_slice_start + total_local_gridboxes;
+
+  for (auto idx = gridboxes_slice_start; idx < gridboxes_slice_end; idx++) {
+    int local_gbx_index = idx - gridboxes_slice_start;
+
+    gbxmaps.insert_gbxarea(local_gbx_index, gfb.gbxarea(idx));
+    gbxmaps.insert_gbxvolume(local_gbx_index, gfb.gbxvol(idx));
+
     const auto c3bs(gfb.get_coord3gbxbounds(idx));
-    gbxmaps.insert_coord3bounds(idx, c3bs);
+    gbxmaps.insert_coord3bounds(local_gbx_index, c3bs);
     const auto c3nghbrs(DoublyPeriodicDomain::cartesian_coord3nghbrs(idx, ndims));
-    gbxmaps.insert_coord3nghbrs(idx, c3nghbrs);
+    gbxmaps.insert_coord3nghbrs(local_gbx_index,
+                                correct_neighbor_indices(c3nghbrs, total_local_gridboxes,
+                                                         gridboxes_slice_start,
+                                                         gridboxes_slice_end));
 
     const auto c1bs(gfb.get_coord1gbxbounds(idx));
-    gbxmaps.insert_coord1bounds(idx, c1bs);
+    gbxmaps.insert_coord1bounds(local_gbx_index, c1bs);
     const auto c1nghbrs(DoublyPeriodicDomain::cartesian_coord1nghbrs(idx, ndims));
-    gbxmaps.insert_coord1nghbrs(idx, c1nghbrs);
+    gbxmaps.insert_coord1nghbrs(local_gbx_index,
+                                correct_neighbor_indices(c1nghbrs, total_local_gridboxes,
+                                                         gridboxes_slice_start,
+                                                         gridboxes_slice_end));
 
     const auto c2bs(gfb.get_coord2gbxbounds(idx));
-    gbxmaps.insert_coord2bounds(idx, c2bs);
+    gbxmaps.insert_coord2bounds(local_gbx_index, c2bs);
     const auto c2nghbrs(DoublyPeriodicDomain::cartesian_coord2nghbrs(idx, ndims));
-    gbxmaps.insert_coord2nghbrs(idx, c2nghbrs);
+    gbxmaps.insert_coord2nghbrs(local_gbx_index,
+                                correct_neighbor_indices(c2nghbrs, total_local_gridboxes,
+                                                         gridboxes_slice_start,
+                                                         gridboxes_slice_end));
   }
 }
