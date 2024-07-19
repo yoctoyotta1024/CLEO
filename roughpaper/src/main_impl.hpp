@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Friday 19th July 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -209,8 +209,10 @@ inline Observer auto create_sdmmonitor_observer(const unsigned int interval,
                                                 const size_t ngbxs) {
   const Observer auto obs_cond = MonitorCondensationObserver(interval, dataset, maxchunk, ngbxs);
   const Observer auto obs_massmoms = MonitorMassMomentsObserver(interval, dataset, maxchunk, ngbxs);
+  const Observer auto obs_rainmassmoms =
+      MonitorRainMassMomentsObserver(interval, dataset, maxchunk, ngbxs);
 
-  return obs_cond >> obs_massmoms;
+  return obs_cond >> obs_massmoms >> obs_rainmassmoms;
 }
 
 template <typename Store>
