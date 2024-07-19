@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.23.1](https://github.com/yoctoyotta1024/CLEO/compare/605b536b4fa564568a92e76cd9cf1915689426ad..v0.23.1) - 2024-07-19
+#### Bug Fixes
+- remove units of totmass_condensed - ([605b536](https://github.com/yoctoyotta1024/CLEO/commit/605b536b4fa564568a92e76cd9cf1915689426ad)) - clara.bayley
+
+- - -
+
 ## [v0.23.0](https://github.com/yoctoyotta1024/CLEO/compare/e9c9dad54d10db958df7f024044feef653426644..v0.23.0) - 2024-07-19
 #### Features
 - new monitor to observe massmoments of raindrop size distribution during motion and microphysics - ([23db516](https://github.com/yoctoyotta1024/CLEO/commit/23db5164bdb2126587b95d6f7692a3c5259ab42b)) - clara.bayley
