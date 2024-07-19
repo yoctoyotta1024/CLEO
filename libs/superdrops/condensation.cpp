@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Friday 19th July 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -90,13 +90,12 @@ double DoCondensation::superdrop_mass_change(Superdrop &drop, const double temp,
                                             drop.get_radius());  // timestepping eqn [7.28] forward
   const auto delta_radius = double{drop.change_radius(newr)};
 
-  constexpr double R0cubed = dlc::R0 * dlc::R0 * dlc::R0;
-  constexpr double dmdt_const = 4.0 * Kokkos::numbers::pi * dlc::Rho_l * R0cubed;
+  constexpr double dmdt_const = 4.0 * Kokkos::numbers::pi * dlc::Rho_l;  // dimensionless
   const auto rsqrd = double{drop.get_radius() * drop.get_radius()};
   const auto mass_condensed =
       double{dmdt_const * rsqrd * drop.get_xi() * delta_radius};  // eqn [7.22] * delta t
 
-  return mass_condensed;
+  return mass_condensed;  // dimensionless
 }
 
 /**
@@ -118,10 +117,9 @@ void DoCondensation::effect_on_thermodynamic_state(const TeamMember &team_member
       Kokkos::PerTeam(team_member),
       [&, this](State &state) {
         if (do_alter_thermo) {
-          const auto VOLUME =
-              double{state.get_volume() * dlc::VOL0};  // volume in which condensation occurs [m^3]
-          const auto totrho_condensed =
-              double{totmass_condensed / VOLUME};  // drho_condensed_vapour/dt * delta t
+          constexpr double R0cubed_VOL0 = dlc::R0 * dlc::R0 * dlc::R0 / dlc::VOL0;
+          const auto totrho_condensed = double{totmass_condensed / state.get_volume() *
+                                               R0cubed_VOL0};  // drho_condensed_vapour/dt * delta t
           state = state_change(totrho_condensed, state);
         }
       },
