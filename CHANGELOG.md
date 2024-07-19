@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.23.0](https://github.com/yoctoyotta1024/CLEO/compare/e9c9dad54d10db958df7f024044feef653426644..v0.23.0) - 2024-07-19
+#### Features
+- new monitor to observe massmoments of raindrop size distribution during motion and microphysics - ([23db516](https://github.com/yoctoyotta1024/CLEO/commit/23db5164bdb2126587b95d6f7692a3c5259ab42b)) - clara.bayley
+- new monitors xarrays for writing rain mass moments to dataset - ([0eb00cb](https://github.com/yoctoyotta1024/CLEO/commit/0eb00cbc2aef629f21f659b8d7c7f30e16347348)) - clara.bayley
+- new monitors views for calculating rain mass moments - ([e9c9dad](https://github.com/yoctoyotta1024/CLEO/commit/e9c9dad54d10db958df7f024044feef653426644)) - clara.bayley
+#### Refactoring
+- use new observer in roughpaper src main for example - ([7f587cb](https://github.com/yoctoyotta1024/CLEO/commit/7f587cbb93a7d1aca6c2f2f9fec568fed5b4841f)) - clara.bayley
+- template over xarray type for monitoring mass moments - ([01dfd13](https://github.com/yoctoyotta1024/CLEO/commit/01dfd139f1da9b22e0634192d03b32837fd3c7f2)) - clara.bayley
+
+- - -
+
 ## [v0.22.0](https://github.com/yoctoyotta1024/CLEO/compare/e80b45263ba73cbf0f933714d45bea13d35dd487..v0.22.0) - 2024-07-09
 #### Continuous Integration
 - removing now inexistent yac examples - ([be38da0](https://github.com/yoctoyotta1024/CLEO/commit/be38da091294569f5ee2e2810f8be926a4576b76)) - wiltonloch
