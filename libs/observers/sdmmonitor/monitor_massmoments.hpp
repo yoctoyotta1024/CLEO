@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Friday 19th July 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -71,6 +71,50 @@ struct MonitorMassMomentViews {
       : d_mom0("d_monitor_mom0", ngbxs),
         d_mom1("d_monitor_mom1", ngbxs),
         d_mom2("d_monitor_mom2", ngbxs) {
+    reset_views();
+  }
+};
+
+struct MonitorRainMassMomentViews {
+  Buffer<uint64_t>::mirrorviewd_buffer d_mom0;  // view on device for monitoring 0th mass moment
+  Buffer<float>::mirrorviewd_buffer d_mom1;     // view on device for monitoring 1st mass moment
+  Buffer<float>::mirrorviewd_buffer d_mom2;     // view on device for monitoring 2nd mass moment
+
+  /**
+   * @brief Parallel loop to fill device views with zero value
+   */
+  void reset_views() const {
+    Kokkos::parallel_for(
+        "reset_views", Kokkos::RangePolicy(0, d_mom0.extent(0)),
+        KOKKOS_CLASS_LAMBDA(const size_t jj) {
+          d_mom0(jj) = 0;
+          d_mom1(jj) = 0.0;
+          d_mom2(jj) = 0.0;
+        });
+  }
+
+  /**
+   * @brief Write the 0th, 1st and 2nd moments of the raindroplet mass distribution to data views.
+   *
+   * Calculates the current mass moments of the raindrop distribution and overwrites the current
+   * values for the raindrop mass moments (d_mom0, d_mom1 and d_mom2) stored since the data
+   * views were last reset.
+   *
+   * _Note:_ possible conversion of raindrop mass moments at one timestep from double precision
+   * (8 bytes double) to single precision (4 bytes float) in output.
+   *
+   * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
+   * @param supers (sub)View of all the superdrops in one gridbox
+   */
+  KOKKOS_FUNCTION
+  void fetch_massmoments(const TeamMember& team_member, const viewd_constsupers supers) const {
+    calculate_rainmassmoments(team_member, supers, d_mom0, d_mom1, d_mom2);
+  }
+
+  explicit MonitorRainMassMomentViews(const size_t ngbxs)
+      : d_mom0("d_monitor_mom0_raindrops", ngbxs),
+        d_mom1("d_monitor_mom1_raindrops", ngbxs),
+        d_mom2("d_monitor_mom2_raindrops", ngbxs) {
     reset_views();
   }
 };
