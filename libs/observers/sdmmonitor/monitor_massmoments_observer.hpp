@@ -202,4 +202,26 @@ inline Observer auto MonitorMassMomentsObserver(const unsigned int interval,
   return ConstTstepObserver(interval, do_obs);
 }
 
+/**
+ * @brief Constructs an observer which writes data monitoring the mass moments of the raindrop's
+ * distributions during microphysics and super-droplet motion to arrays with a constant observation
+ * timestep "interval".
+ *
+ * @tparam Store Type of store for dataset.
+ * @param interval Observation timestep.
+ * @param dataset Dataset to write time data to.
+ * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
+ * @param ngbxs The number of gridboxes.
+ * @return Constructed type satisfying observer concept.
+ */
+template <typename Store>
+inline Observer auto MonitorRainMassMomentsObserver(const unsigned int interval,
+                                                    Dataset<Store> &dataset, const size_t maxchunk,
+                                                    const size_t ngbxs) {
+  const auto do_obs =
+      DoMonitorMassMomentsObs<Store, MonitorRainMassMomentXarrays, MonitorRainMassMomentViews>(
+          dataset, maxchunk, ngbxs);
+  return ConstTstepObserver(interval, do_obs);
+}
+
 #endif  // LIBS_OBSERVERS_SDMMONITOR_MONITOR_MASSMOMENTS_OBSERVER_HPP_
