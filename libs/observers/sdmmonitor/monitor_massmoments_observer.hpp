@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Friday 19th July 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -54,6 +54,29 @@ struct MonitorMassMomentXarrays {
         mom0_motion(create_massmom0_xarray(dataset, "massmom0_motion", maxchunk, ngbxs)),
         mom1_motion(create_massmom1_xarray(dataset, "massmom1_motion", maxchunk, ngbxs)),
         mom2_motion(create_massmom2_xarray(dataset, "massmom2_motion", maxchunk, ngbxs)) {}
+};
+
+template <typename Store>
+struct MonitorRainMassMomentXarrays {
+  XarrayZarrArray<Store, uint64_t> mom0_microphys; /**< 0th mass moment from microphysics Xarray */
+  XarrayZarrArray<Store, float> mom1_microphys;    /**< 1st mass moment from microphysics Xarray */
+  XarrayZarrArray<Store, float> mom2_microphys;    /**< 2nd mass moment from microphysics Xarray */
+  XarrayZarrArray<Store, uint64_t> mom0_motion;    /**< 0th mass moment from motion Xarray */
+  XarrayZarrArray<Store, float> mom1_motion;       /**< 1st mass moment from motion Xarray */
+  XarrayZarrArray<Store, float> mom2_motion;       /**< 2nd mass moment from motion Xarray */
+
+  MonitorRainMassMomentXarrays(const Dataset<Store> &dataset, const size_t maxchunk,
+                               const size_t ngbxs)
+      : mom0_microphys(
+            create_massmom0_xarray(dataset, "massmom0_raindrops_microphys", maxchunk, ngbxs)),
+        mom1_microphys(
+            create_massmom1_xarray(dataset, "massmom1_raindrops_microphys", maxchunk, ngbxs)),
+        mom2_microphys(
+            create_massmom2_xarray(dataset, "massmom2_raindrops_microphys", maxchunk, ngbxs)),
+        mom0_motion(create_massmom0_xarray(dataset, "massmom0_raindrops_motion", maxchunk, ngbxs)),
+        mom1_motion(create_massmom1_xarray(dataset, "massmom1_raindrops_motion", maxchunk, ngbxs)),
+        mom2_motion(create_massmom2_xarray(dataset, "massmom2_raindrops_motion", maxchunk, ngbxs)) {
+  }
 };
 
 /**
