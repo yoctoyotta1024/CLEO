@@ -84,12 +84,14 @@ struct MonitorRainMassMomentXarrays {
  * @brief Class for functionality to observe data from a mass moments monitor of a SDM
  * process at the start of each timestep and write it to a Zarr array in an Xarray dataset.
  * @tparam Store Type of store for dataset.
+ * @tparam MonitorXarraysType Type for xarrays for mass moments in dataset.
+ * @tparam MonitorViewsType Type for views which calculate mass moments for xarrays.
  */
-template <typename Store, typename MonitorViewsType>
+template <typename Store, typename MonitorXarraysType, typename MonitorViewsType>
 class DoMonitorMassMomentsObs {
  private:
-  Dataset<Store> &dataset; /**< Dataset to write time data to. */
-  std::shared_ptr<MonitorMassMomentXarrays<Store>> xzarrs_ptr; /**< Pointer to arrays in dataset. */
+  Dataset<Store> &dataset;                               /**< Dataset to write time data to. */
+  std::shared_ptr<MonitorXarraysType<Store>> xzarrs_ptr; /**< Pointer to arrays in dataset. */
   MonitorMassMoments<MonitorViewsType> monitor;
 
   /**
@@ -129,7 +131,7 @@ class DoMonitorMassMomentsObs {
    */
   DoMonitorMassMomentsObs(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs)
       : dataset(dataset),
-        xzarrs_ptr(std::make_shared<MonitorMassMomentXarrays<Store>>(dataset, maxchunk, ngbxs)),
+        xzarrs_ptr(std::make_shared<MonitorXarraysType<Store>>(dataset, maxchunk, ngbxs)),
         monitor(ngbxs) {}
 
   /**
@@ -195,7 +197,8 @@ inline Observer auto MonitorMassMomentsObserver(const unsigned int interval,
                                                 Dataset<Store> &dataset, const size_t maxchunk,
                                                 const size_t ngbxs) {
   const auto do_obs =
-      DoMonitorMassMomentsObs<Store, MonitorMassMomentViews>(dataset, maxchunk, ngbxs);
+      DoMonitorMassMomentsObs<Store, MonitorMassMomentXarrays, MonitorMassMomentViews>(
+          dataset, maxchunk, ngbxs);
   return ConstTstepObserver(interval, do_obs);
 }
 
