@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.23.2](https://github.com/yoctoyotta1024/CLEO/compare/597b43cbd9bde146c122d8d94ae65b3c3afa9976..v0.23.2) - 2024-07-24
+#### Bug Fixes
+- corrected templating over store of monitoring mass moment xarrays - ([597b43c](https://github.com/yoctoyotta1024/CLEO/commit/597b43cbd9bde146c122d8d94ae65b3c3afa9976)) - clara.bayley
+
+- - -
+
 ## [v0.23.1](https://github.com/yoctoyotta1024/CLEO/compare/605b536b4fa564568a92e76cd9cf1915689426ad..v0.23.1) - 2024-07-19
 #### Bug Fixes
 - remove units of totmass_condensed - ([605b536](https://github.com/yoctoyotta1024/CLEO/commit/605b536b4fa564568a92e76cd9cf1915689426ad)) - clara.bayley
