@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 19th July 2024
+ * Last Modified: Wednesday 24th July 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -90,8 +90,8 @@ struct MonitorRainMassMomentXarrays {
 template <typename Store, typename MonitorXarraysType, typename MonitorViewsType>
 class DoMonitorMassMomentsObs {
  private:
-  Dataset<Store> &dataset;                               /**< Dataset to write time data to. */
-  std::shared_ptr<MonitorXarraysType<Store>> xzarrs_ptr; /**< Pointer to arrays in dataset. */
+  Dataset<Store> &dataset;                        /**< Dataset to write time data to. */
+  std::shared_ptr<MonitorXarraysType> xzarrs_ptr; /**< Pointer to arrays in dataset. */
   MonitorMassMoments<MonitorViewsType> monitor;
 
   /**
@@ -131,7 +131,7 @@ class DoMonitorMassMomentsObs {
    */
   DoMonitorMassMomentsObs(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs)
       : dataset(dataset),
-        xzarrs_ptr(std::make_shared<MonitorXarraysType<Store>>(dataset, maxchunk, ngbxs)),
+        xzarrs_ptr(std::make_shared<MonitorXarraysType>(dataset, maxchunk, ngbxs)),
         monitor(ngbxs) {}
 
   /**
@@ -197,7 +197,7 @@ inline Observer auto MonitorMassMomentsObserver(const unsigned int interval,
                                                 Dataset<Store> &dataset, const size_t maxchunk,
                                                 const size_t ngbxs) {
   const auto do_obs =
-      DoMonitorMassMomentsObs<Store, MonitorMassMomentXarrays, MonitorMassMomentViews>(
+      DoMonitorMassMomentsObs<Store, MonitorMassMomentXarrays<Store>, MonitorMassMomentViews>(
           dataset, maxchunk, ngbxs);
   return ConstTstepObserver(interval, do_obs);
 }
@@ -218,9 +218,8 @@ template <typename Store>
 inline Observer auto MonitorRainMassMomentsObserver(const unsigned int interval,
                                                     Dataset<Store> &dataset, const size_t maxchunk,
                                                     const size_t ngbxs) {
-  const auto do_obs =
-      DoMonitorMassMomentsObs<Store, MonitorRainMassMomentXarrays, MonitorRainMassMomentViews>(
-          dataset, maxchunk, ngbxs);
+  const auto do_obs = DoMonitorMassMomentsObs<Store, MonitorRainMassMomentXarrays<Store>,
+                                              MonitorRainMassMomentViews>(dataset, maxchunk, ngbxs);
   return ConstTstepObserver(interval, do_obs);
 }
 
