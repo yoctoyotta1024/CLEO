@@ -12,6 +12,8 @@ project(CLEO
   VERSION 0.1.0
 )
 
+find_package(MPI REQUIRED)
+
 message("CLEO_SOURCE_DIR: ${CLEO_SOURCE_DIR}")
 message("CLEO_BINARY_DIR: ${CLEO_BINARY_DIR}")
 

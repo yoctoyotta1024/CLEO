@@ -28,6 +28,7 @@
 
 #include "../kokkosaliases.hpp"
 #include "runcleo/coupleddynamics.hpp"
+#include "cartesiandomain/cartesianmaps.hpp"
 
 /**
  * @concept CouplingComms
@@ -43,9 +44,9 @@
  * @tparam CD The type for the dyanmics solver to check against the CoupledDynamics concept.
  */
 template <typename Comms, typename CD>
-concept CouplingComms = requires(Comms s, CD &coupldyn, viewh_gbx h_gbxs) {
+concept CouplingComms = requires(Comms s, CartesianMaps gbxmaps, CD &coupldyn, viewh_gbx h_gbxs) {
   { s.template send_dynamics<CD>(h_gbxs, coupldyn) } -> std::same_as<void>;
-  { s.template receive_dynamics<CD>(coupldyn, h_gbxs) } -> std::same_as<void>;
+  { s.template receive_dynamics<CD>(gbxmaps, coupldyn, h_gbxs) } -> std::same_as<void>;
 };
 
 /**
@@ -66,7 +67,9 @@ struct NullComms {
    * @param h_gbxs The view of Gridboxes.
    */
   template <CoupledDynamics CD>
-  void receive_dynamics(const CD &coupldyn, const viewh_gbx h_gbxs) const {}
+  void receive_dynamics(const CartesianMaps gbxmaps,
+                        const CD &coupldyn,
+                        const viewh_gbx h_gbxs) const {}
 
   /**
    * @brief Sends dynamics information.

@@ -156,7 +156,7 @@ class RunCLEO {
   unsigned int start_step(const unsigned int t_mdl, dualview_gbx gbxs) const {
     if (t_mdl % sdm.get_couplstep() == 0) {
       gbxs.sync_host();
-      comms.receive_dynamics(coupldyn, gbxs.view_host());
+      comms.receive_dynamics(sdm.gbxmaps, coupldyn, gbxs.view_host());
       gbxs.modify_host();
     }
 
