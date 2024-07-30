@@ -31,6 +31,7 @@
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
+#include "cartesiandomain/cartesian_decomposition.hpp"
 
 namespace dlc = dimless_constants;
 
@@ -45,6 +46,8 @@ map from a given gbxidx to the gbxidx of a neighbouring gridbox
 in that direction */
 struct CartesianMaps {
  private:
+  CartesianDecomposition domain_decomposition;
+
   /* maps from gbxidx to {lower, upper} coords of gridbox boundaries */
   kokkos_pairmap to_coord3bounds;
   kokkos_pairmap to_coord1bounds;
@@ -177,7 +180,11 @@ struct CartesianMaps {
   }
 
   KOKKOS_INLINE_FUNCTION
-  unsigned int get_total_local_gridboxes() const { return total_local_gridboxes; }
+  size_t get_total_local_gridboxes() const {
+    return domain_decomposition.get_total_local_gridboxes();
+  }
+
+  void create_decomposition(std::vector<size_t> ndims) { domain_decomposition.create(ndims); }
 
   /* on host device, throws error if maps are not all
   the same size, else returns size of maps */
@@ -303,6 +310,14 @@ struct CartesianMaps {
     const auto i(to_forward_coord2nghbr.find(gbxindex));  // index in map of key 'gbxidx'
 
     return to_forward_coord2nghbr.value_at(i);  // value returned by map at index i
+  }
+
+  void set_domain_decomposition(CartesianDecomposition domain_decomposition) {
+    this->domain_decomposition = domain_decomposition;
+  }
+
+  const CartesianDecomposition & get_domain_decomposition() const {
+    return domain_decomposition;
   }
 };
 

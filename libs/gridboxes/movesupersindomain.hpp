@@ -37,6 +37,7 @@
 #include "superdrops/motion.hpp"
 #include "superdrops/sdmmonitor.hpp"
 #include "superdrops/superdrop.hpp"
+#include "cartesiandomain/cartesian_decomposition.hpp"
 
 /*
 struct for functionality to move superdroplets throughtout
@@ -103,10 +104,13 @@ struct MoveSupersInDomain {
     when in serial
     _Note:_ totsupers is view of all superdrops (both in and out of bounds of domain).
     */
-    void move_supers_between_gridboxes(const viewd_gbx d_gbxs, const viewd_supers totsupers) const {
+    void move_supers_between_gridboxes(const GbxMaps &gbxmaps,
+                                       const viewd_gbx d_gbxs,
+                                       const viewd_supers totsupers) const {
       sort_supers(totsupers);
 
       const size_t ngbxs(d_gbxs.extent(0));
+      const CartesianDecomposition domain_decomposition = gbxmaps.get_domain_decomposition();
 
       int comm_size, my_rank;
       MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
@@ -122,19 +126,20 @@ struct MoveSupersInDomain {
       std::vector<int> double_recv_counts(comm_size, 0);
       std::vector<std::vector<int>> superdrops_indices_per_process(comm_size);
 
-      size_t total_superdrops_to_send      = 0;
-      size_t total_superdrops_to_recv      = 0;
-      size_t local_superdrops              = 0;
-      size_t superdrop_index               = totsupers.extent(0) - 1;
-      Superdrop & drop                     = totsupers(superdrop_index);
-      per_process_send_superdrops[my_rank] = 0;
+      size_t total_superdrops_to_send = 0;
+      size_t total_superdrops_to_recv = 0;
+      size_t local_superdrops         = 0;
+      size_t superdrop_index          = totsupers.extent(0) - 1;
+      Superdrop & drop                = totsupers(superdrop_index);
+      size_t total_global_gridboxes   = domain_decomposition.get_total_global_gridboxes();
 
       // Go through superdrops from back to front and find how many should be sent and their indices
       while (drop.get_sdgbxindex() >= ngbxs) {
-        if (drop.get_sdgbxindex() < comm_size * 2 * ngbxs) {
-          per_process_send_superdrops[(drop.get_sdgbxindex() - ngbxs) / ngbxs]++;
-          superdrops_indices_per_process[(drop.get_sdgbxindex() - ngbxs) / ngbxs]
-                                        .push_back(superdrop_index);
+        if (drop.get_sdgbxindex() < comm_size * 2 * total_global_gridboxes) {
+          size_t global_gridbox_index = drop.get_sdgbxindex() - total_global_gridboxes;
+          int target_process = domain_decomposition.get_gridbox_owner_process(global_gridbox_index);
+          per_process_send_superdrops[target_process]++;
+          superdrops_indices_per_process[target_process].push_back(superdrop_index);
           total_superdrops_to_send++;
         }
         drop = totsupers(--superdrop_index);
@@ -146,7 +151,6 @@ struct MoveSupersInDomain {
                    per_process_recv_superdrops.data(), 1, MPI_INT, MPI_COMM_WORLD);
       total_superdrops_to_recv = std::accumulate(per_process_recv_superdrops.begin(),
                                                  per_process_recv_superdrops.end(), 0);
-
 
       if (local_superdrops + total_superdrops_to_recv > totsupers.extent(0)) {
         std::cout << "MAXIMUM NUMBER OF LOCAL SUPERDROPLETS EXCEEDED" << std::endl;
@@ -220,7 +224,7 @@ struct MoveSupersInDomain {
 
       // Converts global gridbox index to local
       for (auto &i : superdrops_uint_recv_data)
-        i -= ngbxs;
+        i = domain_decomposition.global_to_local_gridbox_index(i - total_global_gridboxes);
 
       for (unsigned int i = local_superdrops;
            i < local_superdrops + total_superdrops_to_recv;
@@ -308,7 +312,7 @@ struct MoveSupersInDomain {
     enactmotion.move_supers_in_gridboxes(gbxmaps, d_gbxs);
 
     /* step (3) */
-    enactmotion.move_supers_between_gridboxes(d_gbxs, totsupers);
+    enactmotion.move_supers_between_gridboxes(gbxmaps, d_gbxs, totsupers);
 
     /* step (4) */
     apply_domain_boundary_conditions(gbxmaps, d_gbxs, totsupers);

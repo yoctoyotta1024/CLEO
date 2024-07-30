@@ -19,8 +19,10 @@
  * dynamics solver
  */
 
-#include "coupldyn_fromfile/fromfilecomms.hpp"
 #include "mpi.h"
+
+#include "coupldyn_fromfile/fromfilecomms.hpp"
+#include "cartesiandomain/cartesianmaps.hpp"
 
 /* update Gridboxes' states using information received
 from FromFileDynamics solver for 1-way coupling to CLEO SDM.
@@ -28,16 +30,17 @@ Kokkos::parallel_for([...]) (on host) is equivalent to:
 for (size_t ii(0); ii < ngbxs; ++ii){[...]}
 when in serial */
 template <typename CD>
-void FromFileComms::receive_dynamics(const FromFileDynamics &ffdyn, const viewh_gbx h_gbxs) const {
+void FromFileComms::receive_dynamics(const CartesianMaps gbxmaps,
+                                     const FromFileDynamics &ffdyn,
+                                     const viewh_gbx h_gbxs) const {
   const size_t ngbxs(h_gbxs.extent(0));
-  int my_rank;
-
-  MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
-  int global_offset = my_rank * ngbxs;
 
   Kokkos::parallel_for(
       "receive_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
-      [=, *this](const size_t ii) { update_gridbox_state(ffdyn, global_offset + ii, h_gbxs(ii)); });
+      [=, *this](const size_t ii) { update_gridbox_state(ffdyn,
+                                                         gbxmaps.get_domain_decomposition()
+                                                                .local_to_global_gridbox_index(ii),
+                                                         h_gbxs(ii)); });
 }
 
 /* updates the state of a gridbox using information
@@ -60,5 +63,6 @@ void FromFileComms::update_gridbox_state(const FromFileDynamics &ffdyn, const si
 template void FromFileComms::send_dynamics<FromFileDynamics>(const viewh_constgbx,
                                                              FromFileDynamics &) const;
 
-template void FromFileComms::receive_dynamics<FromFileDynamics>(const FromFileDynamics &,
+template void FromFileComms::receive_dynamics<FromFileDynamics>(const CartesianMaps gbxmaps,
+                                                                const FromFileDynamics &,
                                                                 const viewh_gbx) const;

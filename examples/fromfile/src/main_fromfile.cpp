@@ -32,6 +32,7 @@
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
+#include "cartesiandomain/cartesian_decomposition.hpp"
 #include "cartesiandomain/null_boundary_conditions.hpp"
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
 #include "coupldyn_fromfile/fromfilecomms.hpp"
@@ -67,30 +68,16 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
   return FromFileDynamics(config.get_fromfiledynamics(), couplstep, ndims, nsteps);
 }
 
-inline unsigned int calculate_gridboxes_per_process(unsigned int total_gridboxes) {
-  int comm_size;
-  unsigned int gridboxes_per_process;
-
-  MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
-  gridboxes_per_process = total_gridboxes / comm_size;
-
-  return gridboxes_per_process;
-}
-
-inline InitialConditions auto create_initconds(const Config &config) {
-  unsigned int gridboxes_per_process = calculate_gridboxes_per_process(config.get_ngbxs());
-
-  const InitGbxsNull initgbxs(gridboxes_per_process);
-  const InitSupersFromBinary initsupers(config.get_initsupersfrombinary(), gridboxes_per_process);
+inline InitialConditions auto create_initconds(const Config &config, const CartesianMaps &gbxmaps) {
+  const InitGbxsNull initgbxs(gbxmaps.get_total_local_gridboxes());
+  const InitSupersFromBinary initsupers(config.get_initsupersfrombinary(), gbxmaps);
 
   return InitConds(initsupers, initgbxs);
 }
 
 inline GridboxMaps auto create_gbxmaps(const Config &config) {
-  int gridboxes_per_process = calculate_gridboxes_per_process(config.get_ngbxs());
   const auto gbxmaps = create_cartesian_maps(config.get_ngbxs(), config.get_nspacedims(),
-                                             config.get_grid_filename(),
-                                             gridboxes_per_process);
+                                             config.get_grid_filename());
   return gbxmaps;
 }
 
@@ -123,10 +110,10 @@ inline Observer auto create_superdrops_observer(const unsigned int interval,
 
 template <typename Store>
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
-                                     Dataset<Store> &dataset) {
+                                     Dataset<Store> &dataset, const CartesianMaps &gbxmaps) {
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
-  const auto ngbxs = calculate_gridboxes_per_process(config.get_ngbxs());
+  const auto ngbxs = gbxmaps.get_total_local_gridboxes();
 
   const Observer auto obs0 = StreamOutObserver(obsstep, &step2realtime);
 
@@ -147,7 +134,7 @@ inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset<St
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
   const MoveSupersInDomain movesupers(create_movement(tsteps.get_motionstep(), gbxmaps));
-  const Observer auto obs(create_observer(config, tsteps, dataset));
+  const Observer auto obs(create_observer(config, tsteps, dataset, gbxmaps));
 
   return SDMMethods(couplstep, gbxmaps, microphys, movesupers, obs);
 }
@@ -170,14 +157,14 @@ int main(int argc, char *argv[]) {
   auto store = FSStore(config.get_zarrbasedir());
   auto dataset = Dataset(store);
 
-  /* Initial conditions for CLEO run */
-  const InitialConditions auto initconds = create_initconds(config);
-
   /* Initialise Kokkos parallel environment */
   Kokkos::initialize(argc, argv);
   {
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
     const SDMMethods sdm(create_sdm(config, tsteps, dataset));
+
+    /* Initial conditions for CLEO run */
+    const InitialConditions auto initconds = create_initconds(config, sdm.gbxmaps);
 
     /* Solver of dynamics coupled to CLEO SDM */
     CoupledDynamics auto coupldyn(
