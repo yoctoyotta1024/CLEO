@@ -25,7 +25,7 @@ executables="$4"  # get from command line argument
 
 spack load cmake@3.23.1%gcc
 module load gcc/11.2.0-gcc-11.2.0
-source activate ${cleoenv}
+source activate ${cleoenv} # or do 'unset CMAKE_PREFIX_PATH' if using default levante env
 
 if [ "${buildtype}" != "serial" ] && [ "${buildtype}" != "openmp" ] && [ "${buildtype}" != "cuda" ];
 then
