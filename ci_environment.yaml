@@ -8,7 +8,7 @@ dependencies:
     - pip:
       - numpy
       - pytest
-      - sphinx=7.4
+      - sphinx==7.4
       - furo
       - sphinx_copybutton
       - sphinxcontrib-bibtex
