@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Friday 16th August 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -58,11 +58,10 @@ struct CartesianDynamics {
 
   // Target for lon and lat edge data respectively
   // (these are copied from united_edge_data after receiving from YAC)
-  std::vector<double> uvel, wvel;
+  std::vector<double> vvel, uvel;
 
   // Container for cell-centered vertical wind velocities
-  // (Only meaningful in 3D simulations)
-  std::vector<double> vvel;
+  std::vector<double> wvel;
 
   // YAC field ids
   int pressure_yac_id;

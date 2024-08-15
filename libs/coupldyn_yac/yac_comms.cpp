@@ -1,13 +1,15 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2024 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
- * File: yaccomms.cpp
+ * File: yac_comms.cpp
  * Project: coupldyn_yac
- * Created Date: Tuesday 31st October 2023
- * Author: Clara Bayley (CB)
- * Additional Contributors:
+ * Created Date: Friday 3rd May 2024
+ * Author: Wilton Loch (WL)
+ * Additional Contributors:  Clara Bayley (CB)
  * -----
- * Last Modified: Tuesday 7th November 2023
+ * Last Modified: Friday 16th August 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -38,8 +40,7 @@ void YacComms::receive_dynamics(const YacDynamics &ffdyn, const viewh_gbx h_gbxs
 /* updates the state of a gridbox using information
 received from YacDynamics solver for 1-way
 coupling to CLEO SDM */
-void YacComms::update_gridbox_state(const YacDynamics &ffdyn, const size_t ii,
-                                         Gridbox &gbx) const {
+void YacComms::update_gridbox_state(const YacDynamics &ffdyn, const size_t ii, Gridbox &gbx) const {
   State &state(gbx.state);
 
   state.press = ffdyn.get_press(ii);
@@ -52,8 +53,6 @@ void YacComms::update_gridbox_state(const YacDynamics &ffdyn, const size_t ii,
   state.vvel = ffdyn.get_vvel(ii);
 }
 
-template void YacComms::send_dynamics<YacDynamics>(const viewh_constgbx,
-                                                             YacDynamics &) const;
+template void YacComms::send_dynamics<YacDynamics>(const viewh_constgbx, YacDynamics &) const;
 
-template void YacComms::receive_dynamics<YacDynamics>(const YacDynamics &,
-                                                                const viewh_gbx) const;
+template void YacComms::receive_dynamics<YacDynamics>(const YacDynamics &, const viewh_gbx) const;
