@@ -8,10 +8,9 @@ dependencies:
     - pip:
       - numpy
       - pytest
-      - sphinx
+      - sphinx=7.4
       - furo
       - sphinx_copybutton
       - sphinxcontrib-bibtex
-      - sphinxcontrib-applehelp
       - breathe
       - pre-commit
