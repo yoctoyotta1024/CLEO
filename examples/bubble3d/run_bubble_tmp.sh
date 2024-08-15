@@ -28,7 +28,7 @@ then
 
 elif [ "${action}" == "compile" ]
 then
-  cd ${path2build} && make clean
+  cd ${path2build}
 
   module purge
   module load openmpi/4.1.2-gcc-11.2.0
