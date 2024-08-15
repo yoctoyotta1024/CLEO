@@ -13,7 +13,8 @@
 
 example=$1
 sbatch=$2
-examplesdir=${3:-./examples}
+path2CLEO=${2:-${HOME}/CLEO}
+examplesdir=${path2CLEO}/examples
 
 if [ "${example}" == "" ]
 then
@@ -43,15 +44,19 @@ else
 
   elif  [ "${example}" == "eurec4a1d" ]
   then
-    ${sbatch} ${examplesdir}/examples/eurec4a1d/eurec4a1d.sh
+    ${sbatch} ${examplesdir}/eurec4a1d/eurec4a1d.sh
 
   elif  [ "${example}" == "rainshaft1d" ]
   then
-    ${sbatch} ${examplesdir}/examples/rainshaft1d/rainshaft1d.sh
+    ${sbatch} ${examplesdir}/rainshaft1d/rainshaft1d.sh
 
   elif  [ "${example}" == "speedtest" ]
   then
-    ${sbatch} ${examplesdir}/ examples/speedtest/speedtest.sh
+    ${sbatch} ${examplesdir}/speedtest/speedtest.sh
+
+  elif  [ "${example}" == "bubble3d" ]
+  then
+    ${sbatch} ${examplesdir}/bubble3d/bubble3d.sh
 
   else
     echo "'${example}' is not an example"

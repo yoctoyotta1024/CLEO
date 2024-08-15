@@ -11,18 +11,66 @@
   # system_installs:
   #  install_tree: /sw/spack-levante
 
-cd /home/m/m300950/CLEO/build_yac
+action=$1
+path2CLEO=${2:-${HOME}/CLEO}
+path2yac=${3:-/work/mh1126/m300950/yac}
+path2build=${4:-${HOME}/CLEO/build_bubble3d}
 
-module load python3/2022.01-gcc-11.2.0 # version of python must match the YAC python bindings
-module load openmpi/4.1.2-gcc-11.2.0 # same mpi as loaded for the build
+if [ "${action}" == "build" ]
+then
+  mkdir ${path2build}
+  mkdir ${path2build}/bin
+  mkdir ${path2build}/share
 
-export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/sw/spack-levante/libfyaml-0.7.12-fvbhgo/lib
-export PYTHONPATH=${$PYTHONPATH}:/work/mh1126/m300950/yac/yac-v3.2.0/python # path to python bindings
+  module purge
+  ${path2CLEO}/scripts/bash/build_cleo_openmp.sh \
+    ${path2CLEO}/ ${path2build} true ${path2yac}
 
-export OMP_PROC_BIND=spread
-export OMP_PLACES=threads
+elif [ "${action}" == "compile" ]
+then
+  cd ${path2build} && make clean
 
-mpiexec -n 1 /home/m/m300950/CLEO/build_yac/examples/yac/bubble3d/src/bubble3D \
-  /home/m/m300950/CLEO/examples/yac/bubble3d/src/config/bubble3d_config.yaml \
-  : -n 1 python \
-  /home/m/m300950/CLEO/examples/yac/bubble3d/yac_icon_data_reader.py
+  module purge
+  module load openmpi/4.1.2-gcc-11.2.0
+  module load netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0
+  spack load openblas@0.3.18%gcc@=11.2.0
+
+  ${path2CLEO}/scripts/bash/compile_cleo.sh \
+     /work/mh1126/m300950/cleoenv openmp ${path2build} bubble3D
+
+elif [ "${action}" == "inputfiles" ]
+then
+  source activate /work/mh1126/m300950/cleoenv
+  /work/mh1126/m300950/cleoenv/bin/python ${path2CLEO}/examples/bubble3d/bubble3d_inputfiles.py \
+   ${path2CLEO} \
+   ${path2build} \
+   ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
+   ${path2build}/share/bubble3d_dimlessGBxboundaries.dat \
+   ${path2build}/share/bubble3d_dimlessSDsinit.dat 0
+
+elif [ "${action}" == "run" ]
+then
+  cd ${path2build}
+
+  module purge
+  # note version of python must match the YAC python bindings (e.g. module load python3/2022.01-gcc-11.2.0)
+  module load openmpi/4.1.2-gcc-11.2.0 # same mpi as loaded for the build
+  spack load py-netcdf4
+
+  export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/sw/spack-levante/libfyaml-0.7.12-fvbhgo/lib
+  export PYTHONPATH=${PYTHONPATH}:${path2yac}/yac-v3.2.0/python # path to python bindings
+
+  export OMP_PROC_BIND=spread
+  export OMP_PLACES=threads
+
+  cp /work/mh1126/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc \
+    ${path2build}/aes_bubble_atm_3d_ml_20080801T000000Z.nc
+
+  cp /work/mh1126/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc \
+    ${path2build}/aes_bubble_atm_cgrid_ml.nc
+
+  mpiexec -n 1 ${path2build}/examples/bubble3d/src/bubble3D \
+    ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
+    : -n 1 python \
+    ${path2CLEO}/examples/bubble3d/yac_bubble_data_reader.py
+fi
