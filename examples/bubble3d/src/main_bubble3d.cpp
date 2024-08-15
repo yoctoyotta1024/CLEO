@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th July 2024
+ * Last Modified: Friday 16th August 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -98,11 +98,12 @@ template <typename Store>
 inline Observer auto create_superdrops_observer(const unsigned int interval,
                                                 Dataset<Store> &dataset, const int maxchunk) {
   CollectDataForDataset<Store> auto sdid = CollectSdId(dataset, maxchunk);
+  CollectDataForDataset<Store> auto sdgbxindex = CollectSdgbxindex(dataset, maxchunk);
   CollectDataForDataset<Store> auto coord3 = CollectCoord3(dataset, maxchunk);
   CollectDataForDataset<Store> auto coord1 = CollectCoord1(dataset, maxchunk);
   CollectDataForDataset<Store> auto coord2 = CollectCoord2(dataset, maxchunk);
 
-  const auto collect_data = coord2 >> coord1 >> coord3 >> sdid;
+  const auto collect_data = coord2 >> coord1 >> coord3 >> sdgbxindex >> sdid;
   return SuperdropsObserver(interval, dataset, maxchunk, collect_data);
 }
 
