@@ -22,14 +22,17 @@ then
   mkdir ${path2build}/bin
   mkdir ${path2build}/share
 
+  module purge
   ${path2CLEO}/scripts/bash/build_cleo_openmp.sh \
     ${path2CLEO}/ ${path2build} true ${path2yac}
 
 elif [ "${action}" == "compile" ]
 then
   cd ${path2build} && make clean
+
+  module purge
   ${path2CLEO}/scripts/bash/compile_cleo.sh \
-    /work/mh1126/m300950/cleoenv openmp ${path2build} bubble3D
+     /work/mh1126/m300950/cleoenv openmp ${path2build} bubble3D
 
 elif [ "${action}" == "inputfiles" ]
 then
@@ -45,7 +48,8 @@ elif [ "${action}" == "run" ]
 then
   cd ${path2build}
 
-  # module load python3/2022.01-gcc-11.2.0 # version of python must match the YAC python bindings
+  module purge
+  # note version of python must match the YAC python bindings (e.g. module load python3/2022.01-gcc-11.2.0)
   module load openmpi/4.1.2-gcc-11.2.0 # same mpi as loaded for the build
   spack load py-netcdf4
 
