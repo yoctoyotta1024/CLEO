@@ -31,6 +31,10 @@ then
   cd ${path2build} && make clean
 
   module purge
+  module load openmpi/4.1.2-gcc-11.2.0
+  module load netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0
+  spack load openblas@0.3.18%gcc@=11.2.0
+
   ${path2CLEO}/scripts/bash/compile_cleo.sh \
      /work/mh1126/m300950/cleoenv openmp ${path2build} bubble3D
 

@@ -22,8 +22,8 @@ then
   mkdir ${path2build}/bin
   mkdir ${path2build}/share
 
-  # spack load cmake@3.23.1%gcc
   module purge
+  spack load cmake@3.23.1%gcc
   module load gcc/11.2.0-gcc-11.2.0
   module load openmpi/4.1.2-gcc-11.2.0
   module load netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0
@@ -53,7 +53,6 @@ then
   module load openmpi/4.1.2-gcc-11.2.0
   module load netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0
   spack load openblas@0.3.18%gcc@=11.2.0
-  unset CMAKE_PREFIX_PATH
 
   cd ${path2build}
   make -j 128 bubble3D
@@ -83,6 +82,12 @@ then
 
   export OMP_PROC_BIND=spread
   export OMP_PLACES=threads
+
+  cp /work/mh1126/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc \
+    ${path2build}/aes_bubble_atm_3d_ml_20080801T000000Z.nc
+
+  cp /work/mh1126/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc \
+    ${path2build}/aes_bubble_atm_cgrid_ml.nc
 
   mpiexec -n 1 ${path2build}/examples/bubble3d/src/bubble3D \
     ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
