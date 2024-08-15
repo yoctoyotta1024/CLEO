@@ -63,6 +63,12 @@ then
   export OMP_PROC_BIND=spread
   export OMP_PLACES=threads
 
+  cp /work/mh1126/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc \
+    ${path2build}/aes_bubble_atm_3d_ml_20080801T000000Z.nc
+
+  cp /work/mh1126/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc \
+    ${path2build}/aes_bubble_atm_cgrid_ml.nc
+
   mpiexec -n 1 ${path2build}/examples/bubble3d/src/bubble3D \
     ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
     : -n 1 python \
