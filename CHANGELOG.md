@@ -2,6 +2,37 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.24.0](https://github.com/yoctoyotta1024/CLEO/compare/aec716f2a6071ccd05e18c2406c3024d0e092932..v0.24.0) - 2024-08-15
+#### Bug Fixes
+- delete yac_version after moving python bindings into yac folder - ([a5e4bc7](https://github.com/yoctoyotta1024/CLEO/commit/a5e4bc7ef24fe8aeb05f185f6556e87ad2669dd4)) - clara.bayley
+- debugging build ci fail with latest sphinx - ([3a7ea19](https://github.com/yoctoyotta1024/CLEO/commit/3a7ea19816cf672c1d3123eb6ce258bbbac75b87)) - clara.bayley
+- debugging build ci fail with latest sphinx - ([be7706e](https://github.com/yoctoyotta1024/CLEO/commit/be7706eb10885b73e44b3627d6501d0e0a5a99a8)) - clara.bayley
+- debugging build ci fail with latest sphinx - ([b2f9dd5](https://github.com/yoctoyotta1024/CLEO/commit/b2f9dd5baf5a51993d652c72143f4c39fe0c4784)) - clara.bayley
+- docs fix typo - ([7303dc3](https://github.com/yoctoyotta1024/CLEO/commit/7303dc37688079bf0c30032935dd1fb56fd6e8a7)) - clara.bayley
+- bubble tmp bash script working - ([402fe2a](https://github.com/yoctoyotta1024/CLEO/commit/402fe2aedab6857cf8f8f92f39c4cfff09d48db2)) - clara.bayley
+- add note on how to compile without loading cleoenv - ([430bcd5](https://github.com/yoctoyotta1024/CLEO/commit/430bcd5f1921ce8b2632c800bb9886ea8722f64a)) - clara.bayley
+#### Features
+- raw bubble script working - ([53474be](https://github.com/yoctoyotta1024/CLEO/commit/53474bedd202ade5360de0a1fc8c15224ecbb625)) - clara.bayley
+- new explicit bash for debugging bubble run - ([9ec7225](https://github.com/yoctoyotta1024/CLEO/commit/9ec722561d06c86b15aab958dd1337e3e0576fd9)) - clara.bayley
+- add module purge into tmp bash - ([782c997](https://github.com/yoctoyotta1024/CLEO/commit/782c9970c90683cc5cb382b8b5b7f76da27a6fd1)) - clara.bayley
+#### Miscellaneous Chores
+- delet coments - ([d6382e6](https://github.com/yoctoyotta1024/CLEO/commit/d6382e6fe298dfa92aaabcb24caab1fe0745a967)) - clara.bayley
+- delete unwanted comment - ([7657f23](https://github.com/yoctoyotta1024/CLEO/commit/7657f2359542dff96502741205a5fd21abdc808b)) - clara.bayley
+- uncomment yaxt install - ([3ec8d71](https://github.com/yoctoyotta1024/CLEO/commit/3ec8d713362e4d3b8270858230e2fbcc23d58206)) - clara.bayley
+- comment with example of yac install call - ([f872ed7](https://github.com/yoctoyotta1024/CLEO/commit/f872ed7b26b3de48f29a0febfc64af2c099df8c6)) - clara.bayley
+- comment for includes needed to run example with yac - ([58dbab6](https://github.com/yoctoyotta1024/CLEO/commit/58dbab6b30cc5dfa0d491f050b3da8a32fda346e)) - clara.bayley
+#### Refactoring
+- remove verbose bash script in install yac - ([5c2445d](https://github.com/yoctoyotta1024/CLEO/commit/5c2445d645b5058fb8fceaee2311e77c2d7d2f99)) - clara.bayley
+- generalise temporary bubble test script - ([d818018](https://github.com/yoctoyotta1024/CLEO/commit/d8180189cca27ccd27a19922eb21446a5e21a73b)) - clara.bayley
+- all stages of bubble3d in tmp script - ([31fa121](https://github.com/yoctoyotta1024/CLEO/commit/31fa121eea81312edf84608f139354547ec01dd7)) - clara.bayley
+- change source paths for examples - ([bb7df5c](https://github.com/yoctoyotta1024/CLEO/commit/bb7df5ce706f9dfa593c5fb3f468027aa22f384b)) - clara.bayley
+- delete unwanted compiler flags for yac installation - ([e1d6efe](https://github.com/yoctoyotta1024/CLEO/commit/e1d6efeb105f0a5be1320ae70ba1a38c2ea4075c)) - clara.bayley
+- use set in bash script to print commands - ([2b05f9d](https://github.com/yoctoyotta1024/CLEO/commit/2b05f9d2a2fca00ec24cf7c797b089b29b6b85d5)) - clara.bayley
+- enable python bindings in yac build - ([ae26dee](https://github.com/yoctoyotta1024/CLEO/commit/ae26deebfe743152f53f1a6bb4509d54d2e73eab)) - clara.bayley
+- update yac version and pythonpath export - ([aec716f](https://github.com/yoctoyotta1024/CLEO/commit/aec716f2a6071ccd05e18c2406c3024d0e092932)) - clara.bayley
+
+- - -
+
 ## [v0.23.2](https://github.com/yoctoyotta1024/CLEO/compare/597b43cbd9bde146c122d8d94ae65b3c3afa9976..v0.23.2) - 2024-07-24
 #### Bug Fixes
 - corrected templating over store of monitoring mass moment xarrays - ([597b43c](https://github.com/yoctoyotta1024/CLEO/commit/597b43cbd9bde146c122d8d94ae65b3c3afa9976)) - clara.bayley
