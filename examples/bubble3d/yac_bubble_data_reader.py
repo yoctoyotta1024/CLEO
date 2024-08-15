@@ -51,24 +51,27 @@ def create_yac_unstructured_grid(grid_filname):
     dataset = Dataset(grid_filname, "r")
 
     # Read the variables
-    nv = dataset.dimensions["vertices"].size
-    no_cells = dataset.dimensions["ncells"].size
+    nv = dataset.dimensions["nv"].size
+    no_cells = dataset.dimensions["cell"].size
 
     vertices = []
-    for cell in range(len(dataset["clon_bnds"])):
+    for cell in range(len(dataset["clon_vertices"])):
         for vertex in range(3):
             vertices.append(
-                [dataset["clon_bnds"][cell][vertex], dataset["clat_bnds"][cell][vertex]]
+                [
+                    dataset["clon_vertices"][cell][vertex],
+                    dataset["clat_vertices"][cell][vertex],
+                ]
             )
 
     cell_vertex_indices = map_vertices(vertices)
 
-    grid_name = "icon_atmos_grid"
+    grid_name = "Torus_Triangles_20x4_5000m"
     grid = UnstructuredGrid(
         grid_name,
         np.ones(no_cells) * nv,
-        dataset["clon_bnds"][:, :].flatten(),
-        dataset["clat_bnds"][:, :].flatten(),
+        dataset["clon_vertices"][:, :].flatten(),
+        dataset["clat_vertices"][:, :].flatten(),
         cell_vertex_indices,
     )
 
