@@ -80,8 +80,6 @@ else
   make install || true
 
   mv ${root4YAC}/${yac_version}/python ${root4YAC}/yac/python
-  rm -rf ${root4YAC}/${yac_version}
-  # TODO(CB): see if moving python bindings to directory of yac installation works
-  # cd ${root4YAC} && mv ${yac_version}/python ${root4YAC}/yac/ && rm -rf ${yac_version}
+  cd ${root4YAC} && rm -rf ${yac_version}
   ### ------------------------------------------------------ ###
 fi
