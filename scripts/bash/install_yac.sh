@@ -77,7 +77,10 @@ else
     --enable-python-bindings \
     --prefix=${root4YAC}/yac
   make -j 8
-  make install
+  make install || true
+
+  mv ${root4YAC}/${yac_version}/python ${root4YAC}/yac/python
+  rm -rf ${root4YAC}/${yac_version}
   # TODO(CB): see if moving python bindings to directory of yac installation works
   # cd ${root4YAC} && mv ${yac_version}/python ${root4YAC}/yac/ && rm -rf ${yac_version}
   ### ------------------------------------------------------ ###

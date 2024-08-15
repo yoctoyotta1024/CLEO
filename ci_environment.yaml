@@ -8,7 +8,7 @@ dependencies:
     - pip:
       - numpy
       - pytest
-      - sphinx==7.4
+      - sphinx==7.4 # TODO(CB): update sphinx allowed version for CI
       - furo
       - sphinx_copybutton
       - sphinxcontrib-bibtex
