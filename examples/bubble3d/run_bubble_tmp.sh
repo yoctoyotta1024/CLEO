@@ -66,7 +66,7 @@ then
   cp /work/mh1126/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc \
     ${path2build}/aes_bubble_atm_3d_ml_20080801T000000Z.nc
 
-  cp /work/mh1126/m300950/icon/build/experiments/aes_bubble/Torus_Triangles_20x4_5000m.nc
+  cp /work/mh1126/m300950/icon/build/experiments/aes_bubble/Torus_Triangles_20x4_5000m.nc \
     ${path2build}/Torus_Triangles_20x4_5000m.nc
 
   mpiexec -n 1 ${path2build}/examples/bubble3d/src/bubble3D \

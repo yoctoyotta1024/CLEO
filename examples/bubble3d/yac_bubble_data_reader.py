@@ -1,8 +1,32 @@
+"""
+Copyright (c) 2024 MPI-M, Clara Bayley
+
+
+----- CLEO -----
+File: yac_bubble_data_reader.py
+Project: bubble3d
+Created Date: Friday 19th July 2024
+Author: Wilton Loch (WL)
+Additional Contributors: Clara Bayley (CB)
+-----
+Last Modified: Friday 16th August 2024
+Modified By: CB
+-----
+License: BSD 3-Clause "New" or "Revised" License
+https://opensource.org/licenses/BSD-3-Clause
+-----
+File Description:
+Python file for yac for a one-way coupling between ICON's
+output data and CLEO (e.g. for the bubble test case)
+"""
+
+
 #!/usr/bin/env python3
 
 from yac import YAC, UnstructuredGrid, Field, Location, Calendar, TimeUnit, def_calendar
 from netCDF4 import Dataset
 import numpy as np
+import sys
 
 
 def map_vertices(array):
@@ -63,8 +87,8 @@ def prepare_data_for_yac(source):
     return target
 
 
-data_filename = "aes_bubble_atm_3d_ml_20080801T000000Z.nc"
-grid_filename = "aes_bubble_atm_cgrid_ml.nc"
+data_filename = sys.argv[1]
+grid_filename = sys.argv[2]
 
 yac = YAC()
 
