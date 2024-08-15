@@ -12,5 +12,6 @@ dependencies:
       - furo
       - sphinx_copybutton
       - sphinxcontrib-bibtex
+      - sphinxcontrib-applehelp
       - breathe
       - pre-commit
