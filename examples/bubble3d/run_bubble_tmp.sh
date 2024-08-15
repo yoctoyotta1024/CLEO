@@ -58,7 +58,7 @@ then
   spack load py-netcdf4
 
   export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/sw/spack-levante/libfyaml-0.7.12-fvbhgo/lib
-  export PYTHONPATH=${PYTHONPATH}:${path2yac}/yac-v3.2.0/python # path to python bindings
+  export PYTHONPATH=${PYTHONPATH}:${path2yac}/yac/python # path to python bindings
 
   export OMP_PROC_BIND=spread
   export OMP_PLACES=threads
