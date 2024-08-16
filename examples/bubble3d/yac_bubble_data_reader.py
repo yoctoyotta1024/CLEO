@@ -122,10 +122,10 @@ def prepare_data_for_yac(source):
 
 grid_filename = sys.argv[1]
 data_filename = sys.argv[2]
-DATATSTEP = sys.argv[3]  # must match ICON data file [seconds]
-COUPLTSTEP = sys.argv[4]  # must match CLEO config file [seconds]
-T_END = sys.argv[6]  # must match CLEO config file [seconds]
-num_vertical_levels = sys.argv[5]  # must match CLEO gridfile
+DATATSTEP = float(sys.argv[3])  # must match ICON data file [seconds]
+COUPLTSTEP = float(sys.argv[4])  # must match CLEO config file [seconds]
+T_END = float(sys.argv[6])  # must match CLEO config file [seconds]
+num_vertical_levels = int(sys.argv[5])  # must match CLEO gridfile
 
 yac = YAC()
 

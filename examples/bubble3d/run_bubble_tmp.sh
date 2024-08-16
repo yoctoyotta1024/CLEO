@@ -73,8 +73,8 @@ then
   grid_file_copy=${path2build}/share/icon_grid_file_Torus_Triangles_20x4_5000m.nc
   data_file_copy=${path2build}/share/icon_data_file_aes_bubble_atm_3d_ml_20080801T000000Z.nc
 
-  cp  ${icon_grid_file} ${icon_grid_file_copy}
-  cp ${icon_data_file} ${icon_data_file_copy}
+  cp ${icon_grid_file} ${grid_file_copy}
+  cp ${icon_data_file} ${data_file_copy}
 
   mpiexec -n 1 ${path2build}/examples/bubble3d/src/bubble3D \
     ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
