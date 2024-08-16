@@ -63,16 +63,23 @@ then
   export OMP_PROC_BIND=spread
   export OMP_PLACES=threads
 
-  cp /work/mh1126/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc \
-    ${path2build}/aes_bubble_atm_3d_ml_20080801T000000Z.nc
+  icon_grid_file=/work/mh1126/m300950/icon/build/experiments/aes_bubble/Torus_Triangles_20x4_5000m.nc
+  icon_data_file=/work/mh1126/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc
+  icon_data_timestep=30 # must match ICON data file [seconds]
+  cleo_coupling_timestep=60 # must match CLEO config file [seconds]
+  cleo_t_end=3600 # must match CLEO config file [seconds]
+  cleo_vertical_levels=25 # must match CLEO gridfile
 
-  cp /work/mh1126/m300950/icon/build/experiments/aes_bubble/Torus_Triangles_20x4_5000m.nc \
-    ${path2build}/Torus_Triangles_20x4_5000m.nc
+  grid_file_copy=${path2build}/share/icon_grid_file_Torus_Triangles_20x4_5000m.nc
+  data_file_copy=${path2build}/share/icon_data_file_aes_bubble_atm_3d_ml_20080801T000000Z.nc
+
+  cp  ${icon_grid_file} ${icon_grid_file_copy}
+  cp ${icon_data_file} ${icon_data_file_copy}
 
   mpiexec -n 1 ${path2build}/examples/bubble3d/src/bubble3D \
     ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
     : -n 1 python \
     ${path2CLEO}/examples/bubble3d/yac_bubble_data_reader.py \
-    ${path2build}/aes_bubble_atm_3d_ml_20080801T000000Z.nc \
-    ${path2build}/Torus_Triangles_20x4_5000m.nc
+    ${grid_file_copy} ${data_file_copy} ${icon_data_timestep} \
+    ${cleo_coupling_timestep} ${cleo_vertical_levels} ${cleo_t_end}
 fi

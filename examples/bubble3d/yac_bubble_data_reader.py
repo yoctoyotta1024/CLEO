@@ -29,6 +29,29 @@ import numpy as np
 import sys
 
 
+def convert_seconds_to_isodate(seconds):
+    """converts seconds interval into an ISO 8601 format string"""
+    import isodate
+    from datetime import timedelta
+
+    duration = timedelta(seconds=seconds)
+
+    return isodate.duration_isoformat(duration)
+
+
+def add_seconds_to_isodate(iso, seconds):
+    """adds seconds interval to ISO 8601 isodate given as a string
+    and returns a string for the new ISO 8601 isodate."""
+
+    from datetime import datetime, timedelta
+
+    dt = datetime.fromisoformat(iso.replace("Z", "+00:00"))
+    new_dt = dt + timedelta(seconds=seconds)
+    new_iso = new_dt.isoformat().replace("+00:00", "Z")
+
+    return new_iso
+
+
 def map_vertices(array):
     vertex_dict = {}
     vertex_mapping = 0
@@ -46,9 +69,16 @@ def map_vertices(array):
     return vertex_mapping_array
 
 
-def create_yac_unstructured_grid(grid_filname):
+def create_yac_unstructured_grid(grid_filename):
+    """create unstructured grid for YAC from ICON netcdf file.
+    Note different .nc files may have different names for variables,
+    e.g. "nv" <=> "vertices"
+    "cell" <=> "ncells"
+    "clon_vertices" <=> "clon_bnds"
+    "clat_vertices" <=> "clat_bnds"
+    """
     # Open the NetCDF file
-    dataset = Dataset(grid_filname, "r")
+    dataset = Dataset(grid_filename, "r")
 
     # Read the variables
     nv = dataset.dimensions["nv"].size
@@ -66,7 +96,7 @@ def create_yac_unstructured_grid(grid_filname):
 
     cell_vertex_indices = map_vertices(vertices)
 
-    grid_name = "Torus_Triangles_20x4_5000m"
+    grid_name = "aes_bubble_atm_icon_grid"
     grid = UnstructuredGrid(
         grid_name,
         np.ones(no_cells) * nv,
@@ -90,50 +120,113 @@ def prepare_data_for_yac(source):
     return target
 
 
-data_filename = sys.argv[1]
-grid_filename = sys.argv[2]
+grid_filename = sys.argv[1]
+data_filename = sys.argv[2]
+DATATSTEP = sys.argv[3]  # must match ICON data file [seconds]
+COUPLTSTEP = sys.argv[4]  # must match CLEO config file [seconds]
+T_END = sys.argv[6]  # must match CLEO config file [seconds]
+num_vertical_levels = sys.argv[5]  # must match CLEO gridfile
 
 yac = YAC()
 
 def_calendar(Calendar.PROLEPTIC_GREGORIAN)
-yac.def_datetime("2008-08-01T00:00:00Z", "2008-08-01T02:00:00Z")
+iso_start = "2008-08-01T00:00:00Z"
+iso_end = add_seconds_to_isodate(iso_start, T_END)
+yac.def_datetime(iso_start, iso_end)
 
 component_name = "atm"
 component = yac.def_comp(component_name)
 grid = create_yac_unstructured_grid(grid_filename)
 
 # --- Field definitions ---
+coupling_tstep = convert_seconds_to_isodate(COUPLTSTEP)
+
 press = Field.create(
-    "pressure", component, grid.cell_points, 25, "PT30M", TimeUnit.ISO_FORMAT
+    "pressure",
+    component,
+    grid.cell_points,
+    num_vertical_levels,
+    coupling_tstep,
+    TimeUnit.ISO_FORMAT,
 )
 temp = Field.create(
-    "temperature", component, grid.cell_points, 25, "PT30M", TimeUnit.ISO_FORMAT
+    "temperature",
+    component,
+    grid.cell_points,
+    num_vertical_levels,
+    coupling_tstep,
+    TimeUnit.ISO_FORMAT,
 )
 qvap = Field.create(
-    "qvap", component, grid.cell_points, 25, "PT30M", TimeUnit.ISO_FORMAT
+    "qvap",
+    component,
+    grid.cell_points,
+    num_vertical_levels,
+    coupling_tstep,
+    TimeUnit.ISO_FORMAT,
 )
 qcond = Field.create(
-    "qcond", component, grid.cell_points, 25, "PT30M", TimeUnit.ISO_FORMAT
+    "qcond",
+    component,
+    grid.cell_points,
+    num_vertical_levels,
+    coupling_tstep,
+    TimeUnit.ISO_FORMAT,
 )
 eastward_wind = Field.create(
-    "eastward_wind", component, grid.cell_points, 25, "PT30M", TimeUnit.ISO_FORMAT
+    "eastward_wind",
+    component,
+    grid.cell_points,
+    num_vertical_levels,
+    coupling_tstep,
+    TimeUnit.ISO_FORMAT,
 )
 northward_wind = Field.create(
-    "northward_wind", component, grid.cell_points, 25, "PT30M", TimeUnit.ISO_FORMAT
+    "northward_wind",
+    component,
+    grid.cell_points,
+    num_vertical_levels,
+    coupling_tstep,
+    TimeUnit.ISO_FORMAT,
 )
 vertical_wind = Field.create(
-    "vertical_wind", component, grid.cell_points, 26, "PT30M", TimeUnit.ISO_FORMAT
+    "vertical_wind",
+    component,
+    grid.cell_points,
+    num_vertical_levels + 1,
+    coupling_tstep,
+    TimeUnit.ISO_FORMAT,
 )
 
 yac.enddef()
 
 dataset = Dataset(data_filename)
 
-for step in range(5):
-    temp.put(prepare_data_for_yac(dataset["ta"][step, 0:25, :]))
-    press.put(prepare_data_for_yac(dataset["pfull"][step, 0:25, :]))
-    qvap.put(prepare_data_for_yac(dataset["hus"][step, 0:25, :]))
-    qcond.put(prepare_data_for_yac(dataset["clw"][step, 0:25, :]))
-    vertical_wind.put(prepare_data_for_yac(dataset["wa"][step, 0:26, :]))
-    eastward_wind.put(prepare_data_for_yac(dataset["ua"][step, 0:25, :]))
-    northward_wind.put(prepare_data_for_yac(dataset["va"][step, 0:25, :]))
+assert (
+    DATATSTEP <= COUPLTSTEP
+), "COUPLTSTEP [s] must be greater than or equal to DATATSTEP [s]"
+assert (
+    DATATSTEP % COUPLTSTEP == 0.0
+), "COUPLTSTEP [s] must be integer multiple of DATATSTEP [s]"
+datasteps_per_coupling_step = COUPLTSTEP / DATATSTEP
+num_couplingsteps = int(np.floor(T_END / COUPLTSTEP) + 1)
+
+for coupling_step in range(num_couplingsteps):
+    timeindex = (
+        coupling_step * datasteps_per_coupling_step
+    )  # index along time axis of data to "put"
+    temp.put(prepare_data_for_yac(dataset["ta"][timeindex, 0:num_vertical_levels, :]))
+    press.put(
+        prepare_data_for_yac(dataset["pfull"][timeindex, 0:num_vertical_levels, :])
+    )
+    qvap.put(prepare_data_for_yac(dataset["hus"][timeindex, 0:num_vertical_levels, :]))
+    qcond.put(prepare_data_for_yac(dataset["clw"][timeindex, 0:num_vertical_levels, :]))
+    vertical_wind.put(
+        prepare_data_for_yac(dataset["wa"][timeindex, 0 : num_vertical_levels + 1, :])
+    )
+    eastward_wind.put(
+        prepare_data_for_yac(dataset["ua"][timeindex, 0:num_vertical_levels, :])
+    )
+    northward_wind.put(
+        prepare_data_for_yac(dataset["va"][timeindex, 0:num_vertical_levels, :])
+    )
