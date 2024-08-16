@@ -237,59 +237,62 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   int horizontal_fields_collection_size = ndims[VERTICAL];
   int vertical_winds_collection_size = ndims[VERTICAL] + 1;
 
+  const char coupling_timestep[6] = "PT60S";
   yac_cdef_field("pressure", component_id, &cell_point_id, num_point_sets,
-                 horizontal_fields_collection_size, "PT30M", YAC_TIME_UNIT_ISO_FORMAT,
+                 horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
                  &pressure_yac_id);
 
   yac_cdef_field("temperature", component_id, &cell_point_id, num_point_sets,
-                 horizontal_fields_collection_size, "PT30M", YAC_TIME_UNIT_ISO_FORMAT,
+                 horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
                  &temp_yac_id);
 
   yac_cdef_field("qvap", component_id, &cell_point_id, num_point_sets,
-                 horizontal_fields_collection_size, "PT30M", YAC_TIME_UNIT_ISO_FORMAT,
+                 horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
                  &qvap_yac_id);
 
   yac_cdef_field("qcond", component_id, &cell_point_id, num_point_sets,
-                 horizontal_fields_collection_size, "PT30M", YAC_TIME_UNIT_ISO_FORMAT,
+                 horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
                  &qcond_yac_id);
 
   yac_cdef_field("eastward_wind", component_id, &edge_point_id, num_point_sets,
-                 horizontal_fields_collection_size, "PT30M", YAC_TIME_UNIT_ISO_FORMAT,
+                 horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
                  &eastward_wind_yac_id);
 
   yac_cdef_field("northward_wind", component_id, &edge_point_id, num_point_sets,
-                 horizontal_fields_collection_size, "PT30M", YAC_TIME_UNIT_ISO_FORMAT,
+                 horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
                  &northward_wind_yac_id);
 
   yac_cdef_field("vertical_wind", component_id, &cell_point_id, num_point_sets,
-                 vertical_winds_collection_size, "PT30M", YAC_TIME_UNIT_ISO_FORMAT,
+                 vertical_winds_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
                  &vertical_wind_yac_id);
 
   // --- Field coupling definitions ---
-  yac_cdef_couple("atm", "icon_atmos_grid", "pressure", "cleo", "cleo_grid", "pressure", "PT30M",
-                  YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE, interp_stack_id, 0, 0);
+  yac_cdef_couple("atm", "icon_atmos_grid", "pressure", "cleo", "cleo_grid", "pressure",
+                  coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, 0, 0);
 
   yac_cdef_couple("atm", "icon_atmos_grid", "temperature", "cleo", "cleo_grid", "temperature",
-                  "PT30M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE, interp_stack_id, 0,
-                  0);
+                  coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, 0, 0);
 
-  yac_cdef_couple("atm", "icon_atmos_grid", "qvap", "cleo", "cleo_grid", "qvap", "PT30M",
+  yac_cdef_couple("atm", "icon_atmos_grid", "qvap", "cleo", "cleo_grid", "qvap", coupling_timestep,
                   YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE, interp_stack_id, 0, 0);
 
-  yac_cdef_couple("atm", "icon_atmos_grid", "qcond", "cleo", "cleo_grid", "qcond", "PT30M",
-                  YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE, interp_stack_id, 0, 0);
+  yac_cdef_couple("atm", "icon_atmos_grid", "qcond", "cleo", "cleo_grid", "qcond",
+                  coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, 0, 0);
 
   yac_cdef_couple("atm", "icon_atmos_grid", "eastward_wind", "cleo", "cleo_grid", "eastward_wind",
-                  "PT30M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE, interp_stack_id, 0,
-                  0);
+                  coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, 0, 0);
 
   yac_cdef_couple("atm", "icon_atmos_grid", "northward_wind", "cleo", "cleo_grid", "northward_wind",
-                  "PT30M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE, interp_stack_id, 0,
-                  0);
+                  coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, 0, 0);
 
   yac_cdef_couple("atm", "icon_atmos_grid", "vertical_wind", "cleo", "cleo_grid", "vertical_wind",
-                  "PT30M", YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE, interp_stack_id, 0,
-                  0);
+                  coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, 0, 0);
 
   // --- End of YAC definitions ---
   yac_cenddef();
