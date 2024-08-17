@@ -54,5 +54,7 @@ outputdata:
 
 coupled_dynamics:
   type: yac
-  lower_latitude: -0.157079632
-  upper_latitude: 0.157079632
+  lower_longitude: -0.02255
+  upper_longitude: 0.02255
+  lower_latitude: -0.01347
+  upper_latitude: 0.01347

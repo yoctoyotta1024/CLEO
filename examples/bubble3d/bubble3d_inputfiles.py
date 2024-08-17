@@ -69,11 +69,17 @@ def main(
     isfigures = [True, True]
     savefigpath = path2build + "/bin/"  # directory for saving figures
 
-    ### --- settings for 2-D gridbox boundaries --- ###
+    ### --- settings for 3-D gridbox boundaries --- ###
     num_vertical_levels = 24  # TODO(CB): move to config file (?)
     zgrid = get_zgrid(icon_grid_file, num_vertical_levels)  # [m]
-    xgrid = [0, 5000, 100]  # evenly spaced xhalf coords [m]
-    ygrid = np.array([0, 1000, 2000])  # array of yhalf coords [m]
+    xgrid = [
+        0,
+        5000,
+        100,
+    ]  # evenly spaced xhalf coords [m] # distance must match longitude in config file
+    ygrid = np.array(
+        [0, 1500, 3000]
+    )  # array of yhalf coords [m] # distance must match latitudes in config file
 
     ### --- settings for initial superdroplets --- ###
     # settings for initial superdroplet coordinates

@@ -53,22 +53,10 @@ std::array<size_t, 3> kijfromindex(const std::array<size_t, 3> &ndims, const siz
 void create_vertex_coordinates(const Config &config, const std::array<size_t, 3> ndims,
                                std::vector<double> &vertex_longitudes,
                                std::vector<double> &vertex_latitudes) {
-  double lower_longitude = 0;
-  double upper_longitude = ndims[EASTWARD] * (2 * std::numbers::pi / (ndims[EASTWARD] + 1));
-  double lower_latitude = (-0.5 * std::numbers::pi * ndims[NORTHWARD]) / (ndims[NORTHWARD] + 2);
-  double upper_latitude = (0.5 * std::numbers::pi * ndims[NORTHWARD]) / (ndims[NORTHWARD] + 2);
-
-  if (!std::isnan(config.get_yac_dynamics().lower_longitude))
-    lower_longitude = config.get_yac_dynamics().lower_longitude;
-
-  if (!std::isnan(config.get_yac_dynamics().upper_longitude))
-    upper_longitude = config.get_yac_dynamics().upper_longitude;
-
-  if (!std::isnan(config.get_yac_dynamics().lower_latitude))
-    lower_latitude = config.get_yac_dynamics().lower_latitude;
-
-  if (!std::isnan(config.get_yac_dynamics().upper_latitude))
-    upper_latitude = config.get_yac_dynamics().upper_latitude;
+  lower_longitude = config.get_yac_dynamics().lower_longitude;
+  upper_longitude = config.get_yac_dynamics().upper_longitude;
+  lower_latitude = config.get_yac_dynamics().lower_latitude;
+  upper_latitude = config.get_yac_dynamics().upper_latitude;
 
   // Defines the vertex longitude and latitude values in radians for grid creation
   // The values are later permuted by YAC to generate all vertex coordinates
