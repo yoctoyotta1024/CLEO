@@ -53,10 +53,10 @@ std::array<size_t, 3> kijfromindex(const std::array<size_t, 3> &ndims, const siz
 void create_vertex_coordinates(const Config &config, const std::array<size_t, 3> ndims,
                                std::vector<double> &vertex_longitudes,
                                std::vector<double> &vertex_latitudes) {
-  lower_longitude = config.get_yac_dynamics().lower_longitude;
-  upper_longitude = config.get_yac_dynamics().upper_longitude;
-  lower_latitude = config.get_yac_dynamics().lower_latitude;
-  upper_latitude = config.get_yac_dynamics().upper_latitude;
+  const auto lower_longitude = config.get_yac_dynamics().lower_longitude;
+  const auto upper_longitude = config.get_yac_dynamics().upper_longitude;
+  const auto lower_latitude = config.get_yac_dynamics().lower_latitude;
+  const auto upper_latitude = config.get_yac_dynamics().upper_latitude;
 
   // Defines the vertex longitude and latitude values in radians for grid creation
   // The values are later permuted by YAC to generate all vertex coordinates
