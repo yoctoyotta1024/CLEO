@@ -63,7 +63,7 @@ then
   export OMP_PROC_BIND=spread
   export OMP_PLACES=threads
 
-  icon_grid_file=/work/mh1126/m300950/icon/build/experiments/aes_bubble/Torus_Triangles_20x4_5000m.nc
+  icon_grid_file=/work/mh1126/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc
   icon_data_file=/work/mh1126/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc
   icon_grid_name="icon_atmos_grid" # must match CLEO (see yac_cartesian_dynamics.cpp)
   icon_data_timestep=30 # must match ICON data file [seconds]
@@ -71,7 +71,7 @@ then
   cleo_t_end=3600 # must match CLEO config file [seconds]
   cleo_vertical_levels=25 # must match CLEO gridfile
 
-  icon_grid_file_copy=${path2build}/share/icon_grid_file_Torus_Triangles_20x4_5000m.nc
+  icon_grid_file_copy=${path2build}/share/icon_grid_file_aes_bubble_atm_cgrid_ml.nc
   icon_data_file_copy=${path2build}/share/icon_data_file_aes_bubble_atm_3d_ml_20080801T000000Z.nc
 
   cp ${icon_grid_file} ${icon_grid_file_copy}

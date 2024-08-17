@@ -119,6 +119,7 @@ def prepare_data_for_yac(source):
     return target
 
 
+# TODO(CB): (move variables to and) read in variables from CLEO config file
 grid_filename = sys.argv[1]
 data_filename = sys.argv[2]
 grid_name = sys.argv[3]  # must match CLEO (see yac_cartesian_dynamics.cpp)
