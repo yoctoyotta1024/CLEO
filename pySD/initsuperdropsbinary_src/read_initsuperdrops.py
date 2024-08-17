@@ -198,7 +198,7 @@ def plot_initGBxs_attrdistribs(
         gbxidxs = np.unique(attrs.sdgbxindex)
         savename = binpath + "initallGBxs_distribs" + savelabel + ".png"
     else:
-        gbxidxs = gbxs2plt
+        gbxidxs = [int(g) for g in gbxs2plt]
         savename = binpath + "initGBxs_distribs" + savelabel + ".png"
 
     fig, axs, lines = plot_initdistribs(attrs, gbxvols, gbxidxs)
