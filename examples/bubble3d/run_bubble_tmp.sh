@@ -16,6 +16,11 @@ path2CLEO=${2:-${HOME}/CLEO}
 path2yac=${3:-/work/mh1126/m300950/yac}
 path2build=${4:-${HOME}/CLEO/build_bubble3d}
 
+icon_grid_file=/work/mh1126/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc
+icon_data_file=/work/mh1126/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc
+icon_grid_file_copy=${path2build}/share/icon_grid_file_aes_bubble_atm_cgrid_ml.nc
+icon_data_file_copy=${path2build}/share/icon_data_file_aes_bubble_atm_3d_ml_20080801T000000Z.nc
+
 if [ "${action}" == "build" ]
 then
   mkdir ${path2build}
@@ -40,13 +45,18 @@ then
 
 elif [ "${action}" == "inputfiles" ]
 then
+  cp ${icon_grid_file} ${icon_grid_file_copy}
+  cp ${icon_data_file} ${icon_data_file_copy}
+
   source activate /work/mh1126/m300950/cleoenv
   /work/mh1126/m300950/cleoenv/bin/python ${path2CLEO}/examples/bubble3d/bubble3d_inputfiles.py \
    ${path2CLEO} \
    ${path2build} \
    ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
    ${path2build}/share/bubble3d_dimlessGBxboundaries.dat \
-   ${path2build}/share/bubble3d_dimlessSDsinit.dat 0
+   ${path2build}/share/bubble3d_dimlessSDsinit.dat \
+   ${icon_grid_file_copy} \
+   0
 
 elif [ "${action}" == "run" ]
 then
@@ -63,19 +73,11 @@ then
   export OMP_PROC_BIND=spread
   export OMP_PLACES=threads
 
-  icon_grid_file=/work/mh1126/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc
-  icon_data_file=/work/mh1126/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc
   icon_grid_name="icon_atmos_grid" # must match CLEO (see yac_cartesian_dynamics.cpp)
   icon_data_timestep=30 # must match ICON data file [seconds]
   cleo_coupling_timestep=60 # must match CLEO config file [seconds]
   cleo_t_end=3600 # must match CLEO config file [seconds]
   cleo_vertical_levels=25 # must match CLEO gridfile
-
-  icon_grid_file_copy=${path2build}/share/icon_grid_file_aes_bubble_atm_cgrid_ml.nc
-  icon_data_file_copy=${path2build}/share/icon_data_file_aes_bubble_atm_3d_ml_20080801T000000Z.nc
-
-  cp ${icon_grid_file} ${icon_grid_file_copy}
-  cp ${icon_data_file} ${icon_data_file_copy}
 
   mpiexec -n 1 ${path2build}/examples/bubble3d/src/bubble3D \
     ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
