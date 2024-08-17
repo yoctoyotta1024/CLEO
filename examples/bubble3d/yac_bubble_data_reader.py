@@ -71,8 +71,8 @@ def map_vertices(array):
 
 def create_yac_unstructured_grid(grid_filename, grid_name):
     """create unstructured grid for YAC from ICON netcdf file.
-    Note different .nc files may have different names for variables,
-    e.g. "nv" <=> "vertices"
+    Note different .nc files may have different names for variables, e.g.
+    "nv" <=> "vertices"
     "cell" <=> "ncells"
     "clon_vertices" <=> "clon_bnds"
     "clat_vertices" <=> "clat_bnds"
@@ -81,16 +81,16 @@ def create_yac_unstructured_grid(grid_filename, grid_name):
     dataset = Dataset(grid_filename, "r")
 
     # Read the variables
-    nv = dataset.dimensions["nv"].size
-    no_cells = dataset.dimensions["cell"].size
+    nv = dataset.dimensions["vertices"].size
+    no_cells = dataset.dimensions["ncells"].size
 
     vertices = []
-    for cell in range(len(dataset["clon_vertices"])):
+    for cell in range(len(dataset["clon_bnds"])):
         for vertex in range(3):
             vertices.append(
                 [
-                    dataset["clon_vertices"][cell][vertex],
-                    dataset["clat_vertices"][cell][vertex],
+                    dataset["clon_bnds"][cell][vertex],
+                    dataset["clat_bnds"][cell][vertex],
                 ]
             )
 
@@ -99,8 +99,8 @@ def create_yac_unstructured_grid(grid_filename, grid_name):
     grid = UnstructuredGrid(
         grid_name,
         np.ones(no_cells) * nv,
-        dataset["clon_vertices"][:, :].flatten(),
-        dataset["clat_vertices"][:, :].flatten(),
+        dataset["clon_bnds"][:, :].flatten(),
+        dataset["clat_bnds"][:, :].flatten(),
         cell_vertex_indices,
     )
 
