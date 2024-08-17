@@ -69,7 +69,7 @@ def map_vertices(array):
     return vertex_mapping_array
 
 
-def create_yac_unstructured_grid(grid_filename):
+def create_yac_unstructured_grid(grid_filename, grid_name):
     """create unstructured grid for YAC from ICON netcdf file.
     Note different .nc files may have different names for variables,
     e.g. "nv" <=> "vertices"
@@ -96,7 +96,6 @@ def create_yac_unstructured_grid(grid_filename):
 
     cell_vertex_indices = map_vertices(vertices)
 
-    grid_name = "aes_bubble_atm_icon_grid"
     grid = UnstructuredGrid(
         grid_name,
         np.ones(no_cells) * nv,
@@ -122,10 +121,38 @@ def prepare_data_for_yac(source):
 
 grid_filename = sys.argv[1]
 data_filename = sys.argv[2]
-DATATSTEP = float(sys.argv[3])  # must match ICON data file [seconds]
-COUPLTSTEP = float(sys.argv[4])  # must match CLEO config file [seconds]
+grid_name = sys.argv[3]  # must match CLEO (see yac_cartesian_dynamics.cpp)
+DATATSTEP = float(sys.argv[4])  # must match ICON data file [seconds]
+COUPLTSTEP = float(sys.argv[5])  # must match CLEO config file [seconds]
 T_END = float(sys.argv[6])  # must match CLEO config file [seconds]
-num_vertical_levels = int(sys.argv[5])  # must match CLEO gridfile
+num_vertical_levels = int(sys.argv[7])  # must match CLEO gridfile
+
+msg = (
+    "--- INPUT ARGS ---"
+    + "\ngrid_filename: "
+    + grid_filename
+    + "\ndata_filename: "
+    + data_filename
+    + "\ngrid_name: "
+    + grid_name
+    + "\nDATASTEP: "
+    + str(DATATSTEP)
+    + "\nCOUPLTSTEP: "
+    + str(COUPLTSTEP)
+    + "\nT_END: "
+    + str(T_END)
+    + "\nnum_vertical_levels: "
+    + str(num_vertical_levels)
+    + "\n--- --- --- --- --- ---"
+)
+print(msg)
+
+assert (
+    DATATSTEP <= COUPLTSTEP
+), "COUPLTSTEP [s] must be greater than or equal to DATATSTEP [s]"
+assert (
+    COUPLTSTEP % DATATSTEP == 0.0
+), "COUPLTSTEP [s] must be integer multiple of DATATSTEP [s]"
 
 yac = YAC()
 
@@ -202,12 +229,6 @@ yac.enddef()
 
 dataset = Dataset(data_filename)
 
-assert (
-    DATATSTEP <= COUPLTSTEP
-), "COUPLTSTEP [s] must be greater than or equal to DATATSTEP [s]"
-assert (
-    DATATSTEP % COUPLTSTEP == 0.0
-), "COUPLTSTEP [s] must be integer multiple of DATATSTEP [s]"
 datasteps_per_coupling_step = COUPLTSTEP / DATATSTEP
 num_couplingsteps = int(np.floor(T_END / COUPLTSTEP) + 1)
 

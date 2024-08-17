@@ -65,6 +65,7 @@ then
 
   icon_grid_file=/work/mh1126/m300950/icon/build/experiments/aes_bubble/Torus_Triangles_20x4_5000m.nc
   icon_data_file=/work/mh1126/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc
+  icon_grid_name="icon_atmos_grid" # must match CLEO (see yac_cartesian_dynamics.cpp)
   icon_data_timestep=30 # must match ICON data file [seconds]
   cleo_coupling_timestep=60 # must match CLEO config file [seconds]
   cleo_t_end=3600 # must match CLEO config file [seconds]
@@ -73,13 +74,13 @@ then
   grid_file_copy=${path2build}/share/icon_grid_file_Torus_Triangles_20x4_5000m.nc
   data_file_copy=${path2build}/share/icon_data_file_aes_bubble_atm_3d_ml_20080801T000000Z.nc
 
-  cp ${icon_grid_file} ${grid_file_copy}
-  cp ${icon_data_file} ${data_file_copy}
+  cp ${icon_grid_file} ${icon_grid_file_copy}
+  cp ${icon_data_file} ${icon_data_file_copy}
 
   mpiexec -n 1 ${path2build}/examples/bubble3d/src/bubble3D \
     ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
     : -n 1 python \
     ${path2CLEO}/examples/bubble3d/yac_bubble_data_reader.py \
-    ${grid_file_copy} ${data_file_copy} ${icon_data_timestep} \
-    ${cleo_coupling_timestep} ${cleo_vertical_levels} ${cleo_t_end}
+    ${icon_grid_file_copy} ${icon_data_file_copy} ${icon_grid_name} ${icon_data_timestep} \
+    ${cleo_coupling_timestep} ${cleo_t_end} ${cleo_vertical_levels}
 fi

@@ -9,7 +9,7 @@
  * Author: Wilton Loch (WL)
  * Additional Contributors: Clara Bayley (CB)
  * -----
- * Last Modified: Friday 16th August 2024
+ * Last Modified: Saturday 17th August 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -237,7 +237,9 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   int horizontal_fields_collection_size = ndims[VERTICAL];
   int vertical_winds_collection_size = ndims[VERTICAL] + 1;
 
-  const char coupling_timestep[6] = "PT60S";
+  const char coupling_timestep[6] = "PT60S";  // TODO(CB): move these variables to config
+  const char coupldyn_grid_name[16] = "icon_atmos_grid";
+
   yac_cdef_field("pressure", component_id, &cell_point_id, num_point_sets,
                  horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
                  &pressure_yac_id);
@@ -267,30 +269,30 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
                  &vertical_wind_yac_id);
 
   // --- Field coupling definitions ---
-  yac_cdef_couple("atm", "icon_atmos_grid", "pressure", "cleo", "cleo_grid", "pressure",
+  yac_cdef_couple("atm", coupldyn_grid_name, "pressure", "cleo", "cleo_grid", "pressure",
                   coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
                   interp_stack_id, 0, 0);
 
-  yac_cdef_couple("atm", "icon_atmos_grid", "temperature", "cleo", "cleo_grid", "temperature",
+  yac_cdef_couple("atm", coupldyn_grid_name, "temperature", "cleo", "cleo_grid", "temperature",
                   coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
                   interp_stack_id, 0, 0);
 
-  yac_cdef_couple("atm", "icon_atmos_grid", "qvap", "cleo", "cleo_grid", "qvap", coupling_timestep,
+  yac_cdef_couple("atm", coupldyn_grid_name, "qvap", "cleo", "cleo_grid", "qvap", coupling_timestep,
                   YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE, interp_stack_id, 0, 0);
 
-  yac_cdef_couple("atm", "icon_atmos_grid", "qcond", "cleo", "cleo_grid", "qcond",
+  yac_cdef_couple("atm", coupldyn_grid_name, "qcond", "cleo", "cleo_grid", "qcond",
                   coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
                   interp_stack_id, 0, 0);
 
-  yac_cdef_couple("atm", "icon_atmos_grid", "eastward_wind", "cleo", "cleo_grid", "eastward_wind",
+  yac_cdef_couple("atm", coupldyn_grid_name, "eastward_wind", "cleo", "cleo_grid", "eastward_wind",
                   coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
                   interp_stack_id, 0, 0);
 
-  yac_cdef_couple("atm", "icon_atmos_grid", "northward_wind", "cleo", "cleo_grid", "northward_wind",
-                  coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
-                  interp_stack_id, 0, 0);
+  yac_cdef_couple("atm", coupldyn_grid_name, "northward_wind", "cleo", "cleo_grid",
+                  "northward_wind", coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
+                  YAC_REDUCTION_TIME_NONE, interp_stack_id, 0, 0);
 
-  yac_cdef_couple("atm", "icon_atmos_grid", "vertical_wind", "cleo", "cleo_grid", "vertical_wind",
+  yac_cdef_couple("atm", coupldyn_grid_name, "vertical_wind", "cleo", "cleo_grid", "vertical_wind",
                   coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
                   interp_stack_id, 0, 0);
 
