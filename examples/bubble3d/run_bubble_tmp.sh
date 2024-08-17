@@ -77,12 +77,12 @@ then
   icon_data_timestep=30 # must match ICON data file [seconds]
   cleo_coupling_timestep=60 # must match CLEO config file [seconds]
   cleo_t_end=3600 # must match CLEO config file [seconds]
-  cleo_vertical_levels=25 # must match CLEO gridfile
+  cleo_num_vertical_levels=24 # must match CLEO gridfile
 
   mpiexec -n 1 ${path2build}/examples/bubble3d/src/bubble3D \
     ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
     : -n 1 python \
     ${path2CLEO}/examples/bubble3d/yac_bubble_data_reader.py \
     ${icon_grid_file_copy} ${icon_data_file_copy} ${icon_grid_name} ${icon_data_timestep} \
-    ${cleo_coupling_timestep} ${cleo_t_end} ${cleo_vertical_levels}
+    ${cleo_coupling_timestep} ${cleo_t_end} ${cleo_num_vertical_levels}
 fi

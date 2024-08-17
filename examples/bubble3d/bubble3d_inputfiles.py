@@ -23,7 +23,23 @@ thermodynamics read from ICON output of bubble test case by YAC
 import sys
 
 
-def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, SDgbxs2plt):
+def get_zgrid(icon_grid_file, num_vertical_levels):
+    """returns zgrid for CLEO gridfile with same vertical levels as ICON grid file"""
+    import numpy as np
+    import xarray as xr
+
+    grid = xr.open_dataset(icon_grid_file)
+    idx2 = int(grid.height.values[-1])
+    idx1 = int(idx2 - num_vertical_levels - 1)
+    zhalf = grid.zghalf.values[idx1:idx2, 0]  # [m]
+    zgrid = np.flip(zhalf)
+
+    return zgrid  # [m]
+
+
+def main(
+    path2CLEO, path2build, configfile, gridfile, initSDsfile, icon_grid_file, SDgbxs2plt
+):
     import numpy as np
     import matplotlib.pyplot as plt
 
@@ -54,9 +70,10 @@ def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, SDgbxs2plt):
     savefigpath = path2build + "/bin/"  # directory for saving figures
 
     ### --- settings for 2-D gridbox boundaries --- ###
-    zgrid = [0, 1500, 60]  # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
-    xgrid = [0, 1500, 50]  # evenly spaced xhalf coords [m]
-    ygrid = np.array([0, 100, 200, 300])  # array of yhalf coords [m]
+    num_vertical_levels = 24  # TODO(CB): move to config file (?)
+    zgrid = get_zgrid(icon_grid_file, num_vertical_levels)  # [m]
+    xgrid = [0, 5000, 100]  # evenly spaced xhalf coords [m]
+    ygrid = np.array([0, 1000, 2000])  # array of yhalf coords [m]
 
     ### --- settings for initial superdroplets --- ###
     # settings for initial superdroplet coordinates
