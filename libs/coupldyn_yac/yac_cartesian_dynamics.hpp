@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 16th August 2024
+ * Last Modified: Saturday 17th August 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -35,7 +35,6 @@
 #include <vector>
 
 #include "initialise/config.hpp"
-
 
 /* contains 1-D vector for each (thermo)dynamic
 variable which is ordered by gridbox at every timestep
@@ -73,9 +72,9 @@ struct CartesianDynamics {
   int vertical_wind_yac_id;
 
   // Containers to receive data from YAC
-  double ** yac_raw_cell_data;
-  double ** yac_raw_edge_data;
-  double ** yac_raw_vertical_wind_data;
+  double **yac_raw_cell_data;
+  double **yac_raw_edge_data;
+  double **yac_raw_vertical_wind_data;
 
   /* --- Private functions --- */
 
@@ -124,9 +123,9 @@ struct CartesianDynamics {
   /* Public call to receive data from YAC
    * If the problem is 2D turns into a wrapper for receive_hor_slice_from_yac */
   void receive_fields_from_yac();
-  void receive_yac_field(unsigned int field_type, unsigned int yac_field_id,
-                         double ** yac_raw_data, std::vector<double> & target_array,
-                         size_t vertical_levels, double conversion_factor);
+  void receive_yac_field(unsigned int field_type, unsigned int yac_field_id, double **yac_raw_data,
+                         std::vector<double> &target_array, size_t vertical_levels,
+                         double conversion_factor);
 };
 
 /* type satisfying CoupledDyanmics solver concept
@@ -139,9 +138,7 @@ struct YacDynamics {
   std::shared_ptr<CartesianDynamics> dynvars;  // pointer to (thermo)dynamic variables
 
   /* Calls the get operations to receive data from YAC for each of the fields of interest */
-  void run_dynamics(const unsigned int t_mdl) const {
-    dynvars->receive_fields_from_yac();
-  }
+  void run_dynamics(const unsigned int t_mdl) const { dynvars->receive_fields_from_yac(); }
 
  public:
   YacDynamics(const Config &config, const unsigned int couplstep, const std::array<size_t, 3> ndims,
