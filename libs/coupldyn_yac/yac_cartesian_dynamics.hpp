@@ -128,8 +128,9 @@ struct CartesianDynamics {
   /* Public call to receive data from YAC
    * If the problem is 2D turns into a wrapper for receive_hor_slice_from_yac */
   void receive_fields_from_yac();
-  void receive_yac_field(unsigned int field_type, unsigned int yac_field_id, double **yac_raw_data,
-                         std::vector<double> &target_array, size_t vertical_levels,
+  void receive_yac_field(unsigned int yac_field_id, double **yac_raw_data,
+                         std::vector<double> &target_array, const size_t ndims_north,
+                         const size_t ndims_east, size_t vertical_levels,
                          double conversion_factor) const;
 };
 
