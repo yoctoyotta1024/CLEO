@@ -131,49 +131,53 @@ void create_grid_and_points_definitions(const Config &config, const std::array<s
                            &edge_point_id);
 }
 
+/*
+fill's target_array with values from yac_raw_data at multiplied by their conversion factor
+*/
+void CartesianDynamics::yac_raw_data_to_target_array(
+    double **yac_raw_data, std::vector<double> &target_array, const size_t ndims_north,
+    const size_t ndims_east, const size_t vertical_levels, const double conversion_factor) const {
+  for (size_t j = 0; j < ndims_north; j++) {
+    for (size_t i = 0; i < ndims_east; i++) {
+      for (size_t k = 0; k < vertical_levels; k++) {
+        auto vertical_idx = k;
+        auto source_idx = j * ndims_east + i;
+        auto ii = (ndims_east * j + i) * vertical_levels + k;
+        target_array[ii] = yac_raw_data[vertical_idx][source_idx] / conversion_factor;
+      }
+    }
+  }
+}
+
 void CartesianDynamics::receive_yac_field(unsigned int field_type, unsigned int yac_field_id,
                                           double **yac_raw_data, std::vector<double> &target_array,
-                                          size_t vertical_levels, double conversion_factor = 1.0) {
+                                          size_t vertical_levels,
+                                          double conversion_factor = 1.0) const {
   int info, error;
-  unsigned int total_horizontal_cells = ndims[EASTWARD] * ndims[NORTHWARD];
-  bool edge_dimension = false;
-  std::vector<double>::iterator target_it = target_array.begin();
-
   yac_cget(yac_field_id, vertical_levels, yac_raw_data, &info, &error);
 
   switch (field_type) {
-    case 0:
-      for (size_t i = 0; i < vertical_levels; i++)
-        for (size_t j = 0; j < total_horizontal_cells; j++)
-          target_array[i * total_horizontal_cells + j] = yac_raw_data[i][j] / conversion_factor;
+    case 0:  // CELL
+      yac_raw_data_to_target_array(yac_raw_data, target_array, ndims[NORTHWARD], ndims[EASTWARD],
+                                   vertical_levels, conversion_factor);
       return;
 
-    case 1:
-      edge_dimension = true;
-      break;
+    case 1:  // EASTWARD_EDGE
+      yac_raw_data_to_target_array(yac_raw_data, target_array, ndims[NORTHWARD],
+                                   ndims[EASTWARD] + 1, vertical_levels, conversion_factor);
+      return;
 
-    case 2:
-      edge_dimension = false;
-      break;
-  }
-
-  for (size_t vertical_index = 0; vertical_index < ndims[VERTICAL]; vertical_index++) {
-    unsigned int source_index = 0;
-    for (size_t lat_index = 0; lat_index < (ndims[NORTHWARD] + 1) * 2 - 1; lat_index++) {
-      if (lat_index % 2 == edge_dimension) {
-        for (size_t index = 0; index < ndims[EASTWARD] + edge_dimension;
-             index++, target_it++, source_index++)
-          *target_it = yac_raw_data[vertical_index][source_index] / conversion_factor;
-      } else
-        source_index += ndims[EASTWARD] + !edge_dimension;
-    }
+    case 2:  // NORTHWARD_EDGE
+      yac_raw_data_to_target_array(yac_raw_data, target_array, ndims[NORTHWARD] + 1,
+                                   ndims[EASTWARD], vertical_levels, conversion_factor);
+      return;
   }
 }
 
 /* This subroutine is the main entry point for receiving data from YAC.
  * It checks the dimensionality of the simulation based on the config data. */
 void CartesianDynamics::receive_fields_from_yac() {
-  enum field_types { CELL, EASTWARD_EDGE, NORTHWARD_EDGE };
+  enum field_types { CELL = 0, EASTWARD_EDGE = 1, NORTHWARD_EDGE = 2 };
 
   receive_yac_field(CELL, temp_yac_id, yac_raw_cell_data, temp, ndims[VERTICAL], dlc::TEMP0);
   receive_yac_field(CELL, pressure_yac_id, yac_raw_cell_data, press, ndims[VERTICAL], dlc::P0);

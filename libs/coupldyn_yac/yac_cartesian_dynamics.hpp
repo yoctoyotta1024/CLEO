@@ -103,6 +103,11 @@ struct CartesianDynamics {
    meaning a 2D set of grid boxes along u and w directions */
   void receive_hor_slice_from_yac(int cell_offset, int u_edges_offset, int w_edges_offset);
 
+  void yac_raw_data_to_target_array(double **yac_raw_data, std::vector<double> &target_array,
+                                    const size_t ndims_north, const size_t ndims_east,
+                                    const size_t vertical_levels,
+                                    const double conversion_factor) const;
+
  public:
   CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
                     const unsigned int nsteps);
@@ -125,7 +130,7 @@ struct CartesianDynamics {
   void receive_fields_from_yac();
   void receive_yac_field(unsigned int field_type, unsigned int yac_field_id, double **yac_raw_data,
                          std::vector<double> &target_array, size_t vertical_levels,
-                         double conversion_factor);
+                         double conversion_factor) const;
 };
 
 /* type satisfying CoupledDyanmics solver concept
