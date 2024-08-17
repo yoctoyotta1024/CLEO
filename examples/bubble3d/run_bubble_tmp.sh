@@ -71,8 +71,8 @@ then
   cleo_t_end=3600 # must match CLEO config file [seconds]
   cleo_vertical_levels=25 # must match CLEO gridfile
 
-  grid_file_copy=${path2build}/share/icon_grid_file_Torus_Triangles_20x4_5000m.nc
-  data_file_copy=${path2build}/share/icon_data_file_aes_bubble_atm_3d_ml_20080801T000000Z.nc
+  icon_grid_file_copy=${path2build}/share/icon_grid_file_Torus_Triangles_20x4_5000m.nc
+  icon_data_file_copy=${path2build}/share/icon_data_file_aes_bubble_atm_3d_ml_20080801T000000Z.nc
 
   cp ${icon_grid_file} ${icon_grid_file_copy}
   cp ${icon_data_file} ${icon_data_file_copy}

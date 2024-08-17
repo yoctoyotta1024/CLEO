@@ -163,7 +163,7 @@ yac.def_datetime(iso_start, iso_end)
 
 component_name = "atm"
 component = yac.def_comp(component_name)
-grid = create_yac_unstructured_grid(grid_filename)
+grid = create_yac_unstructured_grid(grid_filename, grid_name)
 
 # --- Field definitions ---
 coupling_tstep = convert_seconds_to_isodate(COUPLTSTEP)
