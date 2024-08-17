@@ -109,14 +109,20 @@ def create_yac_unstructured_grid(grid_filename, grid_name):
 
     return grid
 
+
 def icon_data_slice(data, timeidx, num_vertical_levels):
-    ''' returns slice of data at timeidx from
+    """returns slice of data at timeidx from
     lowest height level to lowest+num_vertical_levels accounting for
-    fact that ICON data height levels go from top to bottom'''
+    fact that ICON data height levels go from top to bottom"""
     num_data_vertical_levels = data.shape[1]
-    assert (num_data_vertical_levels >= num_vertical_levels), "data must have at least as many vertical levels as desired for slice"
-    heightidx = num_data_vertical_levels - num_vertical_levels # index of uppermost desired level of ICON data
+    assert (
+        num_data_vertical_levels >= num_vertical_levels
+    ), "data must have at least as many vertical levels as desired for slice"
+    heightidx = (
+        num_data_vertical_levels - num_vertical_levels
+    )  # index of uppermost desired level of ICON data
     return np.flip(data[timeidx, heightidx:, :])
+
 
 def prepare_data_for_yac(source):
     vertical_levels = len(source[:, 1])
@@ -245,10 +251,38 @@ for coupling_step in range(num_couplingsteps):
     timeidx = (
         coupling_step * datasteps_per_coupling_step
     )  # index along time axis of data to "put"
-    temp.put(prepare_data_for_yac(icon_data_slice(dataset["ta"], timeidx, num_vertical_levels)))
-    press.put(prepare_data_for_yac(icon_data_slice(dataset["pfull"], timeidx, num_vertical_levels)))
-    qvap.put(prepare_data_for_yac(icon_data_slice(dataset["hus"], timeidx, num_vertical_levels)))
-    qcond.put(prepare_data_for_yac(icon_data_slice(dataset["clw"], timeidx, num_vertical_levels)))
-    vertical_wind.put(prepare_data_for_yac(icon_data_slice(dataset["wa"], timeidx, num_vertical_levels+1)))
-    eastward_wind.put(prepare_data_for_yac(icon_data_slice(dataset["ua"], timeidx, num_vertical_levels)))
-    northward_wind.put(prepare_data_for_yac(icon_data_slice(dataset["va"], timeidx, num_vertical_levels)))
+    temp.put(
+        prepare_data_for_yac(
+            icon_data_slice(dataset["ta"], timeidx, num_vertical_levels)
+        )
+    )
+    press.put(
+        prepare_data_for_yac(
+            icon_data_slice(dataset["pfull"], timeidx, num_vertical_levels)
+        )
+    )
+    qvap.put(
+        prepare_data_for_yac(
+            icon_data_slice(dataset["hus"], timeidx, num_vertical_levels)
+        )
+    )
+    qcond.put(
+        prepare_data_for_yac(
+            icon_data_slice(dataset["clw"], timeidx, num_vertical_levels)
+        )
+    )
+    vertical_wind.put(
+        prepare_data_for_yac(
+            icon_data_slice(dataset["wa"], timeidx, num_vertical_levels + 1)
+        )
+    )
+    eastward_wind.put(
+        prepare_data_for_yac(
+            icon_data_slice(dataset["ua"], timeidx, num_vertical_levels)
+        )
+    )
+    northward_wind.put(
+        prepare_data_for_yac(
+            icon_data_slice(dataset["va"], timeidx, num_vertical_levels)
+        )
+    )
