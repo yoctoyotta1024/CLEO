@@ -25,8 +25,8 @@
 ### SDM Runtime Parameters ###
 domain:
   nspacedims : 3                                          # no. of spatial dimensions to model
-  ngbxs : 960                                            # total number of Gbxs
-  maxnsupers: 960                                        # maximum number of SDs
+  ngbxs : 576                                            # total number of Gbxs
+  maxnsupers: 576                                        # maximum number of SDs
 
 timesteps:
   CONDTSTEP : 2                                           # time between SD condensation [s]
@@ -54,7 +54,7 @@ outputdata:
 
 coupled_dynamics:
   type: yac
-  lower_longitude: -3.29867229
-  upper_longitude: 2.98451302
-  lower_latitude: -1.30899694
-  upper_latitude: 1.30899694
+  lower_longitude: -0.9424777965
+  upper_longitude: 0.9424777965
+  lower_latitude: -0.392699082
+  upper_latitude: 0.392699082

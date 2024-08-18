@@ -73,8 +73,8 @@ def main(
     zgrid = get_zgrid(icon_grid_file, num_vertical_levels)  # [m]
     xgrid = [
         0,
-        100000,
-        5000,
+        30000,
+        2500,
     ]  # evenly spaced xhalf coords [m] # distance must match longitude in config file
     ygrid = [
         0,
