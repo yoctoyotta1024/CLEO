@@ -2,6 +2,43 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.25.0](https://github.com/yoctoyotta1024/CLEO/compare/55cd54fed2074aa32c44d8398d2437c24e9c8c84..v0.25.0) - 2024-08-18
+#### Bug Fixes
+- correctly slice icon data to account for vertical levels being top down not bottom up - ([981f486](https://github.com/yoctoyotta1024/CLEO/commit/981f486106c9411a8811b731e84dda75f1c92bb5)) - clara.bayley
+- correct ordering of yac_raw_data into target_array for each variable - ([3a111f5](https://github.com/yoctoyotta1024/CLEO/commit/3a111f586417aa28bdbde3588a99d0cefbcc34dc)) - clara.bayley
+- add missin types - ([f598954](https://github.com/yoctoyotta1024/CLEO/commit/f5989545e4354607891629f03baff29c510dbea6)) - clara.bayley
+- minor variable renaming - ([67ca555](https://github.com/yoctoyotta1024/CLEO/commit/67ca5551a047c57abba91d2645f72618e993546d)) - clara.bayley
+- ensure gbxidxs for plotting are ints - ([2e4a1a9](https://github.com/yoctoyotta1024/CLEO/commit/2e4a1a9324c23e83e7cc4e38ca26f09325184900)) - clara.bayley
+- ensure gbxidxs for plotting are ints - ([1ff8812](https://github.com/yoctoyotta1024/CLEO/commit/1ff88120d5cdd98f51631d3d6344e39c1e5477cc)) - clara.bayley
+- use correct grid in tmp run script - ([63e5fe2](https://github.com/yoctoyotta1024/CLEO/commit/63e5fe2fd45e74c88a94027eb173dec76b7ede5c)) - clara.bayley
+- minor bug fixes for typos and naming types for args into script - ([70914cf](https://github.com/yoctoyotta1024/CLEO/commit/70914cf5e55d68c4198f4ec2fc9248815ae206fa)) - clara.bayley
+- don't activate cleoenv during compilation - ([b2f2946](https://github.com/yoctoyotta1024/CLEO/commit/b2f2946ef03fd332d93a81d861375f217aad0a24)) - clara.bayley
+- correct gridfile for bubble - ([dd09574](https://github.com/yoctoyotta1024/CLEO/commit/dd09574b47b6325ffcd3f51a5f302dd3d0fc20a8)) - clara.bayley
+- correct python path for yac - ([55cd54f](https://github.com/yoctoyotta1024/CLEO/commit/55cd54fed2074aa32c44d8398d2437c24e9c8c84)) - clara.bayley
+#### Features
+- chose file  for ICONN data fom arguments passed to python script - ([259ab37](https://github.com/yoctoyotta1024/CLEO/commit/259ab37fc879921a83062df11959b71da8456759)) - clara.bayley
+#### Miscellaneous Chores
+- extend bubble example run time - ([33c9cbb](https://github.com/yoctoyotta1024/CLEO/commit/33c9cbb49d46da54c6fc466e2c4f8c97774e8003)) - clara.bayley
+- formatting - ([bdc10d1](https://github.com/yoctoyotta1024/CLEO/commit/bdc10d14a106ffb4dea3556a59723a2c218e19ff)) - clara.bayley
+- formatting - ([e0c2cae](https://github.com/yoctoyotta1024/CLEO/commit/e0c2cae69e565735898efea7ab4d19340b5a2dcc)) - clara.bayley
+- formatting - ([33c97c9](https://github.com/yoctoyotta1024/CLEO/commit/33c97c9c852511e64827ac805db10718e7f5d535)) - clara.bayley
+- formatting - ([e1df3b3](https://github.com/yoctoyotta1024/CLEO/commit/e1df3b324dbd203a8acaf9e51db376da686abd04)) - clara.bayley
+#### Refactoring
+- bubble with higher resolution settings - ([d5a026c](https://github.com/yoctoyotta1024/CLEO/commit/d5a026c228b1cbbb3ae578b33cc7f5192b3dcfde)) - clara.bayley
+- set good params for bubble example - ([df9f137](https://github.com/yoctoyotta1024/CLEO/commit/df9f1377bc7f66626e10c655a51e98bea1161b47)) - clara.bayley
+- reorganise functionality to remove case switch - ([e74a3f2](https://github.com/yoctoyotta1024/CLEO/commit/e74a3f237fd8411d318e4309957bdcd957df0eb7)) - clara.bayley
+- demand that yac is given max and min longitude and latitude in config params - ([3e67b02](https://github.com/yoctoyotta1024/CLEO/commit/3e67b02ebebdcaa38a8a47c1b7ff2501764e910c)) - clara.bayley
+- change grid for cleo in bubble3d example - ([f1d9d9f](https://github.com/yoctoyotta1024/CLEO/commit/f1d9d9f7a5d884229d34927305aa42d50d686380)) - clara.bayley
+- reorganise tmp run script for clarity - ([e4a2bf7](https://github.com/yoctoyotta1024/CLEO/commit/e4a2bf72c19d4459f2f22ba5182a92cdf57ca7cf)) - clara.bayley
+- make ICON grid name an input variable and aadded print statement - ([cbc9c21](https://github.com/yoctoyotta1024/CLEO/commit/cbc9c212ef8d1dc4a3b5265732b0e3f11881571c)) - clara.bayley
+- make ICON grid name an input variable and aadded print statement - ([7ffa41d](https://github.com/yoctoyotta1024/CLEO/commit/7ffa41d07d6712d6fa4cb49476f815b144b6cb39)) - clara.bayley
+- make yac_bubble_data_reader python script more general + formatting - ([8f8b6bf](https://github.com/yoctoyotta1024/CLEO/commit/8f8b6bf05ec487670a47d43cc9c71a8298239395)) - clara.bayley
+- remove make clean from tmp file - ([dda8571](https://github.com/yoctoyotta1024/CLEO/commit/dda857127c289a240e291f2c19870d3e2102c1d1)) - clara.bayley
+- change obsstep, coupling step and add another superdroplet observer - ([cd7fc9d](https://github.com/yoctoyotta1024/CLEO/commit/cd7fc9dbea79459ac45a25058a2d5664de1cbd8b)) - clara.bayley
+- make yac script compatible with Torus Triangles gridfile - ([ad01628](https://github.com/yoctoyotta1024/CLEO/commit/ad0162814eecf1c25f0b646762c3d9add23cfdb9)) - clara.bayley
+
+- - -
+
 ## [v0.24.0](https://github.com/yoctoyotta1024/CLEO/compare/aec716f2a6071ccd05e18c2406c3024d0e092932..v0.24.0) - 2024-08-15
 #### Bug Fixes
 - delete yac_version after moving python bindings into yac folder - ([a5e4bc7](https://github.com/yoctoyotta1024/CLEO/commit/a5e4bc7ef24fe8aeb05f185f6556e87ad2669dd4)) - clara.bayley
