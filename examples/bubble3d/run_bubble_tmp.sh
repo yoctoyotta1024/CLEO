@@ -16,6 +16,11 @@ path2CLEO=${2:-${HOME}/CLEO}
 path2yac=${3:-/work/mh1126/m300950/yac}
 path2build=${4:-${HOME}/CLEO/build_bubble3d}
 
+icon_grid_file=/work/mh1126/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc
+icon_data_file=/work/mh1126/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc
+icon_grid_file_copy=${path2build}/share/icon_grid_file_aes_bubble_atm_cgrid_ml.nc
+icon_data_file_copy=${path2build}/share/icon_data_file_aes_bubble_atm_3d_ml_20080801T000000Z.nc
+
 if [ "${action}" == "build" ]
 then
   mkdir ${path2build}
@@ -28,7 +33,7 @@ then
 
 elif [ "${action}" == "compile" ]
 then
-  cd ${path2build} && make clean
+  cd ${path2build}
 
   module purge
   module load openmpi/4.1.2-gcc-11.2.0
@@ -40,13 +45,18 @@ then
 
 elif [ "${action}" == "inputfiles" ]
 then
+  cp ${icon_grid_file} ${icon_grid_file_copy}
+  cp ${icon_data_file} ${icon_data_file_copy}
+
   source activate /work/mh1126/m300950/cleoenv
   /work/mh1126/m300950/cleoenv/bin/python ${path2CLEO}/examples/bubble3d/bubble3d_inputfiles.py \
    ${path2CLEO} \
    ${path2build} \
    ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
    ${path2build}/share/bubble3d_dimlessGBxboundaries.dat \
-   ${path2build}/share/bubble3d_dimlessSDsinit.dat 0
+   ${path2build}/share/bubble3d_dimlessSDsinit.dat \
+   ${icon_grid_file_copy} \
+   0
 
 elif [ "${action}" == "run" ]
 then
@@ -58,19 +68,21 @@ then
   spack load py-netcdf4
 
   export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/sw/spack-levante/libfyaml-0.7.12-fvbhgo/lib
-  export PYTHONPATH=${PYTHONPATH}:${path2yac}/yac-v3.2.0/python # path to python bindings
+  export PYTHONPATH=${PYTHONPATH}:${path2yac}/yac/python # path to python bindings
 
   export OMP_PROC_BIND=spread
   export OMP_PLACES=threads
 
-  cp /work/mh1126/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc \
-    ${path2build}/aes_bubble_atm_3d_ml_20080801T000000Z.nc
-
-  cp /work/mh1126/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc \
-    ${path2build}/aes_bubble_atm_cgrid_ml.nc
+  icon_grid_name="icon_atmos_grid" # must match CLEO (see yac_cartesian_dynamics.cpp)
+  icon_data_timestep=30 # must match ICON data file [seconds]
+  cleo_coupling_timestep=60 # must match CLEO config file [seconds]
+  cleo_t_end=7200 # must match CLEO config file [seconds]
+  cleo_num_vertical_levels=24 # must match CLEO gridfile
 
   mpiexec -n 1 ${path2build}/examples/bubble3d/src/bubble3D \
     ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
     : -n 1 python \
-    ${path2CLEO}/examples/bubble3d/yac_bubble_data_reader.py
+    ${path2CLEO}/examples/bubble3d/yac_bubble_data_reader.py \
+    ${icon_grid_file_copy} ${icon_data_file_copy} ${icon_grid_name} ${icon_data_timestep} \
+    ${cleo_coupling_timestep} ${cleo_t_end} ${cleo_num_vertical_levels}
 fi

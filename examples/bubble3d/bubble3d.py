@@ -28,6 +28,7 @@ from pathlib import Path
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
 configfile = sys.argv[3]
+icon_grid_file = sys.argv[4]  # TODO(CB): move to config file
 
 import bubble3d_inputfiles
 
@@ -64,7 +65,7 @@ os.system("rm " + gridfile)
 os.system("rm " + initSDsfile)
 
 bubble3d_inputfiles.main(
-    path2CLEO, path2build, configfile, gridfile, initSDsfile, SDgbxs2plt
+    path2CLEO, path2build, configfile, gridfile, initSDsfile, icon_grid_file, SDgbxs2plt
 )
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
