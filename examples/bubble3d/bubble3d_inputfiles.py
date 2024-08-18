@@ -40,7 +40,6 @@ def get_zgrid(icon_grid_file, num_vertical_levels):
 def main(
     path2CLEO, path2build, configfile, gridfile, initSDsfile, icon_grid_file, SDgbxs2plt
 ):
-    import numpy as np
     import matplotlib.pyplot as plt
 
     sys.path.append(path2CLEO)  # for imports from pySD package
@@ -74,12 +73,14 @@ def main(
     zgrid = get_zgrid(icon_grid_file, num_vertical_levels)  # [m]
     xgrid = [
         0,
+        100000,
         5000,
-        100,
     ]  # evenly spaced xhalf coords [m] # distance must match longitude in config file
-    ygrid = np.array(
-        [0, 1500, 3000]
-    )  # array of yhalf coords [m] # distance must match latitudes in config file
+    ygrid = [
+        0,
+        12000,
+        6000,
+    ]  # evenly spaced xhalf coords [m] # distance must match latitudes in config file
 
     ### --- settings for initial superdroplets --- ###
     # settings for initial superdroplet coordinates
