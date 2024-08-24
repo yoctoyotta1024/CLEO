@@ -134,9 +134,14 @@ void create_grid_and_points_definitions(const Config &config, const std::array<s
 /*
 fill's target_array with values from yac_raw_data at multiplied by their conversion factor
 */
-void CartesianDynamics::yac_raw_data_to_target_array(
-    double **yac_raw_data, std::vector<double> &target_array, const size_t ndims_north,
-    const size_t ndims_east, const size_t vertical_levels, const double conversion_factor) const {
+void CartesianDynamics::receive_yac_field(unsigned int yac_field_id, double **yac_raw_data,
+                                          std::vector<double> &target_array,
+                                          const size_t ndims_north, const size_t ndims_east,
+                                          const size_t vertical_levels,
+                                          double conversion_factor = 1.0) const {
+  int info, error;
+  yac_cget(yac_field_id, vertical_levels, yac_raw_data, &info, &error);
+
   for (size_t j = 0; j < ndims_north; j++) {
     for (size_t i = 0; i < ndims_east; i++) {
       for (size_t k = 0; k < vertical_levels; k++) {
@@ -147,17 +152,6 @@ void CartesianDynamics::yac_raw_data_to_target_array(
       }
     }
   }
-}
-
-void CartesianDynamics::receive_yac_field(unsigned int yac_field_id, double **yac_raw_data,
-                                          std::vector<double> &target_array,
-                                          const size_t ndims_north, const size_t ndims_east,
-                                          size_t vertical_levels,
-                                          double conversion_factor = 1.0) const {
-  int info, error;
-  yac_cget(yac_field_id, vertical_levels, yac_raw_data, &info, &error);
-  yac_raw_data_to_target_array(yac_raw_data, target_array, ndims_north, ndims_east, vertical_levels,
-                               conversion_factor);
 }
 
 /* This subroutine is the main entry point for receiving data from YAC.
