@@ -9,7 +9,7 @@
  * Author: Wilton Loch (WL)
  * Additional Contributors: Clara Bayley (CB)
  * -----
- * Last Modified: Saturday 17th August 2024
+ * Last Modified: Saturday 24th August 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -163,22 +163,23 @@ void CartesianDynamics::receive_yac_field(unsigned int yac_field_id, double **ya
 /* This subroutine is the main entry point for receiving data from YAC.
  * It checks the dimensionality of the simulation based on the config data. */
 void CartesianDynamics::receive_fields_from_yac() {
-  const auto n = ndims[NORTHWARD];
-  const auto e = ndims[EASTWARD];
-  const auto v = ndims[VERTICAL];
-  receive_yac_field(temp_yac_id, yac_raw_cell_data, temp, n, e, v, dlc::TEMP0);
-  receive_yac_field(pressure_yac_id, yac_raw_cell_data, press, n, e, v, dlc::P0);
-  receive_yac_field(qvap_yac_id, yac_raw_cell_data, qvap, n, e, v);
-  receive_yac_field(qcond_yac_id, yac_raw_cell_data, qcond, n, e, v);
+  receive_yac_field(temp_yac_id, yac_raw_cell_data, temp, ndims[NORTHWARD], ndims[EASTWARD],
+                    ndims[VERTICAL], dlc::TEMP0);
+  receive_yac_field(pressure_yac_id, yac_raw_cell_data, press, ndims[NORTHWARD], ndims[EASTWARD],
+                    ndims[VERTICAL], dlc::P0);
+  receive_yac_field(qvap_yac_id, yac_raw_cell_data, qvap, ndims[NORTHWARD], ndims[EASTWARD],
+                    ndims[VERTICAL]);
+  receive_yac_field(qcond_yac_id, yac_raw_cell_data, qcond, ndims[NORTHWARD], ndims[EASTWARD],
+                    ndims[VERTICAL]);
 
-  const auto v1 = ndims[VERTICAL] + 1;
-  receive_yac_field(vertical_wind_yac_id, yac_raw_vertical_wind_data, wvel, n, e, v1, dlc::W0);
+  receive_yac_field(vertical_wind_yac_id, yac_raw_vertical_wind_data, wvel, ndims[NORTHWARD],
+                    ndims[EASTWARD], ndims[VERTICAL] + 1, dlc::W0);
 
-  const auto e1 = ndims[EASTWARD] + 1;
-  receive_yac_field(eastward_wind_yac_id, yac_raw_edge_data, uvel, n, e1, v, dlc::W0);
+  receive_yac_field(eastward_wind_yac_id, yac_raw_edge_data, uvel, ndims[NORTHWARD],
+                    ndims[EASTWARD] + 1, ndims[VERTICAL], dlc::W0);
 
-  const auto n1 = ndims[NORTHWARD] + 1;
-  receive_yac_field(northward_wind_yac_id, yac_raw_edge_data, vvel, n1, e, v, dlc::W0);
+  receive_yac_field(northward_wind_yac_id, yac_raw_edge_data, vvel, ndims[NORTHWARD] + 1,
+                    ndims[EASTWARD], ndims[VERTICAL], dlc::W0);
 }
 
 CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
