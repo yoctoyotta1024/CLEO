@@ -192,6 +192,17 @@ class Dataset {
   }
 
   /**
+   * @brief Wrapper for MPI gatherv call for a unsigned int array
+   */
+  void collect_global_array(size_t * target, size_t * local_source,
+                            int local_size, int * receive_counts,
+                            int * receive_displacements) const {
+    MPI_Gatherv(local_source, local_size, MPI_UNSIGNED_LONG,
+                target, receive_counts, receive_displacements,
+                MPI_UNSIGNED_LONG, 0, MPI_COMM_WORLD);
+  }
+
+  /**
    * @brief Adds a dimension to the dataset.
    *
    * @param dim A pair containing the name and size of the dimension to be added.
