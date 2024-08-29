@@ -24,6 +24,12 @@
 #ifndef LIBS_ZARR_COLLECTIVE_DATASET_HPP_
 #define LIBS_ZARR_COLLECTIVE_DATASET_HPP_
 
+// This should be only a temporary solution so that not all of the examples must
+// be changed to use MPI-enabled functionality
+// For this to work dataset.hpp must be included before any other hpp that uses
+// collective_dataset.hpp
+#ifndef LIBS_ZARR_DATASET_HPP_
+
 #include <Kokkos_Core.hpp>
 #include <memory>
 #include <string>
@@ -535,5 +541,7 @@ class Dataset {
     }
   }
 };
+
+#endif
 
 #endif  // LIBS_ZARR_COLLECTIVE_DATASET_HPP_
