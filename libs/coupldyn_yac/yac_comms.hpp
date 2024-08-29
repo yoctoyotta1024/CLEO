@@ -26,6 +26,7 @@
 #include "coupldyn_yac/yac_cartesian_dynamics.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/state.hpp"
+#include "cartesiandomain/cartesianmaps.hpp"
 
 /* 1-way coupling from coupldyn to CLEO's gridboxes where
 coupldyn sends information to h_gbxs but doesn't
@@ -47,7 +48,9 @@ struct YacComms {
   received from YacDynamics solver for
   1-way coupling to CLEO SDM */
   template <typename CD = YacDynamics>
-  void receive_dynamics(const YacDynamics &ffdyn, const viewh_gbx h_gbxs) const;
+  void receive_dynamics(const CartesianMaps gbxmaps,
+                        const YacDynamics &ffdyn,
+                        const viewh_gbx h_gbxs) const;
 };
 
 #endif  // LIBS_COUPLDYN_YAC_YAC_COMMS_HPP_
