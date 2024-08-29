@@ -90,7 +90,6 @@ bool CartesianDecomposition::check_indices_inside_partition(std::array<size_t, 3
 
 size_t
 CartesianDecomposition::get_local_bounding_gridbox(std::array<double, 3> & coordinates) const {
-  auto partition_size = get_local_partition_size();
   std::array<size_t, 3> bounding_gridbox_coordinates;
   std::array<int, 3> external_direction = {0, 0, 0};
   bool local_coordinate = true;
@@ -337,7 +336,7 @@ void CartesianDecomposition::calculate_neighboring_processes() {
           for (auto dimension : {0, 1, 2}) {
             if (target_slice[dimension] < 0)
               target_slice[dimension] = decomposition[dimension] - 1;
-            if (target_slice[dimension] == decomposition[dimension])
+            if (target_slice[dimension] == static_cast<int>(decomposition[dimension]))
               target_slice[dimension] = 0;
           }
 

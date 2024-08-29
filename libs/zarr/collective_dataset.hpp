@@ -79,11 +79,12 @@ class Dataset {
 
     // For process 0, save the distributed sizes of all processes to avoid extra
     // exchanges in each write
-    if (my_rank == 0)
-        if (distributed_datasetdims.contains(dim.first))
-            distributed_datasetdims.at(dim.first) = distributed_sizes;
-        else
-            distributed_datasetdims.insert({dim.first, distributed_sizes});
+    if (my_rank == 0) {
+      if (distributed_datasetdims.contains(dim.first))
+        distributed_datasetdims.at(dim.first) = distributed_sizes;
+      else
+        distributed_datasetdims.insert({dim.first, distributed_sizes});
+    }
   }
 
   /**
@@ -102,7 +103,7 @@ class Dataset {
       Kokkos::View<T*, HostSpace> global_data("global_output_data", global_size);
 
       // Calculate the receive counts and displacements to receive the data
-      for (size_t i = 0; i < comm_size; i++) {
+      for (int i = 0; i < comm_size; i++) {
         receive_counts[i] = static_cast<int>
                             (distributed_datasetdims.at(dimnames[innermost_dimension])[i]);
         if (i > 0)
@@ -160,7 +161,6 @@ class Dataset {
    */
   template <typename T>
   void correct_gridbox_data(std::string dimension, T * target, T * source) const {
-    int process = 0;
     size_t offset = 0;
     for (int process = 0; process < comm_size; process++) {
       for (size_t i = 0;
@@ -492,7 +492,7 @@ class Dataset {
     Kokkos::View<T*, HostSpace> global_data("global_output_data", global_size);
 
     // Calculate the receive counts and displacements (meaningful only for process 0)
-    for (size_t i = 0; i < comm_size; i++) {
+    for (int i = 0; i < comm_size; i++) {
       receive_counts[i] = distributed_sizes[i];
       if (i > 0)
         receive_displacements[i] = receive_displacements[i - 1] + distributed_sizes[i - 1];

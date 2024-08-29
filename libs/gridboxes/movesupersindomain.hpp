@@ -138,7 +138,6 @@ struct MoveSupersInDomain {
       size_t local_superdrops         = 0;
       size_t superdrop_index          = totsupers.extent(0) - 1;
       Superdrop & drop                = totsupers(superdrop_index);
-      size_t total_global_gridboxes   = domain_decomposition.get_total_global_gridboxes();
 
       // Go through superdrops from back to front and find how many should be sent and their indices
       while (drop.get_sdgbxindex() >= ngbxs) {
