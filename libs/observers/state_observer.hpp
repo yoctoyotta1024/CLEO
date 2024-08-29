@@ -38,7 +38,7 @@
 #include "observers/thermo_observer.hpp"
 #include "observers/windvel_observer.hpp"
 #include "observers/write_to_dataset_observer.hpp"
-#include "zarr/dataset.hpp"
+#include "zarr/collective_dataset.hpp"
 
 /**
  * @brief Constructs an observer which writes the state of a gridbox (thermodynamics and

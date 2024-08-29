@@ -84,6 +84,8 @@ class GenSuperdrop {
   explicit GenSuperdrop(const SuperdropInitConds &sdic)
       : nspacedims(sdic.get_nspacedims()), initdata(sdic.fetch_data()) {}
 
+  unsigned int get_local_nsupers() { return initdata.sdgbxindexes.size(); }
+
   /**
    * @brief Generate a super-droplet using initial data for the kk'th superdrop.
    *

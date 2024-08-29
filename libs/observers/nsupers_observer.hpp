@@ -36,7 +36,7 @@
 #include "observers/collect_data_for_dataset.hpp"
 #include "observers/generic_collect_data.hpp"
 #include "observers/write_to_dataset_observer.hpp"
-#include "zarr/dataset.hpp"
+#include "zarr/collective_dataset.hpp"
 
 /**
  * @brief Functor operator to perform a copy of the number of superdroplets in each gridbox

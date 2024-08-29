@@ -28,7 +28,7 @@
 #include <concepts>
 
 #include "../kokkosaliases.hpp"
-#include "zarr/dataset.hpp"
+#include "zarr/collective_dataset.hpp"
 #include "zarr/fsstore.hpp"
 
 /**

@@ -31,6 +31,7 @@
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
+#include "cartesiandomain/cartesian_decomposition.hpp"
 
 namespace dlc = dimless_constants;
 
@@ -45,6 +46,8 @@ map from a given gbxidx to the gbxidx of a neighbouring gridbox
 in that direction */
 struct CartesianMaps {
  private:
+  CartesianDecomposition domain_decomposition;
+
   /* maps from gbxidx to {lower, upper} coords of gridbox boundaries */
   kokkos_pairmap to_coord3bounds;
   kokkos_pairmap to_coord1bounds;
@@ -59,6 +62,7 @@ struct CartesianMaps {
   kokkos_uintmap to_forward_coord2nghbr;
 
   /* additional gridbox / domain information */
+  unsigned int total_local_gridboxes;
   kokkos_dblmaph to_area;    // map from gbxindex to horizontal (x-y planar) area of gridbox on host
   kokkos_dblmaph to_volume;  // map from gbxindex to volume of gridbox on host
   viewd_ndims ndims;  // dimensions (ie. no. gridboxes) in [coord3, coord1, coord2] directions
@@ -78,6 +82,7 @@ struct CartesianMaps {
         to_forward_coord1nghbr(kokkos_uintmap(ngbxs)),
         to_back_coord2nghbr(kokkos_uintmap(ngbxs)),
         to_forward_coord2nghbr(kokkos_uintmap(ngbxs)),
+        total_local_gridboxes(ngbxs),
         to_area(kokkos_dblmaph(ngbxs)),
         to_volume(kokkos_dblmaph(ngbxs)),
         ndims("ndims") {}
@@ -167,6 +172,23 @@ struct CartesianMaps {
   possibly into device memory */
   void set_ndims_via_copy(const viewd_ndims::HostMirror h_ndims) {
     Kokkos::deep_copy(ndims, h_ndims);
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  void set_total_local_gridboxes(const unsigned int total_local_gridboxes) {
+        this->total_local_gridboxes = total_local_gridboxes;
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  size_t get_total_local_gridboxes() const {
+    return domain_decomposition.get_total_local_gridboxes();
+  }
+
+  void create_decomposition(std::vector<size_t> ndims,
+                            double gridbox_z_size,
+                            double gridbox_x_size,
+                            double gridbox_y_size) {
+    domain_decomposition.create(ndims, gridbox_z_size, gridbox_x_size, gridbox_y_size);
   }
 
   /* on host device, throws error if maps are not all
@@ -293,6 +315,14 @@ struct CartesianMaps {
     const auto i(to_forward_coord2nghbr.find(gbxindex));  // index in map of key 'gbxidx'
 
     return to_forward_coord2nghbr.value_at(i);  // value returned by map at index i
+  }
+
+  void set_domain_decomposition(CartesianDecomposition domain_decomposition) {
+    this->domain_decomposition = domain_decomposition;
+  }
+
+  const CartesianDecomposition & get_domain_decomposition() const {
+    return domain_decomposition;
   }
 };
 
