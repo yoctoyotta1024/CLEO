@@ -28,6 +28,7 @@
 #include <stdexcept>
 #include <string_view>
 
+#include "zarr/dataset.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
@@ -52,7 +53,6 @@
 #include "runcleo/sdmmethods.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
-#include "zarr/dataset.hpp"
 #include "zarr/fsstore.hpp"
 
 inline CoupledDynamics auto create_coupldyn(const Config &config, const CartesianMaps &gbxmaps,
@@ -143,6 +143,8 @@ int main(int argc, char *argv[]) {
     throw std::invalid_argument("configuration file(s) not specified");
   }
 
+  MPI_Init(&argc, &argv);
+
   Kokkos::Timer kokkostimer;
 
   /* Read input parameters from configuration file(s) */
@@ -178,6 +180,8 @@ int main(int argc, char *argv[]) {
 
   const auto ttot = double{kokkostimer.seconds()};
   std::cout << "-----\n Total Program Duration: " << ttot << "s \n-----\n";
+
+  MPI_Finalize();
 
   return 0;
 }

@@ -28,6 +28,7 @@
 #include <stdexcept>
 #include <string_view>
 
+#include "zarr/dataset.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
@@ -55,7 +56,6 @@
 #include "superdrops/collisions/lowlistprob.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
-#include "zarr/dataset.hpp"
 #include "zarr/fsstore.hpp"
 
 inline InitialConditions auto create_initconds(const Config &config) {
@@ -135,6 +135,8 @@ int main(int argc, char *argv[]) {
     throw std::invalid_argument("configuration file(s) not specified");
   }
 
+  MPI_Init(&argc, &argv);
+
   Kokkos::Timer kokkostimer;
 
   /* Read input parameters from configuration file(s) */
@@ -167,6 +169,8 @@ int main(int argc, char *argv[]) {
 
   const auto ttot = double{kokkostimer.seconds()};
   std::cout << "-----\n Total Program Duration: " << ttot << "s \n-----\n";
+
+  MPI_Finalize();
 
   return 0;
 }
