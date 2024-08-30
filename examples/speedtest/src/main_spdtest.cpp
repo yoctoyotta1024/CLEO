@@ -202,6 +202,14 @@ int main(int argc, char *argv[]) {
 
   MPI_Init(&argc, &argv);
 
+  int comm_size;
+  MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
+  if (comm_size > 1) {
+    std::cout << "ERROR: The current example is not prepared" <<
+                 " to be run with more than one MPI process" << std::endl;
+    MPI_Abort(MPI_COMM_WORLD, 1);
+  }
+
   Kokkos::Timer kokkostimer;
 
   /* Read input parameters from configuration file(s) */
