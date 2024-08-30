@@ -1,4 +1,4 @@
-name: Build
+name: Build and test
 
 on: pull_request
 
@@ -101,3 +101,4 @@ jobs:
         mv bin bin_4
         mpiexec -n 8 --host localhost:64 ./examples/fromfile/src/fromfile ../examples/fromfile/src/config/fromfile_config.yaml
         mv bin bin_8
+        bash -l ../.github/compare_parallel_results.sh
