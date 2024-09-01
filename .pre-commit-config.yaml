@@ -4,11 +4,37 @@ repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v3.2.0
     hooks:
-    -   id: trailing-whitespace
-    -   id: end-of-file-fixer
     -   id: check-yaml
+        name: Check YAML file formatting
     -   id: check-added-large-files
+        name: No large Files
+        description: Checks that you did not unconsciously upload some enormous file
+    -   id: check-ast
+        name: Check Valid Python
+        description: check if python file is valid
+    -   id: end-of-file-fixer
+        name: End of File Fix
+        description: Checks file ends on newline
     -   id: no-commit-to-branch
+        name: No direct commit to main
+        args: ['--branch', 'main']
+        description: Do not commit to main directly
+    -   id: trailing-whitespace
+        name: Trim trailing whitespaces
+        description: Trailing whitespaces are trimmed
+-   repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.4
+    hooks:
+    -   id: ruff
+        args: ["--ignore=E402"]  # Ignore E402 error "Module level import not at top of file"
+        description: python linter
+    -   id: ruff-format
+        description: python formatter
+-   repo: https://github.com/psf/black-pre-commit-mirror
+    rev: 24.3.0
+    hooks:
+    -   id: black-jupyter
+        description: formating ipynb notebook
 -   repo: https://gitlab.com/daverona/pre-commit/cpp
     rev: 0.8.0
     hooks:
@@ -16,14 +42,7 @@ repos:
         args: [--linelength=100, "--filter=-runtime/references,-readability/braces,-build/include,-build/c++11"]
         types_or: [c, c++, cuda]
 -   repo: https://github.com/compilerla/conventional-pre-commit
-    rev: v3.2.0
+    rev: v3.4.0
     hooks:
     -   id: conventional-pre-commit
         stages: [commit-msg]
-        args: []
-- repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.1.4 # Ruff version.
-  hooks:
-    - id: ruff # Run the linter for Python.
-      args: ["--ignore=E402"]  # Ignore E402 error "Module level import not at top of file"
-    - id: ruff-format # Run the formatter for Python.
