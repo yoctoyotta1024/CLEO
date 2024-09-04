@@ -29,6 +29,7 @@
 #include <stdexcept>
 #include <string_view>
 
+#include "zarr/dataset.hpp"
 #include "cartesiandomain/add_supers_at_domain_top.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"
@@ -64,7 +65,6 @@
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/terminalvelocity.hpp"
-#include "zarr/dataset.hpp"
 #include "zarr/fsstore.hpp"
 
 inline CoupledDynamics auto create_coupldyn(const Config &config, const CartesianMaps &gbxmaps,
@@ -78,10 +78,9 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
   return FromFileDynamics(config.get_fromfiledynamics(), couplstep, ndims, nsteps);
 }
 
-inline InitialConditions auto create_initconds(const Config &config) {
-  // const InitAllSupersFromBinary initsupers(config.get_initsupersfrombinary());
-  const InitSupersFromBinary initsupers(config.get_initsupersfrombinary());
-  const InitGbxsNull initgbxs(config.get_ngbxs());
+inline InitialConditions auto create_initconds(const Config &config, const CartesianMaps &gbxmaps) {
+  const InitGbxsNull initgbxs(gbxmaps.get_total_local_gridboxes());
+  const InitSupersFromBinary initsupers(config.get_initsupersfrombinary(), gbxmaps);
 
   return InitConds(initsupers, initgbxs);
 }
@@ -188,6 +187,16 @@ int main(int argc, char *argv[]) {
     throw std::invalid_argument("configuration file(s) not specified");
   }
 
+  MPI_Init(&argc, &argv);
+
+  int comm_size;
+  MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
+  if (comm_size > 1) {
+    std::cout << "ERROR: The current example is not prepared" <<
+                 " to be run with more than one MPI process" << std::endl;
+    MPI_Abort(MPI_COMM_WORLD, 1);
+  }
+
   Kokkos::Timer kokkostimer;
 
   /* Read input parameters from configuration file(s) */
@@ -199,14 +208,14 @@ int main(int argc, char *argv[]) {
   auto store = FSStore(config.get_zarrbasedir());
   auto dataset = Dataset(store);
 
-  /* Initial conditions for CLEO run */
-  const InitialConditions auto initconds = create_initconds(config);
-
   /* Initialise Kokkos parallel environment */
   Kokkos::initialize(argc, argv);
   {
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
     const SDMMethods sdm(create_sdm(config, tsteps, dataset));
+
+    /* Initial conditions for CLEO run */
+    const InitialConditions auto initconds = create_initconds(config, sdm.gbxmaps);
 
     /* Solver of dynamics coupled to CLEO SDM */
     CoupledDynamics auto coupldyn(
@@ -223,6 +232,8 @@ int main(int argc, char *argv[]) {
 
   const auto ttot = double{kokkostimer.seconds()};
   std::cout << "-----\n Total Program Duration: " << ttot << "s \n-----\n";
+
+  MPI_Finalize();
 
   return 0;
 }
