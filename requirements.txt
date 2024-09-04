@@ -3,6 +3,8 @@ sphinx
 furo
 sphinx_copybutton
 sphinxcontrib-bibtex
+sphinxcontrib-applehelp
+sphinxcontrib-htmlhelp
 breathe
 numpy
 scipy
