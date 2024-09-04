@@ -27,6 +27,7 @@
 
 #include "../kokkosaliases.hpp"
 #include "coupldyn_null/nulldynamics.hpp"
+#include "cartesiandomain/cartesianmaps.hpp"
 
 /* empty (no) coupling to/from to CLEO's gridboxes.
 Struct obeys coupling comms concept */
@@ -34,7 +35,8 @@ struct NullDynComms {
   /* receive information from NullDynamics
   solver if null for no coupling to CLEO SDM */
   template <typename CD = NullDynComms>
-  KOKKOS_INLINE_FUNCTION void receive_dynamics(const NullDynamics &nulldyn,
+  KOKKOS_INLINE_FUNCTION void receive_dynamics(const CartesianMaps gbxmaps,
+                                               const NullDynamics &nulldyn,
                                                const viewh_gbx h_gbxs) const {}
 
   /* send information from Gridboxes' states

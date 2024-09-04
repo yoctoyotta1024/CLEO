@@ -21,6 +21,7 @@
  * can be used by InitConds struct as SuperdropInitConds type.
  */
 
+#include <mpi.h>
 #include "initialise/init_supers_from_binary.hpp"
 
 template <typename T>
@@ -59,4 +60,37 @@ InitSupersData InitSupersFromBinary::add_uninitialised_superdrops_data(
       initdata.solutes, sdgbxindexes, coord3s, coord1s, coord2s, radii, msols, xis, sdIds};
 
   return initdata + nandata;
+}
+
+void InitSupersFromBinary::trim_nonlocal_superdrops(InitSupersData &initdata) const {
+    int my_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+
+    if (gbxmaps.get_domain_decomposition().get_total_global_gridboxes() ==
+        gbxmaps.get_domain_decomposition().get_total_local_gridboxes())
+        return;
+
+    unsigned int gridbox_index = 0;
+
+    // Go through all superdrops and resets the values of the non-local ones
+    for (size_t superdrop_index = 0; superdrop_index < initdata.sdgbxindexes.size();) {
+        gridbox_index = initdata.sdgbxindexes[superdrop_index];
+        if (my_rank != gbxmaps.get_domain_decomposition()
+                              .get_gridbox_owner_process(gridbox_index)) {
+            // resets superdrops which are in gridboxes not owned by this process
+            initdata.sdgbxindexes[superdrop_index] = LIMITVALUES::uintmax;
+            initdata.xis[superdrop_index] = std::numeric_limits<uint64_t>::signaling_NaN();;
+            initdata.radii[superdrop_index] = std::numeric_limits<double>::signaling_NaN();;
+            initdata.msols[superdrop_index] = std::numeric_limits<double>::signaling_NaN();;
+            initdata.coord3s[superdrop_index] = std::numeric_limits<double>::signaling_NaN();;
+            initdata.coord1s[superdrop_index] = std::numeric_limits<double>::signaling_NaN();;
+            initdata.coord2s[superdrop_index] = std::numeric_limits<double>::signaling_NaN();;
+        } else {
+            // updates superdrop gridbox index from global to local
+            initdata.sdgbxindexes[superdrop_index] = gbxmaps
+                                                     .get_domain_decomposition()
+                                                     .global_to_local_gridbox_index(gridbox_index);
+        }
+        superdrop_index++;
+    }
 }
