@@ -2,6 +2,19 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.25.1](https://github.com/yoctoyotta1024/CLEO/compare/8cf9fc790d9de7578dd2f2c9bd59bfeeaa3fae7b..v0.25.1) - 2024-09-04
+#### Bug Fixes
+- fix sphinx dependencies after sphinx version 8 - ([54bb0fa](https://github.com/yoctoyotta1024/CLEO/commit/54bb0fa76172579ab0140f084c94aba1109ff4cf)) - clara.bayley
+- Security vulnerability - ([9ab37dc](https://github.com/yoctoyotta1024/CLEO/commit/9ab37dc81f6478a180159fc53e280a7a6b16cf23)) - clara.bayley
+#### Miscellaneous Chores
+- formatting - ([b6210eb](https://github.com/yoctoyotta1024/CLEO/commit/b6210eb2904c7c3f66597e8a7ad3f0299cd01f46)) - clara.bayley
+#### Refactoring
+- improve pre-commit hooks - ([4a854c3](https://github.com/yoctoyotta1024/CLEO/commit/4a854c36ccae0e463ad202238109ccf664c0a6e9)) - clara.bayley
+- move yac_raw_data_to_target_array into receive_yac_field function - ([963774d](https://github.com/yoctoyotta1024/CLEO/commit/963774d02d62a31d19a82db4a9205837069ce900)) - clara.bayley
+- avoid unneccesary use of named variables - ([8cf9fc7](https://github.com/yoctoyotta1024/CLEO/commit/8cf9fc790d9de7578dd2f2c9bd59bfeeaa3fae7b)) - clara.bayley
+
+- - -
+
 ## [v0.25.0](https://github.com/yoctoyotta1024/CLEO/compare/55cd54fed2074aa32c44d8398d2437c24e9c8c84..v0.25.0) - 2024-08-18
 #### Bug Fixes
 - correctly slice icon data to account for vertical levels being top down not bottom up - ([981f486](https://github.com/yoctoyotta1024/CLEO/commit/981f486106c9411a8811b731e84dda75f1c92bb5)) - clara.bayley
