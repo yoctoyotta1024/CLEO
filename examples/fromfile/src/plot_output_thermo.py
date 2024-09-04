@@ -20,7 +20,6 @@ Python functions used to make plots of CLEO's thermodynamics output for
 fromfile example.
 """
 
-
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec

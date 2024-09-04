@@ -15,7 +15,6 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 """
 
-
 from setuptools import setup, find_packages
 
 setup(

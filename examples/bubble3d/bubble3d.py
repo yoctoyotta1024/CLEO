@@ -20,7 +20,6 @@ Script generates input files, then runs CLEO executable "bubble3D" to
 piggyback ICON bubble test case
 """
 
-
 import os
 import sys
 from pathlib import Path
