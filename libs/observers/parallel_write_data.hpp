@@ -27,7 +27,7 @@
 #include <concepts>
 
 #include "../kokkosaliases.hpp"
-#include "zarr/dataset.hpp"
+#include "zarr/collective_dataset.hpp"
 
 /**
  * @brief Struct for a function-like object with operator() to call when using type as

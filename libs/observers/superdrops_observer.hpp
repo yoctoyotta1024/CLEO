@@ -37,7 +37,7 @@
 #include "observers/generic_collect_data.hpp"
 #include "observers/write_to_dataset_observer.hpp"
 #include "superdrops/superdrop.hpp"
-#include "zarr/dataset.hpp"
+#include "zarr/collective_dataset.hpp"
 
 /**
  * @brief A struct for collecting ragged count data.

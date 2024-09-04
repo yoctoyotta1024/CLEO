@@ -26,6 +26,7 @@
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/state.hpp"
+#include "cartesiandomain/cartesianmaps.hpp"
 
 /* 1-way coupling from coupldyn to CLEO's gridboxes where
 coupldyn sends information to h_gbxs but doesn't
@@ -47,7 +48,9 @@ struct FromFileComms {
   received from FromFileDynamics solver for
   1-way coupling to CLEO SDM */
   template <typename CD = FromFileDynamics>
-  void receive_dynamics(const FromFileDynamics &ffdyn, const viewh_gbx h_gbxs) const;
+  void receive_dynamics(const CartesianMaps gbxmaps,
+                        const FromFileDynamics &ffdyn,
+                        const viewh_gbx h_gbxs) const;
 };
 
 #endif  // LIBS_COUPLDYN_FROMFILE_FROMFILECOMMS_HPP_

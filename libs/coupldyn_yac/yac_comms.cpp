@@ -29,7 +29,9 @@ Kokkos::parallel_for([...]) (on host) is equivalent to:
 for (size_t ii(0); ii < ngbxs; ++ii){[...]}
 when in serial */
 template <typename CD>
-void YacComms::receive_dynamics(const YacDynamics &ffdyn, const viewh_gbx h_gbxs) const {
+void YacComms::receive_dynamics(const CartesianMaps gbxmaps,
+                                const YacDynamics &ffdyn,
+                                const viewh_gbx h_gbxs) const {
   const size_t ngbxs(h_gbxs.extent(0));
 
   Kokkos::parallel_for(
@@ -55,4 +57,6 @@ void YacComms::update_gridbox_state(const YacDynamics &ffdyn, const size_t ii, G
 
 template void YacComms::send_dynamics<YacDynamics>(const viewh_constgbx, YacDynamics &) const;
 
-template void YacComms::receive_dynamics<YacDynamics>(const YacDynamics &, const viewh_gbx) const;
+template void YacComms::receive_dynamics<YacDynamics>(const CartesianMaps gbxmaps,
+                                                      const YacDynamics &,
+                                                      const viewh_gbx) const;

@@ -29,6 +29,7 @@
 #include "coupldyn_cvode/cvodedynamics.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/state.hpp"
+#include "cartesiandomain/cartesianmaps.hpp"
 
 struct CvodeComms {
  private:
@@ -46,7 +47,9 @@ struct CvodeComms {
   information received from CVODE dynanmics
   solver for  press, temp, qvap and qcond */
   template <typename CD = CvodeDynamics>
-  void receive_dynamics(const CvodeDynamics &cvode, const viewh_gbx h_gbxs) const {
+  void receive_dynamics(const CartesianMaps gbxmaps,
+                        const CvodeDynamics &cvode,
+                        const viewh_gbx h_gbxs) const {
     const size_t ngbxs(h_gbxs.extent(0));
     for (size_t ii(0); ii < ngbxs; ++ii) {
       State &state(h_gbxs(ii).state);
