@@ -18,7 +18,6 @@ https://opensource.org/licenses/BSD-3-Clause
 File Description:
 """
 
-
 import numpy as np
 import struct
 

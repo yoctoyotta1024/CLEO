@@ -20,7 +20,6 @@ Python file for yac for a one-way coupling between ICON's
 output data and CLEO (e.g. for the bubble test case)
 """
 
-
 #!/usr/bin/env python3
 
 from yac import YAC, UnstructuredGrid, Field, Location, Calendar, TimeUnit, def_calendar

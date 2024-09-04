@@ -17,7 +17,6 @@ Copyright (c) 2023 MPI-M, Clara Bayley
 File Description:
 """
 
-
 __all__ = [
     "create_initsuperdrops",
     "read_initsuperdrops",
