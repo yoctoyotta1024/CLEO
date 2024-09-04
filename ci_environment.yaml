@@ -8,9 +8,11 @@ dependencies:
     - pip:
       - numpy
       - pytest
-      - sphinx==7.4 # TODO(CB): update sphinx allowed version for CI
+      - sphinx
       - furo
       - sphinx_copybutton
       - sphinxcontrib-bibtex
+      - sphinxcontrib-applehelp
+      - sphinxcontrib-htmlhelp
       - breathe
       - pre-commit
