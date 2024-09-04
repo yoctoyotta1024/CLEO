@@ -17,7 +17,6 @@ Copyright (c) 2023 MPI-M, Clara Bayley
 File Description:
 """
 
-
 import numpy as np
 from os.path import isfile
 from .. import cxx2py, readconfigfile, writebinary
