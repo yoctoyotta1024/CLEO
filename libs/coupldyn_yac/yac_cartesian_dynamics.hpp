@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 24th August 2024
+ * Last Modified: Wednesday 4th September 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -123,10 +123,17 @@ struct CartesianDynamics {
   /* Public call to receive data from YAC
    * If the problem is 2D turns into a wrapper for receive_hor_slice_from_yac */
   void receive_fields_from_yac();
-  void receive_yac_field(unsigned int yac_field_id, double **yac_raw_data,
-                         std::vector<double> &target_array, const size_t ndims_north,
-                         const size_t ndims_east, const size_t vertical_levels,
-                         double conversion_factor) const;
+
+  /*
+  fill's target_array with values from yac_raw_data at multiplied by their
+  conversion factor. Special handling when grid_points = 1 or 2 such that only
+  edge grid points for every other layer are used (to correctly choose only edges
+  in that direction and not another when using YAC's edge point definition).
+  */
+  void receive_yac_field(const unsigned int grid_points, const unsigned int yac_field_id,
+                         double **yac_raw_data, std::vector<double> &target_array,
+                         const size_t ndims_north, const size_t ndims_east,
+                         const size_t vertical_levels, const double conversion_factor) const;
 };
 
 /* type satisfying CoupledDyanmics solver concept
