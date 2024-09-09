@@ -9,7 +9,7 @@
  * Author: Wilton Loch (WL)
  * Additional Contributors: Clara Bayley (CB)
  * -----
- * Last Modified: Saturday 24th August 2024
+ * Last Modified: Monday 9th September 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -132,48 +132,98 @@ void create_grid_and_points_definitions(const Config &config, const std::array<s
 }
 
 /*
-fill's target_array with values from yac_raw_data at multiplied by their conversion factor
+fill's target_array with values from yac_raw_data at multiplied by their
+conversion factor. Special handling when grid_points = 1 or 2 such that only
+edge grid points for every other layer are used (to correctly choose only edges
+in that direction and not another when using YAC's edge point definition).
 */
-void CartesianDynamics::receive_yac_field(unsigned int yac_field_id, double **yac_raw_data,
+void CartesianDynamics::receive_yac_field(const unsigned int grid_points,
+                                          const unsigned int yac_field_id, double **yac_raw_data,
                                           std::vector<double> &target_array,
                                           const size_t ndims_north, const size_t ndims_east,
                                           const size_t vertical_levels,
-                                          double conversion_factor = 1.0) const {
+                                          const double conversion_factor = 1.0) const {
   int info, error;
   yac_cget(yac_field_id, vertical_levels, yac_raw_data, &info, &error);
 
-  for (size_t j = 0; j < ndims_north; j++) {
-    for (size_t i = 0; i < ndims_east; i++) {
-      for (size_t k = 0; k < vertical_levels; k++) {
-        auto vertical_idx = k;
-        auto source_idx = j * ndims_east + i;
-        auto ii = (ndims_east * j + i) * vertical_levels + k;
-        target_array[ii] = yac_raw_data[vertical_idx][source_idx] / conversion_factor;
+  switch (grid_points) {
+    case 0:
+      /* handles fields defined on centres of cells of horizontal
+      (2-D) grid (grid_points = CENTRES), e.g. temp or wvel
+       */
+      for (size_t j = 0; j < ndims_north; j++) {
+        for (size_t i = 0; i < ndims_east; i++) {
+          for (size_t k = 0; k < vertical_levels; k++) {
+            auto vertical_idx = k;
+            auto source_idx = ndims_east * j + i;
+            auto ii = (ndims_east * j + i) * vertical_levels + k;
+            target_array[ii] = yac_raw_data[vertical_idx][source_idx] / conversion_factor;
+          }
+        }
       }
-    }
+      return;
+    case 1:
+      /* handles fields defined on longitude edges of cells of
+      horizontal grid (grid_points = LONGITUDE_EDGES), e.g uvel
+      */
+      for (size_t j = 0; j < ndims_north; j++) {
+        for (size_t i = 0; i < ndims_east; i++) {
+          for (size_t k = 0; k < vertical_levels; k++) {
+            auto vertical_idx = k;
+            auto edges_ndims_east = ndims_east * 2 - 1;
+            auto source_idx = edges_ndims_east * j + ndims_east - 1 + i;
+            auto ii = (ndims_east * j + i) * vertical_levels + k;
+            target_array[ii] = yac_raw_data[vertical_idx][source_idx] / conversion_factor;
+          }
+        }
+      }
+      return;
+
+    case 2:
+      /* handles fields defined on latitude edges of cells of
+      horizontal grid (grid_points = LATITUDE_EDGES), e.g. vvel
+      */
+      for (size_t j = 0; j < ndims_north; j++) {
+        for (size_t i = 0; i < ndims_east; i++) {
+          for (size_t k = 0; k < vertical_levels; k++) {
+            auto vertical_idx = k;
+            auto edges_ndims_east = ndims_east * 2 + 1;
+            auto source_idx = edges_ndims_east * j + i;
+            auto ii = (ndims_east * j + i) * vertical_levels + k;
+            target_array[ii] = yac_raw_data[vertical_idx][source_idx] / conversion_factor;
+          }
+        }
+      }
+      return;
   }
 }
 
 /* This subroutine is the main entry point for receiving data from YAC.
  * It checks the dimensionality of the simulation based on the config data. */
 void CartesianDynamics::receive_fields_from_yac() {
-  receive_yac_field(temp_yac_id, yac_raw_cell_data, temp, ndims[NORTHWARD], ndims[EASTWARD],
-                    ndims[VERTICAL], dlc::TEMP0);
-  receive_yac_field(pressure_yac_id, yac_raw_cell_data, press, ndims[NORTHWARD], ndims[EASTWARD],
-                    ndims[VERTICAL], dlc::P0);
-  receive_yac_field(qvap_yac_id, yac_raw_cell_data, qvap, ndims[NORTHWARD], ndims[EASTWARD],
-                    ndims[VERTICAL]);
-  receive_yac_field(qcond_yac_id, yac_raw_cell_data, qcond, ndims[NORTHWARD], ndims[EASTWARD],
-                    ndims[VERTICAL]);
+  enum grid_points {
+    CENTRES,
+    LONGITUDE_EDGES,
+    LATITUDE_EDGES,
+  };
 
-  receive_yac_field(vertical_wind_yac_id, yac_raw_vertical_wind_data, wvel, ndims[NORTHWARD],
-                    ndims[EASTWARD], ndims[VERTICAL] + 1, dlc::W0);
+  receive_yac_field(CENTRES, temp_yac_id, yac_raw_cell_data, temp, ndims[NORTHWARD],
+                    ndims[EASTWARD], ndims[VERTICAL], dlc::TEMP0);
+  receive_yac_field(CENTRES, pressure_yac_id, yac_raw_cell_data, press, ndims[NORTHWARD],
+                    ndims[EASTWARD], ndims[VERTICAL], dlc::P0);
+  receive_yac_field(CENTRES, qvap_yac_id, yac_raw_cell_data, qvap, ndims[NORTHWARD],
+                    ndims[EASTWARD], ndims[VERTICAL]);
+  receive_yac_field(CENTRES, qcond_yac_id, yac_raw_cell_data, qcond, ndims[NORTHWARD],
+                    ndims[EASTWARD], ndims[VERTICAL]);
 
-  receive_yac_field(eastward_wind_yac_id, yac_raw_edge_data, uvel, ndims[NORTHWARD],
-                    ndims[EASTWARD] + 1, ndims[VERTICAL], dlc::W0);
+  receive_yac_field(CENTRES, vertical_wind_yac_id, yac_raw_vertical_wind_data, wvel,
+                    ndims[NORTHWARD], ndims[EASTWARD], ndims[VERTICAL] + 1, dlc::W0);
 
-  receive_yac_field(northward_wind_yac_id, yac_raw_edge_data, vvel, ndims[NORTHWARD] + 1,
-                    ndims[EASTWARD], ndims[VERTICAL], dlc::W0);
+  receive_yac_field(LONGITUDE_EDGES, eastward_wind_yac_id, yac_raw_edge_data, uvel,
+                    ndims[NORTHWARD], ndims[EASTWARD] + 1, ndims[VERTICAL], dlc::W0);
+
+  receive_yac_field(LATITUDE_EDGES, northward_wind_yac_id, yac_raw_edge_data, vvel,
+                    ndims[NORTHWARD] + 1, ndims[EASTWARD], ndims[VERTICAL], dlc::W0);
 }
 
 CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
