@@ -25,8 +25,8 @@
 ### SDM Runtime Parameters ###
 domain:
   nspacedims : 3                                          # no. of spatial dimensions to model
-  ngbxs : 2250                                            # total number of Gbxs
-  maxnsupers: 2880                                        # maximum number of SDs
+  ngbxs : 780                                             # total number of Gbxs
+  maxnsupers: 1440                                        # maximum number of SDs
 
 timesteps:
   CONDTSTEP : 2                                           # time between SD condensation [s]
@@ -34,7 +34,7 @@ timesteps:
   MOTIONTSTEP : 3                                         # time between SDM motion [s]
   COUPLTSTEP : 1800                                       # time between dynamic couplings [s]
   OBSTSTEP : 1800                                         # time between SDM observations [s]
-  T_END : 7200                                            # time span of integration from 0s to T_END [s]
+  T_END : 10800                                            # time span of integration from 0s to T_END [s]
 
 ### Initialisation Parameters ###
 inputfiles:

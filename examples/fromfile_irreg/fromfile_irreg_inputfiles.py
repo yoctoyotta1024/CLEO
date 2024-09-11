@@ -55,10 +55,12 @@ def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofile):
     isfigures = [True, True]
     savefigpath = path2build + "/bin/"  # directory for saving figures
 
-    ### --- settings for 2-D gridbox boundaries --- ###
-    zgrid = [0, 1500, 60]  # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
-    xgrid = [0, 1500, 50]  # evenly spaced xhalf coords [m]
-    ygrid = np.array([0, 100, 200, 300])  # array of yhalf coords [m]
+    ### --- settings for 3-D irregular gridbox boundaries --- ###
+    zgrid = np.array([0, 20, 30, 45, 60, 80, 90, 120, 140, 180, 360, 500, 1000, 1500])
+    xgrid = np.array(
+        [0, 33, 205, 440, 650, 915, 1033, 1100, 1300, 1450, 1500]
+    )  # evenly spaced xhalf coords [m]
+    ygrid = np.array([0, 10, 75, 100, 150, 200, 300])  # array of yhalf coords [m]
 
     ### --- settings for initial superdroplets --- ###
     # settings for initial superdroplet coordinates
