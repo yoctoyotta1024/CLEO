@@ -3,13 +3,13 @@
  *
  *
  * ----- CLEO -----
- * File: main_fromfile.cpp
+ * File: main_fromfile_irreg.cpp
  * Project: src
  * Created Date: Friday 22nd March 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th July 2024
+ * Last Modified: Wednesday 11th September 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -18,7 +18,7 @@
  * File Description:
  * runs the CLEO super-droplet model (SDM) for 3-D setup reading data from file
  * after make/compiling, execute for example via:
- * ./src/fromfile ../src/config/config.yaml
+ * ./src/fromfile_irreg ../src/config/config.yaml
  */
 
 #include <Kokkos_Core.hpp>

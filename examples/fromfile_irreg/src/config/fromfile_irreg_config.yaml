@@ -1,6 +1,6 @@
 ---
 # ----- CLEO -----
-# File: fromfile_config.txt
+# File: fromfile_irreg_config.txt
 # Project: config
 # Created Date: Thursday 18th April 2024
 # Author: Clara Bayley (CB)
@@ -19,7 +19,7 @@
 # Note: The inital superdroplets data read from file "initsupers_filename" can be made with
 # CLEO's pySD module (see Python script "create_initsuperdropsbinary_script.py" for usage).
 # Likewise the "grid_filename" can be made using pySD (see "create_gbxboundariesbinary_script.py"),
-# and so can the thermodynamics files when using coupled thermodynamics "fromfile".
+# and so can the thermodynamics files when using coupled thermodynamics "fromfile_irreg".
 #
 
 ### SDM Runtime Parameters ###
@@ -39,26 +39,26 @@ timesteps:
 ### Initialisation Parameters ###
 inputfiles:
   constants_filename : ../libs/cleoconstants.hpp          # name of file for values of physical constants
-  grid_filename : ./share/fromfile_dimlessGBxboundaries.dat   # binary filename for initialisation of GBxs / GbxMaps
+  grid_filename : ./share/fromfile_irreg_dimlessGBxboundaries.dat   # binary filename for initialisation of GBxs / GbxMaps
 
 initsupers:
   type: frombinary                                        # type of initialisation of super-droplets
-  initsupers_filename : ./share/fromfile_dimlessSDsinit.dat   # binary filename for initialisation of SDs
+  initsupers_filename : ./share/fromfile_irreg_dimlessSDsinit.dat   # binary filename for initialisation of SDs
 
 ### Output Parameters ###
 outputdata:
-  setup_filename : ./bin/fromfile_setup.txt                   # .txt filename to copy configuration to
-  stats_filename : ./bin/fromfile_stats.txt                   # .txt file to output runtime statistics to
-  zarrbasedir : ./bin/fromfile_sol.zarr                       # zarr store base directory
+  setup_filename : ./bin/fromfile_irreg_setup.txt                   # .txt filename to copy configuration to
+  stats_filename : ./bin/fromfile_irreg_stats.txt                   # .txt file to output runtime statistics to
+  zarrbasedir : ./bin/fromfile_irreg_sol.zarr                       # zarr store base directory
   maxchunk : 2500000                                      # maximum no. of elements in chunks of zarr store array
 
 ### Coupled Dynamics Parameters ###
 coupled_dynamics:
   type : fromfile                                         # type of coupled dynamics to configure
-  press : ./share/fromfile_dimlessthermo_press.dat            # binary filename for pressure
-  temp : ./share/fromfile_dimlessthermo_temp.dat              # binary filename for temperature
-  qvap : ./share/fromfile_dimlessthermo_qvap.dat              # binary filename for vapour mixing ratio
-  qcond : ./share/fromfile_dimlessthermo_qcond.dat            # binary filename for liquid mixing ratio
-  wvel : ./share/fromfile_dimlessthermo_wvel.dat              # binary filename for vertical (coord3) velocity
-  uvel : ./share/fromfile_dimlessthermo_uvel.dat              # binary filename for eastwards (coord1) velocity
-  vvel : ./share/fromfile_dimlessthermo_vvel.dat              # binary filename for eastwards (coord1) velocity
+  press : ./share/fromfile_irreg_dimlessthermo_press.dat            # binary filename for pressure
+  temp : ./share/fromfile_irreg_dimlessthermo_temp.dat              # binary filename for temperature
+  qvap : ./share/fromfile_irreg_dimlessthermo_qvap.dat              # binary filename for vapour mixing ratio
+  qcond : ./share/fromfile_irreg_dimlessthermo_qcond.dat            # binary filename for liquid mixing ratio
+  wvel : ./share/fromfile_irreg_dimlessthermo_wvel.dat              # binary filename for vertical (coord3) velocity
+  uvel : ./share/fromfile_irreg_dimlessthermo_uvel.dat              # binary filename for eastwards (coord1) velocity
+  vvel : ./share/fromfile_irreg_dimlessthermo_vvel.dat              # binary filename for eastwards (coord1) velocity
