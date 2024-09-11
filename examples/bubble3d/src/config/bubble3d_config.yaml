@@ -15,7 +15,7 @@
 # Copyright (c) 2023 MPI-M, Clara Bayley
 # -----
 # File Description:
-# Configuration file for test of YAC with 3D time varying thermodyanamics example.
+# Configuration file for test of YAC with 3D time varying thermodynamics example.
 # Note: The inital superdroplets data read from file "initsupers_filename" can be made with
 # CLEO's pySD module (see Python script "create_initsuperdropsbinary_script.py" for usage).
 # Likewise the "grid_filename" can be made using pySD (see "create_gbxboundariesbinary_script.py"),

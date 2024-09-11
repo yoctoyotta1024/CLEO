@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 16th August 2024
+ * Last Modified: Wednesday 11th September 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -18,7 +18,7 @@
  * File Description:
  * runs the CLEO super-droplet model (SDM) for bubble3d example using YAC.
  * after make/compiling, execute for example via:
- * ./src/bubble3D ../src/config/config.yaml
+ * ./src/bubble3d ../src/config/config.yaml
  */
 
 #include <Kokkos_Core.hpp>

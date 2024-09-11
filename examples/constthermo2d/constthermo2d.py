@@ -9,14 +9,14 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 7th May 2024
+Last Modified: Wednesday 11th September 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
-Script generatees input files, runs CLEO executable "const2D" to create
+Script generatees input files, runs CLEO executable "const2d" to create
 data and then plots precipitation example given 2-D flow field and
 constant thermodynamics read from a file.
 """
@@ -187,7 +187,7 @@ if isfigures[0]:
 os.chdir(path2build)
 os.system("pwd")
 os.system("rm -rf " + dataset)  # delete any existing dataset
-executable = path2build + "/examples/constthermo2d/src/const2D"
+executable = path2build + "/examples/constthermo2d/src/const2d"
 print("Executable: " + executable)
 print("Config file: " + configfile)
 os.system(executable + " " + configfile)

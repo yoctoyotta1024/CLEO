@@ -9,14 +9,14 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 9th July 2024
+Last Modified: Wednesday 11th September 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
-Script generates input files, then runs CLEO executable "bubble3D" to
+Script generates input files, then runs CLEO executable "bubble3d" to
 piggyback ICON bubble test case
 """
 
@@ -78,7 +78,7 @@ def run_exectuable(path2CLEO, path2build, configfile, dataset):
     os.chdir(path2build)
     os.system("pwd")
     os.system("rm -rf " + dataset)  # delete any existing dataset
-    executable = path2build + "/examples/yac/bubble3d/src/bubble3D"
+    executable = path2build + "/examples/yac/bubble3d/src/bubble3d"
     print("Executable: " + executable)
     print("Config file: " + configfile)
 

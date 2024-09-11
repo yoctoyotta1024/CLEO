@@ -16,7 +16,7 @@ License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
-Script generate input files, runs CLEO adia0D executable to create data and
+Script generate input files, runs CLEO adia0d executable to create data and
 then creates plots for adiabatic parcel example similar to Figure 5 of "On
 the CCN (de)activation nonlinearities" S. Arabas and S. Shima 2017 to show
 example of adaibatic parcel expansion and contraction.
@@ -173,7 +173,7 @@ for i in range(len(monors)):
 
         ### run model
         os.chdir(path2build)
-        executable = path2build + "/examples/adiabaticparcel/src/adia0D"
+        executable = path2build + "/examples/adiabaticparcel/src/adia0d"
         print("Executable: " + executable)
         print("Config file: " + configfile)
         os.system(executable + " " + configfile)

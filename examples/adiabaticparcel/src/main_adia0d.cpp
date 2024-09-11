@@ -3,13 +3,13 @@
  *
  *
  * ----- CLEO -----
- * File: main_adia0D.cpp
+ * File: main_adia0d.cpp
  * Project: src
  * Created Date: Monday 29th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 18th June 2024
+ * Last Modified: Wednesday 11th September 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -17,7 +17,7 @@
  * -----
  * runs the CLEO super-droplet model (SDM) for adiabatic parcel model example.
  * After make/compiling, execute for example via:
- * ./src/adia0D ../src/config/config.yaml
+ * ./src/adia0d ../src/config/config.yaml
  */
 
 #include <Kokkos_Core.hpp>

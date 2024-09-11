@@ -3,13 +3,13 @@
  *
  *
  * ----- CLEO -----
- * File: main_const2D.cpp
+ * File: main_const2d.cpp
  * Project: src
  * Created Date: Monday 29th January 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 18th June 2024
+ * Last Modified: Wednesday 11th September 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -18,7 +18,7 @@
  * File Description:
  * runs the CLEO super-droplet model (SDM) for 2-D example with divergence free flow.
  * After make/compiling, execute for example via:
- * ./src/const2D ../src/config/config.yaml
+ * ./src/const2d ../src/config/config.yaml
  */
 
 #include <Kokkos_Core.hpp>

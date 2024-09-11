@@ -3,13 +3,13 @@
  *
  *
  * ----- CLEO -----
- * File: main_rshaft1D.cpp
+ * File: main_rshaft1d.cpp
  * Project: src
  * Created Date: Thursday 12th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 18th June 2024
+ * Last Modified: Wednesday 11th September 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -18,7 +18,7 @@
  * File Description:
  * runs the CLEO super-droplet model (SDM) for 1-D rainshaft example.
  * After make/compiling, execute for example via:
- * ./src/rshaft1D ../src/config/config.yaml
+ * ./src/rshaft1d ../src/config/config.yaml
  */
 
 #include <Kokkos_Core.hpp>

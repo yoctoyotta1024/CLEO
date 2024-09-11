@@ -15,7 +15,7 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script generates input files, then runs CLEO executable "rshaft1D" to create the
+Script generates input files, then runs CLEO executable "rshaft1d" to create the
 data which is then plotted to demonstrate precipitation example in 1-D rainshaft
 with constant thermodynamics read from a file.
 """
@@ -187,7 +187,7 @@ if isfigures[0]:
 os.chdir(path2build)
 os.system("pwd")
 os.system("rm -rf " + dataset)  # delete any existing dataset
-executable = path2build + "/examples/rainshaft1d/src/rshaft1D"
+executable = path2build + "/examples/rainshaft1d/src/rshaft1d"
 print("Executable: " + executable)
 print("Config file: " + configfile)
 os.system(executable + " " + configfile)
