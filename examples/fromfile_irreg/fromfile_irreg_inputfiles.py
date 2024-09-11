@@ -3,21 +3,21 @@ Copyright (c) 2024 MPI-M, Clara Bayley
 
 
 ----- CLEO -----
-File: fromfile_inputfiles.py
-Project: fromfile
-Created Date: Friday 17th November 2023
+File: fromfile_irreg_inputfiles.py
+Project: fromfile_irreg
+Created Date: Wednesday 11th September 2024
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 9th July 2024
+Last Modified: Wednesday 11th September 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
-Script generates input files for 3D example with time varying thermodynamics
-read from binary files.
+Script generates input files for 3D example with irregular grid and
+time varying thermodynamics read from binary files.
 """
 
 import sys

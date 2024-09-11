@@ -3,13 +3,13 @@ Copyright (c) 2024 MPI-M, Clara Bayley
 
 
 ----- CLEO -----
-File: fromfile.py
-Project: fromfile
-Created Date: Friday 17th November 2023
+File: fromfile_irreg.py
+Project: fromfile_irreg
+Created Date: Wednesday 11th September 2024
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 9th July 2024
+Last Modified: Wednesday 11th September 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -17,14 +17,14 @@ https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
 Script generates input files, then runs CLEO executable for 3D example with
-time varying thermodynamics read from binary files. Plots output data as .png
-files for visual checks.
+irreglar 3D grid and time varying thermodynamics read from binary files.
+Plots output data as .png files for visual checks.
 """
 
 import os
 import sys
 from pathlib import Path
-import fromfile_inputfiles
+import fromfile_irreg_inputfiles
 
 path2CLEO = sys.argv[1]
 path2build = sys.argv[2]
@@ -45,14 +45,14 @@ from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
 # path and filenames for creating initial SD conditions
 binpath = path2build + "/bin/"
 sharepath = path2build + "/share/"
-gridfile = sharepath + "fromfile_dimlessGBxboundaries.dat"
-initSDsfile = sharepath + "fromfile_dimlessSDsinit.dat"
-thermofile = sharepath + "/fromfile_dimlessthermo.dat"
+gridfile = sharepath + "fromfile_irreg_dimlessGBxboundaries.dat"
+initSDsfile = sharepath + "fromfile_irreg_dimlessSDsinit.dat"
+thermofile = sharepath + "/fromfile_irreg_dimlessthermo.dat"
 savefigpath = path2build + "/bin/"  # directory for saving figures
 
 # path and file names for plotting results
-setupfile = binpath + "fromfile_setup.txt"
-dataset = binpath + "fromfile_sol.zarr"
+setupfile = binpath + "fromfile_irreg_setup.txt"
+dataset = binpath + "fromfile_irreg_sol.zarr"
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -73,7 +73,7 @@ os.system("rm " + gridfile)
 os.system("rm " + initSDsfile)
 os.system("rm " + thermofile[:-4] + "*")
 
-fromfile_inputfiles.main(
+fromfile_irreg_inputfiles.main(
     path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofile
 )
 ### ---------------------------------------------------------------- ###
@@ -85,7 +85,7 @@ fromfile_inputfiles.main(
 os.chdir(path2build)
 os.system("pwd")
 os.system("rm -rf " + dataset)  # delete any existing dataset
-executable = path2build + "/examples/fromfile/src/fromfile"
+executable = path2build + "/examples/fromfile_irreg/src/fromfile_irreg"
 print("Executable: " + executable)
 print("Config file: " + configfile)
 os.system(executable + " " + configfile)
@@ -109,11 +109,11 @@ thermo, winds = pyzarr.get_thermodata(
 )
 
 # plot super-droplet results
-savename = savefigpath + "fromfile_maxnsupers_validation.png"
+savename = savefigpath + "fromfile_irreg_maxnsupers_validation.png"
 pltmoms.plot_totnsupers(time, maxnsupers, savename=savename)
 
 nsample = 1000
-savename = savefigpath + "fromfile_motion2d_validation.png"
+savename = savefigpath + "fromfile_irreg_motion2d_validation.png"
 pltsds.plot_randomsample_superdrops_2dmotion(
     sddata,
     config["maxnsupers"],

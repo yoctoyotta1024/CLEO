@@ -5,11 +5,11 @@ Copyright (c) 2024 MPI-M, Clara Bayley
 ----- CLEO -----
 File: plot_output_thermo.py
 Project: src
-Created Date: Monday 25th March 2024
+Created Date: Wednesday 11th September 2024
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 9th July 2024
+Last Modified: Wednesday 11th September 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -17,7 +17,7 @@ https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
 Python functions used to make plots of CLEO's thermodynamics output for
-fromfile example.
+fromfile_irreg example.
 """
 
 import numpy as np
