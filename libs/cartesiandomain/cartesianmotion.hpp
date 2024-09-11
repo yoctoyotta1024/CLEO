@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 16th April 2024
+ * Last Modified: Wednesday 11th September 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -54,8 +54,11 @@ struct CartesianCheckBounds {
   KOKKOS_INLINE_FUNCTION void operator()(const unsigned int idx,
                                          const Kokkos::pair<double, double> bounds,
                                          const double coord) const {
+    constexpr double atol = 1e-14;  // tolerance to bounds check
+    const double lower_lim = bounds.first - atol;
+    const double upper_lim = bounds.second + atol;
     const bool bad_gbxindex((idx != outofbounds_gbxindex()) &&
-                            ((coord < bounds.first) | (coord >= bounds.second)));
+                            ((coord < lower_lim) || (coord >= upper_lim)));
 
     assert((!bad_gbxindex) &&
            "SD not in previous gbx nor a neighbour."
