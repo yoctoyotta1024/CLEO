@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: main_bubble3d.cpp
+ * File: main_fromfile_irreg.cpp
  * Project: src
  * Created Date: Friday 22nd March 2024
  * Author: Clara Bayley (CB)
@@ -16,9 +16,9 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * runs the CLEO super-droplet model (SDM) for bubble3d example using YAC.
+ * runs the CLEO super-droplet model (SDM) for 3-D setup reading data from file
  * after make/compiling, execute for example via:
- * ./src/bubble3d ../src/config/config.yaml
+ * ./src/fromfile_irreg ../src/config/config.yaml
  */
 
 #include <Kokkos_Core.hpp>
@@ -32,8 +32,8 @@
 #include "cartesiandomain/cartesianmotion.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
 #include "cartesiandomain/null_boundary_conditions.hpp"
-#include "coupldyn_yac/yac_cartesian_dynamics.hpp"
-#include "coupldyn_yac/yac_comms.hpp"
+#include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
+#include "coupldyn_fromfile/fromfilecomms.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "initialise/config.hpp"
 #include "initialise/init_all_supers_from_binary.hpp"
@@ -63,7 +63,7 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
 
   const auto nsteps = (unsigned int)(std::ceil(t_end / couplstep) + 1);
 
-  return YacDynamics(config, couplstep, ndims, nsteps);
+  return FromFileDynamics(config.get_fromfiledynamics(), couplstep, ndims, nsteps);
 }
 
 inline InitialConditions auto create_initconds(const Config &config) {
@@ -98,12 +98,11 @@ template <typename Store>
 inline Observer auto create_superdrops_observer(const unsigned int interval,
                                                 Dataset<Store> &dataset, const int maxchunk) {
   CollectDataForDataset<Store> auto sdid = CollectSdId(dataset, maxchunk);
-  CollectDataForDataset<Store> auto sdgbxindex = CollectSdgbxindex(dataset, maxchunk);
   CollectDataForDataset<Store> auto coord3 = CollectCoord3(dataset, maxchunk);
   CollectDataForDataset<Store> auto coord1 = CollectCoord1(dataset, maxchunk);
   CollectDataForDataset<Store> auto coord2 = CollectCoord2(dataset, maxchunk);
 
-  const auto collect_data = coord2 >> coord1 >> coord3 >> sdgbxindex >> sdid;
+  const auto collect_data = coord2 >> coord1 >> coord3 >> sdid;
   return SuperdropsObserver(interval, dataset, maxchunk, collect_data);
 }
 
@@ -168,7 +167,7 @@ int main(int argc, char *argv[]) {
         create_coupldyn(config, sdm.gbxmaps, tsteps.get_couplstep(), tsteps.get_t_end()));
 
     /* coupling between coupldyn and SDM */
-    const CouplingComms<YacDynamics> auto comms = YacComms{};
+    const CouplingComms<FromFileDynamics> auto comms = FromFileComms{};
 
     /* Run CLEO (SDM coupled to dynamics solver) */
     const RunCLEO runcleo(sdm, coupldyn, comms);

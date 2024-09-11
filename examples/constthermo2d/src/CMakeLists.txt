@@ -12,18 +12,18 @@ message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 set(CLEOLIBS gridboxes initialise observers runcleo superdrops zarr)
 
 # create primary executable for CLEO in 2-D coupled to thermodynamics from file setup
-add_executable(const2D EXCLUDE_FROM_ALL "main_const2D.cpp")
+add_executable(const2d EXCLUDE_FROM_ALL "main_const2d.cpp")
 
 # Add directories and link libraries to target
-target_link_libraries(const2D PRIVATE coupldyn_fromfile cartesiandomain "${CLEOLIBS}")
-target_link_libraries(const2D PUBLIC Kokkos::kokkos)
-target_include_directories(const2D PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
+target_link_libraries(const2d PRIVATE coupldyn_fromfile cartesiandomain "${CLEOLIBS}")
+target_link_libraries(const2d PUBLIC Kokkos::kokkos)
+target_include_directories(const2d PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
 
 # set specific C++ compiler options for target (optional)
-#target_compile_options(const2D PRIVATE)
+#target_compile_options(const2d PRIVATE)
 
 # set compiler properties for target(s)
-set_target_properties(const2D PROPERTIES
+set_target_properties(const2d PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)

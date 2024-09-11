@@ -23,7 +23,7 @@ buildtype="openmp"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_bubble3d/
 enableyac=true
-executables="bubble3D"
+executables="bubble3d"
 
 pythonscript=${path2CLEO}/examples/bubble3d/bubble3d.py
 configfile=${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml

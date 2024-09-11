@@ -15,7 +15,7 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script generate input files, runs CLEO adia0D executable to
+Script generate input files, runs CLEO adia0d executable to
 create data and then creates plots for adiabatic parcel example
 similar to Figure 5 of "On the CCN (de)activation nonlinearities"
 S. Arabas and S. Shima 2017 to show example of cusp birfucation for
@@ -134,7 +134,7 @@ plt.close()
 os.chdir(path2build)
 os.system("pwd")
 os.system("rm -rf " + dataset)  # delete any existing dataset
-executable = path2build + "/examples/adiabaticparcel/src/adia0D"
+executable = path2build + "/examples/adiabaticparcel/src/adia0d"
 print("Executable: " + executable)
 print("Config file: " + configfile)
 os.system(executable + " " + configfile)

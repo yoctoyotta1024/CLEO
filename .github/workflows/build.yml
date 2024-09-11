@@ -49,8 +49,8 @@ jobs:
         -DCMAKE_MODULE_PATH=${PWD}/../libs/coupldyn_yac/cmake ..
         make
 
-    - name: Build example adia0D
-      run: cd build && make adia0D
+    - name: Build example adia0d
+      run: cd build && make adia0d
 
     - name: Build example golcolls
       run: cd build && make golcolls
@@ -67,23 +67,26 @@ jobs:
     - name: Build example testikstraubcolls
       run: cd build && make testikstraubcolls
 
-    - name: Build example const2D
-      run: cd build && make const2D
+    - name: Build example const2d
+      run: cd build && make const2d
 
-    - name: Build example divfree2D
-      run: cd build && make divfree2D
+    - name: Build example divfree2d
+      run: cd build && make divfree2d
 
-    - name: Build example eurec4a1D
-      run: cd build && make eurec4a1D
+    - name: Build example eurec4a1d
+      run: cd build && make eurec4a1d
 
-    - name: Build example rshaft1D
-      run: cd build && make rshaft1D
+    - name: Build example rshaft1d
+      run: cd build && make rshaft1d
 
     - name: Build example spdtest
       run: cd build && make spdtest
 
-    - name: Build example bubble3D
-      run: cd build && make bubble3D
+    - name: Build example bubble3d
+      run: cd build && make bubble3d
 
     - name: Build example fromfile
       run: cd build && make fromfile
+
+    - name: Build example fromfile_irreg
+      run: cd build && make fromfile_irreg

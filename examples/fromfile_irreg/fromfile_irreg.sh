@@ -1,15 +1,15 @@
 #!/bin/bash
-#SBATCH --job-name=cuspbifurc
+#SBATCH --job-name=fromfile_irreg
 #SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=128
 #SBATCH --mem=30G
-#SBATCH --time=00:10:00
+#SBATCH --time=00:05:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=mh1126
-#SBATCH --output=./cuspbifurc_out.%j.out
-#SBATCH --error=./cuspbifurc_err.%j.out
+#SBATCH --output=./fromfile_irreg_out.%j.out
+#SBATCH --error=./fromfile_irreg_err.%j.out
 
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
@@ -17,14 +17,14 @@
 ### ---- build type, directories, the executable(s) ---- ###
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
-buildtype="serial"
+buildtype="openmp"
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_adia0d/
+path2build=${HOME}/CLEO/build_fromfile_irreg/
 enableyac=false
-executables="adia0d"
+executables="fromfile_irreg"
 
-pythonscript=${path2CLEO}/examples/adiabaticparcel/cuspbifurc.py
-configfile=${path2CLEO}/examples/adiabaticparcel/src/config/cuspbifurc_config.yaml
+pythonscript=${path2CLEO}/examples/fromfile_irreg/fromfile_irreg.py
+configfile=${path2CLEO}/examples/fromfile_irreg/src/config/fromfile_irreg_config.yaml
 script_args="${configfile}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

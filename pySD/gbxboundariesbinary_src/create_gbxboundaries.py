@@ -170,12 +170,20 @@ def write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile):
     ndims, gbxindicies, gbxboundsdata = dimless_gridboxboundaries(
         zgrid, xgrid, ygrid, COORD0
     )
+    zxy = [len(zgrid) - 1, len(xgrid) - 1, len(ygrid) - 1]
+    zxy = [str(x) for x in zxy]
     metastr = (
         "Variables in this file are ndims in (z,x,y), then the "
         + str(np.prod(ndims))
         + " gridbox indicies followed by the"
         + " [zmin, zmax, xmin, xmax, ymin, ymax]"
-        + " coordinates for each gridbox's boundaries"
+        + " coordinates for each gridbox's boundaries."
+        + " Grid has dimensions "
+        + zxy[0]
+        + "x"
+        + zxy[1]
+        + "x"
+        + zxy[2]
     )
 
     ndata = [len(dt) for dt in [ndims, gbxindicies, gbxboundsdata]]

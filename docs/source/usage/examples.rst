@@ -89,7 +89,7 @@ a) Arabas and Shima 2017
 
   $ ./as2017.sh
 
-The plots produced, by default called ``~/CLEO/build_adia0D/bin/as2017fig_[x].png``, should be
+The plots produced, by default called ``~/CLEO/build_adia0d/bin/as2017fig_[x].png``, should be
 similar to the columns of figure 5 from Arabas and Shima 2017 :cite:`arabasshima2017`.
 
 b) Cusp Bifurcation
@@ -104,8 +104,8 @@ b) Cusp Bifurcation
 
   $ ./cuspbifurc.sh
 
-The plots produced, by default called ``~/CLEO/build_adia0D/bin/cuspbifurc_validation.png`` and
-``~/CLEO/build_adia0D/bin/cuspbifurc_SDgrowth.png`` illustrate an example of cusp bifurcation, analagous
+The plots produced, by default called ``~/CLEO/build_adia0d/bin/cuspbifurc_validation.png`` and
+``~/CLEO/build_adia0d/bin/cuspbifurc_SDgrowth.png`` illustrate an example of cusp bifurcation, analagous
 to the third column of figure 5 from Arabas and Shima 2017 :cite:`arabasshima2017`.
 
 
@@ -123,7 +123,7 @@ The Collision Kernels
 
 This example models collision-coalescence using Golovin's kernel.
 
-The plot produced, by default called ``~/CLEO/build_colls0D/bin/golovin_validation.png``, should be similar to
+The plot produced, by default called ``~/CLEO/build_colls0d/bin/golovin_validation.png``, should be similar to
 Fig.2(a) of Shima et al. 2009 :cite:p:`shima2009`.
 
 **Long**
@@ -131,7 +131,7 @@ Fig.2(a) of Shima et al. 2009 :cite:p:`shima2009`.
 This example models collision-coalescence using Long's collision efficiency as given by equation
 13 of Simmel et al. 2002 :cite:`simmel2002`.
 
-The plot produced, by default called ``~/CLEO/build_colls0D/bin/long_validation_[X].png``, should be
+The plot produced, by default called ``~/CLEO/build_colls0d/bin/long_validation_[X].png``, should be
 similar to Fig.2(b) of Shima et al. 2009 :cite:p:`shima2009`.
 
 **Low and List**
@@ -141,7 +141,7 @@ efficiency as given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`, and
 efficiency from Low and List 1982(a) :cite:`lowlist1982a` (see also McFarquhar
 2004 :cite:`mcfarquhar2004`).
 
-This example produces a plot, by default called ``~/CLEO/build_colls0D/bin/lowlist_validation.png``.
+This example produces a plot, by default called ``~/CLEO/build_colls0d/bin/lowlist_validation.png``.
 
 Running the Box Model Collisions Examples
 ##########################################
@@ -171,7 +171,7 @@ run. You can change this by editing ``script_args="[...] golovin long1 long2`` i
 
 This example models collision-coalescence using Golovin's kernel.
 
-The plot produced, by default called ``~/CLEO/build_colls0D/bin/golovin_validation.png``, should be
+The plot produced, by default called ``~/CLEO/build_colls0d/bin/golovin_validation.png``, should be
 comparable to Fig.2(a) of Shima et al. 2009 :cite:p:`shima2009`.
 
 **Long1 and Long2**
@@ -181,8 +181,8 @@ These examples model collision-coalescence using Long's collision efficiency as 
 collision timesteps, as in Shima et al. 2009 :cite:p:`shima2009`. However the setup of the long2
 example is not exactly that which makes Fig.2(c) in Shima et al. 2009.
 
-The plots produced, by default called ``~/CLEO/build_colls0D/bin/long_validation_1.png`` and
-``~/CLEO/build_colls0D/bin/long_validation_2.png``, should be comparable to
+The plots produced, by default called ``~/CLEO/build_colls0d/bin/long_validation_1.png`` and
+``~/CLEO/build_colls0d/bin/long_validation_2.png``, should be comparable to
 Fig.2(b) and Fig.2(c) of Shima et al. 2009 :cite:p:`shima2009`.
 
 b) Breakup
