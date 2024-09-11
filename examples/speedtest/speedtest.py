@@ -69,7 +69,7 @@ savefigpath = outputdir  # directory for saving figures
 SDgbxs2plt = [0]  # gbxindex of SDs to plot (nb. "all" can be very slow)
 outdatafile = outputdir + "/spd_allstats.txt"  # file to write out stats to
 
-### --- settings for 2-D gridbox boundaries --- ###
+### --- settings for 3-D gridbox boundaries --- ###
 zgrid = [0, 1500, 50]  # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
 xgrid = [0, 1500, 50]  # evenly spaced xhalf coords [m]
 ygrid = np.array([0, 25, 50])  # array of yhalf coords [m]
