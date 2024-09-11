@@ -2,6 +2,25 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.26.0](https://github.com/yoctoyotta1024/CLEO/compare/d720d22535e3698bf5066e31f4d41c4d53cc3faa..v0.26.0) - 2024-09-11
+#### Bug Fixes
+- change executable names in CI - ([642b5e1](https://github.com/yoctoyotta1024/CLEO/commit/642b5e1295447dd610c016b335b1a1169e19f458)) - clara.bayley
+- typo in comment - ([80ecf65](https://github.com/yoctoyotta1024/CLEO/commit/80ecf653d00fe37187461d60d4a3570427f68b6f)) - clara.bayley
+#### Documentation
+- update build and executable names - ([e7d358e](https://github.com/yoctoyotta1024/CLEO/commit/e7d358eb11372aca3dc241c3efd16f436024c64c)) - clara.bayley
+#### Features
+- add fromfile_irreg to build CI check - ([a684930](https://github.com/yoctoyotta1024/CLEO/commit/a684930c01679b1f82fe298d1cea38cf9d7c0ad3)) - clara.bayley
+- add cmake target for formfile_irreg example - ([34786e2](https://github.com/yoctoyotta1024/CLEO/commit/34786e2be179de5c25c33b9be1fc4a5cc1fd6020)) - clara.bayley
+- new example for irregular grid version of fromfile example (for MPI devlopment) - ([3b05380](https://github.com/yoctoyotta1024/CLEO/commit/3b05380b107307c9f371da408fd8ff76359d39cc)) - clara.bayley
+#### Refactoring
+- format figures - ([477b29c](https://github.com/yoctoyotta1024/CLEO/commit/477b29c055ad820802041d93cee1e6c1bc244e49)) - clara.bayley
+- add zXxXy dimensions in print statement - ([3fe2737](https://github.com/yoctoyotta1024/CLEO/commit/3fe273762825810848242e6382db7c1261aacfd0)) - clara.bayley
+- set irregular gbx boudndaries - ([e287cab](https://github.com/yoctoyotta1024/CLEO/commit/e287cabc2b113f84a2f9649b12c69d1889e6d57b)) - clara.bayley
+- rename example fromfile -> fromfile_irreg - ([de332ae](https://github.com/yoctoyotta1024/CLEO/commit/de332ae97bed58d9b7a3d2fa3317161a9eb29612)) - clara.bayley
+- examples renaming to get rid of bad use of capital letters - ([d720d22](https://github.com/yoctoyotta1024/CLEO/commit/d720d22535e3698bf5066e31f4d41c4d53cc3faa)) - clara.bayley
+
+- - -
+
 ## [v0.25.1](https://github.com/yoctoyotta1024/CLEO/compare/8cf9fc790d9de7578dd2f2c9bd59bfeeaa3fae7b..v0.25.1) - 2024-09-04
 #### Bug Fixes
 - fix sphinx dependencies after sphinx version 8 - ([54bb0fa](https://github.com/yoctoyotta1024/CLEO/commit/54bb0fa76172579ab0140f084c94aba1109ff4cf)) - clara.bayley
