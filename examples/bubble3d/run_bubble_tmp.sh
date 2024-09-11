@@ -41,7 +41,7 @@ then
   spack load openblas@0.3.18%gcc@=11.2.0
 
   ${path2CLEO}/scripts/bash/compile_cleo.sh \
-     /work/mh1126/m300950/cleoenv openmp ${path2build} bubble3D
+     /work/mh1126/m300950/cleoenv openmp ${path2build} bubble3d
 
 elif [ "${action}" == "inputfiles" ]
 then
@@ -79,7 +79,7 @@ then
   cleo_t_end=7200 # must match CLEO config file [seconds]
   cleo_num_vertical_levels=24 # must match CLEO gridfile
 
-  mpiexec -n 1 ${path2build}/examples/bubble3d/src/bubble3D \
+  mpiexec -n 1 ${path2build}/examples/bubble3d/src/bubble3d \
     ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
     : -n 1 python \
     ${path2CLEO}/examples/bubble3d/yac_bubble_data_reader.py \

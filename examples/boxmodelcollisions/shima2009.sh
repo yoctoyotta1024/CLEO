@@ -20,7 +20,7 @@
 ### ---------------------------------------------------- ###
 buildtype="cuda"
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_colls0D/
+path2build=${HOME}/CLEO/build_colls0d/
 enableyac=false
 executables="golcolls longcolls"
 

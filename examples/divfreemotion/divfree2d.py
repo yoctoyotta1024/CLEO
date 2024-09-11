@@ -9,16 +9,15 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 7th May 2024
+Last Modified: Wednesday 11th September 2024
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
-Script generates input files, then runs CLEO executable "divfree2D" to create the
+Script generates input files, then runs CLEO executable "divfree2d" to create the
 data to then plot for divergence free motion of superdroplets in a 2-D divergence
-free wind field.
 """
 
 import os
@@ -83,7 +82,7 @@ divfree2d_inputfiles.main(
 os.chdir(path2build)
 os.system("pwd")
 os.system("rm -rf " + dataset)  # delete any existing dataset
-executable = path2build + "/examples/divfreemotion/src/divfree2D"
+executable = path2build + "/examples/divfreemotion/src/divfree2d"
 print("Executable: " + executable)
 print("Config file: " + configfile)
 os.system(executable + " " + configfile)
