@@ -87,3 +87,6 @@ jobs:
 
     - name: Build example fromfile
       run: cd build && make fromfile
+
+    - name: Build example fromfile_irreg
+      run: cd build && make fromfile_irreg
