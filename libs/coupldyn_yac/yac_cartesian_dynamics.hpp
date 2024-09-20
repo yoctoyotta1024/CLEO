@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 4th September 2024
+ * Last Modified: Friday 20th September 2024
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,6 +23,7 @@
 #ifndef LIBS_COUPLDYN_YAC_YAC_CARTESIAN_DYNAMICS_HPP_
 #define LIBS_COUPLDYN_YAC_YAC_CARTESIAN_DYNAMICS_HPP_
 
+#include <algorithm>
 #include <array>
 #include <fstream>
 #include <functional>
