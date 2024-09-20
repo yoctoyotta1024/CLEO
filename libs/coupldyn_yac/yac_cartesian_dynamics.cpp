@@ -170,8 +170,8 @@ void CartesianDynamics::receive_yac_field(const unsigned int grid_points,
         for (size_t i = 0; i < ndims_east; i++) {
           for (size_t k = 0; k < vertical_levels; k++) {
             auto vertical_idx = k;
-            auto edges_ndims_east = ndims_east * 2 - 1;
-            auto source_idx = edges_ndims_east * j + ndims_east - 1 + i;
+            auto source_idx = (ndims_east - 1) * j + ndims_east * j;
+            source_idx += std::min(2 * i + 1, 2 * ndims_east - 2);
             auto ii = (ndims_east * j + i) * vertical_levels + k;
             target_array[ii] = yac_raw_data[vertical_idx][source_idx] / conversion_factor;
           }
@@ -187,8 +187,12 @@ void CartesianDynamics::receive_yac_field(const unsigned int grid_points,
         for (size_t i = 0; i < ndims_east; i++) {
           for (size_t k = 0; k < vertical_levels; k++) {
             auto vertical_idx = k;
-            auto edges_ndims_east = ndims_east * 2 + 1;
-            auto source_idx = edges_ndims_east * j + i;
+            auto source_idx = ndims_east * j + (ndims_east + 1) * j;
+            if (j < ndims_north - 1) {
+              source_idx += 2 * i;
+            } else {
+              source_idx += i;
+            }
             auto ii = (ndims_east * j + i) * vertical_levels + k;
             target_array[ii] = yac_raw_data[vertical_idx][source_idx] / conversion_factor;
           }
