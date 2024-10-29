@@ -7,7 +7,7 @@
 #SBATCH --time=00:10:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
-#SBATCH --account=mh1126
+#SBATCH --account=bm1183
 #SBATCH --output=./runexample_out.%j.out
 #SBATCH --error=./runexample_err.%j.out
 
@@ -30,9 +30,9 @@ executables="$5"
 pythonscript=$6
 script_args="$7"
 
-cleoenv=/work/mh1126/m300950/cleoenv
+cleoenv=/work/bm1183/m300950/mambaenvs/cleoenv
 python=${cleoenv}/bin/python3
-yacyaxtroot=/work/mh1126/m300950/yac
+yacyaxtroot=/work/bm1183/m300950/yac
 spack load cmake@3.23.1%gcc
 module load python3/2022.01-gcc-11.2.0
 source activate ${cleoenv}
