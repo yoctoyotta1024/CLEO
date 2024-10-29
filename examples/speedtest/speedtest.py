@@ -20,22 +20,25 @@ of CLEO usign different build configurations (e.g. serial, OpenmP and CUDA paral
 """
 
 import os
+import shutil
+import subprocess
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
 
-path2CLEO = sys.argv[1]
-path2build = sys.argv[2]
-configfile = sys.argv[3]
-outputdir = sys.argv[4]
+path2CLEO = Path(sys.argv[1])
+path2build = Path(sys.argv[2])
+configfile = Path(sys.argv[3])
+outputdir = Path(sys.argv[4])
 buildtype = sys.argv[5]
 nruns = 2
 
-sys.path.append(path2CLEO)  # for imports from pySD package
+sys.path.append(str(path2CLEO))  # imports from pySD
 sys.path.append(
-    path2CLEO + "/examples/exampleplotting/"
-)  # for imports from example plotting package
+    str(path2CLEO / "examples" / "exampleplotting")
+)  # imports from example plots package
+
 
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
@@ -51,23 +54,23 @@ from pySD.thermobinary_src import read_thermodynamics as rthermo
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
 # path and filenames for creating initial SD conditions
-constsfile = path2CLEO + "/libs/cleoconstants.hpp"
-binpath = path2build + "/bin/"
-sharepath = path2build + "/share/"
-gridfile = sharepath + "/spd_dimlessGBxboundaries.dat"
-initSDsfile = sharepath + "/spd_dimlessSDsinit.dat"
-thermofile = sharepath + "/spd_dimlessthermo.dat"
+constsfile = path2CLEO / "libs" / "cleoconstants.hpp"
+binpath = path2build / "bin"
+sharepath = path2build / "share"
+gridfile = sharepath / "spd_dimlessGBxboundaries.dat"
+initSDsfile = sharepath / "spd_dimlessSDsinit.dat"
+thermofiles = sharepath / "spd_dimlessthermo.dat"
 
 # path and file names for plotting results
-setupfile = binpath + "spd_setup.txt"
-statsfile = binpath + "spd_stats.txt"
-dataset = binpath + "spd_sol.zarr"
+setupfile = binpath / "spd_setup.txt"
+statsfile = binpath / "spd_stats.txt"
+dataset = binpath / "spd_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
 isfigures = [False, False]  # booleans for [making, saving] initialisation figures
 savefigpath = outputdir  # directory for saving figures
 SDgbxs2plt = [0]  # gbxindex of SDs to plot (nb. "all" can be very slow)
-outdatafile = outputdir + "/spd_allstats.txt"  # file to write out stats to
+outdatafile = outputdir / "spd_allstats.txt"  # file to write out stats to
 
 ### --- settings for 3-D gridbox boundaries --- ###
 zgrid = [0, 1500, 50]  # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
@@ -162,16 +165,17 @@ def write_outstats(nruns, n, outdatafile, buildtype, stats):
 if path2CLEO == path2build:
     raise ValueError("build directory cannot be CLEO")
 else:
-    Path(path2build).mkdir(exist_ok=True)
-    Path(sharepath).mkdir(exist_ok=True)
-    Path(binpath).mkdir(exist_ok=True)
+    path2build.mkdir(exist_ok=True)
+    sharepath.mkdir(exist_ok=True)
+    binpath.mkdir(exist_ok=True)
     if isfigures[1]:
-        Path(savefigpath).mkdir(exist_ok=True)
+        savefigpath.mkdir(exist_ok=True)
 
 ### --- delete any existing initial conditions --- ###
-os.system("rm " + gridfile)
-os.system("rm " + initSDsfile)
-os.system("rm " + thermofile[:-4] + "*")
+shutil.rmtree(gridfile, ignore_errors=True)
+shutil.rmtree(initSDsfile, ignore_errors=True)
+all_thermofiles = thermofiles.parent / Path(f"{thermofiles.stem}*{thermofiles.suffix}")
+shutil.rmtree(all_thermofiles, ignore_errors=True)
 
 ### ----- write gridbox boundaries binary ----- ###
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
@@ -193,7 +197,7 @@ thermodyngen = thermogen.SimpleThermo2DFlowField(
     VVEL,
 )
 cthermo.write_thermodynamics_binary(
-    thermofile, thermodyngen, configfile, constsfile, gridfile
+    thermofiles, thermodyngen, configfile, constsfile, gridfile
 )
 
 
@@ -217,7 +221,7 @@ csupers.write_initsuperdrops_binary(
 if isfigures[0]:
     rgrid.plot_gridboxboundaries(constsfile, gridfile, savefigpath, isfigures[1])
     rthermo.plot_thermodynamics(
-        constsfile, configfile, gridfile, thermofile, savefigpath, isfigures[1]
+        constsfile, configfile, gridfile, thermofiles, savefigpath, isfigures[1]
     )
     rsupers.plot_initGBxs_distribs(
         configfile,
@@ -235,13 +239,13 @@ if isfigures[0]:
 ### ---------------------------------------------------------------- ###
 ### ---------------------- RUN CLEO EXECUTABLE --------------------- ###
 ### ---------------------------------------------------------------- ###
-executable = path2build + "/examples/speedtest/src/spdtest"
+executable = path2build / "examples" / "speedtest" / "src" / "spdtest"
 for n in range(nruns):
     os.chdir(path2build)
-    os.system("rm -rf " + dataset)  # delete any existing dataset
-    print("Executable: " + executable)
-    print("Config file: " + configfile)
-    os.system(executable + " " + configfile)
+    shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
+    print("Executable: " + str(executable))
+    print("Config file: " + str(configfile))
+    subprocess.run([executable, configfile])
 
     # copy speed results to new file
     print("--- reading runtime statistics ---")

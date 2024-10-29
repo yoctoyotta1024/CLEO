@@ -22,11 +22,11 @@ a 2-D divergence free wind field.
 import sys
 
 
-def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofile):
+def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofiles):
     import numpy as np
     import matplotlib.pyplot as plt
 
-    sys.path.append(path2CLEO)  # for imports from pySD package
+    sys.path.append(str(path2CLEO))  # for imports from pySD package
 
     from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
     from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
@@ -48,11 +48,11 @@ def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofile):
     ### ---------------------------------------------------------------- ###
     ### --- essential paths and filenames --- ###
     # path and filenames for creating initial SD conditions
-    constsfile = path2CLEO + "/libs/cleoconstants.hpp"
+    constsfile = path2CLEO / "libs" / "cleoconstants.hpp"
 
     ### --- plotting initialisation figures --- ###
     isfigures = [True, True]  # booleans for [making, saving] initialisation figures
-    savefigpath = path2build + "/bin/"  # directory for saving figures
+    savefigpath = path2build / "bin"  # directory for saving figures
     SDgbxs2plt = [0]  # gbxindex of SDs to plot (nb. "all" can be very slow)
 
     ### --- settings for 2-D gridbox boundaries --- ###
@@ -115,7 +115,7 @@ def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofile):
         VVEL,
     )
     cthermo.write_thermodynamics_binary(
-        thermofile, thermodyngen, configfile, constsfile, gridfile
+        thermofiles, thermodyngen, configfile, constsfile, gridfile
     )
 
     ### ----- write initial superdroplets binary ----- ###
@@ -138,7 +138,7 @@ def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofile):
     if isfigures[0]:
         rgrid.plot_gridboxboundaries(constsfile, gridfile, savefigpath, isfigures[1])
         rthermo.plot_thermodynamics(
-            constsfile, configfile, gridfile, thermofile, savefigpath, isfigures[1]
+            constsfile, configfile, gridfile, thermofiles, savefigpath, isfigures[1]
         )
         rsupers.plot_initGBxs_distribs(
             configfile,
@@ -155,5 +155,5 @@ def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofile):
 
 
 if __name__ == "__main__":
-    ### args = path2CLEO, path2build, configfile, binpath, gridfile, initSDsfile, thermofile
+    ### args = path2CLEO, path2build, configfile, binpath, gridfile, initSDsfile, thermofiles
     main(*sys.argv[1:])

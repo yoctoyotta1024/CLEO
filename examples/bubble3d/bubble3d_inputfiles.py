@@ -42,7 +42,7 @@ def main(
 ):
     import matplotlib.pyplot as plt
 
-    sys.path.append(path2CLEO)  # for imports from pySD package
+    sys.path.append(str(path2CLEO))  # for imports from pySD package
 
     from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
     from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
@@ -61,12 +61,12 @@ def main(
     ### ---------------------------------------------------------------- ###
     ### --- essential paths and filenames --- ###
     # path and filenames for creating initial SD conditions
-    constsfile = path2CLEO + "/libs/cleoconstants.hpp"
+    constsfile = path2CLEO / "libs" / "cleoconstants.hpp"
 
     ### --- plotting initialisation figures --- ###
     # booleans for [making, saving] initialisation figures
     isfigures = [True, True]
-    savefigpath = path2build + "/bin/"  # directory for saving figures
+    savefigpath = path2build / "bin"  # directory for saving figures
 
     ### --- settings for 3-D gridbox boundaries --- ###
     num_vertical_levels = 24  # TODO(CB): move to config file (?)
@@ -139,5 +139,5 @@ def main(
 
 
 if __name__ == "__main__":
-    ### args = path2CLEO, path2build, configfile, binpath, gridfile, initSDsfile, thermofile
+    ### args = path2CLEO, path2build, configfile, binpath, gridfile, initSDsfile, thermofiles
     main(*sys.argv[1:])

@@ -42,7 +42,7 @@ inputfiles:
 
 initsupers:
   type: frombinary                                              # type of initialisation of super-droplets
-  initsupers_filename: /home/m/m300950/CLEO/build_colls0d//share/shima2009_dimlessSDsinit_2.dat # binary filename for initialisation of SDs
+  initsupers_filename: /home/m/m300950/CLEO/build_colls0d/share/shima2009_dimlessSDsinit_2.dat  # binary filename for initialisation of SDs
 
 ### Output Parameters ###
 outputdata:

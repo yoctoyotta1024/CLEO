@@ -24,19 +24,22 @@ Note: SD(M) = superdroplet (model)
 """
 
 import os
+import shutil
+import subprocess
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
 
-path2CLEO = sys.argv[1]
-path2build = sys.argv[2]
-configfile = sys.argv[3]
+path2CLEO = Path(sys.argv[1])
+path2build = Path(sys.argv[2])
+configfile = Path(sys.argv[3])
 
-sys.path.append(path2CLEO)  # for imports from pySD package
+sys.path.append(str(path2CLEO))  # imports from pySD
 sys.path.append(
-    path2CLEO + "/examples/exampleplotting/"
-)  # for imports from example plotting package
+    str(path2CLEO / "examples" / "exampleplotting")
+)  # imports from example plots package
+
 
 from plotssrc import pltsds, as2017fig
 from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat, sdtracing
@@ -49,15 +52,15 @@ from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
 
 ############### INPUTS ##################
 # path and filenames for creating SD initial conditions and for running model
-constsfile = path2CLEO + "/libs/cleoconstants.hpp"
-binpath = path2build + "/bin/"
-sharepath = path2build + "/share/"
-initSDsfile = sharepath + "cuspbifurc_dimlessSDsinit.dat"
-gridfile = sharepath + "cuspbifurc_dimlessGBxboundaries.dat"
+constsfile = path2CLEO / "libs" / "cleoconstants.hpp"
+binpath = path2build / "bin"
+sharepath = path2build / "share"
+initSDsfile = sharepath / "cuspbifurc_dimlessSDsinit.dat"
+gridfile = sharepath / "cuspbifurc_dimlessGBxboundaries.dat"
 
 # path and file names for plotting results
-setupfile = binpath + "cuspbifurc_setup.txt"
-dataset = binpath + "cuspbifurc_sol.zarr"
+setupfile = binpath / "cuspbifurc_setup.txt"
+dataset = binpath / "cuspbifurc_sol.zarr"
 
 # booleans for [making, saving] initialisation figures
 isfigures = [True, True]
@@ -103,13 +106,13 @@ def displacement(time, w_avg, thalf):
 if path2CLEO == path2build:
     raise ValueError("build directory cannot be CLEO")
 else:
-    Path(path2build).mkdir(exist_ok=True)
-    Path(sharepath).mkdir(exist_ok=True)
-    Path(binpath).mkdir(exist_ok=True)
+    path2build.mkdir(exist_ok=True)
+    sharepath.mkdir(exist_ok=True)
+    binpath.mkdir(exist_ok=True)
 
 ###  delete any exisitng initial conditions
-os.system("rm " + gridfile)
-os.system("rm " + initSDsfile)
+shutil.rmtree(gridfile, ignore_errors=True)
+shutil.rmtree(initSDsfile, ignore_errors=True)
 
 ### create files (and plots) for gridbox boundaries and initial SD conditions
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
@@ -132,12 +135,12 @@ plt.close()
 
 ### run model
 os.chdir(path2build)
-os.system("pwd")
-os.system("rm -rf " + dataset)  # delete any existing dataset
-executable = path2build + "/examples/adiabaticparcel/src/adia0d"
-print("Executable: " + executable)
-print("Config file: " + configfile)
-os.system(executable + " " + configfile)
+subprocess.run(["pwd"])
+shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
+executable = path2build / "examples" / "adiabaticparcel" / "src" / "adia0d"
+print("Executable: " + str(executable))
+print("Config file: " + str(configfile))
+subprocess.run([executable, configfile])
 
 ### load results
 # read in constants and intial setup from setup .txt file
@@ -158,14 +161,14 @@ sample = [0, int(config["maxnsupers"])]
 radii = sdtracing.attribute_for_superdroplets_sample(
     sddata, "radius", minid=sample[0], maxid=sample[1]
 )
-savename = binpath + "/cuspbifurc_SDgrowth.png"
+savename = binpath / "cuspbifurc_SDgrowth.png"
 pltsds.individ_radiusgrowths_figure(time, radii, savename=savename)
 
 attrs = ["radius", "xi", "msol"]
 sd0 = sdtracing.attributes_for1superdroplet(sddata, 0, attrs)
 numconc = np.sum(sddata["xi"][0]) / gbxs["domainvol"] / 1e6  # [/cm^3]
 
-savename2 = binpath + "/cuspbifurc_validation.png"
+savename2 = binpath / "cuspbifurc_validation.png"
 as2017fig.arabas_shima_2017_fig(
     time,
     zprof,

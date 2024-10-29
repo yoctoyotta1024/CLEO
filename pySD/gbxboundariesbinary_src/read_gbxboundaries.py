@@ -222,14 +222,15 @@ def plot_gridboxboundaries(constsfile, gridfile, binpath, savefig):
 
     fig.tight_layout()
     if savefig:
+        savename = binpath / "gridboxboundaries.png"
         fig.savefig(
-            binpath + "gridboxboundaries.png",
+            savename,
             dpi=400,
             bbox_inches="tight",
             facecolor="w",
             format="png",
         )
-        print("Figure .png saved as: " + binpath + "gridboxboundaries.png")
+        print("Figure .png saved as: " + str(savename))
     plt.show()
 
 

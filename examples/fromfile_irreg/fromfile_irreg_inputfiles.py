@@ -23,11 +23,11 @@ time varying thermodynamics read from binary files.
 import sys
 
 
-def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofile):
+def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofiles):
     import numpy as np
     import matplotlib.pyplot as plt
 
-    sys.path.append(path2CLEO)  # for imports from pySD package
+    sys.path.append(str(path2CLEO))  # for imports from pySD package
 
     from src import gen_input_thermo
     from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
@@ -48,12 +48,12 @@ def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofile):
     ### ---------------------------------------------------------------- ###
     ### --- essential paths and filenames --- ###
     # path and filenames for creating initial SD conditions
-    constsfile = path2CLEO + "/libs/cleoconstants.hpp"
+    constsfile = path2CLEO / "libs" / "cleoconstants.hpp"
 
     ### --- plotting initialisation figures --- ###
     # booleans for [making, saving] initialisation figures
     isfigures = [True, True]
-    savefigpath = path2build + "/bin/"  # directory for saving figures
+    savefigpath = path2build / "bin"  # directory for saving figures
 
     ### --- settings for 3-D irregular gridbox boundaries --- ###
     zgrid = np.array([0, 20, 30, 45, 60, 80, 90, 120, 140, 180, 360, 500, 1000, 1500])
@@ -100,7 +100,7 @@ def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofile):
         PRESSz0, TEMPz0, qvapz0, qcondz0, WMAX, Zlength, Xlength, VMAX, Ylength
     )
     cthermo.write_thermodynamics_binary(
-        thermofile, thermodyngen, configfile, constsfile, gridfile
+        thermofiles, thermodyngen, configfile, constsfile, gridfile
     )
 
     ### ----- write initial superdroplets binary ----- ###
@@ -123,7 +123,7 @@ def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofile):
     if isfigures[0]:
         rgrid.plot_gridboxboundaries(constsfile, gridfile, savefigpath, isfigures[1])
         rthermo.plot_thermodynamics(
-            constsfile, configfile, gridfile, thermofile, savefigpath, isfigures[1]
+            constsfile, configfile, gridfile, thermofiles, savefigpath, isfigures[1]
         )
         plt.close()
     ### ---------------------------------------------------------------- ###
@@ -131,5 +131,5 @@ def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofile):
 
 
 if __name__ == "__main__":
-    ### args = path2CLEO, path2build, configfile, binpath, gridfile, initSDsfile, thermofile
+    ### args = path2CLEO, path2build, configfile, binpath, gridfile, initSDsfile, thermofiles
     main(*sys.argv[1:])

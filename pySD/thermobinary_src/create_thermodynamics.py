@@ -190,7 +190,7 @@ def check_datashape(thermodata, ndata, ndims, ntime):
 
 
 def write_thermodynamics_binary(
-    thermofile, thermogen, configfile, constsfile, gridfile
+    thermofiles, thermogen, configfile, constsfile, gridfile
 ):
     """write binarys for thermodynamic data over time on C staggered
     grid. So that pressure, temperature, qvap and qcond are defined at
@@ -220,8 +220,6 @@ def write_thermodynamics_binary(
     units += [b"m"] * 3  # velocity units
     scale_factors = np.asarray(scale_factors, dtype=np.double)
 
-    idot = [i for i, ltr in enumerate(thermofile) if ltr == "."][-1]
-    filestem, filetype = thermofile[:idot], thermofile[idot:]
     varat = ["centres"] * 4 + ["z-faces", "x-faces", "y-faces"]
     for v, var in enumerate(thermodata.keys()):
         if thermodata[var] != []:
@@ -247,7 +245,8 @@ def write_thermodynamics_binary(
                 + str(inputs["ntime"])
                 + " time steps)"
             )
-            filename = filestem + "_" + var + filetype
+            filename = f"{thermofiles.stem}_{var}{thermofiles.suffix}"
+            filename = thermofiles.parent / filename
             writebinary.writebinary(
                 filename,
                 thermodata[var],

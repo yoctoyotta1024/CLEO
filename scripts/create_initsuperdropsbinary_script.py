@@ -32,24 +32,24 @@ from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### --- absolute or relative paths for --- ###
 ### ---   build and CLEO directories --- ###
-path2CLEO = sys.argv[1]
-path2build = sys.argv[2]
-configfile = sys.argv[3]
+path2CLEO = Path(sys.argv[1])
+path2build = Path(sys.argv[2])
+configfile = Path(sys.argv[3])
 
 # booleans for [making, saving] initialisation figures
 isfigures = [True, True]
 gbxs2plt = "all"  # indexes of GBx index of SDs to plot (nb. "all" can be very slow)
 
 ### essential paths and filenames
-constsfile = path2CLEO + "/libs/cleoconstants.hpp"
-binariespath = path2build + "/share/"
-savefigpath = path2build + "/bin/"
+constsfile = path2CLEO / "libs" / "cleoconstants.hpp"
+binariespath = path2build / "share"
+savefigpath = path2build / "bin"
 
 gridfile = (
-    binariespath + "/dimlessGBxboundaries.dat"
+    binariespath / "dimlessGBxboundaries.dat"
 )  # note this should match config.yaml
 initsupersfile = (
-    binariespath + "/dimlessSDsinit.dat"
+    binariespath / "dimlessSDsinit.dat"
 )  # note this should match config.yaml
 
 ### --- Number of Superdroplets per Gridbox --- ###
@@ -147,8 +147,8 @@ coord2gen = None  # do not generate superdroplet coord2s
 if path2CLEO == path2build:
     raise ValueError("build directory cannot be CLEO")
 else:
-    Path(path2build).mkdir(exist_ok=True)
-    Path(binariespath).mkdir(exist_ok=True)
+    path2build.mkdir(exist_ok=True)
+    binariespath.mkdir(exist_ok=True)
 
 ### write initial superdrops binary
 attrsgen = attrsgen.AttrsGenerator(
@@ -161,7 +161,7 @@ csupers.write_initsuperdrops_binary(
 ### plot initial superdrops binary
 if isfigures[0]:
     if isfigures[1]:
-        Path(savefigpath).mkdir(exist_ok=True)
+        savefigpath.mkdir(exist_ok=True)
     rsupers.plot_initGBxs_distribs(
         configfile,
         constsfile,

@@ -21,12 +21,13 @@ piggyback ICON bubble test case
 """
 
 import os
+import shutil
 import sys
 from pathlib import Path
 
-path2CLEO = sys.argv[1]
-path2build = sys.argv[2]
-configfile = sys.argv[3]
+path2CLEO = Path(sys.argv[1])
+path2build = Path(sys.argv[2])
+configfile = Path(sys.argv[3])
 icon_grid_file = sys.argv[4]  # TODO(CB): move to config file
 
 import bubble3d_inputfiles
@@ -36,16 +37,16 @@ import bubble3d_inputfiles
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
 # path and filenames for creating initial SD conditions
-binpath = path2build + "/bin/"
-sharepath = path2build + "/share/"
-gridfile = sharepath + "bubble3d_dimlessGBxboundaries.dat"
-initSDsfile = sharepath + "bubble3d_dimlessSDsinit.dat"
-savefigpath = path2build + "/bin/"  # directory for saving figures
+binpath = path2build / "bin"
+sharepath = path2build / "share"
+gridfile = sharepath / "bubble3d_dimlessGBxboundaries.dat"
+initSDsfile = sharepath / "bubble3d_dimlessSDsinit.dat"
+savefigpath = path2build / "bin"  # directory for saving figures
 SDgbxs2plt = [0]  # gbxindex of SDs to plot (nb. "all" can be very slow)
 
 # path and file names for plotting results
-setupfile = binpath + "bubble3d_setup.txt"
-dataset = binpath + "bubble3d_sol.zarr"
+setupfile = binpath / "bubble3d_setup.txt"
+dataset = binpath / "bubble3d_sol.zarr"
 
 ### ---------------------------------------------------------------- ###
 ### ------------------- BINARY FILES GENERATION--------------------- ###
@@ -54,14 +55,14 @@ dataset = binpath + "bubble3d_sol.zarr"
 if path2CLEO == path2build:
     raise ValueError("build directory cannot be CLEO")
 else:
-    Path(path2build).mkdir(exist_ok=True)
-    Path(sharepath).mkdir(exist_ok=True)
-    Path(binpath).mkdir(exist_ok=True)
-    Path(savefigpath).mkdir(exist_ok=True)
+    path2build.mkdir(exist_ok=True)
+    sharepath.mkdir(exist_ok=True)
+    binpath.mkdir(exist_ok=True)
+    savefigpath.mkdir(exist_ok=True)
 
 ### --- delete any existing initial conditions --- ###
-os.system("rm " + gridfile)
-os.system("rm " + initSDsfile)
+shutil.rmtree(gridfile, ignore_errors=True)
+shutil.rmtree(initSDsfile, ignore_errors=True)
 
 bubble3d_inputfiles.main(
     path2CLEO, path2build, configfile, gridfile, initSDsfile, icon_grid_file, SDgbxs2plt
@@ -77,10 +78,11 @@ def run_exectuable(path2CLEO, path2build, configfile, dataset):
     """delete existing dataset, the run exectuable with given config file"""
     os.chdir(path2build)
     os.system("pwd")
-    os.system("rm -rf " + dataset)  # delete any existing dataset
-    executable = path2build + "/examples/yac/bubble3d/src/bubble3d"
-    print("Executable: " + executable)
-    print("Config file: " + configfile)
+    shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
+    executable = str(path2build / "examples" / "yac" / "bubble3d" / "src" / "bubble3d")
+    configfile = str(configfile)
+    print("Executable: " + str(executable))
+    print("Config file: " + str(configfile))
 
     cleoproc = executable + " " + configfile
     pythonproc = path2CLEO + "/examples/yac/bubble3d/yac_icon_data_reader.py"

@@ -22,21 +22,24 @@ to create data. Then plots results analgous to Shima et al. 2009 Fig. 2(b)
 """
 
 import os
+import shutil
+import subprocess
 import sys
 import numpy as np
 import awkward as ak
 import matplotlib.pyplot as plt
 from pathlib import Path
 
-path2CLEO = sys.argv[1]
-path2build = sys.argv[2]
-configfile = sys.argv[3]
+path2CLEO = Path(sys.argv[1])
+path2build = Path(sys.argv[2])
+configfile = Path(sys.argv[3])
 kernels = sys.argv[4:]
 
-sys.path.append(path2CLEO)  # for imports from pySD package
+sys.path.append(str(path2CLEO))  # imports from pySD
 sys.path.append(
-    path2CLEO + "/examples/exampleplotting/"
-)  # for imports from example plotting package
+    str(path2CLEO / "examples" / "exampleplotting")
+)  # imports from example plots package
+
 
 from plotssrc import shima2009fig
 from pySD import editconfigfile
@@ -52,15 +55,15 @@ from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
 # path and filenames for creating initial SD conditions
-constsfile = path2CLEO + "/libs/cleoconstants.hpp"
-binpath = path2build + "/bin/"
-sharepath = path2build + "/share/"
-initSDsfile = sharepath + "breakup_dimlessSDsinit.dat"
-gridfile = sharepath + "breakup_dimlessGBxboundaries.dat"
+constsfile = path2CLEO / "libs" / "cleoconstants.hpp"
+binpath = path2build / "bin"
+sharepath = path2build / "share"
+initSDsfile = sharepath / "breakup_dimlessSDsinit.dat"
+gridfile = sharepath / "breakup_dimlessGBxboundaries.dat"
 
 # booleans for [making, saving] initialisation figures
 isfigures = [True, True]
-savefigpath = path2build + "/bin/"  # directory for saving figures
+savefigpath = path2build / "bin"  # directory for saving figures
 
 ### --- settings for 0-D Model gridbox boundaries --- ###
 zgrid = np.asarray([0, 100])
@@ -99,15 +102,15 @@ dryradiigen = rgens.MonoAttrGen(dryradius)
 if path2CLEO == path2build:
     raise ValueError("build directory cannot be CLEO")
 else:
-    Path(path2build).mkdir(exist_ok=True)
-    Path(sharepath).mkdir(exist_ok=True)
-    Path(binpath).mkdir(exist_ok=True)
+    path2build.mkdir(exist_ok=True)
+    sharepath.mkdir(exist_ok=True)
+    binpath.mkdir(exist_ok=True)
     if isfigures[1]:
-        Path(savefigpath).mkdir(exist_ok=True)
+        savefigpath.mkdir(exist_ok=True)
 
 ### --- delete any existing initial conditions --- ###
-os.system("rm " + gridfile)
-os.system("rm " + initSDsfile)
+shutil.rmtree(gridfile, ignore_errors=True)
+shutil.rmtree(initSDsfile, ignore_errors=True)
 
 ### ----- write gridbox boundaries binary ----- ###
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
@@ -148,10 +151,11 @@ def get_executable(path2build, kernel):
     }
     executable = (
         path2build
-        + "/examples/boxmodelcollisions/"
-        + kernel
-        + "/src/"
-        + executables[kernel]
+        / "examples"
+        / "boxmodelcollisions"
+        / kernel
+        / "src"
+        / executables[kernel]
     )
 
     return executable
@@ -159,9 +163,9 @@ def get_executable(path2build, kernel):
 
 def get_params(path2build, kernel):
     params = {
-        "setup_filename": path2build + "bin/" + kernel + "_setup.txt",
-        "stats_filename": path2build + "bin/" + kernel + "_stats.txt",
-        "zarrbasedir": path2build + "bin/" + kernel + "_sol.zarr",
+        "setup_filename": str(path2build / "bin" / Path(kernel + "_setup.txt")),
+        "stats_filename": str(path2build / "bin" / Path(kernel + "_stats.txt")),
+        "zarrbasedir": str(path2build / "bin" / Path(kernel + "_sol.zarr")),
     }
 
     return params
@@ -174,11 +178,13 @@ def run_exectuable(path2build, kernel, configfile):
 
     executable = get_executable(path2build, kernel)
     os.chdir(path2build)
-    os.system("pwd")
-    os.system("rm -rf " + params["zarrbasedir"])  # delete any existing dataset
-    print("Executable: " + executable)
-    print("Config file: " + configfile)
-    os.system(executable + " " + configfile)
+    subprocess.run(["pwd"])
+    shutil.rmtree(
+        params["zarrbasedir"], ignore_errors=True
+    )  # delete any existing dataset
+    print("Executable: " + str(executable))
+    print("Config file: " + str(configfile))
+    subprocess.run([executable, configfile])
 
 
 def get_kernel_results(path2build, kernel):
@@ -315,7 +321,7 @@ def plot_allkernels_results(gridfile, path2build, kernels, xlims, t2plts, savena
 
     if savename != "":
         fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
-        print("Figure .png saved as: " + savename)
+        print("Figure .png saved as: " + str(savename))
     plt.show()
 
     return fig, ax
@@ -335,7 +341,7 @@ for kernel in kernels:
 for kernel in kernels:
     t2plts = [0, 600, 1200, 1800, 2400]
     xlims = [10, 5000]
-    savename = savefigpath + kernel + "_validation.png"
+    savename = savefigpath / Path(kernel + "_validation.png")
     plot_onekernel_results(
         gridfile,
         path2build,
@@ -350,7 +356,7 @@ for kernel in kernels:
 
 t2plts = [0, 600, 1200, 1800, 2400]
 xlims = [10, 5000]
-savename = savefigpath + "breakup_validation.png"
+savename = savefigpath / "breakup_validation.png"
 plot_allkernels_results(gridfile, path2build, kernels, xlims, t2plts, savename)
 ### ------------------------------------------------------------ ###
 ### ------------------------------------------------------------ ###

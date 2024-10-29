@@ -21,12 +21,13 @@ python class to handle thermodynamics and wind fields data from SDM zarr store i
 
 import numpy as np
 import xarray as xr
+from pathlib import Path
 
 from . import thermoeqns
 
 
 def thermotryopen_dataset(dataset):
-    if isinstance(dataset, str):
+    if isinstance(dataset, str) or isinstance(dataset, Path):
         print("thermodynamic fields dataset: ", dataset)
         return xr.open_dataset(dataset, engine="zarr", consolidated=False)
     else:

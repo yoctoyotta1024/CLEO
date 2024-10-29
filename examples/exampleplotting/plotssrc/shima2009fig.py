@@ -83,7 +83,7 @@ def plot_validation_figure(
 
     if savename != "":
         fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
-        print("Figure .png saved as: " + savename)
+        print("Figure .png saved as: " + str(savename))
     plt.show()
 
     return fig, ax
