@@ -8,7 +8,7 @@
 #SBATCH --time=00:05:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
-#SBATCH --account=mh1126
+#SBATCH --account=bm1183
 #SBATCH --output=./roughCLEO_out.%j.out
 #SBATCH --error=./roughCLEO_err.%j.out
 
@@ -22,7 +22,7 @@ dobuild=$1 # == "build" or otherwise
 module load gcc/11.2.0-gcc-11.2.0
 module load nvhpc/23.9-gcc-11.2.0
 spack load cmake@3.23.1%gcc
-source activate /work/mh1126/m300950/cleoenv
+source activate /work/bm1183/m300950/mambaenvs/cleoenv
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/roughpaper/scratch/build/
 gxx="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/g++"
