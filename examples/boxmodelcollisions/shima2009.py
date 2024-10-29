@@ -22,20 +22,23 @@ Then plots results comparable to Shima et al. 2009 Fig. 2
 """
 
 import os
+import shutil
+import subprocess
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
 
-path2CLEO = sys.argv[1]
-path2build = sys.argv[2]
-configfile = sys.argv[3]
+path2CLEO = Path(sys.argv[1])
+path2build = Path(sys.argv[2])
+configfile = Path(sys.argv[3])
 kernels = sys.argv[4:]
 
-sys.path.append(path2CLEO)  # for imports from pySD package
+sys.path.append(str(path2CLEO))  # imports from pySD
 sys.path.append(
-    path2CLEO + "/examples/exampleplotting/"
-)  # for imports from example plotting package
+    str(path2CLEO / "examples" / "exampleplotting")
+)  # imports from example plots package
+
 
 import attrgens_shima2009
 from plotssrc import shima2009fig
@@ -52,20 +55,20 @@ from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
 # path and filenames for creating initial SD conditions
-constsfile = path2CLEO + "/libs/cleoconstants.hpp"
-binpath = path2build + "/bin/"
-sharepath = path2build + "/share/"
-initSDsfile_1 = sharepath + "shima2009_dimlessSDsinit_1.dat"
-initSDsfile_2 = sharepath + "shima2009_dimlessSDsinit_2.dat"
-gridfile = sharepath + "shima2009_dimlessGBxboundaries.dat"
+constsfile = path2CLEO / "libs" / "cleoconstants.hpp"
+binpath = path2build / "bin"
+sharepath = path2build / "share"
+initSDsfile_1 = sharepath / "shima2009_dimlessSDsinit_1.dat"
+initSDsfile_2 = sharepath / "shima2009_dimlessSDsinit_2.dat"
+gridfile = sharepath / "shima2009_dimlessGBxboundaries.dat"
 
 # path and file names for plotting results
-setupfile = binpath + "shima2009_setup.txt"
-dataset = binpath + "shima2009_sol.zarr"
+setupfile = binpath / "shima2009_setup.txt"
+dataset = binpath / "shima2009_sol.zarr"
 
 # booleans for [making, saving] initialisation figures
 isfigures = [True, True]
-savefigpath = path2build + "/bin/"  # directory for saving figures
+savefigpath = path2build / "bin"  # directory for saving figures
 
 ### --- settings for 0-D Model gridbox boundaries --- ###
 zgrid = np.asarray([0, 100])
@@ -91,7 +94,7 @@ numconc_1 = 2**23  # total no. conc of real droplets [m^-3]
 params_1 = {
     "COLLTSTEP": 1,
     "maxnsupers": nsupers_1[0],
-    "initsupers_filename": initSDsfile_1,
+    "initsupers_filename": str(initSDsfile_1),
 }
 
 # radius distirbution from exponential in droplet volume for setup 2
@@ -101,7 +104,7 @@ numconc_2 = (3 / 2) ** 3 * 2**23  # total no. conc of real droplets [m^-3]
 params_2 = {
     "COLLTSTEP": 0.1,
     "maxnsupers": nsupers_2[0],
-    "initsupers_filename": initSDsfile_2,
+    "initsupers_filename": str(initSDsfile_2),
 }
 
 # attribute generators
@@ -124,16 +127,16 @@ dryradiigen = rgens.MonoAttrGen(dryradius)
 if path2CLEO == path2build:
     raise ValueError("build directory cannot be CLEO")
 else:
-    Path(path2build).mkdir(exist_ok=True)
-    Path(sharepath).mkdir(exist_ok=True)
-    Path(binpath).mkdir(exist_ok=True)
+    path2build.mkdir(exist_ok=True)
+    sharepath.mkdir(exist_ok=True)
+    binpath.mkdir(exist_ok=True)
     if isfigures[1]:
-        Path(savefigpath).mkdir(exist_ok=True)
+        savefigpath.mkdir(exist_ok=True)
 
 ### --- delete any existing initial conditions --- ###
-os.system("rm " + gridfile)
-os.system("rm " + initSDsfile_1)
-os.system("rm " + initSDsfile_2)
+shutil.rmtree(gridfile, ignore_errors=True)
+shutil.rmtree(initSDsfile_1, ignore_errors=True)
+shutil.rmtree(initSDsfile_2, ignore_errors=True)
 
 ### ----- write gridbox boundaries binary ----- ###
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
@@ -186,11 +189,11 @@ if "long2" in kernels:
 def run_exectuable(path2build, dataset, executable, configfile):
     """delete existing dataset, the run exectuable with given config file"""
     os.chdir(path2build)
-    os.system("pwd")
-    os.system("rm -rf " + dataset)  # delete any existing dataset
-    print("Executable: " + executable)
-    print("Config file: " + configfile)
-    os.system(executable + " " + configfile)
+    subprocess.run(["pwd"])
+    shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
+    print("Executable: " + str(executable))
+    print("Config file: " + str(configfile))
+    subprocess.run([executable, configfile])
 
 
 def plot_results(
@@ -215,7 +218,7 @@ def plot_results(
     sddata = pyzarr.get_supers(dataset, consts)
 
     # make and save plot
-    savename = savefigpath + savename
+    savename = savefigpath / savename
     smoothsig = smoothsigconst * (
         config["maxnsupers"] ** (-1 / 5)
     )  # = ~0.2 for guassian smoothing
@@ -239,7 +242,9 @@ if "golovin" in kernels:
     ### -------------------- RUN CLEO EXECUTABLE ------------------- ###
     ### ------------------------------------------------------------ ###
     editconfigfile.edit_config_params(configfile, params_1)
-    executable = path2build + "/examples/boxmodelcollisions/golovin/src/golcolls"
+    executable = (
+        path2build / "examples" / "boxmodelcollisions" / "golovin" / "src" / "golcolls"
+    )
     run_exectuable(path2build, dataset, executable, configfile)
     ### ------------------------------------------------------------ ###
     ### ------------------------------------------------------------ ###
@@ -274,7 +279,9 @@ if "long1" in kernels:
     ### -------------------- RUN CLEO EXECUTABLE ------------------- ###
     ### ------------------------------------------------------------ ###
     editconfigfile.edit_config_params(configfile, params_1)
-    executable = path2build + "/examples/boxmodelcollisions/long/src/longcolls"
+    executable = (
+        path2build / "examples" / "boxmodelcollisions" / "long" / "src" / "longcolls"
+    )
     run_exectuable(path2build, dataset, executable, configfile)
     ### ------------------------------------------------------------ ###
     ### ------------------------------------------------------------ ###
@@ -309,7 +316,9 @@ if "long2" in kernels:
     ### -------------------- RUN CLEO EXECUTABLE ------------------- ###
     ### ------------------------------------------------------------ ###
     editconfigfile.edit_config_params(configfile, params_2)
-    executable = path2build + "/examples/boxmodelcollisions/long/src/longcolls"
+    executable = (
+        path2build / "examples" / "boxmodelcollisions" / "long" / "src" / "longcolls"
+    )
     run_exectuable(path2build, dataset, executable, configfile)
     ### ------------------------------------------------------------ ###
     ### ------------------------------------------------------------ ###

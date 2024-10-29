@@ -21,19 +21,22 @@ with constant thermodynamics read from a file.
 """
 
 import os
+import shutil
+import subprocess
 import sys
 import numpy as np
 import random
 from pathlib import Path
 
-path2CLEO = sys.argv[1]
-path2build = sys.argv[2]
-configfile = sys.argv[3]
+path2CLEO = Path(sys.argv[1])
+path2build = Path(sys.argv[2])
+configfile = Path(sys.argv[3])
 
-sys.path.append(path2CLEO)  # for imports from pySD package
+sys.path.append(str(path2CLEO))  # imports from pySD
 sys.path.append(
-    path2CLEO + "/examples/exampleplotting/"
-)  # for imports from example plotting package
+    str(path2CLEO / "examples" / "exampleplotting")
+)  # imports from example plots package
+
 
 from plotssrc import pltsds, pltmoms, animations
 from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
@@ -51,20 +54,20 @@ from pySD.thermobinary_src import read_thermodynamics as rthermo
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
 # path and filenames for creating initial SD conditions
-constsfile = path2CLEO + "/libs/cleoconstants.hpp"
-binpath = path2build + "/bin/"
-sharepath = path2build + "/share/"
-gridfile = sharepath + "rain1d_dimlessGBxboundaries.dat"
-initSDsfile = sharepath + "rain1d_dimlessSDsinit.dat"
-thermofile = sharepath + "rain1d_dimlessthermo.dat"
+constsfile = path2CLEO / "libs" / "cleoconstants.hpp"
+binpath = path2build / "bin"
+sharepath = path2build / "share"
+gridfile = sharepath / "rain1d_dimlessGBxboundaries.dat"
+initSDsfile = sharepath / "rain1d_dimlessSDsinit.dat"
+thermofiles = sharepath / "rain1d_dimlessthermo.dat"
 
 # path and file names for plotting results
-setupfile = binpath + "rain1d_setup.txt"
-dataset = binpath + "rain1d_sol.zarr"
+setupfile = binpath / "rain1d_setup.txt"
+dataset = binpath / "rain1d_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
 isfigures = [True, True]  # booleans for [making, saving] initialisation figures
-savefigpath = path2build + "/bin/"  # directory for saving figures
+savefigpath = path2build / "bin"  # directory for saving figures
 SDgbxs2plt = list(range(39, 124))
 SDgbxs2plt = [random.choice(SDgbxs2plt)]  # choose random gbx from list to plot
 
@@ -111,14 +114,15 @@ numconc = np.sum(scalefacs) * 1000
 if path2CLEO == path2build:
     raise ValueError("build directory cannot be CLEO")
 else:
-    Path(path2build).mkdir(exist_ok=True)
-    Path(sharepath).mkdir(exist_ok=True)
-    Path(binpath).mkdir(exist_ok=True)
+    path2build.mkdir(exist_ok=True)
+    sharepath.mkdir(exist_ok=True)
+    binpath.mkdir(exist_ok=True)
 
 ### --- delete any existing initial conditions --- ###
-os.system("rm " + gridfile)
-os.system("rm " + initSDsfile)
-os.system("rm " + thermofile[:-4] + "*")
+shutil.rmtree(gridfile, ignore_errors=True)
+shutil.rmtree(initSDsfile, ignore_errors=True)
+all_thermofiles = thermofiles.parent / Path(f"{thermofiles.stem}*{thermofiles.suffix}")
+shutil.rmtree(all_thermofiles, ignore_errors=True)
 
 ### ----- write gridbox boundaries binary ----- ###
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
@@ -141,7 +145,7 @@ thermodyngen = thermogen.ConstHydrostaticLapseRates(
     Wlength,
 )
 cthermo.write_thermodynamics_binary(
-    thermofile, thermodyngen, configfile, constsfile, gridfile
+    thermofiles, thermodyngen, configfile, constsfile, gridfile
 )
 
 ### ----- write initial superdroplets binary ----- ###
@@ -164,10 +168,10 @@ csupers.write_initsuperdrops_binary(
 ### ----- show (and save) plots of binary file data ----- ###
 if isfigures[0]:
     if isfigures[1]:
-        Path(savefigpath).mkdir(exist_ok=True)
+        savefigpath.mkdir(exist_ok=True)
     rgrid.plot_gridboxboundaries(constsfile, gridfile, savefigpath, isfigures[1])
     rthermo.plot_thermodynamics(
-        constsfile, configfile, gridfile, thermofile, savefigpath, isfigures[1]
+        constsfile, configfile, gridfile, thermofiles, savefigpath, isfigures[1]
     )
     rsupers.plot_initGBxs_distribs(
         configfile,
@@ -185,12 +189,12 @@ if isfigures[0]:
 ### ---------------------- RUN CLEO EXECUTABLE --------------------- ###
 ### ---------------------------------------------------------------- ###
 os.chdir(path2build)
-os.system("pwd")
-os.system("rm -rf " + dataset)  # delete any existing dataset
-executable = path2build + "/examples/rainshaft1d/src/rshaft1d"
-print("Executable: " + executable)
-print("Config file: " + configfile)
-os.system(executable + " " + configfile)
+subprocess.run(["pwd"])
+shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
+executable = path2build / "examples" / "rainshaft1d" / "src" / "rshaft1d"
+print("Executable: " + str(executable))
+print("Config file: " + str(configfile))
+subprocess.run([executable, configfile])
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -208,14 +212,14 @@ totnsupers = pyzarr.get_totnsupers(dataset)
 massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
 
 # plot figures
-savename = savefigpath + "rain1d_totnsupers.png"
+savename = savefigpath / "rain1d_totnsupers.png"
 pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
 
-savename = savefigpath + "rain1d_domainmassmoms.png"
+savename = savefigpath / "rain1d_domainmassmoms.png"
 pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
 
 nsample = 500
-savename = savefigpath + "rain1d_randomsample.png"
+savename = savefigpath / "rain1d_randomsample.png"
 pltsds.plot_randomsample_superdrops(
     time, sddata, config["maxnsupers"], nsample, savename=savename
 )
@@ -225,7 +229,7 @@ nframes = len(time.mins)
 mom2ani = np.sum(massmoms.nsupers, axis=(1, 2))
 xlims = [0, np.amax(mom2ani)]
 xlabel = "number of super-droplets"
-savename = savefigpath + "rain1d_nsupers1d"
+savename = savefigpath / "rain1d_nsupers1d"
 animations.animate1dprofile(
     gbxs,
     mom2ani,
@@ -244,7 +248,7 @@ norm = gbxs["gbxvols"] * 1e6  # volume [cm^3]
 mom2ani = np.sum(massmoms.mom0 / norm[None, :], axis=(1, 2))
 xlims = [0, np.amax(mom2ani)]
 xlabel = "number concentration /cm$^{-3}$"
-savename = savefigpath + "rain1d_numconc1d"
+savename = savefigpath / "rain1d_numconc1d"
 animations.animate1dprofile(
     gbxs,
     mom2ani,
@@ -263,7 +267,7 @@ norm = gbxs["gbxvols"]  # volume [m^3]
 mom2ani = np.sum(massmoms.mom1 / norm[None, :], axis=(1, 2))
 xlims = [0, np.amax(mom2ani)]
 xlabel = "mass concentration /g m$^{-3}$"
-savename = savefigpath + "rain1d_massconc1d"
+savename = savefigpath / "rain1d_massconc1d"
 animations.animate1dprofile(
     gbxs,
     mom2ani,

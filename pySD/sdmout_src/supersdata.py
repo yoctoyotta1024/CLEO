@@ -22,6 +22,7 @@ python class to handle superdroplet attributes data from SDM zarr store in ragge
 import numpy as np
 import xarray as xr
 import awkward as ak
+from pathlib import Path
 
 
 class SuperdropProperties:
@@ -126,7 +127,7 @@ class SupersData(SuperdropProperties):
         self.coord2_units = self.tryunits(ds, "coord2")  # probably meters
 
     def tryopen_dataset(self, dataset):
-        if isinstance(dataset, str):
+        if isinstance(dataset, str) or isinstance(dataset, Path):
             print("supers dataset: ", dataset)
             return xr.open_dataset(dataset, engine="zarr", consolidated=False)
         else:

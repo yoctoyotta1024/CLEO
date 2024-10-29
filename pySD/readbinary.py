@@ -8,7 +8,7 @@ def readbinary(filename, isprint=True):
     """return list of vectors containing dimenionsless
     data read from binary file"""
 
-    print("Reading binary file:\n " + filename)
+    print("Reading binary file:\n " + str(filename))
 
     nvars, metabytes, metapervar = read_metadata(filename, isprint=isprint)
 

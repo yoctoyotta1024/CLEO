@@ -20,7 +20,7 @@ functions to write a new zarr dataset and
 setuptxt file for an ensemble of datasets
 """
 
-import os
+import shutil
 import sys
 import numpy as np
 import zarr
@@ -55,7 +55,7 @@ def write_ensemb_setupfile(ensembsetupfile, setupfile, datasets):
     """copy setupfile to ensembsetupfile and then edit / add
     information relevant to datasets used to make ensemble"""
 
-    os.system("cp " + setupfile + " " + ensembsetupfile)
+    shutil.copy(setupfile, ensembsetupfile)
     params = {
         "initsupers_filename": "[ensemble, see below]",
         "setup_filename": "[ensemble, see below]",
@@ -129,7 +129,7 @@ def write_matchingarray_to_storage(arrayname, arr, refz, zattrs):
     )
     z[:] = arr
 
-    os.system("cp " + zattrs + " " + arrayname + "/.zattrs")
+    shutil.copy(zattrs, arrayname + "/.zattrs")
 
 
 def write_meanvars_to_ensembzarr(ensembdataset, vars4ensemb, datasets, refset):

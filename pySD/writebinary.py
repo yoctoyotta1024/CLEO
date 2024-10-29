@@ -44,7 +44,7 @@ def writebinary(filename, data, ndata, datatypes, units, scale_factors, metastr)
     array2write = metadata + data
     format = metaformat + dataformat
 
-    print("Writing gridbox boundaries binary file to:\n " + filename)
+    print("Writing gridbox boundaries binary file to:\n " + str(filename))
     s = struct.pack(format, *array2write)
     f = open(filename, "wb")
     f.write(s)

@@ -193,20 +193,21 @@ def plot_initGBxs_attrdistribs(
 
     if isinstance(gbxs2plt, int):
         gbxidxs = [gbxs2plt]
-        savename = binpath + "initGBx" + str(gbxs2plt) + "_distrib" + savelabel + ".png"
+        savename = "initGBx" + str(gbxs2plt) + "_distrib" + savelabel + ".png"
     elif gbxs2plt == "all":
         gbxidxs = np.unique(attrs.sdgbxindex)
-        savename = binpath + "initallGBxs_distribs" + savelabel + ".png"
+        savename = "initallGBxs_distribs" + savelabel + ".png"
     else:
         gbxidxs = [int(g) for g in gbxs2plt]
-        savename = binpath + "initGBxs_distribs" + savelabel + ".png"
+        savename = "initGBxs_distribs" + savelabel + ".png"
 
     fig, axs, lines = plot_initdistribs(attrs, gbxvols, gbxidxs)
 
     fig.tight_layout()
     if savefig:
+        savename = binpath / savename
         fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
-        print("Figure .png saved as: " + savename)
+        print("Figure .png saved as: " + str(savename))
     plt.show()
 
 
@@ -396,15 +397,13 @@ def plot_initGBxs_dropletmasses(
 
     if isinstance(gbxs2plt, int):
         gbxidxs = [gbxs2plt]
-        savename = (
-            binpath + "initGBx" + str(gbxs2plt) + "_dropletmasses" + savelabel + ".png"
-        )
+        savename = "initGBx" + str(gbxs2plt) + "_dropletmasses" + savelabel + ".png"
     elif gbxs2plt == "all":
         gbxidxs = np.unique(attrs.sdgbxindex)
-        savename = binpath + "initallGBxs_dropletmasses" + savelabel + ".png"
+        savename = "initallGBxs_dropletmasses" + savelabel + ".png"
     else:
         gbxidxs = [int(g) for g in gbxs2plt]
-        savename = binpath + "initGBxs_dropletmasses" + savelabel + ".png"
+        savename = "initGBxs_dropletmasses" + savelabel + ".png"
 
     fig, axs, lines = plot_massdistribs(
         attrs, gbxvols, gbxidxs, inputs["RHO_L"], inputs["RHO_SOL"]
@@ -412,8 +411,9 @@ def plot_initGBxs_dropletmasses(
 
     fig.tight_layout()
     if savefig:
+        savename = binpath / savename
         fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
-        print("Figure .png saved as: " + savename)
+        print("Figure .png saved as: " + str(savename))
     plt.show()
 
 

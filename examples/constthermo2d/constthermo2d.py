@@ -22,19 +22,22 @@ constant thermodynamics read from a file.
 """
 
 import os
+import shutil
+import subprocess
 import sys
 import numpy as np
 from pathlib import Path
 from matplotlib.colors import LogNorm, Normalize
 
-path2CLEO = sys.argv[1]
-path2build = sys.argv[2]
-configfile = sys.argv[3]
+path2CLEO = Path(sys.argv[1])
+path2build = Path(sys.argv[2])
+configfile = Path(sys.argv[3])
 
-sys.path.append(path2CLEO)  # for imports from pySD package
+sys.path.append(str(path2CLEO))  # imports from pySD
 sys.path.append(
-    path2CLEO + "/examples/exampleplotting/"
-)  # for imports from example plotting package
+    str(path2CLEO / "examples" / "exampleplotting")
+)  # imports from example plots package
+
 
 from plotssrc import pltsds, pltmoms, animations
 from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
@@ -52,20 +55,20 @@ from pySD.thermobinary_src import read_thermodynamics as rthermo
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
 # path and filenames for creating initial SD conditions
-constsfile = path2CLEO + "/libs/cleoconstants.hpp"
-binpath = path2build + "/bin/"
-sharepath = path2build + "/share/"
-gridfile = sharepath + "const2d_dimlessGBxboundaries.dat"
-initSDsfile = sharepath + "const2d_dimlessSDsinit.dat"
-thermofile = sharepath + "/const2d_dimlessthermo.dat"
+constsfile = path2CLEO / "libs" / "cleoconstants.hpp"
+binpath = path2build / "bin"
+sharepath = path2build / "share"
+gridfile = sharepath / "const2d_dimlessGBxboundaries.dat"
+initSDsfile = sharepath / "const2d_dimlessSDsinit.dat"
+thermofiles = sharepath / "const2d_dimlessthermo.dat"
 
 # path and file names for plotting results
-setupfile = binpath + "const2d_setup.txt"
-dataset = binpath + "const2d_sol.zarr"
+setupfile = binpath / "const2d_setup.txt"
+dataset = binpath / "const2d_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
 isfigures = [True, True]  # booleans for [making, saving] initialisation figures
-savefigpath = path2build + "/bin/"  # directory for saving figures
+savefigpath = path2build / "bin"  # directory for saving figures
 SDgbxs2plt = [0]  # gbxindex of SDs to plot (nb. "all" can be very slow)
 
 ### --- settings for 2-D gridbox boundaries --- ###
@@ -111,14 +114,15 @@ moistlayer = False
 if path2CLEO == path2build:
     raise ValueError("build directory cannot be CLEO")
 else:
-    Path(path2build).mkdir(exist_ok=True)
-    Path(sharepath).mkdir(exist_ok=True)
-    Path(binpath).mkdir(exist_ok=True)
+    path2build.mkdir(exist_ok=True)
+    sharepath.mkdir(exist_ok=True)
+    binpath.mkdir(exist_ok=True)
 
 ### --- delete any existing initial conditions --- ###
-os.system("rm " + gridfile)
-os.system("rm " + initSDsfile)
-os.system("rm " + thermofile[:-4] + "*")
+shutil.rmtree(gridfile, ignore_errors=True)
+shutil.rmtree(initSDsfile, ignore_errors=True)
+all_thermofiles = thermofiles.parent / Path(f"{thermofiles.stem}*{thermofiles.suffix}")
+shutil.rmtree(all_thermofiles, ignore_errors=True)
 
 ### ----- write gridbox boundaries binary ----- ###
 cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
@@ -141,7 +145,7 @@ thermodyngen = thermogen.ConstDryHydrostaticAdiabat(
     moistlayer,
 )
 cthermo.write_thermodynamics_binary(
-    thermofile, thermodyngen, configfile, constsfile, gridfile
+    thermofiles, thermodyngen, configfile, constsfile, gridfile
 )
 
 
@@ -164,10 +168,10 @@ csupers.write_initsuperdrops_binary(
 ### ----- show (and save) plots of binary file data ----- ###
 if isfigures[0]:
     if isfigures[1]:
-        Path(savefigpath).mkdir(exist_ok=True)
+        savefigpath.mkdir(exist_ok=True)
     rgrid.plot_gridboxboundaries(constsfile, gridfile, savefigpath, isfigures[1])
     rthermo.plot_thermodynamics(
-        constsfile, configfile, gridfile, thermofile, savefigpath, isfigures[1]
+        constsfile, configfile, gridfile, thermofiles, savefigpath, isfigures[1]
     )
     rsupers.plot_initGBxs_distribs(
         configfile,
@@ -185,12 +189,12 @@ if isfigures[0]:
 ### -------------------- RUN CLEO EXECUTABLE ------------------- ###
 ### ---------------------------------------------------------------- ###
 os.chdir(path2build)
-os.system("pwd")
-os.system("rm -rf " + dataset)  # delete any existing dataset
-executable = path2build + "/examples/constthermo2d/src/const2d"
-print("Executable: " + executable)
-print("Config file: " + configfile)
-os.system(executable + " " + configfile)
+subprocess.run(["pwd"])
+shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
+executable = path2build / "examples" / "constthermo2d" / "src" / "const2d"
+print("Executable: " + str(executable))
+print("Config file: " + str(configfile))
+subprocess.run([executable, configfile])
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -208,19 +212,19 @@ totnsupers = pyzarr.get_totnsupers(dataset)
 massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
 
 # plot figures
-savename = savefigpath + "const2d_totnsupers.png"
+savename = savefigpath / "const2d_totnsupers.png"
 pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
 
-savename = savefigpath + "const2d_domainmassmoms.png"
+savename = savefigpath / "const2d_domainmassmoms.png"
 pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
 
 nsample = 500
-savename = savefigpath + "const2d_randomsample.png"
+savename = savefigpath / "const2d_randomsample.png"
 pltsds.plot_randomsample_superdrops(
     time, sddata, config["maxnsupers"], nsample, savename=savename
 )
 
-savename = savefigpath + "const2d_motion2d.png"
+savename = savefigpath / "const2d_motion2d.png"
 pltsds.plot_randomsample_superdrops_2dmotion(
     sddata, config["maxnsupers"], nsample, savename=savename, arrows=False
 )
@@ -238,7 +242,7 @@ norm = np.sum(gbxs["gbxvols"], axis=0)[None, None, :, :] * 1e6  # volume [cm^3]
 mom2ani = horizontal_average(massmoms.mom0 / norm)
 xlims = [0, np.amax(mom2ani)]
 xlabel = "mean number concentration /cm$^{-3}$"
-savename = savefigpath + "const2d_numconc1d"
+savename = savefigpath / "const2d_numconc1d"
 animations.animate1dprofile(
     gbxs,
     mom2ani,
@@ -258,7 +262,7 @@ mom2ani = np.sum(massmoms.nsupers, axis=1)  # sum over y dimension
 cmap = "plasma_r"
 cmapnorm = Normalize(vmin=1, vmax=20)
 cbarlabel = "number of superdroplets per gridbox"
-savename = savefigpath + "const2d_nsupers2d"
+savename = savefigpath / "const2d_nsupers2d"
 animations.animate2dcmap(
     gbxs,
     mom2ani,
@@ -281,7 +285,7 @@ mom2ani = mom2ani / norm
 cmap = "bone_r"
 cmapnorm = LogNorm(vmin=1e-6, vmax=1e2)
 cbarlabel = "mass concentration /g m$^{-3}$"
-savename = savefigpath + "const2d_massconc2d"
+savename = savefigpath / "const2d_massconc2d"
 animations.animate2dcmap(
     gbxs,
     mom2ani,

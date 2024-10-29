@@ -24,6 +24,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.gridspec import GridSpec
 from matplotlib import colors
+from pathlib import Path
 
 
 def plot_domain_thermodynamics_timeseries(time, gbxs, thermo, winds, savedir):
@@ -97,9 +98,9 @@ def plot_timeseries_domain_slices(
     plt.colorbar(pcm, cax=cax, orientation="horizontal")
 
     if savedir != "":
-        savename = savedir + "/timeseries_" + key + ".png"
+        savename = savedir / Path(f"timeseries_{key}.png")
         fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
-        print("Figure .png saved as: " + savename)
+        print("Figure .png saved as: " + str(savename))
         plt.show()
 
 

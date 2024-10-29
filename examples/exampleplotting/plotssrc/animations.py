@@ -36,9 +36,9 @@ def animate_me(
     )
 
     if saveani:
-        print("saving animation as " + savename + ".gif")
+        print(f"saving animation as {savename}.gif")
         ani.save(
-            savename + ".gif",
+            f"{savename}.gif",
             writer=animation.PillowWriter(fps=fps, bitrate=5000, codec="h264"),
             dpi=100,
             savefig_kwargs={"transparent": True},
