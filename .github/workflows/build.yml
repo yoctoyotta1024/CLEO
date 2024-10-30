@@ -1,92 +1,131 @@
-name: Build
+name: build
 
 on: pull_request
 
 jobs:
-  build:
+  setup:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Setup
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-        cmake libnetcdff-dev liblapack-dev python3-dev \
-        python3-numpy python3-mpi4py python3-pip curl \
-        libfyaml-dev libopenmpi-dev openmpi-bin
+      - name: Setup
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+          cmake libnetcdff-dev liblapack-dev python3-dev \
+          python3-numpy python3-mpi4py python3-pip curl \
+          libfyaml-dev libopenmpi-dev openmpi-bin
 
-    - name: Build YAXT
-      run: |
-        curl -s -L https://swprojects.dkrz.de/redmine/attachments/download/534/yaxt-0.11.1.tar.gz | tar xvz
-        cd yaxt-0.11.1
-        ./configure --without-regard-for-quality --without-example-programs --without-perf-programs --with-pic \
-        --prefix=$HOME/yaxt
-        make -j 4
-        make install
+      - name: Build YAXT
+        run: |
+          curl -s -L https://swprojects.dkrz.de/redmine/attachments/download/534/yaxt-0.11.1.tar.gz | tar xvz
+          cd yaxt-0.11.1
+          ./configure --without-regard-for-quality --without-example-programs --without-perf-programs --with-pic --prefix=${{ runner.temp }}/yaxt
+          make -j 4
+          make install
 
-    - name: Build YAC
-      run: |
-        curl -s -L https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/v3.2.0/yac-v3.2.0.tar.gz | tar xvz
-        cd yac-v3.2.0
-        ./configure CFLAGS="-fPIC" CC=mpicc FC=mpif90 --disable-mpi-checks --with-yaxt-root=${HOME}/yaxt \
-        --prefix=$HOME/yac
-        make -j 4
-        make install
+      - name: Upload YAXT
+        uses: actions/upload-artifact@v4
+        with:
+          name: yaxt-artifact
+          path: ${{ runner.temp }}/yaxt/
 
-    - name: Build main
-      run: |
-        mkdir build && cd build
-        cmake \
-        -DCMAKE_C_COMPILER=gcc \
-        -DCMAKE_CXX_COMPILER=g++ \
-        -DCMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3" \
-        -DKokkos_ENABLE_SERIAL=ON \
-        -DENABLE_YAC_COUPLING=ON \
-        -DYAXT_ROOT=${HOME}/yaxt \
-        -DYAC_ROOT=${HOME}/yac \
-        -DCMAKE_MODULE_PATH=${PWD}/../libs/coupldyn_yac/cmake ..
-        make
+      - name: Build YAC
+        run: |
+          curl -s -L https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/v3.2.0/yac-v3.2.0.tar.gz | tar xvz
+          cd yac-v3.2.0
+          ./configure CFLAGS="-fPIC" CC=mpicc FC=mpif90 --disable-mpi-checks --with-yaxt-root=${{ runner.temp }}/yaxt --prefix=${{ runner.temp }}/yac
+          make -j 4
+          make install
 
-    - name: Build example adia0d
-      run: cd build && make adia0d
+      - name: Upload YAC
+        uses: actions/upload-artifact@v4
+        with:
+          name: yac-artifact
+          path: ${{ runner.temp }}/yac/
 
-    - name: Build example golcolls
-      run: cd build && make golcolls
+  build_main:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Build example longcolls
-      run: cd build && make longcolls
+      - name: Download YAXT
+        uses: actions/download-artifact@v4
+        with:
+          name: yaxt-artifact
+          path: ${{ runner.temp }}/yaxt/
 
-    - name: Build example lowlistcolls
-      run: cd build && make lowlistcolls
+      - name: Download YAC
+        uses: actions/download-artifact@v4
+        with:
+          name: yac-artifact
+          path: ${{ runner.temp }}/yac/
 
-    - name: Build example szakallurbichcolls
-      run: cd build && make szakallurbichcolls
+      - name: Build main
+        run: |
+          mkdir build && cd build
+          cmake \
+          -DCMAKE_C_COMPILER=gcc \
+          -DCMAKE_CXX_COMPILER=g++ \
+          -DCMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3" \
+          -DKokkos_ENABLE_SERIAL=ON \
+          -DENABLE_YAC_COUPLING=ON \
+          -DYAXT_ROOT=${{ runner.temp }}/yaxt \
+          -DYAC_ROOT=${{ runner.temp }}/yac \
+          -DCMAKE_MODULE_PATH=${PWD}/../libs/coupldyn_yac/cmake ..
+          make
 
-    - name: Build example testikstraubcolls
-      run: cd build && make testikstraubcolls
+      - name: Upload build
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: build/
 
-    - name: Build example const2d
-      run: cd build && make const2d
+  build_examples:
+    needs: build_main
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build example adia0d
+        run: cd build && make adia0d
 
-    - name: Build example divfree2d
-      run: cd build && make divfree2d
+      - name: Build example golcolls
+        run: cd build && make golcolls
 
-    - name: Build example eurec4a1d
-      run: cd build && make eurec4a1d
+      - name: Build example longcolls
+        run: cd build && make longcolls
 
-    - name: Build example rshaft1d
-      run: cd build && make rshaft1d
+      - name: Build example lowlistcolls
+        run: cd build && make lowlistcolls
 
-    - name: Build example spdtest
-      run: cd build && make spdtest
+      - name: Build example szakallurbichcolls
+        run: cd build && make szakallurbichcolls
 
-    - name: Build example bubble3d
-      run: cd build && make bubble3d
+      - name: Build example testikstraubcolls
+        run: cd build && make testikstraubcolls
 
-    - name: Build example fromfile
-      run: cd build && make fromfile
+      - name: Build example const2d
+        run: cd build && make const2d
 
-    - name: Build example fromfile_irreg
-      run: cd build && make fromfile_irreg
+      - name: Build example divfree2d
+        run: cd build && make divfree2d
+
+      - name: Build example eurec4a1d
+        run: cd build && make eurec4a1d
+
+      - name: Build example rshaft1d
+        run: cd build && make rshaft1d
+
+      - name: Build example spdtest
+        run: cd build && make spdtest
+
+      - name: Build example bubble3d
+        run: cd build && make bubble3d
+
+      - name: Build example fromfile
+        run: cd build && make fromfile
+
+      - name: Build example fromfile_irreg
+        run: cd build && make fromfile_irreg
