@@ -114,10 +114,8 @@ constexpr double surfconst = 4.0 * DC::SURFSIGMA * std::numbers::pi * R0 * R0;
  *
  */
 namespace LIMITVALUES {
-constexpr unsigned int uintmax =
-    std::numeric_limits<unsigned int>::max(); /**< Maximum unsigned int. */
-constexpr uint64_t uint64_t_max =
-    std::numeric_limits<uint64_t>::max(); /**< Maximum 64 byte unsigned int. */
+constexpr unsigned int uintmax = std::numeric_limits<unsigned int>::max(); /**< Max unsigned int. */
+constexpr uint64_t uint64_t_max = std::numeric_limits<uint64_t>::max(); /**< Max 64 byte u-int. */
 
 constexpr double llim = -1.0 * std::numeric_limits<double>::max(); /**< Maximum negative double. */
 constexpr double ulim = std::numeric_limits<double>::max();        /**< Maximum positive double. */
