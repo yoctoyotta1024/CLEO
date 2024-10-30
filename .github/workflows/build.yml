@@ -45,13 +45,29 @@ jobs:
           name: yac-artifact
           path: ${{ runner.temp }}/yac/
 
-  build_main:
+      - name: Build main
+        run: |
+          mkdir build
+          cmake -S ./ -B ./build \
+          -DCMAKE_C_COMPILER=gcc \
+          -DCMAKE_CXX_COMPILER=g++ \
+          -DCMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3" \
+          -DKokkos_ENABLE_SERIAL=ON \
+          -DENABLE_YAC_COUPLING=ON \
+          -DYAXT_ROOT=${{ runner.temp }}/yaxt \
+          -DYAC_ROOT=${{ runner.temp }}/yac \
+          -DCMAKE_MODULE_PATH=${PWD}/../libs/coupldyn_yac/cmake
+
+      - name: Upload CLEO Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: cleo-build-artifact
+          path: ./build/
+
+  compile_main:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Download YAXT
         uses: actions/download-artifact@v4
         with:
@@ -64,25 +80,14 @@ jobs:
           name: yac-artifact
           path: ${{ runner.temp }}/yac/
 
-      - name: Build main
-        run: |
-          mkdir build && cd build
-          cmake \
-          -DCMAKE_C_COMPILER=gcc \
-          -DCMAKE_CXX_COMPILER=g++ \
-          -DCMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3" \
-          -DKokkos_ENABLE_SERIAL=ON \
-          -DENABLE_YAC_COUPLING=ON \
-          -DYAXT_ROOT=${{ runner.temp }}/yaxt \
-          -DYAC_ROOT=${{ runner.temp }}/yac \
-          -DCMAKE_MODULE_PATH=${PWD}/../libs/coupldyn_yac/cmake ..
-          make
-
-      - name: Upload build
-        uses: actions/upload-artifact@v4
+      - name: Download CLEO Build
+        uses: actions/download-artifact@v4
         with:
-          name: build
-          path: build/
+          name: cleo-build-artifact
+          path: ./build/
+
+      - name: Build main
+        run: cd build && make
 
   build_examples:
     needs: build_main
