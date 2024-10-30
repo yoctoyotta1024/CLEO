@@ -39,7 +39,10 @@ repos:
     rev: 0.8.0
     hooks:
     -   id: cpplint
-        args: [--linelength=100, "--filter=-runtime/references,-readability/braces,-build/include,-build/c++17"]
+        args:
+            - --linelength=100
+            - --filter=-runtime/references,-readability/braces,-whitespace/indent_namespace,
+              -build/include,-build/c++11,-build/c++17
         types_or: [c, c++, cuda]
 -   repo: https://github.com/compilerla/conventional-pre-commit
     rev: v3.4.0
