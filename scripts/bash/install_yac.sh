@@ -7,7 +7,7 @@
 #SBATCH --time=00:10:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
-#SBATCH --account=mh1126
+#SBATCH --account=bm1183
 #SBATCH --output=./build/bin/install_yac_out.%j.out
 #SBATCH --error=./build/bin/install_yac_err.%j.out
 

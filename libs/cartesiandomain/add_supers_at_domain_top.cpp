@@ -290,7 +290,7 @@ std::pair<size_t, double> CreateSuperdrop::new_xi_radius(const double gbxvolume)
   const auto radius = double{std::pow(10.0, log10r)};
 
   const auto nconc = dist.droplet_numconc_distribution(log10r, log10rup, log10rlow);
-  const auto xi = (uint64_t)std::round(nconc * gbxvolume);  // cast double to uint64_t
+  const auto xi =  static_cast<uint64_t>(std::round(nconc * gbxvolume));
 
   return std::make_pair(xi, radius);  // xi_radius
 }

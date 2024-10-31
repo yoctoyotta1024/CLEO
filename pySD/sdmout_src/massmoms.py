@@ -21,6 +21,7 @@ python class to handle mass moments data from SDM zarr store in cartesian domain
 
 import numpy as np
 import xarray as xr
+from pathlib import Path
 
 
 class MassMoms:
@@ -53,7 +54,7 @@ class MassMoms:
         )  # probably grams
 
     def tryopen_dataset(self, dataset):
-        if isinstance(dataset, str):
+        if isinstance(dataset, str) or isinstance(dataset, Path):
             print("mass moments dataset: ", dataset)
             return xr.open_dataset(dataset, engine="zarr", consolidated=False)
         else:

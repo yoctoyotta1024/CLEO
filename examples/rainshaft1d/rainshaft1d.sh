@@ -8,7 +8,7 @@
 #SBATCH --time=00:10:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
-#SBATCH --account=mh1126
+#SBATCH --account=bm1183
 #SBATCH --output=./rain1d_out.%j.out
 #SBATCH --error=./rain1d_err.%j.out
 

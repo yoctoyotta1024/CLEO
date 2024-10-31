@@ -13,11 +13,11 @@
 
 action=$1
 path2CLEO=${2:-${HOME}/CLEO}
-path2yac=${3:-/work/mh1126/m300950/yac}
+path2yac=${3:-/work/bm1183/m300950/yac}
 path2build=${4:-${HOME}/CLEO/build_bubble3d}
 
-icon_grid_file=/work/mh1126/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc
-icon_data_file=/work/mh1126/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc
+icon_grid_file=/work/bm1183/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc
+icon_data_file=/work/bm1183/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc
 icon_grid_file_copy=${path2build}/share/icon_grid_file_aes_bubble_atm_cgrid_ml.nc
 icon_data_file_copy=${path2build}/share/icon_data_file_aes_bubble_atm_3d_ml_20080801T000000Z.nc
 
@@ -41,15 +41,15 @@ then
   spack load openblas@0.3.18%gcc@=11.2.0
 
   ${path2CLEO}/scripts/bash/compile_cleo.sh \
-     /work/mh1126/m300950/cleoenv openmp ${path2build} bubble3d
+     /work/bm1183/m300950/mambaenvs/cleoenv openmp ${path2build} bubble3d
 
 elif [ "${action}" == "inputfiles" ]
 then
   cp ${icon_grid_file} ${icon_grid_file_copy}
   cp ${icon_data_file} ${icon_data_file_copy}
 
-  source activate /work/mh1126/m300950/cleoenv
-  /work/mh1126/m300950/cleoenv/bin/python ${path2CLEO}/examples/bubble3d/bubble3d_inputfiles.py \
+  source activate /work/bm1183/m300950/mambaenvs/cleoenv
+  /work/bm1183/m300950/mambaenvs/cleoenv/bin/python ${path2CLEO}/examples/bubble3d/bubble3d_inputfiles.py \
    ${path2CLEO} \
    ${path2build} \
    ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \

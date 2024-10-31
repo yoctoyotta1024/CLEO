@@ -8,7 +8,7 @@
 #SBATCH --time=00:05:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
-#SBATCH --account=mh1126
+#SBATCH --account=bm1183
 #SBATCH --output=./build/bin/build_cleocoupledsdm_out.%j.out
 #SBATCH --error=./build/bin/build_cleocoupledsdm_err.%j.out
 
@@ -17,13 +17,13 @@
 ### ----- (your environment and) directory paths ------- ###
 ### ---------- and executable(s) to compile ------------ ###
 spack load cmake@3.23.1%gcc
-cleoenv=/work/mh1126/m300950/cleoenv
+cleoenv=/work/bm1183/m300950/mambaenvs/cleoenv
 
 buildtype=$1
 enableyac=${2:-false}                     # "true" or otherwise
 path2CLEO=${3:-${HOME}/CLEO}
 path2build=${4:-${path2CLEO}/build}
-yacyaxtroot=/work/mh1126/m300950/yac      # used if enableyac == "true"
+yacyaxtroot=/work/bm1183/m300950/yac      # used if enableyac == "true"
 executables="cleocoupledsdm"
 ### ---------------------------------------------------- ###
 

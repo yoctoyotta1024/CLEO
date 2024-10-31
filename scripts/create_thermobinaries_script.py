@@ -32,22 +32,22 @@ from pySD.thermobinary_src import read_thermodynamics as rthermo
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### --- absolute or relative paths for --- ###
 ### ---   build and CLEO directories --- ###
-path2CLEO = sys.argv[1]
-path2build = sys.argv[2]
-configfile = sys.argv[3]
+path2CLEO = Path(sys.argv[1])
+path2build = Path(sys.argv[2])
+configfile = Path(sys.argv[3])
 
 # booleans for [making, saving] initialisation figures
 isfigures = [True, True]
 
 ### essential paths and filenames
-constsfile = path2CLEO + "/libs/cleoconstants.hpp"
-binariespath = path2build + "/share/"
-savefigpath = path2build + "/bin/"
+constsfile = path2CLEO / "libs" / "cleoconstants.hpp"
+binariespath = path2build / "share"
+savefigpath = path2build / "bin"
 
 gridfile = (
-    binariespath + "/dimlessGBxboundaries.dat"
+    binariespath / "dimlessGBxboundaries.dat"
 )  # note this should match config.yaml
-thermofile = binariespath + "/dimlessthermo.dat"
+thermofiles = binariespath / "dimlessthermo.dat"
 
 ### --- Choose Initial Thermodynamic Conditions for Gridboxes  --- ###
 
@@ -125,13 +125,13 @@ thermodyngen = thermogen.ConstHydrostaticLapseRates(
 
 ### -------------------- BINARY FILE GENERATION--------------------- ###
 cthermo.write_thermodynamics_binary(
-    thermofile, thermodyngen, configfile, constsfile, gridfile
+    thermofiles, thermodyngen, configfile, constsfile, gridfile
 )
 
 if isfigures[0]:
     if isfigures[1]:
-        Path(savefigpath).mkdir(exist_ok=True)
+        savefigpath.mkdir(exist_ok=True)
     rthermo.plot_thermodynamics(
-        constsfile, configfile, gridfile, thermofile, savefigpath, isfigures[1]
+        constsfile, configfile, gridfile, thermofiles, savefigpath, isfigures[1]
     )
 ### ---------------------------------------------------------------- ###
