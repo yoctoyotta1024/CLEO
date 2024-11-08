@@ -27,7 +27,7 @@ from pathlib import Path
 
 path2CLEO = Path(sys.argv[1])
 path2build = Path(sys.argv[2])
-configfile = Path(sys.argv[3])
+config_filename = Path(sys.argv[3])
 icon_grid_file = sys.argv[4]  # TODO(CB): move to config file
 
 import bubble3d_inputfiles
@@ -39,9 +39,9 @@ import bubble3d_inputfiles
 # path and filenames for creating initial SD conditions
 binpath = path2build / "bin"
 sharepath = path2build / "share"
-gridfile = sharepath / "bubble3d_dimlessGBxboundaries.dat"
-initSDsfile = sharepath / "bubble3d_dimlessSDsinit.dat"
-savefigpath = path2build / "bin"  # directory for saving figures
+grid_filename = sharepath / "bubble3d_dimlessGBxboundaries.dat"
+initsupers_filename = sharepath / "bubble3d_dimlessSDsinit.dat"
+savefigpath = path2build / "bin"
 SDgbxs2plt = [0]  # gbxindex of SDs to plot (nb. "all" can be very slow)
 
 # path and file names for plotting results
@@ -61,11 +61,17 @@ else:
     savefigpath.mkdir(exist_ok=True)
 
 ### --- delete any existing initial conditions --- ###
-shutil.rmtree(gridfile, ignore_errors=True)
-shutil.rmtree(initSDsfile, ignore_errors=True)
+shutil.rmtree(grid_filename, ignore_errors=True)
+shutil.rmtree(initsupers_filename, ignore_errors=True)
 
 bubble3d_inputfiles.main(
-    path2CLEO, path2build, configfile, gridfile, initSDsfile, icon_grid_file, SDgbxs2plt
+    path2CLEO,
+    path2build,
+    config_filename,
+    grid_filename,
+    initsupers_filename,
+    icon_grid_file,
+    SDgbxs2plt,
 )
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
@@ -74,23 +80,23 @@ bubble3d_inputfiles.main(
 ### ---------------------------------------------------------------- ###
 ### ---------------------- RUN CLEO EXECUTABLE --------------------- ###
 ### ---------------------------------------------------------------- ###
-def run_exectuable(path2CLEO, path2build, configfile, dataset):
+def run_exectuable(path2CLEO, path2build, config_filename, dataset):
     """delete existing dataset, the run exectuable with given config file"""
     os.chdir(path2build)
     os.system("pwd")
     shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
     executable = str(path2build / "examples" / "yac" / "bubble3d" / "src" / "bubble3d")
-    configfile = str(configfile)
+    config_filename = str(config_filename)
     print("Executable: " + str(executable))
-    print("Config file: " + str(configfile))
+    print("Config file: " + str(config_filename))
 
-    cleoproc = executable + " " + configfile
+    cleoproc = executable + " " + config_filename
     pythonproc = path2CLEO + "/examples/yac/bubble3d/yac_icon_data_reader.py"
     cmd = "mpiexec -n 1 " + cleoproc + " : -n 1 python " + pythonproc
     os.system(cmd)
 
 
-run_exectuable(path2CLEO, path2build, configfile, dataset)
+run_exectuable(path2CLEO, path2build, config_filename, dataset)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -101,7 +107,7 @@ run_exectuable(path2CLEO, path2build, configfile, dataset)
 # # read in constants and intial setup from setup .txt file
 # config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
 # consts = pysetuptxt.get_consts(setupfile, isprint=True)
-# gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
+# gbxs = pygbxsdat.get_gridboxes(grid_filename, consts["COORD0"], isprint=True)
 
 # time = pyzarr.get_time(dataset)
 # sddata = pyzarr.get_supers(dataset, consts)

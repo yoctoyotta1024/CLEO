@@ -25,37 +25,47 @@ from .create_gbxboundaries import get_COORD0_from_constsfile
 from ..readbinary import readbinary
 
 
-def get_gridboxboundaries(gridfile, COORD0=False, constsfile="", isprint=True):
+def get_gridboxboundaries(
+    grid_filename, COORD0=False, constants_filename="", isprint=True
+):
     """get gridbox boundaries from binary file and
-    re-dimensionalise usign COORD0 const from constsfile"""
+    re-dimensionalise usign COORD0 const from constants_filename"""
 
     if not COORD0:
-        COORD0 = get_COORD0_from_constsfile(constsfile)
+        COORD0 = get_COORD0_from_constsfile(constants_filename)
 
-    gbxbounds = read_dimless_gbxboundaries_binary(gridfile, COORD0, isprint=isprint)
+    gbxbounds = read_dimless_gbxboundaries_binary(
+        grid_filename, COORD0, isprint=isprint
+    )
 
     zhalf, xhalf, yhalf = halfcoords_from_gbxbounds(gbxbounds, isprint=isprint)
 
     return zhalf, xhalf, yhalf
 
 
-def get_domainvol_from_gridfile(gridfile, COORD0=False, constsfile=""):
+def get_domainvol_from_grid_filename(
+    grid_filename, COORD0=False, constants_filename=""
+):
     """get total domain volume from binary file"""
 
     zhalf, xhalf, yhalf = get_gridboxboundaries(
-        gridfile, COORD0=COORD0, constsfile=constsfile
+        grid_filename, COORD0=COORD0, constants_filename=constants_filename
     )
 
     return calc_domainvol(zhalf, xhalf, yhalf)
 
 
-def get_gbxvols_from_gridfile(gridfile, COORD0=False, constsfile="", isprint=True):
+def get_gbxvols_from_gridfile(
+    grid_filename, COORD0=False, constants_filename="", isprint=True
+):
     """get total domain volume from binary file"""
 
     if not COORD0:
-        COORD0 = get_COORD0_from_constsfile(constsfile)
+        COORD0 = get_COORD0_from_constsfile(constants_filename)
 
-    gbxbounds = read_dimless_gbxboundaries_binary(gridfile, COORD0, isprint=isprint)
+    gbxbounds = read_dimless_gbxboundaries_binary(
+        grid_filename, COORD0, isprint=isprint
+    )
 
     return calc_gridboxvols(gbxbounds)
 
@@ -188,10 +198,12 @@ def halfcoords_from_gbxbounds(gbxbounds, isprint=True):
     return zhalf, xhalf, yhalf
 
 
-def plot_gridboxboundaries(constsfile, gridfile, binpath, savefig):
+def plot_gridboxboundaries(constants_filename, grid_filename, savefigpath, savefig):
     plt.rcParams.update({"font.size": 14})
 
-    zhalf, xhalf, yhalf = get_gridboxboundaries(gridfile, constsfile=constsfile)
+    zhalf, xhalf, yhalf = get_gridboxboundaries(
+        grid_filename, constants_filename=constants_filename
+    )
 
     halfs = [zhalf, xhalf, yhalf]
     fulls, deltas = [], []
@@ -222,7 +234,7 @@ def plot_gridboxboundaries(constsfile, gridfile, binpath, savefig):
 
     fig.tight_layout()
     if savefig:
-        savename = binpath / "gridboxboundaries.png"
+        savename = savefigpath / "gridboxboundaries.png"
         fig.savefig(
             savename,
             dpi=400,
@@ -232,6 +244,7 @@ def plot_gridboxboundaries(constsfile, gridfile, binpath, savefig):
         )
         print("Figure .png saved as: " + str(savename))
     plt.show()
+    plt.close()
 
 
 def calc_domainvol(zhalf, xhalf, yhalf):
@@ -286,12 +299,14 @@ def grid_dimensions(gbxbounds):
     return extents, spacings, griddims
 
 
-def print_domain_info(constsfile, gridfile):
-    """prints information about domain reda from gridfile and constants file"""
+def print_domain_info(constants_filename, grid_filename):
+    """prints information about domain read from grid_filename and constants file"""
 
     isprint = True
-    COORD0 = get_COORD0_from_constsfile(constsfile)
-    gbxbounds = read_dimless_gbxboundaries_binary(gridfile, COORD0, isprint=isprint)
+    COORD0 = get_COORD0_from_constsfile(constants_filename)
+    gbxbounds = read_dimless_gbxboundaries_binary(
+        grid_filename, COORD0, isprint=isprint
+    )
 
     domainvol, gridboxvols, ngridboxes = domaininfo(gbxbounds, isprint=isprint)
     xtns, spacings, griddims = grid_dimensions(gbxbounds)

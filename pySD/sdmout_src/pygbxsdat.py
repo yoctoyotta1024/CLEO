@@ -24,9 +24,9 @@ from ..gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from ..cxx2py import print_dict_statement
 
 
-def get_gridboxes(gridfile, COORD0, isprint=True):
+def get_gridboxes(grid_filename, COORD0, isprint=True):
     gbxbounds, ndims = rgrid.read_dimless_gbxboundaries_binary(
-        gridfile, COORD0=COORD0, return_ndims=True, isprint=False
+        grid_filename, COORD0=COORD0, return_ndims=True, isprint=False
     )
     zhalf, xhalf, yhalf = rgrid.halfcoords_from_gbxbounds(gbxbounds, isprint=False)
     domainvol, gbxvols, ngrid = rgrid.domaininfo(gbxbounds, isprint=False)
@@ -57,6 +57,6 @@ def get_gridboxes(gridfile, COORD0, isprint=True):
     gbxs["xxf"], gbxs["zzf"] = xxf, zzf
 
     if isprint:
-        print_dict_statement(gridfile, "gbxs", gbxs)
+        print_dict_statement(grid_filename, "gbxs", gbxs)
 
     return gbxs

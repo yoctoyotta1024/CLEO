@@ -38,14 +38,17 @@ def get_zgrid(icon_grid_file, num_vertical_levels):
 
 
 def main(
-    path2CLEO, path2build, configfile, gridfile, initSDsfile, icon_grid_file, SDgbxs2plt
+    path2CLEO,
+    path2build,
+    config_filename,
+    grid_filename,
+    initsupers_filename,
+    icon_grid_file,
+    SDgbxs2plt,
 ):
-    import matplotlib.pyplot as plt
-
     sys.path.append(str(path2CLEO))  # for imports from pySD package
 
-    from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
-    from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
+    from pySD import geninitconds
     from pySD.initsuperdropsbinary_src import (
         crdgens,
         rgens,
@@ -53,20 +56,18 @@ def main(
         probdists,
         attrsgen,
     )
-    from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
-    from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
 
     ### ---------------------------------------------------------------- ###
     ### ----------------------- INPUT PARAMETERS ----------------------- ###
     ### ---------------------------------------------------------------- ###
     ### --- essential paths and filenames --- ###
     # path and filenames for creating initial SD conditions
-    constsfile = path2CLEO / "libs" / "cleoconstants.hpp"
+    constants_filename = path2CLEO / "libs" / "cleoconstants.hpp"
 
     ### --- plotting initialisation figures --- ###
     # booleans for [making, saving] initialisation figures
-    isfigures = [True, True]
-    savefigpath = path2build / "bin"  # directory for saving figures
+    isfigures = [True, True]  # TODO(CB): move into args
+    savefigpath = path2build / "bin"  # binpath # TODO(CB): move into args
 
     ### --- settings for 3-D gridbox boundaries --- ###
     num_vertical_levels = 24  # TODO(CB): move to config file (?)
@@ -101,11 +102,20 @@ def main(
     ### ------------------- BINARY FILES GENERATION--------------------- ###
     ### ---------------------------------------------------------------- ###
     ### ----- write gridbox boundaries binary ----- ###
-    cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
-    rgrid.print_domain_info(constsfile, gridfile)
+    geninitconds.generate_gridbox_boundaries(
+        grid_filename,
+        zgrid,
+        xgrid,
+        ygrid,
+        constants_filename,
+        isfigures=isfigures,
+        savefigpath=savefigpath,
+    )
 
     ### ----- write initial superdroplets binary ----- ###
-    nsupers = crdgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
+    nsupers = crdgens.nsupers_at_domain_base(
+        grid_filename, constants_filename, npergbx, zlim
+    )
     radiigen = rgens.MonoAttrGen(monor)  # all SDs have the same radius [m]
     dryradiigen = dryrgens.ScaledRadiiGen(dryr_sf)  # dryradii are 1/sf of radii [m]
     coord3gen = crdgens.SampleCoordGen(randcoord)  # (not) random coord3 of SDs
@@ -116,28 +126,22 @@ def main(
     initattrsgen = attrsgen.AttrsGenerator(
         radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
     )
-    csupers.write_initsuperdrops_binary(
-        initSDsfile, initattrsgen, configfile, constsfile, gridfile, nsupers, numconc
+    geninitconds.generate_initial_superdroplet_conditions(
+        initattrsgen,
+        initsupers_filename,
+        config_filename,
+        constants_filename,
+        grid_filename,
+        nsupers,
+        numconc,
+        isfigures=isfigures,
+        savefigpath=savefigpath,
+        gbxs2plt=SDgbxs2plt,
     )
-
-    ### ----- show (and save) plots of binary file data ----- ###
-    if isfigures[0]:
-        rgrid.plot_gridboxboundaries(constsfile, gridfile, savefigpath, isfigures[1])
-        rsupers.plot_initGBxs_distribs(
-            configfile,
-            constsfile,
-            initSDsfile,
-            gridfile,
-            savefigpath,
-            isfigures[1],
-            SDgbxs2plt,
-        )
-        plt.close()
-        rgrid.print_domain_info(constsfile, gridfile)
     ### ---------------------------------------------------------------- ###
     ### ---------------------------------------------------------------- ###
 
 
 if __name__ == "__main__":
-    ### args = path2CLEO, path2build, configfile, binpath, gridfile, initSDsfile, thermofiles
+    ### args = path2CLEO, path2build, config_filename, grid_filename, initsupers_file, icon_grid_file, SDgbxs2plt
     main(*sys.argv[1:])

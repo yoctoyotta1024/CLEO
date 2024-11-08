@@ -59,14 +59,14 @@ class ManyAttrs:
         self.coord2.extend(mia.coord2)
 
 
-def initSDsinputsdict(configfile, constsfile):
+def initsupers_inputsdict(config_filename, constants_filename):
     """create values from constants file & config file
     required as inputs to create initial
     superdroplet conditions"""
 
-    consts = cxx2py.read_cxxconsts_into_floats(constsfile)
+    consts = cxx2py.read_cxxconsts_into_floats(constants_filename)
     mconsts = cxx2py.derive_more_floats(consts)
-    config = readconfigfile.read_configparams_into_floats(configfile)
+    config = readconfigfile.read_configparams_into_floats(config_filename)
 
     inputs = {
         # for creating SD attribute distirbutions
@@ -260,20 +260,27 @@ def nsupers_pergridboxdict(nsupers, gbxbounds):
 
 
 def write_initsuperdrops_binary(
-    initsupersfile, initattrsgen, configfile, constsfile, gridfile, nsupers, NUMCONC
+    initsupers_filename,
+    initattrsgen,
+    config_filename,
+    constants_filename,
+    grid_filename,
+    nsupers,
+    NUMCONC,
 ):
     """de-dimensionalise attributes in initattrsgen and then write to
-    to a binary file, "initsupersfile", with some metadata"""
+    to a binary file, "initsupers_filename", with some metadata"""
 
-    if not isfile(gridfile):
+    if not isfile(grid_filename):
         errmsg = (
-            "gridfile not found, but must be" + " created before initsupersfile can be"
+            "grid_filename not found, but must be"
+            + " created before initsupersfile can be"
         )
         raise ValueError(errmsg)
 
-    inputs = initSDsinputsdict(configfile, constsfile)
+    inputs = initsupers_inputsdict(config_filename, constants_filename)
     gbxbounds = read_dimless_gbxboundaries_binary(
-        gridfile, COORD0=inputs["COORD0"], isprint=False
+        grid_filename, COORD0=inputs["COORD0"], isprint=False
     )
     nsupersdict = nsupers_pergridboxdict(nsupers, gbxbounds)
 
@@ -317,5 +324,5 @@ def write_initsuperdrops_binary(
         metastr += " [sdgbxindex, xi, radius, msol]"
 
     writebinary.writebinary(
-        initsupersfile, data, ndata, datatypes, units, scale_factors, metastr
+        initsupers_filename, data, ndata, datatypes, units, scale_factors, metastr
     )
