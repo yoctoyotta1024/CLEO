@@ -397,11 +397,11 @@
 
 <div class="viewcode-block" id="get_COORD0_from_constsfile">
 <a class="viewcode-back" href="../../../pySD/gbxboundariesbinary_src/create_gbxboundaries.html#pySD.gbxboundariesbinary_src.create_gbxboundaries.get_COORD0_from_constsfile">[docs]</a>
-<span class="k">def</span> <span class="nf">get_COORD0_from_constsfile</span><span class="p">(</span><span class="n">constsfile</span><span class="p">,</span> <span class="n">returnconsts</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">get_COORD0_from_constsfile</span><span class="p">(</span><span class="n">constants_filename</span><span class="p">,</span> <span class="n">returnconsts</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;create values from constants file required as inputs to create initial</span>
 <span class="sd">    superdroplet conditions&quot;&quot;&quot;</span>
 
-    <span class="n">consts</span> <span class="o">=</span> <span class="n">cxx2py</span><span class="o">.</span><span class="n">read_cxxconsts_into_floats</span><span class="p">(</span><span class="n">constsfile</span><span class="p">)</span>
+    <span class="n">consts</span> <span class="o">=</span> <span class="n">cxx2py</span><span class="o">.</span><span class="n">read_cxxconsts_into_floats</span><span class="p">(</span><span class="n">constants_filename</span><span class="p">)</span>
     <span class="n">COORD0</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;TIME0&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;W0&quot;</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">returnconsts</span><span class="p">:</span>
@@ -553,14 +553,16 @@
 
 <div class="viewcode-block" id="write_gridboxboundaries_binary">
 <a class="viewcode-back" href="../../../pySD/gbxboundariesbinary_src/create_gbxboundaries.html#pySD.gbxboundariesbinary_src.create_gbxboundaries.write_gridboxboundaries_binary">[docs]</a>
-<span class="k">def</span> <span class="nf">write_gridboxboundaries_binary</span><span class="p">(</span><span class="n">gridfile</span><span class="p">,</span> <span class="n">zgrid</span><span class="p">,</span> <span class="n">xgrid</span><span class="p">,</span> <span class="n">ygrid</span><span class="p">,</span> <span class="n">constsfile</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">write_gridboxboundaries_binary</span><span class="p">(</span>
+    <span class="n">grid_filename</span><span class="p">,</span> <span class="n">zgrid</span><span class="p">,</span> <span class="n">xgrid</span><span class="p">,</span> <span class="n">ygrid</span><span class="p">,</span> <span class="n">constants_filename</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;zgrid, xgrid and ygrid can either be list of</span>
 <span class="sd">    [min coord, max coord, delta] or they can be arrays of</span>
 <span class="sd">    their half coordinates (ie. gridbox boundaries). If the former,</span>
 <span class="sd">    first create half coordinates. In both cases, de-dimensionalise</span>
 <span class="sd">    and write the boundaries to a binary file, &quot;filename&quot; &quot;&quot;&quot;</span>
 
-    <span class="n">COORD0</span> <span class="o">=</span> <span class="n">get_COORD0_from_constsfile</span><span class="p">(</span><span class="n">constsfile</span><span class="p">)</span>
+    <span class="n">COORD0</span> <span class="o">=</span> <span class="n">get_COORD0_from_constsfile</span><span class="p">(</span><span class="n">constants_filename</span><span class="p">)</span>
 
     <span class="n">ndims</span><span class="p">,</span> <span class="n">gbxindicies</span><span class="p">,</span> <span class="n">gbxboundsdata</span> <span class="o">=</span> <span class="n">dimless_gridboxboundaries</span><span class="p">(</span>
         <span class="n">zgrid</span><span class="p">,</span> <span class="n">xgrid</span><span class="p">,</span> <span class="n">ygrid</span><span class="p">,</span> <span class="n">COORD0</span>
@@ -589,7 +591,7 @@
     <span class="n">units</span> <span class="o">=</span> <span class="p">[</span><span class="sa">b</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;m&quot;</span><span class="p">]</span>
 
     <span class="n">writebinary</span><span class="o">.</span><span class="n">writebinary</span><span class="p">(</span>
-        <span class="n">gridfile</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">scale_factors</span><span class="p">,</span> <span class="n">metastr</span>
+        <span class="n">grid_filename</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">scale_factors</span><span class="p">,</span> <span class="n">metastr</span>
     <span class="p">)</span></div>
 
 </pre></div>
@@ -610,7 +612,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 31 October 2024</div>
+              Last updated on 08 November 2024</div>
           </div>
           <div class="right-details">
             
