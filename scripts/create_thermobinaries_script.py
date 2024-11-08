@@ -25,26 +25,25 @@ import sys
 from pathlib import Path
 
 sys.path.append(sys.argv[1])  # path to pySD (same as to CLEO)
+from pySD import geninitconds
 from pySD.thermobinary_src import thermogen
-from pySD.thermobinary_src import create_thermodynamics as cthermo
-from pySD.thermobinary_src import read_thermodynamics as rthermo
 
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### --- absolute or relative paths for --- ###
 ### ---   build and CLEO directories --- ###
 path2CLEO = Path(sys.argv[1])
 path2build = Path(sys.argv[2])
-configfile = Path(sys.argv[3])
+config_filename = Path(sys.argv[3])
 
 # booleans for [making, saving] initialisation figures
 isfigures = [True, True]
 
 ### essential paths and filenames
-constsfile = path2CLEO / "libs" / "cleoconstants.hpp"
+constants_filename = path2CLEO / "libs" / "cleoconstants.hpp"
 binariespath = path2build / "share"
 savefigpath = path2build / "bin"
 
-gridfile = (
+grid_filename = (
     binariespath / "dimlessGBxboundaries.dat"
 )  # note this should match config.yaml
 thermofiles = binariespath / "dimlessthermo.dat"
@@ -61,7 +60,7 @@ thermofiles = binariespath / "dimlessthermo.dat"
 # V_INIT = 0.0                            # initial northwards (coord2) velocity [m/s]
 # thermodyngen = thermogen.ConstUniformThermo(P_INIT, TEMP_INIT, None,
 #                                     qc_init, W_INIT, U_INIT, V_INIT,
-#                                     relh=relh_init, constsfile=constsfile)
+#                                     relh=relh_init, constants_filename=constants_filename)
 
 ### --- 1-D T and qv set by Lapse Rates --- ###
 PRESS0 = 101315  # [Pa]
@@ -77,8 +76,8 @@ Wlength = (
 )
 
 thermodyngen = thermogen.ConstHydrostaticLapseRates(
-    configfile,
-    constsfile,
+    config_filename,
+    constants_filename,
     PRESS0,
     TEMP0,
     qvap0,
@@ -113,25 +112,33 @@ thermodyngen = thermogen.ConstHydrostaticLapseRates(
 #     "x2": 750,
 #     "mlsratio": 1.005
 # }
-# thermodyngen = thermogen.ConstDryHydrostaticAdiabat(configfile, constsfile, PRESS0,
+# thermodyngen = thermogen.ConstDryHydrostaticAdiabat(config_filename, constants_filename, PRESS0,
 #                                         THETA, qvapmethod, sratios, Zbase,
 #                                         qcond, WMAX, Zlength, Xlength,
 #                                         VVEL, moistlayer)
-# thermodyngen = thermogen.SimpleThermo2DFlowField(configfile, constsfile, PRESS0,
+# thermodyngen = thermogen.SimpleThermo2DFlowField(config_filename, constants_filename, PRESS0,
 #                                         THETA, qvapmethod, sratios, Zbase,
 #                                         qcond, WMAX, Zlength, Xlength,
 #                                         VVEL)
 ### ---------------------------------------------------------------- ###
 
 ### -------------------- BINARY FILE GENERATION--------------------- ###
-cthermo.write_thermodynamics_binary(
-    thermofiles, thermodyngen, configfile, constsfile, gridfile
-)
-
-if isfigures[0]:
+### ensure build, share and bin directories exist
+if path2CLEO == path2build:
+    raise ValueError("build directory cannot be CLEO")
+else:
+    path2build.mkdir(exist_ok=True)
+    binariespath.mkdir(exist_ok=True)
     if isfigures[1]:
         savefigpath.mkdir(exist_ok=True)
-    rthermo.plot_thermodynamics(
-        constsfile, configfile, gridfile, thermofiles, savefigpath, isfigures[1]
-    )
+
+geninitconds.generate_thermodynamics_conditions_fromfile(
+    thermofiles,
+    thermodyngen,
+    config_filename,
+    constants_filename,
+    grid_filename,
+    isfigures=[False, False],
+    savefigpath=False,
+)
 ### ---------------------------------------------------------------- ###

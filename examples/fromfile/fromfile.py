@@ -30,7 +30,7 @@ import fromfile_inputfiles
 
 path2CLEO = Path(sys.argv[1])
 path2build = Path(sys.argv[2])
-configfile = Path(sys.argv[3])
+config_filename = Path(sys.argv[3])
 
 sys.path.append(str(path2CLEO))  # imports from pySD
 sys.path.append(
@@ -48,8 +48,8 @@ from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
 # path and filenames for creating initial SD conditions
 binpath = path2build / "bin"
 sharepath = path2build / "share"
-gridfile = sharepath / "fromfile_dimlessGBxboundaries.dat"
-initSDsfile = sharepath / "fromfile_dimlessSDsinit.dat"
+grid_filename = sharepath / "fromfile_dimlessGBxboundaries.dat"
+initsupers_filename = sharepath / "fromfile_dimlessSDsinit.dat"
 thermofiles = sharepath / "fromfile_dimlessthermo.dat"
 savefigpath = path2build / "bin"  # directory for saving figures
 
@@ -72,14 +72,19 @@ else:
     savefigpath.mkdir(exist_ok=True)
 
 ### --- delete any existing initial conditions --- ###
-shutil.rmtree(gridfile, ignore_errors=True)
-shutil.rmtree(initSDsfile, ignore_errors=True)
+shutil.rmtree(grid_filename, ignore_errors=True)
+shutil.rmtree(initsupers_filename, ignore_errors=True)
 shutil.rmtree(
     str(thermofiles)[:-4] + "*", ignore_errors=True
 )  # delete any existing dataset
 
 fromfile_inputfiles.main(
-    path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofiles
+    path2CLEO,
+    path2build,
+    config_filename,
+    grid_filename,
+    initsupers_filename,
+    thermofiles,
 )
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
@@ -92,8 +97,8 @@ subprocess.run(["pwd"])
 shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
 executable = path2build / "examples" / "fromfile" / "src" / "fromfile"
 print("Executable: " + str(executable))
-print("Config file: " + str(configfile))
-subprocess.run([executable, configfile])
+print("Config file: " + str(config_filename))
+subprocess.run([executable, config_filename])
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -104,7 +109,7 @@ subprocess.run([executable, configfile])
 # read in constants and intial setup from setup .txt file
 config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
 consts = pysetuptxt.get_consts(setupfile, isprint=True)
-gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
+gbxs = pygbxsdat.get_gridboxes(grid_filename, consts["COORD0"], isprint=True)
 
 time = pyzarr.get_time(dataset)
 sddata = pyzarr.get_supers(dataset, consts)

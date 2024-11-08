@@ -31,7 +31,7 @@ from matplotlib.colors import LogNorm, Normalize
 
 path2CLEO = Path(sys.argv[1])
 path2build = Path(sys.argv[2])
-configfile = Path(sys.argv[3])
+config_filename = Path(sys.argv[3])
 
 sys.path.append(str(path2CLEO))  # imports from pySD
 sys.path.append(
@@ -40,26 +40,21 @@ sys.path.append(
 
 
 from plotssrc import pltsds, pltmoms, animations
+from pySD import geninitconds
 from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
-from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
-from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
 from pySD.initsuperdropsbinary_src import crdgens, rgens, dryrgens, probdists, attrsgen
-from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
-from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
 from pySD.thermobinary_src import thermogen
-from pySD.thermobinary_src import create_thermodynamics as cthermo
-from pySD.thermobinary_src import read_thermodynamics as rthermo
 
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
 # path and filenames for creating initial SD conditions
-constsfile = path2CLEO / "libs" / "cleoconstants.hpp"
+constants_filename = path2CLEO / "libs" / "cleoconstants.hpp"
 binpath = path2build / "bin"
 sharepath = path2build / "share"
-gridfile = sharepath / "const2d_dimlessGBxboundaries.dat"
-initSDsfile = sharepath / "const2d_dimlessSDsinit.dat"
+grid_filename = sharepath / "const2d_dimlessGBxboundaries.dat"
+initsupers_filename = sharepath / "const2d_dimlessSDsinit.dat"
 thermofiles = sharepath / "const2d_dimlessthermo.dat"
 
 # path and file names for plotting results
@@ -68,7 +63,7 @@ dataset = binpath / "const2d_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
 isfigures = [True, True]  # booleans for [making, saving] initialisation figures
-savefigpath = path2build / "bin"  # directory for saving figures
+savefigpath = binpath
 SDgbxs2plt = [0]  # gbxindex of SDs to plot (nb. "all" can be very slow)
 
 ### --- settings for 2-D gridbox boundaries --- ###
@@ -117,21 +112,31 @@ else:
     path2build.mkdir(exist_ok=True)
     sharepath.mkdir(exist_ok=True)
     binpath.mkdir(exist_ok=True)
+    if isfigures[1]:
+        savefigpath.mkdir(exist_ok=True)
 
 ### --- delete any existing initial conditions --- ###
-shutil.rmtree(gridfile, ignore_errors=True)
-shutil.rmtree(initSDsfile, ignore_errors=True)
+shutil.rmtree(grid_filename, ignore_errors=True)
+shutil.rmtree(initsupers_filename, ignore_errors=True)
 all_thermofiles = thermofiles.parent / Path(f"{thermofiles.stem}*{thermofiles.suffix}")
 shutil.rmtree(all_thermofiles, ignore_errors=True)
 
 ### ----- write gridbox boundaries binary ----- ###
-cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
-rgrid.print_domain_info(constsfile, gridfile)
+geninitconds.generate_gridbox_boundaries(
+    grid_filename,
+    zgrid,
+    xgrid,
+    ygrid,
+    constants_filename,
+    isprintinfo=True,
+    isfigures=isfigures,
+    savefigpath=savefigpath,
+)
 
 ### ----- write thermodynamics binaries ----- ###
 thermodyngen = thermogen.ConstDryHydrostaticAdiabat(
-    configfile,
-    constsfile,
+    config_filename,
+    constants_filename,
     PRESS0,
     THETA,
     qvapmethod,
@@ -144,13 +149,20 @@ thermodyngen = thermogen.ConstDryHydrostaticAdiabat(
     VVEL,
     moistlayer,
 )
-cthermo.write_thermodynamics_binary(
-    thermofiles, thermodyngen, configfile, constsfile, gridfile
+geninitconds.generate_thermodynamics_conditions_fromfile(
+    thermofiles,
+    thermodyngen,
+    config_filename,
+    constants_filename,
+    grid_filename,
+    isfigures=isfigures,
+    savefigpath=savefigpath,
 )
 
-
 ### ----- write initial superdroplets binary ----- ###
-nsupers = crdgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
+nsupers = crdgens.nsupers_at_domain_base(
+    grid_filename, constants_filename, npergbx, zlim
+)
 coord3gen = crdgens.SampleCoordGen(True)  # sample coord3 randomly
 coord1gen = crdgens.SampleCoordGen(True)  # sample coord1 randomly
 coord2gen = None  # do not generate superdroplet coord2s
@@ -161,27 +173,18 @@ dryradiigen = dryrgens.ScaledRadiiGen(1.0)
 initattrsgen = attrsgen.AttrsGenerator(
     radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
 )
-csupers.write_initsuperdrops_binary(
-    initSDsfile, initattrsgen, configfile, constsfile, gridfile, nsupers, numconc
+geninitconds.generate_initial_superdroplet_conditions(
+    initattrsgen,
+    initsupers_filename,
+    config_filename,
+    constants_filename,
+    grid_filename,
+    nsupers,
+    numconc,
+    isfigures=isfigures,
+    savefigpath=savefigpath,
+    gbxs2plt=SDgbxs2plt,
 )
-
-### ----- show (and save) plots of binary file data ----- ###
-if isfigures[0]:
-    if isfigures[1]:
-        savefigpath.mkdir(exist_ok=True)
-    rgrid.plot_gridboxboundaries(constsfile, gridfile, savefigpath, isfigures[1])
-    rthermo.plot_thermodynamics(
-        constsfile, configfile, gridfile, thermofiles, savefigpath, isfigures[1]
-    )
-    rsupers.plot_initGBxs_distribs(
-        configfile,
-        constsfile,
-        initSDsfile,
-        gridfile,
-        savefigpath,
-        isfigures[1],
-        SDgbxs2plt,
-    )
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -193,8 +196,8 @@ subprocess.run(["pwd"])
 shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
 executable = path2build / "examples" / "constthermo2d" / "src" / "const2d"
 print("Executable: " + str(executable))
-print("Config file: " + str(configfile))
-subprocess.run([executable, configfile])
+print("Config file: " + str(config_filename))
+subprocess.run([executable, config_filename])
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -204,7 +207,7 @@ subprocess.run([executable, configfile])
 # read in constants and intial setup from setup .txt file
 config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
 consts = pysetuptxt.get_consts(setupfile, isprint=True)
-gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
+gbxs = pygbxsdat.get_gridboxes(grid_filename, consts["COORD0"], isprint=True)
 
 time = pyzarr.get_time(dataset)
 sddata = pyzarr.get_supers(dataset, consts)

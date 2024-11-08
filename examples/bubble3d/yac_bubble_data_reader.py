@@ -139,7 +139,7 @@ grid_name = sys.argv[3]  # must match CLEO (see yac_cartesian_dynamics.cpp)
 DATATSTEP = float(sys.argv[4])  # must match ICON data file [seconds]
 COUPLTSTEP = float(sys.argv[5])  # must match CLEO config file [seconds]
 T_END = float(sys.argv[6])  # must match CLEO config file [seconds]
-num_vertical_levels = int(sys.argv[7])  # must match CLEO gridfile
+num_vertical_levels = int(sys.argv[7])  # must match CLEO grid_filename
 
 msg = (
     "--- INPUT ARGS ---"

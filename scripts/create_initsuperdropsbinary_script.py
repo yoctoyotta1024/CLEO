@@ -25,30 +25,29 @@ import numpy as np
 from pathlib import Path
 
 sys.path.append(sys.argv[1])  # path to pySD (same as to CLEO)
+from pySD import geninitconds
 from pySD.initsuperdropsbinary_src import rgens, dryrgens, probdists, attrsgen
-from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
-from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
 
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### --- absolute or relative paths for --- ###
 ### ---   build and CLEO directories --- ###
 path2CLEO = Path(sys.argv[1])
 path2build = Path(sys.argv[2])
-configfile = Path(sys.argv[3])
+config_filename = Path(sys.argv[3])
 
 # booleans for [making, saving] initialisation figures
 isfigures = [True, True]
 gbxs2plt = "all"  # indexes of GBx index of SDs to plot (nb. "all" can be very slow)
 
 ### essential paths and filenames
-constsfile = path2CLEO / "libs" / "cleoconstants.hpp"
+constants_filename = path2CLEO / "libs" / "cleoconstants.hpp"
 binariespath = path2build / "share"
 savefigpath = path2build / "bin"
 
-gridfile = (
+grid_filename = (
     binariespath / "dimlessGBxboundaries.dat"
 )  # note this should match config.yaml
-initsupersfile = (
+initsupers_filename = (
     binariespath / "dimlessSDsinit.dat"
 )  # note this should match config.yaml
 
@@ -56,9 +55,9 @@ initsupersfile = (
 ### ---        (an int or dict of ints)     --- ###
 # zlim = 800
 # npergbx = 8192
-# nsupers =  crdgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim) # supers where z <= zlim
+# nsupers =  crdgens.nsupers_at_domain_base(grid_filename, constants_filename, npergbx, zlim) # supers where z <= zlim
 # nsupers = crdgens.nsupers_at_domain_top(
-#     gridfile, constsfile, npergbx, zlim
+#     grid_filename, constants_filename, npergbx, zlim
 # )  # supers where z >= zlim
 nsupers = 8192
 ### ------------------------------------------- ###
@@ -149,26 +148,25 @@ if path2CLEO == path2build:
 else:
     path2build.mkdir(exist_ok=True)
     binariespath.mkdir(exist_ok=True)
-
-### write initial superdrops binary
-attrsgen = attrsgen.AttrsGenerator(
-    radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
-)
-csupers.write_initsuperdrops_binary(
-    initsupersfile, attrsgen, configfile, constsfile, gridfile, nsupers, numconc
-)
-
-### plot initial superdrops binary
-if isfigures[0]:
     if isfigures[1]:
         savefigpath.mkdir(exist_ok=True)
-    rsupers.plot_initGBxs_distribs(
-        configfile,
-        constsfile,
-        initsupersfile,
-        gridfile,
-        savefigpath,
-        isfigures[1],
-        gbxs2plt,
-    )
+
+
+### write initial superdrops binary
+initattrsgen = attrsgen.AttrsGenerator(
+    radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
+)
+geninitconds.generate_initial_superdroplet_conditions(
+    initattrsgen,
+    initsupers_filename,
+    config_filename,
+    constants_filename,
+    grid_filename,
+    nsupers,
+    numconc,
+    isprintinfo=True,
+    isfigures=isfigures,
+    savefigpath=savefigpath,
+    gbxs2plt=gbxs2plt,
+)
 ### ---------------------------------------------------------------- ###

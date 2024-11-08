@@ -25,8 +25,8 @@ from .create_thermodynamics import thermoinputsdict
 from ..gbxboundariesbinary_src import read_gbxboundaries as rgrid
 
 
-def get_Mrratio_from_constsfile(constsfile):
-    consts = cxx2py.read_cxxconsts_into_floats(constsfile)
+def get_Mrratio_from_constants_filename(constants_filename):
+    consts = cxx2py.read_cxxconsts_into_floats(constants_filename)
     mconsts = cxx2py.derive_more_floats(consts)
 
     return mconsts["Mr_ratio"]
@@ -145,13 +145,22 @@ class ConstUniformThermo:
     time and uniform throughout the domain"""
 
     def __init__(
-        self, PRESS, TEMP, qvap, qcond, WVEL, UVEL, VVEL, relh=False, constsfile=""
+        self,
+        PRESS,
+        TEMP,
+        qvap,
+        qcond,
+        WVEL,
+        UVEL,
+        VVEL,
+        relh=False,
+        constants_filename="",
     ):
         self.PRESS = PRESS  # pressure [Pa]
         self.TEMP = TEMP  # temperature [T]
 
         if relh:
-            Mr_ratio = get_Mrratio_from_constsfile(constsfile)
+            Mr_ratio = get_Mrratio_from_constants_filename(constants_filename)
             self.qvap = relh2qvap(
                 PRESS, TEMP, relh, Mr_ratio
             )  # water vapour content []
@@ -188,8 +197,8 @@ class SimpleThermo2DFlowField:
 
     def __init__(
         self,
-        configfile,
-        constsfile,
+        config_filename,
+        constants_filename,
         PRESS,
         TEMP,
         qvapmethod,
@@ -201,7 +210,7 @@ class SimpleThermo2DFlowField:
         Xlength,
         VVEL,
     ):
-        inputs = thermoinputsdict(configfile, constsfile)
+        inputs = thermoinputsdict(config_filename, constants_filename)
 
         self.PRESS = PRESS  # pressure [Pa]
         self.TEMP = TEMP  # temperature [T]
@@ -289,8 +298,8 @@ class ConstDryHydrostaticAdiabat:
 
     def __init__(
         self,
-        configfile,
-        constsfile,
+        config_filename,
+        constants_filename,
         PRESSz0,
         THETA,
         qvapmethod,
@@ -303,7 +312,7 @@ class ConstDryHydrostaticAdiabat:
         VVEL,
         moistlayer,
     ):
-        inputs = thermoinputsdict(configfile, constsfile)
+        inputs = thermoinputsdict(config_filename, constants_filename)
 
         ### parameters of profile ###
         self.PRESSz0 = PRESSz0  # pressure at z=0m [Pa]
@@ -455,8 +464,8 @@ class ConstHydrostaticLapseRates:
 
     def __init__(
         self,
-        configfile,
-        constsfile,
+        config_filename,
+        constants_filename,
         PRESS0,
         TEMP0,
         qvap0,
@@ -484,7 +493,7 @@ class ConstHydrostaticLapseRates:
         self.VVEL = VVEL  # horizontal northwards (coord2) velocity [m/s]
         self.Wlength = Wlength  # [m] use constant W (Wlength=0.0), or sinusoidal 1-D profile below cloud base
 
-        inputs = thermoinputsdict(configfile, constsfile)
+        inputs = thermoinputsdict(config_filename, constants_filename)
         self.GRAVG = inputs["G"]
         self.RGAS_DRY = inputs["RGAS_DRY"]
         self.Mr_ratio = inputs["Mr_ratio"]

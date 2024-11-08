@@ -77,7 +77,7 @@ then
   icon_data_timestep=30 # must match ICON data file [seconds]
   cleo_coupling_timestep=60 # must match CLEO config file [seconds]
   cleo_t_end=7200 # must match CLEO config file [seconds]
-  cleo_num_vertical_levels=24 # must match CLEO gridfile
+  cleo_num_vertical_levels=24 # must match CLEO grid_filename
 
   mpiexec -n 1 ${path2build}/examples/bubble3d/src/bubble3d \
     ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \

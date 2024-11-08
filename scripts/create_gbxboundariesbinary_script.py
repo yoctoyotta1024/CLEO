@@ -24,29 +24,23 @@ import numpy as np
 from pathlib import Path
 
 sys.path.append(sys.argv[1])  # path to pySD (same as to CLEO)
-from pySD.gbxboundariesbinary_src.create_gbxboundaries import (
-    write_gridboxboundaries_binary,
-)
-from pySD.gbxboundariesbinary_src.read_gbxboundaries import (
-    print_domain_info,
-    plot_gridboxboundaries,
-)
+from pySD import geninitconds
 
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### absolute or relative paths for build and CLEO directories
 path2CLEO = Path(sys.argv[1])
 path2build = Path(sys.argv[2])
-configfile = Path(sys.argv[3])
+config_filename = Path(sys.argv[3])
 
 # booleans for [making, saving] initialisation figures
 isfigures = [True, True]
 
 ### essential paths and filenames
-constsfile = path2CLEO / "libs" / "cleoconstants.hpp"
+constants_filename = path2CLEO / "libs" / "cleoconstants.hpp"
 binariespath = path2build / "share"
 savefigpath = path2build / "bin"
 
-gridfile = (
+grid_filename = (
     binariespath / "dimlessGBxboundaries.dat"
 )  # note this should match config.yaml
 
@@ -72,14 +66,16 @@ if path2CLEO == path2build:
 else:
     path2build.mkdir(exist_ok=True)
     binariespath.mkdir(exist_ok=True)
-
-### write gridbox boundaries binary
-write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
-print_domain_info(constsfile, gridfile)
-
-### plot gridbox boundaries binary
-if isfigures[0]:
     if isfigures[1]:
         savefigpath.mkdir(exist_ok=True)
-    plot_gridboxboundaries(constsfile, gridfile, savefigpath, isfigures[1])
+geninitconds.generate_gridbox_boundaries(
+    grid_filename,
+    zgrid,
+    xgrid,
+    ygrid,
+    constants_filename,
+    isprintinfo=True,
+    isfigures=isfigures,
+    savefigpath=savefigpath,
+)
 ### ---------------------------------------------------------------- ###

@@ -23,11 +23,11 @@ import numpy as np
 from .. import cxx2py, writebinary
 
 
-def get_COORD0_from_constsfile(constsfile, returnconsts=False):
+def get_COORD0_from_constsfile(constants_filename, returnconsts=False):
     """create values from constants file required as inputs to create initial
     superdroplet conditions"""
 
-    consts = cxx2py.read_cxxconsts_into_floats(constsfile)
+    consts = cxx2py.read_cxxconsts_into_floats(constants_filename)
     COORD0 = consts["TIME0"] * consts["W0"]
 
     if returnconsts:
@@ -158,14 +158,16 @@ def ctype_compatible_gridboxboundaries(ndims, idxs, bounds):
     return datalist, datatypes
 
 
-def write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile):
+def write_gridboxboundaries_binary(
+    grid_filename, zgrid, xgrid, ygrid, constants_filename
+):
     """zgrid, xgrid and ygrid can either be list of
     [min coord, max coord, delta] or they can be arrays of
     their half coordinates (ie. gridbox boundaries). If the former,
     first create half coordinates. In both cases, de-dimensionalise
     and write the boundaries to a binary file, "filename" """
 
-    COORD0 = get_COORD0_from_constsfile(constsfile)
+    COORD0 = get_COORD0_from_constsfile(constants_filename)
 
     ndims, gbxindicies, gbxboundsdata = dimless_gridboxboundaries(
         zgrid, xgrid, ygrid, COORD0
@@ -194,5 +196,5 @@ def write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile):
     units = [b" ", b" ", b"m"]
 
     writebinary.writebinary(
-        gridfile, data, ndata, datatypes, units, scale_factors, metastr
+        grid_filename, data, ndata, datatypes, units, scale_factors, metastr
     )

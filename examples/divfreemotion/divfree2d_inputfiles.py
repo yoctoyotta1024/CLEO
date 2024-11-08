@@ -22,14 +22,19 @@ a 2-D divergence free wind field.
 import sys
 
 
-def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofiles):
+def main(
+    path2CLEO,
+    path2build,
+    config_filename,
+    grid_filename,
+    initsupers_filename,
+    thermofiles,
+):
     import numpy as np
-    import matplotlib.pyplot as plt
 
     sys.path.append(str(path2CLEO))  # for imports from pySD package
 
-    from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
-    from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
+    from pySD import geninitconds
     from pySD.initsuperdropsbinary_src import (
         crdgens,
         rgens,
@@ -37,23 +42,26 @@ def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofiles):
         probdists,
         attrsgen,
     )
-    from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
-    from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
     from pySD.thermobinary_src import thermogen
-    from pySD.thermobinary_src import create_thermodynamics as cthermo
-    from pySD.thermobinary_src import read_thermodynamics as rthermo
 
     ### ---------------------------------------------------------------- ###
     ### ----------------------- INPUT PARAMETERS ----------------------- ###
     ### ---------------------------------------------------------------- ###
     ### --- essential paths and filenames --- ###
     # path and filenames for creating initial SD conditions
-    constsfile = path2CLEO / "libs" / "cleoconstants.hpp"
+    constants_filename = path2CLEO / "libs" / "cleoconstants.hpp"
 
     ### --- plotting initialisation figures --- ###
-    isfigures = [True, True]  # booleans for [making, saving] initialisation figures
-    savefigpath = path2build / "bin"  # directory for saving figures
-    SDgbxs2plt = [0]  # gbxindex of SDs to plot (nb. "all" can be very slow)
+    isfigures = [
+        True,
+        True,
+    ]  # booleans for [making, saving] initialisation figures # TODO(CB): move into args
+    savefigpath = (
+        path2build / "bin"
+    )  # directory for saving figures # TODO(CB): move into args
+    SDgbxs2plt = [
+        0
+    ]  # gbxindex of SDs to plot (nb. "all" can be very slow) # TODO(CB): move into args
 
     ### --- settings for 2-D gridbox boundaries --- ###
     zgrid = [0, 1500, 50]  # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
@@ -96,13 +104,20 @@ def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofiles):
     ### ------------------- BINARY FILES GENERATION--------------------- ###
     ### ---------------------------------------------------------------- ###
     ### ----- write gridbox boundaries binary ----- ###
-    cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
-    rgrid.print_domain_info(constsfile, gridfile)
+    geninitconds.generate_gridbox_boundaries(
+        grid_filename,
+        zgrid,
+        xgrid,
+        ygrid,
+        constants_filename,
+        isfigures=isfigures,
+        savefigpath=savefigpath,
+    )
 
     ### ----- write thermodynamics binaries ----- ###
     thermodyngen = thermogen.SimpleThermo2DFlowField(
-        configfile,
-        constsfile,
+        config_filename,
+        constants_filename,
         PRESS0,
         THETA,
         qvapmethod,
@@ -114,12 +129,20 @@ def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofiles):
         Xlength,
         VVEL,
     )
-    cthermo.write_thermodynamics_binary(
-        thermofiles, thermodyngen, configfile, constsfile, gridfile
+    geninitconds.generate_thermodynamics_conditions_fromfile(
+        thermofiles,
+        thermodyngen,
+        config_filename,
+        constants_filename,
+        grid_filename,
+        isfigures=isfigures,
+        savefigpath=savefigpath,
     )
 
     ### ----- write initial superdroplets binary ----- ###
-    nsupers = crdgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
+    nsupers = crdgens.nsupers_at_domain_base(
+        grid_filename, constants_filename, npergbx, zlim
+    )
     coord3gen = crdgens.SampleCoordGen(True)  # sample coord3 randomly
     coord1gen = crdgens.SampleCoordGen(True)  # sample coord1 randomly
     coord2gen = None  # do not generate superdroplet coord2s
@@ -130,30 +153,22 @@ def main(path2CLEO, path2build, configfile, gridfile, initSDsfile, thermofiles):
     initattrsgen = attrsgen.AttrsGenerator(
         radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
     )
-    csupers.write_initsuperdrops_binary(
-        initSDsfile, initattrsgen, configfile, constsfile, gridfile, nsupers, numconc
+    geninitconds.generate_initial_superdroplet_conditions(
+        initattrsgen,
+        initsupers_filename,
+        config_filename,
+        constants_filename,
+        grid_filename,
+        nsupers,
+        numconc,
+        isfigures=isfigures,
+        savefigpath=savefigpath,
+        gbxs2plt=SDgbxs2plt,
     )
-
-    ### ----- show (and save) plots of binary file data ----- ###
-    if isfigures[0]:
-        rgrid.plot_gridboxboundaries(constsfile, gridfile, savefigpath, isfigures[1])
-        rthermo.plot_thermodynamics(
-            constsfile, configfile, gridfile, thermofiles, savefigpath, isfigures[1]
-        )
-        rsupers.plot_initGBxs_distribs(
-            configfile,
-            constsfile,
-            initSDsfile,
-            gridfile,
-            savefigpath,
-            isfigures[1],
-            SDgbxs2plt,
-        )
-        plt.close()
     ### ---------------------------------------------------------------- ###
     ### ---------------------------------------------------------------- ###
 
 
 if __name__ == "__main__":
-    ### args = path2CLEO, path2build, configfile, binpath, gridfile, initSDsfile, thermofiles
+    ### args = path2CLEO, path2build, config_filename, grid_filename, initsupers_filename, thermofiles
     main(*sys.argv[1:])
