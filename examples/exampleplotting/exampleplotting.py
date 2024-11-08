@@ -32,7 +32,7 @@ from plotssrc import pltsds, pltdist
 ### paths to data for plotting
 dataset = Path("/home/m/m300950/CLEO/build/bin/SDMdata.zarr")
 setuptxt = Path("/home/m/m300950/CLEO/build/bin/setup.txt")
-gridfile = Path("/home/m/m300950/CLEO/build/share/dimlessGBxboundaries.dat")
+grid_filename = Path("/home/m/m300950/CLEO/build/share/dimlessGBxboundaries.dat")
 
 ### whether and where to save figures
 savefig = False
@@ -60,7 +60,7 @@ ylog_num = True
 ### ------------------------- load data ---------------------------- ###
 config = pysetuptxt.get_config(setuptxt, nattrs=3, isprint=True)
 consts = pysetuptxt.get_consts(setuptxt, isprint=True)
-gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
+gbxs = pygbxsdat.get_gridboxes(grid_filename, consts["COORD0"], isprint=True)
 ds = pyzarr.get_rawdataset(dataset)
 
 time = pyzarr.get_time(ds)

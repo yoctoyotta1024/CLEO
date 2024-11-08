@@ -24,12 +24,11 @@ import shutil
 import subprocess
 import sys
 import numpy as np
-import matplotlib.pyplot as plt
 from pathlib import Path
 
 path2CLEO = Path(sys.argv[1])
 path2build = Path(sys.argv[2])
-configfile = Path(sys.argv[3])
+config_filename = Path(sys.argv[3])
 outputdir = Path(sys.argv[4])
 buildtype = sys.argv[5]
 nruns = 2
@@ -39,26 +38,20 @@ sys.path.append(
     str(path2CLEO / "examples" / "exampleplotting")
 )  # imports from example plots package
 
-
-from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
-from pySD.gbxboundariesbinary_src import create_gbxboundaries as cgrid
+from pySD import geninitconds
 from pySD.initsuperdropsbinary_src import crdgens, rgens, dryrgens, probdists, attrsgen
-from pySD.initsuperdropsbinary_src import create_initsuperdrops as csupers
-from pySD.initsuperdropsbinary_src import read_initsuperdrops as rsupers
 from pySD.thermobinary_src import thermogen
-from pySD.thermobinary_src import create_thermodynamics as cthermo
-from pySD.thermobinary_src import read_thermodynamics as rthermo
 
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
 # path and filenames for creating initial SD conditions
-constsfile = path2CLEO / "libs" / "cleoconstants.hpp"
+constants_filename = path2CLEO / "libs" / "cleoconstants.hpp"
 binpath = path2build / "bin"
 sharepath = path2build / "share"
-gridfile = sharepath / "spd_dimlessGBxboundaries.dat"
-initSDsfile = sharepath / "spd_dimlessSDsinit.dat"
+grid_filename = sharepath / "spd_dimlessGBxboundaries.dat"
+initsupers_filename = sharepath / "spd_dimlessSDsinit.dat"
 thermofiles = sharepath / "spd_dimlessthermo.dat"
 
 # path and file names for plotting results
@@ -172,19 +165,26 @@ else:
         savefigpath.mkdir(exist_ok=True)
 
 ### --- delete any existing initial conditions --- ###
-shutil.rmtree(gridfile, ignore_errors=True)
-shutil.rmtree(initSDsfile, ignore_errors=True)
+shutil.rmtree(grid_filename, ignore_errors=True)
+shutil.rmtree(initsupers_filename, ignore_errors=True)
 all_thermofiles = thermofiles.parent / Path(f"{thermofiles.stem}*{thermofiles.suffix}")
 shutil.rmtree(all_thermofiles, ignore_errors=True)
 
 ### ----- write gridbox boundaries binary ----- ###
-cgrid.write_gridboxboundaries_binary(gridfile, zgrid, xgrid, ygrid, constsfile)
-rgrid.print_domain_info(constsfile, gridfile)
+geninitconds.generate_gridbox_boundaries(
+    grid_filename,
+    zgrid,
+    xgrid,
+    ygrid,
+    constants_filename,
+    isfigures=isfigures,
+    savefigpath=savefigpath,
+)
 
 ### ----- write thermodynamics binaries ----- ###
 thermodyngen = thermogen.SimpleThermo2DFlowField(
-    configfile,
-    constsfile,
+    config_filename,
+    constants_filename,
     PRESS0,
     THETA,
     qvapmethod,
@@ -196,13 +196,20 @@ thermodyngen = thermogen.SimpleThermo2DFlowField(
     Xlength,
     VVEL,
 )
-cthermo.write_thermodynamics_binary(
-    thermofiles, thermodyngen, configfile, constsfile, gridfile
+geninitconds.generate_thermodynamics_conditions_fromfile(
+    thermofiles,
+    thermodyngen,
+    config_filename,
+    constants_filename,
+    grid_filename,
+    isfigures=isfigures,
+    savefigpath=savefigpath,
 )
 
-
 ### ----- write initial superdroplets binary ----- ###
-nsupers = crdgens.nsupers_at_domain_base(gridfile, constsfile, npergbx, zlim)
+nsupers = crdgens.nsupers_at_domain_base(
+    grid_filename, constants_filename, npergbx, zlim
+)
 coord3gen = crdgens.SampleCoordGen(True)  # sample coord3 randomly
 coord1gen = crdgens.SampleCoordGen(True)  # sample coord1 randomly
 coord2gen = crdgens.SampleCoordGen(True)  # sample coord2 randomly
@@ -213,26 +220,18 @@ dryradiigen = dryrgens.ScaledRadiiGen(1.0)
 initattrsgen = attrsgen.AttrsGenerator(
     radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
 )
-csupers.write_initsuperdrops_binary(
-    initSDsfile, initattrsgen, configfile, constsfile, gridfile, nsupers, numconc
+geninitconds.generate_initial_superdroplet_conditions(
+    initattrsgen,
+    initsupers_filename,
+    config_filename,
+    constants_filename,
+    grid_filename,
+    nsupers,
+    numconc,
+    isfigures=isfigures,
+    savefigpath=savefigpath,
+    gbxs2plt=SDgbxs2plt,
 )
-
-### ----- show (and save) plots of binary file data ----- ###
-if isfigures[0]:
-    rgrid.plot_gridboxboundaries(constsfile, gridfile, savefigpath, isfigures[1])
-    rthermo.plot_thermodynamics(
-        constsfile, configfile, gridfile, thermofiles, savefigpath, isfigures[1]
-    )
-    rsupers.plot_initGBxs_distribs(
-        configfile,
-        constsfile,
-        initSDsfile,
-        gridfile,
-        savefigpath,
-        isfigures[1],
-        SDgbxs2plt,
-    )
-    plt.close()
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -244,8 +243,8 @@ for n in range(nruns):
     os.chdir(path2build)
     shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
     print("Executable: " + str(executable))
-    print("Config file: " + str(configfile))
-    subprocess.run([executable, configfile])
+    print("Config file: " + str(config_filename))
+    subprocess.run([executable, config_filename])
 
     # copy speed results to new file
     print("--- reading runtime statistics ---")

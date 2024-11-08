@@ -25,13 +25,13 @@ import numpy as np
 from ..gbxboundariesbinary_src import read_gbxboundaries as rgrid
 
 
-def nsupers_at_domain_base(gridfile, constsfile, nsupers, zlim):
+def nsupers_at_domain_base(grid_filename, constants_filename, nsupers, zlim):
     """create dict for sd initialisation where nsupers
     only occur in gridboxes with upper bound <= zlim"""
 
-    COORD0 = rgrid.get_COORD0_from_constsfile(constsfile)
+    COORD0 = rgrid.get_COORD0_from_constsfile(constants_filename)
     gbxbounds, ndims = rgrid.read_dimless_gbxboundaries_binary(
-        gridfile, COORD0=COORD0, return_ndims=True, isprint=False
+        grid_filename, COORD0=COORD0, return_ndims=True, isprint=False
     )
     nsupersdict = {}
     for ii in gbxbounds.keys():
@@ -44,13 +44,13 @@ def nsupers_at_domain_base(gridfile, constsfile, nsupers, zlim):
     return nsupersdict
 
 
-def nsupers_at_domain_top(gridfile, constsfile, nsupers, zlim):
+def nsupers_at_domain_top(grid_filename, constants_filename, nsupers, zlim):
     """create dict for sd initialisation where nsupers
     only occur in gridboxes with lower bound >= zlim"""
 
-    COORD0 = rgrid.get_COORD0_from_constsfile(constsfile)
+    COORD0 = rgrid.get_COORD0_from_constsfile(constants_filename)
     gbxbounds, ndims = rgrid.read_dimless_gbxboundaries_binary(
-        gridfile, COORD0=COORD0, return_ndims=True, isprint=False
+        grid_filename, COORD0=COORD0, return_ndims=True, isprint=False
     )
     nsupersdict = {}
     for ii in gbxbounds.keys():
