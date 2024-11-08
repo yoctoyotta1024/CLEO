@@ -2,6 +2,20 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.27.0](https://github.com/yoctoyotta1024/CLEO/compare/8fe37bd7e095b58363a798381730f706aaace06a..v0.27.0) - 2024-11-08
+#### Features
+- new bash to submit slurm for all examples - ([9443af2](https://github.com/yoctoyotta1024/CLEO/commit/9443af2827dd49936fdd20f224a648f51e823d2b)) - clara.bayley
+- new pysd module to help with creating and ploting initial condition binary files - ([5f3949c](https://github.com/yoctoyotta1024/CLEO/commit/5f3949cc5666a6c7d8a65e92ffa5d7be66716ceb)) - clara.bayley
+#### Miscellaneous Chores
+- formatting - ([49959bd](https://github.com/yoctoyotta1024/CLEO/commit/49959bdbf33654d2b0d79cb9bf94d14f1a82ed72)) - clara.bayley
+#### Refactoring
+- use new python module - ([818bd3b](https://github.com/yoctoyotta1024/CLEO/commit/818bd3b332cc4f593258671eb0a6e8f14d5862ce)) - clara.bayley
+- seperate steps in build CI - ([198df4d](https://github.com/yoctoyotta1024/CLEO/commit/198df4d81f1a5a0c30b8e50e74c6d60b8db165c9)) - clara.bayley
+- use pathlib for Paths properly - ([83bc5dd](https://github.com/yoctoyotta1024/CLEO/commit/83bc5dd57e273da159abfc940f64b491331ad542)) - clara.bayley
+- change levante account in bash scripts - ([8fe37bd](https://github.com/yoctoyotta1024/CLEO/commit/8fe37bd7e095b58363a798381730f706aaace06a)) - clara.bayley
+
+- - -
+
 ## [v0.26.0](https://github.com/yoctoyotta1024/CLEO/compare/d720d22535e3698bf5066e31f4d41c4d53cc3faa..v0.26.0) - 2024-09-11
 #### Bug Fixes
 - change executable names in CI - ([642b5e1](https://github.com/yoctoyotta1024/CLEO/commit/642b5e1295447dd610c016b335b1a1169e19f458)) - clara.bayley
