@@ -72,7 +72,7 @@ struct Config {
 
   size_t get_maxchunk() const { return required.outputdata.maxchunk; }
 
-  size_t get_max_nsupers() const { return required.domain.maxnsupers; }
+  size_t get_maxnsupers() const { return required.domain.maxnsupers; }
 
   unsigned int get_nspacedims() const { return required.domain.nspacedims; }
 

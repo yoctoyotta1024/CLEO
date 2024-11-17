@@ -64,7 +64,7 @@ struct OptionalConfigParams {
     size_t maxniters = NaNVals::sizet(); /**< maximum no. iterations of Newton Raphson Method */
     double MINSUBTSTEP = NaNVals::dbl(); /**< minimum subtimestep in cases of substepping [s] */
     double rtol = NaNVals::dbl();        /**< relative tolerance for implicit Euler integration */
-    double atol = NaNVals::dbl();        /**< abolute tolerance for implicit Euler integration */
+    double atol = NaNVals::dbl();        /**< absolute tolerance for implicit Euler integration */
   } condensation;
 
   struct BreakupParams {

@@ -138,7 +138,7 @@ geninitconds.generate_thermodynamics_conditions_fromfile(
     config_filename,
     constants_filename,
     grid_filename,
-    isfigures=[False, False],
-    savefigpath=False,
+    isfigures=isfigures,
+    savefigpath=savefigpath,
 )
 ### ---------------------------------------------------------------- ###

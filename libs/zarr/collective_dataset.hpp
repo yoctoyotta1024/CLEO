@@ -30,20 +30,21 @@
 // collective_dataset.hpp
 #ifndef LIBS_ZARR_DATASET_HPP_
 
+#include <mpi.h>
+
 #include <Kokkos_Core.hpp>
+#include <iostream>
 #include <memory>
+#include <numeric>
 #include <string>
 #include <string_view>
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <numeric>
-#include <iostream>
-#include <mpi.h>
 
+#include "cartesiandomain/cartesian_decomposition.hpp"
 #include "zarr/xarray_zarr_array.hpp"
 #include "zarr/zarr_group.hpp"
-#include "cartesiandomain/cartesian_decomposition.hpp"
 
 /**
  * @brief A class representing a dataset made from a Zarr group (i.e. collection of Zarr arrays)
@@ -80,8 +81,8 @@ class Dataset {
 
     std::vector<size_t> distributed_sizes(comm_size);
 
-    MPI_Gather(&(dim.second), 1, MPI_UNSIGNED_LONG,
-               distributed_sizes.data(), 1, MPI_UNSIGNED_LONG, 0, MPI_COMM_WORLD);
+    MPI_Gather(&(dim.second), 1, MPI_UNSIGNED_LONG, distributed_sizes.data(), 1, MPI_UNSIGNED_LONG,
+               0, MPI_COMM_WORLD);
 
     // For process 0, save the distributed sizes of all processes to avoid extra
     // exchanges in each write
@@ -100,22 +101,22 @@ class Dataset {
    * @param dimnames The names of the dimensions related to the array
    */
   template <typename T>
-  Kokkos::View<T*, HostSpace> collect_global_data(Kokkos::View<T*, HostSpace> data,
-                                                  std::vector<std::string> dimnames) const {
+  Kokkos::View<T *, HostSpace> collect_global_data(Kokkos::View<T *, HostSpace> data,
+                                                   std::vector<std::string> dimnames) const {
     size_t innermost_dimension = dimnames.size() - 1;
     if (my_rank == 0) {
       std::vector<int> receive_displacements(comm_size, 0), receive_counts(comm_size, 0);
       size_t global_size = datasetdims.at(dimnames[innermost_dimension]);
-      Kokkos::View<T*, HostSpace> global_data("global_output_data", global_size);
+      Kokkos::View<T *, HostSpace> global_data("global_output_data", global_size);
 
       // Calculate the receive counts and displacements to receive the data
       for (int i = 0; i < comm_size; i++) {
-        receive_counts[i] = static_cast<int>
-                            (distributed_datasetdims.at(dimnames[innermost_dimension])[i]);
+        receive_counts[i] =
+            static_cast<int>(distributed_datasetdims.at(dimnames[innermost_dimension])[i]);
         if (i > 0)
-          receive_displacements[i] = receive_displacements[i - 1] +
-                                     distributed_datasetdims
-                                     .at(dimnames[innermost_dimension])[i - 1];
+          receive_displacements[i] =
+              receive_displacements[i - 1] +
+              distributed_datasetdims.at(dimnames[innermost_dimension])[i - 1];
       }
 
       // If the exchanges are for gridbox data extra actions are needed
@@ -123,7 +124,7 @@ class Dataset {
         // If there is only the gridbox dimension, then this is the gridbox
         // index array and can be trivially constructed without exchanges
         if (dimnames.size() == 1) {
-          for (size_t i = 0; i < decomposition.get_total_global_gridboxes(); i++)
+          for (size_t i = 0; i < decomposition.get_total_global_ngridboxes(); i++)
             global_data[i] = i;
         } else {
           // All other gridbox-defined data must be correctly ordered to follow
@@ -132,8 +133,8 @@ class Dataset {
           collect_global_array(receive_target.data(), data.data(),
                                distributed_datasetdims.at(dimnames[innermost_dimension])[0],
                                receive_counts.data(), receive_displacements.data());
-          correct_gridbox_data(dimnames[innermost_dimension],
-                               global_data.data(), receive_target.data());
+          correct_gridbox_data(dimnames[innermost_dimension], global_data.data(),
+                               receive_target.data());
         }
       } else {
         collect_global_array(global_data.data(), data.data(),
@@ -145,11 +146,10 @@ class Dataset {
     } else {
       // Don't perform an exchange for the gridbox index array
       if (dimnames.size() != 1)
-        collect_global_array(nullptr, data.data(),
-                             datasetdims.at(dimnames[innermost_dimension]),
+        collect_global_array(nullptr, data.data(), datasetdims.at(dimnames[innermost_dimension]),
                              nullptr, nullptr);
 
-      return Kokkos::View<T*, HostSpace>();
+      return Kokkos::View<T *, HostSpace>();
     }
   }
 
@@ -166,12 +166,10 @@ class Dataset {
    * gridbox order
    */
   template <typename T>
-  void correct_gridbox_data(std::string dimension, T * target, T * source) const {
+  void correct_gridbox_data(std::string dimension, T *target, T *source) const {
     size_t offset = 0;
     for (int process = 0; process < comm_size; process++) {
-      for (size_t i = 0;
-           i < distributed_datasetdims.at(dimension)[process];
-           i++) {
+      for (size_t i = 0; i < distributed_datasetdims.at(dimension)[process]; i++) {
         size_t global_gridbox_index = decomposition.local_to_global_gridbox_index(i, process);
         target[global_gridbox_index] = source[offset + i];
       }
@@ -182,30 +180,28 @@ class Dataset {
   /**
    * @brief Wrapper for MPI gatherv call for a float array
    */
-  void collect_global_array(float * target, float * local_source, int local_size,
-                             int * receive_counts, int * receive_displacements) const {
-    MPI_Gatherv(local_source, local_size, MPI_FLOAT,
-                target, receive_counts, receive_displacements, MPI_FLOAT, 0, MPI_COMM_WORLD);
+  void collect_global_array(float *target, float *local_source, int local_size, int *receive_counts,
+                            int *receive_displacements) const {
+    MPI_Gatherv(local_source, local_size, MPI_FLOAT, target, receive_counts, receive_displacements,
+                MPI_FLOAT, 0, MPI_COMM_WORLD);
   }
 
   /**
    * @brief Wrapper for MPI gatherv call for a unsigned int array
    */
-  void collect_global_array(unsigned int * target, unsigned int * local_source, int local_size,
-                             int * receive_counts, int * receive_displacements) const {
-    MPI_Gatherv(local_source, local_size, MPI_UNSIGNED,
-                target, receive_counts, receive_displacements, MPI_UNSIGNED, 0, MPI_COMM_WORLD);
+  void collect_global_array(unsigned int *target, unsigned int *local_source, int local_size,
+                            int *receive_counts, int *receive_displacements) const {
+    MPI_Gatherv(local_source, local_size, MPI_UNSIGNED, target, receive_counts,
+                receive_displacements, MPI_UNSIGNED, 0, MPI_COMM_WORLD);
   }
 
   /**
    * @brief Wrapper for MPI gatherv call for a unsigned int array
    */
-  void collect_global_array(size_t * target, size_t * local_source,
-                            int local_size, int * receive_counts,
-                            int * receive_displacements) const {
-    MPI_Gatherv(local_source, local_size, MPI_UNSIGNED_LONG,
-                target, receive_counts, receive_displacements,
-                MPI_UNSIGNED_LONG, 0, MPI_COMM_WORLD);
+  void collect_global_array(size_t *target, size_t *local_source, int local_size,
+                            int *receive_counts, int *receive_displacements) const {
+    MPI_Gatherv(local_source, local_size, MPI_UNSIGNED_LONG, target, receive_counts,
+                receive_displacements, MPI_UNSIGNED_LONG, 0, MPI_COMM_WORLD);
   }
 
   /**
@@ -235,14 +231,13 @@ class Dataset {
    *
    * @param store The store object associated with the Dataset.
    */
-  explicit Dataset(Store &store) :
-        group(store), datasetdims() {
+  explicit Dataset(Store &store) : group(store), datasetdims() {
     store[".zattrs"] =
         "{\n"
         "  \"creator\": \"Clara Bayley\",\n"
         "  \"title\": \"Dataset from CLEO is Xarray and NetCDF compatible Zarr Group of Arrays\""
         "\n}";
-        global_superdroplet_ordering = std::make_shared<std::vector<unsigned int>>();
+    global_superdroplet_ordering = std::make_shared<std::vector<unsigned int>>();
   }
 
   /**
@@ -252,7 +247,6 @@ class Dataset {
    * @return The size of (i.e. number of elements along) the dimension.
    */
   size_t get_dimension(const std::string &dimname) const { return datasetdims.at(dimname); }
-
 
   /**
    * @brief Sets the size of an existing dimension in the dataset.
@@ -266,8 +260,8 @@ class Dataset {
     // The time dimension has the global size in all processes and therefore
     // should not be accumulated
     if (my_rank == 0 && dim.first != "time")
-        dim_size = std::accumulate(distributed_datasetdims.at(dim.first).begin(),
-                                   distributed_datasetdims.at(dim.first).end(), 0);
+      dim_size = std::accumulate(distributed_datasetdims.at(dim.first).begin(),
+                                 distributed_datasetdims.at(dim.first).end(), 0);
 
     datasetdims.at(dim.first) = dim_size;
   }
@@ -386,8 +380,7 @@ class Dataset {
    */
   template <typename T>
   void write_arrayshape(XarrayZarrArray<Store, T> &xzarr) const {
-    if (my_rank == 0)
-      xzarr.write_arrayshape(datasetdims);
+    if (my_rank == 0) xzarr.write_arrayshape(datasetdims);
   }
 
   /**
@@ -399,8 +392,7 @@ class Dataset {
    */
   template <typename T>
   void write_arrayshape(const std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr) const {
-    if (my_rank == 0)
-      xzarr_ptr->write_arrayshape(datasetdims);
+    if (my_rank == 0) xzarr_ptr->write_arrayshape(datasetdims);
   }
 
   /**
@@ -411,8 +403,7 @@ class Dataset {
    */
   template <typename T>
   void write_ragged_arrayshape(XarrayZarrArray<Store, T> &xzarr) const {
-    if (my_rank == 0)
-      xzarr.write_ragged_arrayshape();
+    if (my_rank == 0) xzarr.write_ragged_arrayshape();
   }
 
   /**
@@ -454,8 +445,8 @@ class Dataset {
                       const typename Buffer<T>::viewh_buffer h_data) const {
     auto global_data = collect_global_data(h_data, xzarr_ptr->get_dimnames());
     if (my_rank == 0) {
-        xzarr_ptr->write_to_array(global_data);
-        xzarr_ptr->write_arrayshape(datasetdims);
+      xzarr_ptr->write_to_array(global_data);
+      xzarr_ptr->write_arrayshape(datasetdims);
     }
   }
 
@@ -506,18 +497,17 @@ class Dataset {
     // Since there is no defined dimensions for ragged arrays collect the array sizes directly
     MPI_Gather(&local_size, 1, MPI_INT, distributed_sizes.data(), 1, MPI_INT, 0, MPI_COMM_WORLD);
     int global_size = std::accumulate(distributed_sizes.begin(), distributed_sizes.end(), 0);
-    Kokkos::View<T*, HostSpace> global_data("global_output_data", global_size);
+    Kokkos::View<T *, HostSpace> global_data("global_output_data", global_size);
 
     // Calculate the receive counts and displacements (meaningful only for process 0)
     for (int i = 0; i < comm_size; i++) {
       receive_counts[i] = distributed_sizes[i];
-      if (i > 0)
-        receive_displacements[i] = receive_displacements[i - 1] + distributed_sizes[i - 1];
+      if (i > 0) receive_displacements[i] = receive_displacements[i - 1] + distributed_sizes[i - 1];
     }
 
     // Collect the global data
-    collect_global_array(global_data.data(), h_data.data(), h_data.extent(0),
-                         receive_counts.data(), receive_displacements.data());
+    collect_global_array(global_data.data(), h_data.data(), h_data.extent(0), receive_counts.data(),
+                         receive_displacements.data());
 
     // IMPORTANT: In order to write the data correctly this function requires a
     // global superdroplet ordering. This is constructed based on the
@@ -531,7 +521,7 @@ class Dataset {
           global_superdroplet_ordering.get()->at(global_data[i]) = i;
       }
       // Correctly orders the data based on the global superdroplet ordering
-      Kokkos::View<T*, HostSpace> global_write_data("global_write_data", global_size);
+      Kokkos::View<T *, HostSpace> global_write_data("global_write_data", global_size);
       for (size_t i = 0; i < global_data.extent(0); i++)
         global_write_data[i] = global_data[global_superdroplet_ordering.get()->at(i)];
 

@@ -121,9 +121,8 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
 
   const Observer auto obs2 = GbxindexObserver(dataset, maxchunk, ngbxs);
 
-  const Observer auto obs3 = StateObserver(obsstep, dataset, maxchunk,
-                                           gbxmaps.get_domain_decomposition()
-                                                  .get_total_global_gridboxes());
+  const Observer auto obs3 =
+      StateObserver(obsstep, dataset, maxchunk, gbxmaps.get_total_global_ngridboxes());
 
   const Observer auto obssd = create_superdrops_observer(obsstep, dataset, maxchunk);
 
@@ -165,7 +164,7 @@ int main(int argc, char *argv[]) {
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
     const SDMMethods sdm(create_sdm(config, tsteps, dataset));
     dataset.set_decomposition(sdm.gbxmaps.get_domain_decomposition());
-    dataset.set_max_superdroplets(config.get_max_nsupers());
+    dataset.set_max_superdroplets(config.get_maxnsupers());
 
     /* Initial conditions for CLEO run */
     const InitialConditions auto initconds = create_initconds(config, sdm.gbxmaps);

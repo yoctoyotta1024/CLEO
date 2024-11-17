@@ -29,12 +29,12 @@
 #include <string>
 #include <vector>
 
+#include "cartesiandomain/cartesianmaps.hpp"
 #include "initialise/init_all_supers_from_binary.hpp"
 #include "initialise/initialconditions.hpp"
-#include "initialise/config.hpp"
+#include "initialise/optional_config_params.hpp"
 #include "initialise/readbinary.hpp"
 #include "superdrops/superdrop.hpp"
-#include "cartesiandomain/cartesianmaps.hpp"
 
 /* struct containing functions which return data for the initial conditions needed to create
 superdroplets e.g. via the CreateSupers struct */
@@ -44,7 +44,7 @@ struct InitSupersFromBinary {
   size_t initnsupers; /**< initial no. of super-droplets to initialise */
   std::filesystem::path initsupers_filename; /**< filename for super-droplets' initial conditons */
   unsigned int nspacedims; /**< number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D) */
-  const CartesianMaps & gbxmaps;
+  const CartesianMaps &gbxmaps;
 
   /* returns InitSupersData created by reading some data from a binary file and
   filling the rest with un-initialised super-droplets */
@@ -66,7 +66,7 @@ struct InitSupersFromBinary {
   /* constructor ensures the number of super-droplets to intialise is >= maxiumum number of
    * superdrops*/
   explicit InitSupersFromBinary(const OptionalConfigParams::InitSupersFromBinaryParams &config,
-                                const CartesianMaps & gbxmaps)
+                                const CartesianMaps &gbxmaps)
       : maxnsupers(config.maxnsupers),
         initnsupers(config.initnsupers),
         initsupers_filename(config.initsupers_filename),

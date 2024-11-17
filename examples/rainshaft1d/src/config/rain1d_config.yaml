@@ -16,7 +16,7 @@
 # -----
 # File Description:
 # Configuration file for CLEO 1-D rainshaft example with constant thermodynamics.
-# Note: The inital superdroplets data read from file "initsupers_filename" can be made with
+# Note: The initial superdroplets data read from file "initsupers_filename" can be made with
 # CLEO's pySD module (see Python script "create_initsuperdropsbinary_script.py" for usage).
 # Likewise the "grid_filename" can be made using pySD (see "create_gbxboundariesbinary_script.py"),
 # and so can the thermodynamics files when using coupled thermodynamics "fromfile".
@@ -59,7 +59,7 @@ microphysics:
     maxniters : 50                                        # maximum no. iterations of Newton Raphson Method
     MINSUBTSTEP : 0.001                                   # minimum subtimestep in cases of substepping [s]
     rtol : 0.0                                               # relative tolerance for implicit Euler integration
-    atol : 0.01                                              # abolute tolerance for implicit Euler integration
+    atol : 0.01                                              # absolute tolerance for implicit Euler integration
 
 ### Coupled Dynamics Parameters ###
 coupled_dynamics:
