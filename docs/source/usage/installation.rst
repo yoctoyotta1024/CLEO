@@ -17,8 +17,8 @@ we suggest in our environment.yml file, e.g. using Conda:
 
 .. code-block:: console
 
-  $ conda env create --file=environment.yml
-  $ conda activate cleoenv
+  $ micromamba create --file=environment.yml
+  $ micromamba activate cleoenv
 
 
 Finally we suggest you use pre-commit. You can install our hooks via:
