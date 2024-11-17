@@ -16,6 +16,9 @@
 ### -------------- PLEASE NOTE: this script assumes you have --------------- ###
 ### -------- already built CLEO and compiled the desired executable -------- ###
 ### ------------------------------------------------------------------------ ###
+# TODO(CB): fix best practise for loading modules/spack/environment
+module purge
+spack unload --all
 
 executable=$1   # get from command line argument
 configfile=$2   # get from command line argument
@@ -30,7 +33,6 @@ else
   export OMP_PLACES=threads
 
   # TODO(all): add exports to paths required if YAC is enabled
-
   runcmd="${executable} ${configfile}"
   echo ${runcmd}
   ${runcmd}

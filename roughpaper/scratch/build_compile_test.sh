@@ -19,14 +19,17 @@
 ### ---------------------------------------------------- ###
 dobuild=$1 # == "build" or otherwise
 
-module load gcc/11.2.0-gcc-11.2.0
-module load nvhpc/23.9-gcc-11.2.0
+module purge
+spack unload --all
+module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0
+# module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0 nvhpc/23.9-gcc-11.2.0 # (CUDA)
 spack load cmake@3.23.1%gcc
-source activate /work/bm1183/m300950/mambaenvs/cleoenv
+
+gxx="/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpic++"
+gcc="/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpicc"
+
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/roughpaper/scratch/build/
-gxx="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/g++"
-gcc="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/gcc"
 ### ---------------------------------------------------- ###
 
 ### ---------------------------------------------------- ###

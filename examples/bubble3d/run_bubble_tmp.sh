@@ -36,20 +36,21 @@ then
   cd ${path2build}
 
   module purge
+  spack unload --all
   module load openmpi/4.1.2-gcc-11.2.0
   module load netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0
   spack load openblas@0.3.18%gcc@=11.2.0
 
-  ${path2CLEO}/scripts/bash/compile_cleo.sh \
-     /work/bm1183/m300950/mambaenvs/cleoenv openmp ${path2build} bubble3d
+  ${path2CLEO}/scripts/bash/compile_cleo.sh openmp ${path2build} bubble3d
 
 elif [ "${action}" == "inputfiles" ]
 then
   cp ${icon_grid_file} ${icon_grid_file_copy}
   cp ${icon_data_file} ${icon_data_file_copy}
 
-  source activate /work/bm1183/m300950/mambaenvs/cleoenv
-  /work/bm1183/m300950/mambaenvs/cleoenv/bin/python ${path2CLEO}/examples/bubble3d/bubble3d_inputfiles.py \
+  cleoenv=/work/bm1183/m300950/mambaenvs/cleoenv
+  python=${cleoenv}/bin/python3
+  ${python} ${path2CLEO}/examples/bubble3d/bubble3d_inputfiles.py \
    ${path2CLEO} \
    ${path2build} \
    ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
@@ -63,6 +64,7 @@ then
   cd ${path2build}
 
   module purge
+  spack unload --all
   # note version of python must match the YAC python bindings (e.g. module load python3/2022.01-gcc-11.2.0)
   module load openmpi/4.1.2-gcc-11.2.0 # same mpi as loaded for the build
   spack load py-netcdf4

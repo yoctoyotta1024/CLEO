@@ -33,9 +33,6 @@ script_args="$7"
 cleoenv=/work/bm1183/m300950/mambaenvs/cleoenv
 python=${cleoenv}/bin/python3
 yacyaxtroot=/work/bm1183/m300950/yac
-spack load cmake@3.23.1%gcc
-module load python3/2022.01-gcc-11.2.0
-source activate ${cleoenv}
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
@@ -57,8 +54,7 @@ ${path2CLEO}/scripts/bash/build_cleo.sh ${buildtype} ${path2CLEO} ${path2build} 
 ### ---------------------------------------------------- ###
 
 ### --------- compile executable(s) from scratch ---------- ###
-cd ${path2build} && make
-${path2CLEO}/scripts/bash/compile_cleo.sh ${cleoenv} ${buildtype} ${path2build} "${executables}"
+${path2CLEO}/scripts/bash/compile_cleo.sh ${buildtype} ${path2build} "${executables}"
 ### ---------------------------------------------------- ###
 
 ### --------- run model through Python script ---------- ###

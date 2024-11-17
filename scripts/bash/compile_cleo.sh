@@ -17,22 +17,24 @@
 ### --------------- have already built CLEO in "path2build" ---------------- ###
 ### -----------------------  directory using cmake  ------------------------ ###
 ### ------------------------------------------------------------------------ ###
+# TODO(CB): fix best practise for loading modules/spack/environment
+module purge
+spack unload --all
 
-cleoenv=$1        # get from command line argument
-buildtype=$2      # get from command line argument
-path2build=$3     # get from command line argument
-executables="$4"  # get from command line argument
+buildtype=$1      # get from command line argument
+path2build=$2     # get from command line argument
+executables="$3"  # get from command line argument
 
-spack load cmake@3.23.1%gcc
-module load gcc/11.2.0-gcc-11.2.0
-# source activate ${cleoenv} # TODO(CB): fix best practise
 
 if [ "${buildtype}" != "serial" ] && [ "${buildtype}" != "openmp" ] && [ "${buildtype}" != "cuda" ];
 then
   echo "please specify the build type as 'serial', 'openmp' or 'cuda'"
 else
-  # load nvhpc compilers if compiling cuda build
+  module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0 # use gcc mpi wrappers
+  spack load cmake@3.23.1%gcc
+
   if [[ "${buildtype}" == "cuda" ]]
+  # load nvhpc compilers if compiling cuda build
   then
     module load nvhpc/23.9-gcc-11.2.0
   fi

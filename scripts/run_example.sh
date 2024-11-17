@@ -34,6 +34,10 @@ else
     then
     ${sbatch} ${examplesdir}/boxmodelcollisions/shima2009.sh
 
+  elif  [ "${example}" == "breakup" ]
+    then
+    ${sbatch} ${examplesdir}/boxmodelcollisions/breakup.sh
+
   elif  [ "${example}" == "constthermo2d" ]
     then
     ${sbatch} ${examplesdir}/constthermo2d/constthermo2d.sh
@@ -56,7 +60,7 @@ else
 
   elif  [ "${example}" == "bubble3d" ]
   then
-    ${sbatch} ${examplesdir}/bubble3d/bubble3d.sh
+    ${sbatch} ${examplesdir}/bubble3d/bubble3d.sh # WIP
 
   else
     echo "'${example}' is not an example"

@@ -16,18 +16,20 @@
 ### --------- and optionally your environment, path to CLEO and the -------- ###
 ### ----------------------- desired build directory  ----------------------- ###
 ### ------------------------------------------------------------------------ ###
-module load gcc/11.2.0-gcc-11.2.0
+# TODO(CB): fix best practise for loading modules/spack/environment
+module purge
+spack unload --all
+module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0
 spack load cmake@3.23.1%gcc
-gxx="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/g++"
-gcc="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/gcc"
+gxx="/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpic++"
+gcc="/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpicc"
 
 path2CLEO=$1    # required
 path2build=$2   # required
 enableyac=$3    # required
 yacyaxtroot=$4      # required if enableyac=true
 
-yac_openmpi=openmpi/4.1.2-gcc-11.2.0 # required if enableyac=true (must match gcc)
-yac_netcdf=netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0 # required if enableyac=true (must match gcc & openmp)
+yac_netcdf=netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0 # required if enableyac=true (must match gcc & openmpi)
 yac_openblas=openblas@0.3.18%gcc@=11.2.0 # required if enableyac=true (must match gcc)
 ### ------------------------------------------------------------------------ ###
 
@@ -64,7 +66,7 @@ then
     yacflags="-DENABLE_YAC_COUPLING=OFF"
 
 else
-    module load ${yac_openmpi} ${yac_netcdf}
+    module load ${yac_netcdf}
     spack load ${yac_openblas}
     yacflags="-DENABLE_YAC_COUPLING=ON -DYAXT_ROOT=${yacyaxtroot}/yaxt -DYAC_ROOT=${yacyaxtroot}/yac"
     yacmodule="${path2CLEO}/libs/coupldyn_yac/cmake"
