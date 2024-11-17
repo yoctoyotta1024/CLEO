@@ -25,6 +25,7 @@
 #include <iostream>
 
 #include "./cleotypes_sizes.hpp"
+#include "zarr/dataset.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
 #include "cartesiandomain/null_boundary_conditions.hpp"
@@ -54,7 +55,6 @@
 #include "runcleo/sdmmethods.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
-#include "zarr/dataset.hpp"
 #include "zarr/fsstore.hpp"
 
 template <typename Store>
@@ -172,7 +172,17 @@ inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset<St
 }
 
 int main(int argc, char *argv[]) {
-  print_type_sizes(argc, argv);
+  // print_type_sizes(argc, argv);
+
+  MPI_Init(&argc, &argv);
+
+  int comm_size;
+  MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
+  if (comm_size > 1) {
+    std::cout << "ERROR: The current example is not prepared"
+              << " to be run with more than one MPI process" << std::endl;
+    MPI_Abort(MPI_COMM_WORLD, 1);
+  }
 
   Kokkos::Timer kokkostimer;
 
@@ -209,6 +219,8 @@ int main(int argc, char *argv[]) {
   std::cout << "-------------------------------\n"
                "Total Program Duration: "
             << ttot << "s \n-------------------------------\n";
+
+  MPI_Finalize();
 
   return 0;
 }

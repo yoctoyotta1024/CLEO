@@ -30,6 +30,7 @@
 #include <stdexcept>
 #include <string_view>
 
+#include "zarr/dataset.hpp"
 #include "cartesiandomain/add_supers_at_domain_top.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"
@@ -74,7 +75,6 @@
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/terminalvelocity.hpp"
-#include "zarr/dataset.hpp"
 #include "zarr/fsstore.hpp"
 
 inline CoupledDynamics auto create_coupldyn(const Config &config, const CartesianMaps &gbxmaps,
@@ -88,9 +88,9 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
   return FromFileDynamics(config.get_fromfiledynamics(), couplstep, ndims, nsteps);
 }
 
-inline InitialConditions auto create_initconds(const Config &config) {
+inline InitialConditions auto create_initconds(const Config &config, const CartesianMaps &gbxmaps) {
   // const InitAllSupersFromBinary initsupers(config.get_initsupersfrombinary());
-  const InitSupersFromBinary initsupers(config.get_initsupersfrombinary());
+  const InitSupersFromBinary initsupers(config.get_initsupersfrombinary(), gbxmaps);
   const InitGbxsNull initgbxs(config.get_ngbxs());
 
   return InitConds(initsupers, initgbxs);
