@@ -62,7 +62,6 @@ struct CartesianMaps {
   kokkos_uintmap to_forward_coord2nghbr;
 
   /* additional gridbox / domain information */
-  unsigned int total_local_gridboxes;
   kokkos_dblmaph to_area;    // map from gbxindex to horizontal (x-y planar) area of gridbox on host
   kokkos_dblmaph to_volume;  // map from gbxindex to volume of gridbox on host
   viewd_ndims ndims;  // dimensions (ie. no. gridboxes) in [coord3, coord1, coord2] directions
@@ -82,7 +81,6 @@ struct CartesianMaps {
         to_forward_coord1nghbr(kokkos_uintmap(ngbxs)),
         to_back_coord2nghbr(kokkos_uintmap(ngbxs)),
         to_forward_coord2nghbr(kokkos_uintmap(ngbxs)),
-        total_local_gridboxes(ngbxs),
         to_area(kokkos_dblmaph(ngbxs)),
         to_volume(kokkos_dblmaph(ngbxs)),
         ndims("ndims") {}
@@ -175,18 +173,15 @@ struct CartesianMaps {
   }
 
   KOKKOS_INLINE_FUNCTION
-  void set_total_local_gridboxes(const unsigned int total_local_gridboxes) {
-        this->total_local_gridboxes = total_local_gridboxes;
-  }
-
-  KOKKOS_INLINE_FUNCTION
   size_t get_total_local_gridboxes() const {
     return domain_decomposition.get_total_local_gridboxes();
   }
 
-  void create_decomposition(std::vector<size_t> ndims,
-                            double gridbox_z_size,
-                            double gridbox_x_size,
+  size_t get_total_global_ngridboxes() const {
+    return domain_decomposition.get_total_global_ngridboxes();
+  }
+
+  void create_decomposition(std::vector<size_t> ndims, double gridbox_z_size, double gridbox_x_size,
                             double gridbox_y_size) {
     domain_decomposition.create(ndims, gridbox_z_size, gridbox_x_size, gridbox_y_size);
   }
@@ -321,9 +316,7 @@ struct CartesianMaps {
     this->domain_decomposition = domain_decomposition;
   }
 
-  const CartesianDecomposition & get_domain_decomposition() const {
-    return domain_decomposition;
-  }
+  const CartesianDecomposition& get_domain_decomposition() const { return domain_decomposition; }
 };
 
 #endif  // LIBS_CARTESIANDOMAIN_CARTESIANMAPS_HPP_
