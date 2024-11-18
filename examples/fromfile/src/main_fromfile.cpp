@@ -27,12 +27,11 @@
 #include <iostream>
 #include <stdexcept>
 #include <string_view>
-#include "mpi.h"
 
+#include "cartesiandomain/cartesian_decomposition.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
-#include "cartesiandomain/cartesian_decomposition.hpp"
 #include "cartesiandomain/null_boundary_conditions.hpp"
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
 #include "coupldyn_fromfile/fromfilecomms.hpp"
@@ -42,6 +41,7 @@
 #include "initialise/initgbxsnull.hpp"
 #include "initialise/initialconditions.hpp"
 #include "initialise/timesteps.hpp"
+#include "mpi.h"
 #include "observers/gbxindex_observer.hpp"
 #include "observers/observers.hpp"
 #include "observers/state_observer.hpp"
@@ -174,7 +174,7 @@ int main(int argc, char *argv[]) {
         create_coupldyn(config, sdm.gbxmaps, tsteps.get_couplstep(), tsteps.get_t_end()));
 
     /* coupling between coupldyn and SDM */
-    const CouplingComms<FromFileDynamics> auto comms = FromFileComms{};
+    const CouplingComms<CartesianMaps, FromFileDynamics> auto comms = FromFileComms{};
 
     /* Run CLEO (SDM coupled to dynamics solver) */
     const RunCLEO runcleo(sdm, coupldyn, comms);

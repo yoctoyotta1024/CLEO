@@ -25,19 +25,18 @@
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
-#include <numeric>
 #include <iostream>
-#include "mpi.h"
+#include <numeric>
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/sortsupers.hpp"
+#include "mpi.h"
 #include "superdrops/motion.hpp"
 #include "superdrops/sdmmonitor.hpp"
 #include "superdrops/superdrop.hpp"
-#include "cartesiandomain/cartesian_decomposition.hpp"
 
 /*
 struct for functionality to move superdroplets throughtout
@@ -104,13 +103,12 @@ struct MoveSupersInDomain {
     when in serial
     _Note:_ totsupers is view of all superdrops (both in and out of bounds of domain).
     */
-    void move_supers_between_gridboxes(const GbxMaps &gbxmaps,
-                                       const viewd_gbx d_gbxs,
+    void move_supers_between_gridboxes(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
                                        const viewd_supers totsupers) const {
       sort_supers(totsupers);
 
       const size_t ngbxs(d_gbxs.extent(0));
-      const CartesianDecomposition domain_decomposition = gbxmaps.get_domain_decomposition();
+      const auto domain_decomposition = gbxmaps.get_domain_decomposition();
 
       int comm_size, my_rank;
       MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
@@ -135,9 +133,9 @@ struct MoveSupersInDomain {
 
       size_t total_superdrops_to_send = 0;
       size_t total_superdrops_to_recv = 0;
-      size_t local_superdrops         = 0;
-      size_t superdrop_index          = totsupers.extent(0) - 1;
-      Superdrop & drop                = totsupers(superdrop_index);
+      size_t local_superdrops = 0;
+      size_t superdrop_index = totsupers.extent(0) - 1;
+      Superdrop &drop = totsupers(superdrop_index);
 
       // Go through superdrops from back to front and find how many should be sent and their indices
       while (drop.get_sdgbxindex() >= ngbxs) {
@@ -178,93 +176,79 @@ struct MoveSupersInDomain {
         uint_send_counts[i] = per_process_send_superdrops[i] * 2;
         uint_recv_counts[i] = per_process_recv_superdrops[i] * 2;
         if (i > 0) {
-          uint_send_displacements[i] = uint_send_displacements[i - 1] +
-                                       uint_send_counts[i - 1];
-          uint_recv_displacements[i] = uint_recv_displacements[i - 1] +
-                                       uint_recv_counts[i - 1];
+          uint_send_displacements[i] = uint_send_displacements[i - 1] + uint_send_counts[i - 1];
+          uint_recv_displacements[i] = uint_recv_displacements[i - 1] + uint_recv_counts[i - 1];
 
-          uint64_send_displacements[i] = uint64_send_displacements[i - 1] +
-                                         per_process_send_superdrops[i - 1];
-          uint64_recv_displacements[i] = uint64_recv_displacements[i - 1] +
-                                         per_process_recv_superdrops[i - 1];
+          uint64_send_displacements[i] =
+              uint64_send_displacements[i - 1] + per_process_send_superdrops[i - 1];
+          uint64_recv_displacements[i] =
+              uint64_recv_displacements[i - 1] + per_process_recv_superdrops[i - 1];
 
-          double_send_displacements[i] = double_send_displacements[i - 1] +
-                                         double_send_counts[i - 1];
-          double_recv_displacements[i] = double_recv_displacements[i - 1] +
-                                         double_recv_counts[i - 1];
+          double_send_displacements[i] =
+              double_send_displacements[i - 1] + double_send_counts[i - 1];
+          double_recv_displacements[i] =
+              double_recv_displacements[i - 1] + double_recv_counts[i - 1];
         }
       }
 
       // Serialize the data for all superdroplets into the exchange arrays
       unsigned int send_superdrop_index = 0;
       for (int process_index = 0; process_index < comm_size; process_index++)
-        for (int superdrop = 0;
-           superdrop < per_process_send_superdrops[process_index];
-           superdrop++) {
+        for (int superdrop = 0; superdrop < per_process_send_superdrops[process_index];
+             superdrop++) {
           superdrop_index = superdrops_indices_per_process[process_index][superdrop];
-          totsupers[superdrop_index]
-                   .serialize_uint_components(superdrops_uint_send_data.begin() +
-                                              send_superdrop_index * 2);
-          totsupers[superdrop_index]
-                   .serialize_uint64_components(superdrops_uint64_send_data.begin() +
-                                                send_superdrop_index);
-          totsupers[superdrop_index]
-                   .serialize_double_components(superdrops_double_send_data.begin() +
-                                                send_superdrop_index * 5);
+          totsupers[superdrop_index].serialize_uint_components(superdrops_uint_send_data.begin() +
+                                                               send_superdrop_index * 2);
+          totsupers[superdrop_index].serialize_uint64_components(
+              superdrops_uint64_send_data.begin() + send_superdrop_index);
+          totsupers[superdrop_index].serialize_double_components(
+              superdrops_double_send_data.begin() + send_superdrop_index * 5);
           send_superdrop_index++;
         }
 
       // Exchange superdrops uint data
       MPI_Alltoallv(superdrops_uint_send_data.data(), uint_send_counts.data(),
-                    uint_send_displacements.data(), MPI_UNSIGNED,
-                    superdrops_uint_recv_data.data(), uint_recv_counts.data(),
-                    uint_recv_displacements.data(), MPI_UNSIGNED,
+                    uint_send_displacements.data(), MPI_UNSIGNED, superdrops_uint_recv_data.data(),
+                    uint_recv_counts.data(), uint_recv_displacements.data(), MPI_UNSIGNED,
                     MPI_COMM_WORLD);
 
       // Exchange superdrops uint64 data
       MPI_Alltoallv(superdrops_uint64_send_data.data(), per_process_send_superdrops.data(),
                     uint64_send_displacements.data(), MPI_UINT64_T,
                     superdrops_uint64_recv_data.data(), per_process_recv_superdrops.data(),
-                    uint64_recv_displacements.data(), MPI_UINT64_T,
-                    MPI_COMM_WORLD);
+                    uint64_recv_displacements.data(), MPI_UINT64_T, MPI_COMM_WORLD);
 
       // Exchange superdrops double data
       MPI_Alltoallv(superdrops_double_send_data.data(), double_send_counts.data(),
                     double_send_displacements.data(), MPI_DOUBLE,
                     superdrops_double_recv_data.data(), double_recv_counts.data(),
-                    double_recv_displacements.data(), MPI_DOUBLE,
-                    MPI_COMM_WORLD);
+                    double_recv_displacements.data(), MPI_DOUBLE, MPI_COMM_WORLD);
 
-      for (unsigned int i = local_superdrops;
-           i < local_superdrops + total_superdrops_to_recv;
+      for (unsigned int i = local_superdrops; i < local_superdrops + total_superdrops_to_recv;
            i++) {
         int data_offset = i - local_superdrops;
-        totsupers[i].deserialize_components(superdrops_uint_recv_data.begin()   + data_offset * 2,
+        totsupers[i].deserialize_components(superdrops_uint_recv_data.begin() + data_offset * 2,
                                             superdrops_uint64_recv_data.begin() + data_offset,
-                                            superdrops_double_recv_data.begin() +
-                                            data_offset * 5);
+                                            superdrops_double_recv_data.begin() + data_offset * 5);
 
         // Get the local gridbox index which contains the superdroplet
-        std::array<double, 3> drop_coords = {totsupers[i].get_coord3(),
-                                             totsupers[i].get_coord1(),
-                                             totsupers[i].get_coord2()};
-        unsigned int gridbox_index = domain_decomposition.get_local_bounding_gridbox(drop_coords);
+        auto drop_coords = std::array<double, 3>{
+            totsupers[i].get_coord3(), totsupers[i].get_coord1(), totsupers[i].get_coord2()};
+        const auto gbxindex = domain_decomposition.get_local_bounding_gridbox(drop_coords);
 
         // Since the coordinates have already been corrected in the sending
         // process here just the gridbox index update is necessary
-        totsupers[i].set_sdgbxindex(gridbox_index);
+        totsupers[i].set_sdgbxindex(gbxindex);
       }
 
       // Reset all remaining non-used superdroplet spots
-      for (unsigned int i = local_superdrops + total_superdrops_to_recv;
-           i < totsupers.extent(0);
+      for (unsigned int i = local_superdrops + total_superdrops_to_recv; i < totsupers.extent(0);
            i++)
         totsupers[i].set_sdgbxindex(LIMITVALUES::uintmax);
 
       /* This guard is required because currently calling sort_supers twice,
          with nothing in between, changes the results in the output */
-      if (comm_size > 1)
-        sort_supers(totsupers);
+      if (comm_size > 1) sort_supers(totsupers);
 
       Kokkos::parallel_for(
           "move_supers_between_gridboxes", TeamPolicy(ngbxs, Kokkos::AUTO()),

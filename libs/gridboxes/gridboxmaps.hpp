@@ -22,15 +22,16 @@
 #ifndef LIBS_GRIDBOXES_GRIDBOXMAPS_HPP_
 #define LIBS_GRIDBOXES_GRIDBOXMAPS_HPP_
 
-#include <concepts>
-
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
+#include <concepts>
 
 /* concept for GridboxMaps is all types that have
 correct signatues for map-like functions */
 template <typename GbxMaps>
 concept GridboxMaps = requires(GbxMaps gbxmaps, unsigned int idx) {
+  { gbxmaps.get_domain_decomposition() };
+
   { gbxmaps.maps_size() } -> std::same_as<size_t>;
 
   { gbxmaps.get_gbxarea(idx) } -> std::convertible_to<double>;

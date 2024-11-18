@@ -67,8 +67,10 @@ struct PredCorrMotion {
   lies outside bounds of gridbox in that direction */
   KOKKOS_INLINE_FUNCTION void superdrop_gbx(const unsigned int gbxindex,
                                             const CartesianMaps &gbxmaps, Superdrop &drop) const {
-    std::array<double, 3> drop_coords = {drop.get_coord3(), drop.get_coord1(), drop.get_coord2()};
-    unsigned int idx = gbxmaps.get_domain_decomposition().get_local_bounding_gridbox(drop_coords);
+    auto drop_coords =
+        std::array<double, 3>{drop.get_coord3(), drop.get_coord1(), drop.get_coord2()};
+    const auto domain_decomposition = gbxmaps.get_domain_decomposition();
+    const auto idx = domain_decomposition.get_local_bounding_gridbox(drop_coords);
 
     // Sets the updated superdroplet coordinates and gridbox index
     drop.set_coord3(drop_coords[0]);
@@ -79,8 +81,7 @@ struct PredCorrMotion {
     // If the index is non-local return
     // For superdrops going to other processes checks will be perfomed in the receiver
     // For out of bounds index nothing will be done
-    if (idx >= gbxmaps.get_total_local_gridboxes())
-        return;
+    if (idx >= domain_decomposition.get_total_local_gridboxes()) return;
 
     // Checks that the drop coordinates match the ones of the gridbox
     check_bounds(idx, gbxmaps.coord3bounds(idx), drop.get_coord3());

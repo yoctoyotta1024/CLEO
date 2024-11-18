@@ -29,7 +29,6 @@
 #include "coupldyn_cvode/cvodedynamics.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/state.hpp"
-#include "cartesiandomain/cartesianmaps.hpp"
 
 struct CvodeComms {
  private:
@@ -46,9 +45,8 @@ struct CvodeComms {
   /* update Gridboxes' states using
   information received from CVODE dynanmics
   solver for  press, temp, qvap and qcond */
-  template <typename CD = CvodeDynamics>
-  void receive_dynamics(const CartesianMaps gbxmaps,
-                        const CvodeDynamics &cvode,
+  template <typename GbxMaps, typename CD = CvodeDynamics>
+  void receive_dynamics(const GbxMaps &gbxmaps, const CvodeDynamics &cvode,
                         const viewh_gbx h_gbxs) const {
     const size_t ngbxs(h_gbxs.extent(0));
     for (size_t ii(0); ii < ngbxs; ++ii) {
@@ -65,8 +63,9 @@ struct CvodeComms {
   /* send information from Gridboxes' states
   to CVODE dynanmics solver for  temp, qvap
   and qcond (excludes press) */
-  template <typename CD = CvodeDynamics>
-  void send_dynamics(const viewh_constgbx h_gbxs, CvodeDynamics &cvode) const {
+  template <typename GbxMaps, typename CD = CvodeDynamics>
+  void send_dynamics(const GbxMaps &gbxmaps, const viewh_constgbx h_gbxs,
+                     CvodeDynamics &cvode) const {
     std::vector<double> delta_y;
     bool is_delta_y(false);
 

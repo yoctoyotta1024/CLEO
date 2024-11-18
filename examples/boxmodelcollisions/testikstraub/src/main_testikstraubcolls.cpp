@@ -140,8 +140,8 @@ int main(int argc, char *argv[]) {
   int comm_size;
   MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
   if (comm_size > 1) {
-    std::cout << "ERROR: The current example is not prepared" <<
-                 " to be run with more than one MPI process" << std::endl;
+    std::cout << "ERROR: The current example is not prepared"
+              << " to be run with more than one MPI process" << std::endl;
     MPI_Abort(MPI_COMM_WORLD, 1);
   }
 
@@ -158,7 +158,7 @@ int main(int argc, char *argv[]) {
 
   /* Create coupldyn solver and coupling between coupldyn and SDM */
   const CoupledDynamics auto coupldyn = NullDynamics(tsteps.get_couplstep());
-  const CouplingComms<NullDynamics> auto comms = NullDynComms{};
+  const CouplingComms<CartesianMaps, NullDynamics> auto comms = NullDynComms{};
 
   /* Initial conditions for CLEO run */
   const InitialConditions auto initconds = create_initconds(config);
