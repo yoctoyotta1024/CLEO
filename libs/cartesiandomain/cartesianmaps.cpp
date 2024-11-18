@@ -27,7 +27,7 @@
 the same size, else returns size of maps */
 size_t CartesianMaps::maps_size() const {
   // ngbxs + 1 for out of bounds key
-  const size_t sz(domain_decomposition.get_total_local_gridboxes() + 1);
+  const auto sz = domain_decomposition.get_total_local_gridboxes() + 1;
 
   if (to_coord3bounds.size() != sz || to_coord1bounds.size() != sz ||
       to_coord2bounds.size() != sz || to_back_coord3nghbr.size() != sz ||
