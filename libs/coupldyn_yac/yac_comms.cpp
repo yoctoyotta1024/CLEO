@@ -27,7 +27,9 @@
 from YacDynamics solver for 1-way coupling to CLEO SDM.
 Kokkos::parallel_for([...]) (on host) is equivalent to:
 for (size_t ii(0); ii < ngbxs; ++ii){[...]}
-when in serial */
+when in serial
+// TODO(ALL): make ii indexing compatible with MPI domain decomposition
+*/
 template <typename GbxMaps, typename CD>
 void YacComms::receive_dynamics(const GbxMaps &gbxmaps, const YacDynamics &ffdyn,
                                 const viewh_gbx h_gbxs) const {
