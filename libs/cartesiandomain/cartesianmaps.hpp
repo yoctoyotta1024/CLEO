@@ -315,13 +315,11 @@ struct CartesianMaps {
   }
 
   // TODO(ALL) make compatible with GPUs
-  // TODO(ALL) return correct type
-  int local_to_global_gridbox_index(size_t local_gridbox_index, int process = -1) const {
+  size_t local_to_global_gridbox_index(unsigned int local_gridbox_index, int process = -1) const {
     return domain_decomposition.local_to_global_gridbox_index(local_gridbox_index, process);
   }
 
-  // TODO(ALL) return correct type
-  int global_to_local_gbxindex(size_t global_gridbox_index) const {
+  unsigned int global_to_local_gbxindex(size_t global_gridbox_index) const {
     return domain_decomposition.global_to_local_gridbox_index(global_gridbox_index);
   }
 
@@ -329,7 +327,7 @@ struct CartesianMaps {
    * e.g. if the domain has a cyclic boundary condition and they therefore need to be corrected
    * // TODO(ALL) make compatible with GPUs
    */
-  size_t get_local_bounding_gridbox(const viewd_coords coords) const {
+  unsigned int get_local_bounding_gridbox(const viewd_coords coords) const {
     auto coordinates = std::array<double, 3>{coords(0), coords(1), coords(2)};
     const auto idx = domain_decomposition.get_local_bounding_gridbox(coordinates);
     coords(0) = coordinates[0];

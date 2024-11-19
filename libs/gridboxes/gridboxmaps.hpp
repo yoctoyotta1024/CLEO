@@ -31,7 +31,7 @@
 /* concept for GridboxMaps is all types that have
 correct signatues for map-like functions */
 template <typename GbxMaps>
-concept GridboxMaps = requires(GbxMaps gbxmaps, unsigned int idx, viewd_coords coords) {
+concept GridboxMaps = requires(GbxMaps gbxmaps, unsigned int idx, size_t s, viewd_coords coords) {
   { gbxmaps.get_local_ngridboxes() } -> std::convertible_to<size_t>;
   { gbxmaps.get_total_global_ngridboxes() } -> std::convertible_to<size_t>;
 
@@ -52,8 +52,8 @@ concept GridboxMaps = requires(GbxMaps gbxmaps, unsigned int idx, viewd_coords c
   { gbxmaps.coord2backward(idx) } -> std::convertible_to<unsigned int>;
   { gbxmaps.coord2forward(idx) } -> std::convertible_to<unsigned int>;
 
-  { gbxmaps.local_to_global_gridbox_index(idx) } -> std::convertible_to<unsigned int>;
-  { gbxmaps.global_to_local_gbxindex(idx) } -> std::convertible_to<unsigned int>;
+  { gbxmaps.local_to_global_gridbox_index(idx) } -> std::convertible_to<size_t>;
+  { gbxmaps.global_to_local_gbxindex(s) } -> std::convertible_to<unsigned int>;
   { gbxmaps.get_local_bounding_gridbox(coords) } -> std::convertible_to<unsigned int>;
 };
 

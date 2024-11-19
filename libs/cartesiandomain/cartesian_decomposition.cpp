@@ -85,7 +85,7 @@ bool CartesianDecomposition::check_indices_inside_partition(std::array<size_t, 3
   return inside;
 }
 
-size_t CartesianDecomposition::get_local_bounding_gridbox(
+unsigned int CartesianDecomposition::get_local_bounding_gridbox(
     std::array<double, 3> &coordinates) const {
   std::array<size_t, 3> bounding_gridbox_coordinates;
   std::array<int, 3> external_direction = {0, 0, 0};
