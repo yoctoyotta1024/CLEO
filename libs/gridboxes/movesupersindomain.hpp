@@ -234,8 +234,8 @@ void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd
   // indices
   const auto ngbxs = d_gbxs.extent(0);
   while (drop.get_sdgbxindex() >= ngbxs) {
-    if (drop.get_sdgbxindex() < LIMITVALUES::uintmax) {
-      int target_process = (LIMITVALUES::uintmax - drop.get_sdgbxindex()) - 1;
+    if (drop.get_sdgbxindex() < LIMITVALUES::oob_gbxindex) {
+      int target_process = (LIMITVALUES::oob_gbxindex - drop.get_sdgbxindex()) - 1;
       per_process_send_superdrops[target_process]++;
       superdrops_indices_per_process[target_process].push_back(superdrop_index);
       total_superdrops_to_send++;
@@ -342,7 +342,7 @@ void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd
 
   // Reset all remaining non-used superdroplet spots
   for (unsigned int i = local_superdrops + total_superdrops_to_recv; i < totsupers.extent(0); i++)
-    totsupers[i].set_sdgbxindex(LIMITVALUES::uintmax);
+    totsupers[i].set_sdgbxindex(LIMITVALUES::oob_gbxindex);
 
   sort_supers(totsupers);
 }

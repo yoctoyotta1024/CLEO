@@ -77,7 +77,7 @@ Flag = 2 if coord >= upperbound, indicating idx should
 be updated to forwards neighbour. */
 int flag_sdgbxindex(const unsigned int idx, const Kokkos::pair<double, double> bounds,
                     const double coord) {
-  if (idx == outofbounds_gbxindex()) {
+  if (idx == LIMITVALUES::oob_gbxindex) {
     return 0;  // maintian idx that is already out of domain
     // lowerbound
   } else if (coord < bounds.first) {

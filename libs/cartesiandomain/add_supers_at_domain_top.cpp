@@ -82,7 +82,7 @@ void remove_superdrop_above_coord3lim(const TeamMember &team_member, const Gridb
   Kokkos::parallel_for(
       Kokkos::TeamThreadRange(team_member, supers.extent(0)), [supers, coord3lim](const size_t kk) {
         if (supers(kk).get_coord3() >= coord3lim) {
-          supers(kk).set_sdgbxindex(outofbounds_gbxindex());  // remove super-droplet from domain
+          supers(kk).set_sdgbxindex(LIMITVALUES::oob_gbxindex);  // remove super-droplet from domain
         }
       });
 }
@@ -111,7 +111,7 @@ Kokkos::View<unsigned int *> remove_superdrops_from_gridboxes(const CartesianMap
           remove_superdrop_above_coord3lim(team_member, d_gbxs(ii), coord3lim);
           gbxindexes_of_removedsupers(ii) = d_gbxs(ii).get_gbxindex();  // add newsupers
         } else {
-          gbxindexes_of_removedsupers(ii) = outofbounds_gbxindex();  // don't add newsupers
+          gbxindexes_of_removedsupers(ii) = LIMITVALUES::oob_gbxindex;  // don't add newsupers
         }
       });
 
@@ -131,7 +131,7 @@ size_t total_newnsupers_to_create(Kokkos::View<unsigned int *> gbxindexes,
   Kokkos::parallel_reduce(
       "newnsupers_total", Kokkos::RangePolicy<ExecSpace>(0, gbxindexes.extent(0)),
       KOKKOS_LAMBDA(const size_t ii, size_t &nsupers) {
-        if (gbxindexes(ii) != outofbounds_gbxindex()) {
+        if (gbxindexes(ii) != LIMITVALUES::oob_gbxindex) {
           nsupers = newnsupers_pergbx;
         } else {
           nsupers = 0;
@@ -159,7 +159,7 @@ viewd_supers create_newsupers_for_gridboxes(const CartesianMaps &gbxmaps,
 
   auto nn = size_t{0};  // number of super_droplets created
   for (size_t ii(0); ii < h_gbxindexes.extent(0); ++ii) {
-    if (h_gbxindexes(ii) != outofbounds_gbxindex()) {
+    if (h_gbxindexes(ii) != LIMITVALUES::oob_gbxindex) {
       for (size_t kk(0); kk < newnsupers_pergbx; ++kk) {
         h_newsupers(nn) = create_superdrop(gbxmaps, h_gbxindexes(ii));
         ++nn;
@@ -290,7 +290,7 @@ std::pair<size_t, double> CreateSuperdrop::new_xi_radius(const double gbxvolume)
   const auto radius = double{std::pow(10.0, log10r)};
 
   const auto nconc = dist.droplet_numconc_distribution(log10r, log10rup, log10rlow);
-  const auto xi =  static_cast<uint64_t>(std::round(nconc * gbxvolume));
+  const auto xi = static_cast<uint64_t>(std::round(nconc * gbxvolume));
 
   return std::make_pair(xi, radius);  // xi_radius
 }

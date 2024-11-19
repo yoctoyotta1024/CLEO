@@ -98,7 +98,7 @@ unsigned int CartesianDecomposition::get_local_bounding_gridbox(
       // If the dimension behavior is finite and the coordinate is smaller than
       // the beginning of the domain return the out_of_bounds value
       if (dimension_bound_behavior[dimension] == 0 && coordinates[dimension] < 0)
-        return LIMITVALUES::uintmax;
+        return LIMITVALUES::oob_gbxindex;
 
       // The coordinate is inside of the domain but outside of the partition in that dimension
       external_direction[dimension] -= 1;
@@ -110,7 +110,7 @@ unsigned int CartesianDecomposition::get_local_bounding_gridbox(
       // the end of the domain return the out_of_bounds value
       if (dimension_bound_behavior[dimension] == 0 &&
           coordinates[dimension] > ndims[dimension] * gridbox_size[dimension])
-        return LIMITVALUES::uintmax;
+        return LIMITVALUES::oob_gbxindex;
 
       // The coordinate is inside of the domain but outside of the partition in that dimension
       external_direction[dimension] += 1;
@@ -165,14 +165,14 @@ unsigned int CartesianDecomposition::get_local_bounding_gridbox(
 
     // If the coordinate is outside of the local partition, encode in the return
     // value which process contains it
-    return (LIMITVALUES::uintmax - 1) - neighboring_processes.at(external_direction);
+    return (LIMITVALUES::oob_gbxindex - 1) - neighboring_processes.at(external_direction);
   }
 }
 
 // Given a global gridbox index returns which process ows it
 int CartesianDecomposition::get_gridbox_owner_process(size_t global_gridbox_index) const {
   // Tests whether the gridbox index is out of the domain
-  if (global_gridbox_index == outofbounds_gbxindex()) return -1;
+  if (global_gridbox_index == LIMITVALUES::oob_gbxindex) return -1;
 
   // Get global gridbox coordinates
   auto gridbox_coordinates = get_coordinates_from_index(ndims, global_gridbox_index);
@@ -187,7 +187,7 @@ int CartesianDecomposition::get_gridbox_owner_process(size_t global_gridbox_inde
 // Given a global gridbox index returns the corresponding local gridbox index
 int CartesianDecomposition::global_to_local_gridbox_index(size_t global_gridbox_index) const {
   // Tests whether the gridbox index is out of the domain
-  if (global_gridbox_index == outofbounds_gbxindex()) return -1;
+  if (global_gridbox_index == LIMITVALUES::oob_gbxindex) return -1;
 
   // Tests whether the gridbox is owned by the local process
   if (my_rank != get_gridbox_owner_process(global_gridbox_index)) return -1;

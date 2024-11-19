@@ -158,7 +158,7 @@ void set_model_areas_vols(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps
 /* sets value for coordinate bounds for case
 when outofbounds gbxidx searches map */
 void set_outofbounds(CartesianMaps &gbxmaps) {
-  const auto idx = (unsigned int)outofbounds_gbxindex();
+  const auto idx = (unsigned int)LIMITVALUES::oob_gbxindex;
   gbxmaps.insert_coord3bounds(idx, nullbounds());
   gbxmaps.insert_coord1bounds(idx, nullbounds());
   gbxmaps.insert_coord2bounds(idx, nullbounds());
@@ -243,7 +243,7 @@ kkpair_size_t correct_neighbor_indices(kkpair_size_t neighbours, const std::vect
   MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
   std::array<size_t, 3> neighbor_coordinates;
 
-  if (neighbours.first != outofbounds_gbxindex()) {
+  if (neighbours.first != LIMITVALUES::oob_gbxindex) {
     neighbor_coordinates = get_coordinates_from_index(ndims, neighbours.first);
     if (domain_decomposition.check_indices_inside_partition(neighbor_coordinates, my_rank))
       neighbours.first = domain_decomposition.global_to_local_gridbox_index(neighbours.first);
@@ -251,7 +251,7 @@ kkpair_size_t correct_neighbor_indices(kkpair_size_t neighbours, const std::vect
       neighbours.first += domain_decomposition.get_total_global_gridboxes();
   }
 
-  if (neighbours.second != outofbounds_gbxindex()) {
+  if (neighbours.second != LIMITVALUES::oob_gbxindex) {
     neighbor_coordinates = get_coordinates_from_index(ndims, neighbours.second);
     if (domain_decomposition.check_indices_inside_partition(neighbor_coordinates, my_rank))
       neighbours.second = domain_decomposition.global_to_local_gridbox_index(neighbours.second);

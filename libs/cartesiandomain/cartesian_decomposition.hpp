@@ -25,6 +25,8 @@
 #include <map>
 #include <vector>
 
+#include "../cleoconstants.hpp"
+
 class CartesianDecomposition {
  private:
   int my_rank;

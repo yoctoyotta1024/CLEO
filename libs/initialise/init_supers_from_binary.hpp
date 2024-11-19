@@ -29,6 +29,7 @@
 #include <string>
 #include <vector>
 
+#include "../cleoconstants.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "initialise/init_all_supers_from_binary.hpp"
 #include "initialise/initialconditions.hpp"

@@ -31,6 +31,7 @@
 #include <cassert>
 #include <functional>
 
+#include "../cleoconstants.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/doubly_periodic_domain.hpp"
 #include "gridboxes/predcorrmotion.hpp"
@@ -54,7 +55,7 @@ struct CartesianCheckBounds {
   KOKKOS_INLINE_FUNCTION void operator()(const unsigned int idx,
                                          const Kokkos::pair<double, double> bounds,
                                          const double coord) const {
-    const bool bad_gbxindex((idx != outofbounds_gbxindex()) &&
+    const bool bad_gbxindex((idx != LIMITVALUES::oob_gbxindex) &&
                             ((coord < bounds.first) | (coord >= bounds.second)));
 
     assert((!bad_gbxindex) &&

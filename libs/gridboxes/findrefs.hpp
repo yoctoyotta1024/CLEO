@@ -25,6 +25,7 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 
+#include "../cleoconstants.hpp"
 #include "superdrops/kokkosaliases_sd.hpp"
 
 /* namespace containing values of
@@ -129,11 +130,9 @@ that is in domain, ie. that has sdgbxindex < oob_idx.
 Function is outermost level of parallelism. */
 template <typename ViewSupers>
 inline kkpair_size_t find_domainrefs(const ViewSupers totsupers) {
-  constexpr unsigned int oob_idx = LIMITVALUES::uintmax;  // out of bounds sdgbxindex
-
   namespace SRP = SetRefPreds;
   const auto ref0 = size_t{0};
-  const auto ref1 = size_t{find_ref(totsupers, SRP::Ref0{oob_idx})};
+  const auto ref1 = size_t{find_ref(totsupers, SRP::Ref0{LIMITVALUES::oob_gbxindex})};
 
   return {ref0, ref1};
 }
