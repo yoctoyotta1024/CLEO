@@ -54,8 +54,9 @@ equations in Grabowski et al. 2018 */
 template <GridboxMaps GbxMaps, VelocityFormula TV>
 struct PredCorr {
  private:
-  const double delt;   // equivalent of motionstep as dimensionless time
-  const TV terminalv;  // returns terminal velocity given a superdroplet
+  const double delt;          // equivalent of motionstep as dimensionless time
+  const TV terminalv;         // returns terminal velocity given a superdroplet
+  const viewd_coords deltas;  // view on device required for operator return;
 
   /* method to interpolate coord3 wind velocity component (w)
   defined on coord3 faces of a gridbox to a superdroplet's
@@ -151,7 +152,7 @@ struct PredCorr {
  public:
   PredCorr(const unsigned int motionstep, const std::function<double(unsigned int)> int2time,
            const TV i_terminalv)
-      : delt(int2time(motionstep)), terminalv(i_terminalv) {}
+      : delt(int2time(motionstep)), terminalv(i_terminalv), deltas("deltas") {}
 
   /* operator for use in the "superdrop_coords" function of the PredCorrMotion struct.
   Operator uses predictor-corrector method to return the change in
@@ -169,7 +170,6 @@ struct PredCorr {
     cfl_criteria(gbxmaps, gbxindex, delta3, delta1, delta2);
 
     /* return change in coordinates in order: (coord3, coord1, coord2) */
-    const auto deltas = viewd_coords("deltas");
     deltas(0) = delta3;
     deltas(1) = delta1;
     deltas(2) = delta2;

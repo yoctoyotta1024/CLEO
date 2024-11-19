@@ -38,6 +38,8 @@
 #include "superdrops/superdrop.hpp"
 #include "superdrops/terminalvelocity.hpp"
 
+// TODO(ALL): delete redundant no-longer used functions
+
 KOKKOS_FUNCTION unsigned int change_if_coord3nghbr(const CartesianMaps &gbxmaps, unsigned int idx,
                                                    Superdrop &drop);
 

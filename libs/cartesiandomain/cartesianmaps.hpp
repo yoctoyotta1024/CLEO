@@ -315,6 +315,7 @@ struct CartesianMaps {
   }
 
   // TODO(ALL) make compatible with GPUs
+  KOKKOS_INLINE_FUNCTION
   size_t local_to_global_gridbox_index(unsigned int local_gridbox_index, int process = -1) const {
     return domain_decomposition.local_to_global_gridbox_index(local_gridbox_index, process);
   }
@@ -327,6 +328,7 @@ struct CartesianMaps {
    * e.g. if the domain has a cyclic boundary condition and they therefore need to be corrected
    * // TODO(ALL) make compatible with GPUs
    */
+  KOKKOS_INLINE_FUNCTION
   unsigned int get_local_bounding_gridbox(const viewd_coords coords) const {
     auto coordinates = std::array<double, 3>{coords(0), coords(1), coords(2)};
     const auto idx = domain_decomposition.get_local_bounding_gridbox(coordinates);

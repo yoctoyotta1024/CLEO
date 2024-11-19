@@ -20,6 +20,8 @@
 
 #include "./cartesianmotion.hpp"
 
+// TODO(ALL): delete redundant no-longer used functions
+
 KOKKOS_FUNCTION int flag_sdgbxindex(const unsigned int idx,
                                     const Kokkos::pair<double, double> bounds, const double coord);
 
