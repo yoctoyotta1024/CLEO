@@ -143,8 +143,8 @@ inline auto create_movement(const CartesianMaps &gbxmaps) {
 }
 
 inline InitialConditions auto create_initconds(const Config &config) {
-  const InitAllSupersFromBinary initsupers(config.get_initsupersfrombinary());
-  const InitGbxsNull initgbxs(config.get_ngbxs());
+  const auto initsupers = InitAllSupersFromBinary(config.get_initsupersfrombinary());
+  const auto initgbxs = InitGbxsNull(config.get_ngbxs());
 
   return InitConds(initsupers, initgbxs);
 }

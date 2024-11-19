@@ -29,7 +29,6 @@
 #include <stdexcept>
 #include <string_view>
 
-#include "zarr/dataset.hpp"
 #include "cartesiandomain/add_supers_at_domain_top.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"
@@ -65,6 +64,7 @@
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "superdrops/terminalvelocity.hpp"
+#include "zarr/dataset.hpp"
 #include "zarr/fsstore.hpp"
 
 inline CoupledDynamics auto create_coupldyn(const Config &config, const CartesianMaps &gbxmaps,
@@ -79,8 +79,8 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
 }
 
 inline InitialConditions auto create_initconds(const Config &config, const CartesianMaps &gbxmaps) {
-  const InitGbxsNull initgbxs(gbxmaps.get_total_local_gridboxes());
-  const InitSupersFromBinary initsupers(config.get_initsupersfrombinary(), gbxmaps);
+  const auto initgbxs = InitGbxsNull(gbxmaps.get_local_ngridboxes());
+  const auto initsupers = InitSupersFromBinary(config.get_initsupersfrombinary(), gbxmaps);
 
   return InitConds(initsupers, initgbxs);
 }
@@ -192,8 +192,8 @@ int main(int argc, char *argv[]) {
   int comm_size;
   MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
   if (comm_size > 1) {
-    std::cout << "ERROR: The current example is not prepared" <<
-                 " to be run with more than one MPI process" << std::endl;
+    std::cout << "ERROR: The current example is not prepared"
+              << " to be run with more than one MPI process" << std::endl;
     MPI_Abort(MPI_COMM_WORLD, 1);
   }
 

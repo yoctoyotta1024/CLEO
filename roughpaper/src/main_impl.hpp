@@ -89,9 +89,9 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
 }
 
 inline InitialConditions auto create_initconds(const Config &config, const CartesianMaps &gbxmaps) {
-  // const InitAllSupersFromBinary initsupers(config.get_initsupersfrombinary());
-  const InitSupersFromBinary initsupers(config.get_initsupersfrombinary(), gbxmaps);
-  const InitGbxsNull initgbxs(config.get_ngbxs());
+  // const auto initsupers = InitAllSupersFromBinary(config.get_initsupersfrombinary());
+  const auto initsupers = InitSupersFromBinary(config.get_initsupersfrombinary(), gbxmaps);
+  const auto initgbxs = InitGbxsNull(config.get_ngbxs());
 
   return InitConds(initsupers, initgbxs);
 }

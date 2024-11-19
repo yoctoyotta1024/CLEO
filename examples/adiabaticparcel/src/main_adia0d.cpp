@@ -59,8 +59,8 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const unsigned
 }
 
 inline InitialConditions auto create_initconds(const Config &config) {
-  const InitAllSupersFromBinary initsupers(config.get_initsupersfrombinary());
-  const InitGbxsCvode initgbxs(config.get_cvodedynamics());
+  const auto initsupers = InitAllSupersFromBinary(config.get_initsupersfrombinary());
+  const auto initgbxs = InitGbxsCvode(config.get_cvodedynamics());
 
   return InitConds(initsupers, initgbxs);
 }
