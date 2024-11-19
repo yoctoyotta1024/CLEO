@@ -41,7 +41,6 @@
 /*
 function to move super-droplets between MPI processes, e.g. for superdroplets
 which move to/from gridboxes on different nodes.
-TODO(ALL): make GPU compatible.
 */
 template <GridboxMaps GbxMaps>
 void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd_supers totsupers);
@@ -201,7 +200,6 @@ struct MoveSupersInDomain {
 /*
 function to move super-droplets between MPI processes, e.g. for superdroplets
 which move to/from gridboxes on different nodes.
-TODO(ALL): make GPU compatible.
 */
 template <GridboxMaps GbxMaps>
 void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd_supers totsupers) {
@@ -330,7 +328,8 @@ void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd
                                              totsupers[i].get_coord2()};
     const auto b4 = std::array<double, 3>{drop_coords[0], drop_coords[1], drop_coords[2]};
     const auto gbxindex =
-        gbxmaps.get_domain_decomposition().get_local_bounding_gridbox(drop_coords);
+        (unsigned int)gbxmaps.get_domain_decomposition().get_local_bounding_gridbox(
+            drop_coords);  // TODO(ALL): access through gbxmaps (note error in conversions?)
 
     // Since the coordinates have already been corrected in the sending
     // process here just the gridbox index update is necessary
@@ -338,7 +337,7 @@ void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd
            "drop coordinates should have already been corrected and so shoudn't have changed here");
     totsupers[i].set_sdgbxindex(gbxindex);
 
-    // TODO(CB): add check_bounds to SD?
+    // TODO(ALL): add check_bounds to SD?
   }
 
   // Reset all remaining non-used superdroplet spots

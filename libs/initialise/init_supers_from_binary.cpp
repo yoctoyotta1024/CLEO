@@ -67,10 +67,7 @@ void InitSupersFromBinary::trim_nonlocal_superdrops(InitSupersData &initdata) co
   int my_rank;
   MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 
-  const auto domain_decomposition = gbxmaps.get_domain_decomposition();
-  if (domain_decomposition.get_total_global_ngridboxes() ==
-      domain_decomposition.get_total_local_gridboxes())
-    return;
+  if (gbxmaps.get_total_global_ngridboxes() == gbxmaps.get_local_ngridboxes()) return;
 
   // Go through all superdrops and resets the values of the non-local ones
   auto gbxindex = size_t{0};
@@ -93,8 +90,7 @@ void InitSupersFromBinary::trim_nonlocal_superdrops(InitSupersData &initdata) co
 
     } else {
       // updates superdrop gridbox index from global to local
-      initdata.sdgbxindexes[superdrop_index] =
-          gbxmaps.get_domain_decomposition().global_to_local_gridbox_index(gbxindex);
+      initdata.sdgbxindexes[superdrop_index] = gbxmaps.global_to_local_gbxindex(gbxindex);
     }
     superdrop_index++;
   }

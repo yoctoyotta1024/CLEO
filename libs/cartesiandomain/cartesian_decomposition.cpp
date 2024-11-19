@@ -35,7 +35,7 @@
 CartesianDecomposition::CartesianDecomposition() {}
 CartesianDecomposition::~CartesianDecomposition() {}
 
-size_t CartesianDecomposition::get_total_global_ngridboxes() const {
+size_t CartesianDecomposition::get_total_global_gridboxes() const {
   return ndims[0] * ndims[1] * ndims[2];
 };
 

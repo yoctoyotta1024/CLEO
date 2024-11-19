@@ -69,7 +69,7 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
 }
 
 inline InitialConditions auto create_initconds(const Config &config, const CartesianMaps &gbxmaps) {
-  const auto initgbxs = InitGbxsNull(gbxmaps.get_total_local_gridboxes());
+  const auto initgbxs = InitGbxsNull(gbxmaps.get_local_ngridboxes());
   const auto initsupers = InitSupersFromBinary(config.get_initsupersfrombinary(), gbxmaps);
 
   return InitConds(initsupers, initgbxs);
@@ -113,7 +113,7 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
                                      Dataset<Store> &dataset, const CartesianMaps &gbxmaps) {
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
-  const auto ngbxs = gbxmaps.get_total_local_gridboxes();
+  const auto ngbxs = gbxmaps.get_local_ngridboxes();
 
   const Observer auto obs0 = StreamOutObserver(obsstep, &step2realtime);
 

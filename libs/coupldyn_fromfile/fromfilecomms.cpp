@@ -33,9 +33,7 @@ void FromFileComms::receive_dynamics(const GbxMaps &gbxmaps, const FromFileDynam
 
   Kokkos::parallel_for(
       "receive_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs), [=, *this](const size_t ii) {
-        update_gridbox_state(ffdyn,
-                             gbxmaps.get_domain_decomposition().local_to_global_gridbox_index(ii),
-                             h_gbxs(ii));
+        update_gridbox_state(ffdyn, gbxmaps.local_to_global_gridbox_index(ii), h_gbxs(ii));
       });
 }
 

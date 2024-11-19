@@ -27,7 +27,9 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
 #include <Kokkos_UnorderedMap.hpp>
+#include <array>
 #include <stdexcept>
+#include <vector>
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
@@ -298,15 +300,6 @@ struct CartesianMaps {
     return to_forward_coord2nghbr.value_at(i);  // value returned by map at index i
   }
 
-  KOKKOS_INLINE_FUNCTION
-  size_t get_total_local_gridboxes() const {
-    return domain_decomposition.get_total_local_gridboxes();
-  }
-
-  size_t get_total_global_ngridboxes() const {
-    return domain_decomposition.get_total_global_ngridboxes();
-  }
-
   void create_decomposition(std::vector<size_t> ndims, double gridbox_z_size, double gridbox_x_size,
                             double gridbox_y_size) {
     domain_decomposition.create(ndims, gridbox_z_size, gridbox_x_size, gridbox_y_size);
@@ -314,12 +307,34 @@ struct CartesianMaps {
 
   const CartesianDecomposition& get_domain_decomposition() const { return domain_decomposition; }
 
-  size_t get_local_bounding_gridbox(const viewd_coords drop_coords) const {
-    auto coordinates = std::array<double, 3>{drop_coords(0), drop_coords(1), drop_coords(2)};
+  KOKKOS_INLINE_FUNCTION
+  size_t get_local_ngridboxes() const { return domain_decomposition.get_total_local_gridboxes(); }
+
+  size_t get_total_global_ngridboxes() const {
+    return domain_decomposition.get_total_global_gridboxes();
+  }
+
+  // TODO(ALL) make compatible with GPUs
+  // TODO(ALL) return correct type
+  int local_to_global_gridbox_index(size_t local_gridbox_index, int process = -1) const {
+    return domain_decomposition.local_to_global_gridbox_index(local_gridbox_index, process);
+  }
+
+  // TODO(ALL) return correct type
+  int global_to_local_gbxindex(size_t global_gridbox_index) const {
+    return domain_decomposition.global_to_local_gridbox_index(global_gridbox_index);
+  }
+
+  /* given coordinates, associated gxbindex is found. The coords may be updated too,
+   * e.g. if the domain has a cyclic boundary condition and they therefore need to be corrected
+   * // TODO(ALL) make compatible with GPUs
+   */
+  size_t get_local_bounding_gridbox(const viewd_coords coords) const {
+    auto coordinates = std::array<double, 3>{coords(0), coords(1), coords(2)};
     const auto idx = domain_decomposition.get_local_bounding_gridbox(coordinates);
-    drop_coords(0) = coordinates[0];
-    drop_coords(1) = coordinates[1];
-    drop_coords(2) = coordinates[2];
+    coords(0) = coordinates[0];
+    coords(1) = coordinates[1];
+    coords(2) = coordinates[2];
     return idx;
   }
 };

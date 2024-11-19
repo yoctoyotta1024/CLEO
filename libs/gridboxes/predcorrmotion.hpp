@@ -90,7 +90,7 @@ struct PredCorrMotion {
     // If the index is non-local return
     // For superdrops going to other processes checks will be perfomed in the receiver
     // For out of bounds index nothing will be done
-    if (idx >= gbxmaps.get_total_local_gridboxes()) return;
+    if (idx >= gbxmaps.get_local_ngridboxes()) return;
 
     // Checks that the drop coordinates match the ones of the gridbox
     check_bounds(idx, gbxmaps.coord3bounds(idx), drop.get_coord3());

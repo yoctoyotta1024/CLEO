@@ -124,7 +124,7 @@ class Dataset {
         // If there is only the gridbox dimension, then this is the gridbox
         // index array and can be trivially constructed without exchanges
         if (dimnames.size() == 1) {
-          for (size_t i = 0; i < decomposition.get_total_global_ngridboxes(); i++)
+          for (size_t i = 0; i < decomposition.get_total_global_gridboxes(); i++)
             global_data[i] = i;
         } else {
           // All other gridbox-defined data must be correctly ordered to follow

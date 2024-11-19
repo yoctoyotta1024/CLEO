@@ -103,7 +103,7 @@ CartesianMaps create_cartesian_maps(const size_t ngbxs, const unsigned int nspac
   }
 
   check_ngridboxes_matches_ndims(gbxmaps, gbxmaps.get_total_global_ngridboxes());
-  check_ngridboxes_matches_maps(gbxmaps, gbxmaps.get_total_local_gridboxes());
+  check_ngridboxes_matches_maps(gbxmaps, gbxmaps.get_local_ngridboxes());
 
   std::cout << "--- create cartesian gridbox maps: success ---\n";
 
@@ -248,7 +248,7 @@ kkpair_size_t correct_neighbor_indices(kkpair_size_t neighbours, const std::vect
     if (domain_decomposition.check_indices_inside_partition(neighbor_coordinates, my_rank))
       neighbours.first = domain_decomposition.global_to_local_gridbox_index(neighbours.first);
     else
-      neighbours.first += domain_decomposition.get_total_global_ngridboxes();
+      neighbours.first += domain_decomposition.get_total_global_gridboxes();
   }
 
   if (neighbours.second != outofbounds_gbxindex()) {
@@ -256,7 +256,7 @@ kkpair_size_t correct_neighbor_indices(kkpair_size_t neighbours, const std::vect
     if (domain_decomposition.check_indices_inside_partition(neighbor_coordinates, my_rank))
       neighbours.second = domain_decomposition.global_to_local_gridbox_index(neighbours.second);
     else
-      neighbours.second += domain_decomposition.get_total_global_ngridboxes();
+      neighbours.second += domain_decomposition.get_total_global_gridboxes();
   }
 
   return neighbours;

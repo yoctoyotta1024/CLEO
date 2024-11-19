@@ -71,7 +71,7 @@ class CartesianDecomposition {
 
   // Local and global amount of gridboxes
   size_t get_total_local_gridboxes() const;
-  size_t get_total_global_ngridboxes() const;
+  size_t get_total_global_gridboxes() const;
 
   // Get the origin and size of local partition in terms of number of gridboxes
   std::array<size_t, 3> get_local_partition_origin() const;
