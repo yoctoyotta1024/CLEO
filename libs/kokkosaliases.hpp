@@ -50,7 +50,7 @@ using kokkos_uintmap = Kokkos::UnorderedMap<unsigned int, unsigned int, ExecSpac
 /**< E.g. for map from one unsigned int gbxindex to another */
 using kokkos_dblmaph = Kokkos::UnorderedMap<unsigned int, double, HostSpace>;
 /**< E.g. for map from unsigned int gbxindex to gridbox area/volume on host*/
-using viewd_ndims =
-    Kokkos::View<size_t[3]>; /**< View in device memory for number of gridboxes in CartesianMaps. */
+using viewd_ndims = Kokkos::View<size_t[3]>;
+/**< View in device memory for number of gridboxes in CartesianMaps. */
 
 #endif  // LIBS_KOKKOSALIASES_HPP_

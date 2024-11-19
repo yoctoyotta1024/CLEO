@@ -172,24 +172,6 @@ struct CartesianMaps {
     Kokkos::deep_copy(ndims, h_ndims);
   }
 
-  KOKKOS_INLINE_FUNCTION
-  size_t get_total_local_gridboxes() const {
-    return domain_decomposition.get_total_local_gridboxes();
-  }
-
-  size_t get_total_global_ngridboxes() const {
-    return domain_decomposition.get_total_global_ngridboxes();
-  }
-
-  void create_decomposition(std::vector<size_t> ndims, double gridbox_z_size, double gridbox_x_size,
-                            double gridbox_y_size) {
-    domain_decomposition.create(ndims, gridbox_z_size, gridbox_x_size, gridbox_y_size);
-  }
-
-  /* on host device, throws error if maps are not all
-  the same size, else returns size of maps */
-  size_t maps_size() const;
-
   /* returns model dimensions ie. number of gridboxes
   along [coord3, coord1, coord2] directions for use on
   host. deep copy is made if gbxmaps ndims is on device */
@@ -199,13 +181,6 @@ struct CartesianMaps {
     Kokkos::deep_copy(h_ndims, ndims);
 
     return h_ndims;
-  }
-
-  /* returns volume of gridbox with index 'gbxidx' on host */
-  double get_gbxvolume(const unsigned int gbxidx) const {
-    const auto i(to_volume.find(gbxidx));  // index in map of key 'gbxindex'
-
-    return to_volume.value_at(i);  // value returned by map at index i
   }
 
   /* returns model dimensions ie. number of gridboxes
@@ -220,6 +195,17 @@ struct CartesianMaps {
   ndims(d=2) = coord2 */
   KOKKOS_INLINE_FUNCTION
   size_t get_ndim(const unsigned int d) const { return ndims(d); }
+
+  /* on host device, throws error if maps are not all
+  the same size, else returns size of maps */
+  size_t maps_size() const;
+
+  /* returns volume of gridbox with index 'gbxidx' on host */
+  double get_gbxvolume(const unsigned int gbxidx) const {
+    const auto i(to_volume.find(gbxidx));  // index in map of key 'gbxindex'
+
+    return to_volume.value_at(i);  // value returned by map at index i
+  }
 
   /* returns horizontal (x-y planar) area of gridbox with index 'gbxidx' on host */
   double get_gbxarea(const unsigned int gbxidx) const {
@@ -312,11 +298,30 @@ struct CartesianMaps {
     return to_forward_coord2nghbr.value_at(i);  // value returned by map at index i
   }
 
-  void set_domain_decomposition(CartesianDecomposition domain_decomposition) {
-    this->domain_decomposition = domain_decomposition;
+  KOKKOS_INLINE_FUNCTION
+  size_t get_total_local_gridboxes() const {
+    return domain_decomposition.get_total_local_gridboxes();
+  }
+
+  size_t get_total_global_ngridboxes() const {
+    return domain_decomposition.get_total_global_ngridboxes();
+  }
+
+  void create_decomposition(std::vector<size_t> ndims, double gridbox_z_size, double gridbox_x_size,
+                            double gridbox_y_size) {
+    domain_decomposition.create(ndims, gridbox_z_size, gridbox_x_size, gridbox_y_size);
   }
 
   const CartesianDecomposition& get_domain_decomposition() const { return domain_decomposition; }
+
+  size_t get_local_bounding_gridbox(const viewd_coords drop_coords) const {
+    auto coordinates = std::array<double, 3>{drop_coords(0), drop_coords(1), drop_coords(2)};
+    const auto idx = domain_decomposition.get_local_bounding_gridbox(coordinates);
+    drop_coords(0) = coordinates[0];
+    drop_coords(1) = coordinates[1];
+    drop_coords(2) = coordinates[2];
+    return idx;
+  }
 };
 
 #endif  // LIBS_CARTESIANDOMAIN_CARTESIANMAPS_HPP_

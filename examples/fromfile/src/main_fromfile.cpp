@@ -69,7 +69,7 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
 }
 
 inline InitialConditions auto create_initconds(const Config &config, const CartesianMaps &gbxmaps) {
-  const auto initgbxs = InitGbxsNull(gbxmaps.get_local_ngridboxes());
+  const auto initgbxs = InitGbxsNull(gbxmaps.get_total_local_gridboxes());
   const auto initsupers = InitSupersFromBinary(config.get_initsupersfrombinary(), gbxmaps);
 
   return InitConds(initsupers, initgbxs);

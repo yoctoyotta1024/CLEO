@@ -31,6 +31,7 @@
 #include <cassert>
 #include <functional>
 
+#include "../kokkosaliases.hpp"
 #include "gridboxes/cfl_criteria.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "superdrops/state.hpp"
@@ -152,14 +153,13 @@ struct PredCorr {
            const TV i_terminalv)
       : delt(int2time(motionstep)), terminalv(i_terminalv) {}
 
-  /* operator to satisfiy requirements of the
-  "superdrop_coords" function in the motion
-  concept. Operator uses predictor-corrector method to
-  forward timestep a superdroplet's coordinates using
-  the interpolated wind velocity from a gridbox's state */
+  /* operator for use in the "superdrop_coords" function of the PredCorrMotion struct.
+  Operator uses predictor-corrector method to return the change in
+  a superdroplet's coordinates from a forward timestep of motion using the
+  interpolated wind velocity from a gridbox's state */
   KOKKOS_FUNCTION
-  void operator()(const unsigned int gbxindex, const GbxMaps &gbxmaps, const State &state,
-                  Superdrop &drop) const {
+  viewd_constcoords operator()(const unsigned int gbxindex, const GbxMaps &gbxmaps,
+                               const State &state, const Superdrop &drop) const {
     /* Use predictor-corrector method to get change in SD coords */
     const auto delta3 = delta_coord3(gbxindex, gbxmaps, state, drop);
     const auto delta1 = delta_coord1(gbxindex, gbxmaps, state, drop);
@@ -168,8 +168,12 @@ struct PredCorr {
     /* CFL check on predicted change to SD coords */
     cfl_criteria(gbxmaps, gbxindex, delta3, delta1, delta2);
 
-    /* update SD coords */
-    drop.increment_coords(delta3, delta1, delta2);
+    /* return change in coordinates in order: (coord3, coord1, coord2) */
+    const auto deltas = viewd_coords("deltas");
+    deltas(0) = delta3;
+    deltas(1) = delta1;
+    deltas(2) = delta2;
+    return deltas;
   }
 };
 

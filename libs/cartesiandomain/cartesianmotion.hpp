@@ -96,11 +96,11 @@ superdroplet using a predictor-corrector method to update
 a superdroplet's coordinates and then updating it's
 sdgbxindex as appropriate for a cartesian domain */
 template <VelocityFormula TV>
-inline PredCorrMotion<CartesianMaps, TV, CartesianChangeIfNghbr, CartesianCheckBounds>
-CartesianMotion(const unsigned int motionstep, const std::function<double(unsigned int)> int2time,
-                const TV terminalv) {
-  return PredCorrMotion<CartesianMaps, TV, CartesianChangeIfNghbr, CartesianCheckBounds>(
-      motionstep, int2time, terminalv, CartesianChangeIfNghbr{}, CartesianCheckBounds{});
+inline PredCorrMotion<CartesianMaps, TV, CartesianCheckBounds> CartesianMotion(
+    const unsigned int motionstep, const std::function<double(unsigned int)> int2time,
+    const TV terminalv) {
+  return PredCorrMotion<CartesianMaps, TV, CartesianCheckBounds>(motionstep, int2time, terminalv,
+                                                                 CartesianCheckBounds{});
 }
 
 #endif  // LIBS_CARTESIANDOMAIN_CARTESIANMOTION_HPP_

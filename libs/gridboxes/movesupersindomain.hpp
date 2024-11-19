@@ -205,9 +205,6 @@ TODO(ALL): make GPU compatible.
 */
 template <GridboxMaps GbxMaps>
 void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd_supers totsupers) {
-  const auto ngbxs = d_gbxs.extent(0);
-  const auto domain_decomposition = gbxmaps.get_domain_decomposition();
-
   int comm_size, my_rank;
   MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
   MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
@@ -237,6 +234,7 @@ void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd
 
   // Go through superdrops from back to front and find how many should be sent and their
   // indices
+  const auto ngbxs = d_gbxs.extent(0);
   while (drop.get_sdgbxindex() >= ngbxs) {
     if (drop.get_sdgbxindex() < LIMITVALUES::uintmax) {
       int target_process = (LIMITVALUES::uintmax - drop.get_sdgbxindex()) - 1;
@@ -330,11 +328,17 @@ void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd
     // Get the local gridbox index which contains the superdroplet
     auto drop_coords = std::array<double, 3>{totsupers[i].get_coord3(), totsupers[i].get_coord1(),
                                              totsupers[i].get_coord2()};
-    const auto gbxindex = domain_decomposition.get_local_bounding_gridbox(drop_coords);
+    const auto b4 = std::array<double, 3>{drop_coords[0], drop_coords[1], drop_coords[2]};
+    const auto gbxindex =
+        gbxmaps.get_domain_decomposition().get_local_bounding_gridbox(drop_coords);
 
     // Since the coordinates have already been corrected in the sending
     // process here just the gridbox index update is necessary
+    assert((drop_coords[0] == b4[0]) && (drop_coords[1] == b4[1]) && (drop_coords[2] == b4[2]) &&
+           "drop coordinates should have already been corrected and so shoudn't have changed here");
     totsupers[i].set_sdgbxindex(gbxindex);
+
+    // TODO(CB): add check_bounds to SD?
   }
 
   // Reset all remaining non-used superdroplet spots
