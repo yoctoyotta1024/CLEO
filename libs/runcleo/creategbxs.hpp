@@ -256,7 +256,7 @@ dualview_gbx create_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &gbxic,
   const dualview_gbx gbxs(initialise_gbxs(gbxmaps, gbxic, totsupers));
 
   std::cout << "checking initialisation\n";
-  is_gbxinit_complete(gbxmaps.get_local_ngridboxes(), gbxs);
+  is_gbxinit_complete(gbxmaps.get_local_ngridboxes_hostcopy(), gbxs);
 
   // // Print information about the created superdrops
   // print_gbxs(gbxs.view_host());

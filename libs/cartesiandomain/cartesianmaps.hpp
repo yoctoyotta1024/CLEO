@@ -34,6 +34,7 @@
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
 #include "cartesiandomain/cartesian_decomposition.hpp"
+#include "cartesiandomain/doubly_periodic_domain.hpp"
 
 namespace dlc = dimless_constants;
 
@@ -46,9 +47,11 @@ of each bounds map is that gridbox's {lower boundary, upper boundary}.
 to_[direction]_coord[X]nghbr (for direction = back, forward)
 map from a given gbxidx to the gbxidx of a neighbouring gridbox
 in that direction */
+// TODO(CB): use domain_decomposition instead of ndims
 struct CartesianMaps {
  private:
   CartesianDecomposition domain_decomposition;
+  bool is_decomp;
 
   /* maps from gbxidx to {lower, upper} coords of gridbox boundaries */
   kokkos_pairmap to_coord3bounds;
@@ -74,7 +77,8 @@ struct CartesianMaps {
   for ndims, gbxareas and gbxvols undefined
   upon construction (e.g. null ptr for ndims) */
   explicit CartesianMaps(const size_t ngbxs)
-      : to_coord3bounds(kokkos_pairmap(ngbxs)),
+      : is_decomp(false),
+        to_coord3bounds(kokkos_pairmap(ngbxs)),
         to_coord1bounds(kokkos_pairmap(ngbxs)),
         to_coord2bounds(kokkos_pairmap(ngbxs)),
         to_back_coord3nghbr(kokkos_uintmap(ngbxs)),
@@ -168,8 +172,7 @@ struct CartesianMaps {
   /* insert 1 value into to_volume map at key = idx with value=volume */
   void insert_gbxvolume(const unsigned int idx, double volume) { to_volume.insert(idx, volume); }
 
-  /* copies of h_ndims to ndims,
-  possibly into device memory */
+  /* copies of h_ndims to ndims, possibly into device memory */
   void set_ndims_via_copy(const viewd_ndims::HostMirror h_ndims) {
     Kokkos::deep_copy(ndims, h_ndims);
   }
@@ -177,9 +180,8 @@ struct CartesianMaps {
   /* returns model dimensions ie. number of gridboxes
   along [coord3, coord1, coord2] directions for use on
   host. deep copy is made if gbxmaps ndims is on device */
-  viewd_ndims::HostMirror ndims_hostcopy() const {
-    auto h_ndims =
-        Kokkos::create_mirror_view(ndims);  // mirror ndims in case view is on device memory
+  viewd_ndims::HostMirror get_ndims_hostcopy() const {
+    auto h_ndims = Kokkos::create_mirror_view(ndims);  // mirror in case ndims is on device memory
     Kokkos::deep_copy(h_ndims, ndims);
 
     return h_ndims;
@@ -303,40 +305,39 @@ struct CartesianMaps {
   void create_decomposition(std::vector<size_t> ndims, double gridbox_z_size, double gridbox_x_size,
                             double gridbox_y_size) {
     domain_decomposition.create(ndims, gridbox_z_size, gridbox_x_size, gridbox_y_size);
+    if (domain_decomposition.get_total_local_gridboxes() <
+        domain_decomposition.get_total_global_gridboxes()) {
+      is_decomp = true;
+    }
   }
 
   const CartesianDecomposition& get_domain_decomposition() const { return domain_decomposition; }
-
-  KOKKOS_INLINE_FUNCTION
-  size_t get_local_ngridboxes() const { return domain_decomposition.get_total_local_gridboxes(); }
 
   size_t get_total_global_ngridboxes() const {
     return domain_decomposition.get_total_global_gridboxes();
   }
 
-  // TODO(ALL) make compatible with GPUs
-  KOKKOS_INLINE_FUNCTION
-  size_t local_to_global_gridbox_index(unsigned int local_gridbox_index, int process = -1) const {
-    return domain_decomposition.local_to_global_gridbox_index(local_gridbox_index, process);
+  KOKKOS_FUNCTION
+  size_t get_local_ngridboxes() const;
+
+  // TODO(ALL): refactor once domain_decomposition.get_total_local_gridboxes() is a GPU function
+  size_t get_local_ngridboxes_hostcopy() const {
+    return domain_decomposition.get_total_local_gridboxes();
   }
 
   unsigned int global_to_local_gbxindex(size_t global_gridbox_index) const {
     return domain_decomposition.global_to_local_gridbox_index(global_gridbox_index);
   }
 
+  KOKKOS_FUNCTION
+  size_t local_to_global_gridbox_index(unsigned int local_gridbox_index, int process = -1) const;
+
   /* given coordinates, associated gxbindex is found. The coords may be updated too,
    * e.g. if the domain has a cyclic boundary condition and they therefore need to be corrected
-   * // TODO(ALL) make compatible with GPUs
    */
-  KOKKOS_INLINE_FUNCTION
-  unsigned int get_local_bounding_gridbox(const viewd_coords coords) const {
-    auto coordinates = std::array<double, 3>{coords(0), coords(1), coords(2)};
-    const auto idx = domain_decomposition.get_local_bounding_gridbox(coordinates);
-    coords(0) = coordinates[0];
-    coords(1) = coordinates[1];
-    coords(2) = coordinates[2];
-    return idx;
-  }
+  KOKKOS_FUNCTION
+  unsigned int get_local_bounding_gridbox(const unsigned int gbxindex, double& coord3,
+                                          double& coord1, double& coord2) const;
 };
 
 #endif  // LIBS_CARTESIANDOMAIN_CARTESIANMAPS_HPP_

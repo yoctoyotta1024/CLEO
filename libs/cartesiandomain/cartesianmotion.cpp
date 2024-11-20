@@ -77,6 +77,7 @@ Flag = 1 if coord < lowerbound, indicating idx should
 be updated to backwards neighbour.
 Flag = 2 if coord >= upperbound, indicating idx should
 be updated to forwards neighbour. */
+KOKKOS_FUNCTION
 int flag_sdgbxindex(const unsigned int idx, const Kokkos::pair<double, double> bounds,
                     const double coord) {
   if (idx == LIMITVALUES::oob_gbxindex) {

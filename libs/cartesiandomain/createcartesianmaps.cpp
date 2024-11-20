@@ -103,7 +103,7 @@ CartesianMaps create_cartesian_maps(const size_t ngbxs, const unsigned int nspac
   }
 
   check_ngridboxes_matches_ndims(gbxmaps, gbxmaps.get_total_global_ngridboxes());
-  check_ngridboxes_matches_maps(gbxmaps, gbxmaps.get_local_ngridboxes());
+  check_ngridboxes_matches_maps(gbxmaps, gbxmaps.get_local_ngridboxes_hostcopy());
 
   std::cout << "--- create cartesian gridbox maps: success ---\n";
 
@@ -113,7 +113,7 @@ CartesianMaps create_cartesian_maps(const size_t ngbxs, const unsigned int nspac
 /* checks number of gridboxes according to
 maps matches with expected value from gfb */
 void check_ngridboxes_matches_ndims(const CartesianMaps &gbxmaps, const size_t ngbxs) {
-  const auto h_ndims(gbxmaps.ndims_hostcopy());
+  const auto h_ndims = gbxmaps.get_ndims_hostcopy();
   const size_t ngbxs_from_ndims(h_ndims(0) * h_ndims(1) * h_ndims(2));
 
   if (ngbxs_from_ndims != ngbxs) {

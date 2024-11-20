@@ -77,14 +77,14 @@ struct PredCorrMotion {
   superdroplet is indeed in correct gridbox after update. */
   KOKKOS_INLINE_FUNCTION void superdrop_gbx(const unsigned int gbxindex, const GbxMaps &gbxmaps,
                                             Superdrop &drop) const {
-    const auto drop_coords = viewd_coords("drop_coords");
-    drop_coords(0) = drop.get_coord3();
-    drop_coords(1) = drop.get_coord1();
-    drop_coords(2) = drop.get_coord2();
-    const auto idx = gbxmaps.get_local_bounding_gridbox(drop_coords);  // drop_coords may change(!)
+    auto coord3 = drop.get_coord3();
+    auto coord1 = drop.get_coord1();
+    auto coord2 = drop.get_coord2();
+    const auto idx = gbxmaps.get_local_bounding_gridbox(gbxindex, coord3, coord1,
+                                                        coord2);  // drop_coords may change(!)
 
     // Sets the updated superdroplet coordinates and gridbox index
-    drop.set_coords(drop_coords(0), drop_coords(1), drop_coords(2));
+    drop.set_coords(coord3, coord1, coord2);
     drop.set_sdgbxindex(idx);
 
     // If the index is non-local return

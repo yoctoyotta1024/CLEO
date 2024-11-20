@@ -68,7 +68,7 @@ void InitSupersFromBinary::trim_nonlocal_superdrops(InitSupersData &initdata) co
   int my_rank;
   MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 
-  if (gbxmaps.get_total_global_ngridboxes() == gbxmaps.get_local_ngridboxes()) return;
+  if (gbxmaps.get_total_global_ngridboxes() == gbxmaps.get_local_ngridboxes_hostcopy()) return;
 
   // Go through all superdrops and resets the values of the non-local ones
   auto gbxindex = size_t{0};
