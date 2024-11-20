@@ -38,17 +38,6 @@
 #include "superdrops/superdrop.hpp"
 #include "superdrops/terminalvelocity.hpp"
 
-// TODO(ALL): delete redundant no-longer used functions
-
-KOKKOS_FUNCTION unsigned int change_if_coord3nghbr(const CartesianMaps &gbxmaps, unsigned int idx,
-                                                   Superdrop &drop);
-
-KOKKOS_FUNCTION unsigned int change_if_coord1nghbr(const CartesianMaps &gbxmaps, unsigned int idx,
-                                                   Superdrop &drop);
-
-KOKKOS_FUNCTION unsigned int change_if_coord2nghbr(const CartesianMaps &gbxmaps, unsigned int idx,
-                                                   Superdrop &drop);
-
 /* wrapper of operator for use of function
 in PredCorrMotion's CheckBounds type */
 struct CartesianCheckBounds {
@@ -65,32 +54,6 @@ struct CartesianCheckBounds {
            " Try reducing the motion timestep to"
            " satisfy CFL criteria, or use "
            " 'update_ifoutside' to update sd_gbxindex");
-  }
-};
-
-/* wrapper of functions for use in PredCorrMotion's
-ChangeToNghbr type for deciding if a superdroplet should move
-to a neighbouring gbx in a cartesian domain and then updating the
-superdroplet appropriately. Struct has three functions, one
-for each direction (coord3 = z, coord1 = x, coord2 = y). For each,
-the superdrop's coord is compared to gridbox bounds given by gbxmaps
-for the current gbxindex 'idx'. If superdrop coord lies outside
-bounds, forward or backward neighbour functions are called to
-update sdgbxindex (and possibly other superdrop attributes) */
-struct CartesianChangeIfNghbr {
-  KOKKOS_INLINE_FUNCTION unsigned int coord3(const CartesianMaps &gbxmaps, unsigned int idx,
-                                             Superdrop &drop) const {
-    return change_if_coord3nghbr(gbxmaps, idx, drop);
-  }
-
-  KOKKOS_INLINE_FUNCTION unsigned int coord1(const CartesianMaps &gbxmaps, unsigned int idx,
-                                             Superdrop &drop) const {
-    return change_if_coord1nghbr(gbxmaps, idx, drop);
-  }
-
-  KOKKOS_INLINE_FUNCTION unsigned int coord2(const CartesianMaps &gbxmaps, unsigned int idx,
-                                             Superdrop &drop) const {
-    return change_if_coord2nghbr(gbxmaps, idx, drop);
   }
 };
 

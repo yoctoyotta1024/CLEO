@@ -15,7 +15,6 @@ set(LIB_BINARY_DIR ${CLEO_BINARY_DIR}/lib)
 set(SOURCES
 "add_supers_at_domain_top.cpp"
 "cartesianmaps.cpp"
-"cartesianmotion.cpp"
 "createcartesianmaps.cpp"
 "cartesian_decomposition.cpp"
 )
