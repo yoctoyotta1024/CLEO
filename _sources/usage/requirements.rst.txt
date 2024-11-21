@@ -22,17 +22,21 @@ Compilers
 ---------
 A C++ compiler with the C++20 standard library is the absolute minimum.
 
-On Levante you can use the latest gcc compilers. At the time of writing this is gcc 11.2.0, e.g.
+On Levante you can use the latest MPI compiler wrappers for the gcc compilers.
+At the time of writing this is gcc 11.2.0, e.g.
 
 .. code-block:: console
 
-  $ module load gcc/11.2.0-gcc-11.2.0
+  $ module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0
 
-To compile with CUDA, use Levante's latest nvhpc compilers, e.g.
+To compile with C++ and CUDA, use Levante's nvhpc compilers too, e.g.
 
 .. code-block:: console
 
-  $ module load nvhpc/23.9-gcc-11.2.0
+  $ module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0 nvhpc/23.9-gcc-11.2.0
+
+(Note you still need to use the gcc openmpi library as opposed to the nvhpc one because CLEO uses
+gcc not nvhpc where this is relevant).
 
 Python
 ------
@@ -40,12 +44,6 @@ To use PySD you need Python minimum version 3.10.4. We advise you to :ref:`creat
 environment<environment>` using our envirnoment.yml file. This environment should automatically
 include all the additional packages you may require. If not, please :ref:`contact us <contact>` or
 `open a new issue <https://github.com/yoctoyotta1024/CLEO/issues/new>`_ on our GitHub repository.
-
-On Levante it's a good idea to load the python3 module, e.g.
-
-.. code-block:: console
-
-  $ module load python3/2022.01-gcc-11.2.0
 
 To use PySD and to run CLEO's examples, particular Python packages are needed. These are included in
 our environment.yml file and are the following: ``matplotlib``, ``numpy``, ``scipy``, ``xarray``,
@@ -57,7 +55,7 @@ You can install Python packages to an existing Conda (or Mamba) environment via:
 
 .. code-block:: console
 
-  $ conda activate [your conda environment]
+  $ micromamba activate [your conda environment]
   $ python -m pip install [package name(s)]
 
 YAC

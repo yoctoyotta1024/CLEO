@@ -430,6 +430,28 @@
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7Dataset17set_decompositionE22CartesianDecomposition">
+<span id="_CPPv3N7Dataset17set_decompositionE22CartesianDecomposition"></span><span id="_CPPv2N7Dataset17set_decompositionE22CartesianDecomposition"></span><span id="Dataset::set_decomposition__CartesianDecomposition"></span><span class="target" id="classDataset_1afa222e95f2ce6c76527a035557b3971d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_decomposition</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">CartesianDecomposition</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">decomposition</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7Dataset17set_decompositionE22CartesianDecomposition" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Sets the decomposition maps for correctly writing data out. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>decomposition</strong> – A CartesianDecomposition instance with the domain decomposition </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7Dataset21set_max_superdropletsEj">
+<span id="_CPPv3N7Dataset21set_max_superdropletsEj"></span><span id="_CPPv2N7Dataset21set_max_superdropletsEj"></span><span id="Dataset::set_max_superdroplets__unsigned-i"></span><span class="target" id="classDataset_1ab80b899d50e43a558015f459d90432bc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_max_superdroplets</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">max_superdroplets</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7Dataset21set_max_superdropletsEj" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Sets the maximum number of superdroplets for data allocation, comes from the config file. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>max_superdroplets</strong> – The maximum number of superdroplets of the model </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4I0ENK7Dataset12create_arrayE15XarrayZarrArrayI5Store1TEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEE">
 <span id="_CPPv3I0ENK7Dataset12create_arrayEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEE"></span><span id="_CPPv2I0ENK7Dataset12create_arrayEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classDataset_1ae0316ee92ccfbea38ebfa5c8ec4780eb"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="xarray_zarr_array.html#_CPPv4I00E15XarrayZarrArray" title="XarrayZarrArray"><span class="n"><span class="pre">XarrayZarrArray</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E7Dataset" title="Dataset::Store"><span class="n"><span class="pre">Store</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0ENK7Dataset12create_arrayE15XarrayZarrArrayI5Store1TEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEE" title="Dataset::create_array::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_array</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">units</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">scale_factor</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">chunkshape</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dimnames</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4I0ENK7Dataset12create_arrayE15XarrayZarrArrayI5Store1TEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Creates a new array in the dataset. </p>
@@ -637,12 +659,327 @@
 </dl>
 </dd></dl>
 
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="classDataset_1a6c83c894243c11b8feea13f6e4bc160f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Dataset</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0E7Dataset" title="Dataset::Store"><span class="n"><span class="pre">Store</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">store</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Constructs a <a class="reference internal" href="#classDataset"><span class="std std-ref">Dataset</span></a> with the specified store object. </p>
+<p>This constructor initializes a <a class="reference internal" href="#classDataset"><span class="std std-ref">Dataset</span></a> with the provided store object by initialising a <a class="reference internal" href="zarr_group.html#structZarrGroup"><span class="std std-ref">ZarrGroup</span></a> and writing some additional metatdata for Xarray and NetCDF.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>store</strong> – The store object associated with the <a class="reference internal" href="#classDataset"><span class="std std-ref">Dataset</span></a>. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="classDataset_1abad84131276da081f03d4834712077f7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_dimension</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dimname</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Returns the size of an existing dimension in the dataset. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dimname</strong> – A string for the name of the dimension in the dataset. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The size of (i.e. number of elements along) the dimension. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="classDataset_1a739258d006049838f6b84f43688441fb"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_dimension</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dim</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Sets the size of an existing dimension in the dataset. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dim</strong> – A pair containing the name of the dimension and its new size to be set. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classDataset_1ae0316ee92ccfbea38ebfa5c8ec4780eb"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="xarray_zarr_array.html#_CPPv4I00E15XarrayZarrArray" title="XarrayZarrArray"><span class="n"><span class="pre">XarrayZarrArray</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E7Dataset" title="Dataset::Store"><span class="n"><span class="pre">Store</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0ENK7Dataset12create_arrayE15XarrayZarrArrayI5Store1TEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEE" title="Dataset::create_array::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_array</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">units</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">scale_factor</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">chunkshape</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dimnames</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Creates a new array in the dataset. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>T</strong> – The data type of the array. </p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>name</strong> – The name of the new array. </p></li>
+<li><p><strong>units</strong> – The units of the array data. </p></li>
+<li><p><strong>scale_factor</strong> – The scale factor of array data. </p></li>
+<li><p><strong>chunkshape</strong> – The shape of the chunks of the array. </p></li>
+<li><p><strong>dimnames</strong> – The names of each dimension of the array. </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instance of <a class="reference internal" href="xarray_zarr_array.html#classXarrayZarrArray"><span class="std std-ref">XarrayZarrArray</span></a> representing the newly created array. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classDataset_1a73a60b6158db9b4321908894063d0499"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="xarray_zarr_array.html#_CPPv4I00E15XarrayZarrArray" title="XarrayZarrArray"><span class="n"><span class="pre">XarrayZarrArray</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E7Dataset" title="Dataset::Store"><span class="n"><span class="pre">Store</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0EN7Dataset23create_coordinate_arrayE15XarrayZarrArrayI5Store1TEKNSt11string_viewEKNSt11string_viewEKdK6size_tK6size_t" title="Dataset::create_coordinate_array::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_coordinate_array</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">units</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">scale_factor</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">chunksize</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dimsize</span></span><span class="sig-paren">)</span><br /></dt>
+<dd><p>Creates a new 1-D array for a coordinate of the dataset. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>T</strong> – The data type of the coordinate array. </p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>name</strong> – The name of the new coordinate. </p></li>
+<li><p><strong>units</strong> – The units of the coordinate. </p></li>
+<li><p><strong>scale_factor</strong> – The scale factor of the coordinate data. </p></li>
+<li><p><strong>chunksize</strong> – The size of each 1-D chunk of the coordinate array. </p></li>
+<li><p><strong>dimsize</strong> – The initial size of the coordinate (number of elements along array). </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instance of <a class="reference internal" href="xarray_zarr_array.html#classXarrayZarrArray"><span class="std std-ref">XarrayZarrArray</span></a> representing the newly created coordinate array. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classDataset_1a03a21c383917fdc2a8ff44bc8711223c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="xarray_zarr_array.html#_CPPv4I00E15XarrayZarrArray" title="XarrayZarrArray"><span class="n"><span class="pre">XarrayZarrArray</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E7Dataset" title="Dataset::Store"><span class="n"><span class="pre">Store</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0ENK7Dataset19create_ragged_arrayE15XarrayZarrArrayI5Store1TEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEEKNSt11string_viewE" title="Dataset::create_ragged_array::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_ragged_array</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">units</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">scale_factor</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">chunkshape</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dimnames</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">sampledimname</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Creates a new ragged array in the dataset. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>T</strong> – The data type of the array. </p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>name</strong> – The name of the new array. </p></li>
+<li><p><strong>units</strong> – The units of the array data. </p></li>
+<li><p><strong>scale_factor</strong> – The scale factor of array data. </p></li>
+<li><p><strong>chunkshape</strong> – The shape of the chunks of the array. </p></li>
+<li><p><strong>dimnames</strong> – The names of each dimension of the array. </p></li>
+<li><p><strong>sampledimname</strong> – The names of the sample dimension of the array. </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instance of <a class="reference internal" href="xarray_zarr_array.html#classXarrayZarrArray"><span class="std std-ref">XarrayZarrArray</span></a> representing the newly created ragged array. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classDataset_1a311a63403fa4dfde7300b44ce0feb77e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="xarray_zarr_array.html#_CPPv4I00E15XarrayZarrArray" title="XarrayZarrArray"><span class="n"><span class="pre">XarrayZarrArray</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E7Dataset" title="Dataset::Store"><span class="n"><span class="pre">Store</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0ENK7Dataset24create_raggedcount_arrayE15XarrayZarrArrayI5Store1TEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEEKNSt11string_viewE" title="Dataset::create_raggedcount_array::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_raggedcount_array</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">units</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">scale_factor</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">chunkshape</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dimnames</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">sampledimname</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Creates a new raggedcount array in the dataset. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>T</strong> – The data type of the array. </p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>name</strong> – The name of the new array. </p></li>
+<li><p><strong>units</strong> – The units of the array data. </p></li>
+<li><p><strong>scale_factor</strong> – The scale factor of array data. </p></li>
+<li><p><strong>chunkshape</strong> – The shape of the chunks of the array. </p></li>
+<li><p><strong>dimnames</strong> – The names of each dimension of the array. </p></li>
+<li><p><strong>sampledimname</strong> – The names of the sample dimension of the array. </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instance of <a class="reference internal" href="xarray_zarr_array.html#classXarrayZarrArray"><span class="std std-ref">XarrayZarrArray</span></a> representing the newly created raggedcount array. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classDataset_1a2f120185546c5b331d0e4f4192eef816"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_arrayshape</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="xarray_zarr_array.html#_CPPv4I00E15XarrayZarrArray" title="XarrayZarrArray"><span class="n"><span class="pre">XarrayZarrArray</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E7Dataset" title="Dataset::Store"><span class="n"><span class="pre">Store</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0ENK7Dataset16write_arrayshapeEvR15XarrayZarrArrayI5Store1TE" title="Dataset::write_arrayshape::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">xzarr</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Calls array’s shape function to ensure the shape of the array matches the dimensions of the dataset. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>T</strong> – The data type of the array. </p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>xzarr</strong> – An instance of <a class="reference internal" href="xarray_zarr_array.html#classXarrayZarrArray"><span class="std std-ref">XarrayZarrArray</span></a> representing the array. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classDataset_1ac6624f3bce5175520b7eb5df492247e7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_arrayshape</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="xarray_zarr_array.html#_CPPv4I00E15XarrayZarrArray" title="XarrayZarrArray"><span class="n"><span class="pre">XarrayZarrArray</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E7Dataset" title="Dataset::Store"><span class="n"><span class="pre">Store</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0ENK7Dataset16write_arrayshapeEvKNSt10shared_ptrI15XarrayZarrArrayI5Store1TEEE" title="Dataset::write_arrayshape::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">xzarr_ptr</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Calls array’s shape function to ensure the shape of the array matches the dimensions of the dataset. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>T</strong> – The data type of the array. </p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>xzarr_ptr</strong> – A shared pointer to the instance of <a class="reference internal" href="xarray_zarr_array.html#classXarrayZarrArray"><span class="std std-ref">XarrayZarrArray</span></a> representing the array. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classDataset_1a7a67370b98c0dd9a488b5d98552fa405"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_ragged_arrayshape</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="xarray_zarr_array.html#_CPPv4I00E15XarrayZarrArray" title="XarrayZarrArray"><span class="n"><span class="pre">XarrayZarrArray</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E7Dataset" title="Dataset::Store"><span class="n"><span class="pre">Store</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0ENK7Dataset23write_ragged_arrayshapeEvR15XarrayZarrArrayI5Store1TE" title="Dataset::write_ragged_arrayshape::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">xzarr</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Calls array’s shape function to write the shape of the array for a ragged array. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>T</strong> – The data type of the array. </p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>xzarr</strong> – An instance of <a class="reference internal" href="xarray_zarr_array.html#classXarrayZarrArray"><span class="std std-ref">XarrayZarrArray</span></a> representing the array. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classDataset_1a9e8fd5046f57ba3de089993fe2ea30b1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_to_array</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="xarray_zarr_array.html#_CPPv4I00E15XarrayZarrArray" title="XarrayZarrArray"><span class="n"><span class="pre">XarrayZarrArray</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E7Dataset" title="Dataset::Store"><span class="n"><span class="pre">Store</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0ENK7Dataset14write_to_arrayEvR15XarrayZarrArrayI5Store1TEKN6BufferI1TE12viewh_bufferE" title="Dataset::write_to_array::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">xzarr</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><a class="reference internal" href="buffer.html#_CPPv4I0E6Buffer" title="Buffer"><span class="n"><span class="pre">Buffer</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0ENK7Dataset14write_to_arrayEvR15XarrayZarrArrayI5Store1TEKN6BufferI1TE12viewh_bufferE" title="Dataset::write_to_array::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">viewh_buffer</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">h_data</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Writes data from Kokkos view in host memory to a Zarr array in the dataset and calls function to ensure the shape of the array matches the dimensions of the dataset. </p>
+<p>Function writes data to an array in the dataset and updates the metadata for the shape of the array to ensure the size of each dimension of the array is consistent with the dimensions of the dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>T</strong> – The data type of the array. </p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>xzarr</strong> – An instance of <a class="reference internal" href="xarray_zarr_array.html#classXarrayZarrArray"><span class="std std-ref">XarrayZarrArray</span></a> representing the array. </p></li>
+<li><p><strong>h_data</strong> – The data to be written to the array. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classDataset_1aa949933aebf3601819533705996250be"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_to_array</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="xarray_zarr_array.html#_CPPv4I00E15XarrayZarrArray" title="XarrayZarrArray"><span class="n"><span class="pre">XarrayZarrArray</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E7Dataset" title="Dataset::Store"><span class="n"><span class="pre">Store</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0ENK7Dataset14write_to_arrayEvKNSt10shared_ptrI15XarrayZarrArrayI5Store1TEEEKN6BufferI1TE12viewh_bufferE" title="Dataset::write_to_array::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">xzarr_ptr</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><a class="reference internal" href="buffer.html#_CPPv4I0E6Buffer" title="Buffer"><span class="n"><span class="pre">Buffer</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0ENK7Dataset14write_to_arrayEvKNSt10shared_ptrI15XarrayZarrArrayI5Store1TEEEKN6BufferI1TE12viewh_bufferE" title="Dataset::write_to_array::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">viewh_buffer</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">h_data</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Writes data from Kokkos view in host memory to a Zarr array in the dataset and calls function to ensure the shape of the array matches the dimensions of the dataset. </p>
+<p>Function writes data to an array in the dataset and updates the metadata for the shape of the array to ensure the size of each dimension of the array is consistent with the dimensions of the dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>T</strong> – The data type of the array. </p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>xzarr_ptr</strong> – A shared pointer to the instance of <a class="reference internal" href="xarray_zarr_array.html#classXarrayZarrArray"><span class="std std-ref">XarrayZarrArray</span></a> representing the array. </p></li>
+<li><p><strong>h_data</strong> – The data to be written to the array. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classDataset_1a6a29944660efeffc29ba2741f9a159ce"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_to_array</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="xarray_zarr_array.html#_CPPv4I00E15XarrayZarrArray" title="XarrayZarrArray"><span class="n"><span class="pre">XarrayZarrArray</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E7Dataset" title="Dataset::Store"><span class="n"><span class="pre">Store</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0ENK7Dataset14write_to_arrayEvKNSt10shared_ptrI15XarrayZarrArrayI5Store1TEEEK1T" title="Dataset::write_to_array::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">xzarr_ptr</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0ENK7Dataset14write_to_arrayEvKNSt10shared_ptrI15XarrayZarrArrayI5Store1TEEEK1T" title="Dataset::write_to_array::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Writes 1 data element to a Zarr array in the dataset and calls function to ensure the shape of the array matches the dimensions of the dataset. </p>
+<p>Function writes 1 data element to an array in the dataset and updates the metadata for the shape of the array to ensure the size of each dimension of the array is consistent with the dimensions of the dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>T</strong> – The data type of the array. </p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>xzarr_ptr</strong> – A shared pointer to the instance of <a class="reference internal" href="xarray_zarr_array.html#classXarrayZarrArray"><span class="std std-ref">XarrayZarrArray</span></a> representing the array. </p></li>
+<li><p><strong>data</strong> – The data element to be written to the array. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classDataset_1af7ad2ff7ed49e0b271b8e6842bd56a27"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_to_ragged_array</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="xarray_zarr_array.html#_CPPv4I00E15XarrayZarrArray" title="XarrayZarrArray"><span class="n"><span class="pre">XarrayZarrArray</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E7Dataset" title="Dataset::Store"><span class="n"><span class="pre">Store</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0ENK7Dataset21write_to_ragged_arrayEvR15XarrayZarrArrayI5Store1TEKN6BufferI1TE12viewh_bufferE" title="Dataset::write_to_ragged_array::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">xzarr</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><a class="reference internal" href="buffer.html#_CPPv4I0E6Buffer" title="Buffer"><span class="n"><span class="pre">Buffer</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0ENK7Dataset21write_to_ragged_arrayEvR15XarrayZarrArrayI5Store1TEKN6BufferI1TE12viewh_bufferE" title="Dataset::write_to_ragged_array::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">viewh_buffer</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">h_data</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><br /></dt>
+<dd><p>Writes data from Kokkos view in host memory to a Zarr array in the dataset and calls function to ensure the shape of the array matches the dimensions of the dataset. </p>
+<p>Function writes data to an array in the dataset and updates the metadata for the shape of the array to ensure the size of each dimension of the array is consistent with the dimensions of the dataset.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>T</strong> – The data type of the array. </p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>xzarr</strong> – An instance of <a class="reference internal" href="xarray_zarr_array.html#classXarrayZarrArray"><span class="std std-ref">XarrayZarrArray</span></a> representing the array. </p></li>
+<li><p><strong>h_data</strong> – The data to be written to the array. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-functions">Private Functions</p>
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N7Dataset28collect_distributed_dim_sizeERKNSt4pairINSt6stringE6size_tEE">
+<span id="_CPPv3N7Dataset28collect_distributed_dim_sizeERKNSt4pairINSt6stringE6size_tEE"></span><span id="_CPPv2N7Dataset28collect_distributed_dim_sizeERKNSt4pairINSt6stringE6size_tEE"></span><span id="Dataset::collect_distributed_dim_size__std::pair:ss.s:CR"></span><span class="target" id="classDataset_1af9de379988f139b933e7fc3382ac111a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">collect_distributed_dim_size</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dim</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7Dataset28collect_distributed_dim_sizeERKNSt4pairINSt6stringE6size_tEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Collects the distributed process-local size of dimensions. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dim</strong> – A pair with the dimension name and local size </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0ENK7Dataset19collect_global_dataEN6Kokkos4ViewIP1T9HostSpaceEEN6Kokkos4ViewIP1T9HostSpaceEENSt6vectorINSt6stringEEE">
+<span id="_CPPv3I0ENK7Dataset19collect_global_dataEN6Kokkos4ViewIP1T9HostSpaceEENSt6vectorINSt6stringEEE"></span><span id="_CPPv2I0ENK7Dataset19collect_global_dataEN6Kokkos4ViewIP1T9HostSpaceEENSt6vectorINSt6stringEEE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classDataset_1a77b44cb429fb70050be20b46cad85d4a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">View</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0ENK7Dataset19collect_global_dataEN6Kokkos4ViewIP1T9HostSpaceEEN6Kokkos4ViewIP1T9HostSpaceEENSt6vectorINSt6stringEEE" title="Dataset::collect_global_data::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv49HostSpace" title="HostSpace"><span class="n"><span class="pre">HostSpace</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">collect_global_data</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">View</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0ENK7Dataset19collect_global_dataEN6Kokkos4ViewIP1T9HostSpaceEEN6Kokkos4ViewIP1T9HostSpaceEENSt6vectorINSt6stringEEE" title="Dataset::collect_global_data::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv49HostSpace" title="HostSpace"><span class="n"><span class="pre">HostSpace</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dimnames</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4I0ENK7Dataset19collect_global_dataEN6Kokkos4ViewIP1T9HostSpaceEEN6Kokkos4ViewIP1T9HostSpaceEENSt6vectorINSt6stringEEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Collects the distributed process-local data for a write. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – A Kokkos view containing the data to be collected </p></li>
+<li><p><strong>dimnames</strong> – The names of the dimensions related to the array </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0ENK7Dataset20correct_gridbox_dataEvNSt6stringEP1TP1T">
+<span id="_CPPv3I0ENK7Dataset20correct_gridbox_dataENSt6stringEP1TP1T"></span><span id="_CPPv2I0ENK7Dataset20correct_gridbox_dataENSt6stringEP1TP1T"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classDataset_1a6c03bce52f8d70435e71d74e949f452e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">correct_gridbox_data</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dimension</span></span>, <a class="reference internal" href="#_CPPv4I0ENK7Dataset20correct_gridbox_dataEvNSt6stringEP1TP1T" title="Dataset::correct_gridbox_data::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">target</span></span>, <a class="reference internal" href="#_CPPv4I0ENK7Dataset20correct_gridbox_dataEvNSt6stringEP1TP1T" title="Dataset::correct_gridbox_data::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">source</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4I0ENK7Dataset20correct_gridbox_dataEvNSt6stringEP1TP1T" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Correcly orders global data following the global gridbox order. </p>
+<p>Given a source and a target array, correctly orders data from the source on the target following the global gridbox ordering. Should be called only on process 0.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dimension</strong> – The dimension name which should be the gridboxes </p></li>
+<li><p><strong>source</strong> – The array to take the data from </p></li>
+<li><p><strong>target</strong> – The array to write the data to, according to the global gridbox order </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7Dataset20collect_global_arrayEPfPfiPiPi">
+<span id="_CPPv3NK7Dataset20collect_global_arrayEPfPfiPiPi"></span><span id="_CPPv2NK7Dataset20collect_global_arrayEPfPfiPiPi"></span><span id="Dataset::collect_global_array__floatP.floatP.i.iP.iPC"></span><span class="target" id="classDataset_1a87f0d625be8756e7f1da7fbe9fc46e79"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">collect_global_array</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">target</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">local_source</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">local_size</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">receive_counts</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">receive_displacements</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7Dataset20collect_global_arrayEPfPfiPiPi" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Wrapper for MPI gatherv call for a float array. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7Dataset20collect_global_arrayEPjPjiPiPi">
+<span id="_CPPv3NK7Dataset20collect_global_arrayEPjPjiPiPi"></span><span id="_CPPv2NK7Dataset20collect_global_arrayEPjPjiPiPi"></span><span id="Dataset::collect_global_array__unsigned-iP.unsigned-iP.i.iP.iPC"></span><span class="target" id="classDataset_1a40f47d1f7fa9bf3a5c15b10bc0ee6a5f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">collect_global_array</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">target</span></span>, <span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">local_source</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">local_size</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">receive_counts</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">receive_displacements</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7Dataset20collect_global_arrayEPjPjiPiPi" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Wrapper for MPI gatherv call for a unsigned int array. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK7Dataset20collect_global_arrayEP6size_tP6size_tiPiPi">
+<span id="_CPPv3NK7Dataset20collect_global_arrayEP6size_tP6size_tiPiPi"></span><span id="_CPPv2NK7Dataset20collect_global_arrayEP6size_tP6size_tiPiPi"></span><span id="Dataset::collect_global_array__sP.sP.i.iP.iPC"></span><span class="target" id="classDataset_1acd4771669f7fe45e133f86f7c8f74840"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">collect_global_array</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">target</span></span>, <span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">local_source</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">local_size</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">receive_counts</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">receive_displacements</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7Dataset20collect_global_arrayEP6size_tP6size_tiPiPi" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Wrapper for MPI gatherv call for a unsigned int array. </p>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N7Dataset13add_dimensionERKNSt4pairINSt6stringE6size_tEE">
 <span id="_CPPv3N7Dataset13add_dimensionERKNSt4pairINSt6stringE6size_tEE"></span><span id="_CPPv2N7Dataset13add_dimensionERKNSt4pairINSt6stringE6size_tEE"></span><span id="Dataset::add_dimension__std::pair:ss.s:CR"></span><span class="target" id="classDataset_1a8738e123e1a13829268aa4c5d52e282a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_dimension</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dim</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N7Dataset13add_dimensionERKNSt4pairINSt6stringE6size_tEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Adds a dimension to the dataset. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>dim</strong> – A pair containing the name and size of the dimension to be added. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp">
+<span class="target" id="classDataset_1a8738e123e1a13829268aa4c5d52e282a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_dimension</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dim</span></span><span class="sig-paren">)</span><br /></dt>
 <dd><p>Adds a dimension to the dataset. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -656,15 +993,42 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N7Dataset5groupE">
-<span id="_CPPv3N7Dataset5groupE"></span><span id="_CPPv2N7Dataset5groupE"></span><span id="Dataset::group__ZarrGroup:Store:"></span><span class="target" id="classDataset_1a80c2a4e6d41eca9e9ede695e2a1a4224"></span><a class="reference internal" href="zarr_group.html#_CPPv4I0E9ZarrGroup" title="ZarrGroup"><span class="n"><span class="pre">ZarrGroup</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E7Dataset" title="Dataset::Store"><span class="n"><span class="pre">Store</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">group</span></span></span><a class="headerlink" href="#_CPPv4N7Dataset5groupE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Reference to the zarr group object. </p>
+<span id="_CPPv3N7Dataset5groupE"></span><span id="_CPPv2N7Dataset5groupE"></span><span id="Dataset::group__ZarrGroup:Store:"></span><span class="target" id="classDataset_1ae7df2acd73eb4ed634c03fc9f2a8168f"></span><a class="reference internal" href="zarr_group.html#_CPPv4I0E9ZarrGroup" title="ZarrGroup"><span class="n"><span class="pre">ZarrGroup</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E7Dataset" title="Dataset::Store"><span class="n"><span class="pre">Store</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">group</span></span></span><a class="headerlink" href="#_CPPv4N7Dataset5groupE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>&lt; Reference to the zarr group object. map from name of each dimension in dataset to their size</p>
+<p>Reference to the zarr group object. </p>
 </dd></dl>
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N7Dataset11datasetdimsE">
-<span id="_CPPv3N7Dataset11datasetdimsE"></span><span id="_CPPv2N7Dataset11datasetdimsE"></span><span id="Dataset::datasetdims__std::unordered_map:ss.s:"></span><span class="target" id="classDataset_1ac8aa357ad32b02d2481cdd486ca48819"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">datasetdims</span></span></span><a class="headerlink" href="#_CPPv4N7Dataset11datasetdimsE" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3N7Dataset11datasetdimsE"></span><span id="_CPPv2N7Dataset11datasetdimsE"></span><span id="Dataset::datasetdims__std::unordered_map:ss.s:"></span><span class="target" id="classDataset_1a0dc23d083d69b99431faf060e1a69688"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">datasetdims</span></span></span><a class="headerlink" href="#_CPPv4N7Dataset11datasetdimsE" title="Link to this definition">¶</a><br /></dt>
 <dd><p>map from name of each dimension in dataset to their size </p>
 </dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7Dataset13decompositionE">
+<span id="_CPPv3N7Dataset13decompositionE"></span><span id="_CPPv2N7Dataset13decompositionE"></span><span id="Dataset::decomposition__CartesianDecomposition"></span><span class="target" id="classDataset_1ac3187f06d3454862c46437ad6b7b1ffd"></span><span class="n"><span class="pre">CartesianDecomposition</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">decomposition</span></span></span><a class="headerlink" href="#_CPPv4N7Dataset13decompositionE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7Dataset28global_superdroplet_orderingE">
+<span id="_CPPv3N7Dataset28global_superdroplet_orderingE"></span><span id="_CPPv2N7Dataset28global_superdroplet_orderingE"></span><span id="Dataset::global_superdroplet_ordering__std::shared_ptr:std::vector:unsigned-i::"></span><span class="target" id="classDataset_1aceb191ae612a942e41a4c43cc5da78bf"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">shared_ptr</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">global_superdroplet_ordering</span></span></span><a class="headerlink" href="#_CPPv4N7Dataset28global_superdroplet_orderingE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>map from name of each dimension in dataset to their size </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7Dataset23distributed_datasetdimsE">
+<span id="_CPPv3N7Dataset23distributed_datasetdimsE"></span><span id="_CPPv2N7Dataset23distributed_datasetdimsE"></span><span id="Dataset::distributed_datasetdims__std::unordered_map:ss.std::vector:s::"></span><span class="target" id="classDataset_1aecbaaeaba777cd2bddec0161981df4e0"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">distributed_datasetdims</span></span></span><a class="headerlink" href="#_CPPv4N7Dataset23distributed_datasetdimsE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7Dataset7my_rankE">
+<span id="_CPPv3N7Dataset7my_rankE"></span><span id="_CPPv2N7Dataset7my_rankE"></span><span id="Dataset::my_rank__i"></span><span class="target" id="classDataset_1a82ac68c479fbf6ce1f3183a3ac1031a0"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">my_rank</span></span></span><a class="headerlink" href="#_CPPv4N7Dataset7my_rankE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N7Dataset9comm_sizeE">
+<span id="_CPPv3N7Dataset9comm_sizeE"></span><span id="_CPPv2N7Dataset9comm_sizeE"></span><span id="Dataset::comm_size__i"></span><span class="target" id="classDataset_1ab3d2095c02f56f5051759b27f760e46b"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">comm_size</span></span></span><a class="headerlink" href="#_CPPv4N7Dataset9comm_sizeE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
 
 </div>
 </dd></dl>
@@ -706,7 +1070,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 14 November 2024</div>
+              Last updated on 21 November 2024</div>
           </div>
           <div class="right-details">
             
@@ -732,6 +1096,8 @@
 <li><a class="reference internal" href="#_CPPv4N7Dataset7DatasetER5Store"><code class="docutils literal notranslate"><span class="pre">Dataset::Dataset()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK7Dataset13get_dimensionERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Dataset::get_dimension()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N7Dataset13set_dimensionERKNSt4pairINSt6stringE6size_tEE"><code class="docutils literal notranslate"><span class="pre">Dataset::set_dimension()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7Dataset17set_decompositionE22CartesianDecomposition"><code class="docutils literal notranslate"><span class="pre">Dataset::set_decomposition()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7Dataset21set_max_superdropletsEj"><code class="docutils literal notranslate"><span class="pre">Dataset::set_max_superdroplets()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I0ENK7Dataset12create_arrayE15XarrayZarrArrayI5Store1TEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEE"><code class="docutils literal notranslate"><span class="pre">Dataset::create_array()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I0EN7Dataset23create_coordinate_arrayE15XarrayZarrArrayI5Store1TEKNSt11string_viewEKNSt11string_viewEKdK6size_tK6size_t"><code class="docutils literal notranslate"><span class="pre">Dataset::create_coordinate_array()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I0ENK7Dataset19create_ragged_arrayE15XarrayZarrArrayI5Store1TEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEEKNSt11string_viewE"><code class="docutils literal notranslate"><span class="pre">Dataset::create_ragged_array()</span></code></a></li>
@@ -743,9 +1109,20 @@
 <li><a class="reference internal" href="#_CPPv4I0ENK7Dataset14write_to_arrayEvKNSt10shared_ptrI15XarrayZarrArrayI5Store1TEEEKN6BufferI1TE12viewh_bufferE"><code class="docutils literal notranslate"><span class="pre">Dataset::write_to_array()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I0ENK7Dataset14write_to_arrayEvKNSt10shared_ptrI15XarrayZarrArrayI5Store1TEEEK1T"><code class="docutils literal notranslate"><span class="pre">Dataset::write_to_array()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I0ENK7Dataset21write_to_ragged_arrayEvR15XarrayZarrArrayI5Store1TEKN6BufferI1TE12viewh_bufferE"><code class="docutils literal notranslate"><span class="pre">Dataset::write_to_ragged_array()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7Dataset28collect_distributed_dim_sizeERKNSt4pairINSt6stringE6size_tEE"><code class="docutils literal notranslate"><span class="pre">Dataset::collect_distributed_dim_size()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I0ENK7Dataset19collect_global_dataEN6Kokkos4ViewIP1T9HostSpaceEEN6Kokkos4ViewIP1T9HostSpaceEENSt6vectorINSt6stringEEE"><code class="docutils literal notranslate"><span class="pre">Dataset::collect_global_data()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I0ENK7Dataset20correct_gridbox_dataEvNSt6stringEP1TP1T"><code class="docutils literal notranslate"><span class="pre">Dataset::correct_gridbox_data()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7Dataset20collect_global_arrayEPfPfiPiPi"><code class="docutils literal notranslate"><span class="pre">Dataset::collect_global_array()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7Dataset20collect_global_arrayEPjPjiPiPi"><code class="docutils literal notranslate"><span class="pre">Dataset::collect_global_array()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7Dataset20collect_global_arrayEP6size_tP6size_tiPiPi"><code class="docutils literal notranslate"><span class="pre">Dataset::collect_global_array()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N7Dataset13add_dimensionERKNSt4pairINSt6stringE6size_tEE"><code class="docutils literal notranslate"><span class="pre">Dataset::add_dimension()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N7Dataset5groupE"><code class="docutils literal notranslate"><span class="pre">Dataset::group</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N7Dataset11datasetdimsE"><code class="docutils literal notranslate"><span class="pre">Dataset::datasetdims</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7Dataset13decompositionE"><code class="docutils literal notranslate"><span class="pre">Dataset::decomposition</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7Dataset28global_superdroplet_orderingE"><code class="docutils literal notranslate"><span class="pre">Dataset::global_superdroplet_ordering</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7Dataset23distributed_datasetdimsE"><code class="docutils literal notranslate"><span class="pre">Dataset::distributed_datasetdims</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7Dataset7my_rankE"><code class="docutils literal notranslate"><span class="pre">Dataset::my_rank</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N7Dataset9comm_sizeE"><code class="docutils literal notranslate"><span class="pre">Dataset::comm_size</span></code></a></li>
 </ul>
 </li>
 </ul>
