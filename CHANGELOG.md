@@ -2,6 +2,81 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.28.0](https://github.com/yoctoyotta1024/CLEO/compare/d783df060fed33171cfd5024e1c6c33e7b45c80e..v0.28.0) - 2024-11-21
+#### Bug Fixes
+- renamed function - ([5597588](https://github.com/yoctoyotta1024/CLEO/commit/55975888f1dd590afc11f4776087cc6ad544c511)) - clara.bayley
+- fix order of dataset includes - ([643588a](https://github.com/yoctoyotta1024/CLEO/commit/643588a02ba8d88bd854934f17e9c212db7a65aa)) - clara.bayley
+- deltas in predcorr gpu compatible and add kokkos macros to gbxmaps gpu functions - ([d03e2ec](https://github.com/yoctoyotta1024/CLEO/commit/d03e2ecee1d07f74d3ea8046479dfefc26ac5539)) - clara.bayley
+- add MPI guards to fromfile_irreg example - ([8f02d55](https://github.com/yoctoyotta1024/CLEO/commit/8f02d5512e1a90be6a8cc4502d60bb7b57e78933)) - clara.bayley
+- change executable names in CI - ([c930271](https://github.com/yoctoyotta1024/CLEO/commit/c930271279f08c588917914017106f53df985f3a)) - clara.bayley
+- typo in comment - ([43e08fd](https://github.com/yoctoyotta1024/CLEO/commit/43e08fdbcf42b9f7892ab3f4bc8f20187832e266)) - clara.bayley
+- fix sphinx dependencies after sphinx version 8 - ([92e396b](https://github.com/yoctoyotta1024/CLEO/commit/92e396ba0ec9345ec1b7b7485cb079b064d90a9a)) - clara.bayley
+- Security vulnerability - ([d26a02c](https://github.com/yoctoyotta1024/CLEO/commit/d26a02c4091ef870102739820625a0f81a235319)) - clara.bayley
+- added CartesianMaps instance to receive_dynamics in yac coupling dynamics - ([2370edb](https://github.com/yoctoyotta1024/CLEO/commit/2370edb69f8051b2595ddf80e7e353f249fb1f2d)) - Wilton Jaciel Loch
+- added CartesianMaps instance to cvode and null coupling dynamics - ([95598de](https://github.com/yoctoyotta1024/CLEO/commit/95598dedcd48ea1f08ecc56fcb9e98f59bf1ef9f)) - Wilton Jaciel Loch
+#### Continuous Integration
+- updated cmake compiler flag to use mpi wrappers - ([97f9438](https://github.com/yoctoyotta1024/CLEO/commit/97f94389f48a8516609d2249a1f93bfb5a630083)) - Wilton Jaciel Loch
+- minor changes for building with more restrict compiler rules - ([ee2636a](https://github.com/yoctoyotta1024/CLEO/commit/ee2636a86ba320d79501cf3e9ed41f95ec95ee31)) - Wilton Jaciel Loch
+- updated cmake compiler flag to use mpi wrappers - ([36641c3](https://github.com/yoctoyotta1024/CLEO/commit/36641c32199cafd749bf3d2105b16c228c9b53ff)) - Wilton Jaciel Loch
+#### Documentation
+- add notes on coupling function calls - ([e3746d5](https://github.com/yoctoyotta1024/CLEO/commit/e3746d52416f7961f4388049543f350037b0663b)) - clara.bayley
+- add openmpi compiler wrappers to requirements - ([ec3a531](https://github.com/yoctoyotta1024/CLEO/commit/ec3a531bc728b5c1082477a267e275f306fb786a)) - clara.bayley
+- figures for memory layout - ([44ff4bb](https://github.com/yoctoyotta1024/CLEO/commit/44ff4bb90e098096e482dd17dbde4e02d346c01c)) - clara.bayley
+- more intro on memory layout - ([a8da2a3](https://github.com/yoctoyotta1024/CLEO/commit/a8da2a337ad3699881713354af13177f402e228e)) - clara.bayley
+- figure for timestepping - ([b1072f6](https://github.com/yoctoyotta1024/CLEO/commit/b1072f6e1d383bc49255ddbb2c5423db7a3dc976)) - clara.bayley
+- more intro on timestepping - ([fa638e8](https://github.com/yoctoyotta1024/CLEO/commit/fa638e8acf88120c8aa2737b9f1ce3b1a8f426da)) - clara.bayley
+- rearrange landing page - ([06f66c5](https://github.com/yoctoyotta1024/CLEO/commit/06f66c51483316361dea90c832f0712bb9df5d18)) - clara.bayley
+- update build and executable names - ([69a71c3](https://github.com/yoctoyotta1024/CLEO/commit/69a71c35f56ddee11b74435de2d882c3f40f2c79)) - clara.bayley
+- figures for memory layout - ([889f35a](https://github.com/yoctoyotta1024/CLEO/commit/889f35a077698f7c5f6c5234708a0961d1a8d37d)) - clara.bayley
+- more intro on memory layout - ([66b63ce](https://github.com/yoctoyotta1024/CLEO/commit/66b63ce8aadf5aef0998d0436ccdaf4cc3ec507d)) - clara.bayley
+- figure for timestepping - ([734536e](https://github.com/yoctoyotta1024/CLEO/commit/734536edb5a674d170218c5fde38270fa478c7f5)) - clara.bayley
+- more intro on timestepping - ([1c2d27e](https://github.com/yoctoyotta1024/CLEO/commit/1c2d27e55fb80b81ece3252052a7e6bdd80de4f2)) - clara.bayley
+- rearrange landing page - ([0b8ef33](https://github.com/yoctoyotta1024/CLEO/commit/0b8ef33dbabb86396247c4cf75188ef2fea27792)) - clara.bayley
+#### Features
+- new bash to submit slurm for all examples - ([c51c0d8](https://github.com/yoctoyotta1024/CLEO/commit/c51c0d859bd8f6052ae036b0c8488e1094bb98eb)) - clara.bayley
+- new pysd module to help with creating and ploting initial condition binary files - ([780ee6e](https://github.com/yoctoyotta1024/CLEO/commit/780ee6ecf989da5c271fae4ef34900dcf212a123)) - clara.bayley
+- add fromfile_irreg to build CI check - ([eed98b0](https://github.com/yoctoyotta1024/CLEO/commit/eed98b0e3348eaf511d2cea2f98ffaa249a781d0)) - clara.bayley
+- add cmake target for formfile_irreg example - ([481e675](https://github.com/yoctoyotta1024/CLEO/commit/481e675bc5a196ae8e29470f5a4e536a63d2e38b)) - clara.bayley
+- new example for irregular grid version of fromfile example (for MPI devlopment) - ([a32a6f8](https://github.com/yoctoyotta1024/CLEO/commit/a32a6f84c21481c4dba4613faf140070a4b5f800)) - clara.bayley
+- added a collect_global_array implementation for long unsigned int type - ([77a43dc](https://github.com/yoctoyotta1024/CLEO/commit/77a43dc8a0677badd5302688baf39476c0282b51)) - Wilton Jaciel Loch
+- initial mpi parallelization - ([d783df0](https://github.com/yoctoyotta1024/CLEO/commit/d783df060fed33171cfd5024e1c6c33e7b45c80e)) - Wilton Jaciel Loch
+#### Miscellaneous Chores
+- **(version)** v0.27.0 - ([be63380](https://github.com/yoctoyotta1024/CLEO/commit/be633804938bb910bcc0210547d6f69a169f84bb)) - yoctoyotta1024
+- **(version)** v0.26.0 - ([d6d4c3d](https://github.com/yoctoyotta1024/CLEO/commit/d6d4c3df47c73f0b5075661f6f9f89ec7189f76f)) - yoctoyotta1024
+- **(version)** v0.25.1 - ([b415082](https://github.com/yoctoyotta1024/CLEO/commit/b415082f410628d814f873f29ca207d80cf310ad)) - yoctoyotta1024
+- delete redundant unused functions - ([91c397d](https://github.com/yoctoyotta1024/CLEO/commit/91c397d1436e1bb46a28ab761acd2e38c68e75c2)) - clara.bayley
+- fix spelling mistakes - ([d8ec48b](https://github.com/yoctoyotta1024/CLEO/commit/d8ec48b671e998fd6375e0bec3367c7f3db4d970)) - clara.bayley
+- formatting - ([660ffd0](https://github.com/yoctoyotta1024/CLEO/commit/660ffd0d7b6674a6a0529eecad29ff93ad95bb8d)) - clara.bayley
+- formatting - ([e515e14](https://github.com/yoctoyotta1024/CLEO/commit/e515e14cb845d9b4b1a75bcb788451149d1d6063)) - clara.bayley
+#### Refactoring
+- add gbxmaps functions to avoid use of non-gpu compatible domain decomposition in single process builds - ([18b91ee](https://github.com/yoctoyotta1024/CLEO/commit/18b91eefba324535ed3b3048702e3630cabbcfe9)) - clara.bayley
+- consistent use of out of bounds gbxindex value from constants - ([fb4617c](https://github.com/yoctoyotta1024/CLEO/commit/fb4617c0c7a8704a5bb2292f313916669a12b047)) - clara.bayley
+- ensure gbxmaps returns correct types - ([7cbb859](https://github.com/yoctoyotta1024/CLEO/commit/7cbb8593390824fd11e28cfb9fc6dd8a767f2387)) - clara.bayley
+- rework gridboxmaps - ([120109a](https://github.com/yoctoyotta1024/CLEO/commit/120109a81c90ea45a2992351ed869ae8f32e5c2e)) - clara.bayley
+- rework predmotion - ([f427cea](https://github.com/yoctoyotta1024/CLEO/commit/f427cea60bf9b0011207c5f9a829cb90756a5cc6)) - clara.bayley
+- move send/recv supers into seperate function with guard on comms > 1 - ([3bf7df7](https://github.com/yoctoyotta1024/CLEO/commit/3bf7df70993a7892f5622eab3b248716aeb8aafd)) - clara.bayley
+- run fromfile example for longer and with 4 tasks - ([69a8382](https://github.com/yoctoyotta1024/CLEO/commit/69a83828be9100d2331e51274c4a35a37fffd5cd)) - clara.bayley
+- helper functions for total_local_gridboxes and total_global_gridboxes - ([bd290d5](https://github.com/yoctoyotta1024/CLEO/commit/bd290d5152fa0b80baaa1c1000cece3e4e1e6c56)) - clara.bayley
+- generalise couplingcomms for any gridbox maps - ([0754c4a](https://github.com/yoctoyotta1024/CLEO/commit/0754c4ad4aa6bb26e01b48ab4e54b377e3ad8e65)) - clara.bayley
+- better use auto in examples - ([87f7398](https://github.com/yoctoyotta1024/CLEO/commit/87f7398046d205095a69dc9632aee4e5c3b35877)) - clara.bayley
+- add to bash scripts for Levante the use openmpi compiler wrappers - ([b6d7e14](https://github.com/yoctoyotta1024/CLEO/commit/b6d7e14ee3446f005a7d09b997e51aaf29fdd062)) - clara.bayley
+- added MPI capabilities to all roughpaper programs - ([ad28dc7](https://github.com/yoctoyotta1024/CLEO/commit/ad28dc730788c97cc9a27434801835e55888e13b)) - clara.bayley
+- use new python module - ([dcfa7d2](https://github.com/yoctoyotta1024/CLEO/commit/dcfa7d2da008be34c91e832d7f0891721497ad3a)) - clara.bayley
+- seperate steps in build CI - ([ccb73be](https://github.com/yoctoyotta1024/CLEO/commit/ccb73be05269990243f26a5e0f522f80485120e4)) - clara.bayley
+- use pathlib for Paths properly - ([04b5e73](https://github.com/yoctoyotta1024/CLEO/commit/04b5e7313b05a4589fa8e5bde69b9b39f017f089)) - clara.bayley
+- change levante account in bash scripts - ([52e6ace](https://github.com/yoctoyotta1024/CLEO/commit/52e6ace74b67fb23cf3c6999463ad2f07bc1a5d5)) - clara.bayley
+- format figures - ([e2210ef](https://github.com/yoctoyotta1024/CLEO/commit/e2210efb92cff995b6002e4703d664dc2faa2fe0)) - clara.bayley
+- add zXxXy dimensions in print statement - ([11dc5fe](https://github.com/yoctoyotta1024/CLEO/commit/11dc5fe56174a73098091081eac193687ca9345d)) - clara.bayley
+- set irregular gbx boudndaries - ([78b07aa](https://github.com/yoctoyotta1024/CLEO/commit/78b07aa0d4dea1506cd30f0ccd30b828d549fa11)) - clara.bayley
+- rename example fromfile -> fromfile_irreg - ([2f2550d](https://github.com/yoctoyotta1024/CLEO/commit/2f2550db56a205de2a15d89403589d43925a32f5)) - clara.bayley
+- examples renaming to get rid of bad use of capital letters - ([91af179](https://github.com/yoctoyotta1024/CLEO/commit/91af179a42e223ddbd9ab6cfd1eaa8e494a83ab6)) - clara.bayley
+- improve pre-commit hooks - ([f6d28be](https://github.com/yoctoyotta1024/CLEO/commit/f6d28be779f9b1d7adda960aa353700db344d0f8)) - clara.bayley
+- added check to avoid sequential examples to be run with more than one MPI process - ([219c3c8](https://github.com/yoctoyotta1024/CLEO/commit/219c3c8c9d43e90687ff55afc7f69033c833050c)) - Wilton Jaciel Loch
+- added MPI capabilities to all examples - ([48018c2](https://github.com/yoctoyotta1024/CLEO/commit/48018c22e90219a5246c07405ef1b04f8982b67b)) - Wilton Jaciel Loch
+- added guard to test whether the sequential dataset has been included to allow sequential examples to run normally - ([e2e51d4](https://github.com/yoctoyotta1024/CLEO/commit/e2e51d4b9757f9607798ebc9cdbaa29f279cdd64)) - Wilton Jaciel Loch
+
+- - -
+
 ## [v0.27.0](https://github.com/yoctoyotta1024/CLEO/compare/8fe37bd7e095b58363a798381730f706aaace06a..v0.27.0) - 2024-11-08
 #### Features
 - new bash to submit slurm for all examples - ([9443af2](https://github.com/yoctoyotta1024/CLEO/commit/9443af2827dd49936fdd20f224a648f51e823d2b)) - clara.bayley
