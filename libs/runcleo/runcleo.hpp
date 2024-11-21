@@ -62,7 +62,8 @@
  * @tparam Comms Type of CouplingComms.
  */
 template <CoupledDynamics CD, GridboxMaps GbxMaps, MicrophysicalProcess Microphys,
-          Motion<GbxMaps> M, typename BoundaryConditions, Observer Obs, CouplingComms<CD> Comms>
+          Motion<GbxMaps> M, typename BoundaryConditions, Observer Obs,
+          CouplingComms<GbxMaps, CD> Comms>
 class RunCLEO {
  private:
   const SDMMethods<GbxMaps, Microphys, M, BoundaryConditions, Obs> &sdm; /**< SDMMethods object. */
@@ -156,7 +157,7 @@ class RunCLEO {
   unsigned int start_step(const unsigned int t_mdl, dualview_gbx gbxs) const {
     if (t_mdl % sdm.get_couplstep() == 0) {
       gbxs.sync_host();
-      comms.receive_dynamics(coupldyn, gbxs.view_host());
+      comms.receive_dynamics(sdm.gbxmaps, coupldyn, gbxs.view_host());
       gbxs.modify_host();
     }
 
@@ -249,7 +250,7 @@ class RunCLEO {
   unsigned int proceed_to_next_step(unsigned int t_next, dualview_gbx gbxs) const {
     if (t_next % sdm.get_couplstep() == 0) {
       gbxs.sync_host();
-      comms.send_dynamics(gbxs.view_host(), coupldyn);
+      comms.send_dynamics(sdm.gbxmaps, gbxs.view_host(), coupldyn);
     }
 
     return t_next;

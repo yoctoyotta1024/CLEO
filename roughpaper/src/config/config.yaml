@@ -16,7 +16,7 @@
 # -----
 # File Description:
 # Configuration file for CLEO SDM coupled to a dynamics solver.
-# Note: The inital superdroplets data read from file "initsupers_filename" can be made with
+# Note: The initial superdroplets data read from file "initsupers_filename" can be made with
 # CLEO's pySD module (see Python script "create_initsuperdropsbinary_script.py" for usage).
 # Likewise the "grid_filename" can be made using pySD (see "create_gbxboundariesbinary_script.py"),
 # and so can the thermodynamics files when using coupled thermodynamics "fromfile".
@@ -60,34 +60,34 @@ microphysics:
     maxniters : 50                                     # maximum no. iterations of Newton Raphson Method
     MINSUBTSTEP : 0.01                                 # minimum subtimestep in cases of substepping [s]
     rtol : 0.0                                         # relative tolerance for implicit Euler integration
-    atol : 0.001                                       # abolute tolerance for implicit Euler integration
+    atol : 0.001                                       # absolute tolerance for implicit Euler integration
   # breakup:
   #   constnfrags:
   #     nfrags: 5.0                                      # average no. of fragments per droplet breakup
 
-# ### Coupled Dynamics Parameters ###
-# coupled_dynamics:
-#   type : fromfile                                      # type of coupled dynamics to configure
-#   press : ./share/dimlessthermo_press.dat              # binary filename for pressure
-#   temp : ./share/dimlessthermo_temp.dat                # binary filename for temperature
-#   qvap : ./share/dimlessthermo_qvap.dat                # binary filename for vapour mixing ratio
-#   qcond : ./share/dimlessthermo_qcond.dat              # binary filename for liquid mixing ratio
-#   wvel : ./share/dimlessthermo_wvel.dat                # binary filename for vertical (coord3) velocity
-#   uvel : ./share/dimlessthermo_uvel.dat                # binary filename for eastwards (coord1) velocity
-#   vvel : ./share/dimlessthermo_vvel.dat                # binary filename for northwards (coord2) velocity
-
 ### Coupled Dynamics Parameters ###
 coupled_dynamics:
-  type: cvode                                              # type of coupled dynamics to configure
-  # initial (uniform) thermodynamic conditions #
-  P_init: 100000.0                                         # initial pressure [Pa]
-  TEMP_init: 273.15                                        # initial temperature [T]
-  relh_init: 98.0                                          # initial relative humidity (%)
-  # ODE solver parameters #
-  W_avg: 0.5                                               # average amplitude of sinusoidal w [m/s] (dP/dt ~ w*dP/dz)
-  TAU_half: 300                                            # timescale for w sinusoid, tau_half = TAU_half/pi [s]
-  rtol: 1e-6                                               # relative tolerance for integration of [P, T, qv, qc] ODEs
-  atol: 1e-6                                               # relative tolerance for integration of [P, T, qv, qc] ODEs
+  type : fromfile                                      # type of coupled dynamics to configure
+  press : ./share/dimlessthermo_press.dat              # binary filename for pressure
+  temp : ./share/dimlessthermo_temp.dat                # binary filename for temperature
+  qvap : ./share/dimlessthermo_qvap.dat                # binary filename for vapour mixing ratio
+  qcond : ./share/dimlessthermo_qcond.dat              # binary filename for liquid mixing ratio
+  wvel : ./share/dimlessthermo_wvel.dat                # binary filename for vertical (coord3) velocity
+  uvel : ./share/dimlessthermo_uvel.dat                # binary filename for eastwards (coord1) velocity
+  vvel : ./share/dimlessthermo_vvel.dat                # binary filename for northwards (coord2) velocity
+
+# ### Coupled Dynamics Parameters ###
+# coupled_dynamics:
+#   type: cvode                                              # type of coupled dynamics to configure
+#   # initial (uniform) thermodynamic conditions #
+#   P_init: 100000.0                                         # initial pressure [Pa]
+#   TEMP_init: 273.15                                        # initial temperature [T]
+#   relh_init: 98.0                                          # initial relative humidity (%)
+#   # ODE solver parameters #
+#   W_avg: 0.5                                               # average amplitude of sinusoidal w [m/s] (dP/dt ~ w*dP/dz)
+#   TAU_half: 300                                            # timescale for w sinusoid, tau_half = TAU_half/pi [s]
+#   rtol: 1e-6                                               # relative tolerance for integration of [P, T, qv, qc] ODEs
+#   atol: 1e-6                                               # relative tolerance for integration of [P, T, qv, qc] ODEs
 
 # ### Bounday Conditions Parameters ###
 # boundary_conditions:

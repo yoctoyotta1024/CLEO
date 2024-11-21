@@ -22,16 +22,17 @@
 #ifndef LIBS_GRIDBOXES_GRIDBOXMAPS_HPP_
 #define LIBS_GRIDBOXES_GRIDBOXMAPS_HPP_
 
-#include <concepts>
-
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
+#include <concepts>
 
 /* concept for GridboxMaps is all types that have
 correct signatues for map-like functions */
 template <typename GbxMaps>
-concept GridboxMaps = requires(GbxMaps gbxmaps, unsigned int idx) {
-  { gbxmaps.maps_size() } -> std::same_as<size_t>;
+concept GridboxMaps = requires(GbxMaps gbxmaps, unsigned int idx, size_t s, double& d) {
+  { gbxmaps.get_total_global_ngridboxes() } -> std::convertible_to<size_t>;
+  { gbxmaps.get_local_ngridboxes() } -> std::convertible_to<size_t>;
+  { gbxmaps.get_local_ngridboxes_hostcopy() } -> std::convertible_to<size_t>;
 
   { gbxmaps.get_gbxarea(idx) } -> std::convertible_to<double>;
 
@@ -49,6 +50,10 @@ concept GridboxMaps = requires(GbxMaps gbxmaps, unsigned int idx) {
 
   { gbxmaps.coord2backward(idx) } -> std::convertible_to<unsigned int>;
   { gbxmaps.coord2forward(idx) } -> std::convertible_to<unsigned int>;
+
+  { gbxmaps.global_to_local_gbxindex(s) } -> std::convertible_to<unsigned int>;
+  { gbxmaps.local_to_global_gridbox_index(idx) } -> std::convertible_to<size_t>;
+  { gbxmaps.get_local_bounding_gridbox(idx, d, d, d) } -> std::convertible_to<unsigned int>;
 };
 
 #endif  // LIBS_GRIDBOXES_GRIDBOXMAPS_HPP_

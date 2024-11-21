@@ -23,6 +23,7 @@
 #define LIBS_COUPLDYN_FROMFILE_FROMFILECOMMS_HPP_
 
 #include "../kokkosaliases.hpp"
+#include "cartesiandomain/cartesianmaps.hpp"
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/state.hpp"
@@ -40,14 +41,16 @@ struct FromFileComms {
  public:
   /* send information from Gridboxes' states
   to coupldyn is null for FromFileDynamics*/
-  template <typename CD = FromFileDynamics>
-  void send_dynamics(const viewh_constgbx h_gbxs, FromFileDynamics &ffdyn) const {}
+  template <typename GbxMaps, typename CD = FromFileDynamics>
+  void send_dynamics(const GbxMaps &gbxmaps, const viewh_constgbx h_gbxs,
+                     FromFileDynamics &ffdyn) const {}
 
   /* update Gridboxes' states using information
   received from FromFileDynamics solver for
   1-way coupling to CLEO SDM */
-  template <typename CD = FromFileDynamics>
-  void receive_dynamics(const FromFileDynamics &ffdyn, const viewh_gbx h_gbxs) const;
+  template <typename GbxMaps, typename CD = FromFileDynamics>
+  void receive_dynamics(const GbxMaps &gbxmaps, const FromFileDynamics &ffdyn,
+                        const viewh_gbx h_gbxs) const;
 };
 
 #endif  // LIBS_COUPLDYN_FROMFILE_FROMFILECOMMS_HPP_

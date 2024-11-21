@@ -274,6 +274,22 @@ class Superdrop {
   void set_coord2(const double i_coord2) { coord2 = i_coord2; }
 
   /**
+   * @brief Sets the values of the 3rd, 1st and 2nd coordinates.
+   *
+   * This function sets the coordinates of the super-droplet along each dimension.
+   *
+   * @param i_coord3 The value to set for coord3.
+   * @param i_coord1 The value to set for coord1.
+   * @param i_coord2 The value to set for coord2.
+   */
+  KOKKOS_INLINE_FUNCTION
+  void set_coords(const double i_coord3, const double i_coord1, const double i_coord2) {
+    coord3 = i_coord3;
+    coord1 = i_coord1;
+    coord2 = i_coord2;
+  }
+
+  /**
    * @brief Increments the coordinates by the specified deltas.
    *
    * This function increments the coordinates of the super-droplet by the specified deltas along
@@ -288,6 +304,40 @@ class Superdrop {
     coord3 += delta3;
     coord1 += delta1;
     coord2 += delta2;
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  void serialize_double_components(std::vector<double>::iterator target) const {
+    *target++ = coord3;
+    *target++ = coord1;
+    *target++ = coord2;
+    *target++ = attrs.radius;
+    *target = attrs.msol;
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  void serialize_uint_components(std::vector<unsigned int>::iterator target) {
+    *target++ = sdgbxindex;
+    *target = static_cast<unsigned int>(sdId.get_value());
+  }
+
+  KOKKOS_INLINE_FUNCTION
+  void serialize_uint64_components(std::vector<uint64_t>::iterator target) { *target = attrs.xi; }
+
+  KOKKOS_INLINE_FUNCTION
+  void deserialize_components(std::vector<unsigned int>::iterator uint_source,
+                              std::vector<uint64_t>::iterator uint64_source,
+                              std::vector<double>::iterator double_source) {
+    sdgbxindex = *uint_source++;
+    sdId.value = static_cast<size_t>(*uint_source);
+
+    attrs.xi = *uint64_source;
+
+    coord3 = *double_source++;
+    coord1 = *double_source++;
+    coord2 = *double_source++;
+    attrs.radius = *double_source++;
+    attrs.msol = *double_source;
   }
 };
 

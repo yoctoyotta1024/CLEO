@@ -62,4 +62,8 @@ using HostTeamMember = HostTeamPolicy::member_type;   /**< Member in host parall
  */
 using GenRandomPool = Kokkos::Random_XorShift64_Pool<ExecSpace>;
 
+using viewd_constcoords = Kokkos::View<const double[3]>;
+using viewd_coords = Kokkos::View<double[3]>;
+/**< Helper type for view in device memory for superdroplet coords: (coord3, coord1, coord2). */
+
 #endif  // LIBS_SUPERDROPS_KOKKOSALIASES_SD_HPP_

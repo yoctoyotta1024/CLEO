@@ -29,6 +29,7 @@
 #include <stdexcept>
 #include <string_view>
 
+#include "zarr/dataset.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/cartesianmotion.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
@@ -58,12 +59,11 @@
 #include "superdrops/collisions/longhydroprob.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
-#include "zarr/dataset.hpp"
 #include "zarr/fsstore.hpp"
 
 inline InitialConditions auto create_initconds(const Config &config) {
-  const InitAllSupersFromBinary initsupers(config.get_initsupersfrombinary());
-  const InitGbxsNull initgbxs(config.get_ngbxs());
+  const auto initsupers = InitAllSupersFromBinary(config.get_initsupersfrombinary());
+  const auto initgbxs = InitGbxsNull(config.get_ngbxs());
 
   return InitConds(initsupers, initgbxs);
 }
@@ -136,6 +136,16 @@ int main(int argc, char *argv[]) {
     throw std::invalid_argument("configuration file(s) not specified");
   }
 
+  MPI_Init(&argc, &argv);
+
+  int comm_size;
+  MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
+  if (comm_size > 1) {
+    std::cout << "ERROR: The current example is not prepared"
+              << " to be run with more than one MPI process" << std::endl;
+    MPI_Abort(MPI_COMM_WORLD, 1);
+  }
+
   Kokkos::Timer kokkostimer;
 
   /* Read input parameters from configuration file(s) */
@@ -149,7 +159,7 @@ int main(int argc, char *argv[]) {
 
   /* Create coupldyn solver and coupling between coupldyn and SDM */
   const CoupledDynamics auto coupldyn = NullDynamics(tsteps.get_couplstep());
-  const CouplingComms<NullDynamics> auto comms = NullDynComms{};
+  const CouplingComms<CartesianMaps, NullDynamics> auto comms = NullDynComms{};
 
   /* Initial conditions for CLEO run */
   const InitialConditions auto initconds = create_initconds(config);
@@ -168,6 +178,8 @@ int main(int argc, char *argv[]) {
 
   const auto ttot = double{kokkostimer.seconds()};
   std::cout << "-----\n Total Program Duration: " << ttot << "s \n-----\n";
+
+  MPI_Finalize();
 
   return 0;
 }

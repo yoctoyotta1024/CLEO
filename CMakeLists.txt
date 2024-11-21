@@ -1,6 +1,6 @@
 # run cmake with " cmake -S [source dir of targerts] -B [build dir for makefile] "
 # e.g. could run cmake with these compiler options:
-# cmake -S ./ -B ./build -DCMAKE_CXX_COMPILER=g++ -DCMAKE_C_COMPILER=gcc -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON
+# cmake -S ./ -B ./build -DCMAKE_CXX_COMPILER=mpic++ -DCMAKE_C_COMPILER=mpicc -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON
 
 # set cmake version
 cmake_minimum_required(VERSION 3.18.0)
@@ -11,6 +11,8 @@ project(CLEO
   DESCRIPTION "CLEO by Clara Bayley and other developers"
   VERSION 0.1.0
 )
+
+find_package(MPI REQUIRED)
 
 message("CLEO_SOURCE_DIR: ${CLEO_SOURCE_DIR}")
 message("CLEO_BINARY_DIR: ${CLEO_BINARY_DIR}")

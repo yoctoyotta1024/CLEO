@@ -27,6 +27,7 @@
 #include <concepts>
 
 #include "../kokkosaliases.hpp"
+#include "gridboxes/gridboxmaps.hpp"
 #include "runcleo/coupleddynamics.hpp"
 
 /**
@@ -40,12 +41,13 @@
  * solver `coupldyn` into SDM view of Gridboxes `h_gbxs`.
  *
  * @tparam Comms The type for communication to check against the CouplingComms concept.
+ * @tparam GbxMaps The type for gridbox maps to check against the GridboxMaps concept.
  * @tparam CD The type for the dyanmics solver to check against the CoupledDynamics concept.
  */
-template <typename Comms, typename CD>
-concept CouplingComms = requires(Comms s, CD &coupldyn, viewh_gbx h_gbxs) {
-  { s.template send_dynamics<CD>(h_gbxs, coupldyn) } -> std::same_as<void>;
-  { s.template receive_dynamics<CD>(coupldyn, h_gbxs) } -> std::same_as<void>;
+template <typename Comms, typename GbxMaps, typename CD>
+concept CouplingComms = requires(Comms s, GbxMaps &gbxmaps, CD &coupldyn, viewh_gbx h_gbxs) {
+  { s.template send_dynamics<GbxMaps, CD>(gbxmaps, h_gbxs, coupldyn) } -> std::same_as<void>;
+  { s.template receive_dynamics<GbxMaps, CD>(gbxmaps, coupldyn, h_gbxs) } -> std::same_as<void>;
 };
 
 /**
@@ -65,8 +67,8 @@ struct NullComms {
    * @param coupldyn The coupled dynamics solver object.
    * @param h_gbxs The view of Gridboxes.
    */
-  template <CoupledDynamics CD>
-  void receive_dynamics(const CD &coupldyn, const viewh_gbx h_gbxs) const {}
+  template <GridboxMaps GbxMaps, CoupledDynamics CD>
+  void receive_dynamics(const GbxMaps &gbxmaps, const CD &coupldyn, const viewh_gbx h_gbxs) const {}
 
   /**
    * @brief Sends dynamics information.
@@ -77,8 +79,8 @@ struct NullComms {
    * @param h_gbxs The view of Gridboxes.
    * @param coupldyn The coupled dynamics solver object.
    */
-  template <CoupledDynamics CD>
-  void send_dynamics(const viewh_constgbx h_gbxs, CD &coupldyn) const {}
+  template <GridboxMaps GbxMaps, CoupledDynamics CD>
+  void send_dynamics(const GbxMaps &gbxmaps, const viewh_constgbx h_gbxs, CD &coupldyn) const {}
 };
 
 #endif  // LIBS_RUNCLEO_COUPLINGCOMMS_HPP_

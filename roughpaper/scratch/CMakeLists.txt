@@ -1,4 +1,5 @@
-# module load gcc && CXX=g++ CC=gcc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON
+# module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0
+# CXX=mpic++ CC=mpicc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON
 
 # set cmake version
 if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)

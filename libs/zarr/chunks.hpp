@@ -28,6 +28,7 @@
 #include <string>
 #include <string_view>
 #include <vector>
+#include <mpi.h>
 
 #include "zarr/buffer.hpp"
 
@@ -118,17 +119,23 @@ class Chunks {
       : chunkshape(chunkshape), reducedarray_nchunks(chunkshape.size() - 1, 0) {
     /* number of dimensions (ndims) of actual array = ndims of array's chunks, is 1 more than
     ndims of reduced arrayshape (because reduced arrayshape excludes outermost (0th) dimension)). */
-    assert((reduced_arrayshape.size() == chunkshape.size() - 1) &&
-           "number of dimensions of reduced array must be 1 less than that of chunks (i.e. array)");
+
+    // Since only process 0 writes the data, only it should check the sizes
+    int my_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    if (my_rank == 0)
+      assert((reduced_arrayshape.size() == chunkshape.size() - 1) &&
+             "number of dimensions of reduced array must be "
+             "1 less than that of chunks (i.e. array)");
 
     /* set number of chunks along all but array's outermost dimension given
     the shape of each chunk and expected shape of final array along those dimensions */
     for (size_t aa = 0; aa < reduced_arrayshape.size(); ++aa) {
       /* Assert the chunk size is completely divisible by the array's expected size along that
       dimension in order to ensure good chunking */
-      assert((reduced_arrayshape.at(aa) % chunkshape.at(aa + 1) == 0) &&
-             "along all but outermost dimension, arrayshape must be completely divisible by "
-             "chunkshape");
+      // assert((reduced_arrayshape.at(aa) % chunkshape.at(aa + 1) == 0) &&
+      //        "along all but outermost dimension, arrayshape must be completely divisible by "
+      //        "chunkshape");
       /* reducedarray_nchunks = number of chunks along all but outermost dimension of array */
       reducedarray_nchunks.at(aa) = (reduced_arrayshape.at(aa) / chunkshape.at(aa + 1));
     }

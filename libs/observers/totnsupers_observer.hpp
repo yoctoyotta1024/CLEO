@@ -34,7 +34,7 @@
 #include "observers/observers.hpp"
 #include "superdrops/sdmmonitor.hpp"
 #include "zarr/buffer.hpp"
-#include "zarr/dataset.hpp"
+#include "zarr/collective_dataset.hpp"
 #include "zarr/xarray_zarr_array.hpp"
 
 /**

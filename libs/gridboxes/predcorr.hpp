@@ -31,6 +31,7 @@
 #include <cassert>
 #include <functional>
 
+#include "../kokkosaliases.hpp"
 #include "gridboxes/cfl_criteria.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "superdrops/state.hpp"
@@ -53,8 +54,9 @@ equations in Grabowski et al. 2018 */
 template <GridboxMaps GbxMaps, VelocityFormula TV>
 struct PredCorr {
  private:
-  const double delt;   // equivalent of motionstep as dimensionless time
-  const TV terminalv;  // returns terminal velocity given a superdroplet
+  const double delt;          // equivalent of motionstep as dimensionless time
+  const TV terminalv;         // returns terminal velocity given a superdroplet
+  const viewd_coords deltas;  // view on device required for operator return;
 
   /* method to interpolate coord3 wind velocity component (w)
   defined on coord3 faces of a gridbox to a superdroplet's
@@ -150,16 +152,15 @@ struct PredCorr {
  public:
   PredCorr(const unsigned int motionstep, const std::function<double(unsigned int)> int2time,
            const TV i_terminalv)
-      : delt(int2time(motionstep)), terminalv(i_terminalv) {}
+      : delt(int2time(motionstep)), terminalv(i_terminalv), deltas("deltas") {}
 
-  /* operator to satisfiy requirements of the
-  "superdrop_coords" function in the motion
-  concept. Operator uses predictor-corrector method to
-  forward timestep a superdroplet's coordinates using
-  the interpolated wind velocity from a gridbox's state */
+  /* operator for use in the "superdrop_coords" function of the PredCorrMotion struct.
+  Operator uses predictor-corrector method to return the change in
+  a superdroplet's coordinates from a forward timestep of motion using the
+  interpolated wind velocity from a gridbox's state */
   KOKKOS_FUNCTION
-  void operator()(const unsigned int gbxindex, const GbxMaps &gbxmaps, const State &state,
-                  Superdrop &drop) const {
+  viewd_constcoords operator()(const unsigned int gbxindex, const GbxMaps &gbxmaps,
+                               const State &state, const Superdrop &drop) const {
     /* Use predictor-corrector method to get change in SD coords */
     const auto delta3 = delta_coord3(gbxindex, gbxmaps, state, drop);
     const auto delta1 = delta_coord1(gbxindex, gbxmaps, state, drop);
@@ -168,8 +169,11 @@ struct PredCorr {
     /* CFL check on predicted change to SD coords */
     cfl_criteria(gbxmaps, gbxindex, delta3, delta1, delta2);
 
-    /* update SD coords */
-    drop.increment_coords(delta3, delta1, delta2);
+    /* return change in coordinates in order: (coord3, coord1, coord2) */
+    deltas(0) = delta3;
+    deltas(1) = delta1;
+    deltas(2) = delta2;
+    return deltas;
   }
 };
 

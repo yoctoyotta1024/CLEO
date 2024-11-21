@@ -24,7 +24,11 @@
 
 #include "cartesiandomain/createcartesianmaps.hpp"
 
-void check_ngridboxes(const CartesianMaps &gbxmaps, const size_t ngbxs);
+#include "mpi.h"
+
+void check_ngridboxes_matches_ndims(const CartesianMaps &gbxmaps, const size_t ngbxs);
+
+void check_ngridboxes_matches_maps(const CartesianMaps &gbxmaps, const size_t ngbxs);
 
 void set_maps_ndims(const std::vector<size_t> &ndims, CartesianMaps &gbxmaps);
 
@@ -70,18 +74,25 @@ CartesianMaps create_cartesian_maps(const size_t ngbxs, const unsigned int nspac
 
   CartesianMaps gbxmaps(gfb.get_ngbxs());
 
+  gbxmaps.create_decomposition(
+      gfb.ndims, gfb.get_coord3gbxbounds(0).second - gfb.get_coord3gbxbounds(0).first,
+      gfb.get_coord1gbxbounds(0).second - gfb.get_coord1gbxbounds(0).first,
+      gfb.get_coord2gbxbounds(0).second - gfb.get_coord2gbxbounds(0).first);
+
   set_maps_ndims(gfb.ndims, gbxmaps);
-  set_model_areas_vols(gfb, gbxmaps);
   set_outofbounds(gbxmaps);
 
   switch (nspacedims) {
     case 0:
+      set_model_areas_vols(gfb, gbxmaps);
       set_0Dmodel_maps(gfb, gbxmaps);
       break;
     case 1:
+      set_model_areas_vols(gfb, gbxmaps);
       set_1Dmodel_maps(gfb, gbxmaps);
       break;
     case 2:
+      set_model_areas_vols(gfb, gbxmaps);
       set_2Dmodel_maps(gfb, gbxmaps);
       break;
     case 3:
@@ -91,7 +102,8 @@ CartesianMaps create_cartesian_maps(const size_t ngbxs, const unsigned int nspac
       throw std::invalid_argument("nspacedims > 3 is invalid ");
   }
 
-  check_ngridboxes(gbxmaps, ngbxs);
+  check_ngridboxes_matches_ndims(gbxmaps, gbxmaps.get_total_global_ngridboxes());
+  check_ngridboxes_matches_maps(gbxmaps, gbxmaps.get_local_ngridboxes_hostcopy());
 
   std::cout << "--- create cartesian gridbox maps: success ---\n";
 
@@ -100,8 +112,8 @@ CartesianMaps create_cartesian_maps(const size_t ngbxs, const unsigned int nspac
 
 /* checks number of gridboxes according to
 maps matches with expected value from gfb */
-void check_ngridboxes(const CartesianMaps &gbxmaps, const size_t ngbxs) {
-  const auto h_ndims(gbxmaps.ndims_hostcopy());
+void check_ngridboxes_matches_ndims(const CartesianMaps &gbxmaps, const size_t ngbxs) {
+  const auto h_ndims = gbxmaps.get_ndims_hostcopy();
   const size_t ngbxs_from_ndims(h_ndims(0) * h_ndims(1) * h_ndims(2));
 
   if (ngbxs_from_ndims != ngbxs) {
@@ -109,7 +121,9 @@ void check_ngridboxes(const CartesianMaps &gbxmaps, const size_t ngbxs) {
         "ndims from gridbox maps inconsistent "
         " with number of gridboxes");
   }
+}
 
+void check_ngridboxes_matches_maps(const CartesianMaps &gbxmaps, const size_t ngbxs) {
   const size_t ngbxs_from_maps(gbxmaps.maps_size());
   if (ngbxs_from_maps != ngbxs + 1) {
     throw std::invalid_argument(
@@ -144,7 +158,7 @@ void set_model_areas_vols(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps
 /* sets value for coordinate bounds for case
 when outofbounds gbxidx searches map */
 void set_outofbounds(CartesianMaps &gbxmaps) {
-  const auto idx = (unsigned int)outofbounds_gbxindex();
+  const auto idx = (unsigned int)LIMITVALUES::oob_gbxindex;
   gbxmaps.insert_coord3bounds(idx, nullbounds());
   gbxmaps.insert_coord1bounds(idx, nullbounds());
   gbxmaps.insert_coord2bounds(idx, nullbounds());
@@ -220,27 +234,75 @@ void set_2Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
   }
 }
 
+kkpair_size_t correct_neighbor_indices(kkpair_size_t neighbours, const std::vector<size_t> ndims,
+                                       CartesianDecomposition &domain_decomposition) {
+  // If the neighbour index is not local sum total_local_gridboxes so that it
+  // can be identified later If the neighbour index is local convert it to a
+  // local index by subtracting gridboxes_slice_start
+  int my_rank;
+  MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+  std::array<size_t, 3> neighbor_coordinates;
+
+  if (neighbours.first != LIMITVALUES::oob_gbxindex) {
+    neighbor_coordinates = get_coordinates_from_index(ndims, neighbours.first);
+    if (domain_decomposition.check_indices_inside_partition(neighbor_coordinates, my_rank))
+      neighbours.first = domain_decomposition.global_to_local_gridbox_index(neighbours.first);
+    else
+      neighbours.first += domain_decomposition.get_total_global_gridboxes();
+  }
+
+  if (neighbours.second != LIMITVALUES::oob_gbxindex) {
+    neighbor_coordinates = get_coordinates_from_index(ndims, neighbours.second);
+    if (domain_decomposition.check_indices_inside_partition(neighbor_coordinates, my_rank))
+      neighbours.second = domain_decomposition.global_to_local_gridbox_index(neighbours.second);
+    else
+      neighbours.second += domain_decomposition.get_total_global_gridboxes();
+  }
+
+  return neighbours;
+}
+
 /* Sets all coord[X]bounds maps (for X = x, y, z)
 using gfb data as well as back and forward neighbours
 maps assuming periodic or finite boundary conditions
 in cartesian domain */
 void set_3Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
   const auto ndims(gfb.ndims);
+  int my_rank, local_gbx_index;
+  MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 
-  for (auto idx : gfb.gbxidxs) {
-    const auto c3bs(gfb.get_coord3gbxbounds(idx));
-    gbxmaps.insert_coord3bounds(idx, c3bs);
-    const auto c3nghbrs(DoublyPeriodicDomain::cartesian_coord3nghbrs(idx, ndims));
-    gbxmaps.insert_coord3nghbrs(idx, c3nghbrs);
+  auto domain_decomposition = gbxmaps.get_domain_decomposition();
+  auto partition_origin = domain_decomposition.get_local_partition_origin();
+  auto partition_size = domain_decomposition.get_local_partition_size();
+  domain_decomposition.set_dimensions_bound_behavior({0, 1, 1});
 
-    const auto c1bs(gfb.get_coord1gbxbounds(idx));
-    gbxmaps.insert_coord1bounds(idx, c1bs);
-    const auto c1nghbrs(DoublyPeriodicDomain::cartesian_coord1nghbrs(idx, ndims));
-    gbxmaps.insert_coord1nghbrs(idx, c1nghbrs);
+  for (size_t k = 0; k < partition_size[0]; k++)
+    for (size_t i = 0; i < partition_size[1]; i++)
+      for (size_t j = 0; j < partition_size[2]; j++) {
+        int idx = get_index_from_coordinates(ndims, partition_origin[0] + k,
+                                             partition_origin[1] + i, partition_origin[2] + j);
 
-    const auto c2bs(gfb.get_coord2gbxbounds(idx));
-    gbxmaps.insert_coord2bounds(idx, c2bs);
-    const auto c2nghbrs(DoublyPeriodicDomain::cartesian_coord2nghbrs(idx, ndims));
-    gbxmaps.insert_coord2nghbrs(idx, c2nghbrs);
-  }
+        local_gbx_index = domain_decomposition.global_to_local_gridbox_index(idx);
+
+        gbxmaps.insert_gbxarea(local_gbx_index, gfb.gbxarea(idx));
+        gbxmaps.insert_gbxvolume(local_gbx_index, gfb.gbxvol(idx));
+
+        const auto c3bs(gfb.get_coord3gbxbounds(idx));
+        gbxmaps.insert_coord3bounds(local_gbx_index, c3bs);
+        const auto c3nghbrs(DoublyPeriodicDomain::cartesian_coord3nghbrs(idx, ndims));
+        gbxmaps.insert_coord3nghbrs(
+            local_gbx_index, correct_neighbor_indices(c3nghbrs, ndims, domain_decomposition));
+
+        const auto c1bs(gfb.get_coord1gbxbounds(idx));
+        gbxmaps.insert_coord1bounds(local_gbx_index, c1bs);
+        const auto c1nghbrs(DoublyPeriodicDomain::cartesian_coord1nghbrs(idx, ndims));
+        gbxmaps.insert_coord1nghbrs(
+            local_gbx_index, correct_neighbor_indices(c1nghbrs, ndims, domain_decomposition));
+
+        const auto c2bs(gfb.get_coord2gbxbounds(idx));
+        gbxmaps.insert_coord2bounds(local_gbx_index, c2bs);
+        const auto c2nghbrs(DoublyPeriodicDomain::cartesian_coord2nghbrs(idx, ndims));
+        gbxmaps.insert_coord2nghbrs(
+            local_gbx_index, correct_neighbor_indices(c2nghbrs, ndims, domain_decomposition));
+      }
 }

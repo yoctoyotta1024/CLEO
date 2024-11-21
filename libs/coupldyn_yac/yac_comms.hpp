@@ -23,6 +23,7 @@
 #define LIBS_COUPLDYN_YAC_YAC_COMMS_HPP_
 
 #include "../kokkosaliases.hpp"
+#include "cartesiandomain/cartesianmaps.hpp"
 #include "coupldyn_yac/yac_cartesian_dynamics.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "superdrops/state.hpp"
@@ -40,14 +41,16 @@ struct YacComms {
  public:
   /* send information from Gridboxes' states
   to coupldyn is null for YacDynamics*/
-  template <typename CD = YacDynamics>
-  void send_dynamics(const viewh_constgbx h_gbxs, YacDynamics &ffdyn) const {}
+  template <typename GbxMaps, typename CD = YacDynamics>
+  void send_dynamics(const GbxMaps &gbxmaps, const viewh_constgbx h_gbxs,
+                     YacDynamics &ffdyn) const {}
 
   /* update Gridboxes' states using information
   received from YacDynamics solver for
   1-way coupling to CLEO SDM */
-  template <typename CD = YacDynamics>
-  void receive_dynamics(const YacDynamics &ffdyn, const viewh_gbx h_gbxs) const;
+  template <typename GbxMaps, typename CD = YacDynamics>
+  void receive_dynamics(const GbxMaps &gbxmaps, const YacDynamics &ffdyn,
+                        const viewh_gbx h_gbxs) const;
 };
 
 #endif  // LIBS_COUPLDYN_YAC_YAC_COMMS_HPP_

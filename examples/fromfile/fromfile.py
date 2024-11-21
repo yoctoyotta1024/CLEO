@@ -98,7 +98,7 @@ shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
 executable = path2build / "examples" / "fromfile" / "src" / "fromfile"
 print("Executable: " + str(executable))
 print("Config file: " + str(config_filename))
-subprocess.run([executable, config_filename])
+subprocess.run(["srun", "--ntasks=4", executable, config_filename])
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 

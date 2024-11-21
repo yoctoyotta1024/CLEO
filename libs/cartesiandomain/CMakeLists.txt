@@ -15,8 +15,8 @@ set(LIB_BINARY_DIR ${CLEO_BINARY_DIR}/lib)
 set(SOURCES
 "add_supers_at_domain_top.cpp"
 "cartesianmaps.cpp"
-"cartesianmotion.cpp"
 "createcartesianmaps.cpp"
+"cartesian_decomposition.cpp"
 )
 # must use STATIC (not(!) SHARED) lib for linking to executable if build is CUDA enabled with Kokkos
 add_library("${LIBNAME}" STATIC ${SOURCES})

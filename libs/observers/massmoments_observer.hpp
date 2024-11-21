@@ -36,7 +36,7 @@
 #include "observers/observers.hpp"
 #include "observers/write_to_dataset_observer.hpp"
 #include "superdrops/superdrop.hpp"
-#include "zarr/dataset.hpp"
+#include "zarr/collective_dataset.hpp"
 
 /**
  * @brief Performs calculation of 0th, 1st, and 2nd moments of the (real)

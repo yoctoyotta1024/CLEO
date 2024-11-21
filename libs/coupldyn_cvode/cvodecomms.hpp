@@ -42,11 +42,14 @@ struct CvodeComms {
   bool is_state_change(const std::array<double, 4> &delta, bool is_delta_y) const;
 
  public:
-  /* update Gridboxes' states using
-  information received from CVODE dynanmics
-  solver for  press, temp, qvap and qcond */
-  template <typename CD = CvodeDynamics>
-  void receive_dynamics(const CvodeDynamics &cvode, const viewh_gbx h_gbxs) const {
+  /*
+  update Gridboxes' states using information received from CVODE dynanmics
+  solver for  press, temp, qvap and qcond.
+  Note: ii indexing for cvode isn't compatible with MPI domain decompositon.
+  */
+  template <typename GbxMaps, typename CD = CvodeDynamics>
+  void receive_dynamics(const GbxMaps &gbxmaps, const CvodeDynamics &cvode,
+                        const viewh_gbx h_gbxs) const {
     const size_t ngbxs(h_gbxs.extent(0));
     for (size_t ii(0); ii < ngbxs; ++ii) {
       State &state(h_gbxs(ii).state);
@@ -59,11 +62,14 @@ struct CvodeComms {
     }
   }
 
-  /* send information from Gridboxes' states
-  to CVODE dynanmics solver for  temp, qvap
-  and qcond (excludes press) */
-  template <typename CD = CvodeDynamics>
-  void send_dynamics(const viewh_constgbx h_gbxs, CvodeDynamics &cvode) const {
+  /*
+  send information from Gridboxes' states to CVODE dynanmics solver for  temp, qvap
+  and qcond (excludes press)
+  Note: ii indexing for cvode isn't compatible with MPI domain decompositon.
+  */
+  template <typename GbxMaps, typename CD = CvodeDynamics>
+  void send_dynamics(const GbxMaps &gbxmaps, const viewh_constgbx h_gbxs,
+                     CvodeDynamics &cvode) const {
     std::vector<double> delta_y;
     bool is_delta_y(false);
 

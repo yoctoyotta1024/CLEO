@@ -23,6 +23,8 @@
 
 #include "initialise/init_supers_from_binary.hpp"
 
+#include <mpi.h>
+
 template <typename T>
 inline std::vector<T> nan_vector(const size_t size) {
   const auto nanValue = std::numeric_limits<T>::signaling_NaN();
@@ -46,7 +48,8 @@ InitSupersData InitSupersFromBinary::add_uninitialised_superdrops_data(
     InitSupersData &initdata) const {
   const auto size = maxnsupers - initdata.sdgbxindexes.size();
 
-  const auto sdgbxindexes = std::vector<unsigned int>(size, LIMITVALUES::uintmax);  // out of bounds
+  const auto sdgbxindexes =
+      std::vector<unsigned int>(size, LIMITVALUES::oob_gbxindex);  // out of bounds
   const auto coord3s = nan_vector<double>(size);
   const auto coord1s = nan_vector<double>(size);
   const auto coord2s = nan_vector<double>(size);
@@ -59,4 +62,37 @@ InitSupersData InitSupersFromBinary::add_uninitialised_superdrops_data(
       initdata.solutes, sdgbxindexes, coord3s, coord1s, coord2s, radii, msols, xis, sdIds};
 
   return initdata + nandata;
+}
+
+void InitSupersFromBinary::trim_nonlocal_superdrops(InitSupersData &initdata) const {
+  int my_rank;
+  MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+
+  if (gbxmaps.get_total_global_ngridboxes() == gbxmaps.get_local_ngridboxes_hostcopy()) return;
+
+  // Go through all superdrops and resets the values of the non-local ones
+  auto gbxindex = size_t{0};
+  for (size_t superdrop_index = 0; superdrop_index < initdata.sdgbxindexes.size();) {
+    gbxindex = initdata.sdgbxindexes[superdrop_index];
+    if (my_rank != gbxmaps.get_domain_decomposition().get_gridbox_owner_process(gbxindex)) {
+      // resets superdrops which are in gridboxes not owned by this process
+      initdata.sdgbxindexes[superdrop_index] = LIMITVALUES::oob_gbxindex;
+      initdata.xis[superdrop_index] = std::numeric_limits<uint64_t>::signaling_NaN();
+
+      initdata.radii[superdrop_index] = std::numeric_limits<double>::signaling_NaN();
+
+      initdata.msols[superdrop_index] = std::numeric_limits<double>::signaling_NaN();
+
+      initdata.coord3s[superdrop_index] = std::numeric_limits<double>::signaling_NaN();
+
+      initdata.coord1s[superdrop_index] = std::numeric_limits<double>::signaling_NaN();
+
+      initdata.coord2s[superdrop_index] = std::numeric_limits<double>::signaling_NaN();
+
+    } else {
+      // updates superdrop gridbox index from global to local
+      initdata.sdgbxindexes[superdrop_index] = gbxmaps.global_to_local_gbxindex(gbxindex);
+    }
+    superdrop_index++;
+  }
 }

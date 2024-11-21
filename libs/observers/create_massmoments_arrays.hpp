@@ -35,7 +35,7 @@
 #include "observers/observers.hpp"
 #include "observers/write_to_dataset_observer.hpp"
 #include "superdrops/superdrop.hpp"
-#include "zarr/dataset.hpp"
+#include "zarr/collective_dataset.hpp"
 
 /**
  * @brief Creates an XarrayZarrArray for storing the mass moments of each gridbox in a dataset.

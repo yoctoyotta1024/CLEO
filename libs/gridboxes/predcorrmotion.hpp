@@ -37,18 +37,16 @@
 using a predictor-corrector method to update a superdroplet's
 coordinates and then updating it's sdgbxindex using
 the appropriate templated type */
-template <GridboxMaps GbxMaps, VelocityFormula TV, typename ChangeToNghbr, typename CheckBounds>
+template <GridboxMaps GbxMaps, VelocityFormula TV, typename CheckBounds>
 struct PredCorrMotion {
   const unsigned int interval;  // integer timestep for movement
-  PredCorr<GbxMaps, TV> superdrop_coords;
-  ChangeToNghbr change_if_nghbr;
+  PredCorr<GbxMaps, TV> predcorr;
   CheckBounds check_bounds;
 
   PredCorrMotion(const unsigned int motionstep, const std::function<double(unsigned int)> int2time,
-                 const TV i_terminalv, ChangeToNghbr i_change_if_nghbr, CheckBounds i_check_bounds)
+                 const TV i_terminalv, CheckBounds i_check_bounds)
       : interval(motionstep),
-        superdrop_coords(interval, int2time, i_terminalv),
-        change_if_nghbr(i_change_if_nghbr),
+        predcorr(interval, int2time, i_terminalv),
         check_bounds(i_check_bounds) {}
 
   KOKKOS_INLINE_FUNCTION
@@ -59,24 +57,45 @@ struct PredCorrMotion {
   KOKKOS_INLINE_FUNCTION
   bool on_step(const unsigned int t_sdm) const { return t_sdm % interval == 0; }
 
-  /* function satisfies requirements of
-  "superdrop_gbx" in the motion concept to update a
-  superdroplet if it should move between gridboxes.
-  For each direction (coord3, then coord1, then coord2),
-  superdrop and idx may be changed if superdrop coord
-  lies outside bounds of gridbox in that direction */
-  KOKKOS_INLINE_FUNCTION void superdrop_gbx(const unsigned int gbxindex,
-                                            const CartesianMaps &gbxmaps, Superdrop &drop) const {
-    auto idx = (unsigned int)change_if_nghbr.coord3(gbxmaps, gbxindex, drop);
+  /* function satisfies requirements of the "superdrop_coords" function in the motion
+  concept. Operator uses predictor-corrector method to obtain the change in the coordinates
+  from a forward timestep of the motion and then increments the superdroplet coordinates
+  accordingly */
+  KOKKOS_INLINE_FUNCTION
+  void superdrop_coords(const unsigned int gbxindex, const GbxMaps &gbxmaps, const State &state,
+                        Superdrop &drop) const {
+    /* change in SD coords: (coord3, coord1, coord2) */
+    const auto deltas = predcorr(gbxindex, gbxmaps, state, drop);
+
+    /* update SD coords */
+    drop.increment_coords(deltas(0), deltas(1), deltas(2));
+  }
+
+  /* function satisfies requirements of "superdrop_gbx" in the motion
+  concept to update a superdroplet if it should move between gridboxes
+  (or out of domain). Function also called check_bounds to check
+  superdroplet is indeed in correct gridbox after update. */
+  KOKKOS_INLINE_FUNCTION void superdrop_gbx(const unsigned int gbxindex, const GbxMaps &gbxmaps,
+                                            Superdrop &drop) const {
+    auto coord3 = drop.get_coord3();
+    auto coord1 = drop.get_coord1();
+    auto coord2 = drop.get_coord2();
+    const auto idx = gbxmaps.get_local_bounding_gridbox(gbxindex, coord3, coord1,
+                                                        coord2);  // drop_coords may change(!)
+
+    // Sets the updated superdroplet coordinates and gridbox index
+    drop.set_coords(coord3, coord1, coord2);
+    drop.set_sdgbxindex(idx);
+
+    // If the index is non-local return
+    // For superdrops going to other processes checks will be perfomed in the receiver
+    // For out of bounds index nothing will be done
+    if (idx >= gbxmaps.get_local_ngridboxes()) return;
+
+    // Checks that the drop coordinates match the ones of the gridbox
     check_bounds(idx, gbxmaps.coord3bounds(idx), drop.get_coord3());
-
-    idx = change_if_nghbr.coord1(gbxmaps, idx, drop);
     check_bounds(idx, gbxmaps.coord1bounds(idx), drop.get_coord1());
-
-    idx = change_if_nghbr.coord2(gbxmaps, idx, drop);
     check_bounds(idx, gbxmaps.coord2bounds(idx), drop.get_coord2());
-
-    assert((drop.get_sdgbxindex() == idx) && "sdgbxindex not concordant with supposed idx");
   }
 };
 

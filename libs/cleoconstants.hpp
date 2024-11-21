@@ -117,6 +117,7 @@ namespace LIMITVALUES {
 constexpr unsigned int uintmax = std::numeric_limits<unsigned int>::max(); /**< Max unsigned int. */
 constexpr uint64_t uint64_t_max = std::numeric_limits<uint64_t>::max(); /**< Max 64 byte u-int. */
 
+constexpr unsigned int oob_gbxindex = uintmax; /**< value for an out of bounds gbxindex */
 constexpr double llim = -1.0 * std::numeric_limits<double>::max(); /**< Maximum negative double. */
 constexpr double ulim = std::numeric_limits<double>::max();        /**< Maximum positive double. */
 }  // namespace LIMITVALUES

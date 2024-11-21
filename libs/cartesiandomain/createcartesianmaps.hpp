@@ -28,12 +28,14 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
 #include <filesystem>
+#include <iostream>
 #include <stdexcept>
 #include <string_view>
 #include <vector>
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
+#include "cartesiandomain/cartesian_decomposition.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/doubly_periodic_domain.hpp"
 #include "initialise/gbx_bounds_from_binary.hpp"

@@ -26,6 +26,8 @@
 ### using nvcc compiler:
 ###     nvhpc > 22.3
 ###     with cmake 3.21.1
+### using appropriate openmpi library for chosen compiler
+###     (e.g. via Levante compiler wrappers)
 ### ----------------------------- ###
 
 ### -- CLEO PySD Requirements --- ###
@@ -44,26 +46,27 @@ e.g. spack find cmake
 -DKokkos_ENABLE_CUDA_LAMBDA=ON
 -DKokkos_ENABLE_CUDA_UVM=ON (depreciated)
 
-OPENMP ENABLED build:
-module load gcc
-CXX=g++ CC=gcc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON
-
-or perhaps:
-CXX=g++-13 CC=gcc-13 cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON
-
-GPU (CUDA) ENABLED build:
-module load gcc
-module load nvhpc
-spack load cmake@3.23.1%gcc
-CXX=nvc++ CC=nvcc cmake -S ./ -B ./build -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON -DKokkos_ENABLE_CUDA_UVM=ON
-
-SERIAL ONLY build:
-module load gcc
+SERIAL ONLY build (no MPI):
+module load gcc/11.2.0-gcc-11.2.0
 CXX=g++ CC=gcc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON
 CXX=nvc++ CC=nvcc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON
+or perhaps:
+CXX=g++-13 CC=gcc-13 cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON
 
-CUDA and OPENMP build:
-module load gcc
-module load nvhpc
+MPI + SERIAL ONLY build
+module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0
+CXX=mpi++ CC=mpicc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON
+
+MPI + OPENMP ENABLED build:
+module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0
+CXX=mpi++ CC=mpicc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON
+
+MPI + GPU (CUDA) ENABLED build:
+module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0 nvhpc/23.9-gcc-11.2.0
 spack load cmake@3.23.1%gcc
-CXX=nvc++ CC=nvcc cmake -S ./ -B ./build -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON -DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON -DKokkos_ENABLE_CUDA_UVM=ON
+CXX=mpic++ CC=mpicc cmake -S ./ -B ./build -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON -DKokkos_ENABLE_CUDA_UVM=ON
+
+MPI + CUDA and OPENMP build:
+module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0 nvhpc/23.9-gcc-11.2.0
+spack load cmake@3.23.1%gcc
+CXX=mpic++ CC=mpicc cmake -S ./ -B ./build -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON -DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON -DKokkos_ENABLE_CUDA_UVM=ON

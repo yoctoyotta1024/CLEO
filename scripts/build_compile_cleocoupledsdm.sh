@@ -16,9 +16,6 @@
 ### ----- You need to edit these lines to specify ------ ###
 ### ----- (your environment and) directory paths ------- ###
 ### ---------- and executable(s) to compile ------------ ###
-spack load cmake@3.23.1%gcc
-cleoenv=/work/bm1183/m300950/mambaenvs/cleoenv
-
 buildtype=$1
 enableyac=${2:-false}                     # "true" or otherwise
 path2CLEO=${3:-${HOME}/CLEO}
@@ -44,7 +41,7 @@ then
 
   ### ---------------- compile executables --------------- ###
   cd ${path2build} && make clean
-  compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${cleoenv} ${buildtype} ${path2build} ${executables}"
+  compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${buildtype} ${path2build} ${executables}"
   echo ${compilecmd}
   ${compilecmd}
   ### ---------------------------------------------------- ###

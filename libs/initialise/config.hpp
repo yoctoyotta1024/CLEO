@@ -72,6 +72,8 @@ struct Config {
 
   size_t get_maxchunk() const { return required.outputdata.maxchunk; }
 
+  size_t get_maxnsupers() const { return required.domain.maxnsupers; }
+
   unsigned int get_nspacedims() const { return required.domain.nspacedims; }
 
   size_t get_ngbxs() const { return required.domain.ngbxs; }

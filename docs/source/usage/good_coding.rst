@@ -18,13 +18,13 @@ or
 
 .. code-block:: console
 
-  $ mamba env create --file=environment.yml
+  $ micromamba env create --file=environment.yml
 
 And then activate this environment everytime you use CLEO, e.g.
 
 .. code-block:: console
 
-  $ conda activate cleoenv
+  $ micromamba activate cleoenv
 
 We kindly ask that you also :ref:`contact us <contact>` or `open a new
 issue <https://github.com/yoctoyotta1024/CLEO/issues/new>`_ on our GitHub repository if you discover
