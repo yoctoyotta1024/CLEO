@@ -30,7 +30,7 @@ executables="$5"
 pythonscript=$6
 script_args="$7"
 
-cleoenv=/work/bm1183/m300950/mambaenvs/cleoenv
+cleoenv=/work/bm1183/m300950/bin/envs/cleoenv
 python=${cleoenv}/bin/python3
 yacyaxtroot=/work/bm1183/m300950/yac
 ### ---------------------------------------------------- ###

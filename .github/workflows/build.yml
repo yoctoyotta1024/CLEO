@@ -154,11 +154,11 @@ jobs:
           -DCMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3" \
           -DKokkos_ENABLE_SERIAL=ON \
           -DENABLE_YAC_COUPLING=OFF
-          cd build && make fromfile
 
       - name: Parallelization execution test
         run: |
-          wget https://nextcloud.dkrz.de/s/PRdfiyJJoJ4x6YK/download/fromfile_data.tar.gz
+          cd build && make fromfile
+          wget https://nextcloud.dkrz.de/index.php/s/SsTgPSLGjK3929g/download/fromfile_data.tar.gz
           tar -xvf fromfile_data.tar.gz
           mpiexec -n 1 ./examples/fromfile/src/fromfile ../examples/fromfile/src/config/fromfile_config.yaml
           mv bin bin_1

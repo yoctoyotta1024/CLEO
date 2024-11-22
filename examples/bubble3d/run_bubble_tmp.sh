@@ -48,7 +48,7 @@ then
   cp ${icon_grid_file} ${icon_grid_file_copy}
   cp ${icon_data_file} ${icon_data_file_copy}
 
-  cleoenv=/work/bm1183/m300950/mambaenvs/cleoenv
+  cleoenv=/work/bm1183/m300950/bin/envs/cleoenv
   python=${cleoenv}/bin/python3
   ${python} ${path2CLEO}/examples/bubble3d/bubble3d_inputfiles.py \
    ${path2CLEO} \

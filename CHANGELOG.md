@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.28.1](https://github.com/yoctoyotta1024/CLEO/compare/aab95ef25bdf5d7712b092ad7e3e5bd89014e770..v0.28.1) - 2024-11-22
+#### Bug Fixes
+- update levante mamba env path - ([aab95ef](https://github.com/yoctoyotta1024/CLEO/commit/aab95ef25bdf5d7712b092ad7e3e5bd89014e770)) - clara.bayley
+
+- - -
+
 ## [v0.28.0](https://github.com/yoctoyotta1024/CLEO/compare/d783df060fed33171cfd5024e1c6c33e7b45c80e..v0.28.0) - 2024-11-21
 #### Bug Fixes
 - renamed function - ([5597588](https://github.com/yoctoyotta1024/CLEO/commit/55975888f1dd590afc11f4776087cc6ad544c511)) - clara.bayley
