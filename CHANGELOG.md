@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.28.2](https://github.com/yoctoyotta1024/CLEO/compare/b1d57e5d52a245e6ca3904f047dce7c4f2541ac3..v0.28.2) - 2024-11-22
+#### Bug Fixes
+- correct tarball link - ([fbf3a28](https://github.com/yoctoyotta1024/CLEO/commit/fbf3a285c812601d886718719d1168ddbf182934)) - clara.bayley
+- revert running fromfile example for longer - ([0618278](https://github.com/yoctoyotta1024/CLEO/commit/0618278dda3798581dc9e2632868455de97b6058)) - clara.bayley
+#### Continuous Integration
+- added script to the CI step for comparing parallel run results - ([74fb42a](https://github.com/yoctoyotta1024/CLEO/commit/74fb42a5dd4509b645d76f204a23feba7c706938)) - Wilton Jaciel Loch
+- added parallelization execution test to verify that parallel execution is possible - ([b1d57e5](https://github.com/yoctoyotta1024/CLEO/commit/b1d57e5d52a245e6ca3904f047dce7c4f2541ac3)) - Wilton Jaciel Loch
+
+- - -
+
 ## [v0.28.1](https://github.com/yoctoyotta1024/CLEO/compare/aab95ef25bdf5d7712b092ad7e3e5bd89014e770..v0.28.1) - 2024-11-22
 #### Bug Fixes
 - update levante mamba env path - ([aab95ef](https://github.com/yoctoyotta1024/CLEO/commit/aab95ef25bdf5d7712b092ad7e3e5bd89014e770)) - clara.bayley
