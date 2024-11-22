@@ -2,6 +2,19 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.28.3](https://github.com/yoctoyotta1024/CLEO/compare/fbad594c2925992ae0feade58d08a983c30accfd..v0.28.3) - 2024-11-22
+#### Bug Fixes
+- revert running fromfile example for longer - ([6761ffb](https://github.com/yoctoyotta1024/CLEO/commit/6761ffb942791409fe7e7a90a52f4698c8646dab)) - clara.bayley
+#### Continuous Integration
+- added script to the CI step for comparing parallel run results - ([5d710f0](https://github.com/yoctoyotta1024/CLEO/commit/5d710f02c3f0470f9cba60d5ccfbcd898989eb41)) - Wilton Jaciel Loch
+- added parallelization execution test to verify that parallel execution is possible - ([fbad594](https://github.com/yoctoyotta1024/CLEO/commit/fbad594c2925992ae0feade58d08a983c30accfd)) - Wilton Jaciel Loch
+#### Miscellaneous Chores
+- Merge branch 'parallelization_ci' of https://github.com/wiltonloch/CLEO into parallelization_ci - ([aa494b8](https://github.com/yoctoyotta1024/CLEO/commit/aa494b8b447abe490f26b90a0a681555bd1d49ad)) - clara.bayley
+#### Performance Improvements
+- replaced global communication in superdrops exchange by p2p calls - ([ba4463a](https://github.com/yoctoyotta1024/CLEO/commit/ba4463a8a0eb7287c46f2263124395a83afd2a31)) - Wilton Jaciel Loch
+
+- - -
+
 ## [v0.28.2](https://github.com/yoctoyotta1024/CLEO/compare/b1d57e5d52a245e6ca3904f047dce7c4f2541ac3..v0.28.2) - 2024-11-22
 #### Bug Fixes
 - correct tarball link - ([fbf3a28](https://github.com/yoctoyotta1024/CLEO/commit/fbf3a285c812601d886718719d1168ddbf182934)) - clara.bayley
