@@ -207,6 +207,9 @@ void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd
   MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
   MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 
+  std::vector<MPI_Request> exchange_requests(comm_size * 6, MPI_REQUEST_NULL);
+  std::vector<MPI_Status> exchange_statuses(comm_size * 6);
+
   std::vector<int> per_process_send_superdrops(comm_size, 0);
   std::vector<int> per_process_recv_superdrops(comm_size, 0);
 
@@ -230,8 +233,7 @@ void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd
   size_t superdrop_index = totsupers.extent(0) - 1;
   Superdrop &drop = totsupers(superdrop_index);
 
-  // Go through superdrops from back to front and find how many should be sent and their
-  // indices
+  // Go through superdrops from back to front and find how many should be sent and their indices
   const auto ngbxs = d_gbxs.extent(0);
   while (drop.get_sdgbxindex() >= ngbxs) {
     if (drop.get_sdgbxindex() < LIMITVALUES::oob_gbxindex) {
@@ -264,8 +266,7 @@ void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd
   std::vector<uint64_t> superdrops_uint64_send_data(total_superdrops_to_send);
   std::vector<uint64_t> superdrops_uint64_recv_data(total_superdrops_to_recv);
 
-  // Calculate the send and receive counts and displacements for each of the target
-  // processes
+  // Calculate the send and receive counts and displacements for each of the target processes
   for (int i = 0; i < comm_size; i++) {
     double_send_counts[i] = per_process_send_superdrops[i] * 5;
     double_recv_counts[i] = per_process_recv_superdrops[i] * 5;
@@ -299,23 +300,41 @@ void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd
       send_superdrop_index++;
     }
 
-  // Exchange superdrops uint data
-  MPI_Alltoallv(superdrops_uint_send_data.data(), uint_send_counts.data(),
-                uint_send_displacements.data(), MPI_UNSIGNED, superdrops_uint_recv_data.data(),
-                uint_recv_counts.data(), uint_recv_displacements.data(), MPI_UNSIGNED,
-                MPI_COMM_WORLD);
+  for (int i = 0; i < comm_size; i++) {
+    if (i != my_rank) {
+      // Checks whether something should be sent to process i
+      if (per_process_send_superdrops[i] > 0) {
+        MPI_Isend(superdrops_uint_send_data.data() + uint_send_displacements[i],
+                  uint_send_counts[i], MPI_UNSIGNED, i, 0, MPI_COMM_WORLD,
+                  exchange_requests.data() + i);
 
-  // Exchange superdrops uint64 data
-  MPI_Alltoallv(superdrops_uint64_send_data.data(), per_process_send_superdrops.data(),
-                uint64_send_displacements.data(), MPI_UINT64_T, superdrops_uint64_recv_data.data(),
-                per_process_recv_superdrops.data(), uint64_recv_displacements.data(), MPI_UINT64_T,
-                MPI_COMM_WORLD);
+        MPI_Isend(superdrops_uint64_send_data.data() + uint64_send_displacements[i],
+                  per_process_send_superdrops[i], MPI_UNSIGNED_LONG, i, 1, MPI_COMM_WORLD,
+                  exchange_requests.data() + comm_size + i);
 
-  // Exchange superdrops double data
-  MPI_Alltoallv(superdrops_double_send_data.data(), double_send_counts.data(),
-                double_send_displacements.data(), MPI_DOUBLE, superdrops_double_recv_data.data(),
-                double_recv_counts.data(), double_recv_displacements.data(), MPI_DOUBLE,
-                MPI_COMM_WORLD);
+        MPI_Isend(superdrops_double_send_data.data() + double_send_displacements[i],
+                  double_send_counts[i], MPI_DOUBLE, i, 2, MPI_COMM_WORLD,
+                  exchange_requests.data() + comm_size * 2 + i);
+      }
+
+      // Checks whether something should be received from process i
+      if (per_process_recv_superdrops[i] > 0) {
+        MPI_Irecv(superdrops_uint_recv_data.data() + uint_recv_displacements[i],
+                  uint_recv_counts[i], MPI_UNSIGNED, i, 0, MPI_COMM_WORLD,
+                  exchange_requests.data() + (comm_size * 3) + i);
+
+        MPI_Irecv(superdrops_uint64_recv_data.data() + uint64_recv_displacements[i],
+                  per_process_recv_superdrops[i], MPI_UNSIGNED_LONG, i, 1, MPI_COMM_WORLD,
+                  exchange_requests.data() + (comm_size * 4) + i);
+
+        MPI_Irecv(superdrops_double_recv_data.data() + double_recv_displacements[i],
+                  double_recv_counts[i], MPI_DOUBLE, i, 2, MPI_COMM_WORLD,
+                  exchange_requests.data() + (comm_size * 5) + i);
+      }
+    }
+  }
+
+  MPI_Waitall(comm_size * 6, exchange_requests.data(), exchange_statuses.data());
 
   for (unsigned int i = local_superdrops; i < local_superdrops + total_superdrops_to_recv; i++) {
     int data_offset = i - local_superdrops;
