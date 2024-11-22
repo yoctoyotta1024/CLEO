@@ -16,7 +16,7 @@
 ### ----  and paths for CLEO and build directories  ---- ###
 path2CLEO=${2:-${HOME}/CLEO}
 path2scripts=${path2CLEO}/scripts
-condaenv=/work/bm1183/m300950/mambaenvs/cleoenv
+condaenv=/work/bm1183/m300950/bin/envs/cleoenv
 python=${condaenv}/bin/python
 ### ---------------------------------------------------- ###
 
