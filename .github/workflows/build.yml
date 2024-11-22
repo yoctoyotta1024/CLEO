@@ -1,4 +1,4 @@
-name: build
+name: build and test
 
 on: pull_request
 
@@ -131,3 +131,41 @@ jobs:
 
       - name: Compile YAC Example
         run: cd build && make ${{ matrix.target }}
+
+  parallelisation_execution_test:
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+          cmake libopenmpi-dev openmpi-bin
+
+      - name: Build and Compile Parallel Example
+        run: |
+          mkdir build
+          cmake -S ./ -B ./build \
+          -DCMAKE_C_COMPILER=mpicc \
+          -DCMAKE_CXX_COMPILER=mpic++ \
+          -DCMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3" \
+          -DKokkos_ENABLE_SERIAL=ON \
+          -DENABLE_YAC_COUPLING=OFF
+          cd build && make fromfile
+
+      - name: Parallelization execution test
+        run: |
+          wget https://nextcloud.dkrz.de/s/PRdfiyJJoJ4x6YK/download/fromfile_data.tar.gz
+          tar -xvf fromfile_data.tar.gz
+          mpiexec -n 1 ./examples/fromfile/src/fromfile ../examples/fromfile/src/config/fromfile_config.yaml
+          mv bin bin_1
+          mpiexec -n 2 --host localhost:64 ./examples/fromfile/src/fromfile ../examples/fromfile/src/config/fromfile_config.yaml
+          mv bin bin_2
+          mpiexec -n 4 --host localhost:64 ./examples/fromfile/src/fromfile ../examples/fromfile/src/config/fromfile_config.yaml
+          mv bin bin_4
+          mpiexec -n 8 --host localhost:64 ./examples/fromfile/src/fromfile ../examples/fromfile/src/config/fromfile_config.yaml
+          mv bin bin_8
+          bash -l ../.github/compare_parallel_results.sh
