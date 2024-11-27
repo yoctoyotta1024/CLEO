@@ -21,6 +21,7 @@ thermodynamics read from ICON output of bubble test case by YAC
 """
 
 import sys
+from pathlib import Path
 
 
 def get_zgrid(icon_grid_file, num_vertical_levels):
@@ -62,12 +63,12 @@ def main(
     ### ---------------------------------------------------------------- ###
     ### --- essential paths and filenames --- ###
     # path and filenames for creating initial SD conditions
-    constants_filename = path2CLEO / "libs" / "cleoconstants.hpp"
+    constants_filename = path2CLEO / Path("libs/cleoconstants.hpp")
 
     ### --- plotting initialisation figures --- ###
     # booleans for [making, saving] initialisation figures
     isfigures = [True, True]  # TODO(CB): move into args
-    savefigpath = path2build / "bin"  # binpath # TODO(CB): move into args
+    savefigpath = path2build / Path("bin")  # binpath # TODO(CB): move into args
 
     ### --- settings for 3-D gridbox boundaries --- ###
     num_vertical_levels = 24  # TODO(CB): move to config file (?)
