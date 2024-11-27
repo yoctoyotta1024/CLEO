@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.28.4](https://github.com/yoctoyotta1024/CLEO/compare/aba51cd720e11577a53c3a7947295f10c3307b3f..v0.28.4) - 2024-11-27
+#### Bug Fixes
+- bubble run script uses python pathlib - ([aba51cd](https://github.com/yoctoyotta1024/CLEO/commit/aba51cd720e11577a53c3a7947295f10c3307b3f)) - clara.bayley
+
+- - -
+
 ## [v0.28.3](https://github.com/yoctoyotta1024/CLEO/compare/fbad594c2925992ae0feade58d08a983c30accfd..v0.28.3) - 2024-11-22
 #### Bug Fixes
 - revert running fromfile example for longer - ([6761ffb](https://github.com/yoctoyotta1024/CLEO/commit/6761ffb942791409fe7e7a90a52f4698c8646dab)) - clara.bayley
