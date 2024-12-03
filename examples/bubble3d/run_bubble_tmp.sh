@@ -48,8 +48,8 @@ then
   cp ${icon_grid_file} ${icon_grid_file_copy}
   cp ${icon_data_file} ${icon_data_file_copy}
 
-  source activate /work/bm1183/m300950/mambaenvs/cleoenv
-  /work/bm1183/m300950/mambaenvs/cleoenv/bin/python ${path2CLEO}/examples/bubble3d/bubble3d_inputfiles.py \
+  source activate /work/bm1183/m300950/bin/envs/cleoenv
+  /work/bm1183/m300950/bin/envs/cleoenv/bin/python ${path2CLEO}/examples/bubble3d/bubble3d_inputfiles.py \
    ${path2CLEO} \
    ${path2build} \
    ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
