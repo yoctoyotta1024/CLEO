@@ -45,7 +45,6 @@
 #include "observers/massmoments_observer.hpp"
 #include "observers/nsupers_observer.hpp"
 #include "observers/observers.hpp"
-#include "observers/runstats_observer.hpp"
 #include "observers/state_observer.hpp"
 #include "observers/streamout_observer.hpp"
 #include "observers/superdrops_observer.hpp"
@@ -173,15 +172,13 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
 
-  const Observer auto obs0 = RunStatsObserver(obsstep, config.get_stats_filename());
-
-  const Observer auto obs1 = StreamOutObserver(obsstep * 10, &step2realtime);
+  const Observer auto obs0 = StreamOutObserver(obsstep * 10, &step2realtime);
 
   const Observer auto obsblk = create_bulk_observer(obsstep, dataset, maxchunk, config.get_ngbxs());
 
   const Observer auto obssd = create_superdrops_observer(obsstep, dataset, maxchunk);
 
-  return obssd >> obsblk >> obs1 >> obs0;
+  return obssd >> obsblk >> obs0;
 }
 
 template <typename Store>

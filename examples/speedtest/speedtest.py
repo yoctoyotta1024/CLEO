@@ -19,6 +19,7 @@ Script generates input files, then runs CLEO executable "spdtest" to check perfo
 of CLEO usign different build configurations (e.g. serial, OpenmP and CUDA parallelism).
 """
 
+import glob
 import os
 import shutil
 import subprocess
@@ -30,7 +31,8 @@ path2CLEO = Path(sys.argv[1])
 path2build = Path(sys.argv[2])
 config_filename = Path(sys.argv[3])
 outputdir = Path(sys.argv[4])
-buildtype = sys.argv[5]
+path2kokkostools = Path(sys.argv[5])
+buildtype = sys.argv[6]
 nruns = 2
 
 sys.path.append(str(path2CLEO))  # imports from pySD
@@ -103,49 +105,31 @@ sratios = [0.85, 1.1]  # s_ratio [below, above] Zbase
 ### ---------------------------------------------------------------- ###
 ### --------------------- FUNCTION DEFINITIONS --------------------- ###
 ### ---------------------------------------------------------------- ###
-def read_statsfile(statsfile):
-    stats = {}
-    with open(statsfile, "r") as file:
-        for line in file:
-            # Check if the line starts with '###'
-            if not line.startswith("###"):
-                # Process the line
-                line = line.strip().split()
-                stats[line[0]] = float(line[1])
+class KpKernelTimer:
+    def __init__(self, kokkos_tools_lib: Path):
+        self.kokkos_tools_lib = kokkos_tools_lib
+        self.kp_reader = self.kokkos_tools_lib / ".." / "bin" / "kp_reader"
 
-    return stats
+        os.environ["KOKKOS_TOOLS_LIBS"] = str(
+            self.kokkos_tools_lib / "libkp_kernel_timer.so"
+        )
+        print("Using Kokkos Profiling Tool", os.environ["KOKKOS_TOOLS_LIBS"])
+        print("Using Kokkos Tool Reader", self.kp_reader)
 
+    def postprocess(self, filespath: Path, txt_filepath: Path, txt_filelabel: str):
+        # Add kokkos_tools_lib to LD_LIBRARY_PATH
+        ld_lib_path = os.environ.get("LD_LIBRARY_PATH", "")
+        os.environ["LD_LIBRARY_PATH"] = f"{self.kokkos_tools_lib}:{ld_lib_path}"
 
-def write_outstats(nruns, n, outdatafile, buildtype, stats):
-    """if outdatafile doesn't already exist, creates new file with
-    a header. else appends to end of file"""
+        # Use glob to find all .dat files in the specified directory
+        datfiles = glob.glob(os.path.join(filespath, "*.dat"))
 
-    try:
-        # Try to open the file for exclusive creation
-        with open(outdatafile, "x") as file:
-            # Perform operations on the new file if needed
-            header = "### Wall Clock time For Timestepping\n"
-            header += "### columns are: "
-            header += "test_run gpus_cpus/s cpus/s serial/s"
-            file.write(header)
-        print(f"--- new stats output: '{outdatafile}' created ---")
-    except FileExistsError:
-        print(f"stats output file '{outdatafile}' already exists")
-
-    # write new line at number = existing number of (non-header) lines + 1
-    with open(outdatafile, "r") as file:
-        lines = file.readlines()
-
-    if buildtype == "cuda":
-        line = "\n" + str(n) + " " + str(stats["tstep"])
-        with open(outdatafile, "a") as file:
-            file.write(line)
-
-    else:
-        nline = len(lines) - nruns + n
-        lines[nline] = lines[nline].rstrip() + " " + str(stats["tstep"]) + "\n"
-        with open(outdatafile, "w") as file:
-            file.writelines(lines)
+        # Print the list of .dat files
+        for f, filename in enumerate(datfiles):
+            txt_filename = txt_filepath / Path(txt_filelabel + f"_{f}.txt")
+            cmd = [str(self.kp_reader), filename]
+            with open(txt_filename, "w") as wfile:
+                subprocess.run(cmd, stdout=wfile, stderr=subprocess.STDOUT)
 
 
 ### ---------------------------------------------------------------- ###
@@ -238,6 +222,7 @@ geninitconds.generate_initial_superdroplet_conditions(
 ### ---------------------------------------------------------------- ###
 ### ---------------------- RUN CLEO EXECUTABLE --------------------- ###
 ### ---------------------------------------------------------------- ###
+profiler = KpKernelTimer(path2kokkostools)
 executable = path2build / "examples" / "speedtest" / "src" / "spdtest"
 for n in range(nruns):
     os.chdir(path2build)
@@ -245,13 +230,6 @@ for n in range(nruns):
     print("Executable: " + str(executable))
     print("Config file: " + str(config_filename))
     subprocess.run([executable, config_filename])
-
-    # copy speed results to new file
-    print("--- reading runtime statistics ---")
-    stats = read_statsfile(statsfile)
-    for key, value in stats.items():
-        print(key + ": {:.3f}s".format(value))
-    write_outstats(nruns, n, outdatafile, buildtype, stats)
-    print("--- runtime stats written to file ---")
+profiler.postprocess(path2build, outputdir, buildtype)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###

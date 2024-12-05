@@ -50,7 +50,6 @@
 #include "observers/massmoments_observer.hpp"
 #include "observers/nsupers_observer.hpp"
 #include "observers/observers.hpp"
-#include "observers/runstats_observer.hpp"
 #include "observers/sdmmonitor/monitor_condensation_observer.hpp"
 #include "observers/sdmmonitor/monitor_massmoments_observer.hpp"
 #include "observers/state_observer.hpp"
@@ -222,19 +221,17 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
   const auto maxchunk = config.get_maxchunk();
   const auto ngbxs = config.get_ngbxs();
 
-  const Observer auto obs0 = RunStatsObserver(obsstep, config.get_stats_filename());
+  const Observer auto obs0 = StreamOutObserver(obsstep, &step2realtime);
 
-  const Observer auto obs1 = StreamOutObserver(obsstep, &step2realtime);
+  const Observer auto obs1 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
 
-  const Observer auto obs2 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
+  const Observer auto obs2 = GbxindexObserver(dataset, maxchunk, ngbxs);
 
-  const Observer auto obs3 = GbxindexObserver(dataset, maxchunk, ngbxs);
+  const Observer auto obs3 = TotNsupersObserver(obsstep, dataset, maxchunk);
 
-  const Observer auto obs4 = TotNsupersObserver(obsstep, dataset, maxchunk);
+  const Observer auto obs4 = MassMomentsObserver(obsstep, dataset, maxchunk, ngbxs);
 
-  const Observer auto obs5 = MassMomentsObserver(obsstep, dataset, maxchunk, ngbxs);
-
-  const Observer auto obs6 = MassMomentsRaindropsObserver(obsstep, dataset, maxchunk, ngbxs);
+  const Observer auto obs5 = MassMomentsRaindropsObserver(obsstep, dataset, maxchunk, ngbxs);
 
   const Observer auto obsgbx = create_gridboxes_observer(obsstep, dataset, maxchunk, ngbxs);
 
@@ -242,7 +239,7 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
 
   const Observer auto obsm = create_sdmmonitor_observer(obsstep, dataset, maxchunk, ngbxs);
 
-  return obsm >> obssd >> obsgbx >> obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
+  return obsm >> obssd >> obsgbx >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
 }
 
 template <typename Store>
