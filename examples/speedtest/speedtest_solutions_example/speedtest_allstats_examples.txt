@@ -56,3 +56,6 @@ C1 0.305725 1.64846 13.7267          # test G (new observers / data output libra
 
 A0 0.529342 1.48977 16.2189          # (new) test A after change to condensation at v0.17.1
 A1 0.527819 1.46074 16.8407          # (new) test A after change to condensation at v0.17.1
+
+A0 0.635192 1.505808 17.165402       # (new) test A after removing RunStats obs at v0.29.0
+A1 0.619722 1.511115 17.108600       # (new) test A after removing RunStats obs at v0.29.0
