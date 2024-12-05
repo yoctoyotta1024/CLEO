@@ -24,6 +24,7 @@
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
+#include <Kokkos_Profiling_ScopedRegion.hpp>
 #include <Kokkos_Random.hpp>
 #include <concepts>
 #include <iostream>
@@ -212,6 +213,9 @@ class RunCLEO {
    *
    * This function runs SDM on both host and device from `t_mdl` to `t_next`.
    *
+   * Kokkos::Profiling are null pointers unless a Kokkos profiler library has been
+   * exported to "KOKKOS_TOOLS_LIBS" prior to runtime so the lib gets dynamically loaded.
+   *
    * @param t_mdl Current timestep of the coupled model.
    * @param t_next Next timestep of the coupled model.
    * @param gbxs DualView of gridboxes.
@@ -219,6 +223,8 @@ class RunCLEO {
    */
   void sdm_step(const unsigned int t_mdl, unsigned int t_next, dualview_gbx gbxs,
                 const viewd_supers totsupers) const {
+    Kokkos::Profiling::ScopedRegion region("timestep_sdm");
+
     gbxs.sync_device();  // get device up to date with host
     sdm.run_step(t_mdl, t_next, gbxs.view_device(), totsupers);
     gbxs.modify_device();  // mark device view of gbxs as modified
@@ -229,10 +235,15 @@ class RunCLEO {
    *
    * This function runs the Coupled Dynamics on host from t_mdl to t_next.
    *
+   * Kokkos::Profiling are null pointers unless a Kokkos profiler library has been
+   * exported to "KOKKOS_TOOLS_LIBS" prior to runtime so the lib gets dynamically loaded.
+   *
    * @param t_mdl Current timestep of the coupled model.
    * @param t_next Next timestep of the coupled model.
    */
   void coupldyn_step(const unsigned int t_mdl, const unsigned int t_next) const {
+    Kokkos::Profiling::ScopedRegion region("timestep_coupldyn");
+
     coupldyn.run_step(t_mdl, t_next);
   }
 
@@ -287,21 +298,29 @@ class RunCLEO {
    * Creates runtime objects, gridboxes, superdrops and random number generators
    * using initial conditions, then prepares and performs CLEO timestepping.
    *
+   * Kokkos::Profiling are null pointers unless a Kokkos profiler library has been
+   * exported to "KOKKOS_TOOLS_LIBS" prior to runtime so the lib gets dynamically loaded.
+   *
    * @param initconds InitialConditions object containing initial conditions.
    * @param t_end End time for timestepping.
    * @return 0 on success.
    */
   int operator()(const InitialConditions auto &initconds, const unsigned int t_end) const {
-    // create runtime objects
-    viewd_supers totsupers(create_supers(initconds.initsupers));
-    dualview_gbx gbxs(create_gbxs(sdm.gbxmaps, initconds.initgbxs, totsupers));
+    Kokkos::Profiling::pushRegion("runcleo");
 
-    // prepare CLEO for timestepping
+    // create runtime objects and prepare CLEO for timestepping
+    Kokkos::Profiling::pushRegion("init");
+    auto totsupers = create_supers(initconds.initsupers);
+    auto gbxs = create_gbxs(sdm.gbxmaps, initconds.initgbxs, totsupers);
     prepare_to_timestep(gbxs);
+    Kokkos::Profiling::popRegion();
 
     // do timestepping from t=0 to t=t_end
+    Kokkos::Profiling::pushRegion("timestep");
     timestep_cleo(t_end, gbxs, totsupers);
+    Kokkos::Profiling::popRegion();
 
+    Kokkos::Profiling::popRegion();
     return 0;
   }
 };

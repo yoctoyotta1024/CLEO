@@ -24,6 +24,7 @@
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
+#include <Kokkos_Profiling_ScopedRegion.hpp>
 #include <Kokkos_Random.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 
@@ -89,6 +90,9 @@ class SDMMethods {
    * `movesupers` is an instance of the MoveSupersInDomain templated type with a certain
    * instance of a type of GridboxMaps, super-droplets' Motion and boundary conditions.
    *
+   * Kokkos::Profiling are null pointers unless a Kokkos profiler library has been
+   * exported to "KOKKOS_TOOLS_LIBS" prior to runtime so the lib gets dynamically loaded.
+   *
    * @param t_sdm Current timestep for SDM.
    * @param d_gbxs View of gridboxes on device.
    * @param totsupers View of all superdrops (both in and out of bounds of domain).
@@ -96,6 +100,8 @@ class SDMMethods {
    */
   void superdrops_movement(const unsigned int t_sdm, viewd_gbx d_gbxs, const viewd_supers totsupers,
                            const SDMMonitor auto mo) const {
+    Kokkos::Profiling::ScopedRegion region("timestep_sdm_movement");
+
     movesupers.run_step(t_sdm, gbxmaps, d_gbxs, totsupers, mo);
   }
 
@@ -122,8 +128,11 @@ class SDMMethods {
      * @brief run SDM microphysics for each gridbox (using sub-timestepping routine).
      *
      * This function runs SDM microphysics for each gridbox using a sub-timestepping routine.
-     *  Kokkos::parallel_for is nested parallelism within parallelised loop over gridboxes,
+     * Kokkos::parallel_for is nested parallelism within parallelised loop over gridboxes,
      * serial equivalent is simply: `for (size_t ii(0); ii < ngbxs; ++ii) { [...] }`
+     *
+     * Kokkos::Profiling are null pointers unless a Kokkos profiler library has been
+     * exported to "KOKKOS_TOOLS_LIBS" prior to runtime so the lib gets dynamically loaded.
      *
      * @param t_sdm Current timestep for SDM.
      * @param t_next Next timestep for SDM.
@@ -133,6 +142,8 @@ class SDMMethods {
     template <SDMMonitor SDMMo>
     void operator()(const unsigned int t_sdm, const unsigned int t_next, const viewd_gbx d_gbxs,
                     const SDMMo mo) const {
+      Kokkos::Profiling::ScopedRegion region("timestep_sdm_microphysics");
+
       // TODO(all) use scratch space for parallel region
       const size_t ngbxs(d_gbxs.extent(0));
       Kokkos::parallel_for(
