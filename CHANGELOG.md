@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.29.0](https://github.com/yoctoyotta1024/CLEO/compare/f30212e726ca35fe15489fc9a81bfa9d498da0f0..v0.29.0) - 2024-12-05
+#### Features
+- add kokkos profiling hooks to measure computational performance - ([f30212e](https://github.com/yoctoyotta1024/CLEO/commit/f30212e726ca35fe15489fc9a81bfa9d498da0f0)) - clara.bayley
+
+- - -
+
 ## [v0.28.4](https://github.com/yoctoyotta1024/CLEO/compare/aba51cd720e11577a53c3a7947295f10c3307b3f..v0.28.4) - 2024-11-27
 #### Bug Fixes
 - bubble run script uses python pathlib - ([aba51cd](https://github.com/yoctoyotta1024/CLEO/commit/aba51cd720e11577a53c3a7947295f10c3307b3f)) - clara.bayley
