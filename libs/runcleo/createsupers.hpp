@@ -23,6 +23,7 @@
 #define LIBS_RUNCLEO_CREATESUPERS_HPP_
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Profiling_ScopedRegion.hpp>
 #include <iostream>
 #include <stdexcept>
 #include <string>
@@ -102,12 +103,17 @@ void print_supers(const viewd_constsupers supers);
  * ordered by the gridbox indexes and generated using a generator which uses
  * the initial conditions provided by the `SuperdropInitConds` type.
  *
+ * Kokkos::Profiling are null pointers unless a Kokkos profiler library has been
+ * exported to "KOKKOS_TOOLS_LIBS" prior to runtime so the lib gets dynamically loaded.
+ *
  * @tparam SuperdropInitConds The type of the super-droplets' initial conditions data.
  * @param sdic The instance of the super-droplets' initial conditions data.
  * @return A view of super-droplets in device memory.
  */
 template <typename SuperdropInitConds>
 viewd_supers create_supers(const SuperdropInitConds &sdic) {
+  Kokkos::Profiling::ScopedRegion region("init_supers");
+
   // Log message and create superdrops using the initial conditions
   std::cout << "\n--- create superdrops ---\ninitialising\n";
   viewd_supers supers(initialise_supers(sdic));
