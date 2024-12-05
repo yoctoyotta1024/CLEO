@@ -24,8 +24,8 @@
 #include <concepts>
 #include <iostream>
 
-#include "./cleotypes_sizes.hpp"
 #include "zarr/dataset.hpp"
+#include "./cleotypes_sizes.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
 #include "cartesiandomain/null_boundary_conditions.hpp"
@@ -41,7 +41,6 @@
 #include "observers/massmoments_observer.hpp"
 #include "observers/nsupers_observer.hpp"
 #include "observers/observers.hpp"
-#include "observers/runstats_observer.hpp"
 #include "observers/state_observer.hpp"
 #include "observers/streamout_observer.hpp"
 #include "observers/superdrops_observer.hpp"
@@ -108,16 +107,15 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
   const auto maxchunk = config.get_maxchunk();
   const auto ngbxs = config.get_ngbxs();
 
-  const Observer auto obs0 = RunStatsObserver(obsstep, config.get_stats_filename());
-  const Observer auto obs1 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
-  const Observer auto obs2 = GbxindexObserver(dataset, maxchunk, ngbxs);
-  const Observer auto obs3 = MassMomentsObserver(obsstep, dataset, maxchunk, ngbxs);
-  const Observer auto obs4 = MassMomentsRaindropsObserver(obsstep, dataset, maxchunk, ngbxs);
-  const Observer auto obs6 = TotNsupersObserver(obsstep, dataset, maxchunk);
+  const Observer auto obs0 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
+  const Observer auto obs1 = GbxindexObserver(dataset, maxchunk, ngbxs);
+  const Observer auto obs2 = MassMomentsObserver(obsstep, dataset, maxchunk, ngbxs);
+  const Observer auto obs3 = MassMomentsRaindropsObserver(obsstep, dataset, maxchunk, ngbxs);
+  const Observer auto obs4 = TotNsupersObserver(obsstep, dataset, maxchunk);
   const Observer auto obsx = create_gridbox_observer(config, tsteps, dataset);
   const Observer auto obssd = create_superdrops_observer(config, tsteps, dataset);
 
-  return obssd >> obsx >> obs6 >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
+  return obssd >> obsx >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
 }
 
 /* ---------------------------------------------------------------------------------------------- */

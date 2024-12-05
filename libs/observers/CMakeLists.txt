@@ -16,7 +16,6 @@ set(LIB_BINARY_DIR ${CLEO_BINARY_DIR}/lib)
 # Add executables and create library target
 set(SOURCES
 "streamout_observer.cpp"
-"runstats_observer.cpp"
 "massmoments_observer.cpp"
 )
 # must use STATIC (not(!) SHARED) lib for linking to executable if build is CUDA enabled with Kokkos
