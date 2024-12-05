@@ -530,9 +530,14 @@ initialise Gridboxes (i.e. GBxs).</p>
 <span id="_CPPv3I_11GridboxMaps0E11create_gbxsRK7GbxMapsRK12GbxInitCondsK12viewd_supers"></span><span id="_CPPv2I_11GridboxMaps0E11create_gbxsRK7GbxMapsRK12GbxInitCondsK12viewd_supers"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">GridboxMaps</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxMaps</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxInitConds</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="creategbxs_8hpp_1a52c25ef943e7ca2d53e54ec873a73225"></span><a class="reference internal" href="../kokkosaliases.html#_CPPv412dualview_gbx" title="dualview_gbx"><span class="n"><span class="pre">dualview_gbx</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_gbxs</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_11GridboxMaps0E11create_gbxs12dualview_gbxRK7GbxMapsRK12GbxInitCondsK12viewd_supers" title="create_gbxs::GbxMaps"><span class="n"><span class="pre">GbxMaps</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">gbxmaps</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_11GridboxMaps0E11create_gbxs12dualview_gbxRK7GbxMapsRK12GbxInitCondsK12viewd_supers" title="create_gbxs::GbxInitConds"><span class="n"><span class="pre">GbxInitConds</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">gbxic</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv412viewd_supers" title="viewd_supers"><span class="n"><span class="pre">viewd_supers</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">totsupers</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_11GridboxMaps0E11create_gbxs12dualview_gbxRK7GbxMapsRK12GbxInitCondsK12viewd_supers" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Create Gridboxes from initial conditions. </p>
 <p>This function creates Gridboxes based on the provided gridbox maps and initial conditions, and given super-droplets.</p>
+<p>
+This function creates Gridboxes based on the provided gridbox maps and initial conditions, and given super-droplets.</p>
+<p>Kokkos::Profiling are null pointers unless a Kokkos profiler library has been exported to “KOKKOS_TOOLS_LIBS” prior to runtime so the lib gets dynamically loaded.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>GbxMaps</strong> – Type representing Gridbox Maps. </p></li>
+<li><p><strong>GbxInitConds</strong> – Type representing Gridbox initial conditions.</p></li>
 <li><p><strong>GbxMaps</strong> – Type representing Gridbox Maps. </p></li>
 <li><p><strong>GbxInitConds</strong> – Type representing Gridbox initial conditions.</p></li>
 </ul>
@@ -542,10 +547,16 @@ initialise Gridboxes (i.e. GBxs).</p>
 <li><p><strong>gbxmaps</strong> – The Gridbox Maps. </p></li>
 <li><p><strong>gbxic</strong> – The Gridbox initial conditions. </p></li>
 <li><p><strong>totsupers</strong> – The view of all super-droplets (both in and out of bounds of domain).</p></li>
+<li><p><strong>gbxmaps</strong> – The Gridbox Maps. </p></li>
+<li><p><strong>gbxic</strong> – The Gridbox initial conditions. </p></li>
+<li><p><strong>totsupers</strong> – The view of all super-droplets (both in and out of bounds of domain).</p></li>
 </ul>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The view of initialised Gridboxes. </p>
+<dd class="field-odd"><p>The view of initialised Gridboxes.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The view of initialised Gridboxes. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -666,7 +677,7 @@ initialise Gridboxes (i.e. GBxs).</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 27 November 2024</div>
+              Last updated on 05 December 2024</div>
           </div>
           <div class="right-details">
             

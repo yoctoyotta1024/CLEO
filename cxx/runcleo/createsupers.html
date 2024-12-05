@@ -479,6 +479,7 @@ super-droplets in Kokkos view (on device).</p>
 <span id="_CPPv3I0E13create_supersRK18SuperdropInitConds"></span><span id="_CPPv2I0E13create_supersRK18SuperdropInitConds"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SuperdropInitConds</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="createsupers_8hpp_1a81b08e4a28f3a27f87c0b7c9b1df2b3a"></span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv412viewd_supers" title="viewd_supers"><span class="n"><span class="pre">viewd_supers</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_supers</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0E13create_supers12viewd_supersRK18SuperdropInitConds" title="create_supers::SuperdropInitConds"><span class="n"><span class="pre">SuperdropInitConds</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">sdic</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0E13create_supers12viewd_supersRK18SuperdropInitConds" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Create a view of super-droplets in (device) memory. </p>
 <p>This function creates an ordered view of superdrops in device memory, where the number of superdrops is specified by the parameter <code class="docutils literal notranslate"><span class="pre">totnsupers</span></code>. The superdrops are ordered by the gridbox indexes and generated using a generator which uses the initial conditions provided by the <code class="docutils literal notranslate"><span class="pre">SuperdropInitConds</span></code> type.</p>
+<p>Kokkos::Profiling are null pointers unless a Kokkos profiler library has been exported to “KOKKOS_TOOLS_LIBS” prior to runtime so the lib gets dynamically loaded.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>SuperdropInitConds</strong> – The type of the super-droplets’ initial conditions data. </p>
@@ -599,7 +600,7 @@ super-droplets in Kokkos view (on device).</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 27 November 2024</div>
+              Last updated on 05 December 2024</div>
           </div>
           <div class="right-details">
             
