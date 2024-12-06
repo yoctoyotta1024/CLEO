@@ -20,7 +20,7 @@ buildtype=$1
 enableyac=${2:-false}                     # "true" or otherwise
 path2CLEO=${3:-${HOME}/CLEO}
 path2build=${4:-${path2CLEO}/build}
-yacyaxtroot=/work/bm1183/m300950/yac      # used if enableyac == "true"
+yacyaxtroot=/work/bm1183/m300950/yacyaxt  # used if enableyac == "true"
 executables="cleocoupledsdm"
 ### ---------------------------------------------------- ###
 

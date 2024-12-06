@@ -13,7 +13,7 @@
 
 action=$1
 path2CLEO=${2:-${HOME}/CLEO}
-path2yac=${3:-/work/bm1183/m300950/yac}
+path2yac=${3:-/work/bm1183/m300950/yacyaxt}
 path2build=${4:-${HOME}/CLEO/build_bubble3d}
 
 icon_grid_file=/work/bm1183/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc
