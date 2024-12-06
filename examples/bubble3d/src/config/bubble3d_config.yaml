@@ -25,8 +25,8 @@
 ### SDM Runtime Parameters ###
 domain:
   nspacedims : 3                                          # no. of spatial dimensions to model
-  ngbxs : 576                                            # total number of Gbxs
-  maxnsupers: 576                                        # maximum number of SDs
+  ngbxs : 4800                                            # total number of Gbxs
+  maxnsupers: 4800                                        # maximum number of SDs
 
 timesteps:
   CONDTSTEP : 2                                           # time between SD condensation [s]
@@ -50,11 +50,11 @@ outputdata:
   setup_filename : ./bin/bubble3d_setup.txt                   # .txt filename to copy configuration to
   stats_filename : ./bin/bubble3d_stats.txt                   # .txt file to output runtime statistics to
   zarrbasedir : ./bin/bubble3d_sol.zarr                       # zarr store base directory
-  maxchunk : 2500000                                      # maximum no. of elements in chunks of zarr store array
+  maxchunk : 2500000                                          # maximum no. of elements in chunks of zarr store array
 
 coupled_dynamics:
   type: yac
-  lower_longitude: -0.9424777965
-  upper_longitude: 0.9424777965
-  lower_latitude: -0.392699082
-  upper_latitude: 0.392699082
+  lower_longitude: -3.29867229                                # must match xgrid domain delta_x
+  upper_longitude: 2.98451302
+  lower_latitude: -1.25665                                    # must match ygrid domain delta_y
+  upper_latitude: 1.25665
