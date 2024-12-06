@@ -112,13 +112,13 @@ void create_grid_and_points_definitions(const Config &config, const std::array<s
   // these arrays will have a size equal to the number of edges.
   for (size_t lat_index = 0; lat_index < vertex_latitudes.size() * 2 - 1; lat_index++) {
     if (lat_index % 2 == 0) {
-      edge_centers_longitudes.insert(edge_centers_longitudes.end(), cell_center_longitudes.begin(),
-                                     cell_center_longitudes.end());
+      edge_centers_longitudes.insert(edge_centers_longitudes.end(), cell_center_longitudes.rbegin(),
+                                     cell_center_longitudes.rend());
       edge_centers_latitudes.insert(edge_centers_latitudes.end(), cell_center_longitudes.size(),
                                     vertex_latitudes[lat_index / 2]);
     } else {
-      edge_centers_longitudes.insert(edge_centers_longitudes.end(), vertex_longitudes.begin(),
-                                     vertex_longitudes.end());
+      edge_centers_longitudes.insert(edge_centers_longitudes.end(), vertex_longitudes.rbegin(),
+                                     vertex_longitudes.rend());
       edge_centers_latitudes.insert(edge_centers_latitudes.end(), vertex_longitudes.size(),
                                     cell_center_latitudes[(lat_index - 1) / 2]);
     }
