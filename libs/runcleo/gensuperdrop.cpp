@@ -86,5 +86,5 @@ SuperdropAttrs GenSuperdrop::attrs_at(const unsigned int kk) const {
   const auto xi = initdata.xis.at(kk);
   const SoluteProperties solute(initdata.solutes.at(0));
 
-  return SuperdropAttrs(solute, xi, radius, msol);
+  return SuperdropAttrs(solute, xi, radius, msol, true);
 }
