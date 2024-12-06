@@ -205,7 +205,7 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   // --- Interpolation stack ---
   int interp_stack_id;
   yac_cget_interp_stack_config(&interp_stack_id);
-  yac_cadd_interp_stack_config_nnn(interp_stack_id, YAC_NNN_AVG, 1, 1.0);
+  yac_cadd_interp_stack_config_nnn(interp_stack_id, YAC_NNN_AVG, 1, 0.0, 1.0);
 
   // --- Field definitions ---
   int num_point_sets = 1;
