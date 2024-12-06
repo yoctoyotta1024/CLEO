@@ -2,6 +2,22 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.29.1](https://github.com/yoctoyotta1024/CLEO/compare/56a3b9a996f2654669794892d6ea83018ca2d6ca..v0.29.1) - 2024-12-06
+#### Bug Fixes
+- reverse order of longitude edge centers - ([f496c6e](https://github.com/yoctoyotta1024/CLEO/commit/f496c6efb1e7528c992bc205c2242099d00b338b)) - clara.bayley
+- update python use for yac and yac_cadd_interp_stack_config_nnn call for latest yac version - ([d268b7c](https://github.com/yoctoyotta1024/CLEO/commit/d268b7ca6f0a40cc5428d993994f15111be5f5e8)) - clara.bayley
+#### Miscellaneous Chores
+- update yac and yaxt versions on CI - ([fcf576d](https://github.com/yoctoyotta1024/CLEO/commit/fcf576d888b3c3e7384698d004035e67dafe1574)) - clara.bayley
+#### Refactoring
+- adapt cleo domain for bubble to crop inside central portion of icon domain - ([b8e7de4](https://github.com/yoctoyotta1024/CLEO/commit/b8e7de4f31a11d0519b27b6a2beed8ab307831f4)) - clara.bayley
+- adapt cleo domain for bubble to match entire icon domain - ([37958a0](https://github.com/yoctoyotta1024/CLEO/commit/37958a09c4aa739ca654a4311567bd85f0449428)) - clara.bayley
+- update install yac bash script to make python bindings correctly - ([7ee4a84](https://github.com/yoctoyotta1024/CLEO/commit/7ee4a84e0ba564d3c3560938032bc0348785d2ca)) - clara.bayley
+- update yacyaxt root dir - ([9c163be](https://github.com/yoctoyotta1024/CLEO/commit/9c163be2e43953bdd6535719158f0a40aa1d7afa)) - clara.bayley
+- update expected solutions from spdtest - ([4e53e5b](https://github.com/yoctoyotta1024/CLEO/commit/4e53e5bbc6bea1a44949432d1debe05964a3ad2f)) - clara.bayley
+- delete run_stats observer - ([56a3b9a](https://github.com/yoctoyotta1024/CLEO/commit/56a3b9a996f2654669794892d6ea83018ca2d6ca)) - clara.bayley
+
+- - -
+
 ## [v0.29.0](https://github.com/yoctoyotta1024/CLEO/compare/f30212e726ca35fe15489fc9a81bfa9d498da0f0..v0.29.0) - 2024-12-05
 #### Features
 - add kokkos profiling hooks to measure computational performance - ([f30212e](https://github.com/yoctoyotta1024/CLEO/commit/f30212e726ca35fe15489fc9a81bfa9d498da0f0)) - clara.bayley
