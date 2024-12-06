@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.29.2](https://github.com/yoctoyotta1024/CLEO/compare/8e8ecbf76cde7d01baa95bc350a4a92a9e183446..v0.29.2) - 2024-12-06
+#### Bug Fixes
+- create superdroplets at domain top with xi>=1 - ([4a7be0d](https://github.com/yoctoyotta1024/CLEO/commit/4a7be0d5e236dcc203b973c1c38776d1d35ee205)) - clara.bayley
+#### Refactoring
+- add bool in SD creation to prevent un-physical superdroplets by default - ([8e8ecbf](https://github.com/yoctoyotta1024/CLEO/commit/8e8ecbf76cde7d01baa95bc350a4a92a9e183446)) - clara.bayley
+
+- - -
+
 ## [v0.29.1](https://github.com/yoctoyotta1024/CLEO/compare/56a3b9a996f2654669794892d6ea83018ca2d6ca..v0.29.1) - 2024-12-06
 #### Bug Fixes
 - reverse order of longitude edge centers - ([f496c6e](https://github.com/yoctoyotta1024/CLEO/commit/f496c6efb1e7528c992bc205c2242099d00b338b)) - clara.bayley
