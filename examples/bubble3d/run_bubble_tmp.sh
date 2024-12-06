@@ -13,7 +13,7 @@
 
 action=$1
 path2CLEO=${2:-${HOME}/CLEO}
-path2yac=${3:-/work/bm1183/m300950/yac}
+path2yac=${3:-/work/bm1183/m300950/yacyaxt}
 path2build=${4:-${HOME}/CLEO/build_bubble3d}
 
 icon_grid_file=/work/bm1183/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc
@@ -67,7 +67,11 @@ then
   spack unload --all
   # note version of python must match the YAC python bindings (e.g. module load python3/2022.01-gcc-11.2.0)
   module load openmpi/4.1.2-gcc-11.2.0 # same mpi as loaded for the build
-  spack load py-netcdf4
+  ### ----------------- load Python ------------------------ ###
+  spack load python@3.9.9%gcc@=11.2.0/fwv
+  spack load py-cython@0.29.33%gcc@=11.2.0/j7b4fa
+  spack load py-mpi4py@3.1.2%gcc@=11.2.0/hdi5yl6
+  ### ------------------------------------------------------ ###
 
   export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/sw/spack-levante/libfyaml-0.7.12-fvbhgo/lib
   export PYTHONPATH=${PYTHONPATH}:${path2yac}/yac/python # path to python bindings

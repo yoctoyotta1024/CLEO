@@ -23,7 +23,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ runner.temp }}/yac/
-          key: ${{ runner.os }}-yac-cache-v3.2.0
+          key: ${{ runner.os }}-yac-cache-v3.5.2
           restore-keys: |
             ${{ runner.os }}-yac-
 
@@ -39,8 +39,8 @@ jobs:
       - name: Build YAXT
         if: steps.cache_yaxt.outputs.cache-hit != 'true'
         run: |
-          curl -s -L https://swprojects.dkrz.de/redmine/attachments/download/534/yaxt-0.11.1.tar.gz | tar xvz
-          cd yaxt-0.11.1
+          mkdir yaxt-0.11.1 && cd yaxt-0.11.1
+          curl -s -L https://gitlab.dkrz.de/dkrz-sw/yaxt/-/archive/release-0.11.1/yaxt-0.11.1.tar.gz | tar xvz --strip-components=1
           ./configure --without-regard-for-quality --without-example-programs \
             --without-perf-programs --with-pic --prefix=${{ runner.temp }}/yaxt
           make -j 4
@@ -49,8 +49,8 @@ jobs:
       - name: Build YAC
         if: steps.cache_yac.outputs.cache-hit != 'true'
         run: |
-          curl -s -L https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/v3.2.0/yac-v3.2.0.tar.gz | tar xvz
-          cd yac-v3.2.0
+          mkdir yac-v3.5.2 && cd yac-v3.5.2
+          curl -s -L https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/v3.5.2/yac_v3.5.2.tar.gz | tar xvz --strip-components=1
           ./configure CFLAGS="-fPIC" CC=mpicc FC=mpif90 --disable-mpi-checks \
             --with-yaxt-root=${{ runner.temp }}/yaxt --prefix=${{ runner.temp }}/yac
           make -j 4
@@ -114,7 +114,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ runner.temp }}/yac/
-          key: ${{ runner.os }}-yac-cache-v3.2.0
+          key: ${{ runner.os }}-yac-cache-v3.5.2
 
       - name: Build YAC Example
         run: |

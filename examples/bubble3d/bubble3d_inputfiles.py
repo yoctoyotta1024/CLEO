@@ -80,8 +80,8 @@ def main(
     ]  # evenly spaced xhalf coords [m] # distance must match longitude in config file
     ygrid = [
         0,
-        12000,
-        6000,
+        6250,
+        1250,
     ]  # evenly spaced xhalf coords [m] # distance must match latitudes in config file
 
     ### --- settings for initial superdroplets --- ###
