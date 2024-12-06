@@ -75,13 +75,13 @@ def main(
     zgrid = get_zgrid(icon_grid_file, num_vertical_levels)  # [m]
     xgrid = [
         0,
-        30000,
+        100000,
         2500,
     ]  # evenly spaced xhalf coords [m] # distance must match longitude in config file
     ygrid = [
         0,
-        12000,
-        6000,
+        20000,
+        4000,
     ]  # evenly spaced xhalf coords [m] # distance must match latitudes in config file
 
     ### --- settings for initial superdroplets --- ###
