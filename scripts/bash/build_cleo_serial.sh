@@ -24,7 +24,7 @@ gcc="/sw/spack-levante/gcc-11.2.0-bcn7mb/bin/gcc"
 path2CLEO=$1    # required
 path2build=$2   # required
 enableyac=$3    # required
-yacyaxtroot=$4      # required if enableyac=true
+yacyaxtroot=$4  # required if enableyac=true
 
 yac_openmpi=openmpi/4.1.2-gcc-11.2.0 # required if enableyac=true (must match gcc)
 yac_netcdf=netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0 # required if enableyac=true (must match gcc & openmp)

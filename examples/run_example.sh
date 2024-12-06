@@ -32,7 +32,7 @@ script_args="$7"
 
 cleoenv=/work/bm1183/m300950/mambaenvs/cleoenv
 python=${cleoenv}/bin/python3
-yacyaxtroot=/work/bm1183/m300950/yac
+yacyaxtroot=/work/bm1183/m300950/yacyaxt
 spack load cmake@3.23.1%gcc
 module load python3/2022.01-gcc-11.2.0
 source activate ${cleoenv}
