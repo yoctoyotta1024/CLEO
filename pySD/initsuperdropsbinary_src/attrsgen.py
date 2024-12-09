@@ -60,8 +60,9 @@ class AttrsGenerator:
         is about 'numconc'. Raise an error if any of the calculated
         mulitiplicities are zero"""
 
-        prob = self.xiprobdist(radii)  # normalised prob distrib
-        xi = np.rint(prob * NUMCONC * samplevol)
+        totxi = NUMCONC * samplevol
+        prob = self.xiprobdist(radii, totxi)  # normalised prob distrib
+        xi = np.rint(prob * totxi)
 
         if any(xi == 0):
             num = len(xi[xi == 0])
