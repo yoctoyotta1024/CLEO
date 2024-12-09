@@ -24,6 +24,22 @@ import numpy as np
 from scipy import special
 
 
+class MinXiDistrib:
+    """probability of radius for a given probability distribution but with a
+    minimum value such that xi>='xi_min'"""
+
+    def __init__(self, probdistrib, xi_min):
+        self.probdistrib = probdistrib
+        self.xi_min = xi_min
+
+    def __call__(self, radii, totxi):
+        """returns probability for radii from a certain distribution or the
+        probability such that xi has minimum value 'xi_min'"""
+        prob = self.probdistrib(radii, totxi)
+        prob_min = self.xi_min / totxi
+        return np.where(prob < prob_min, prob_min, prob)
+
+
 class CombinedRadiiProbDistribs:
     """probability of radius from the sum of several
     probability distributions"""
@@ -36,7 +52,10 @@ class CombinedRadiiProbDistribs:
             errmsg = "relative height of each probability distribution must be given"
             raise ValueError(errmsg)
 
-    def __call__(self, radii):
+    def __call__(self, radii, totxi):
+        return self._probdistrib(radii)
+
+    def _probdistrib(self, radii):
         """returns distribution for radii given by the
         sum of the distributions in probdistribs list"""
 
@@ -54,7 +73,10 @@ class DiracDelta:
     def __init__(self, r0):
         self.r0 = r0
 
-    def __call__(self, radii):
+    def __call__(self, radii, totxi):
+        return self._probdistrib(radii)
+
+    def _probdistrib(self, radii):
         """Returns probability of radius in radii sample for
         discrete version of dirac delta function centred on
         value of r in radii closest to r0. For each radius in radii,
@@ -81,7 +103,10 @@ class VolExponential:
         self.radius0 = radius0  # peak of volume exponential distribution [m]
         self.rspan = rspan
 
-    def __call__(self, radii):
+    def __call__(self, radii, totxi):
+        return self._probdistrib(radii)
+
+    def _probdistrib(self, radii):
         """Returns probability of eaach radius in radii according to
         distribution where probability of volume is exponential and bins
         for radii are evently spaced in ln(r).
@@ -122,7 +147,10 @@ class LnNormal:
             self.geosigs = geosigs
             self.scalefacs = scalefacs
 
-    def __call__(self, radii):
+    def __call__(self, radii, totxi):
+        return self._probdistrib(radii)
+
+    def _probdistrib(self, radii):
         """Returns probability of each radius in radii derived
         from superposition of Logarithmic (in e) Normal Distributions"""
 
@@ -159,7 +187,10 @@ class ClouddropsHansenGamma:
         self.reff = reff
         self.nueff = nueff
 
-    def __call__(self, radii):
+    def __call__(self, radii, totxi):
+        return self._probdistrib(radii)
+
+    def _probdistrib(self, radii):
         """return gamma distribution for cloud droplets
         given radius [m] using parameters from Poertge
         et al. 2023 for shallow cumuli (figure 12).
@@ -188,7 +219,10 @@ class RaindropsGeoffroyGamma:
         self.qrain = qrain  # rainwater content [g/m^3]
         self.dvol = dvol  # volume mean raindrop diameter [m]
 
-    def __call__(self, radii):
+    def __call__(self, radii, totxi):
+        return self._probdistrib(radii)
+
+    def _probdistrib(self, radii):
         """returns probability of each radius according to a
         gamma distribution for rain droplets using parameters
         from Geoffroy et al. 2014 for precipitating shallow
