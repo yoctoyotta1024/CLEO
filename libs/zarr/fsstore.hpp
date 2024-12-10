@@ -22,6 +22,7 @@
 #ifndef LIBS_ZARR_FSSTORE_HPP_
 #define LIBS_ZARR_FSSTORE_HPP_
 
+#include <cstdint>
 #include <filesystem>
 #include <fstream>
 #include <iostream>

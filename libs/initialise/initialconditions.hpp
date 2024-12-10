@@ -24,6 +24,7 @@
 
 #include <array>
 #include <concepts>
+#include <cstdint>
 #include <utility>
 #include <vector>
 

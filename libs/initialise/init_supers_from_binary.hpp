@@ -24,6 +24,7 @@
 #ifndef LIBS_INITIALISE_INIT_SUPERS_FROM_BINARY_HPP_
 #define LIBS_INITIALISE_INIT_SUPERS_FROM_BINARY_HPP_
 
+#include <cstdint>
 #include <filesystem>
 #include <stdexcept>
 #include <string>

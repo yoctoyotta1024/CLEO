@@ -24,6 +24,7 @@
 #define LIBS_ZARR_STORE_ACCESSOR_HPP_
 
 #include <Kokkos_Core.hpp>
+#include <cstdint>
 #include <span>
 #include <string_view>
 

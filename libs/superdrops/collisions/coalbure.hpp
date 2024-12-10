@@ -28,6 +28,7 @@
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
+#include <cstdint>
 #include <functional>
 
 #include "../microphysicalprocess.hpp"

@@ -26,6 +26,7 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Random.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
+#include <cstdint>
 
 #include "kokkosaliases_sd.hpp"
 #include "superdrop.hpp"

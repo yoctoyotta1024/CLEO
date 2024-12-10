@@ -27,6 +27,7 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_MathematicalConstants.hpp>  // for pi
 #include <cassert>
+#include <cstdint>
 
 #include "../cleoconstants.hpp"
 

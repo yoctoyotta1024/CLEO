@@ -26,6 +26,7 @@
 #include <Kokkos_Core.hpp>
 #include <cassert>
 #include <concepts>
+#include <cstdint>
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
