@@ -124,7 +124,7 @@ struct MoveSupersInDomain {
       const auto ngbxs = d_gbxs.extent(0);
       Kokkos::parallel_for(
           "move_supers_between_gridboxes", TeamPolicy(ngbxs, Kokkos::AUTO()),
-          KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
+          KOKKOS_LAMBDA(const TeamMember &team_member) {
             const auto ii = team_member.league_rank();
 
             auto &gbx(d_gbxs(ii));
