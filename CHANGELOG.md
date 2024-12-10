@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.29.3](https://github.com/yoctoyotta1024/CLEO/compare/5564bde07ed6603c079c815f9d5cc79613f55f33..v0.29.3) - 2024-12-10
+#### Bug Fixes
+- remove unused class capture from lambda - ([6e99b63](https://github.com/yoctoyotta1024/CLEO/commit/6e99b633df8b45c5a94a408c6c7f6afe6777fdc7)) - clara.bayley
+#### Refactoring
+- add missing c++ standard lib include - ([7394a8d](https://github.com/yoctoyotta1024/CLEO/commit/7394a8ddddca144b0861ca010555f0018aab080d)) - clara.bayley
+- change interface to xiprobdist calc and add new class to set minimum value of any distribution - ([5564bde](https://github.com/yoctoyotta1024/CLEO/commit/5564bde07ed6603c079c815f9d5cc79613f55f33)) - clara.bayley
+
+- - -
+
 ## [v0.29.2](https://github.com/yoctoyotta1024/CLEO/compare/8e8ecbf76cde7d01baa95bc350a4a92a9e183446..v0.29.2) - 2024-12-06
 #### Bug Fixes
 - create superdroplets at domain top with xi>=1 - ([4a7be0d](https://github.com/yoctoyotta1024/CLEO/commit/4a7be0d5e236dcc203b973c1c38776d1d35ee205)) - clara.bayley
