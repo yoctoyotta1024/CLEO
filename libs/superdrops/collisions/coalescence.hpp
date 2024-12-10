@@ -25,6 +25,7 @@
 
 #include <Kokkos_Core.hpp>
 #include <cassert>
+#include <cstdint>
 #include <functional>
 
 #include "../microphysicalprocess.hpp"

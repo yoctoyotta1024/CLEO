@@ -26,6 +26,7 @@
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
+#include <cstdint>
 #include <memory>
 
 #include "../../kokkosaliases.hpp"

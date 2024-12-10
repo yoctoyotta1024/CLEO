@@ -25,6 +25,7 @@
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
+#include <cstdint>
 #include <memory>
 #include <string>
 #include <string_view>

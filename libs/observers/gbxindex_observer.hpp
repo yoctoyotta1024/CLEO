@@ -24,6 +24,7 @@
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
+#include <cstdint>
 #include <iostream>
 #include <memory>
 

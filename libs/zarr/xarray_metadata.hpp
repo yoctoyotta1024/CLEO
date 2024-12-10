@@ -23,6 +23,7 @@
 #define LIBS_ZARR_XARRAY_METADATA_HPP_
 
 #include <cassert>
+#include <cstdint>
 #include <iomanip>
 #include <limits>
 #include <sstream>

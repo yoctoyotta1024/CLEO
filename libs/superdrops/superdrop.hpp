@@ -25,6 +25,8 @@
 #ifndef LIBS_SUPERDROPS_SUPERDROP_HPP_
 #define LIBS_SUPERDROPS_SUPERDROP_HPP_
 
+#include <cstdint>
+
 #include "superdrop_attrs.hpp"
 #include "superdrop_ids.hpp"
 

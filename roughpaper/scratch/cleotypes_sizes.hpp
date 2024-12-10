@@ -22,6 +22,7 @@
 #define ROUGHPAPER_SCRATCH_CLEOTYPES_SIZES_HPP_
 
 #include <Kokkos_Core.hpp>
+#include <cstdint>
 #include <iostream>
 
 #include "gridboxes/gbxindex.hpp"
