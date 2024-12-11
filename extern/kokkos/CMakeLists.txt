@@ -9,9 +9,10 @@ include(FetchContent)
 FetchContent_Declare(
   Kokkos
   DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-  URL https://github.com/kokkos/kokkos/archive/refs/tags/4.2.00.tar.gz
-  GIT_TAG 71a9bcae52543bd065522bf3e41b5bfa467d8015
+  URL https://github.com/kokkos/kokkos/archive/refs/tags/4.5.00.tar.gz
+  GIT_TAG 09e775bfc585840bb9ab1156cbd8d7d1c9e0cc6d
 )
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC") # Kokkos needs -fPIC flag
 FetchContent_MakeAvailable(Kokkos)
 set(CMAKE_CXX_FLAGS "${FLAGS_B4}")
