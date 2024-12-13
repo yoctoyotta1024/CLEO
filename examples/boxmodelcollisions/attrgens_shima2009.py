@@ -69,7 +69,10 @@ class SampleXiShima2009:
     """probability of radius given by
     Shima et al. (2009) is equal for all radii"""
 
-    def __call__(self, radii):
+    def __call__(self, radii, totxi):
+        return self._probdistrib(radii)
+
+    def _probdistrib(self, radii):
         """Returns probability of each radius in radii according to uniform
         distribution as in Shima et al. 2009"""
 
