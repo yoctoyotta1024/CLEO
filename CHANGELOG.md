@@ -2,6 +2,18 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.29.4](https://github.com/yoctoyotta1024/CLEO/compare/e86a380d3339617c30d1eab992f322ffee50b8b8..v0.29.4) - 2024-12-13
+#### Bug Fixes
+- correct call signature for shima init conds - ([ca75dca](https://github.com/yoctoyotta1024/CLEO/commit/ca75dca3c86e8d5d6036e8e19abe06f23a674942)) - clara.bayley
+#### Documentation
+- update info on speed test example - ([42400f4](https://github.com/yoctoyotta1024/CLEO/commit/42400f486450303d08b40fd548683e43b8f503a6)) - clara.bayley
+#### Refactoring
+- add option for savelabel to gbx and thermo plots - ([c2b227a](https://github.com/yoctoyotta1024/CLEO/commit/c2b227a78acb14a092f7dae734646a9773f547c1)) - clara.bayley
+- delete stats_filename parameter of model - ([f98dd14](https://github.com/yoctoyotta1024/CLEO/commit/f98dd14378d26d82e68de25637539eceb65bbbf9)) - clara.bayley
+- remove redundant stats_filename from examples config files - ([e86a380](https://github.com/yoctoyotta1024/CLEO/commit/e86a380d3339617c30d1eab992f322ffee50b8b8)) - clara.bayley
+
+- - -
+
 ## [v0.29.3](https://github.com/yoctoyotta1024/CLEO/compare/5564bde07ed6603c079c815f9d5cc79613f55f33..v0.29.3) - 2024-12-10
 #### Bug Fixes
 - remove unused class capture from lambda - ([6e99b63](https://github.com/yoctoyotta1024/CLEO/commit/6e99b633df8b45c5a94a408c6c7f6afe6777fdc7)) - clara.bayley
