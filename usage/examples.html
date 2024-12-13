@@ -616,9 +616,10 @@ parallelism, and (3) “serial” without parallelism.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>./speedtest.sh
 </pre></div>
 </div>
-<p>By default, a .txt file with the wall-clock time spent time-stepping the model for the three
-different build configurations is written to <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_spdtest/bin/spd_allstats.txt</span></code>.
-The times can be compared with the ones
+<p>By default, a .txt file with Kokkos’ simple kernel timer profiling tool data for
+each of the three different build configurations and runs is written
+to <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_spdtest/bin/[build_type]_[run_number].txt</span></code>.
+The time spent in the “timestep” region can be compared with the ones
 in <code class="docutils literal notranslate"><span class="pre">~/CLEO/examples/speedtest/speedtest_allstats_examples.txt</span></code>.</p>
 </section>
 <section id="extension">
@@ -664,7 +665,7 @@ script.</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 10 December 2024</div>
+              Last updated on 13 December 2024</div>
           </div>
           <div class="right-details">
             
