@@ -20,6 +20,7 @@ File Description:
 
 import numpy as np
 import matplotlib.pyplot as plt
+from pathlib import Path
 
 from .create_gbxboundaries import get_COORD0_from_constsfile
 from ..readbinary import readbinary
@@ -198,7 +199,9 @@ def halfcoords_from_gbxbounds(gbxbounds, isprint=True):
     return zhalf, xhalf, yhalf
 
 
-def plot_gridboxboundaries(constants_filename, grid_filename, savefigpath, savefig):
+def plot_gridboxboundaries(
+    constants_filename, grid_filename, savefigpath, savefig, savelabel=""
+):
     plt.rcParams.update({"font.size": 14})
 
     zhalf, xhalf, yhalf = get_gridboxboundaries(
@@ -234,7 +237,7 @@ def plot_gridboxboundaries(constants_filename, grid_filename, savefigpath, savef
 
     fig.tight_layout()
     if savefig:
-        savename = savefigpath / "gridboxboundaries.png"
+        savename = savefigpath / Path(f"gridboxboundaries{savelabel}.png")
         fig.savefig(
             savename,
             dpi=400,
