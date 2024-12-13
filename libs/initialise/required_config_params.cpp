@@ -36,7 +36,6 @@ RequiredConfigParams::RequiredConfigParams(const std::filesystem::path config_fi
 
   node = config["outputdata"];
   outputdata.setup_filename = fspath_from_yaml(node, "setup_filename");
-  outputdata.stats_filename = fspath_from_yaml(node, "stats_filename");
   outputdata.zarrbasedir = fspath_from_yaml(node, "zarrbasedir");
   outputdata.maxchunk = node["maxchunk"].as<size_t>();
 
@@ -61,7 +60,6 @@ void RequiredConfigParams::print_params() const {
             << "\nconstants_filename : " << inputfiles.constants_filename
             << "\ngrid_filename : " << inputfiles.grid_filename
             << "\nsetup_filename : " << outputdata.setup_filename
-            << "\nstats_filename : " << outputdata.stats_filename
             << "\nzarrbasedir : " << outputdata.zarrbasedir
             << "\nmaxchunk : " << outputdata.maxchunk << "\nnspacedims : " << domain.nspacedims
             << "\nngbxs : " << domain.ngbxs << "\nmaxnsupers : " << domain.maxnsupers

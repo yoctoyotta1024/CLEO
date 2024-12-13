@@ -58,14 +58,12 @@ thermofiles = sharepath / "spd_dimlessthermo.dat"
 
 # path and file names for plotting results
 setupfile = binpath / "spd_setup.txt"
-statsfile = binpath / "spd_stats.txt"
 dataset = binpath / "spd_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
 isfigures = [False, False]  # booleans for [making, saving] initialisation figures
 savefigpath = outputdir  # directory for saving figures
 SDgbxs2plt = [0]  # gbxindex of SDs to plot (nb. "all" can be very slow)
-outdatafile = outputdir / "spd_allstats.txt"  # file to write out stats to
 
 ### --- settings for 3-D gridbox boundaries --- ###
 zgrid = [0, 1500, 50]  # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]

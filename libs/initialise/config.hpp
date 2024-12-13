@@ -66,8 +66,6 @@ struct Config {
 
   std::filesystem::path get_grid_filename() const { return required.inputfiles.grid_filename; }
 
-  std::filesystem::path get_stats_filename() const { return required.outputdata.stats_filename; }
-
   std::filesystem::path get_zarrbasedir() const { return required.outputdata.zarrbasedir; }
 
   size_t get_maxchunk() const { return required.outputdata.maxchunk; }

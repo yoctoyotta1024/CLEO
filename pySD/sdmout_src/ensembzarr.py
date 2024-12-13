@@ -60,7 +60,6 @@ def write_ensemb_setupfile(ensembsetupfile, setupfile, datasets):
         "initsupers_filename": "[ensemble, see below]",
         "setup_filename": "[ensemble, see below]",
         "zarrbasedir": "[ensemble, see below]",
-        "stats_filename": "[ensemble, see below]",
     }
     editconfigfile.edit_config_params(ensembsetupfile, params)
 

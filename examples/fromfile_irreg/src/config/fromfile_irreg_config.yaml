@@ -48,7 +48,6 @@ initsupers:
 ### Output Parameters ###
 outputdata:
   setup_filename : ./bin/fromfile_irreg_setup.txt                   # .txt filename to copy configuration to
-  stats_filename : ./bin/fromfile_irreg_stats.txt                   # .txt file to output runtime statistics to
   zarrbasedir : ./bin/fromfile_irreg_sol.zarr                       # zarr store base directory
   maxchunk : 2500000                                      # maximum no. of elements in chunks of zarr store array
 

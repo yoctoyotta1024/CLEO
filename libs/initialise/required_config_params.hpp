@@ -50,7 +50,6 @@ struct RequiredConfigParams {
 
   struct OutputDataParams {
     std::filesystem::path setup_filename; /**< filename to copy model setup to */
-    std::filesystem::path stats_filename; /**< filename to output runtime statistics to */
     std::filesystem::path zarrbasedir;    /**< name of base directory of zarr output */
     size_t maxchunk;                      /**< maximum number of elements in zarr array chunks */
   } outputdata;

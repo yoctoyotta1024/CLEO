@@ -49,7 +49,6 @@ initsupers:
 ### Output Parameters ###
 outputdata:
   setup_filename : ./bin/setup.txt                     # .txt filename to copy configuration to
-  stats_filename : ./bin/stats.txt                     # .txt file to output runtime statistics to
   zarrbasedir : ./bin/SDMdata.zarr                     # zarr store base directory
   maxchunk : 2500000                                   # maximum no. of elements in chunks of zarr store array
 
