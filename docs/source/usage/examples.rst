@@ -290,9 +290,10 @@ parallelism, and (3) "serial" without parallelism.
 
   $ ./speedtest.sh
 
-By default, a .txt file with the wall-clock time spent time-stepping the model for the three
-different build configurations is written to ``~/CLEO/build_spdtest/bin/spd_allstats.txt``.
-The times can be compared with the ones
+By default, a .txt file with Kokkos' simple kernel timer profiling tool data for
+each of the three different build configurations and runs is written
+to ``~/CLEO/build_spdtest/bin/[build_type]_[run_number].txt``.
+The time spent in the "timestep" region can be compared with the ones
 in ``~/CLEO/examples/speedtest/speedtest_allstats_examples.txt``.
 
 Extension
