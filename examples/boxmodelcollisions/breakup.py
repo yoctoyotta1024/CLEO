@@ -163,7 +163,6 @@ def get_executable(path2build, kernel):
 def get_params(path2build, kernel):
     params = {
         "setup_filename": str(path2build / "bin" / Path(kernel + "_setup.txt")),
-        "stats_filename": str(path2build / "bin" / Path(kernel + "_stats.txt")),
         "zarrbasedir": str(path2build / "bin" / Path(kernel + "_sol.zarr")),
     }
 
