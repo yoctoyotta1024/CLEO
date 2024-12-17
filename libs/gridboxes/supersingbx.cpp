@@ -38,7 +38,7 @@ subview have matching index. (2) all superdrops preceeding current
 subview do not have matching index. (3) all superdrops after current
 subview also do not have matching index. */
 bool SupersInGbx::iscorrect() const {
-  const Pred pred{idx};
+  const auto pred = Pred{idx};
   const auto crit1(is_pred(pred));
   const auto crit2(is_prednot(pred, {0, refs.first}));
   const auto crit3(is_prednot(pred, {refs.second, totsupers.extent(0)}));
@@ -61,7 +61,7 @@ template <typename Pred>
 bool SupersInGbx::is_prednot(const Pred pred, const kkpair_size_t refs4pred) const {
   namespace KE = Kokkos::Experimental;
 
-  const subviewd_constsupers supers4pred(Kokkos::subview(totsupers, refs4pred));
+  const auto supers4pred = Kokkos::subview(totsupers, refs4pred);
 
   return KE::none_of("is_prednot", ExecSpace(), supers4pred, pred);
 }

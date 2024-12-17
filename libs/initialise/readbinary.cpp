@@ -93,7 +93,7 @@ read and print the global metadata string at the start of the file,
 then return a vector containing the metadata that is specific to
 each of the variables in the file */
 std::vector<VarMetadata> metadata_from_binary(std::ifstream &file) {
-  const GblMetadata gblmeta(file);
+  const auto gblmeta = GblMetadata(file);
 
   unsigned int pos = 4 * sizeof(unsigned int) +
                      gblmeta.charbytes;  // position of 1st byte of variable specific metadata
