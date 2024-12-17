@@ -28,6 +28,9 @@
  * the number of gridboxes from gridbox maps and if each gridbox has correct
  * references to superdroplets.
  *
+ * Kokkos::parallel_for([...]) (on host) is equivalent to:
+ * for (size_t ii(0); ii < ngbxs; ++ii){[...]} when in serial
+ *
  * @param ngbxs_from_maps The number of gridboxes from gridbox maps.
  * @param gbxs The dualview containing gridboxes.
  */
@@ -44,14 +47,11 @@ void is_gbxinit_complete(const size_t ngbxs_from_maps, dualview_gbx gbxs) {
     throw std::invalid_argument(err);
   }
 
-  for (size_t ii(0); ii < ngbxs; ++ii) {  // TODO(CB) : parallelise
-    if (!(h_gbxs(ii).supersingbx.iscorrect())) {
-      const std::string err(
-          "incorrect references to "
-          "superdrops in gridbox");
-      throw std::invalid_argument(err);
-    }
-  }
+  Kokkos::parallel_for("receive_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
+                       [h_gbxs](const size_t ii) {
+                         assert(h_gbxs(ii).supersingbx.iscorrect() &&
+                                "incorrect references to superdrops in gridbox");
+                       });
 }
 
 /**

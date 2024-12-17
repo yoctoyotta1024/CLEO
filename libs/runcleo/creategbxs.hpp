@@ -26,6 +26,7 @@
 #include <Kokkos_DualView.hpp>
 #include <Kokkos_Pair.hpp>
 #include <Kokkos_Profiling_ScopedRegion.hpp>
+#include <cassert>
 #include <iostream>
 #include <memory>
 #include <stdexcept>
