@@ -89,22 +89,39 @@ inline size_t find_ref(const ViewSupers totsupers, const Pred pred) {
 
 /* returns element access index from begining of totsupers view to the superdroplet that
 is first to fail to satisfy given Predicate "pred". Function is 2nd level of nested parallelism,
-i.e. is thread parallelism within a league for a given team_member */
+i.e. is thread parallelism within a league for a given team_member. serial equivalent is:
+return find_partition_point(totsupers, pred, 0, totsupers.extent(0)); */
 template <typename Pred, typename TeamMemberType, typename ViewSupers>
 KOKKOS_INLINE_FUNCTION size_t find_ref(const TeamMemberType &team_member,
                                        const ViewSupers totsupers, const Pred pred) {
-  const auto ref = find_partition_point(team_member, totsupers, pred);
+  const auto nsupers = size_t{totsupers.extent(0)};
+  const size_t nthreads = team_member.team_size();
+  const auto nsupers_onethread = (nsupers + nthreads - 1) / nthreads;  // round up
+
+  auto ref = size_t{0};
+  Kokkos::parallel_reduce(
+      Kokkos::TeamThreadRange(team_member, team_member.team_size()),
+      [=](const size_t tt, size_t &first) {
+        first = tt * nsupers_onethread;
+        auto last = first + nsupers_onethread;
+        last = (!(last < nsupers) ? nsupers : last); /* maller of two ints (see std::min) */
+        first = find_partition_point(totsupers, pred, first, last);
+        if (first == last) {
+          first = nsupers;
+        }
+      },
+      Kokkos::Min<size_t>(ref));
+
   return ref;
 }
 
 /* returns element access index from begining of totsupers view to the superdroplet that is
 first to fail to satisfy given Predicate "pred". Function is Kokkos GPU compatible version
 of std::partition_point specific to kokkos view types */
-template <typename Pred, typename TeamMemberType, typename ViewSupers>
-KOKKOS_INLINE_FUNCTION size_t find_partition_point(const TeamMemberType &team_member,
-                                                   const ViewSupers totsupers, const Pred pred) {
-  size_t first = 0;
-  for (auto length = totsupers.extent(0); 0 < length;) {
+template <typename ViewSupers, typename Pred>
+KOKKOS_INLINE_FUNCTION size_t find_partition_point(const ViewSupers totsupers, const Pred pred,
+                                                   size_t first, size_t start_length) {
+  for (auto length = start_length; 0 < length;) {
     size_t half = length / 2;
     size_t middle = first + half;
     if (pred(totsupers(middle))) {
