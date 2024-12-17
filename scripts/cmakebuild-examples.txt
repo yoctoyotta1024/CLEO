@@ -43,8 +43,6 @@ e.g. spack find cmake
 -DKokkos_ENABLE_SERIAL=ON
 -DKokkos_ENABLE_OPENMP=ON
 -DKokkos_ENABLE_CUDA=ON
--DKokkos_ENABLE_CUDA_LAMBDA=ON
--DKokkos_ENABLE_CUDA_UVM=ON (depreciated)
 
 SERIAL ONLY build (no MPI):
 module load gcc/11.2.0-gcc-11.2.0
@@ -64,9 +62,9 @@ CXX=mpi++ CC=mpicc cmake -S ./ -B ./build -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABL
 MPI + GPU (CUDA) ENABLED build:
 module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0 nvhpc/23.9-gcc-11.2.0
 spack load cmake@3.23.1%gcc
-CXX=mpic++ CC=mpicc cmake -S ./ -B ./build -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON -DKokkos_ENABLE_CUDA_UVM=ON
+CXX=mpic++ CC=mpicc cmake -S ./ -B ./build -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_CUDA=ON
 
 MPI + CUDA and OPENMP build:
 module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0 nvhpc/23.9-gcc-11.2.0
 spack load cmake@3.23.1%gcc
-CXX=mpic++ CC=mpicc cmake -S ./ -B ./build -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON -DKokkos_ENABLE_CUDA=ON -DKokkos_ENABLE_CUDA_LAMBDA=ON -DKokkos_ENABLE_CUDA_UVM=ON
+CXX=mpic++ CC=mpicc cmake -S ./ -B ./build -DKokkos_ARCH_AMPERE80=ON -DKokkos_ENABLE_SERIAL=ON -DKokkos_ENABLE_OPENMP=ON -DKokkos_ENABLE_CUDA=ON
