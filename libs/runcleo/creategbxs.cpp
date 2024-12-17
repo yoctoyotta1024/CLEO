@@ -33,8 +33,8 @@
  */
 void is_gbxinit_complete(const size_t ngbxs_from_maps, dualview_gbx gbxs) {
   gbxs.sync_host();  // copy device to host (if sync flag was modified prior)
-  const size_t ngbxs(gbxs.extent(0));
-  const auto h_gbxs(gbxs.view_host());
+  const auto ngbxs = size_t{gbxs.extent(0)};
+  const auto h_gbxs = gbxs.view_host();
 
   if (ngbxs != ngbxs_from_maps) {
     const std::string err(
@@ -63,9 +63,9 @@ void is_gbxinit_complete(const size_t ngbxs_from_maps, dualview_gbx gbxs) {
  * @param h_gbxs The host view of Gridboxes.
  */
 void print_gbxs(const viewh_constgbx h_gbxs) {
-  const size_t ngbxs(h_gbxs.extent(0));
+  const auto ngbxs = size_t{h_gbxs.extent(0)};
   for (size_t ii(0); ii < ngbxs; ++ii) {
-    const size_t nsupers(h_gbxs(ii).supersingbx.nsupers());
+    const auto nsupers = h_gbxs(ii).supersingbx.nsupers();
     std::cout << "gbx: " << h_gbxs(ii).get_gbxindex()
               << ", (vol = " << h_gbxs(ii).state.get_volume() << ", nsupers = " << nsupers << ")\n";
   }
@@ -83,9 +83,9 @@ void print_gbxs(const viewh_constgbx h_gbxs) {
  */
 State GenGridbox::state_at(const unsigned int ii, const double volume) const {
   /* Type cast from std::pair to Kokkos::pair */
-  Kokkos::pair<double, double> wvel(wvels.at(ii));
-  Kokkos::pair<double, double> uvel(uvels.at(ii));
-  Kokkos::pair<double, double> vvel(vvels.at(ii));
+  const auto wvel = Kokkos::pair<double, double>{wvels.at(ii)};
+  const auto uvel = Kokkos::pair<double, double>{uvels.at(ii)};
+  const auto vvel = Kokkos::pair<double, double>{vvels.at(ii)};
 
   /* Return ii'th State from the initial conditions */
   return State(volume, presss.at(ii), temps.at(ii), qvaps.at(ii), qconds.at(ii), wvel, uvel, vvel);
