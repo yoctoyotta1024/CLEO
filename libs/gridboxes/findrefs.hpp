@@ -94,25 +94,7 @@ return find_partition_point(totsupers, pred, 0, totsupers.extent(0)); */
 template <typename Pred, typename TeamMemberType, typename ViewSupers>
 KOKKOS_INLINE_FUNCTION size_t find_ref(const TeamMemberType &team_member,
                                        const ViewSupers totsupers, const Pred pred) {
-  const auto nsupers = size_t{totsupers.extent(0)};
-  const size_t nthreads = team_member.team_size();
-  const auto nsupers_onethread = (nsupers + nthreads - 1) / nthreads;  // round up
-
-  auto ref = size_t{0};
-  Kokkos::parallel_reduce(
-      Kokkos::TeamThreadRange(team_member, team_member.team_size()),
-      [=](const size_t tt, size_t &first) {
-        first = tt * nsupers_onethread;
-        auto last = first + nsupers_onethread;
-        last = (!(last < nsupers) ? nsupers : last); /* maller of two ints (see std::min) */
-        first = find_partition_point(totsupers, pred, first, last);
-        if (first == last) {
-          first = nsupers;
-        }
-      },
-      Kokkos::Min<size_t>(ref));
-
-  return ref;
+  return find_partition_point(totsupers, pred, 0, totsupers.extent(0));
 }
 
 /* returns element access index from begining of totsupers view to the superdroplet that is
