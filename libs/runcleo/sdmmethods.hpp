@@ -77,7 +77,7 @@ class SDMMethods {
     const auto next_move = (unsigned int)movesupers.next_step(t_sdm);
 
     /* return smaller of two unsigned ints (see std::min) */
-    const auto t_next = (unsigned int)(!(next_mdl < next_move) ? next_move : next_mdl);
+    const auto t_next = Kokkos::min(next_mdl, next_move);
 
     return t_next;
   }

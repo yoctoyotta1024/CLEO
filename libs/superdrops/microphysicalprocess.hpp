@@ -91,7 +91,7 @@ struct CombinedMicrophysicalProcess {
     const auto t_a = a.next_step(subt);
     const auto t_b = b.next_step(subt);
 
-    return !(t_a < t_b) ? t_b : t_a;  // smaller of two unsigned ints (see std::min)
+    return Kokkos::min(t_a, t_b);
   }
 
   /**
