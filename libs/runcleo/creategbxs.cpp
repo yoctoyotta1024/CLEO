@@ -44,7 +44,7 @@ void is_gbxinit_complete(const size_t ngbxs_from_maps, dualview_gbx gbxs) {
     throw std::invalid_argument(err);
   }
 
-  for (size_t ii(0); ii < ngbxs; ++ii) {
+  for (size_t ii(0); ii < ngbxs; ++ii) {  // TODO(CB) : parallelise
     if (!(h_gbxs(ii).supersingbx.iscorrect())) {
       const std::string err(
           "incorrect references to "
