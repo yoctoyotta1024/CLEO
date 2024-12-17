@@ -45,34 +45,28 @@ void set_2Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps);
 
 void set_3Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps);
 
-/* bounds for CartesianMaps of gridboxes along
-directions of model not used e.g. in 1-D model,
-these are bounds of gridboxes in coord1 and
-coord2 directions */
+/* bounds for CartesianMaps of gridboxes along directions of model not used e.g. in 1-D model,
+these are bounds of gridboxes in coord1 and coord2 directions */
 Kokkos::pair<double, double> nullbounds() { return {LIMITVALUES::llim, LIMITVALUES::ulim}; }
 
-/* {back, forward} neighbours for CartesianMaps of
-gridboxes along directions of model not used. Boundaries
-are 'periodic' BCs in non-existent dimensions
-e.g. in 2-D model, neighbour in coord2 direction
-of gridbox is itself */
+/* {back, forward} neighbours for CartesianMaps of gridboxes along directions of model not used.
+Boundaries are 'periodic' BCs in non-existent dimensions e.g. in 2-D model, neighbour in
+coord2 direction of gridbox is itself */
 Kokkos::pair<unsigned int, unsigned int> nullnghbrs(const unsigned int idx) { return {idx, idx}; }
 
-/* creates cartesian maps instance using gridbox bounds read from
-gridfile for a 0-D, 1-D, 2-D or 3-D model with periodic or finite
-boundary conditions. In a non-3D case, boundaries and neighbours
-maps for unused dimensions are 'null' (ie. return numerical limits),
-however the area and volume of each gridbox remains finite.
-E.g. In the 0-D case, the bounds maps all have 1 {key, value} where
-key=gbxidx=0 and value = {max, min} numerical limits, meanwhile volume
+/* creates cartesian maps instance using gridbox bounds read from gridfile for a 0-D, 1-D, 2-D
+or 3-D model with periodic or finite boundary conditions. In a non-3D case, boundaries and
+neighbours maps for unused dimensions are 'null' (ie. return numerical limits), however the area
+and volume of each gridbox remains finite. E.g. In the 0-D case, the bounds maps all have 1
+{key, value} where key=gbxidx=0 and value = {max, min} numerical limits, meanwhile volume
 function returns a value determined from the gridfile 'grid_filename' */
 CartesianMaps create_cartesian_maps(const size_t ngbxs, const unsigned int nspacedims,
                                     const std::filesystem::path grid_filename) {
   std::cout << "\n--- create cartesian gridbox maps ---\n";
 
-  const GbxBoundsFromBinary gfb(ngbxs, nspacedims, grid_filename);
+  const auto gfb = GbxBoundsFromBinary(ngbxs, nspacedims, grid_filename);
 
-  CartesianMaps gbxmaps(gfb.get_ngbxs());
+  auto gbxmaps = CartesianMaps(gfb.get_ngbxs());
 
   gbxmaps.create_decomposition(
       gfb.ndims, gfb.get_coord3gbxbounds(0).second - gfb.get_coord3gbxbounds(0).first,
@@ -110,11 +104,10 @@ CartesianMaps create_cartesian_maps(const size_t ngbxs, const unsigned int nspac
   return gbxmaps;
 }
 
-/* checks number of gridboxes according to
-maps matches with expected value from gfb */
+/* checks number of gridboxes according to maps matches with expected value from gfb */
 void check_ngridboxes_matches_ndims(const CartesianMaps &gbxmaps, const size_t ngbxs) {
   const auto h_ndims = gbxmaps.get_ndims_hostcopy();
-  const size_t ngbxs_from_ndims(h_ndims(0) * h_ndims(1) * h_ndims(2));
+  const auto ngbxs_from_ndims = size_t{h_ndims(0) * h_ndims(1) * h_ndims(2)};
 
   if (ngbxs_from_ndims != ngbxs) {
     throw std::invalid_argument(
@@ -124,7 +117,7 @@ void check_ngridboxes_matches_ndims(const CartesianMaps &gbxmaps, const size_t n
 }
 
 void check_ngridboxes_matches_maps(const CartesianMaps &gbxmaps, const size_t ngbxs) {
-  const size_t ngbxs_from_maps(gbxmaps.maps_size());
+  const auto ngbxs_from_maps = gbxmaps.maps_size();
   if (ngbxs_from_maps != ngbxs + 1) {
     throw std::invalid_argument(
         "ngbxs from gridbox maps inconsistent "
@@ -132,12 +125,11 @@ void check_ngridboxes_matches_maps(const CartesianMaps &gbxmaps, const size_t ng
   }
 }
 
-/* copys ndims  to gbxmaps' ndims to set number of
-dimensions (ie. number of gridboxes) in
+/* copys ndims  to gbxmaps' ndims to set number of dimensions (ie. number of gridboxes) in
 [coord3, coord1, coord2] directions */
 void set_maps_ndims(const std::vector<size_t> &i_ndims, CartesianMaps &gbxmaps) {
-  auto h_ndims = Kokkos::create_mirror_view(
-      gbxmaps.get_ndims());  // mirror ndims in case view is on device memory
+  auto h_ndims =
+      Kokkos::create_mirror_view(gbxmaps.get_ndims());  // mirror ndims in case view is on device
 
   for (unsigned int m(0); m < 3; ++m) {
     h_ndims(m) = i_ndims.at(m);
@@ -146,8 +138,8 @@ void set_maps_ndims(const std::vector<size_t> &i_ndims, CartesianMaps &gbxmaps) 
   gbxmaps.set_ndims_via_copy(h_ndims);
 }
 
-/* sets (finite) dimensionless horizontal area and
-volume using area and volume from gfb for gbxidx=0 */
+/* sets (finite) dimensionless horizontal area and volume using area and volume from
+gfb for gbxidx=0 */
 void set_model_areas_vols(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
   for (auto idx : gfb.gbxidxs) {
     gbxmaps.insert_gbxarea(idx, gfb.gbxarea(idx));
@@ -155,10 +147,9 @@ void set_model_areas_vols(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps
   }
 }
 
-/* sets value for coordinate bounds for case
-when outofbounds gbxidx searches map */
+/* sets value for coordinate bounds for case when outofbounds gbxidx searches map */
 void set_outofbounds(CartesianMaps &gbxmaps) {
-  const auto idx = (unsigned int)LIMITVALUES::oob_gbxindex;
+  const auto idx = LIMITVALUES::oob_gbxindex;
   gbxmaps.insert_coord3bounds(idx, nullbounds());
   gbxmaps.insert_coord1bounds(idx, nullbounds());
   gbxmaps.insert_coord2bounds(idx, nullbounds());
@@ -171,11 +162,9 @@ void set_outofbounds(CartesianMaps &gbxmaps) {
   gbxmaps.insert_gbxvolume(idx, 0.0);
 }
 
-/* gives all coord[X]bounds maps to 1 key with null
-values (max/min numerical limits). Also sets null
-neighbours maps (meaning periodic boundary conditions
-in all directions where neighbour of single gridbox
-with gbxidx=0 is itself) */
+/* gives all coord[X]bounds maps to 1 key with null values (max/min numerical limits).
+Also sets null neighbours maps (meaning periodic boundary conditions in all directions
+where neighbour of single gridbox with gbxidx=0 is itself) */
 void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
   gbxmaps.insert_coord3bounds(0, nullbounds());
   gbxmaps.insert_coord1bounds(0, nullbounds());
@@ -186,15 +175,13 @@ void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
   gbxmaps.insert_coord2nghbrs(0, nullnghbrs(0));
 }
 
-/* Gives all coord[X]bounds maps for X = x or y
-null values (max/min numerical limits) for all gridboxes and
-neighbours maps are null (meaning periodic boundary conditions
-where neighbour of gridbox in x or y direction is itself).
-coord3bounds map, ie. z direction, is set using gfb.
-coord3 back / forward neighbours set using finite or
-periodic boundary conditions in a cartesian domain */
+/* Gives all coord[X]bounds maps for X = x or y null values (max/min numerical limits)
+for all gridboxes and neighbours maps are null (meaning periodic boundary conditions
+where neighbour of gridbox in x or y direction is itself). coord3bounds map, ie. z direction,
+is set using gfb. coord3 back / forward neighbours set using finite or periodic boundary
+conditions in a cartesian domain */
 void set_1Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
-  const auto ndims(gfb.ndims);
+  const auto ndims = gfb.ndims;
 
   for (auto idx : gfb.gbxidxs) {
     const auto c3bs(gfb.get_coord3gbxbounds(idx));
@@ -209,13 +196,11 @@ void set_1Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
   }
 }
 
-/* Gives coordybounds map null values (max/min numerical limits)
-for all gridboxes and y neighbours maps are null (meaning periodic
-boundary conditions where neighbour of gridbox in y direction is
-itself). coord3 and coord1 bounds maps (ie. z and x) are set
-using gfb. coord3 and coord1 neighbours maps call functions for
-appropriate periodic or finite boundary conditions in a
-cartesian domain  */
+/* Gives coordybounds map null values (max/min numerical limits) for all gridboxes and y neighbours
+maps are null (meaning periodic boundary conditions where neighbour of gridbox in y direction is
+itself). coord3 and coord1 bounds maps (ie. z and x) are set using gfb. coord3 and coord1
+neighbours maps call functions for appropriate periodic or finite boundary conditions in a
+cartesian domain */
 void set_2Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
   const auto ndims(gfb.ndims);
 
@@ -262,10 +247,8 @@ kkpair_size_t correct_neighbor_indices(kkpair_size_t neighbours, const std::vect
   return neighbours;
 }
 
-/* Sets all coord[X]bounds maps (for X = x, y, z)
-using gfb data as well as back and forward neighbours
-maps assuming periodic or finite boundary conditions
-in cartesian domain */
+/* Sets all coord[X]bounds maps (for X = x, y, z) using gfb data as well as back and
+forward neighbours maps assuming periodic or finite boundary conditions in cartesian domain */
 void set_3Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
   const auto ndims(gfb.ndims);
   int my_rank, local_gbx_index;
