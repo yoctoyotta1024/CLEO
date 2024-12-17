@@ -115,7 +115,7 @@ def is_sdgbxindex_correct(gridboxbounds, coord3, coord1, coord2, gbxindex, sdgbx
 
 
 def dimless_superdropsattrs(
-    nsupers, initattrsgen, inputs, gbxindex, gridboxbounds, NUMCONC
+    nsupers, initattrsgen, inputs, gbxindex, gridboxbounds, NUMCONC, isprint=False
 ):
     """use superdroplet attribute generator "initattrsgen"
     and settings from config and consts files to
@@ -124,7 +124,7 @@ def dimless_superdropsattrs(
     # generate attributes
     sdgbxindex = [gbxindex] * nsupers
     xi, radius, msol = initattrsgen.generate_attributes(
-        nsupers, inputs["RHO_SOL"], NUMCONC, gridboxbounds
+        nsupers, inputs["RHO_SOL"], NUMCONC, gridboxbounds, isprint=isprint
     )
     coord3, coord1, coord2 = initattrsgen.generate_coords(
         nsupers, inputs["nspacedims"], gridboxbounds
@@ -144,7 +144,9 @@ def dimless_superdropsattrs(
     return attrs4gbx
 
 
-def create_allsuperdropattrs(nsupersdict, initattrsgen, gbxbounds, inputs, NUMCONC):
+def create_allsuperdropattrs(
+    nsupersdict, initattrsgen, gbxbounds, inputs, NUMCONC, isprint=False
+):
     """returns lists for attributes of all SDs in domain called attrs"""
 
     attrs = ManyAttrs()  # lists of attrs for SDs in domain
@@ -152,7 +154,13 @@ def create_allsuperdropattrs(nsupersdict, initattrsgen, gbxbounds, inputs, NUMCO
     for gbxindex, gridboxbounds in gbxbounds.items():
         nsupers = nsupersdict[gbxindex]
         attrs4gbx = dimless_superdropsattrs(
-            nsupers, initattrsgen, inputs, gbxindex, gridboxbounds, NUMCONC
+            nsupers,
+            initattrsgen,
+            inputs,
+            gbxindex,
+            gridboxbounds,
+            NUMCONC,
+            isprint=isprint,
         )  # lists of attrs for SDs in gridbox
 
         attrs.extend_attrlists(attrs4gbx)
@@ -267,6 +275,7 @@ def write_initsuperdrops_binary(
     grid_filename,
     nsupers,
     NUMCONC,
+    isprint=False,
 ):
     """de-dimensionalise attributes in initattrsgen and then write to
     to a binary file, "initsupers_filename", with some metadata"""
@@ -285,7 +294,7 @@ def write_initsuperdrops_binary(
     nsupersdict = nsupers_pergridboxdict(nsupers, gbxbounds)
 
     attrs = create_allsuperdropattrs(
-        nsupersdict, initattrsgen, gbxbounds, inputs, NUMCONC
+        nsupersdict, initattrsgen, gbxbounds, inputs, NUMCONC, isprint=isprint
     )
 
     ndata = [
