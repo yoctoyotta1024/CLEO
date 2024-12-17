@@ -133,10 +133,13 @@ struct MoveSupersInDomain {
 
       // /* optional (expensive!) test to raise error if
       // superdrops' gbxindex doesn't match gridbox's gbxindex */
-      // for (size_t ii(0); ii < ngbxs; ++ii)
-      // {
-      //   d_gbxs(ii).supersingbx.iscorrect();
-      // }
+      // Kokkos::parallel_for(
+      //     "check_sdgbxindex_during_motion", TeamPolicy(ngbxs, Kokkos::AUTO()),
+      //     KOKKOS_LAMBDA(const TeamMember &team_member) {
+      //       const auto ii = team_member.league_rank();
+      //       assert(d_gbxs(ii).supersingbx.iscorrect(team_member) &&
+      //              "incorrect references to superdrops in gridbox during motion");
+      //     });
     }
   } enactmotion;
 

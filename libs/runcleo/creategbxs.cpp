@@ -35,10 +35,7 @@
  * @param gbxs The dualview containing gridboxes.
  */
 void is_gbxinit_complete(const size_t ngbxs_from_maps, dualview_gbx gbxs) {
-  gbxs.sync_host();  // copy device to host (if sync flag was modified prior)
   const auto ngbxs = size_t{gbxs.extent(0)};
-  const auto h_gbxs = gbxs.view_host();
-
   if (ngbxs != ngbxs_from_maps) {
     const std::string err(
         "number of gridboxes created not "
@@ -47,11 +44,14 @@ void is_gbxinit_complete(const size_t ngbxs_from_maps, dualview_gbx gbxs) {
     throw std::invalid_argument(err);
   }
 
-  Kokkos::parallel_for("receive_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
-                       [h_gbxs](const size_t ii) {
-                         assert(h_gbxs(ii).supersingbx.iscorrect() &&
-                                "incorrect references to superdrops in gridbox");
-                       });
+  const auto d_gbxs = gbxs.view_device();
+  Kokkos::parallel_for(
+      "is_gbxinit_complete", TeamPolicy(ngbxs, Kokkos::AUTO()),
+      KOKKOS_LAMBDA(const TeamMember &team_member) {
+        const auto ii = team_member.league_rank();
+        assert(d_gbxs(ii).supersingbx.iscorrect(team_member) &&
+               "incorrect references to superdrops in gridbox");
+      });
 }
 
 /**
