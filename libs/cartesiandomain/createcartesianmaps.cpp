@@ -89,7 +89,7 @@ void check_ngridboxes_matches_maps(const CartesianMaps &gbxmaps, const size_t ng
 
 /* checks number of gridboxes according to maps matches with expected value from gfb */
 void check_ngridboxes_matches_ndims(const CartesianMaps &gbxmaps, const size_t ngbxs) {
-  const auto h_ndims = gbxmaps.get_ndims_hostcopy();
+  const auto h_ndims = gbxmaps.get_global_ndims_hostcopy();
   const auto ngbxs_from_ndims = size_t{h_ndims(0) * h_ndims(1) * h_ndims(2)};
 
   if (ngbxs_from_ndims != ngbxs) {
@@ -104,14 +104,14 @@ copys ndims  to gbxmaps' ndims to set number of dimensions (ie. number of gridbo
 [coord3, coord1, coord2] directions
 */
 void set_maps_ndims(const std::vector<size_t> &i_ndims, CartesianMaps &gbxmaps) {
-  auto h_ndims =
-      Kokkos::create_mirror_view(gbxmaps.get_ndims());  // mirror ndims in case view is on device
+  auto h_ndims = Kokkos::create_mirror_view(
+      gbxmaps.get_global_ndims());  // mirror ndims in case view is on device
 
   for (unsigned int m(0); m < 3; ++m) {
     h_ndims(m) = i_ndims.at(m);
   }
 
-  gbxmaps.set_ndims_via_copy(h_ndims);
+  gbxmaps.set_global_ndims_via_copy(h_ndims);
 }
 
 /*

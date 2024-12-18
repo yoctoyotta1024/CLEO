@@ -47,7 +47,7 @@ of each bounds map is that gridbox's {lower boundary, upper boundary}.
 to_[direction]_coord[X]nghbr (for direction = back, forward)
 map from a given gbxidx to the gbxidx of a neighbouring gridbox
 in that direction */
-// TODO(CB): use domain_decomposition instead of ndims
+// TODO(CB): use domain_decomposition instead of global_ndims
 struct CartesianMaps {
  private:
   CartesianDecomposition domain_decomposition;
@@ -69,14 +69,11 @@ struct CartesianMaps {
   /* additional gridbox / domain information */
   kokkos_dblmaph to_areas;  // map from gbxindex to horizontal (x-y planar) area of gridbox on host
   kokkos_dblmaph to_volumes;  // map from gbxindex to volume of gridbox on host
-  viewd_ndims ndims;  // dimensions (ie. no. gridboxes) in [coord3, coord1, coord2] directions //
-                      // TODO(CB): delete
+  viewd_ndims global_ndims;   // entire domain no. gridboxes in [coord3, coord1, coord2] dimensions
 
  public:
-  /* initialise maps with hint for their capacity
-  (ie. total number of keys). Leave values for maps,
-  for ndims, gbxareas and gbxvols undefined
-  upon construction (e.g. null ptr for ndims) */
+  /* initialise maps without capacity. Note this leave values for maps,
+  for e.g. for global_ndims, gbxareas and gbxvols undefined upon construction */
   explicit CartesianMaps()
       : is_decomp(false),
         to_coord3bounds(kokkos_pairmap(0)),
@@ -90,7 +87,7 @@ struct CartesianMaps {
         to_forward_coord2nghbr(kokkos_uintmap(0)),
         to_areas(kokkos_dblmaph(0)),
         to_volumes(kokkos_dblmaph(0)),
-        ndims("ndims") {}
+        global_ndims("global_ndims") {}
 
   /* copy host version of to_coord3bounds to gridbox maps (possibly in device memory) */
   void set_coord3bounds_via_copy(const kokkos_pairmap::HostMirror h_to_coord3bounds) {
@@ -141,33 +138,32 @@ struct CartesianMaps {
 
   void set_gbxvolumes_map(const kokkos_dblmaph i_to_volumes) { to_volumes = i_to_volumes; }
 
-  /* copies of h_ndims to ndims, possibly into device memory */
-  void set_ndims_via_copy(const viewd_ndims::HostMirror h_ndims) {
-    Kokkos::deep_copy(ndims, h_ndims);
+  /* copies of h_global_ndims to global_ndims, possibly into device memory */
+  void set_global_ndims_via_copy(const viewd_ndims::HostMirror h_global_ndims) {
+    Kokkos::deep_copy(global_ndims, h_global_ndims);
   }
 
-  /* returns model dimensions ie. number of gridboxes
-  along [coord3, coord1, coord2] directions for use on
-  host. deep copy is made if gbxmaps ndims is on device */
-  viewd_ndims::HostMirror get_ndims_hostcopy() const {
-    auto h_ndims = Kokkos::create_mirror_view(ndims);  // mirror in case ndims is on device memory
-    Kokkos::deep_copy(h_ndims, ndims);
+  /* returns model dimensions ie. number of gridboxes along [coord3, coord1, coord2]
+  directions for use on host. deep copy is made if gbxmaps global_ndims is in device memory */
+  viewd_ndims::HostMirror get_global_ndims_hostcopy() const {
+    auto h_global_ndims = Kokkos::create_mirror_view(global_ndims);
+    Kokkos::deep_copy(h_global_ndims, global_ndims);
 
-    return h_ndims;
+    return h_global_ndims;
   }
 
   /* returns model dimensions ie. number of gridboxes
   along [coord3, coord1, coord2] directions */
   KOKKOS_INLINE_FUNCTION
-  viewd_ndims get_ndims() const { return ndims; }
+  viewd_ndims get_global_ndims() const { return global_ndims; }
 
   /* returns model dimensions ie. number of
   gridboxes along d'th direction, where:
-  ndims(d=0) = coord3
-  ndims(d=1) = coord1
-  ndims(d=2) = coord2 */
+  global_ndims(d=0) = coord3
+  global_ndims(d=1) = coord1
+  global_ndims(d=2) = coord2 */
   KOKKOS_INLINE_FUNCTION
-  size_t get_ndim(const unsigned int d) const { return ndims(d); }
+  size_t get_global_ndim(const unsigned int d) const { return global_ndims(d); }
 
   /* on host device, throws error if maps are not all
   the same size, else returns size of maps */
@@ -271,9 +267,9 @@ struct CartesianMaps {
     return to_forward_coord2nghbr.value_at(i);  // value returned by map at index i
   }
 
-  void create_decomposition(std::vector<size_t> ndims, double gridbox_z_size, double gridbox_x_size,
-                            double gridbox_y_size) {
-    domain_decomposition.create(ndims, gridbox_z_size, gridbox_x_size, gridbox_y_size);
+  void create_decomposition(std::vector<size_t> global_ndims, double gridbox_z_size,
+                            double gridbox_x_size, double gridbox_y_size) {
+    domain_decomposition.create(global_ndims, gridbox_z_size, gridbox_x_size, gridbox_y_size);
     if (domain_decomposition.get_total_local_gridboxes() <
         domain_decomposition.get_total_global_gridboxes()) {
       is_decomp = true;
