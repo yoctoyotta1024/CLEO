@@ -92,8 +92,65 @@ struct CartesianMaps {
         to_volumes(kokkos_dblmaph(0)),
         ndims("ndims") {}
 
+  /* copy host version of to_coord3bounds to gridbox maps (possibly in device memory) */
+  void set_coord3bounds_via_copy(const kokkos_pairmap::HostMirror h_to_coord3bounds) {
+    to_coord3bounds.create_copy_view(h_to_coord3bounds);
+  }
+
+  /* copy host version of to_coord1bounds to gridbox maps (possibly in device memory) */
+  void set_coord1bounds_via_copy(const kokkos_pairmap::HostMirror h_to_coord1bounds) {
+    to_coord1bounds.create_copy_view(h_to_coord1bounds);
+  }
+
+  /* copy host version of to_coord2bounds to gridbox maps (possibly in device memory) */
+  void set_coord2bounds_via_copy(const kokkos_pairmap::HostMirror h_to_coord2bounds) {
+    to_coord2bounds.create_copy_view(h_to_coord2bounds);
+  }
+
+  /* copy host version of to_back_coord3nghbr to gridbox maps (possibly in device memory) */
+  void set_back_coord3nghbr_via_copy(const kokkos_uintmap::HostMirror h_to_back_coord3nghbr) {
+    to_back_coord3nghbr.create_copy_view(h_to_back_coord3nghbr);
+  }
+
+  /* copy host version of to_forward_coord3nghbr to gridbox maps (possibly in device memory) */
+  void set_forward_coord3nghbr_via_copy(const kokkos_uintmap::HostMirror h_to_forward_coord3nghbr) {
+    to_forward_coord3nghbr.create_copy_view(h_to_forward_coord3nghbr);
+  }
+
+  /* copy host version of to_back_coord1nghbr to gridbox maps (possibly in device memory) */
+  void set_back_coord1nghbr_via_copy(const kokkos_uintmap::HostMirror h_to_back_coord1nghbr) {
+    to_back_coord1nghbr.create_copy_view(h_to_back_coord1nghbr);
+  }
+
+  /* copy host version of to_forward_coord1nghbr to gridbox maps (possibly in device memory) */
+  void set_forward_coord1nghbr_via_copy(const kokkos_uintmap::HostMirror h_to_forward_coord1nghbr) {
+    to_forward_coord1nghbr.create_copy_view(h_to_forward_coord1nghbr);
+  }
+
+  /* copy host version of to_back_coord2nghbr to gridbox maps (possibly in device memory) */
+  void set_back_coord2nghbr_via_copy(const kokkos_uintmap::HostMirror h_to_back_coord2nghbr) {
+    to_back_coord2nghbr.create_copy_view(h_to_back_coord2nghbr);
+  }
+
+  /* copy host version of to_forward_coord2nghbr to gridbox maps (possibly in device memory) */
+  void set_forward_coord2nghbr_via_copy(const kokkos_uintmap::HostMirror h_to_forward_coord2nghbr) {
+    to_forward_coord2nghbr.create_copy_view(h_to_forward_coord2nghbr);
+  }
+
+  void set_gbxareas_map(const kokkos_dblmaph i_to_areas) { to_areas = i_to_areas; }
+
+  void set_gbxvolumes_map(const kokkos_dblmaph i_to_volumes) { to_volumes = i_to_volumes; }
+
+  /* insert 1 value into to_areas map at key = idx with value=area */
+  void insert_gbxarea(const unsigned int idx, double area) const { to_areas.insert(idx, area); }
+
+  /* insert 1 value into to_volumes map at key = idx with value=volume */
+  void insert_gbxvolume(const unsigned int idx, double volume) const {
+    to_volumes.insert(idx, volume);
+  }
+
   /* insert 1 value into to_coord3bounds
-  map at key = idx with value=bounds */
+  map at key = idx with value=bounds TODO(CB): WIP delete function (and analogous ones) */
   void insert_coord3bounds(const unsigned int idx, Kokkos::pair<double, double> bounds) {
     /* parallel for for 1 value so that execution of
     insert occurs on device if necessary */
@@ -166,12 +223,6 @@ struct CartesianMaps {
           to_forward_coord2nghbr.insert(idx, nghbrs.second);
         });
   }
-
-  /* insert 1 value into to_area map at key = idx with value=area */
-  void insert_gbxarea(const unsigned int idx, double area) { to_area.insert(idx, area); }
-
-  /* insert 1 value into to_volume map at key = idx with value=volume */
-  void insert_gbxvolume(const unsigned int idx, double volume) { to_volume.insert(idx, volume); }
 
   /* copies of h_ndims to ndims, possibly into device memory */
   void set_ndims_via_copy(const viewd_ndims::HostMirror h_ndims) {

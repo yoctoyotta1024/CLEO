@@ -44,6 +44,7 @@ void set_1Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps);
 void set_2Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps);
 
 void set_3Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps);
+void set_3Dcartesian_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps);
 
 /* bounds for CartesianMaps of gridboxes along directions of model not used e.g. in 1-D model,
 these are bounds of gridboxes in coord1 and coord2 directions */
@@ -249,42 +250,90 @@ kkpair_size_t correct_neighbor_indices(kkpair_size_t neighbours, const std::vect
 /* Sets all coord[X]bounds maps (for X = x, y, z) using gfb data as well as back and
 forward neighbours maps assuming periodic or finite boundary conditions in cartesian domain */
 void set_3Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
-  const auto ndims(gfb.ndims);
-  int my_rank, local_gbx_index;
+  int my_rank;
   MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+
+  set_3Dcartesian_maps(gfb, gbxmaps);
+}
+
+/* Sets all coord[X]bounds maps (for X = x, y, z) using gfb data as well as back and
+forward neighbours maps assuming periodic or finite boundary conditions in cartesian domain */
+void set_3Dcartesian_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
+  const auto ndims(gfb.ndims);
 
   auto domain_decomposition = gbxmaps.get_domain_decomposition();
   auto partition_origin = domain_decomposition.get_local_partition_origin();
   auto partition_size = domain_decomposition.get_local_partition_size();
   domain_decomposition.set_dimensions_bound_behavior({0, 1, 1});
 
-  for (size_t k = 0; k < partition_size[0]; k++)
-    for (size_t i = 0; i < partition_size[1]; i++)
-      for (size_t j = 0; j < partition_size[2]; j++) {
-        int idx = get_index_from_coordinates(ndims, partition_origin[0] + k,
-                                             partition_origin[1] + i, partition_origin[2] + j);
+  const auto local_ngbxs = size_t{partition_size[0] * partition_size[1] * partition_size[2]};
 
-        local_gbx_index = domain_decomposition.global_to_local_gridbox_index(idx);
+  const auto h_to_coord3bounds = kokkos_pairmap::HostMirror(local_ngbxs);
+  const auto h_to_coord1bounds = kokkos_pairmap::HostMirror(local_ngbxs);
+  const auto h_to_coord2bounds = kokkos_pairmap::HostMirror(local_ngbxs);
 
-        gbxmaps.insert_gbxarea(local_gbx_index, gfb.gbxarea(idx));
-        gbxmaps.insert_gbxvolume(local_gbx_index, gfb.gbxvol(idx));
+  const auto h_to_back_coord3nghbr = kokkos_uintmap::HostMirror(local_ngbxs);
+  const auto h_to_forward_coord3nghbr = kokkos_uintmap::HostMirror(local_ngbxs);
+  const auto h_to_back_coord1nghbr = kokkos_uintmap::HostMirror(local_ngbxs);
+  const auto h_to_forward_coord1nghbr = kokkos_uintmap::HostMirror(local_ngbxs);
+  const auto h_to_back_coord2nghbr = kokkos_uintmap::HostMirror(local_ngbxs);
+  const auto h_to_forward_coord2nghbr = kokkos_uintmap::HostMirror(local_ngbxs);
 
-        const auto c3bs(gfb.get_coord3gbxbounds(idx));
-        gbxmaps.insert_coord3bounds(local_gbx_index, c3bs);
-        const auto c3nghbrs(DoublyPeriodicDomain::cartesian_coord3nghbrs(idx, ndims));
-        gbxmaps.insert_coord3nghbrs(
-            local_gbx_index, correct_neighbor_indices(c3nghbrs, ndims, domain_decomposition));
+  const auto to_gbxareas = kokkos_dblmaph(local_ngbxs);
+  const auto to_gbxvolumes = kokkos_dblmaph(local_ngbxs);
 
-        const auto c1bs(gfb.get_coord1gbxbounds(idx));
-        gbxmaps.insert_coord1bounds(local_gbx_index, c1bs);
-        const auto c1nghbrs(DoublyPeriodicDomain::cartesian_coord1nghbrs(idx, ndims));
-        gbxmaps.insert_coord1nghbrs(
-            local_gbx_index, correct_neighbor_indices(c1nghbrs, ndims, domain_decomposition));
+  Kokkos::parallel_for(
+      "set_cartesian_maps", HostTeamPolicy(partition_size[0], Kokkos::AUTO()),
+      KOKKOS_LAMBDA(const HostTeamMember &team_member) {
+        const auto k = team_member.league_rank();
+        Kokkos::parallel_for(
+            Kokkos::TeamThreadRange(team_member, partition_size[1]), [=](const size_t i) {
+              Kokkos::parallel_for(
+                  Kokkos::ThreadVectorRange(team_member, partition_size[2]), [=](const size_t j) {
+                    int idx = get_index_from_coordinates(ndims, partition_origin[0] + k,
+                                                         partition_origin[1] + i,
+                                                         partition_origin[2] + j);
 
-        const auto c2bs(gfb.get_coord2gbxbounds(idx));
-        gbxmaps.insert_coord2bounds(local_gbx_index, c2bs);
-        const auto c2nghbrs(DoublyPeriodicDomain::cartesian_coord2nghbrs(idx, ndims));
-        gbxmaps.insert_coord2nghbrs(
-            local_gbx_index, correct_neighbor_indices(c2nghbrs, ndims, domain_decomposition));
-      }
+                    int local_gbx_index = domain_decomposition.global_to_local_gridbox_index(idx);
+
+                    const auto c3bs = gfb.get_coord3gbxbounds(idx);
+                    h_to_coord3bounds.insert(local_gbx_index, c3bs);
+                    auto c3nghbrs = DoublyPeriodicDomain::cartesian_coord3nghbrs(idx, ndims);
+                    c3nghbrs = correct_neighbor_indices(c3nghbrs, ndims, domain_decomposition);
+                    h_to_back_coord3nghbr.insert(local_gbx_index, c3nghbrs.first);
+                    h_to_forward_coord3nghbr.insert(local_gbx_index, c3nghbrs.second);
+
+                    const auto c1bs = gfb.get_coord1gbxbounds(idx);
+                    h_to_coord1bounds.insert(local_gbx_index, c1bs);
+                    auto c1nghbrs = DoublyPeriodicDomain::cartesian_coord1nghbrs(idx, ndims);
+                    c1nghbrs = correct_neighbor_indices(c1nghbrs, ndims, domain_decomposition);
+                    h_to_back_coord1nghbr.insert(local_gbx_index, c1nghbrs.first);
+                    h_to_forward_coord1nghbr.insert(local_gbx_index, c1nghbrs.second);
+
+                    const auto c2bs = gfb.get_coord2gbxbounds(idx);
+                    h_to_coord2bounds.insert(local_gbx_index, c2bs);
+                    auto c2nghbrs = DoublyPeriodicDomain::cartesian_coord2nghbrs(idx, ndims);
+                    c2nghbrs = correct_neighbor_indices(c2nghbrs, ndims, domain_decomposition);
+                    h_to_back_coord2nghbr.insert(local_gbx_index, c2nghbrs.first);
+                    h_to_forward_coord2nghbr.insert(local_gbx_index, c2nghbrs.second);
+
+                    to_gbxareas.insert(local_gbx_index, gfb.gbxarea(idx));
+                    to_gbxvolumes.insert(local_gbx_index, gfb.gbxvol(idx));
+                  });
+            });
+      });
+
+  gbxmaps.set_coord3bounds_via_copy(h_to_coord3bounds);
+  gbxmaps.set_coord1bounds_via_copy(h_to_coord1bounds);
+  gbxmaps.set_coord2bounds_via_copy(h_to_coord2bounds);
+
+  gbxmaps.set_back_coord3nghbr_via_copy(h_to_back_coord3nghbr);
+  gbxmaps.set_forward_coord3nghbr_via_copy(h_to_forward_coord3nghbr);
+  gbxmaps.set_back_coord1nghbr_via_copy(h_to_back_coord1nghbr);
+  gbxmaps.set_forward_coord1nghbr_via_copy(h_to_forward_coord1nghbr);
+  gbxmaps.set_back_coord2nghbr_via_copy(h_to_back_coord2nghbr);
+  gbxmaps.set_forward_coord2nghbr_via_copy(h_to_forward_coord2nghbr);
+
+  gbxmaps.set_gbxareas_map(to_gbxareas);
+  gbxmaps.set_gbxvolumes_map(to_gbxvolumes);
 }
