@@ -89,8 +89,16 @@ inline size_t find_ref(const ViewSupers totsupers, const Pred pred) {
 
 /* returns element access index from begining of totsupers view to the superdroplet that
 is first to fail to satisfy given Predicate "pred". Function is 2nd level of nested parallelism,
-i.e. is thread parallelism within a league for a given team_member. serial equivalent is:
-return find_partition_point(totsupers, pred, 0, totsupers.extent(0)); */
+i.e. is thread parallelism within a league for a given team_member. Parallel equivalent
+is experimental (!):
+```
+namespace KE = Kokkos::Experimental;
+const auto start = KE::begin(totsupers);
+const auto end = KE::end(totsupers);
+const auto iter = KE::partition_point(team_member, start, end, pred);
+return makeref(start, iter);
+```
+*/
 template <typename Pred, typename TeamMemberType, typename ViewSupers>
 KOKKOS_INLINE_FUNCTION size_t find_ref(const TeamMemberType &team_member,
                                        const ViewSupers totsupers, const Pred pred) {
