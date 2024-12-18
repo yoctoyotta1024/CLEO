@@ -26,25 +26,19 @@
 
 #include "mpi.h"
 
+void check_ngridboxes_matches_maps(const CartesianMaps &gbxmaps, const size_t ngbxs);
+
 void check_ngridboxes_matches_ndims(const CartesianMaps &gbxmaps, const size_t ngbxs);
 
-void check_ngridboxes_matches_maps(const CartesianMaps &gbxmaps, const size_t ngbxs);
+void set_outofbounds(CartesianMaps &gbxmaps);
 
 void set_maps_ndims(const std::vector<size_t> &ndims, CartesianMaps &gbxmaps);
 
-void set_model_areas_vols(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps);
+void set_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary &gfb,
+                        CartesianMaps &gbxmaps);
 
-/* set gbxindex to out of bounds value */
-void set_outofbounds(CartesianMaps &gbxmaps);
-
-void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps);
-
-void set_1Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps);
-
-void set_2Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps);
-
-void set_3Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps);
-void set_3Dcartesian_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps);
+void set_null_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary &gfb,
+                             CartesianMaps &gbxmaps);
 
 /* bounds for CartesianMaps of gridboxes along directions of model not used e.g. in 1-D model,
 these are bounds of gridboxes in coord1 and coord2 directions */
@@ -74,27 +68,9 @@ CartesianMaps create_cartesian_maps(const size_t ngbxs, const unsigned int nspac
       gfb.get_coord1gbxbounds(0).second - gfb.get_coord1gbxbounds(0).first,
       gfb.get_coord2gbxbounds(0).second - gfb.get_coord2gbxbounds(0).first);
 
-  switch (nspacedims) {
-    case 0:
-      set_model_areas_vols(gfb, gbxmaps);
-      set_0Dmodel_maps(gfb, gbxmaps);
-      break;
-    case 1:
-      set_model_areas_vols(gfb, gbxmaps);
-      set_1Dmodel_maps(gfb, gbxmaps);
-      break;
-    case 2:
-      set_model_areas_vols(gfb, gbxmaps);
-      set_2Dmodel_maps(gfb, gbxmaps);
-      break;
-    case 3:
-      set_3Dmodel_maps(gfb, gbxmaps);
-      break;
-    default:
-      throw std::invalid_argument("nspacedims > 3 is invalid ");
-  }
+  set_cartesian_maps(nspacedims, gfb, gbxmaps);
+
   set_maps_ndims(gfb.ndims, gbxmaps);
-  set_outofbounds(gbxmaps);
 
   check_ngridboxes_matches_ndims(gbxmaps, gbxmaps.get_total_global_ngridboxes());
   check_ngridboxes_matches_maps(gbxmaps, gbxmaps.get_local_ngridboxes_hostcopy());
@@ -102,18 +78,6 @@ CartesianMaps create_cartesian_maps(const size_t ngbxs, const unsigned int nspac
   std::cout << "--- create cartesian gridbox maps: success ---\n";
 
   return gbxmaps;
-}
-
-/* checks number of gridboxes according to maps matches with expected value from gfb */
-void check_ngridboxes_matches_ndims(const CartesianMaps &gbxmaps, const size_t ngbxs) {
-  const auto h_ndims = gbxmaps.get_ndims_hostcopy();
-  const auto ngbxs_from_ndims = size_t{h_ndims(0) * h_ndims(1) * h_ndims(2)};
-
-  if (ngbxs_from_ndims != ngbxs) {
-    throw std::invalid_argument(
-        "ndims from gridbox maps inconsistent "
-        " with number of gridboxes");
-  }
 }
 
 void check_ngridboxes_matches_maps(const CartesianMaps &gbxmaps, const size_t ngbxs) {
@@ -125,25 +89,15 @@ void check_ngridboxes_matches_maps(const CartesianMaps &gbxmaps, const size_t ng
   }
 }
 
-/* copys ndims  to gbxmaps' ndims to set number of dimensions (ie. number of gridboxes) in
-[coord3, coord1, coord2] directions */
-void set_maps_ndims(const std::vector<size_t> &i_ndims, CartesianMaps &gbxmaps) {
-  auto h_ndims =
-      Kokkos::create_mirror_view(gbxmaps.get_ndims());  // mirror ndims in case view is on device
+/* checks number of gridboxes according to maps matches with expected value from gfb */
+void check_ngridboxes_matches_ndims(const CartesianMaps &gbxmaps, const size_t ngbxs) {
+  const auto h_ndims = gbxmaps.get_ndims_hostcopy();
+  const auto ngbxs_from_ndims = size_t{h_ndims(0) * h_ndims(1) * h_ndims(2)};
 
-  for (unsigned int m(0); m < 3; ++m) {
-    h_ndims(m) = i_ndims.at(m);
-  }
-
-  gbxmaps.set_ndims_via_copy(h_ndims);
-}
-
-/* sets (finite) dimensionless horizontal area and volume using area and volume from
-gfb for gbxidx=0 */
-void set_model_areas_vols(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
-  for (auto idx : gfb.gbxidxs) {
-    gbxmaps.insert_gbxarea(idx, gfb.gbxarea(idx));
-    gbxmaps.insert_gbxvolume(idx, gfb.gbxvol(idx));
+  if (ngbxs_from_ndims != ngbxs) {
+    throw std::invalid_argument(
+        "ndims from gridbox maps inconsistent "
+        " with number of gridboxes");
   }
 }
 
@@ -162,68 +116,28 @@ void set_outofbounds(CartesianMaps &gbxmaps) {
   gbxmaps.insert_gbxvolume(idx, 0.0);
 }
 
-/* gives all coord[X]bounds maps to 1 key with null values (max/min numerical limits).
-Also sets null neighbours maps (meaning periodic boundary conditions in all directions
-where neighbour of single gridbox with gbxidx=0 is itself) */
-void set_0Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
-  gbxmaps.insert_coord3bounds(0, nullbounds());
-  gbxmaps.insert_coord1bounds(0, nullbounds());
-  gbxmaps.insert_coord2bounds(0, nullbounds());
+/*
+copys ndims  to gbxmaps' ndims to set number of dimensions (ie. number of gridboxes) in
+[coord3, coord1, coord2] directions
+*/
+void set_maps_ndims(const std::vector<size_t> &i_ndims, CartesianMaps &gbxmaps) {
+  auto h_ndims =
+      Kokkos::create_mirror_view(gbxmaps.get_ndims());  // mirror ndims in case view is on device
 
-  gbxmaps.insert_coord3nghbrs(0, nullnghbrs(0));
-  gbxmaps.insert_coord1nghbrs(0, nullnghbrs(0));
-  gbxmaps.insert_coord2nghbrs(0, nullnghbrs(0));
-}
-
-/* Gives all coord[X]bounds maps for X = x or y null values (max/min numerical limits)
-for all gridboxes and neighbours maps are null (meaning periodic boundary conditions
-where neighbour of gridbox in x or y direction is itself). coord3bounds map, ie. z direction,
-is set using gfb. coord3 back / forward neighbours set using finite or periodic boundary
-conditions in a cartesian domain */
-void set_1Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
-  const auto ndims = gfb.ndims;
-
-  for (auto idx : gfb.gbxidxs) {
-    const auto c3bs(gfb.get_coord3gbxbounds(idx));
-    gbxmaps.insert_coord3bounds(idx, c3bs);
-    gbxmaps.insert_coord1bounds(idx, nullbounds());
-    gbxmaps.insert_coord2bounds(idx, nullbounds());
-
-    const auto c3nghbrs(DoublyPeriodicDomain::cartesian_coord3nghbrs(idx, ndims));
-    gbxmaps.insert_coord3nghbrs(idx, c3nghbrs);
-    gbxmaps.insert_coord1nghbrs(idx, nullnghbrs(0));
-    gbxmaps.insert_coord2nghbrs(idx, nullnghbrs(0));
+  for (unsigned int m(0); m < 3; ++m) {
+    h_ndims(m) = i_ndims.at(m);
   }
+
+  gbxmaps.set_ndims_via_copy(h_ndims);
 }
 
-/* Gives coordybounds map null values (max/min numerical limits) for all gridboxes and y neighbours
-maps are null (meaning periodic boundary conditions where neighbour of gridbox in y direction is
-itself). coord3 and coord1 bounds maps (ie. z and x) are set using gfb. coord3 and coord1
-neighbours maps call functions for appropriate periodic or finite boundary conditions in a
-cartesian domain */
-void set_2Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
-  const auto ndims(gfb.ndims);
-
-  for (auto idx : gfb.gbxidxs) {
-    const auto c3bs(gfb.get_coord3gbxbounds(idx));
-    gbxmaps.insert_coord3bounds(idx, c3bs);
-    const auto c1bs(gfb.get_coord1gbxbounds(idx));
-    gbxmaps.insert_coord1bounds(idx, c1bs);
-    gbxmaps.insert_coord2bounds(idx, nullbounds());
-
-    const auto c3nghbrs(DoublyPeriodicDomain::cartesian_coord3nghbrs(idx, ndims));
-    gbxmaps.insert_coord3nghbrs(idx, c3nghbrs);
-    const auto c1nghbrs(DoublyPeriodicDomain::cartesian_coord1nghbrs(idx, ndims));
-    gbxmaps.insert_coord1nghbrs(idx, c1nghbrs);
-    gbxmaps.insert_coord2nghbrs(idx, nullnghbrs(0));
-  }
-}
-
+/*
+If the neighbour index is not local sum total_local_gridboxes so that it
+can be identified later If the neighbour index is local convert it to a
+local index by subtracting gridboxes_slice_start
+*/
 kkpair_size_t correct_neighbor_indices(kkpair_size_t neighbours, const std::vector<size_t> ndims,
                                        const CartesianDecomposition &domain_decomposition) {
-  // If the neighbour index is not local sum total_local_gridboxes so that it
-  // can be identified later If the neighbour index is local convert it to a
-  // local index by subtracting gridboxes_slice_start
   int my_rank;
   MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
   std::array<size_t, 3> neighbor_coordinates;
@@ -248,17 +162,17 @@ kkpair_size_t correct_neighbor_indices(kkpair_size_t neighbours, const std::vect
 }
 
 /* Sets all coord[X]bounds maps (for X = x, y, z) using gfb data as well as back and
-forward neighbours maps assuming periodic or finite boundary conditions in cartesian domain */
-void set_3Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
+forward neighbours maps assuming periodic or finite boundary conditions in
+cartesian domain */
+void set_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary &gfb,
+                        CartesianMaps &gbxmaps) {
   int my_rank;
   MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 
-  set_3Dcartesian_maps(gfb, gbxmaps);
-}
+  if (nspacedims > 3) {
+    throw std::invalid_argument("only 0 <= nspacedims <= 3 is valid ");
+  }
 
-/* Sets all coord[X]bounds maps (for X = x, y, z) using gfb data as well as back and
-forward neighbours maps assuming periodic or finite boundary conditions in cartesian domain */
-void set_3Dcartesian_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
   const auto ndims(gfb.ndims);
 
   auto domain_decomposition = gbxmaps.get_domain_decomposition();
@@ -323,17 +237,102 @@ void set_3Dcartesian_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps
             });
       });
 
-  gbxmaps.set_coord3bounds_via_copy(h_to_coord3bounds);
-  gbxmaps.set_coord1bounds_via_copy(h_to_coord1bounds);
-  gbxmaps.set_coord2bounds_via_copy(h_to_coord2bounds);
+  switch (nspacedims) {
+    case 3:  // 3-D model (set coord2 dimension)
+      gbxmaps.set_coord2bounds_via_copy(h_to_coord2bounds);
+      gbxmaps.set_back_coord2nghbr_via_copy(h_to_back_coord2nghbr);
+      gbxmaps.set_forward_coord2nghbr_via_copy(h_to_forward_coord2nghbr);
+      [[fallthrough]];
+    case 2:  // 3-D or 2-D model (set coord1 dimension)
+      gbxmaps.set_coord1bounds_via_copy(h_to_coord1bounds);
+      gbxmaps.set_back_coord1nghbr_via_copy(h_to_back_coord1nghbr);
+      gbxmaps.set_forward_coord1nghbr_via_copy(h_to_forward_coord1nghbr);
+      [[fallthrough]];
+    case 1:  // 3-D, 2-D or 1-D model (set coord3 dimension)
+      gbxmaps.set_coord3bounds_via_copy(h_to_coord3bounds);
+      gbxmaps.set_back_coord3nghbr_via_copy(h_to_back_coord3nghbr);
+      gbxmaps.set_forward_coord3nghbr_via_copy(h_to_forward_coord3nghbr);
+      [[fallthrough]];
+    case 0:  // 3-D, 2-D, 1-D or 0-D model (set areas and volumes)
+      gbxmaps.set_gbxareas_map(to_gbxareas);
+      gbxmaps.set_gbxvolumes_map(to_gbxvolumes);
+  }
 
-  gbxmaps.set_back_coord3nghbr_via_copy(h_to_back_coord3nghbr);
-  gbxmaps.set_forward_coord3nghbr_via_copy(h_to_forward_coord3nghbr);
-  gbxmaps.set_back_coord1nghbr_via_copy(h_to_back_coord1nghbr);
-  gbxmaps.set_forward_coord1nghbr_via_copy(h_to_forward_coord1nghbr);
-  gbxmaps.set_back_coord2nghbr_via_copy(h_to_back_coord2nghbr);
-  gbxmaps.set_forward_coord2nghbr_via_copy(h_to_forward_coord2nghbr);
+  if (nspacedims < 3) {
+    set_null_cartesian_maps(nspacedims, gfb, gbxmaps);
+  }
 
-  gbxmaps.set_gbxareas_map(to_gbxareas);
-  gbxmaps.set_gbxvolumes_map(to_gbxvolumes);
+  set_outofbounds(gbxmaps);
+}
+
+/*
+For null dimensions (see below), function gives coord[X]bounds maps null values (max/min numerical
+limits) for all gridboxes and also gives neighbours maps null values (meaning periodic boundary
+conditions where neighbour of gridbox in a certain direction is itself). Null dimensions are:
+ - coord2 (y) for a 2-D model,
+ - coord1 and coord2 (x and y) for a 1-D model,
+ - coord3, coord1 and coord2 (z, x and y) for a 0-D model.
+*/
+void set_null_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary &gfb,
+                             CartesianMaps &gbxmaps) {
+  int my_rank;
+  MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+
+  if (nspacedims >= 3) {
+    throw std::invalid_argument("null model dimensions only valid for 0 <= nspacedims < 3");
+  }
+
+  const auto ndims(gfb.ndims);
+
+  auto domain_decomposition = gbxmaps.get_domain_decomposition();
+  auto partition_origin = domain_decomposition.get_local_partition_origin();
+  auto partition_size = domain_decomposition.get_local_partition_size();
+  domain_decomposition.set_dimensions_bound_behavior({0, 1, 1});
+
+  const auto local_ngbxs = size_t{partition_size[0] * partition_size[1] * partition_size[2]};
+
+  const auto h_nullbounds = kokkos_pairmap::HostMirror(local_ngbxs);
+  const auto h_back_nullnghbr = kokkos_uintmap::HostMirror(local_ngbxs);
+  const auto h_forward_nullnghbr = kokkos_uintmap::HostMirror(local_ngbxs);
+
+  // TODO(ALL): perform on GPUs once domain_decomposition is GPU compatible (then after loop assign
+  // gbxmaps in switch rather than use deep_copy)
+  Kokkos::parallel_for(
+      "set_null_cartesian_maps", HostTeamPolicy(partition_size[0], Kokkos::AUTO()),
+      KOKKOS_LAMBDA(const HostTeamMember &team_member) {
+        const auto k = team_member.league_rank();
+        Kokkos::parallel_for(
+            Kokkos::TeamThreadRange(team_member, partition_size[1]), [=](const size_t i) {
+              Kokkos::parallel_for(
+                  Kokkos::ThreadVectorRange(team_member, partition_size[2]), [=](const size_t j) {
+                    int idx = get_index_from_coordinates(ndims, partition_origin[0] + k,
+                                                         partition_origin[1] + i,
+                                                         partition_origin[2] + j);
+
+                    int local_gbx_index = domain_decomposition.global_to_local_gridbox_index(idx);
+
+                    h_nullbounds.insert(local_gbx_index, nullbounds());
+                    const auto nullnghbr = nullnghbrs(local_gbx_index);
+                    h_back_nullnghbr.insert(local_gbx_index, nullnghbr.first);
+                    h_forward_nullnghbr.insert(local_gbx_index, nullnghbr.second);
+                  });
+            });
+      });
+
+  switch (nspacedims) {
+    case 0:  // 0-D model (set coord3 dimension null)
+      gbxmaps.set_coord3bounds_via_copy(h_nullbounds);
+      gbxmaps.set_back_coord3nghbr_via_copy(h_back_nullnghbr);
+      gbxmaps.set_forward_coord3nghbr_via_copy(h_forward_nullnghbr);
+      [[fallthrough]];
+    case 1:  // 1-D or 0-D model (set coord1 dimension null)
+      gbxmaps.set_coord1bounds_via_copy(h_nullbounds);
+      gbxmaps.set_back_coord1nghbr_via_copy(h_back_nullnghbr);
+      gbxmaps.set_forward_coord1nghbr_via_copy(h_forward_nullnghbr);
+      [[fallthrough]];
+    case 2:  // 2-D, 1-D or 0-D model (set coord2 dimension null)
+      gbxmaps.set_coord2bounds_via_copy(h_nullbounds);
+      gbxmaps.set_back_coord2nghbr_via_copy(h_back_nullnghbr);
+      gbxmaps.set_forward_coord2nghbr_via_copy(h_forward_nullnghbr);
+  }
 }
