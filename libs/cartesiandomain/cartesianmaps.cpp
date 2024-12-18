@@ -38,7 +38,7 @@ size_t CartesianMaps::maps_size() const {
       to_coord2bounds.size() != sz || to_back_coord3nghbr.size() != sz ||
       to_forward_coord3nghbr.size() != sz || to_back_coord1nghbr.size() != sz ||
       to_forward_coord1nghbr.size() != sz || to_back_coord2nghbr.size() != sz ||
-      to_forward_coord2nghbr.size() != sz || to_area.size() != sz || to_volume.size() != sz) {
+      to_forward_coord2nghbr.size() != sz || to_areas.size() != sz || to_volumes.size() != sz) {
     throw std::invalid_argument("gridbox maps are not all the same size");
   }
 

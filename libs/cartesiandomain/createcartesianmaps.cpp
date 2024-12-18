@@ -66,15 +66,12 @@ CartesianMaps create_cartesian_maps(const size_t ngbxs, const unsigned int nspac
 
   const auto gfb = GbxBoundsFromBinary(ngbxs, nspacedims, grid_filename);
 
-  auto gbxmaps = CartesianMaps(gfb.get_ngbxs());
+  auto gbxmaps = CartesianMaps();
 
   gbxmaps.create_decomposition(
       gfb.ndims, gfb.get_coord3gbxbounds(0).second - gfb.get_coord3gbxbounds(0).first,
       gfb.get_coord1gbxbounds(0).second - gfb.get_coord1gbxbounds(0).first,
       gfb.get_coord2gbxbounds(0).second - gfb.get_coord2gbxbounds(0).first);
-
-  set_maps_ndims(gfb.ndims, gbxmaps);
-  set_outofbounds(gbxmaps);
 
   switch (nspacedims) {
     case 0:
@@ -95,6 +92,8 @@ CartesianMaps create_cartesian_maps(const size_t ngbxs, const unsigned int nspac
     default:
       throw std::invalid_argument("nspacedims > 3 is invalid ");
   }
+  set_maps_ndims(gfb.ndims, gbxmaps);
+  set_outofbounds(gbxmaps);
 
   check_ngridboxes_matches_ndims(gbxmaps, gbxmaps.get_total_global_ngridboxes());
   check_ngridboxes_matches_maps(gbxmaps, gbxmaps.get_local_ngridboxes_hostcopy());
@@ -220,7 +219,7 @@ void set_2Dmodel_maps(const GbxBoundsFromBinary &gfb, CartesianMaps &gbxmaps) {
 }
 
 kkpair_size_t correct_neighbor_indices(kkpair_size_t neighbours, const std::vector<size_t> ndims,
-                                       CartesianDecomposition &domain_decomposition) {
+                                       const CartesianDecomposition &domain_decomposition) {
   // If the neighbour index is not local sum total_local_gridboxes so that it
   // can be identified later If the neighbour index is local convert it to a
   // local index by subtracting gridboxes_slice_start
