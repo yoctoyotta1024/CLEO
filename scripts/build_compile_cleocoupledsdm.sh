@@ -18,8 +18,8 @@
 ### ---------- and executable(s) to compile ------------ ###
 buildtype=$1
 enableyac=${2:-false}                     # "true" or otherwise
-path2CLEO=${3:-${HOME}/CLEO}
-path2build=${4:-${path2CLEO}/build}
+path2CLEO=${3:-${HOME}/CLEO}              # must be absolute path
+path2build=${4:-${path2CLEO}/build}       # should be absolute path
 yacyaxtroot=/work/bm1183/m300950/yacyaxt  # used if enableyac == "true"
 executables="cleocoupledsdm"
 ### ---------------------------------------------------- ###
