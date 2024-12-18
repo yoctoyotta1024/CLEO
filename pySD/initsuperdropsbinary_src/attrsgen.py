@@ -138,7 +138,9 @@ class AttrsGenerator:
 
         print(msg)
 
-    def generate_attributes(self, nsupers, RHO_SOL, NUMCONC, gridboxbounds):
+    def generate_attributes(
+        self, nsupers, RHO_SOL, NUMCONC, gridboxbounds, isprint=False
+    ):
         """generate superdroplets (SDs) attributes that have dimensions
         by calling the appropraite generating functions"""
 
@@ -153,7 +155,10 @@ class AttrsGenerator:
 
         if nsupers > 0:
             self.check_totalnumconc(multiplicities, NUMCONC, gbxvol)
-            self.print_totalconc(multiplicities, radii, mass_solutes, RHO_SOL, gbxvol)
+            if isprint:
+                self.print_totalconc(
+                    multiplicities, radii, mass_solutes, RHO_SOL, gbxvol
+                )
 
         return multiplicities, radii, mass_solutes  # units [], [m], [Kg], [m]
 

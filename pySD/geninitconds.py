@@ -78,6 +78,7 @@ def generate_initial_superdroplet_conditions(
         grid_filename,
         nsupers,
         numconc,
+        isprint=isprintinfo,
     )
 
     if isprintinfo:
