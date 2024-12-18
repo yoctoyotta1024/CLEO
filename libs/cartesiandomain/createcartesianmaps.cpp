@@ -30,8 +30,6 @@ void check_ngridboxes_matches_maps(const CartesianMaps &gbxmaps, const size_t ng
 
 void check_ngridboxes_matches_ndims(const CartesianMaps &gbxmaps, const size_t ngbxs);
 
-void set_outofbounds(CartesianMaps &gbxmaps);
-
 void set_maps_ndims(const std::vector<size_t> &ndims, CartesianMaps &gbxmaps);
 
 void set_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary &gfb,
@@ -101,21 +99,6 @@ void check_ngridboxes_matches_ndims(const CartesianMaps &gbxmaps, const size_t n
   }
 }
 
-/* sets value for coordinate bounds for case when outofbounds gbxidx searches map */
-void set_outofbounds(CartesianMaps &gbxmaps) {
-  const auto idx = LIMITVALUES::oob_gbxindex;
-  gbxmaps.insert_coord3bounds(idx, nullbounds());
-  gbxmaps.insert_coord1bounds(idx, nullbounds());
-  gbxmaps.insert_coord2bounds(idx, nullbounds());
-
-  gbxmaps.insert_coord3nghbrs(idx, nullnghbrs(idx));
-  gbxmaps.insert_coord1nghbrs(idx, nullnghbrs(idx));
-  gbxmaps.insert_coord2nghbrs(idx, nullnghbrs(idx));
-
-  gbxmaps.insert_gbxarea(idx, 0.0);
-  gbxmaps.insert_gbxvolume(idx, 0.0);
-}
-
 /*
 copys ndims  to gbxmaps' ndims to set number of dimensions (ie. number of gridboxes) in
 [coord3, coord1, coord2] directions
@@ -180,21 +163,36 @@ void set_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary
   auto partition_size = domain_decomposition.get_local_partition_size();
   domain_decomposition.set_dimensions_bound_behavior({0, 1, 1});
 
-  const auto local_ngbxs = size_t{partition_size[0] * partition_size[1] * partition_size[2]};
+  const auto sz = gbxmaps.get_local_ngridboxes_hostcopy() + 1;  // +1 for oob_gbxindex key
 
-  const auto h_to_coord3bounds = kokkos_pairmap::HostMirror(local_ngbxs);
-  const auto h_to_coord1bounds = kokkos_pairmap::HostMirror(local_ngbxs);
-  const auto h_to_coord2bounds = kokkos_pairmap::HostMirror(local_ngbxs);
+  const auto h_to_coord3bounds = kokkos_pairmap::HostMirror(sz);
+  const auto h_to_coord1bounds = kokkos_pairmap::HostMirror(sz);
+  const auto h_to_coord2bounds = kokkos_pairmap::HostMirror(sz);
 
-  const auto h_to_back_coord3nghbr = kokkos_uintmap::HostMirror(local_ngbxs);
-  const auto h_to_forward_coord3nghbr = kokkos_uintmap::HostMirror(local_ngbxs);
-  const auto h_to_back_coord1nghbr = kokkos_uintmap::HostMirror(local_ngbxs);
-  const auto h_to_forward_coord1nghbr = kokkos_uintmap::HostMirror(local_ngbxs);
-  const auto h_to_back_coord2nghbr = kokkos_uintmap::HostMirror(local_ngbxs);
-  const auto h_to_forward_coord2nghbr = kokkos_uintmap::HostMirror(local_ngbxs);
+  const auto h_to_back_coord3nghbr = kokkos_uintmap::HostMirror(sz);
+  const auto h_to_forward_coord3nghbr = kokkos_uintmap::HostMirror(sz);
+  const auto h_to_back_coord1nghbr = kokkos_uintmap::HostMirror(sz);
+  const auto h_to_forward_coord1nghbr = kokkos_uintmap::HostMirror(sz);
+  const auto h_to_back_coord2nghbr = kokkos_uintmap::HostMirror(sz);
+  const auto h_to_forward_coord2nghbr = kokkos_uintmap::HostMirror(sz);
 
-  const auto to_gbxareas = kokkos_dblmaph(local_ngbxs);
-  const auto to_gbxvolumes = kokkos_dblmaph(local_ngbxs);
+  const auto to_gbxareas = kokkos_dblmaph(sz);
+  const auto to_gbxvolumes = kokkos_dblmaph(sz);
+
+  /* sets value for coordinate bounds, neighbours, areas and volumes
+  for case when outofbounds gbxidx "oob_gbxindex" searches map */
+  const auto oob = LIMITVALUES::oob_gbxindex;
+  h_to_coord3bounds.insert(oob, nullbounds());
+  h_to_coord1bounds.insert(oob, nullbounds());
+  h_to_coord2bounds.insert(oob, nullbounds());
+  h_to_back_coord3nghbr.insert(oob, nullnghbrs(oob).first);
+  h_to_forward_coord3nghbr.insert(oob, nullnghbrs(oob).second);
+  h_to_back_coord1nghbr.insert(oob, nullnghbrs(oob).first);
+  h_to_forward_coord1nghbr.insert(oob, nullnghbrs(oob).second);
+  h_to_back_coord2nghbr.insert(oob, nullnghbrs(oob).first);
+  h_to_forward_coord2nghbr.insert(oob, nullnghbrs(oob).second);
+  to_gbxareas.insert(oob, 0.0);
+  to_gbxvolumes.insert(oob, 0.0);
 
   Kokkos::parallel_for(
       "set_cartesian_maps", HostTeamPolicy(partition_size[0], Kokkos::AUTO()),
@@ -261,8 +259,6 @@ void set_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary
   if (nspacedims < 3) {
     set_null_cartesian_maps(nspacedims, gfb, gbxmaps);
   }
-
-  set_outofbounds(gbxmaps);
 }
 
 /*
@@ -289,11 +285,17 @@ void set_null_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromB
   auto partition_size = domain_decomposition.get_local_partition_size();
   domain_decomposition.set_dimensions_bound_behavior({0, 1, 1});
 
-  const auto local_ngbxs = size_t{partition_size[0] * partition_size[1] * partition_size[2]};
+  const auto sz = gbxmaps.get_local_ngridboxes_hostcopy() + 1;  // +1 for oob_gbxindex key
+  const auto h_nullbounds = kokkos_pairmap::HostMirror(sz);
+  const auto h_back_nullnghbr = kokkos_uintmap::HostMirror(sz);
+  const auto h_forward_nullnghbr = kokkos_uintmap::HostMirror(sz);
 
-  const auto h_nullbounds = kokkos_pairmap::HostMirror(local_ngbxs);
-  const auto h_back_nullnghbr = kokkos_uintmap::HostMirror(local_ngbxs);
-  const auto h_forward_nullnghbr = kokkos_uintmap::HostMirror(local_ngbxs);
+  /* sets value for coordinate bounds, neighbours, areas and volumes
+  for case when outofbounds gbxidx "oob_gbxindex" searches map */
+  const auto oob = LIMITVALUES::oob_gbxindex;
+  h_nullbounds.insert(oob, nullbounds());
+  h_back_nullnghbr.insert(oob, nullnghbrs(oob).first);
+  h_forward_nullnghbr.insert(oob, nullnghbrs(oob).first);
 
   // TODO(ALL): perform on GPUs once domain_decomposition is GPU compatible (then after loop assign
   // gbxmaps in switch rather than use deep_copy)
