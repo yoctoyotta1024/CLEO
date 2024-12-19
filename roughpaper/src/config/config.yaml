@@ -36,6 +36,12 @@ timesteps:
   OBSTSTEP : 2                                         # time between SDM observations [s]
   T_END : 600                                          # time span of integration from 0s to T_END [s]
 
+### Kokkos Initialization Parameters ###
+kokkos_settings:
+  num_threads : 8                                      # number of threads for host parallel backend
+  device_id :  0                                       # device to use for device parallel backend
+  map_device_id_by : "mpi_rank"                        # select device for execution, either "mpi_rank" or "random".
+
 ### Initialisation Parameters ###
 inputfiles:
   constants_filename : ../libs/cleoconstants.hpp       # name of file for values of physical constants

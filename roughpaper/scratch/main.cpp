@@ -186,17 +186,21 @@ int main(int argc, char *argv[]) {
 
   /* Read input parameters from configuration file(s) */
   const Config config("/home/m/m300950/CLEO/roughpaper/scratch/share/config.yaml");
-  const Timesteps tsteps(config.get_timesteps());
 
-  /* Create zarr store for writing output to storage */
-  auto store = FSStore(config.get_zarrbasedir());
-  auto dataset = Dataset(store);
-
-  /* Initial conditions for CLEO run */
-  const InitialConditions auto initconds = create_initconds(config);
-
-  Kokkos::initialize(argc, argv);
+  Kokkos::initialize(config.get_kokkos_initialization_settings());
   {
+    Kokkos::print_configuration(std::cout);
+
+    /* Create timestepping parameters from configuration */
+    const Timesteps tsteps(config.get_timesteps());
+
+    /* Create zarr store for writing output to storage */
+    auto store = FSStore(config.get_zarrbasedir());
+    auto dataset = Dataset(store);
+
+    /* Initial conditions for CLEO run */
+    const InitialConditions auto initconds = create_initconds(config);
+
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
     const SDMMethods sdm(create_sdm(config, tsteps, dataset));
 
