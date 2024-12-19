@@ -617,9 +617,14 @@ This function creates Gridboxes based on the provided gridbox maps and initial c
 <span id="_CPPv319is_gbxinit_completeK6size_t12dualview_gbx"></span><span id="_CPPv219is_gbxinit_completeK6size_t12dualview_gbx"></span><span id="is_gbxinit_complete__sC.dualview_gbx"></span><span class="target" id="creategbxs_8hpp_1a0033fab49387c9892120538c4e684afe"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_gbxinit_complete</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ngbxs_from_maps</span></span>, <a class="reference internal" href="../kokkosaliases.html#_CPPv412dualview_gbx" title="dualview_gbx"><span class="n"><span class="pre">dualview_gbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">gbxs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419is_gbxinit_completeK6size_t12dualview_gbx" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Check if gridbox initialisation is complete. </p>
 <p>This function checks if the number of created gridboxes is consistent with the number of gridboxes from gridbox maps and if each gridbox has correct references to superdroplets.</p>
+<p>
+This function checks if the number of created gridboxes is consistent with the number of gridboxes from gridbox maps and if each gridbox has correct references to superdroplets.</p>
+<p>Kokkos::parallel_for([…]) (on host) is equivalent to: for (size_t ii(0); ii &lt; ngbxs; ++ii){[…]} when in serial</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
+<li><p><strong>ngbxs_from_maps</strong> – The number of gridboxes from gridbox maps. </p></li>
+<li><p><strong>gbxs</strong> – The dualview containing gridboxes.</p></li>
 <li><p><strong>ngbxs_from_maps</strong> – The number of gridboxes from gridbox maps. </p></li>
 <li><p><strong>gbxs</strong> – The dualview containing gridboxes. </p></li>
 </ul>
@@ -676,7 +681,7 @@ This function creates Gridboxes based on the provided gridbox maps and initial c
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 18 December 2024</div>
+              Last updated on 19 December 2024</div>
           </div>
           <div class="right-details">
             
