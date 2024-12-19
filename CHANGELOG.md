@@ -2,6 +2,35 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.29.5](https://github.com/yoctoyotta1024/CLEO/compare/283e6feaf54436720704f52736f09a3b348e934a..v0.29.5) - 2024-12-19
+#### Bug Fixes
+- revert parallelising finding partition algorithm - ([c2b01e0](https://github.com/yoctoyotta1024/CLEO/commit/c2b01e0cec57546ff952ab8c0862fb79ae269dc4)) - clara.bayley
+#### Documentation
+- add note on experimental parallel version of find_partition_point - ([a6c126f](https://github.com/yoctoyotta1024/CLEO/commit/a6c126f2a956088021981a10586e57ff3dd186f4)) - clara.bayley
+#### Miscellaneous Chores
+- delete redundant functions - ([7df6112](https://github.com/yoctoyotta1024/CLEO/commit/7df6112bbb2af157d57b443a74a0d8cd56714278)) - clara.bayley
+- add note on paths in bash script - ([4bc4dad](https://github.com/yoctoyotta1024/CLEO/commit/4bc4dad18fda3b8ddb2b2fc33755f27aff604517)) - clara.bayley
+- use auto - ([75d9ad0](https://github.com/yoctoyotta1024/CLEO/commit/75d9ad0a3d19dd60f62cef5f514356d5d110f9d0)) - clara.bayley
+- formatting and use auto - ([cd6f393](https://github.com/yoctoyotta1024/CLEO/commit/cd6f3938a50ec8450cefc0514a4fe045bb57f033)) - clara.bayley
+- use auto - ([44dc3ae](https://github.com/yoctoyotta1024/CLEO/commit/44dc3ae35000715331e8267f5b0540bf47afbf8c)) - clara.bayley
+- update kokkos version - ([283e6fe](https://github.com/yoctoyotta1024/CLEO/commit/283e6feaf54436720704f52736f09a3b348e934a)) - clara.bayley
+#### Performance Improvements
+- use kokkos min function not selfmade one - ([6e83288](https://github.com/yoctoyotta1024/CLEO/commit/6e83288d56fac859f4d43f4e3be2c07a57fd6c4f)) - clara.bayley
+#### Refactoring
+- new spdtest results for performance comparison - ([83998c0](https://github.com/yoctoyotta1024/CLEO/commit/83998c09ec372840aa0137c899ef4f8d45394c3a)) - clara.bayley
+- rename gbxmaps ndims - ([00d527b](https://github.com/yoctoyotta1024/CLEO/commit/00d527ba0f2d306d281b107a065dae443ace828d)) - clara.bayley
+- move setting of oob_gbxindex key in maps to optimised function - ([429d371](https://github.com/yoctoyotta1024/CLEO/commit/429d3713273b0079908615bd185c35899fc1054d)) - clara.bayley
+- optimise null maps initialisation - ([3e108d7](https://github.com/yoctoyotta1024/CLEO/commit/3e108d7e777cd3ed40d6383414f8be819a420f33)) - clara.bayley
+- optimise map initialisation of 3D model - ([a2ed085](https://github.com/yoctoyotta1024/CLEO/commit/a2ed085ac595236ddd3ab08fcc978311ca0f6b66)) - clara.bayley
+- edit cartesian maps names and constructor and use auto - ([d5a2478](https://github.com/yoctoyotta1024/CLEO/commit/d5a24780995ded2a3c1b75bf077c01423fa19fd1)) - clara.bayley
+- nested parallelisism for iscorrect function - ([58b10cb](https://github.com/yoctoyotta1024/CLEO/commit/58b10cb7cc627bb606e8f9f56a015de7350e7647)) - clara.bayley
+- replace invalid argument with cassert and parallelise checking of gridboxes - ([54e5fd5](https://github.com/yoctoyotta1024/CLEO/commit/54e5fd59d12d12971873bc9150a4d396cf52c25e)) - clara.bayley
+- parallelise finding partition point for refs - ([03e471f](https://github.com/yoctoyotta1024/CLEO/commit/03e471fa374e529f31fad90fba48ae12cc4da6f5)) - clara.bayley
+- improve performance of nested parallelism partition point finding algorithm - ([0a1cc06](https://github.com/yoctoyotta1024/CLEO/commit/0a1cc06a60bea2740650904923f4d5f55b48fdd6)) - clara.bayley
+- add bool to prevent default print statements - ([7e4c910](https://github.com/yoctoyotta1024/CLEO/commit/7e4c9101a2fbc45d41e2d4e2ed270ad23658ed70)) - clara.bayley
+
+- - -
+
 ## [v0.29.4](https://github.com/yoctoyotta1024/CLEO/compare/e86a380d3339617c30d1eab992f322ffee50b8b8..v0.29.4) - 2024-12-13
 #### Bug Fixes
 - correct call signature for shima init conds - ([ca75dca](https://github.com/yoctoyotta1024/CLEO/commit/ca75dca3c86e8d5d6036e8e19abe06f23a674942)) - clara.bayley
