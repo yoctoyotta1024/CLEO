@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH --job-name=breakup
-#SBATCH --partition=gpu
+#SBATCH --partition=compute
 #SBATCH --nodes=1
-#SBATCH --gpus=4
-#SBATCH --ntasks-per-node=128
-#SBATCH --mem=30G
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=128
+#SBATCH --mem=10G
 #SBATCH --time=00:15:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
@@ -18,9 +18,9 @@
 ### ---- build type, directories, the executable(s) ---- ###
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
-buildtype="cuda"
+buildtype="openmp"
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_colls0d/
+path2build=${HOME}/CLEO/build_colls0d/${buildtype}/
 enableyac=false
 executables="longcolls lowlistcolls szakallurbichcolls testikstraubcolls"
 

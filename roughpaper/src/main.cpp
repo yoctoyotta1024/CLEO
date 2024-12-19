@@ -43,20 +43,23 @@ int main(int argc, char *argv[]) {
   /* Read input parameters from configuration file(s) */
   const std::filesystem::path config_filename(argv[1]);  // path to configuration file
   const Config config(config_filename);
-  const Timesteps tsteps(config.get_timesteps());
-
-  /* Create Xarray dataset wit Zarr backend for writing output data to a store */
-  auto store = FSStore(config.get_zarrbasedir());
-  auto dataset = Dataset(store);
-
-  /* Initial conditions for CLEO run */
 
   /* Initialise Kokkos parallel environment */
-  Kokkos::initialize(argc, argv);
+  Kokkos::initialize(config.get_kokkos_initialization_settings());
   {
+    Kokkos::print_configuration(std::cout);
+
+    /* Create timestepping parameters from configuration */
+    const Timesteps tsteps(config.get_timesteps());
+
+    /* Create Xarray dataset wit Zarr backend for writing output data to a store */
+    auto store = FSStore(config.get_zarrbasedir());
+    auto dataset = Dataset(store);
+
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
     const SDMMethods sdm(create_sdm(config, tsteps, dataset));
 
+    /* Initial conditions for CLEO run */
     const InitialConditions auto initconds = create_initconds(config, sdm.gbxmaps);
 
     /* Solver of dynamics coupled to CLEO SDM */

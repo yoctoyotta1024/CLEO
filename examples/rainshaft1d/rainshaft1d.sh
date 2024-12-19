@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH --job-name=rain1d
-#SBATCH --partition=gpu
+#SBATCH --partition=compute
 #SBATCH --nodes=1
-#SBATCH --gpus=4
-#SBATCH --ntasks-per-node=128
-#SBATCH --mem=30G
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=256
+#SBATCH --mem=10G
 #SBATCH --time=00:10:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
@@ -17,7 +17,7 @@
 ### ---- build type, directories, the executable(s) ---- ###
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
-buildtype="cuda"
+buildtype="openmp"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_rshaft1d/
 enableyac=false

@@ -16,13 +16,15 @@ the end of your ``main.cpp`` looks something like this:
 .. code-block:: c++
 
   /* Initialise Kokkos parallel environment */
-  Kokkos::initialize(argc, argv);
+  Kokkos::initialize(config.get_kokkos_initialization_settings());
   {
+    Kokkos::print_configuration(std::cout);
+
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-    const SDMMethods sdm(create_sdm(config, tsteps, dataset));
+    const SDMMethods sdm = create_sdm(config, tsteps, dataset);
 
     /* Run CLEO (SDM coupled to dynamics solver) */
-    const RunCLEO runcleo(sdm, coupldyn, comms);
+    const auto runcleo = RunCLEO(sdm, coupldyn, comms);
     runcleo(initconds, t_end);
   }
   Kokkos::finalize();

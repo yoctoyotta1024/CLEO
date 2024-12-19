@@ -78,6 +78,10 @@ struct Config {
 
   RequiredConfigParams::TimestepsParams get_timesteps() const { return required.timesteps; }
 
+  Kokkos::InitializationSettings get_kokkos_initialization_settings() const {
+    return optional.kokkos_settings;
+  };
+
   OptionalConfigParams::CondensationParams get_condensation() const {
     return optional.condensation;
   }

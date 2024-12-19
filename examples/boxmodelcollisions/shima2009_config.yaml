@@ -21,6 +21,10 @@
 # and so can the thermodynamics files when using coupled thermodynamics "fromfile".
 #
 
+### Kokkos Initialization Parameters ###
+kokkos_settings:
+  num_threads: 128                                              # number of threads for host parallel backend
+
 ### SDM Runtime Parameters ###
 domain:
   nspacedims: 0                                                 # no. of spatial dimensions to model
@@ -37,12 +41,12 @@ timesteps:
 
 ### Initialisation Parameters ###
 inputfiles:
-  constants_filename: ../libs/cleoconstants.hpp                 # name of file for values of physical constants
+  constants_filename: ../../libs/cleoconstants.hpp              # name of file for values of physical constants
   grid_filename: ./share/shima2009_dimlessGBxboundaries.dat     # binary filename for initialisation of GBxs / GbxMaps
 
 initsupers:
   type: frombinary                                              # type of initialisation of super-droplets
-  initsupers_filename: /home/m/m300950/CLEO/build_colls0d/share/shima2009_dimlessSDsinit_2.dat  # binary filename for initialisation of SDs
+  initsupers_filename: /home/m/m300950/CLEO/build_colls0d/cuda/share/shima2009_dimlessSDsinit_2.dat # binary filename for initialisation of SDs
 
 ### Output Parameters ###
 outputdata:
