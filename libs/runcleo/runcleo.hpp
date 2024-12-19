@@ -201,9 +201,7 @@ class RunCLEO {
     /* t_next is sooner out of time for next coupl or obs */
     const auto next_coupl = (unsigned int)next_couplstep();
     const auto next_obs = (unsigned int)sdm.obs.next_obs(t_mdl);
-    const auto t_next(!(next_coupl < next_obs)
-                          ? next_obs
-                          : next_coupl);  // return smaller of two unsigned ints (see std::min)
+    const auto t_next = Kokkos::min(next_coupl, next_obs);
 
     return t_next;  // stepsize = t_next - t_mdl
   }

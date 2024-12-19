@@ -38,7 +38,7 @@ size_t CartesianMaps::maps_size() const {
       to_coord2bounds.size() != sz || to_back_coord3nghbr.size() != sz ||
       to_forward_coord3nghbr.size() != sz || to_back_coord1nghbr.size() != sz ||
       to_forward_coord1nghbr.size() != sz || to_back_coord2nghbr.size() != sz ||
-      to_forward_coord2nghbr.size() != sz || to_area.size() != sz || to_volume.size() != sz) {
+      to_forward_coord2nghbr.size() != sz || to_areas.size() != sz || to_volumes.size() != sz) {
     throw std::invalid_argument("gridbox maps are not all the same size");
   }
 
@@ -51,7 +51,7 @@ size_t CartesianMaps::get_local_ngridboxes() const {
   if (is_decomp) {
     return domain_decomposition.get_total_local_gridboxes();
   }
-  return ndims(0) * ndims(1) * ndims(2);
+  return global_ndims(0) * global_ndims(1) * global_ndims(2);
 }
 
 // TODO(ALL) make domain_decomp call compatible with GPUs and then remove comm_size guard
@@ -115,7 +115,7 @@ KOKKOS_FUNCTION
 unsigned int change_to_forwards_coord2nghbr(const unsigned int idx, const CartesianMaps &gbxmaps,
                                             double &coord2) {
   const auto nghbr = gbxmaps.coord2forward(idx);
-  const auto ndims(gbxmaps.get_ndims());
+  const auto ndims = gbxmaps.get_global_ndims();
   const auto incre = (unsigned int)ndims(0) * ndims(1);  // ngbxs in z * ngbxs in x direction
   // at upper y edge of domain
   if (beyond_domainboundary(idx + incre, incre, ndims(2))) {
@@ -133,7 +133,7 @@ KOKKOS_FUNCTION
 unsigned int change_to_backwards_coord2nghbr(const unsigned int idx, const CartesianMaps &gbxmaps,
                                              double &coord2) {
   const auto nghbr = gbxmaps.coord2backward(idx);
-  const auto ndims(gbxmaps.get_ndims());
+  const auto ndims = gbxmaps.get_global_ndims();
   const auto incre = (unsigned int)ndims(0) * ndims(1);  // ngbxs in z * ngbxs in x direction
   // at lower y edge of domain
   if (beyond_domainboundary(idx, incre, ndims(2))) {
@@ -151,7 +151,7 @@ KOKKOS_FUNCTION
 unsigned int change_to_forwards_coord1nghbr(const unsigned int idx, const CartesianMaps &gbxmaps,
                                             double &coord1) {
   const auto nghbr = gbxmaps.coord1forward(idx);
-  const auto ndims(gbxmaps.get_ndims());
+  const auto ndims = gbxmaps.get_global_ndims();
   const auto incre = (unsigned int)ndims(0);  // increment
   // at lower x edge of domain
   if (beyond_domainboundary(idx + incre, incre, ndims(1))) {
@@ -169,7 +169,7 @@ KOKKOS_FUNCTION
 unsigned int change_to_backwards_coord1nghbr(const unsigned int idx, const CartesianMaps &gbxmaps,
                                              double &coord1) {
   const auto nghbr = gbxmaps.coord1backward(idx);
-  const auto ndims(gbxmaps.get_ndims());
+  const auto ndims = gbxmaps.get_global_ndims();
   const auto incre = (unsigned int)ndims(0);  // increment
   // at lower x edge of domain
   if (beyond_domainboundary(idx, incre, ndims(1))) {
@@ -189,7 +189,7 @@ unsigned int change_to_forwards_coord3nghbr(const unsigned int idx, const Cartes
   const auto nghbr = (unsigned int)gbxmaps.coord3forward(idx);
   const auto incre = (unsigned int)1;  // increment
   // drop was upper z edge of domain (now moving above it)
-  if (beyond_domainboundary(idx + incre, incre, gbxmaps.get_ndim(0))) {
+  if (beyond_domainboundary(idx + incre, incre, gbxmaps.get_global_ndim(0))) {
     const auto lim1 = gbxmaps.coord3bounds(nghbr).first;  // lower lim of forward neighbour
     const auto lim2 = gbxmaps.coord3bounds(idx).second;   // upper lim of current gbx
     coord3 = DoublyPeriodicDomain::boundarycond_coord3(coord3, lim1, lim2);
@@ -206,7 +206,7 @@ unsigned int change_to_backwards_coord3nghbr(const unsigned int idx, const Carte
   const auto nghbr = gbxmaps.coord3backward(idx);
   const auto incre = (unsigned int)1;  // increment
   // drop was at lower z edge of domain (now moving below it)
-  if (beyond_domainboundary(idx, incre, gbxmaps.get_ndim(0))) {
+  if (beyond_domainboundary(idx, incre, gbxmaps.get_global_ndim(0))) {
     const auto lim1 = gbxmaps.coord3bounds(nghbr).second;  // upper lim of backward neighbour
     const auto lim2 = gbxmaps.coord3bounds(idx).first;     // lower lim of current gbx
     coord3 = DoublyPeriodicDomain::boundarycond_coord3(coord3, lim1, lim2);

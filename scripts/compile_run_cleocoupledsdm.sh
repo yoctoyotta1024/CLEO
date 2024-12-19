@@ -21,8 +21,8 @@
 ### ----- (your environment and) directory paths ------- ###
 ### ------------ and executable to compile ------------- ###
 buildtype=$1
-path2CLEO=${2:-${HOME}/CLEO}
-path2build=${3:-${path2CLEO}/build} # get from command line argument
+path2CLEO=${2:-${HOME}/CLEO}        # must be absolute path
+path2build=${3:-${path2CLEO}/build} # should be absolute path
 executable="cleocoupledsdm"
 configfile=${path2CLEO}/roughpaper/src/config/config.yaml
 run_executable=${path2build}/roughpaper/src/${executable}

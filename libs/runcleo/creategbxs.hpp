@@ -26,6 +26,7 @@
 #include <Kokkos_DualView.hpp>
 #include <Kokkos_Pair.hpp>
 #include <Kokkos_Profiling_ScopedRegion.hpp>
+#include <cassert>
 #include <iostream>
 #include <memory>
 #include <stdexcept>
@@ -113,7 +114,7 @@ class GenGridbox {
                      const viewd_supers totsupers) const {
     const auto gbxindex = GbxindexGen->next(ii);
     const auto volume = gbxmaps.get_gbxvolume(gbxindex.value);
-    const State state(state_at(ii, volume));
+    const auto state = state_at(ii, volume);
 
     return Gridbox(gbxindex, state, totsupers);
   }
@@ -142,8 +143,8 @@ class GenGridbox {
                      const viewd_constsupers::HostMirror h_totsupers) const {
     const auto gbxindex = GbxindexGen->next(ii);
     const auto volume = gbxmaps.get_gbxvolume(gbxindex.value);
-    const State state(state_at(ii, volume));
-    const kkpair_size_t refs(find_refs(team_member, h_totsupers, gbxindex.value));
+    const auto state = state_at(ii, volume);
+    const auto refs = find_refs(team_member, h_totsupers, gbxindex.value);
 
     return Gridbox(gbxindex, state, totsupers, refs);
   }
@@ -259,7 +260,7 @@ dualview_gbx create_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &gbxic,
   Kokkos::Profiling::ScopedRegion region("init_gbxs");
 
   std::cout << "\n--- create gridboxes ---\ninitialising\n";
-  const dualview_gbx gbxs(initialise_gbxs(gbxmaps, gbxic, totsupers));
+  const auto gbxs = initialise_gbxs(gbxmaps, gbxic, totsupers);
 
   std::cout << "checking initialisation\n";
   is_gbxinit_complete(gbxmaps.get_local_ngridboxes_hostcopy(), gbxs);
@@ -330,7 +331,7 @@ inline dualview_gbx initialise_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &
 template <GridboxMaps GbxMaps>
 inline void initialise_gbxs_on_host(const GbxMaps &gbxmaps, const GenGridbox &gen,
                                     const viewd_supers totsupers, const viewh_gbx h_gbxs) {
-  const size_t ngbxs(h_gbxs.extent(0));
+  const size_t ngbxs = h_gbxs.extent(0);
 
   auto h_totsupers =
       Kokkos::create_mirror_view(totsupers);  // mirror totsupers in case view is on device memory
@@ -340,7 +341,7 @@ inline void initialise_gbxs_on_host(const GbxMaps &gbxmaps, const GenGridbox &ge
                        [=](const HostTeamMember &team_member) {
                          const auto ii = team_member.league_rank();
 
-                         const Gridbox gbx(gen(team_member, ii, gbxmaps, totsupers, h_totsupers));
+                         const auto gbx = gen(team_member, ii, gbxmaps, totsupers, h_totsupers);
 
                          /* use 1 thread on host to write gbx to view */
                          team_member.team_barrier();

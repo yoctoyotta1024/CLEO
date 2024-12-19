@@ -39,15 +39,14 @@ struct SupersInGbx {
   unsigned int idx;   /**< value of gbxindex which sdgbxindex of superdrops must match */
   kkpair_size_t refs; /**< position in view of (first, last) superdrop that occupies gridbox */
 
+  /* returns true if all superdrops in subview between refs satisfy the Predicate "pred" */
   template <typename Pred>
-  bool is_pred(const Pred pred) const;
-  /* returns true if all superdrops in subview
-  between refs satisfy the Predicate "pred" */
+  KOKKOS_FUNCTION bool is_pred(const TeamMember &team_member, const Pred pred) const;
 
+  /* returns true if all superdrops in subview between r0 and r1 do not satisfy pred */
   template <typename Pred>
-  bool is_prednot(const Pred pred, const kkpair_size_t refs4pred) const;
-  /* returns true if all superdrops in subview
-  between r0 and r1 do not satisfy pred */
+  KOKKOS_FUNCTION bool is_prednot(const TeamMember &team_member, const Pred pred,
+                                  const kkpair_size_t refs4pred) const;
 
  public:
   SupersInGbx() = default;   // Kokkos requirement for a (dual)View
@@ -72,7 +71,7 @@ struct SupersInGbx {
   subview have matching index. (2) all superdrops preceeding current
   subview do not have matching index. (3) all superdrops after current
   subview also do not have matching index. */
-  bool iscorrect() const;
+  KOKKOS_FUNCTION bool iscorrect(const TeamMember &team_member) const;
 
   /* assumes totsupers is already sorted via sdgbxindex.
   sets 'refs' to pair with positions of first and last

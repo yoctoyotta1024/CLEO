@@ -79,7 +79,7 @@
 inline CoupledDynamics auto create_coupldyn(const Config &config, const CartesianMaps &gbxmaps,
                                             const unsigned int couplstep,
                                             const unsigned int t_end) {
-  const auto h_ndims = gbxmaps.get_ndims_hostcopy();
+  const auto h_ndims = gbxmaps.get_global_ndims_hostcopy();
   const std::array<size_t, 3> ndims({h_ndims(0), h_ndims(1), h_ndims(2)});
 
   const auto nsteps = (unsigned int)(std::ceil(t_end / couplstep) + 1);

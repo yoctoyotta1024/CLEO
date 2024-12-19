@@ -27,6 +27,7 @@
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
+#include <Kokkos_UnorderedMap.hpp>
 #include <filesystem>
 #include <iostream>
 #include <stdexcept>
