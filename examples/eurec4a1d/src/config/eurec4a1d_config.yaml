@@ -22,6 +22,12 @@
 # and so can the thermodynamics files when using coupled thermodynamics "fromfile".
 #
 
+### Kokkos Initialization Parameters ###
+kokkos_settings:
+  num_threads : 128                                    # number of threads for host parallel backend
+  device_id :  0                                       # device to use for device parallel backend
+  map_device_id_by : random                            # select device for execution, either "mpi_rank" or "random".
+
 ### SDM Runtime Parameters ###
 domain:
   nspacedims : 1                                                 # no. of spatial dimensions to model
