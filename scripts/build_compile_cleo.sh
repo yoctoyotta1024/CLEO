@@ -18,8 +18,8 @@ spack unload --all
 
 ### ------------------ input parameters ---------------- ###
 ### ----- You need to edit these lines to specify ------ ###
-### ----- (your environment and) directory paths ------- ###
-### ---------- and executable(s) to compile ------------ ###
+### ----- your build configuration and executables ----- ###
+### ---------------------------------------------------- ###
 buildtype=$1                                # "serial", "threads", "openmp" or "cuda"
 compilername=${2:-intel}                    # "intel" or "gcc"
 path2CLEO=${3:-${HOME}/CLEO}                # must be absolute path

@@ -24,9 +24,10 @@ make_clean=$2
 bashsrc=${CLEO_PATH2CLEO}/scripts/bash/src
 
 ### -------------------- check inputs ------------------ ###
-if [ "${CLEO_PATH2BUILD}" == "" ]
+if [[ "${CLEO_BUILDTYPE}" == "" || "${CLEO_COMPILERNAME}" == "" ||
+      "${CLEO_PATH2CLEO}" == "" || "${CLEO_PATH2BUILD}" == "" ]]
 then
-  echo "Bad inputs, path to CLEO build must be specified"
+  echo "Bad inputs, please check all the required inputs have been specified"
   exit 1
 fi
 
@@ -74,6 +75,16 @@ fi
 ### ---------------------------------------------------- ###
 
 ### ---------------- compile executables --------------- ###
+echo "### --------------- Compile Inputs -------------- ###"
+echo "CLEO_BUILDTYPE = ${CLEO_BUILDTYPE}"
+echo "CLEO_COMPILERNAME = ${CLEO_COMPILERTYPE}"
+echo "CLEO_PATH2CLEO = ${CLEO_PATH2CLEO}"
+echo "CLEO_PATH2BUILD = ${CLEO_PATH2BUILD}"
+
+echo "executables = ${executables}"
+echo "make_clean = ${make_clean}"
+echo "### ------------------------------------------- ###"
+
 if [ "${make_clean}" == "true" ]
 then
   make clean -C ${CLEO_PATH2BUILD}

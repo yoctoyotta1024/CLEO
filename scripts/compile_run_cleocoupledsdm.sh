@@ -1,45 +1,95 @@
 #!/bin/bash
-#SBATCH --job-name=run_cleocoupledsdm
+#SBATCH --job-name=compile_run_cleo
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
 #SBATCH --gpus=4
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=128
-#SBATCH --mem=10G
+#SBATCH --mem=940M
 #SBATCH --time=00:30:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=bm1183
-#SBATCH --output=./run_cleocoupledsdm_out.%j.out
-#SBATCH --error=./run_cleocoupledsdm_err.%j.out
+#SBATCH --output=./compile_run_cleo_out.%j.out
+#SBATCH --error=./compile_run_cleo_err.%j.out
 
-### ------------- PLEASE NOTE: this script assumes you ------------- ###
-### ----------- have already built CLEO in "path2build" ------------ ###
-### -------------------  directory using cmake  -------------------- ###
+set -e
+module purge
+spack unload --all
 
 ### ------------------ input parameters ---------------- ###
 ### ----- You need to edit these lines to specify ------ ###
-### ----- (your environment and) directory paths ------- ###
-### ------------ and executable to compile ------------- ###
-buildtype=$1
-path2CLEO=${2:-${HOME}/CLEO}        # must be absolute path
-path2build=${3:-${path2CLEO}/build} # should be absolute path
-executable="cleocoupledsdm"
-configfile=${path2CLEO}/roughpaper/src/config/config.yaml
-run_executable=${path2build}/roughpaper/src/${executable}
-
+### ----- your build configuration and executables ----- ###
+### ---------------------------------------------------- ###
+buildtype=$1                                                    # "serial", "threads", "openmp" or "cuda"
+compilername=${2:-intel}                                        # "intel" or "gcc"
+path2CLEO=${3:-${HOME}/CLEO}                                    # must be absolute path
+path2build=${4:-${path2CLEO}/build}                             # should be absolute path
+enableyac=${5:-false}                                           # "true" or otherwise false
+executables=${6:-"cleocoupledsdm testing"}                      # executable(s) to compile
+executable2run=${7:-${path2build}/roughpaper/src/${executable}} # path to executable to run
+configfile=${8:-${path2CLEO}/roughpaper/src/config/config.yaml} # configuration to run
 ### ---------------------------------------------------- ###
 
-### ----------------- compile executable --------------- ###
+### -------------------- check inputs ------------------ ###
+if [[ "${buildtype}" == "" || "${compilername}" == "" || "${enableyac}" == "" ||
+      "${path2CLEO}" == "" || "${path2build}" == ""  ]]
+then
+  echo "Bad inputs, please check all the required inputs have been specified"
+  exit 1
+fi
+
+if [[ "${path2CLEO}" == "${path2build}" ]]
+then
+  echo "Bad inputs, build directory cannot match the path to CLEO source"
+  exit 1
+fi
+
+if [ "${buildtype}" != "serial" ] &&
+   [ "${buildtype}" != "openmp" ] &&
+   [ "${buildtype}" != "threads" ] &&
+   [ "${buildtype}" != "cuda" ];
+then
+  echo "Bad inputs, build type must be 'serial', 'openmp', 'threads' or 'cuda'"
+  exit 1
+fi
+### ---------------------------------------------------- ###
+
+### ----------------- export inputs -------------------- ###
+export CLEO_BUILDTYPE=${buildtype}
+export CLEO_COMPILERNAME=${compilername}
+export CLEO_PATH2CLEO=${path2CLEO}
+export CLEO_PATH2BUILD=${path2build}
+export CLEO_ENABLEYAC=${enableyac}
+### ---------------------------------------------------- ###
+
+### --------------- print compiling inputs ------------- ###
+echo "### --------------- User Inputs -------------- ###"
+echo "CLEO_BUILDTYPE = ${CLEO_BUILDTYPE}"
+echo "CLEO_COMPILERNAME = ${CLEO_COMPILERTYPE}"
+echo "CLEO_PATH2BUILD = ${CLEO_PATH2BUILD}"
+echo "CLEO_ENABLEYAC = ${CLEO_ENABLEYAC}"
+echo "### ------------------------------------------- ###"
+### ---------------------------------------------------- ###
+
+### ---------------- compile executables --------------- ###
+make_clean=false
 rm ${run_executable}
-compilecmd="${path2CLEO}/scripts/bash/compile_cleo.sh ${buildtype} ${path2build} ${executable}"
+compilecmd="${CLEO_PATH2BUILD}/scripts/bash/compile_cleo.sh ${executables} ${make_clean}"
 echo ${compilecmd}
-${compilecmd}
+eval ${compilecmd}
+### ---------------------------------------------------- ###
+
+### -------------- print running inputs ---------------- ###
+echo "### --------------- User Inputs -------------- ###"
+echo "executable = ${executable2run}"
+echo "config file for executable = ${configfile}"
+echo "### ------------------------------------------- ###"
 ### ---------------------------------------------------- ###
 
 ### ------------------- run executable ----------------- ###
-cd ${path2build} && pwd
-runcmd="${path2CLEO}/scripts/bash/run_cleo.sh ${run_executable} ${configfile}"
+cd ${CLEO_PATH2BUILD} && pwd
+runcmd="${CLEO_PATH2BUILD}/scripts/bash/run_cleo.sh ${executable2run} ${configfile}"
 echo ${runcmd}
-${runcmd}
+eval ${runcmd}
 ### -------------------------------------------------- ###
