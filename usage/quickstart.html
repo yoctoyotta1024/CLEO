@@ -386,13 +386,15 @@ need to specify the type of super-droplet motion, microphysics, observer, and co
 <p>Once you’ve done that, your should have constructed all the necesary ingredients for CLEO so that
 the end of your <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> looks something like this:</p>
 <div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cm">/* Initialise Kokkos parallel environment */</span>
-<span class="n">Kokkos</span><span class="o">::</span><span class="n">initialize</span><span class="p">(</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">);</span>
+<span class="n">Kokkos</span><span class="o">::</span><span class="n">initialize</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">get_kokkos_initialization_settings</span><span class="p">());</span>
 <span class="p">{</span>
+<span class="w">  </span><span class="n">Kokkos</span><span class="o">::</span><span class="n">print_configuration</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">);</span>
+
 <span class="w">  </span><span class="cm">/* CLEO Super-Droplet Model (excluding coupled dynamics solver) */</span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">SDMMethods</span><span class="w"> </span><span class="nf">sdm</span><span class="p">(</span><span class="n">create_sdm</span><span class="p">(</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">tsteps</span><span class="p">,</span><span class="w"> </span><span class="n">dataset</span><span class="p">));</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">SDMMethods</span><span class="w"> </span><span class="n">sdm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">create_sdm</span><span class="p">(</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">tsteps</span><span class="p">,</span><span class="w"> </span><span class="n">dataset</span><span class="p">);</span>
 
 <span class="w">  </span><span class="cm">/* Run CLEO (SDM coupled to dynamics solver) */</span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">RunCLEO</span><span class="w"> </span><span class="nf">runcleo</span><span class="p">(</span><span class="n">sdm</span><span class="p">,</span><span class="w"> </span><span class="n">coupldyn</span><span class="p">,</span><span class="w"> </span><span class="n">comms</span><span class="p">);</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">runcleo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RunCLEO</span><span class="p">(</span><span class="n">sdm</span><span class="p">,</span><span class="w"> </span><span class="n">coupldyn</span><span class="p">,</span><span class="w"> </span><span class="n">comms</span><span class="p">);</span>
 <span class="w">  </span><span class="n">runcleo</span><span class="p">(</span><span class="n">initconds</span><span class="p">,</span><span class="w"> </span><span class="n">t_end</span><span class="p">);</span>
 <span class="p">}</span>
 <span class="n">Kokkos</span><span class="o">::</span><span class="n">finalize</span><span class="p">();</span>
@@ -435,7 +437,7 @@ the end of your <code class="docutils literal notranslate"><span class="pre">mai
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 19 December 2024</div>
+              Last updated on 20 December 2024</div>
           </div>
           <div class="right-details">
             
