@@ -25,6 +25,11 @@
 OptionalConfigParams::OptionalConfigParams(const std::filesystem::path config_filename) {
   const YAML::Node config = YAML::LoadFile(std::string{config_filename});
 
+  if (config["kokkos_settings"]) {
+    set_kokkos_settings(config);
+  }
+  print_kokkos_settings();
+
   if (config["microphysics"]) {
     set_microphysics(config);
   }
@@ -40,6 +45,40 @@ OptionalConfigParams::OptionalConfigParams(const std::filesystem::path config_fi
   if (config["boundary_conditions"]) {
     set_boundary_conditions(config);
   }
+}
+
+void OptionalConfigParams::set_kokkos_settings(const YAML::Node &config) {
+  const YAML::Node node = config["kokkos_settings"];
+
+  if (node["num_threads"]) {
+    kokkos_settings.set_num_threads(node["num_threads"].as<int>());
+    is_default_kokkos_settings = false;
+  }
+
+  if (node["device_id"]) {
+    kokkos_settings.set_device_id(node["device_id"].as<int>());
+    is_default_kokkos_settings = false;
+  }
+
+  if (node["map_device_id_by"]) {
+    kokkos_settings.set_map_device_id_by(node["map_device_id_by"].as<std::string>());
+    is_default_kokkos_settings = false;
+  }
+}
+
+void OptionalConfigParams::print_kokkos_settings() const {
+  std::cout << "\n-------- Kokkos Configuration Parameters --------------"
+            << "\nusing default kokkos settings (bool): " << is_default_kokkos_settings;
+  if (kokkos_settings.has_num_threads()) {
+    std::cout << "\nnum_threads: " << kokkos_settings.get_num_threads();
+  }
+  if (kokkos_settings.has_device_id()) {
+    std::cout << "\ndevice_id: " << kokkos_settings.get_device_id();
+  }
+  if (kokkos_settings.has_map_device_id_by()) {
+    std::cout << "\nmap_device_id_by: " << kokkos_settings.get_map_device_id_by();
+  }
+  std::cout << "\n---------------------------------------------------------\n";
 }
 
 void OptionalConfigParams::set_microphysics(const YAML::Node &config) {
