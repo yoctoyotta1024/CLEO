@@ -22,7 +22,7 @@ fi
 
 ### --------------- choose CUDA compiler --------------- ###
 source ${bashsrc}/levante_packages.sh
-module load ${levante_gcc_cuda}
+spack load ${levante_gcc_cuda}
 
 # set nvcc compiler used by Kokkos nvcc wrapper as CUDA_ROOT/bin/nvcc
 cuda_root=${levante_gcc_cuda_root}

@@ -20,20 +20,18 @@ then
   if [ "${CLEO_ENABLEDEBUG}" == "true" ]
   then
     ### for correctness and debugging (note -gdwarf-4 not possible for nvc++) use:
-    export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wno-unused-parameter -Wall -Wextra -pedantic -g -gdwarf-4 -O0"
+    export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wall -Wextra -pedantic -Wno-unused-parameter -g -gdwarf-4 -O0" # correctness and debugging
   else
     ### for performance use:
-    export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wall -pedantic -O3"
+    export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wall -Wextra -pedantic -Wno-unused-parameter -O3 -fma"
   fi
 elif [ "${CLEO_COMPILERNAME}" == "gcc" ]
 then
-  module load ${levante_gcc} ${levante_gcc_openmpi}
+  module load ${levante_gcc}
+  spack load ${levante_gcc_openmpi}
   spack load ${levante_gcc_cmake}
   export CLEO_CXX_COMPILER=${levante_gxx_compiler}
   export CLEO_CC_COMPILER=${levante_gcc_compiler}
-
-  echo "TODO(CB): update gcc compiler version (in YAC and cuda too!)"
-  exit 1
 
   if [ "${CLEO_ENABLEDEBUG}" == "true" ]
   then
@@ -41,7 +39,7 @@ then
     export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wno-unused-parameter -Wall -Wextra -pedantic -g -gdwarf-4 -O0 -mpc64"
   else
     ### for performance use:
-    export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wall -pedantic -O3"
+    export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wall -Wextra -pedantic -Wno-unused-parameter -O3 -mfma"
   fi
 fi
 ### ---------------------------------------------------- ###

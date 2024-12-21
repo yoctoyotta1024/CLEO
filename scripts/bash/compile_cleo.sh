@@ -42,14 +42,13 @@ then
   exit 1
 elif [ "${CLEO_COMPILERNAME}" == "gcc" ]
 then
-  module load ${levante_gcc} ${levante_gcc_openmpi}
+  module load ${levante_gcc}
+  spack load ${levante_gcc_openmpi}
   spack load ${levante_gcc_cmake}
   if [ "${CLEO_BUILDTYPE}" == "cuda" ]
   then
-    module load ${levante_gcc_cuda}
+    spack load ${levante_gcc_cuda}
   fi
-  echo "TODO(CB): update gcc compiler version (in YAC and cuda too!)"
-  exit 1
 fi
 ### ---------------------------------------------------- ###
 
