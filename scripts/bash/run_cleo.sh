@@ -5,7 +5,7 @@
 #SBATCH --gpus=4
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=128
-#SBATCH --mem=10G
+#SBATCH --mem=940M
 #SBATCH --time=00:30:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
@@ -13,29 +13,25 @@
 #SBATCH --output=./run_cleo_out.%j.out
 #SBATCH --error=./run_cleo_err.%j.out
 
-### ------------------------------------------------------------------------ ###
-### -------------- PLEASE NOTE: this script assumes you have --------------- ###
-### -------- already built CLEO and compiled the desired executable -------- ###
-### ------------------------------------------------------------------------ ###
-# TODO(CB): fix best practise for loading modules/spack/environment
+### Please note: script may assume required CLEO_[XXX]
+### variables have already exported (!)
+
+set -e
 module purge
 spack unload --all
 
-executable=$1   # get from command line argument
-configfile=$2   # get from command line argument
+executable2run=$1
+configfile=$2
+stacksize_limit=$3 # kB
+bashsrc=${CLEO_PATH2CLEO}/scripts/bash/src
+### -------------------- check inputs ------------------ ###
+source ${bashsrc}/check_inputs.sh
+check_args_not_empty "${executable2run}" "${configfile}" "${CLEO_ENABLEYAC}"
+### ---------------------------------------------------- ###
 
-if [[ "${executable}" == "" ||
-      "${configfile}" == "" ]]
-then
-  echo "Bad inputs, please check your executable and config file name"
-else
-  ### ----------------- run executable --------------- ###
-  export OMP_PROC_BIND=spread
-  export OMP_PLACES=threads
-
-  # TODO(all): add exports to paths required if YAC is enabled
-  runcmd="${executable} ${configfile}"
-  echo ${runcmd}
-  ${runcmd}
-  ### ---------------------------------------------------- ###
-fi
+### ----------------- run executable --------------- ###
+source ${bashsrc}/runtime_settings.sh ${stacksize_limit}
+runcmd="${executable2run} ${configfile}"
+echo ${runcmd}
+eval ${runcmd}
+### ---------------------------------------------------- ###

@@ -2,57 +2,76 @@
 #SBATCH --job-name=compile_cleo
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
-#SBATCH --gpus=4
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=128
-#SBATCH --mem=10G
-#SBATCH --time=00:30:00
+#SBATCH --mem=940M
+#SBATCH --time=00:05:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=bm1183
-#SBATCH --output=./compile_cleo_out.%j.out
-#SBATCH --error=./compile_cleo_err.%j.out
+#SBATCH --output=./build/bin/compile_cleo_out.%j.out
+#SBATCH --error=./build/bin/compile_cleo_err.%j.out
 
-### ------------------------------------------------------------------------ ###
-### ----------------- PLEASE NOTE: this script assumes you ----------------- ###
-### --------------- have already built CLEO in "path2build" ---------------- ###
-### -----------------------  directory using cmake  ------------------------ ###
-### ------------------------------------------------------------------------ ###
-# TODO(CB): fix best practise for loading modules/spack/environment
+### Please note: script may assume required CLEO_[XXX]
+### variables have already exported (!)
+
+set -e
 module purge
 spack unload --all
 
-buildtype=$1      # get from command line argument
-path2build=$2     # get from command line argument
-executables="$3"  # get from command line argument
+executables=$1
+make_clean=$2
+bashsrc=${CLEO_PATH2CLEO}/scripts/bash/src
 
+### -------------------- check inputs ------------------ ###
+source ${bashsrc}/check_inputs.sh
+check_args_not_empty "${CLEO_BUILDTYPE}" "${CLEO_COMPILERNAME}" \
+  "${CLEO_PATH2CLEO}" "${CLEO_PATH2BUILD}"
 
-if [ "${buildtype}" != "serial" ] && [ "${buildtype}" != "openmp" ] && [ "${buildtype}" != "cuda" ];
+check_source_and_build_paths
+check_buildtype
+check_compilername
+### ---------------------------------------------------- ###
+
+### ----------------- load compiler(s) ----------------- ###
+source ${bashsrc}/levante_packages.sh
+
+if [ "${CLEO_COMPILERNAME}" == "intel" ]
 then
-  echo "please specify the build type as 'serial', 'openmp' or 'cuda'"
-else
-  module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0 # use gcc mpi wrappers
-  spack load cmake@3.23.1%gcc
-
-  if [[ "${buildtype}" == "cuda" ]]
-  # load nvhpc compilers if compiling cuda build
+  module load ${levante_intel}
+  spack load ${levante_intel_openmpi}
+  spack load ${levante_intel_cmake}
+elif [ "${CLEO_COMPILERNAME}" == "gcc" ]
+then
+  module load ${levante_gcc}
+  spack load ${levante_gcc_openmpi}
+  spack load ${levante_gcc_cmake}
+  if [ "${CLEO_BUILDTYPE}" == "cuda" ]
   then
-    module load nvhpc/23.9-gcc-11.2.0
-  fi
-  ### ---------------------------------------------------- ###
-
-  if [[ "${buildtype}" == "" ||
-        "${path2build}" == "" ||
-        "${executables}" == "" ]]
-  then
-    echo "Bad inputs, please check your buildtype, path2build and executables"
-  else
-    ### ---------------- compile executables --------------- ###
-    echo "path to build directory: ${path2build}"
-    echo "executables: ${executables}"
-
-    cd ${path2build}
-    make -j 128 ${executables}
-    ### ---------------------------------------------------- ###
+    spack load ${levante_gcc_cuda}
   fi
 fi
+### ---------------------------------------------------- ###
+
+### ---------------- compile executables --------------- ###
+echo "### --------------- Compile Inputs -------------- ###"
+echo "CLEO_BUILDTYPE: ${CLEO_BUILDTYPE}"
+echo "CLEO_COMPILERNAME: ${CLEO_COMPILERNAME}"
+echo "CLEO_PATH2CLEO: ${CLEO_PATH2CLEO}"
+echo "CLEO_PATH2BUILD: ${CLEO_PATH2BUILD}"
+
+echo "executables: ${executables}"
+echo "make_clean: ${make_clean}"
+echo "### ------------------------------------------- ###"
+
+cd ${CLEO_PATH2BUILD} && pwd
+if [ "${make_clean}" == "true" ]
+then
+  cmd="make clean"
+  echo ${cmd}
+  eval ${cmd}
+fi
+cmd="make -j 128 ${executables}"
+echo ${cmd}
+eval ${cmd}
+### ---------------------------------------------------- ###

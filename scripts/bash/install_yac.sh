@@ -4,7 +4,7 @@
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=8
-#SBATCH --mem=10G
+#SBATCH --mem=940M
 #SBATCH --time=00:10:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
@@ -16,7 +16,6 @@
 ### running script sucessfully installs YAC and YAXT for
 ### gcc 11.2.0 compiler with openmpi 4.1.2 on Levante
 ### ------------------------------------------------------- ###
-# TODO(CB): fix best practise for loading modules/spack/environment
 module purge
 spack unload --all
 
