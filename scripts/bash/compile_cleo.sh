@@ -38,8 +38,9 @@ source ${bashsrc}/levante_packages.sh
 
 if [ "${CLEO_COMPILERNAME}" == "intel" ]
 then
-  echo "TODO(CB): intel compiler support"
-  exit 1
+  module load ${levante_intel}
+  spack load ${levante_intel_openmpi}
+  spack load ${levante_intel_cmake}
 elif [ "${CLEO_COMPILERNAME}" == "gcc" ]
 then
   module load ${levante_gcc}
