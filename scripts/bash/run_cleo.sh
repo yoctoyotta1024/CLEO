@@ -22,15 +22,15 @@ spack unload --all
 
 executable2run=$1
 configfile=$2
+stacksize_limit=$3 # kB
 bashsrc=${CLEO_PATH2CLEO}/scripts/bash/src
-
 ### -------------------- check inputs ------------------ ###
 source ${bashsrc}/check_inputs.sh
 check_args_not_empty "${executable2run}" "${configfile}" "${CLEO_ENABLEYAC}"
 ### ---------------------------------------------------- ###
 
 ### ----------------- run executable --------------- ###
-source ${bashsrc}/runtime_settings.sh
+source ${bashsrc}/runtime_settings.sh ${stacksize_limit}
 runcmd="${executable2run} ${configfile}"
 echo ${runcmd}
 eval ${runcmd}

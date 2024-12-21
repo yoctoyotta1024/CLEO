@@ -37,6 +37,7 @@ compilername=gcc
 enabledebug=false
 make_clean=false
 yacyaxtroot=/work/bm1183/m300950/yacyaxt
+stacksize_limit=204800 # ulimit -s [stacksize_limit] (kB)
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
@@ -73,7 +74,7 @@ eval ${cmd}
 export CLEO_PATH2CLEO=${path2CLEO}
 export CLEO_BUILDTYPE=${buildtype}
 export CLEO_ENABLEYAC=${enableyac}
-source ${path2CLEO}/scripts/bash/src/runtime_settings.sh
+source ${path2CLEO}/scripts/bash/src/runtime_settings.sh ${stacksize_limit}
 
 # TODO(all): split python scripts away from running executable
 ${python} ${pythonscript} ${path2CLEO} ${path2build} ${script_args}

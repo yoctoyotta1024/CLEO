@@ -29,6 +29,7 @@ enableyac=${5:-false}                                           # == "true" or o
 executables=${6:-"cleocoupledsdm testing"}                      # executable(s) to compile
 executable2run=${7:-${path2build}/roughpaper/src/${executable}} # path to executable to run
 configfile=${8:-${path2CLEO}/roughpaper/src/config/config.yaml} # configuration to run
+stacksize_limit=${9:-204800}                                    # ulimit -s [stacksize_limit] (kB)
 ### ---------------------------------------------------- ###
 
 ### -------------------- check inputs ------------------ ###
@@ -89,7 +90,7 @@ echo "### ------------------------------------------- ###"
 
 ### ------------------- run executable ----------------- ###
 cd ${CLEO_PATH2BUILD} && pwd
-runcmd="${CLEO_PATH2BUILD}/scripts/bash/run_cleo.sh ${executable2run} ${configfile}"
+runcmd="${CLEO_PATH2BUILD}/scripts/bash/run_cleo.sh ${executable2run} ${configfile} ${stacksize_limit}"
 echo ${runcmd}
 eval ${runcmd}
 ### -------------------------------------------------- ###

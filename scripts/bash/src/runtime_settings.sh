@@ -3,7 +3,7 @@
 set -e
 bashsrc=${CLEO_PATH2CLEO}/scripts/bash/src
 
-stacksize_limit={$1:-204800} # kB
+stacksize_limit=${1} # kB
 
 ### -------------------- check inputs ------------------ ###
 source ${bashsrc}/check_inputs.sh
