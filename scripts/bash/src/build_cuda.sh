@@ -1,15 +1,15 @@
 #!/bin/bash
 
+set -e
+bashsrc=${CLEO_PATH2CLEO}/scripts/bash/src
+
 ### -------------------- check inputs ------------------ ###
+source ${bashsrc}/check_inputs.sh
+check_args_not_empty "${CLEO_BUILDTYPE}" "${CLEO_CXX_COMPILER}"
+
 if [ "${CLEO_BUILDTYPE}" != "cuda" ]
 then
   echo "Bad inputs, build type for enabling cuda device must be 'cuda'"
-  exit 1
-fi
-
-if  [ "${CLEO_CXX_COMPILER}" == "" ]
-then
-  echo "Bad inputs, CXX compiler must be specified for CUDA build"
   exit 1
 fi
 

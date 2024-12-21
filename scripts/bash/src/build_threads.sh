@@ -1,8 +1,13 @@
 #!/bin/bash
 
+set -e
+bashsrc=${CLEO_PATH2CLEO}/scripts/bash/src
+
 ### -------------------- check inputs ------------------ ###
-if [ "${CLEO_BUILDTYPE}" != "threads" ] &&
-   [ "${CLEO_BUILDTYPE}" != "cuda" ];
+source ${bashsrc}/check_inputs.sh
+check_args_not_empty "${CLEO_BUILDTYPE}"
+
+if [[ "${CLEO_BUILDTYPE}" != "threads" && "${CLEO_BUILDTYPE}" != "cuda" ]];
 then
   echo "Bad inputs, build type for enabling C++ threads on host must be 'threads' or 'cuda'"
   exit 1

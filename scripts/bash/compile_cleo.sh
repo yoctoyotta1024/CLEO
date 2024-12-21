@@ -19,39 +19,18 @@ set -e
 module purge
 spack unload --all
 
-executables=($1)
+executables=$1
 make_clean=$2
 bashsrc=${CLEO_PATH2CLEO}/scripts/bash/src
 
 ### -------------------- check inputs ------------------ ###
-if [[ "${CLEO_BUILDTYPE}" == "" || "${CLEO_COMPILERNAME}" == "" ||
-      "${CLEO_PATH2CLEO}" == "" || "${CLEO_PATH2BUILD}" == "" ]]
-then
-  echo "Bad inputs, please check all the required inputs have been specified"
-  exit 1
-fi
+source ${bashsrc}/check_inputs.sh
+check_args_not_empty "${CLEO_BUILDTYPE}" "${CLEO_COMPILERNAME}" \
+  "${CLEO_PATH2CLEO}" "${CLEO_PATH2BUILD}"
 
-if [ "${CLEO_PATH2BUILD}" == "${CLEO_PATH2CLEO}" ]
-then
-  echo "Bad inputs, build directory cannot match the path to CLEO source"
-  exit 1
-fi
-
-if [[ "${CLEO_BUILDTYPE}" != "serial" &&
-      "${CLEO_BUILDTYPE}" != "openmp" &&
-      "${CLEO_BUILDTYPE}" != "threads" &&
-      "${CLEO_BUILDTYPE}" != "cuda" ]];
-then
-  echo "Bad inputs, build type must be 'serial', 'openmp', 'threads' or 'cuda'"
-  exit 1
-fi
-
-if [[ "${CLEO_COMPILERNAME}" != "intel" &&
-      "${CLEO_COMPILERNAME}" != "gcc" ]];
-then
-  echo "Bad inputs, CLEO compiler name must be 'intel' or 'gcc'"
-  exit 1
-fi
+check_source_and_build_paths
+check_buildtype
+check_compilername
 ### ---------------------------------------------------- ###
 
 ### ----------------- load compiler(s) ----------------- ###
@@ -59,8 +38,6 @@ if [ "${CLEO_COMPILERNAME}" == "intel" ]
 then
   echo "TODO(CB): intel compiler support"
   exit 1
-fi
-
 elif [ "${CLEO_COMPILERNAME}" == "gcc" ]
 then
   module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0
@@ -76,18 +53,23 @@ fi
 
 ### ---------------- compile executables --------------- ###
 echo "### --------------- Compile Inputs -------------- ###"
-echo "CLEO_BUILDTYPE = ${CLEO_BUILDTYPE}"
-echo "CLEO_COMPILERNAME = ${CLEO_COMPILERTYPE}"
-echo "CLEO_PATH2CLEO = ${CLEO_PATH2CLEO}"
-echo "CLEO_PATH2BUILD = ${CLEO_PATH2BUILD}"
+echo "CLEO_BUILDTYPE: ${CLEO_BUILDTYPE}"
+echo "CLEO_COMPILERNAME: ${CLEO_COMPILERNAME}"
+echo "CLEO_PATH2CLEO: ${CLEO_PATH2CLEO}"
+echo "CLEO_PATH2BUILD: ${CLEO_PATH2BUILD}"
 
-echo "executables = ${executables}"
-echo "make_clean = ${make_clean}"
+echo "executables: ${executables}"
+echo "make_clean: ${make_clean}"
 echo "### ------------------------------------------- ###"
 
+cd ${CLEO_PATH2BUILD} && pwd
 if [ "${make_clean}" == "true" ]
 then
-  make clean -C ${CLEO_PATH2BUILD}
+  cmd="make clean"
+  echo ${cmd}
+  eval ${cmd}
 fi
-make -C ${CLEO_PATH2BUILD} -j 128 ${executables}
+cmd="make -j 128 ${executables}"
+echo ${cmd}
+eval ${cmd}
 ### ---------------------------------------------------- ###

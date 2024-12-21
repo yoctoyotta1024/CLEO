@@ -1,29 +1,13 @@
 #!/bin/bash
 
 set -e
+bashsrc=${CLEO_PATH2CLEO}/scripts/bash/src
 
 ### -------------------- check inputs ------------------ ###
-if [ "${CLEO_BUILDTYPE}" != "serial" ] &&
-   [ "${CLEO_BUILDTYPE}" != "openmp" ] &&
-   [ "${CLEO_BUILDTYPE}" != "threads" ] &&
-   [ "${CLEO_BUILDTYPE}" != "cuda" ];
-then
-  echo "Bad inputs, build type must be 'serial', 'openmp', 'threads' or 'cuda'"
-  exit 1
-fi
-
-if [ "${CLEO_COMPILERNAME}" == "" || "${CLEO_ENABLEDEBUG}" ]
-then
-  echo "Bad inputs, please specify CLEO compiler name and debuging mode"
-  exit 1
-fi
-
-if [ "${CLEO_COMPILERNAME}" != "intel" ] &&
-   [ "${CLEO_COMPILERNAME}" != "gcc" ];
-then
-  echo "Bad inputs, CLEO compiler name must be 'intel' or 'gcc'"
-  exit 1
-fi
+source ${bashsrc}/check_inputs.sh
+check_args_not_empty "${CLEO_COMPILERNAME}" "${CLEO_ENABLEDEBUG}"
+check_buildtype
+check_compilername
 ### ---------------------------------------------------- ###
 
 ### -------- choose compiler(s) and their flags -------- ###
@@ -39,8 +23,6 @@ then
     ### for performance use:
     export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wall -pedantic -O3"
   fi
-fi
-
 elif [ "${CLEO_COMPILERNAME}" == "gcc" ]
 then
   module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0

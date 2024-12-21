@@ -1,8 +1,13 @@
 #!/bin/bash
 
+set -e
+bashsrc=${CLEO_PATH2CLEO}/scripts/bash/src
+
 ### -------------------- check inputs ------------------ ###
-if [ "${CLEO_BUILDTYPE}" != "openmp" ] &&
-   [ "${CLEO_BUILDTYPE}" != "cuda" ];
+source ${bashsrc}/check_inputs.sh
+check_args_not_empty "${CLEO_BUILDTYPE}"
+
+if [[ "${CLEO_BUILDTYPE}" != "openmp" && "${CLEO_BUILDTYPE}" != "cuda" ]];
 then
   echo "Bad inputs, build type for enabling openmp on host must be 'openmp' or 'cuda'"
   exit 1

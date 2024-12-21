@@ -1,11 +1,11 @@
 #!/bin/bash
 
+set -e
+bashsrc=${CLEO_PATH2CLEO}/scripts/bash/src
+
 ### -------------------- check inputs ------------------ ###
-if [ "${CLEO_BUILDTYPE}" != "" ]
-then
-  echo "Bad inputs, build type required for runtime optimisations"
-  exit 1
-fi
+source ${bashsrc}/check_inputs.sh
+check_args_not_empty "${CLEO_BUILDTYPE}"
 ### ---------------------------------------------------- ###
 
 ### --------------- set runtime optimisations----------- ###

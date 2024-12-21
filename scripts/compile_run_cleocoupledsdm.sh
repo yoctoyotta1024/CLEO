@@ -66,7 +66,7 @@ export CLEO_ENABLEYAC=${enableyac}
 ### --------------- print compiling inputs ------------- ###
 echo "### --------------- User Inputs -------------- ###"
 echo "CLEO_BUILDTYPE = ${CLEO_BUILDTYPE}"
-echo "CLEO_COMPILERNAME = ${CLEO_COMPILERTYPE}"
+echo "CLEO_COMPILERNAME = ${CLEO_COMPILERNAME}"
 echo "CLEO_PATH2BUILD = ${CLEO_PATH2BUILD}"
 echo "CLEO_ENABLEYAC = ${CLEO_ENABLEYAC}"
 echo "### ------------------------------------------- ###"

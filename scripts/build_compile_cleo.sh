@@ -24,22 +24,21 @@ buildtype=$1                                # "serial", "threads", "openmp" or "
 compilername=${2:-intel}                    # "intel" or "gcc"
 path2CLEO=${3:-${HOME}/CLEO}                # must be absolute path
 path2build=${4:-${path2CLEO}/build}         # should be absolute path
-enabledebug=${5:-false}                     # "true" or otherwise false
-enableyac=${6:-false}                       # "true" or otherwise false
-executables=${7:-"cleocoupledsdm testing"}  # list of executables to compile
-yacyaxtroot=/work/bm1183/m300950/yacyaxt    # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
+executables=${5:-"cleocoupledsdm"}          # list of executables to compile
+enabledebug=${6:-false}                     # "true" or otherwise false
+enableyac=${7:-false}                       # "true" or otherwise false
+yacyaxtroot=${8:-/work/bm1183/m300950/yacyaxt} # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
 ### ---------------------------------------------------- ###
 
-### -------------------- check inputs ------------------ ###
+### ------------------ check arguments ----------------- ###
 if [ "${path2CLEO}" == "" ]
 then
   echo "Please provide path to CLEO source directory"
   exit 1
 fi
-echo ${path2CLEO}/scripts/bash/src/check_inputs.sh
 source ${path2CLEO}/scripts/bash/src/check_inputs.sh
-
-check_inputs "${buildtype}" "${compilername}" "${enabledebug}" "${path2CLEO}" "${path2build}" "${enableyac}"
+check_args_not_empty "${buildtype}" "${compilername}" "${enabledebug}" "${path2CLEO}" "${path2build}" "${enableyac}"
+### ---------------------------------------------------- ###
 
 ### ----------------- export inputs -------------------- ###
 export CLEO_BUILDTYPE=${buildtype}
@@ -58,7 +57,7 @@ fi
 ### -------------------- check inputs ------------------ ###
 check_source_and_build_paths
 check_buildtype
-check_compiler_name
+check_compilername
 check_yac
 ### ---------------------------------------------------- ###
 
@@ -83,7 +82,7 @@ eval ${buildcmd}
 
 ### ---------------- compile executables --------------- ###
 make_clean=true
-compilecmd="${CLEO_PATH2CLEO}/scripts/bash/compile_cleo.sh ${executables} ${make_clean}"
+compilecmd="${CLEO_PATH2CLEO}/scripts/bash/compile_cleo.sh \"${executables}\" ${make_clean}"
 echo ${compilecmd}
 eval ${compilecmd}
 ### ---------------------------------------------------- ###

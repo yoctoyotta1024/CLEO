@@ -1,21 +1,15 @@
 #!/bin/bash
 
+set -e
+bashsrc=${CLEO_PATH2CLEO}/scripts/bash/src
+
 ### -------------------- check inputs ------------------ ###
-if [ ${CLEO_ENABLEYAC} != "true" || ${CLEO_YACYAXTROOT} == "" ]
+source ${bashsrc}/check_inputs.sh
+check_args_not_empty "${CLEO_PATH2CLEO}" "${CLEO_CXX_COMPILER}" "${CLEO_ENABLEYAC}"
+
+if [ [ ${CLEO_ENABLEYAC} != "true" || ${CLEO_YACYAXTROOT} == "" ]]
 then
   echo "Bad inputs, YAC must be enabled and yacyaxtroot directory must be specified for YAC build"
-  exit 1
-fi
-
-if [ "${CLEO_PATH2CLEO}" == "" ]
-then
-  echo "Bad inputs, path to CLEO source must be specified for YAC build"
-  exit 1
-fi
-
-if  [ "${CLEO_CXX_COMPILER}" == "" ]
-then
-  echo "Bad inputs, CXX compiler must be specified for YAC build"
   exit 1
 fi
 
