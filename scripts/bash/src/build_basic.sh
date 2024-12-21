@@ -11,6 +11,8 @@ check_compilername
 ### ---------------------------------------------------- ###
 
 ### -------- choose compiler(s) and their flags -------- ###
+source ${bashsrc}/levante_packages.sh
+
 if [ "${CLEO_COMPILERNAME}" == "intel" ]
 then
   echo "TODO(CB): intel compiler support"
@@ -25,10 +27,10 @@ then
   fi
 elif [ "${CLEO_COMPILERNAME}" == "gcc" ]
 then
-  module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0
-  spack load cmake@3.23.1%gcc
-  export CLEO_CXX_COMPILER="/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpic++"
-  export CLEO_CC_COMPILER="/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpicc"
+  module load ${levante_gcc} ${levante_gcc_openmpi}
+  spack load ${levante_gcc_cmake}
+  export CLEO_CXX_COMPILER=${levante_gxx_compiler}
+  export CLEO_CC_COMPILER=${levante_gcc_compiler}
 
   echo "TODO(CB): update gcc compiler version (in YAC and cuda too!)"
   exit 1

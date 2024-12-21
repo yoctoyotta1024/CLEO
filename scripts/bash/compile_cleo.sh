@@ -34,17 +34,19 @@ check_compilername
 ### ---------------------------------------------------- ###
 
 ### ----------------- load compiler(s) ----------------- ###
+source ${bashsrc}/levante_packages.sh
+
 if [ "${CLEO_COMPILERNAME}" == "intel" ]
 then
   echo "TODO(CB): intel compiler support"
   exit 1
 elif [ "${CLEO_COMPILERNAME}" == "gcc" ]
 then
-  module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0
-  spack load cmake@3.23.1%gcc
+  module load ${levante_gcc} ${levante_gcc_openmpi}
+  spack load ${levante_gcc_cmake}
   if [ "${CLEO_BUILDTYPE}" == "cuda" ]
   then
-    module load nvhpc/23.9-gcc-11.2.0
+    module load ${levante_gcc_cuda}
   fi
   echo "TODO(CB): update gcc compiler version (in YAC and cuda too!)"
   exit 1
