@@ -57,8 +57,11 @@ C1 0.305725 1.64846 13.7267          # test G (new observers / data output libra
 A0 0.529342 1.48977 16.2189          # (new) test A after change to condensation at v0.17.1
 A1 0.527819 1.46074 16.8407          # (new) test A after change to condensation at v0.17.1
 
-A0 0.635192 1.505808 17.165402       # (new) test A after removing RunStats obs at v0.29.0
-A1 0.619722 1.511115 17.108600       # (new) test A after removing RunStats obs at v0.29.0
+A0 0.635192 1.505808 17.165402       # test A after removing RunStats obs at v0.29.0
+A1 0.619722 1.511115 17.108600       # test A after removing RunStats obs at v0.29.0
 
-A0 0.541116 0.438037 5.746167        # (new) after optimising initialisation at v0.29.5
-A1 0.547648 0.422167 5.884430        # (new) after optimising initialisation at v0.29.5
+A0 0.541116 0.438037 5.746167        # after optimising initialisation at v0.29.5
+A1 0.547648 0.422167 5.884430        # after optimising initialisation at v0.29.5
+
+A0 0.546275 0.319407 1.764127        # new bash for compiler & runtime optimisations and intel compiler at v0.30.0
+A1 0.540315 0.312013 1.757403        # new bash for coppiler & runtime optimisations and intel compiler at v0.30.0
