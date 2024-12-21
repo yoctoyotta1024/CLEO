@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.30.1](https://github.com/yoctoyotta1024/CLEO/compare/ffbd7900b9ef26749c0fb9c6b619584b83c143a6..v0.30.1) - 2024-12-21
+#### Bug Fixes
+- add spdtest results for new bash scripts - ([ffbd790](https://github.com/yoctoyotta1024/CLEO/commit/ffbd7900b9ef26749c0fb9c6b619584b83c143a6)) - clara.bayley
+
+- - -
+
 ## [v0.30.0](https://github.com/yoctoyotta1024/CLEO/compare/1eb2f8afdf612f148fbde1ced64bef78a737f0ec..v0.30.0) - 2024-12-21
 #### Bug Fixes
 - correctly pass stacksize_limit - ([3a90e8f](https://github.com/yoctoyotta1024/CLEO/commit/3a90e8ff3a3625fc8894cde4c5474ed4f878e92f)) - clara.bayley
