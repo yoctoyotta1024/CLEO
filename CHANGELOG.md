@@ -2,6 +2,40 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.30.0](https://github.com/yoctoyotta1024/CLEO/compare/1eb2f8afdf612f148fbde1ced64bef78a737f0ec..v0.30.0) - 2024-12-21
+#### Bug Fixes
+- correctly pass stacksize_limit - ([3a90e8f](https://github.com/yoctoyotta1024/CLEO/commit/3a90e8ff3a3625fc8894cde4c5474ed4f878e92f)) - clara.bayley
+- fix partition for building gpu - ([43f0467](https://github.com/yoctoyotta1024/CLEO/commit/43f04678f3dd03d4c65aa9bb3e95cccdcaa337f1)) - clara.bayley
+- debugging new scripts and tinkering - ([069e504](https://github.com/yoctoyotta1024/CLEO/commit/069e504813c9a6b00324681851cfe8a9cb5a5e2b)) - clara.bayley
+#### Features
+- add runtime optimisations for Levante - ([dc88aed](https://github.com/yoctoyotta1024/CLEO/commit/dc88aed3e0c15bc34673a373fbbff271a3d372a0)) - clara.bayley
+#### Miscellaneous Chores
+- move files - ([c9fa5d4](https://github.com/yoctoyotta1024/CLEO/commit/c9fa5d4698d8385b019fcb1656d1a40001eb10a0)) - clara.bayley
+#### Performance Improvements
+- be clearer on arg descriptions - ([2be2e3b](https://github.com/yoctoyotta1024/CLEO/commit/2be2e3bd38c5a1fd70910537fc8d2f3c21c8f9f8)) - clara.bayley
+#### Refactoring
+- add YAC runtime settings - ([7873891](https://github.com/yoctoyotta1024/CLEO/commit/7873891ddb92f2823d436e32163dbdf65dba0b65)) - clara.bayley
+- run examples with intel compiler unless cuda build - ([a61c2dc](https://github.com/yoctoyotta1024/CLEO/commit/a61c2dc68ecc0c8d1a875436e173edd3219730de)) - clara.bayley
+- add intel compiler option - ([91ec4d5](https://github.com/yoctoyotta1024/CLEO/commit/91ec4d56c0fc0f54d9059bc937ea809e5efcbd75)) - clara.bayley
+- update gcc compiler version and flags - ([1253918](https://github.com/yoctoyotta1024/CLEO/commit/125391819c9eb2cfdce849283c58858a21068e6e)) - clara.bayley
+- move packages into seperate file - ([767c7e2](https://github.com/yoctoyotta1024/CLEO/commit/767c7e2b1492b4447c68a6cb745a2663b67b4f91)) - clara.bayley
+- allow examples and run_cleo script to use same runtime settings - ([6f0fc26](https://github.com/yoctoyotta1024/CLEO/commit/6f0fc26b843aa2592d9614617850d8661cebe753)) - clara.bayley
+- update slurm of running example submission scripts - ([500d1d0](https://github.com/yoctoyotta1024/CLEO/commit/500d1d04bb6de8220d5d0784ab41bf79e60c037b)) - clara.bayley
+- failed exit to running examples if wrong name used - ([482e8f9](https://github.com/yoctoyotta1024/CLEO/commit/482e8f976ca6b63fe7ecad84794b81fe6b098211)) - clara.bayley
+- first draft import from check_inputs function script - ([d120920](https://github.com/yoctoyotta1024/CLEO/commit/d120920e7a32b0d72b88df2084aafaa6b157458f)) - clara.bayley
+- new scripts for compiling and running cleo first draft - ([9b5277d](https://github.com/yoctoyotta1024/CLEO/commit/9b5277d94f2ab0e454faf805afc97eeea8196bb8)) - clara.bayley
+- move install yac helper script - ([87e6a94](https://github.com/yoctoyotta1024/CLEO/commit/87e6a940ea09ecb89e9311e8b0c39d14ad89be2a)) - clara.bayley
+- delete old redundant bash build helper files - ([e19b12d](https://github.com/yoctoyotta1024/CLEO/commit/e19b12d3abd146f491bd2cbc11a562e2b443cc1f)) - clara.bayley
+- new scripts for building cleo firsrt draft - ([3129682](https://github.com/yoctoyotta1024/CLEO/commit/312968233f9c0fd9a71524480a0b5af265d932eb)) - clara.bayley
+- new bash script for interface to building and compiling CLEO - ([079b0a0](https://github.com/yoctoyotta1024/CLEO/commit/079b0a0c4c3a9c7b3c570322dd0f516cf1c5586d)) - clara.bayley
+- move install yac helper script - ([1a6c932](https://github.com/yoctoyotta1024/CLEO/commit/1a6c9328d7393097ec79989a41497a0726c4dec4)) - clara.bayley
+- modify inputfiles slurm settings - ([14ea428](https://github.com/yoctoyotta1024/CLEO/commit/14ea428b4e7f72deea45ae71355667b0473051ab)) - clara.bayley
+- initialise kokkos from struct given by config - ([270c5ed](https://github.com/yoctoyotta1024/CLEO/commit/270c5ed2b8925d3571da7617b2183a1499b5f365)) - clara.bayley
+- specify resoures for examples - ([78925f9](https://github.com/yoctoyotta1024/CLEO/commit/78925f9db5b965eec6e1e9bfff7cf7006eba6ac0)) - clara.bayley
+- initialise kokkos from struct given by config - ([1eb2f8a](https://github.com/yoctoyotta1024/CLEO/commit/1eb2f8afdf612f148fbde1ced64bef78a737f0ec)) - clara.bayley
+
+- - -
+
 ## [v0.29.5](https://github.com/yoctoyotta1024/CLEO/compare/283e6feaf54436720704f52736f09a3b348e934a..v0.29.5) - 2024-12-19
 #### Bug Fixes
 - revert parallelising finding partition algorithm - ([c2b01e0](https://github.com/yoctoyotta1024/CLEO/commit/c2b01e0cec57546ff952ab8c0862fb79ae269dc4)) - clara.bayley
