@@ -33,11 +33,17 @@ script_args="$7"
 
 cleoenv=/work/bm1183/m300950/bin/envs/cleoenv
 python=${cleoenv}/bin/python3
-compilername=gcc
 enabledebug=false
 make_clean=false
 yacyaxtroot=/work/bm1183/m300950/yacyaxt
 stacksize_limit=204800 # ulimit -s [stacksize_limit] (kB)
+
+if [ "${buildtype}" == "cuda" ]
+then
+  compilername=gcc
+else
+  compilername=intel
+fi
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
