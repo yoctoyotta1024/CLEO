@@ -3,8 +3,8 @@
 #SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=256
-#SBATCH --mem=10G
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=940MB
 #SBATCH --time=00:10:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
@@ -26,13 +26,16 @@
 buildtype=$1
 path2CLEO=$2
 path2build=$3
-enableyac=$4      # required "true" or otherwise
+enableyac=$4
 executables="$5"
 pythonscript=$6
 script_args="$7"
 
 cleoenv=/work/bm1183/m300950/bin/envs/cleoenv
 python=${cleoenv}/bin/python3
+compilername=gcc
+enabledebug=false
+make_clean=false
 yacyaxtroot=/work/bm1183/m300950/yacyaxt
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
@@ -40,28 +43,38 @@ yacyaxtroot=/work/bm1183/m300950/yacyaxt
 
 ### -------------------- print inputs ------------------ ###
 echo "----- Running Example -----"
-echo "buildtype:  ${buildtype}"
-echo "path2CLEO: ${path2CLEO}"
-echo "path2build: ${path2build}"
-echo "enableyac: ${enableyac}"
-echo "executables: ${executables}"
-echo "pythonscript: ${pythonscript}"
-echo "script_args: ${script_args}"
+echo "buildtype = ${buildtype}"
+echo "compilername = ${compilername}"
+echo "path2CLEO = ${path2CLEO}"
+echo "path2build = ${path2build}"
+echo "enableyac = ${enableyac}"
+echo "executables = ${executables}"
+echo "pythonscript = ${pythonscript}"
+echo "script_args = ${script_args}"
 echo "---------------------------"
 ### ---------------------------------------------------- ###
 
-### ---------------------- build CLEO ------------------ ###
-${path2CLEO}/scripts/bash/build_cleo.sh ${buildtype} ${path2CLEO} ${path2build} ${enableyac} ${yacyaxtroot}
-### ---------------------------------------------------- ###
-
-### --------- compile executable(s) from scratch ---------- ###
-${path2CLEO}/scripts/bash/compile_cleo.sh ${buildtype} ${path2build} "${executables}"
+### --------------- build and compile CLEO ------------- ###
+cmd="${path2CLEO}/scripts/build_compile_cleo.sh \
+  ${buildtype}
+  ${compilername}
+  ${path2CLEO}
+  ${path2build}
+  "\"${executables}\""
+  ${enabledebug}
+  ${enableyac}
+  ${yacyaxtroot}
+  ${make_clean}"
+echo ${cmd}
+eval ${cmd}
 ### ---------------------------------------------------- ###
 
 ### --------- run model through Python script ---------- ###
-export OMP_PROC_BIND=spread
-export OMP_PLACES=threads
+export CLEO_PATH2CLEO=${path2CLEO}
+export CLEO_BUILDTYPE=${buildtype}
+export CLEO_ENABLEYAC=${enableyac}
+source ${path2CLEO}/scripts/bash/src/runtime_settings.sh
 
-# TODO(all): add exports to paths required if YAC is enabled
+# TODO(all): split python scripts away from running executable
 ${python} ${pythonscript} ${path2CLEO} ${path2build} ${script_args}
 ### ---------------------------------------------------- ###

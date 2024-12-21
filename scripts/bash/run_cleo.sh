@@ -25,22 +25,12 @@ configfile=$2
 bashsrc=${CLEO_PATH2CLEO}/scripts/bash/src
 
 ### -------------------- check inputs ------------------ ###
-if [[ "${executable}" == "" || "${configfile}" == "" || "${CLEO_ENABLEYAC}"]]
-if [[ "${CLEO_BUILDTYPE}" == "" || "${CLEO_COMPILERNAME}" == "" || "${CLEO_ENABLEDEBUG}" == "" ||
-      "${CLEO_PATH2CLEO}" == "" || "${CLEO_PATH2BUILD}" == ""  == "" ]]
-then
-  echo "Bad inputs, please check all the required inputs have been specified"
-  exit 1
-fi
+source ${bashsrc}/check_inputs.sh
+check_args_not_empty "${executable2run}" "${configfile}" "${CLEO_ENABLEYAC}"
 ### ---------------------------------------------------- ###
 
-if [ "${CLEO_ENABLEYAC}" == "true" ]
-then
-  source ${bashsrc}/runtime_yac.sh
-fi
-
 ### ----------------- run executable --------------- ###
-source ${bashsrc}/runtime_optimisations.sh
+source ${bashsrc}/runtime_settings.sh
 runcmd="${executable2run} ${configfile}"
 echo ${runcmd}
 eval ${runcmd}
