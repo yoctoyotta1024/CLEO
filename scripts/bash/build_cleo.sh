@@ -29,16 +29,16 @@ then
   exit 1
 fi
 
-if [[ "${CLEO_PATH2CLEO}" == "${CLEO_PATH2BUILD}" ]]
+if [ "${CLEO_PATH2CLEO}" == "${CLEO_PATH2BUILD}" ]
 then
   echo "Bad inputs, build directory cannot match the path to CLEO source"
   exit 1
 fi
 
-if [ "${CLEO_BUILDTYPE}" != "serial" ] &&
-   [ "${CLEO_BUILDTYPE}" != "openmp" ] &&
-   [ "${CLEO_BUILDTYPE}" != "threads" ] &&
-   [ "${CLEO_BUILDTYPE}" != "cuda" ];
+if [[ "${CLEO_BUILDTYPE}" != "serial" &&
+      "${CLEO_BUILDTYPE}" != "openmp" &&
+      "${CLEO_BUILDTYPE}" != "threads" &&
+      "${CLEO_BUILDTYPE}" != "cuda" ]];
 then
   echo "Bad inputs, build type must be 'serial', 'openmp', 'threads' or 'cuda'"
   exit 1
@@ -105,7 +105,7 @@ cmake -DCMAKE_CXX_COMPILER=${CLEO_CXX_COMPILER} \
     ${CLEO_KOKKOS_BASIC_FLAGS} ${CLEO_KOKKOS_HOST_FLAGS} ${CLEO_KOKKOS_DEVICE_FLAGS} \
     ${CLEO_YAC_FLAGS}
 
-# ensure these directories exist (it's a good idea for later use)
+### ensure these directories exist (it's a good idea for later use)
 mkdir -p ${CLEO_PATH2BUILD}/tmp
 mkdir -p ${CLEO_PATH2BUILD}/bin
 mkdir -p ${CLEO_PATH2BUILD}/share

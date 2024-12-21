@@ -31,23 +31,23 @@ then
   exit 1
 fi
 
-if [[ "${CLEO_PATH2BUILD}" == "${CLEO_PATH2CLEO}" ]]
+if [ "${CLEO_PATH2BUILD}" == "${CLEO_PATH2CLEO}" ]
 then
   echo "Bad inputs, build directory cannot match the path to CLEO source"
   exit 1
 fi
 
-if [ "${CLEO_BUILDTYPE}" != "serial" ] &&
-   [ "${CLEO_BUILDTYPE}" != "openmp" ] &&
-   [ "${CLEO_BUILDTYPE}" != "threads" ] &&
-   [ "${CLEO_BUILDTYPE}" != "cuda" ];
+if [[ "${CLEO_BUILDTYPE}" != "serial" &&
+      "${CLEO_BUILDTYPE}" != "openmp" &&
+      "${CLEO_BUILDTYPE}" != "threads" &&
+      "${CLEO_BUILDTYPE}" != "cuda" ]];
 then
   echo "Bad inputs, build type must be 'serial', 'openmp', 'threads' or 'cuda'"
   exit 1
 fi
 
-if [ "${CLEO_COMPILERNAME}" != "intel" ] &&
-   [ "${CLEO_COMPILERNAME}" != "gcc" ];
+if [[ "${CLEO_COMPILERNAME}" != "intel" &&
+      "${CLEO_COMPILERNAME}" != "gcc" ]];
 then
   echo "Bad inputs, CLEO compiler name must be 'intel' or 'gcc'"
   exit 1

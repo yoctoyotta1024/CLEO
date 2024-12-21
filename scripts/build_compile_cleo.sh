@@ -31,34 +31,15 @@ yacyaxtroot=/work/bm1183/m300950/yacyaxt    # yac and yaxt in yacyaxtroot/yac an
 ### ---------------------------------------------------- ###
 
 ### -------------------- check inputs ------------------ ###
-if [[ "${buildtype}" == "" || "${compilername}" == "" || "${enabledebug}" == "" ||
-      "${path2CLEO}" == "" || "${path2build}" == "" || "${enableyac}" == "" ]]
+if [ "${path2CLEO}" == "" ]
 then
-  echo "Bad inputs, please check all the required inputs have been specified"
+  echo "Please provide path to CLEO source directory"
   exit 1
 fi
+echo ${path2CLEO}/scripts/bash/src/check_inputs.sh
+source ${path2CLEO}/scripts/bash/src/check_inputs.sh
 
-if [[ "${path2CLEO}" == "${path2build}" ]]
-then
-  echo "Bad inputs, build directory cannot match the path to CLEO source"
-  exit 1
-fi
-
-if [ "${CLEO_BUILDTYPE}" != "serial" ] &&
-   [ "${CLEO_BUILDTYPE}" != "openmp" ] &&
-   [ "${CLEO_BUILDTYPE}" != "threads" ] &&
-   [ "${CLEO_BUILDTYPE}" != "cuda" ];
-then
-  echo "Bad inputs, build type must be 'serial', 'openmp', 'threads' or 'cuda'"
-  exit 1
-fi
-
-if [ ${CLEO_ENABLEYAC} == "true" && ${CLEO_YACYAXTROOT} == "" ]
-then
-  echo "Bad inputs, yacyaxtroot directory must be specified if YAC is enabled"
-  exit 1
-fi
-### ---------------------------------------------------- ###
+check_inputs "${buildtype}" "${compilername}" "${enabledebug}" "${path2CLEO}" "${path2build}" "${enableyac}"
 
 ### ----------------- export inputs -------------------- ###
 export CLEO_BUILDTYPE=${buildtype}
@@ -74,10 +55,17 @@ then
 fi
 ### ---------------------------------------------------- ###
 
+### -------------------- check inputs ------------------ ###
+check_source_and_build_paths
+check_buildtype
+check_compiler_name
+check_yac
+### ---------------------------------------------------- ###
+
 ### -------------------- print inputs ------------------- ###
 echo "### --------------- User Inputs -------------- ###"
 echo "CLEO_BUILDTYPE = ${CLEO_BUILDTYPE}"
-echo "CLEO_COMPILERNAME = ${CLEO_COMPILERTYPE}"
+echo "CLEO_COMPILERNAME = ${CLEO_COMPILERNAME}"
 echo "CLEO_PATH2CLEO = ${CLEO_PATH2CLEO}"
 echo "CLEO_PATH2BUILD = ${CLEO_PATH2BUILD}"
 echo "CLEO_ENABLEDEBUG = ${CLEO_ENABLEDEBUG}"
@@ -88,14 +76,14 @@ echo "### ------------------------------------------- ###"
 ### ---------------------------------------------------- ###
 
 ### --------------------- build CLEO ------------------- ###
-buildcmd="${CLEO_PATH2BUILD}/scripts/bash/build_cleo.sh"
+buildcmd="${CLEO_PATH2CLEO}/scripts/bash/build_cleo.sh"
 echo ${buildcmd}
 eval ${buildcmd}
 ### ---------------------------------------------------- ###
 
 ### ---------------- compile executables --------------- ###
 make_clean=true
-compilecmd="${CLEO_PATH2BUILD}/scripts/bash/compile_cleo.sh ${executables} ${make_clean}"
+compilecmd="${CLEO_PATH2CLEO}/scripts/bash/compile_cleo.sh ${executables} ${make_clean}"
 echo ${compilecmd}
 eval ${compilecmd}
 ### ---------------------------------------------------- ###
