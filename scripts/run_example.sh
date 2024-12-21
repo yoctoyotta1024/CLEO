@@ -20,7 +20,7 @@ examplesdir=${path2CLEO}/examples
 if [ "${example}" == "" ]
 then
   echo "Please specify and example to run"
-  exit 0
+  exit 1
 
 else
   if [ "${example}" == "as2017" ]
@@ -65,5 +65,6 @@ else
 
   else
     echo "'${example}' is not an example"
+    exit 1
   fi
 fi
