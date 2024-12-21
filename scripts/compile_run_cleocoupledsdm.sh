@@ -25,7 +25,7 @@ buildtype=$1                                                    # "serial", "thr
 compilername=${2:-intel}                                        # "intel" or "gcc"
 path2CLEO=${3:-${HOME}/CLEO}                                    # must be absolute path
 path2build=${4:-${path2CLEO}/build}                             # should be absolute path
-enableyac=${5:-false}                                           # "true" or otherwise false
+enableyac=${5:-false}                                           # == "true" or otherwise false
 executables=${6:-"cleocoupledsdm testing"}                      # executable(s) to compile
 executable2run=${7:-${path2build}/roughpaper/src/${executable}} # path to executable to run
 configfile=${8:-${path2CLEO}/roughpaper/src/config/config.yaml} # configuration to run

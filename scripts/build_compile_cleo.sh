@@ -6,7 +6,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=128
 #SBATCH --mem=940M
-#SBATCH --time=00:05:00
+#SBATCH --time=00:15:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=bm1183
@@ -26,9 +26,10 @@ compilername=${2:-intel}                    # "intel" or "gcc"
 path2CLEO=${3:-${HOME}/CLEO}                # must be absolute path
 path2build=${4:-${path2CLEO}/build}         # should be absolute path
 executables=${5:-"cleocoupledsdm"}          # list of executables to compile
-enabledebug=${6:-false}                     # "true" or otherwise false
-enableyac=${7:-false}                       # "true" or otherwise false
+enabledebug=${6:-false}                     # == "true" or otherwise false
+enableyac=${7:-false}                       # == "true" or otherwise false
 yacyaxtroot=${8:-/work/bm1183/m300950/yacyaxt} # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
+make_clean=${9:-true}                       # == "true" or otherwise false
 ### ---------------------------------------------------- ###
 
 ### ------------------ check arguments ----------------- ###
@@ -82,7 +83,6 @@ eval ${buildcmd}
 ### ---------------------------------------------------- ###
 
 ### ---------------- compile executables --------------- ###
-make_clean=true
 compilecmd="${CLEO_PATH2CLEO}/scripts/bash/compile_cleo.sh \"${executables}\" ${make_clean}"
 echo ${compilecmd}
 eval ${compilecmd}
