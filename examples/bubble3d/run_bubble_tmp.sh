@@ -100,4 +100,12 @@ then
     ${path2CLEO}/examples/bubble3d/yac_bubble_data_reader.py \
     ${icon_grid_file_copy} ${icon_data_file_copy} ${icon_grid_name} ${icon_data_timestep} \
     ${cleo_coupling_timestep} ${cleo_t_end} ${cleo_num_vertical_levels}
+
+elif [ "${action}" == "plot" ]
+then
+  /work/bm1183/m300950/bin/envs/cleoenv/bin/python \
+    ${path2CLEO}/examples/bubble3d/bubble3d_plotting.py \
+    ${path2CLEO} \
+    ${path2build} \
+    ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml
 fi
