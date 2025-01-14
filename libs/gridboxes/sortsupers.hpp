@@ -21,11 +21,11 @@
 #ifndef LIBS_GRIDBOXES_SORTSUPERS_HPP_
 #define LIBS_GRIDBOXES_SORTSUPERS_HPP_
 
-#include <algorithm>
-
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Profiling_ScopedRegion.hpp>
 #include <Kokkos_Sort.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
+#include <algorithm>
 
 #include "../kokkosaliases.hpp"
 #include "superdrops/superdrop.hpp"
@@ -43,6 +43,8 @@ so that superdrops in the view are ordered from
 lowest to highest sdgbxindex. Note that sorting of
 superdrops with matching sdgbxindex can take any order */
 inline viewd_supers sort_supers(const viewd_supers supers) {
+  Kokkos::Profiling::ScopedRegion region("sort_supers_func");
+
   Kokkos::sort(ExecSpace(), supers, SortComparator{});
 
   return supers;

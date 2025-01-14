@@ -24,6 +24,7 @@
 #define LIBS_GRIDBOXES_MOVESUPERSINDOMAIN_HPP_
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Profiling_ScopedRegion.hpp>
 #include <concepts>
 #include <cstdint>
 #include <iostream>
@@ -91,6 +92,8 @@ struct MoveSupersInDomain {
     for (size_t ii(0); ii < ngbxs; ++ii) {[...]}
     when in serial */
     void move_supers_in_gridboxes(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs) const {
+      Kokkos::Profiling::ScopedRegion region("move_supers_in_gridboxes_func");
+
       const size_t ngbxs(d_gbxs.extent(0));
 
       Kokkos::parallel_for(
@@ -113,14 +116,21 @@ struct MoveSupersInDomain {
     */
     void move_supers_between_gridboxes(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
                                        const viewd_supers totsupers) const {
-      sort_supers(totsupers);
+      Kokkos::Profiling::ScopedRegion region("move_supers_between_gridboxes_func");
 
+      Kokkos::Profiling::pushRegion("move_supers_between_gridboxes_sort_supers");
+      sort_supers(totsupers);
+      Kokkos::Profiling::popRegion();
+
+      Kokkos::Profiling::pushRegion("move_supers_between_gridboxes_mpi_comms");
       int comm_size;
       MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
       if (comm_size > 1) {
         sendrecv_supers(gbxmaps, d_gbxs, totsupers);  // TODO(ALL): make GPU compatible
       }
+      Kokkos::Profiling::popRegion();
 
+      Kokkos::Profiling::pushRegion("move_supers_between_gridboxes_loop");
       const auto ngbxs = d_gbxs.extent(0);
       Kokkos::parallel_for(
           "move_supers_between_gridboxes", TeamPolicy(ngbxs, Kokkos::AUTO()),
@@ -128,6 +138,7 @@ struct MoveSupersInDomain {
             const auto ii = team_member.league_rank();
             d_gbxs(ii).supersingbx.set_refs(team_member);
           });
+      Kokkos::Profiling::popRegion();
 
       // /* optional (expensive!) test to raise error if
       // superdrops' gbxindex doesn't match gridbox's gbxindex */
@@ -195,7 +206,9 @@ struct MoveSupersInDomain {
     enactmotion.move_supers_between_gridboxes(gbxmaps, d_gbxs, totsupers);
 
     /* step (4) */
+    Kokkos::Profiling::pushRegion("apply_domain_boundary_conditions");
     apply_domain_boundary_conditions(gbxmaps, d_gbxs, totsupers);
+    Kokkos::Profiling::popRegion();
   }
 };
 
