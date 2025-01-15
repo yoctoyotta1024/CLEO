@@ -30,15 +30,15 @@ kokkos_settings:
 domain:
   nspacedims : 2                                              # no. of spatial dimensions to model
   ngbxs : 400                                                 # total number of Gbxs
-  maxnsupers: 960                                             # maximum number of SDs
+  maxnsupers: 15360                                           # maximum number of SDs
 
 timesteps:
   CONDTSTEP : 1                                               # time between SD condensation [s]
   COLLTSTEP : 1                                               # time between SD collision [s]
   MOTIONTSTEP : 2                                             # time between SDM motion [s]
-  COUPLTSTEP : 7200                                           # time between dynamic couplings [s]
-  OBSTSTEP : 120                                              # time between SDM observations [s]
-  T_END : 7200                                                # time span of integration from 0s to T_END [s]
+  COUPLTSTEP : 10800                                          # time between dynamic couplings [s]
+  OBSTSTEP : 1200                                             # time between SDM observations [s]
+  T_END : 10800                                               # time span of integration from 0s to T_END [s]
 
 ### Initialisation Parameters ###
 inputfiles:

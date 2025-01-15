@@ -43,8 +43,8 @@ for gridboxes at the edges of the domain is either finite
 (null neighbour) or periodic (cyclic neighbour) */
 inline Kokkos::pair<unsigned int, unsigned int> cartesian_coord3nghbrs(
     const unsigned int idx, const std::vector<size_t> &ndims) {
-  return finitedomain_nghbrs(idx, 1, ndims.at(0));
-  // return periodicdomain_nghbrs(idx, 1, ndims.at(0));
+  // return finitedomain_nghbrs(idx, 1, ndims.at(0));
+  return periodicdomain_nghbrs(idx, 1, ndims.at(0));
 }
 
 /* returns pair for gbx index of neighbour in the
@@ -79,8 +79,8 @@ in the z direction, or coord3 is above the upper edge of highest
 gridboxes in the z direction) */
 KOKKOS_INLINE_FUNCTION double boundarycond_coord3(const double coord3, const double lim1,
                                                   const double lim2) {
-  return coordbeyond_finitedomain(coord3, lim1, lim2);
-  // return coordbeyond_periodicdomain(coord3, lim1, lim2);
+  // return coordbeyond_finitedomain(coord3, lim1, lim2);
+  return coordbeyond_periodicdomain(coord3, lim1, lim2);
 }
 
 /* return value is new coord for a superdroplet given
