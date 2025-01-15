@@ -18,7 +18,7 @@
 ### ---- build type, directories, the executable(s) ---- ###
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
-buildtype="openmp"
+buildtype="serial"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_const2d/
 enableyac=false
