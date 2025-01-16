@@ -6,7 +6,7 @@
 
     <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
         <title>pySD.sdmout_src.thermoeqns - CLEO 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=302659d7" />
@@ -390,16 +390,16 @@
 <span class="sd">variables e.g. potential temperature</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 
-<span class="k">def</span> <span class="nf">vapour_pressure</span><span class="p">(</span><span class="n">press</span><span class="p">,</span> <span class="n">qv</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">vapour_pressure</span><span class="p">(</span><span class="n">press</span><span class="p">,</span> <span class="n">qv</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">):</span>
     <span class="n">pv</span> <span class="o">=</span> <span class="n">qv</span> <span class="o">*</span> <span class="n">press</span> <span class="o">/</span> <span class="p">(</span><span class="n">Mr_ratio</span> <span class="o">+</span> <span class="n">qv</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">pv</span>
 
 
-<span class="k">def</span> <span class="nf">relative_humidity</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">qv</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">relative_humidity</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">qv</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">):</span>
     <span class="n">pv</span> <span class="o">=</span> <span class="n">vapour_pressure</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">qv</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">)</span>
     <span class="n">psat</span> <span class="o">=</span> <span class="n">saturation_pressure</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
     <span class="n">relh</span> <span class="o">=</span> <span class="n">pv</span> <span class="o">/</span> <span class="n">psat</span>
@@ -407,7 +407,7 @@
     <span class="k">return</span> <span class="n">relh</span>
 
 
-<span class="k">def</span> <span class="nf">supersaturation</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">qv</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">supersaturation</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">qv</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">):</span>
     <span class="n">pv</span> <span class="o">=</span> <span class="n">vapour_pressure</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">qv</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">)</span>
     <span class="n">psat</span> <span class="o">=</span> <span class="n">saturation_pressure</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span>
 
@@ -419,7 +419,7 @@
 
 <div class="viewcode-block" id="saturation_pressure">
 <a class="viewcode-back" href="../../../pySD/sdmout_src/thermoeqns.html#pySD.sdmout_src.thermoeqns.saturation_pressure">[docs]</a>
-<span class="k">def</span> <span class="nf">saturation_pressure</span><span class="p">(</span><span class="n">TEMP</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">saturation_pressure</span><span class="p">(</span><span class="n">TEMP</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the equilibrium vapor pressure</span>
 <span class="sd">    of water over liquid water ie. the</span>
 <span class="sd">    saturation pressure (psat) given TEMP /K.</span>
@@ -448,7 +448,7 @@
 
 <div class="viewcode-block" id="saturation_pressure_murphy_koop">
 <a class="viewcode-back" href="../../../pySD/sdmout_src/thermoeqns.html#pySD.sdmout_src.thermoeqns.saturation_pressure_murphy_koop">[docs]</a>
-<span class="k">def</span> <span class="nf">saturation_pressure_murphy_koop</span><span class="p">(</span><span class="n">TEMP</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">saturation_pressure_murphy_koop</span><span class="p">(</span><span class="n">TEMP</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the equilibrium vapor pressure</span>
 <span class="sd">    of water over liquid water ie. the</span>
 <span class="sd">    saturation pressure (psat [Pa]). Equation taken from</span>
@@ -473,7 +473,7 @@
 
 <div class="viewcode-block" id="dry_pot_temp">
 <a class="viewcode-back" href="../../../pySD/sdmout_src/thermoeqns.html#pySD.sdmout_src.thermoeqns.dry_pot_temp">[docs]</a>
-<span class="k">def</span> <span class="nf">dry_pot_temp</span><span class="p">(</span><span class="n">Temp</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">qv</span><span class="p">,</span> <span class="n">consts</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">dry_pot_temp</span><span class="p">(</span><span class="n">Temp</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">qv</span><span class="p">,</span> <span class="n">consts</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;calculate potential Temperature [K]</span>
 <span class="sd">    assuming moist (unsaturated) air with</span>
 <span class="sd">    vapour content qv&quot;&quot;&quot;</span>
@@ -492,7 +492,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">dry_adiabat</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">consts</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">dry_adiabat</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">consts</span><span class="p">):</span>
     <span class="n">gamma</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;RGAS_DRY&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;CP_DRY&quot;</span><span class="p">]</span>
     <span class="n">dry_adia</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">**</span> <span class="n">gamma</span>  <span class="c1"># dry adiabatic temp</span>
 
@@ -503,7 +503,7 @@
 
 <div class="viewcode-block" id="specific_moist_static_energy">
 <a class="viewcode-back" href="../../../pySD/sdmout_src/thermoeqns.html#pySD.sdmout_src.thermoeqns.specific_moist_static_energy">[docs]</a>
-<span class="k">def</span> <span class="nf">specific_moist_static_energy</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">Temp</span><span class="p">,</span> <span class="n">qv</span><span class="p">,</span> <span class="n">consts</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">specific_moist_static_energy</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">Temp</span><span class="p">,</span> <span class="n">qv</span><span class="p">,</span> <span class="n">consts</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;calculate the specific mass moist static</span>
 <span class="sd">    energy, mse, J/Kg. (ie. mse per unit mass).&quot;&quot;&quot;</span>
 
@@ -531,7 +531,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 21 December 2024</div>
+              Last updated on 16 January 2025</div>
           </div>
           <div class="right-details">
             

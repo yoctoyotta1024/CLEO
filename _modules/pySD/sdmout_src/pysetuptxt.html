@@ -6,7 +6,7 @@
 
     <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
         <title>pySD.sdmout_src.pysetuptxt - CLEO 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=302659d7" />
@@ -391,12 +391,12 @@
 <span class="sd">output alongside zarr storage</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">cxx2py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">cxx2py</span>
 
 
 <div class="viewcode-block" id="get_consts">
 <a class="viewcode-back" href="../../../pySD/sdmout_src/pysetuptxt.html#pySD.sdmout_src.pysetuptxt.get_consts">[docs]</a>
-<span class="k">def</span> <span class="nf">get_consts</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_consts</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;returns dictionary of constants</span>
 <span class="sd">    read from from setup.txt file&quot;&quot;&quot;</span>
 
@@ -406,7 +406,7 @@
 
 <div class="viewcode-block" id="get_config">
 <a class="viewcode-back" href="../../../pySD/sdmout_src/pysetuptxt.html#pySD.sdmout_src.pysetuptxt.get_config">[docs]</a>
-<span class="k">def</span> <span class="nf">get_config</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">,</span> <span class="n">nattrs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_config</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">,</span> <span class="n">nattrs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;returns dictionary of configuration parameters</span>
 <span class="sd">    read from from setup.txt file&quot;&quot;&quot;</span>
 
@@ -414,7 +414,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">consts_dict</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">,</span> <span class="n">isprint</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">consts_dict</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">,</span> <span class="n">isprint</span><span class="p">):</span>
     <span class="n">consts</span> <span class="o">=</span> <span class="n">cxx2py</span><span class="o">.</span><span class="n">read_cxxconsts_into_floats</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">)</span>
     <span class="n">consts</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">cxx2py</span><span class="o">.</span><span class="n">derive_more_floats</span><span class="p">(</span><span class="n">consts</span><span class="p">))</span>
 
@@ -424,7 +424,7 @@
     <span class="k">return</span> <span class="n">consts</span>
 
 
-<span class="k">def</span> <span class="nf">config_dict</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">,</span> <span class="n">nattrs</span><span class="p">,</span> <span class="n">isprint</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">config_dict</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">,</span> <span class="n">nattrs</span><span class="p">,</span> <span class="n">isprint</span><span class="p">):</span>
     <span class="n">config</span> <span class="o">=</span> <span class="n">read_configparams_fromsetuptxt_into_floats</span><span class="p">(</span><span class="n">setuptxt</span><span class="p">)</span>
     <span class="n">config</span><span class="p">[</span><span class="s2">&quot;numSDattrs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;nspacedims&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">nattrs</span>
     <span class="n">config</span><span class="p">[</span><span class="s2">&quot;ntime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;T_END&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;OBSTSTEP&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="mi">1</span>
@@ -437,7 +437,7 @@
 
 <div class="viewcode-block" id="read_configparams_fromsetuptxt_into_floats">
 <a class="viewcode-back" href="../../../pySD/sdmout_src/pysetuptxt.html#pySD.sdmout_src.pysetuptxt.read_configparams_fromsetuptxt_into_floats">[docs]</a>
-<span class="k">def</span> <span class="nf">read_configparams_fromsetuptxt_into_floats</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_configparams_fromsetuptxt_into_floats</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;returns dictionary of value: float from</span>
 <span class="sd">    values assigned in a config .txt file.</span>
 <span class="sd">    Also returns dictionary of notfloats</span>
@@ -489,7 +489,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 21 December 2024</div>
+              Last updated on 16 January 2025</div>
           </div>
           <div class="right-details">
             

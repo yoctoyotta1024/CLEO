@@ -6,7 +6,7 @@
 
     <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
         <title>pySD.writebinary - CLEO 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=302659d7" />
@@ -389,13 +389,13 @@
 <span class="sd">File Description:</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">struct</span>
 
 
 <div class="viewcode-block" id="writebinary">
 <a class="viewcode-back" href="../../pySD/writebinary.html#pySD.writebinary.writebinary">[docs]</a>
-<span class="k">def</span> <span class="nf">writebinary</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">scale_factors</span><span class="p">,</span> <span class="n">metastr</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">writebinary</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">scale_factors</span><span class="p">,</span> <span class="n">metastr</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;&#39;data&#39; is 1D array containing continuous list of variables.</span>
 <span class="sd">    The number of data points of each variable is give by it&#39;s index in</span>
 <span class="sd">    &#39;ndata&#39;, likewise it&#39;s datatype, unit and scale_factor are in</span>
@@ -427,7 +427,7 @@
 
 <div class="viewcode-block" id="check_validinputs">
 <a class="viewcode-back" href="../../pySD/writebinary.html#pySD.writebinary.check_validinputs">[docs]</a>
-<span class="k">def</span> <span class="nf">check_validinputs</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">scale_factors</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_validinputs</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">scale_factors</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;&#39; check that each variable&#39;s scale_factor is a double, unit is</span>
 <span class="sd">    a binary encoded single character and that the dataype given matches</span>
 <span class="sd">    the type of the data&quot;&quot;&quot;</span>
@@ -453,7 +453,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">get_dataformat</span><span class="p">(</span><span class="n">nvars</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_dataformat</span><span class="p">(</span><span class="n">nvars</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">):</span>
     <span class="n">dtc</span> <span class="o">=</span> <span class="n">DataTypeCodes</span><span class="p">()</span>
 
     <span class="n">dataformat</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
@@ -464,8 +464,8 @@
     <span class="k">return</span> <span class="n">dataformat</span>
 
 
-<span class="k">class</span> <span class="nc">DataTypeCodes</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DataTypeCodes</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">d2f</span> <span class="o">=</span> <span class="p">{</span>
             <span class="c1"># dict for converting dtype to struct formatting code</span>
             <span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">:</span> <span class="s2">&quot;I&quot;</span><span class="p">,</span>
@@ -482,7 +482,7 @@
             <span class="nb">type</span><span class="p">(</span><span class="s2">&quot;c&quot;</span><span class="p">):</span> <span class="sa">b</span><span class="s2">&quot;c&quot;</span><span class="p">,</span>
         <span class="p">}</span>
 
-    <span class="k">def</span> <span class="nf">dtype2bytesize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datatype</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">dtype2bytesize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datatype</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;returns C type unsigned int for the size of the</span>
 <span class="sd">        datatype given int&#39;s format when stored in binary using</span>
 <span class="sd">        python&#39;s struct module&quot;&quot;&quot;</span>
@@ -491,7 +491,7 @@
 
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">calcsize</span><span class="p">(</span><span class="n">dcode</span><span class="p">))</span>
 
-    <span class="k">def</span> <span class="nf">format_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">format</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">format</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;returns size in bytes of data stored in a given format</span>
 <span class="sd">        using python&#39;s struct module&quot;&quot;&quot;</span>
 
@@ -502,14 +502,14 @@
         <span class="k">return</span> <span class="n">bytesize</span>
 
 
-<span class="k">class</span> <span class="nc">MetadataPerVariable</span><span class="p">(</span><span class="n">DataTypeCodes</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">MetadataPerVariable</span><span class="p">(</span><span class="n">DataTypeCodes</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">MetadataPerVariable</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">mpv_format</span> <span class="o">=</span> <span class="s2">&quot;IIIccd&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mpv_bytesize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mpv_format</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">varmetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datap0</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="n">scale_factor</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">varmetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datap0</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="n">scale_factor</span><span class="p">):</span>
         <span class="n">bytespos0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">(</span><span class="n">datap0</span><span class="p">)</span>  <span class="c1"># position of first datapoint of var</span>
         <span class="n">varsz</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype2bytesize</span><span class="p">(</span><span class="n">datatype</span><span class="p">)</span>  <span class="c1"># size in bytes of 1 datapoint of var</span>
         <span class="n">nvar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">(</span><span class="n">ndata</span><span class="p">)</span>  <span class="c1"># number of datapoints of var</span>
@@ -524,8 +524,8 @@
         <span class="k">return</span> <span class="n">metapervar</span><span class="p">,</span> <span class="n">varbytes</span>
 
 
-<span class="k">class</span> <span class="nc">CreateMetadataForBinaryArray</span><span class="p">(</span><span class="n">MetadataPerVariable</span><span class="p">):</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nvars</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">scale_factors</span><span class="p">,</span> <span class="n">metastr</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">CreateMetadataForBinaryArray</span><span class="p">(</span><span class="n">MetadataPerVariable</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nvars</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">scale_factors</span><span class="p">,</span> <span class="n">metastr</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">CreateMetadataForBinaryArray</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">nvars</span> <span class="o">=</span> <span class="n">nvars</span>
@@ -548,7 +548,7 @@
             <span class="o">+</span> <span class="n">metastr</span>
         <span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">gblmeta</span><span class="p">,</span> <span class="n">gblmeta_format</span><span class="p">,</span> <span class="n">gblmeta_bytes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metastr_to_chars</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gblmetastr</span><span class="p">)</span>
 
         <span class="n">datap0</span> <span class="o">=</span> <span class="p">(</span>
@@ -562,7 +562,7 @@
 
         <span class="k">return</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">metaformat</span>
 
-    <span class="k">def</span> <span class="nf">metastr_to_chars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadatastr</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">metastr_to_chars</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadatastr</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;returns metadata string as list of characters encoded</span>
 <span class="sd">        as binary bytes alongside the corresponding format interpretation</span>
 <span class="sd">        and total size of the metadata characters (in bytes)&quot;&quot;&quot;</span>
@@ -576,7 +576,7 @@
 
         <span class="k">return</span> <span class="n">metachars</span><span class="p">,</span> <span class="n">metaformat</span><span class="p">,</span> <span class="n">metabytes</span>
 
-    <span class="k">def</span> <span class="nf">variables_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datap0</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">variables_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datap0</span><span class="p">):</span>
         <span class="n">metapervars</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">metapervars_format</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
@@ -614,7 +614,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 21 December 2024</div>
+              Last updated on 16 January 2025</div>
           </div>
           <div class="right-details">
             

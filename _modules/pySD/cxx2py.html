@@ -6,7 +6,7 @@
 
     <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
         <title>pySD.cxx2py - CLEO 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=302659d7" />
@@ -394,7 +394,7 @@
 
 <div class="viewcode-block" id="print_dict_statement">
 <a class="viewcode-back" href="../../pySD/cxx2py.html#pySD.cxx2py.print_dict_statement">[docs]</a>
-<span class="k">def</span> <span class="nf">print_dict_statement</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">dictname</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">print_dict_statement</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">dictname</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;print key, value pairs for dictionary created by reading filename&quot;&quot;&quot;</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">---- &quot;</span> <span class="o">+</span> <span class="n">dictname</span> <span class="o">+</span> <span class="s2">&quot; from &quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;-----&quot;</span><span class="p">)</span>
@@ -406,7 +406,7 @@
 
 <div class="viewcode-block" id="remove_excess_line">
 <a class="viewcode-back" href="../../pySD/cxx2py.html#pySD.cxx2py.remove_excess_line">[docs]</a>
-<span class="k">def</span> <span class="nf">remove_excess_line</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">remove_excess_line</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;removes white spaces and</span>
 <span class="sd">    and comments from a line&quot;&quot;&quot;</span>
 
@@ -421,7 +421,7 @@
 
 <div class="viewcode-block" id="line_with_assignment">
 <a class="viewcode-back" href="../../pySD/cxx2py.html#pySD.cxx2py.line_with_assignment">[docs]</a>
-<span class="k">def</span> <span class="nf">line_with_assignment</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">line_with_assignment</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;find all the lines in a file</span>
 <span class="sd">    which have form [...] = [...] ;</span>
 <span class="sd">    ie. lines which assign variables. return</span>
@@ -442,7 +442,7 @@
 
 <div class="viewcode-block" id="where_typename_ends">
 <a class="viewcode-back" href="../../pySD/cxx2py.html#pySD.cxx2py.where_typename_ends">[docs]</a>
-<span class="k">def</span> <span class="nf">where_typename_ends</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">where_typename_ends</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;finds index where c++ name for</span>
 <span class="sd">    variable type ends for a const double,</span>
 <span class="sd">    double, int or const int.&quot;&quot;&quot;</span>
@@ -471,7 +471,7 @@
 
 <div class="viewcode-block" id="read_cxxconsts_into_floats">
 <a class="viewcode-back" href="../../pySD/cxx2py.html#pySD.cxx2py.read_cxxconsts_into_floats">[docs]</a>
-<span class="k">def</span> <span class="nf">read_cxxconsts_into_floats</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_cxxconsts_into_floats</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;returns dictionary of value: float from</span>
 <span class="sd">    (const) doubles and (const) ints</span>
 <span class="sd">    assigned in a c++ file. Also returns</span>
@@ -504,7 +504,7 @@
 
 <div class="viewcode-block" id="derive_more_floats">
 <a class="viewcode-back" href="../../pySD/cxx2py.html#pySD.cxx2py.derive_more_floats">[docs]</a>
-<span class="k">def</span> <span class="nf">derive_more_floats</span><span class="p">(</span><span class="n">consts</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">derive_more_floats</span><span class="p">(</span><span class="n">consts</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;return mconsts dictionary containing</span>
 <span class="sd">    some derived key,values from values in</span>
 <span class="sd">    consts dictionary&quot;&quot;&quot;</span>
@@ -545,7 +545,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 21 December 2024</div>
+              Last updated on 16 January 2025</div>
           </div>
           <div class="right-details">
             

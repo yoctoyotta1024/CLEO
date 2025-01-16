@@ -6,7 +6,7 @@
 
     <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
         <title>pySD.readbinary - CLEO 0.1.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=302659d7" />
@@ -369,15 +369,15 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for pySD.readbinary</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">struct</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">struct</span>
 
-<span class="kn">from</span> <span class="nn">.writebinary</span> <span class="kn">import</span> <span class="n">DataTypeCodes</span><span class="p">,</span> <span class="n">MetadataPerVariable</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.writebinary</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataTypeCodes</span><span class="p">,</span> <span class="n">MetadataPerVariable</span>
 
 
 <div class="viewcode-block" id="readbinary">
 <a class="viewcode-back" href="../../pySD/readbinary.html#pySD.readbinary.readbinary">[docs]</a>
-<span class="k">def</span> <span class="nf">readbinary</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">readbinary</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;return list of vectors containing dimenionsless</span>
 <span class="sd">    data read from binary file&quot;&quot;&quot;</span>
 
@@ -393,7 +393,7 @@
 
 <div class="viewcode-block" id="read_metadata">
 <a class="viewcode-back" href="../../pySD/readbinary.html#pySD.readbinary.read_metadata">[docs]</a>
-<span class="k">def</span> <span class="nf">read_metadata</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_metadata</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;read global metadata and return the variable specific metadata</span>
 <span class="sd">    in a 2D array with each row being the metadata for a different variable&quot;&quot;&quot;</span>
 
@@ -412,7 +412,7 @@
 
 
 
-<span class="k">def</span> <span class="nf">first4uints</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">dtc</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">first4uints</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">dtc</span><span class="p">):</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">binaryfile</span><span class="p">:</span>
         <span class="n">bytes4uints</span> <span class="o">=</span> <span class="n">dtc</span><span class="o">.</span><span class="n">format_size</span><span class="p">(</span><span class="s2">&quot;IIII&quot;</span><span class="p">)</span>
         <span class="n">uints</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;IIII&quot;</span><span class="p">,</span> <span class="n">binaryfile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">bytes4uints</span><span class="p">))</span>
@@ -422,7 +422,7 @@
     <span class="k">return</span> <span class="n">metabytes</span><span class="p">,</span> <span class="n">gblmeta_bytes</span><span class="p">,</span> <span class="n">nvars</span><span class="p">,</span> <span class="n">metapervar_bytes</span>
 
 
-<span class="k">def</span> <span class="nf">get_metadatapervar</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">dtc</span><span class="p">,</span> <span class="n">gblmeta_bytes</span><span class="p">,</span> <span class="n">nvars</span><span class="p">,</span> <span class="n">metabytes</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_metadatapervar</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">dtc</span><span class="p">,</span> <span class="n">gblmeta_bytes</span><span class="p">,</span> <span class="n">nvars</span><span class="p">,</span> <span class="n">metabytes</span><span class="p">):</span>
     <span class="n">mpv_format</span> <span class="o">=</span> <span class="n">MetadataPerVariable</span><span class="p">()</span><span class="o">.</span><span class="n">mpv_format</span>
 
     <span class="n">nchars</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">gblmeta_bytes</span> <span class="o">/</span> <span class="n">dtc</span><span class="o">.</span><span class="n">dtype2bytesize</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="s2">&quot;c&quot;</span><span class="p">)))</span>
@@ -442,7 +442,7 @@
     <span class="k">return</span> <span class="n">gblmetadata</span><span class="p">,</span> <span class="n">metapervar</span>
 
 
-<span class="k">def</span> <span class="nf">read_data</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">nvars</span><span class="p">,</span> <span class="n">metabytes</span><span class="p">,</span> <span class="n">metapervar</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">read_data</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">nvars</span><span class="p">,</span> <span class="n">metabytes</span><span class="p">,</span> <span class="n">metapervar</span><span class="p">):</span>
     <span class="n">dataformat</span><span class="p">,</span> <span class="n">ndata_pervar</span> <span class="o">=</span> <span class="n">get_dataformat</span><span class="p">(</span><span class="n">nvars</span><span class="p">,</span> <span class="n">metapervar</span><span class="p">)</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">binaryfile</span><span class="p">:</span>
         <span class="n">binaryfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">metabytes</span><span class="p">)</span>
@@ -460,7 +460,7 @@
     <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">ndata_pervar</span>
 
 
-<span class="k">def</span> <span class="nf">get_dataformat</span><span class="p">(</span><span class="n">nvars</span><span class="p">,</span> <span class="n">metapervar</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_dataformat</span><span class="p">(</span><span class="n">nvars</span><span class="p">,</span> <span class="n">metapervar</span><span class="p">):</span>
     <span class="n">dtypes</span> <span class="o">=</span> <span class="n">metapervar</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span>  <span class="c1"># struct code for datatype of each variable</span>
     <span class="n">ndata_pervar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
         <span class="n">metapervar</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uintc</span>
@@ -495,7 +495,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 21 December 2024</div>
+              Last updated on 16 January 2025</div>
           </div>
           <div class="right-details">
             
