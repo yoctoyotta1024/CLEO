@@ -65,10 +65,7 @@ struct PredCorrMotion {
   void superdrop_coords(const unsigned int gbxindex, const GbxMaps &gbxmaps, const State &state,
                         Superdrop &drop) const {
     /* change in SD coords: (coord3, coord1, coord2) */
-    const auto deltas = predcorr(gbxindex, gbxmaps, state, drop);
-
-    /* update SD coords */
-    drop.increment_coords(deltas(0), deltas(1), deltas(2));
+    drop = predcorr(gbxindex, gbxmaps, state, drop);
   }
 
   /* function satisfies requirements of "superdrop_gbx" in the motion
