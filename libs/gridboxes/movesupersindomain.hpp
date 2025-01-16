@@ -98,7 +98,7 @@ struct MoveSupersInDomain {
           KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
             const auto ii = team_member.league_rank();
 
-            auto &gbx(d_gbxs(ii));
+            auto &gbx = d_gbxs(ii);
             move_supers_in_gbx(team_member, gbx.get_gbxindex(), gbxmaps, gbx.state,
                                gbx.supersingbx());
           });
@@ -126,9 +126,7 @@ struct MoveSupersInDomain {
           "move_supers_between_gridboxes", TeamPolicy(ngbxs, Kokkos::AUTO()),
           KOKKOS_LAMBDA(const TeamMember &team_member) {
             const auto ii = team_member.league_rank();
-
-            auto &gbx(d_gbxs(ii));
-            gbx.supersingbx.set_refs(team_member);
+            d_gbxs(ii).supersingbx.set_refs(team_member);
           });
 
       // /* optional (expensive!) test to raise error if
