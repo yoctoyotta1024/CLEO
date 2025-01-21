@@ -32,6 +32,7 @@
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/movesupersindomain.hpp"
+#include "gridboxes/supersindomain.hpp"
 #include "observers/observers.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
@@ -212,9 +213,10 @@ class SDMMethods {
    * @param t_mdl Current timestep of the coupled model.
    * @param gbxs Dualview of gridboxes (on host and on device).
    */
-  void at_start_step(const unsigned int t_mdl, const dualview_gbx gbxs) const {
+  void at_start_step(const unsigned int t_mdl, const dualview_gbx gbxs,
+                     const SupersInDomain domainsupers) const {
     const auto d_gbxs = gbxs.view_device();
-    const auto domain_totsupers = gbxs.view_host()(0).domain_totsupers_readonly();
+    const auto domain_totsupers = domainsupers.domain_totsupers_readonly();
     obs.at_start_step(t_mdl, d_gbxs, domain_totsupers);
   }
 

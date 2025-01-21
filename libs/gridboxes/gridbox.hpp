@@ -58,10 +58,6 @@ struct Gridbox {
   KOKKOS_INLINE_FUNCTION
   auto get_gbxindex() const { return gbxindex.value; }
 
-  viewd_constsupers domain_totsupers_readonly() const {
-    return supersingbx.domain_totsupers_readonly();
-  }
-
   size_t domain_totnsupers() const { return supersingbx.domain_totnsupers(); }
 };
 

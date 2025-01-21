@@ -101,13 +101,6 @@ struct SupersInGbx {
   /* returns current number of superdrops referred to by gridbox */
   KOKKOS_INLINE_FUNCTION size_t nsupers() const { return refs.second - refs.first; }
 
-  /* returns the view of all the superdrops in the domain.
-  read-only means superdrops in the view are const */
-  viewd_constsupers domain_totsupers_readonly() const {
-    const auto domainrefs = find_domainrefs(totsupers);
-    return Kokkos::subview(totsupers, domainrefs);
-  }
-
   /* returns the total number of all the superdrops in the domain */
   size_t domain_totnsupers() const {
     const auto domainrefs = find_domainrefs(totsupers);
