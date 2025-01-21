@@ -149,7 +149,8 @@ viewd_supers create_newsupers_for_gridboxes(const CartesianMaps &gbxmaps,
                                             const CreateSuperdrop &create_superdrop,
                                             Kokkos::View<unsigned int *> gbxindexes,
                                             const size_t newnsupers_pergbx) {
-  viewd_supers newsupers("newsupers", total_newnsupers_to_create(gbxindexes, newnsupers_pergbx));
+  auto newsupers =
+      viewd_supers("newsupers", total_newnsupers_to_create(gbxindexes, newnsupers_pergbx));
   auto h_newsupers = Kokkos::create_mirror_view(newsupers);
 
   auto h_gbxindexes = Kokkos::create_mirror_view(gbxindexes);
