@@ -74,10 +74,10 @@ struct RaggedCount {
    * = uint64_t), to 8 byte unsigned integer (uint32_t).
    *
    * @param dataset The dataset to write data to.
-   * @param totsupers The view of total super-droplets.
+   * @param d_supers The view of total super-droplets.
    */
-  void write_to_array(const Dataset<Store> &dataset, const viewd_constsupers totsupers) const {
-    const auto totnsupers = static_cast<uint32_t>(totsupers.extent(0));
+  void write_to_array(const Dataset<Store> &dataset, const subviewd_constsupers d_supers) const {
+    const auto totnsupers = static_cast<uint32_t>(d_supers.extent(0));
     dataset.write_to_array(xzarr_ptr, totnsupers);
   }
 
@@ -138,14 +138,14 @@ CollectDataForDataset<Store> auto CollectSuperdropVariable(
  *
  * @param kk The index of the superdrop.
  * @param d_gbxs The view of gridboxes on device.
- * @param totsupers The view of superdroplets on device.
+ * @param d_supers The view of superdroplets on device.
  * @param d_data The mirror view buffer for the superdroplets' sdgbxindex.
  */
 struct SdgbxindexFunc {
   KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t kk, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
+  void operator()(const size_t kk, viewd_constgbx d_gbxs, const subviewd_constsupers d_supers,
                   Buffer<uint32_t>::mirrorviewd_buffer d_data) const {
-    auto sdgbxindex = static_cast<uint32_t>(totsupers(kk).get_sdgbxindex());
+    auto sdgbxindex = static_cast<uint32_t>(d_supers(kk).get_sdgbxindex());
     d_data(kk) = sdgbxindex;
   }
 };
@@ -182,14 +182,14 @@ CollectDataForDataset<Store> auto CollectSdgbxindex(const Dataset<Store> &datase
  *
  * @param kk The index of the superdrop.
  * @param d_gbxs The view of gridboxes on device.
- * @param totsupers The view of superdroplets on device.
+ * @param d_supers The view of superdroplets on device.
  * @param d_data The mirror view buffer for the superdroplets' identity.
  */
 struct SdIdFunc {
   KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t kk, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
+  void operator()(const size_t kk, viewd_constgbx d_gbxs, const subviewd_constsupers d_supers,
                   Buffer<uint32_t>::mirrorviewd_buffer d_data) const {
-    auto sdid = static_cast<uint32_t>(totsupers(kk).sdId.get_value());
+    auto sdid = static_cast<uint32_t>(d_supers(kk).sdId.get_value());
     d_data(kk) = sdid;
   }
 };
@@ -226,16 +226,16 @@ CollectDataForDataset<Store> auto CollectSdId(const Dataset<Store> &dataset,
  *
  * @param kk The index of the superdrop.
  * @param d_gbxs The view of gridboxes on device.
- * @param totsupers The view of superdroplets on device.
+ * @param d_supers The view of superdroplets on device.
  * @param d_data The mirror view buffer for the superdroplets' multiplicity.
  */
 struct XiFunc {
   KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t kk, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
+  void operator()(const size_t kk, viewd_constgbx d_gbxs, const subviewd_constsupers d_supers,
                   Buffer<uint64_t>::mirrorviewd_buffer d_data) const {
-    assert((totsupers(kk).get_xi() < LIMITVALUES::uint64_t_max) &&
+    assert((d_supers(kk).get_xi() < LIMITVALUES::uint64_t_max) &&
            "superdroplet mulitiplicy too large to represent with 4 byte unsigned integer");
-    auto xi = static_cast<uint64_t>(totsupers(kk).get_xi());
+    auto xi = static_cast<uint64_t>(d_supers(kk).get_xi());
     d_data(kk) = xi;
   }
 };
@@ -269,14 +269,14 @@ CollectDataForDataset<Store> auto CollectXi(const Dataset<Store> &dataset, const
  *
  * @param kk The index of the superdrop.
  * @param d_gbxs The view of gridboxes on device.
- * @param totsupers The view of superdroplets on device.
+ * @param d_supers The view of superdroplets on device.
  * @param d_data The mirror view buffer for the superdroplets' radius.
  */
 struct RadiusFunc {
   KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t kk, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
+  void operator()(const size_t kk, viewd_constgbx d_gbxs, const subviewd_constsupers d_supers,
                   Buffer<float>::mirrorviewd_buffer d_data) const {
-    auto radius = static_cast<float>(totsupers(kk).get_radius());
+    auto radius = static_cast<float>(d_supers(kk).get_radius());
     d_data(kk) = radius;
   }
 };
@@ -311,14 +311,14 @@ CollectDataForDataset<Store> auto CollectRadius(const Dataset<Store> &dataset,
  *
  * @param kk The index of the superdrop.
  * @param d_gbxs The view of gridboxes on device.
- * @param totsupers The view of superdroplets on device.
+ * @param d_supers The view of superdroplets on device.
  * @param d_data The mirror view buffer for the superdroplets' msol.
  */
 struct MsolFunc {
   KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t kk, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
+  void operator()(const size_t kk, viewd_constgbx d_gbxs, const subviewd_constsupers d_supers,
                   Buffer<float>::mirrorviewd_buffer d_data) const {
-    auto msol = static_cast<float>(totsupers(kk).get_msol());
+    auto msol = static_cast<float>(d_supers(kk).get_msol());
     d_data(kk) = msol;
   }
 };
@@ -353,14 +353,14 @@ CollectDataForDataset<Store> auto CollectMsol(const Dataset<Store> &dataset,
  *
  * @param kk The index of the superdrop.
  * @param d_gbxs The view of gridboxes on device.
- * @param totsupers The view of superdroplets on device.
+ * @param d_supers The view of superdroplets on device.
  * @param d_data The mirror view buffer for the superdroplets' coord3.
  */
 struct Coord3Func {
   KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t kk, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
+  void operator()(const size_t kk, viewd_constgbx d_gbxs, const subviewd_constsupers d_supers,
                   Buffer<float>::mirrorviewd_buffer d_data) const {
-    auto coord3 = static_cast<float>(totsupers(kk).get_coord3());
+    auto coord3 = static_cast<float>(d_supers(kk).get_coord3());
     d_data(kk) = coord3;
   }
 };
@@ -395,14 +395,14 @@ CollectDataForDataset<Store> auto CollectCoord3(const Dataset<Store> &dataset,
  *
  * @param kk The index of the superdrop.
  * @param d_gbxs The view of gridboxes on device.
- * @param totsupers The view of superdroplets on device.
+ * @param d_supers The view of superdroplets on device.
  * @param d_data The mirror view buffer for the superdroplets' coord1.
  */
 struct Coord1Func {
   KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t kk, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
+  void operator()(const size_t kk, viewd_constgbx d_gbxs, const subviewd_constsupers d_supers,
                   Buffer<float>::mirrorviewd_buffer d_data) const {
-    auto coord1 = static_cast<float>(totsupers(kk).get_coord1());
+    auto coord1 = static_cast<float>(d_supers(kk).get_coord1());
     d_data(kk) = coord1;
   }
 };
@@ -437,14 +437,14 @@ CollectDataForDataset<Store> auto CollectCoord1(const Dataset<Store> &dataset,
  *
  * @param kk The index of the superdrop.
  * @param d_gbxs The view of gridboxes on device.
- * @param totsupers The view of superdroplets on device.
+ * @param d_supers The view of superdroplets on device.
  * @param d_data The mirror view buffer for the superdroplets' coord2.
  */
 struct Coord2Func {
   KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t kk, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
+  void operator()(const size_t kk, viewd_constgbx d_gbxs, const subviewd_constsupers d_supers,
                   Buffer<float>::mirrorviewd_buffer d_data) const {
-    auto coord2 = static_cast<float>(totsupers(kk).get_coord2());
+    auto coord2 = static_cast<float>(d_supers(kk).get_coord2());
     d_data(kk) = coord2;
   }
 };

@@ -50,12 +50,12 @@
  *
  * @param ii The index of the gridbox.
  * @param d_gbxs The view of gridboxes on device.
- * @param totsupers The view of superdroplets on device.
+ * @param d_supers The view of superdroplets on device.
  * @param d_data The mirror view buffer for the number of superdroplets.
  */
 struct NsupersFunc {
   KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t ii, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
+  void operator()(const size_t ii, viewd_constgbx d_gbxs, const subviewd_constsupers d_supers,
                   Buffer<uint32_t>::mirrorviewd_buffer d_data) const {
     auto nsupers = static_cast<uint32_t>(d_gbxs(ii).supersingbx.nsupers());
     d_data(ii) = nsupers;

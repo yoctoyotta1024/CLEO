@@ -82,12 +82,12 @@ CollectDataForDataset<Store> auto CollectThermoVariable(const Dataset<Store> &da
  *
  * @param ii The index of the gridbox.
  * @param d_gbxs The view of gridboxes on device.
- * @param totsupers The view of superdroplets on device.
+ * @param d_supers The view of superdroplets on device.
  * @param d_data The mirror view buffer for the pressure in each gridbox.
  */
 struct PressFunc {
   KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t ii, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
+  void operator()(const size_t ii, viewd_constgbx d_gbxs, const subviewd_constsupers d_supers,
                   Buffer<float>::mirrorviewd_buffer d_data) const {
     auto press = static_cast<float>(d_gbxs(ii).state.press);
     d_data(ii) = press;
@@ -104,12 +104,12 @@ struct PressFunc {
  *
  * @param ii The index of the gridbox.
  * @param d_gbxs The view of gridboxes on device.
- * @param totsupers The view of superdroplets on device.
+ * @param d_supers The view of superdroplets on device.
  * @param d_data The mirror view buffer for the temperature in each gridbox.
  */
 struct TempFunc {
   KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t ii, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
+  void operator()(const size_t ii, viewd_constgbx d_gbxs, const subviewd_constsupers d_supers,
                   Buffer<float>::mirrorviewd_buffer d_data) const {
     auto temp = static_cast<float>(d_gbxs(ii).state.temp);
     d_data(ii) = temp;
@@ -126,12 +126,12 @@ struct TempFunc {
  *
  * @param ii The index of the gridbox.
  * @param d_gbxs The view of gridboxes on device.
- * @param totsupers The view of superdroplets on device.
+ * @param d_supers The view of superdroplets on device.
  * @param d_data The mirror view buffer for qvap from each gridbox.
  */
 struct QvapFunc {
   KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t ii, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
+  void operator()(const size_t ii, viewd_constgbx d_gbxs, const subviewd_constsupers d_supers,
                   Buffer<float>::mirrorviewd_buffer d_data) const {
     auto qvap = static_cast<float>(d_gbxs(ii).state.qvap);
     d_data(ii) = qvap;
@@ -148,12 +148,12 @@ struct QvapFunc {
  *
  * @param ii The index of the gridbox.
  * @param d_gbxs The view of gridboxes on device.
- * @param totsupers The view of superdroplets on device.
+ * @param d_supers The view of superdroplets on device.
  * @param d_data The mirror view buffer for qcond from each gridbox.
  */
 struct QcondFunc {
   KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t ii, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
+  void operator()(const size_t ii, viewd_constgbx d_gbxs, const subviewd_constsupers d_supers,
                   Buffer<float>::mirrorviewd_buffer d_data) const {
     auto qcond = static_cast<float>(d_gbxs(ii).state.qcond);
     d_data(ii) = qcond;

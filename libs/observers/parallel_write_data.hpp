@@ -132,10 +132,6 @@ class ParallelWriteGridboxes {
    */
   ~ParallelWriteGridboxes() { collect_data.write_arrayshapes(dataset); }
 
-  /*
-    Then write the data in the dataset. Inclusion of totsupers so that object can be used as
-    "ParallelWriteData" function in DoWriteToDataset struct */
-
   /**
    * @brief Executes the operation to collect data from gridboxes and write it to arrays in the
    * dataset.
@@ -143,14 +139,14 @@ class ParallelWriteGridboxes {
    * Use the funtor returned by CollectData's get_functor() call to collect data from gridboxes in a
    * parallel loop as determined by the parallel_gridboxes_func operator().
    *
-   * Inclusion of totsupers in function signature so that object can be used as "ParallelWriteData"
+   * Inclusion of d_supers in function signature so that object can be used as "ParallelWriteData"
    * function-like object in DoWriteToDataset struct.
    *
    * @param d_gbxs The view of gridboxes in device memory.
-   * @param totsupers The view of superdroplets in device memory.
+   * @param d_supers The view of superdroplets in device memory.
    */
-  void operator()(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
-    auto functor = collect_data.get_functor(d_gbxs, totsupers);
+  void operator()(const viewd_constgbx d_gbxs, const subviewd_constsupers d_supers) const {
+    auto functor = collect_data.get_functor(d_gbxs, d_supers);
     parallel_gridboxes_func(functor, d_gbxs);
     collect_data.write_to_arrays(dataset);
   }
@@ -163,11 +159,11 @@ class ParallelWriteGridboxes {
  * @tparam CRC The type that satisfies the CollectRaggedCount concept.
  */
 template <typename CRC, typename Store>
-concept CollectRaggedCount = requires(CRC crc, const Dataset<Store> &ds,
-                                      const viewd_constsupers totsupers) {
-  { crc.write_to_array(ds, totsupers) } -> std::same_as<void>;
-  { crc.write_arrayshape(ds) } -> std::same_as<void>;
-};
+concept CollectRaggedCount =
+    requires(CRC crc, const Dataset<Store> &ds, const subviewd_constsupers d_supers) {
+      { crc.write_to_array(ds, d_supers) } -> std::same_as<void>;
+      { crc.write_arrayshape(ds) } -> std::same_as<void>;
+    };
 
 /**
  * @brief Struct for "ParallelWriteData" (see write_to_dataset_observer.hpp) to collect data from
@@ -198,18 +194,18 @@ class ParallelWriteSupers {
    * @brief Parallel loop over superdroplets using a Kokkos Range Policy.
    *
    * Kokkos::parallel_for([...]) is equivalent in serial to:
-   * for (size_t kk(0); kk < totsupers.extent(0); ++kk){[...]}
+   * for (size_t kk(0); kk < d_supers.extent(0); ++kk){[...]}
    *
    * _Note:_ type for Functor used in this call must have operator() with signature:
    * void operator()(const size_t kk).
    *
    * @tparam Functor The type of the functor.
    * @param functor The functor to be executed in parallel.
-   * @param totsupers The view of superdroplets on device.
+   * @param d_supers The view of superdroplets on device.
    */
   template <typename Functor>
-  void parallel_supers_func(const Functor functor, const viewd_constsupers totsupers) const {
-    const size_t totnsupers(totsupers.extent(0));
+  void parallel_supers_func(const Functor functor, const subviewd_constsupers d_supers) const {
+    const size_t totnsupers(d_supers.extent(0));
     Kokkos::parallel_for("write_supers", Kokkos::RangePolicy<ExecSpace>(0, totnsupers), functor);
   }
 
@@ -250,14 +246,14 @@ class ParallelWriteSupers {
    * function-like object in DoWriteToDataset struct.
    *
    * @param d_gbxs The view of gridboxes in device memory.
-   * @param totsupers The view of superdroplets in device memory.
+   * @param d_supers The view of superdroplets in device memory.
    */
-  void operator()(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
-    collect_data.reallocate_views(totsupers.extent(0));
-    auto functor = collect_data.get_functor(d_gbxs, totsupers);
-    parallel_supers_func(functor, totsupers);
+  void operator()(const viewd_constgbx d_gbxs, const subviewd_constsupers d_supers) const {
+    collect_data.reallocate_views(d_supers.extent(0));
+    auto functor = collect_data.get_functor(d_gbxs, d_supers);
+    parallel_supers_func(functor, d_supers);
     collect_data.write_to_ragged_arrays(dataset);
-    ragged_count.write_to_array(dataset, totsupers);
+    ragged_count.write_to_array(dataset, d_supers);
   }
 };
 

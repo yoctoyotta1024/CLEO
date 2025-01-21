@@ -41,8 +41,8 @@
 template <typename CDD, typename Store>
 concept CollectDataForDataset =
     requires(CDD cdd, const Dataset<Store> &ds, const viewd_constgbx d_gbxs,
-             const viewd_constsupers totsupers, const size_t sz) {
-      { cdd.get_functor(d_gbxs, totsupers) };
+             const subviewd_constsupers d_supers, const size_t sz) {
+      { cdd.get_functor(d_gbxs, d_supers) };
       { cdd.reallocate_views(sz) } -> std::same_as<void>;
       { cdd.write_to_arrays(ds) } -> std::same_as<void>;
       { cdd.write_to_ragged_arrays(ds) } -> std::same_as<void>;
@@ -71,9 +71,8 @@ struct CombinedCollectDataForDataset {
     CollectData2::Functor b_functor;
 
     explicit Functor(const CollectData1 a, const CollectData2 b, const viewd_constgbx d_gbxs,
-                     const viewd_constsupers totsupers)
-        : a_functor(a.get_functor(d_gbxs, totsupers)),
-          b_functor(b.get_functor(d_gbxs, totsupers)) {}
+                     const subviewd_constsupers d_supers)
+        : a_functor(a.get_functor(d_gbxs, d_supers)), b_functor(b.get_functor(d_gbxs, d_supers)) {}
 
     /* Functor operator to perform copy of each element in parallel in Kokkos Range Policy */
     KOKKOS_INLINE_FUNCTION
@@ -98,8 +97,8 @@ struct CombinedCollectDataForDataset {
    */
   CombinedCollectDataForDataset(const CollectData1 a, const CollectData2 b) : a(a), b(b) {}
 
-  Functor get_functor(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
-    return Functor(a, b, d_gbxs, totsupers);
+  Functor get_functor(const viewd_constgbx d_gbxs, const subviewd_constsupers d_supers) const {
+    return Functor(a, b, d_gbxs, d_supers);
   }
 
   void write_to_arrays(const Dataset<Store> &dataset) const {
@@ -153,7 +152,7 @@ struct NullCollectDataForDataset {
     void operator()(const TeamMember &team_member) const {}
   };
 
-  Functor get_functor(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
+  Functor get_functor(const viewd_constgbx d_gbxs, const subviewd_constsupers d_supers) const {
     return Functor{};
   }
 

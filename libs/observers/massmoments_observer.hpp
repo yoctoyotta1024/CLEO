@@ -287,10 +287,10 @@ struct CollectMassMoments {
    * within a Kokkos::parallel_for loop over gridboxes with a team policy.
    *
    * @param d_gbxs View of gridboxes on device.
-   * @param totsupers View of superdroplets on device.
+   * @param d_supers View of superdroplets on device.
    * @return Functor for collecting mass moments.
    */
-  Functor get_functor(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
+  Functor get_functor(const viewd_constgbx d_gbxs, const subviewd_constsupers d_supers) const {
     assert(((mom0_ptr->d_data.extent(0) == d_gbxs.extent(0)) &&
             (mom1_ptr->d_data.extent(0) == d_gbxs.extent(0)) &&
             (mom2_ptr->d_data.extent(0) == d_gbxs.extent(0))) &&

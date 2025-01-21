@@ -80,12 +80,12 @@ CollectDataForDataset<Store> auto CollectWindVariable(const Dataset<Store> &data
  *
  * @param ii The index of the gridbox.
  * @param d_gbxs The view of gridboxes on device.
- * @param totsupers The view of superdroplets on device.
+ * @param d_supers The view of superdroplets on device.
  * @param d_data The mirror view buffer for wvel form each gridbox.
  */
 struct WvelFunc {
   KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t ii, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
+  void operator()(const size_t ii, viewd_constgbx d_gbxs, const subviewd_constsupers d_supers,
                   Buffer<float>::mirrorviewd_buffer d_data) const {
     auto wvel = static_cast<float>(d_gbxs(ii).state.wvelcentre());
     d_data(ii) = wvel;
@@ -102,12 +102,12 @@ struct WvelFunc {
  *
  * @param ii The index of the gridbox.
  * @param d_gbxs The view of gridboxes on device.
- * @param totsupers The view of superdroplets on device.
+ * @param d_supers The view of superdroplets on device.
  * @param d_data The mirror view buffer for uvel form each gridbox.
  */
 struct UvelFunc {
   KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t ii, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
+  void operator()(const size_t ii, viewd_constgbx d_gbxs, const subviewd_constsupers d_supers,
                   Buffer<float>::mirrorviewd_buffer d_data) const {
     auto uvel = static_cast<float>(d_gbxs(ii).state.uvelcentre());
     d_data(ii) = uvel;
@@ -124,12 +124,12 @@ struct UvelFunc {
  *
  * @param ii The index of the gridbox.
  * @param d_gbxs The view of gridboxes on device.
- * @param totsupers The view of superdroplets on device.
+ * @param d_supers The view of superdroplets on device.
  * @param d_data The mirror view buffer for vvel form each gridbox.
  */
 struct VvelFunc {
   KOKKOS_INLINE_FUNCTION
-  void operator()(const size_t ii, viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
+  void operator()(const size_t ii, viewd_constgbx d_gbxs, const subviewd_constsupers d_supers,
                   Buffer<float>::mirrorviewd_buffer d_data) const {
     auto vvel = static_cast<float>(d_gbxs(ii).state.vvelcentre());
     d_data(ii) = vvel;

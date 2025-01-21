@@ -92,14 +92,14 @@ class GenericCollectData {
    */
   struct Functor {
     using mirrorviewd_data = XarrayAndViews<Store, T>::mirrorviewd_data;
-    FunctorFunc ffunc;           /**< functor to collect data into d_data during parallel loop */
-    viewd_constgbx d_gbxs;       /**< view of gridboxes on device */
-    viewd_constsupers totsupers; /**< view of superdroplets on device */
-    mirrorviewd_data d_data;     /**< mirror view on device for data to collect */
+    FunctorFunc ffunc;             /**< functor to collect data into d_data during parallel loop */
+    viewd_constgbx d_gbxs;         /**< view of gridboxes on device */
+    subviewd_constsupers d_supers; /**< view of superdroplets on device */
+    mirrorviewd_data d_data;       /**< mirror view on device for data to collect */
 
-    Functor(FunctorFunc ffunc, const viewd_constgbx d_gbxs, const viewd_constsupers totsupers,
+    Functor(FunctorFunc ffunc, const viewd_constgbx d_gbxs, const subviewd_constsupers d_supers,
             mirrorviewd_data d_data)
-        : ffunc(ffunc), d_gbxs(d_gbxs), totsupers(totsupers), d_data(d_data) {}
+        : ffunc(ffunc), d_gbxs(d_gbxs), d_supers(d_supers), d_data(d_data) {}
 
     /**
      * @brief Adapter from signature of Kokkos::parallel_for with a range policy to call to
@@ -108,7 +108,7 @@ class GenericCollectData {
      * @param nn The index of the data element.
      */
     KOKKOS_INLINE_FUNCTION
-    void operator()(const size_t nn) const { ffunc(nn, d_gbxs, totsupers, d_data); }
+    void operator()(const size_t nn) const { ffunc(nn, d_gbxs, d_supers, d_data); }
   };
 
   /* Constructor to initialize GenericCollectData given functor function-like object,
@@ -131,14 +131,14 @@ class GenericCollectData {
    * @brief Returns the functor for collecting data.
    *
    * @param d_gbxs The view of gridboxes on device.
-   * @param totsupers The view of superdroplets on device.
+   * @param d_supers The view of superdroplets on device.
    * @return The functor object to use during a Kokkos:parallel_for range policy loop.
    */
-  Functor get_functor(const viewd_constgbx d_gbxs, const viewd_constsupers totsupers) const {
+  Functor get_functor(const viewd_constgbx d_gbxs, const subviewd_constsupers d_supers) const {
     // assert(((ptr->d_data.extent(0) == d_gbxs.extent(0)) ||
-    //         (ptr->d_data.extent(0) == totsupers.extent(0))) &&
+    //         (ptr->d_data.extent(0) == d_supers.extent(0))) &&
     //        "d_data view should be size of the number of gridboxes or superdroplets");
-    return Functor(ffunc, d_gbxs, totsupers, ptr->d_data);
+    return Functor(ffunc, d_gbxs, d_supers, ptr->d_data);
   }
 
   /**

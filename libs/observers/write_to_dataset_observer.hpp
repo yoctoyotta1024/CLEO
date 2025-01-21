@@ -72,11 +72,11 @@ class DoWriteToDataset {
    * @brief Calls the parallel_write function during at_start_step.
    * @param t_mdl Current model time.
    * @param d_gbxs View of gridboxes.
-   * @param totsupers View of superdroplets.
+   * @param d_supers View of superdroplets.
    */
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
-                     const viewd_constsupers totsupers) const {
-    parallel_write(d_gbxs, totsupers);
+                     const subviewd_constsupers d_supers) const {
+    parallel_write(d_gbxs, d_supers);
   }
 
   /**
