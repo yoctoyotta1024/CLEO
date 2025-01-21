@@ -29,28 +29,28 @@ viewd_supers create_newsupers_for_gridboxes(const CartesianMaps &gbxmaps,
                                             const CreateSuperdrop &create_superdrop,
                                             Kokkos::View<unsigned int *> gbxindexes,
                                             const size_t newnsupers_pergbx);
-void add_superdrops_for_gridboxes(const SupersInDomain domainsupers,
+void add_superdrops_for_gridboxes(const SupersInDomain allsupers,
                                   const viewd_constsupers newsupers);
 SupersInDomain move_supers_between_gridboxes_again(const viewd_gbx d_gbxs,
-                                                   SupersInDomain domainsupers);
+                                                   SupersInDomain allsupers);
 
 /*
 Call to apply boundary conditions to remove and then add superdroplets to the top of the domain
 above coord3lim.
 */
 SupersInDomain AddSupersAtDomainTop::operator()(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
-                                                SupersInDomain domainsupers) const {
+                                                SupersInDomain allsupers) const {
   const auto gbxindexes_for_newsupers =
       remove_superdrops_from_gridboxes(gbxmaps, d_gbxs, coord3lim);
 
   auto newsupers_for_gridboxes = create_newsupers_for_gridboxes(
       gbxmaps, create_superdrop, gbxindexes_for_newsupers, newnsupers);
 
-  add_superdrops_for_gridboxes(domainsupers, newsupers_for_gridboxes);
+  add_superdrops_for_gridboxes(allsupers, newsupers_for_gridboxes);
 
-  domainsupers = move_supers_between_gridboxes_again(d_gbxs, domainsupers);
+  allsupers = move_supers_between_gridboxes_again(d_gbxs, allsupers);
 
-  return domainsupers;
+  return allsupers;
 }
 
 /* (re)sorting supers based on their gbxindexes and then updating the span (gbx refs) for each
@@ -62,8 +62,8 @@ Kokkos::parallel_for([...]) is equivalent in serial to:
 for (size_t ii(0); ii < d_gbxs.extent(0); ++ii){[...]}.
 */
 SupersInDomain move_supers_between_gridboxes_again(const viewd_gbx d_gbxs,
-                                                   SupersInDomain domainsupers) {
-  auto totsupers = domainsupers.get_totsupers();
+                                                   SupersInDomain allsupers) {
+  auto totsupers = allsupers.get_totsupers();
 
   sort_supers(totsupers);
 
@@ -75,9 +75,9 @@ SupersInDomain move_supers_between_gridboxes_again(const viewd_gbx d_gbxs,
         d_gbxs(ii).supersingbx.set_refs(team_member);
       });
 
-  domainsupers.set_totsupers(totsupers);
+  allsupers.set_totsupers(totsupers);
 
-  return domainsupers;
+  return allsupers;
 }
 
 /* set super-droplet sdgbxindex to out of bounds value if superdrop coord3 > coord3lim.
@@ -197,10 +197,9 @@ viewh_constgbx hostcopy_one_gridbox(const viewd_constgbx d_gbxs, const size_t ii
 }
 
 /* throws error if the size of newnsupers + oldnsupers > total space in totsupers view */
-size_t check_space_in_totsupers(const SupersInDomain domainsupers,
-                                const viewd_constsupers newsupers) {
-  const auto totsupers = domainsupers.get_totsupers();
-  const auto oldnsupers = domainsupers.domain_nsupers();
+size_t check_space_in_totsupers(const SupersInDomain allsupers, const viewd_constsupers newsupers) {
+  const auto totsupers = allsupers.get_totsupers();
+  const auto oldnsupers = allsupers.domain_nsupers();
   if (oldnsupers + newsupers.extent(0) > totsupers.extent(0)) {
     const auto err = std::string(
         "UNDEFINED BEHAVIOUR: Number of super-droplets in the domain cannot become larger than the "
@@ -213,10 +212,10 @@ size_t check_space_in_totsupers(const SupersInDomain domainsupers,
 
 /* check there is space in totsupers for newsupers, then append superdrops in newsupers to end of
 totsupers view */
-void add_superdrops_for_gridboxes(const SupersInDomain domainsupers,
+void add_superdrops_for_gridboxes(const SupersInDomain allsupers,
                                   const viewd_constsupers newsupers) {
-  const auto totsupers = domainsupers.get_totsupers();
-  const auto og_totnsupers = check_space_in_totsupers(domainsupers, newsupers);
+  const auto totsupers = allsupers.get_totsupers();
+  const auto og_totnsupers = check_space_in_totsupers(allsupers, newsupers);
 
   Kokkos::parallel_for(
       "add_superdrops", Kokkos::RangePolicy<ExecSpace>(0, newsupers.extent(0)),

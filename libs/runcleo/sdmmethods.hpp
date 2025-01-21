@@ -99,11 +99,11 @@ class SDMMethods {
    * @param totsupers View of all superdrops (both in and out of bounds of domain).
    * @param mo Monitor of SDM processes.
    */
-  void superdrops_movement(const unsigned int t_sdm, viewd_gbx d_gbxs, SupersInDomain &domainsupers,
+  void superdrops_movement(const unsigned int t_sdm, viewd_gbx d_gbxs, SupersInDomain &allsupers,
                            const SDMMonitor auto mo) const {
     Kokkos::Profiling::ScopedRegion region("timestep_sdm_movement");
 
-    domainsupers = movesupers.run_step(t_sdm, gbxmaps, d_gbxs, domainsupers, mo);
+    allsupers = movesupers.run_step(t_sdm, gbxmaps, d_gbxs, allsupers, mo);
   }
 
  public:
@@ -154,9 +154,9 @@ class SDMMethods {
 
             auto supers = d_gbxs(ii).supersingbx();
             for (unsigned int subt = t_sdm; subt < t_next; subt = microphys.next_step(subt)) {
-              supers = microphys.run_step(
-                  team_member, subt, supers, d_gbxs(ii).state,
-                  mo);  // TODO(CB): explicitly feed supers back into domainsupers
+              supers =
+                  microphys.run_step(team_member, subt, supers, d_gbxs(ii).state,
+                                     mo);  // TODO(CB): explicitly feed supers back into allsupers
             }
 
             mo.monitor_microphysics(team_member, supers);
@@ -216,9 +216,9 @@ class SDMMethods {
    * @param gbxs Dualview of gridboxes (on host and on device).
    */
   void at_start_step(const unsigned int t_mdl, const dualview_gbx gbxs,
-                     const SupersInDomain domainsupers) const {
+                     const SupersInDomain allsupers) const {
     const auto d_gbxs = gbxs.view_device();
-    const auto domain_totsupers = domainsupers.domain_totsupers_readonly();
+    const auto domain_totsupers = allsupers.domain_totsupers_readonly();
     obs.at_start_step(t_mdl, d_gbxs, domain_totsupers);
   }
 
@@ -235,15 +235,15 @@ class SDMMethods {
    * @param totsupers View of all superdrops (both in and out of bounds of domain).
    */
   void run_step(const unsigned int t_mdl, const unsigned int t_mdl_next, viewd_gbx d_gbxs,
-                SupersInDomain &domainsupers) const {
+                SupersInDomain &allsupers) const {
     const SDMMonitor auto mo = obs.get_sdmmonitor();
 
     unsigned int t_sdm(t_mdl);
     while (t_sdm < t_mdl_next) {
       const auto t_sdm_next = next_sdmstep(t_sdm, t_mdl_next);
 
-      superdrops_movement(t_sdm, d_gbxs, domainsupers, mo);  // on host and device
-      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs, mo);       // on device
+      superdrops_movement(t_sdm, d_gbxs, allsupers, mo);  // on host and device
+      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs, mo);    // on device
 
       t_sdm = t_sdm_next;
     }

@@ -126,7 +126,7 @@ struct AddSupersAtDomainTop {
   abouve coord3lim.
   */
   SupersInDomain operator()(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
-                            SupersInDomain domainsupers) const;
+                            SupersInDomain allsupers) const;
 };
 
 #endif  // LIBS_CARTESIANDOMAIN_ADD_SUPERS_AT_DOMAIN_TOP_HPP_

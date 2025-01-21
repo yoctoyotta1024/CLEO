@@ -114,8 +114,8 @@ struct MoveSupersInDomain {
     _Note:_ totsupers is view of all superdrops (both in and out of bounds of domain).
     */
     SupersInDomain move_supers_between_gridboxes(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
-                                                 SupersInDomain domainsupers) const {
-      auto totsupers = domainsupers.get_totsupers();
+                                                 SupersInDomain allsupers) const {
+      auto totsupers = allsupers.get_totsupers();
 
       sort_supers(totsupers);
 
@@ -133,7 +133,7 @@ struct MoveSupersInDomain {
             d_gbxs(ii).supersingbx.set_refs(team_member);
           });
 
-      domainsupers.set_totsupers(totsupers);
+      allsupers.set_totsupers(totsupers);
 
       // /* optional (expensive!) test to raise error if
       // superdrops' gbxindex doesn't match gridbox's gbxindex */
@@ -145,7 +145,7 @@ struct MoveSupersInDomain {
       //              "incorrect references to superdrops in gridbox during motion");
       //     });
 
-      return domainsupers;
+      return allsupers;
     }
   } enactmotion;
 
@@ -168,17 +168,17 @@ struct MoveSupersInDomain {
    * if current time, t_sdm, is time when superdrop motion should occur, enact movement of
    * superdroplets throughout domain.
    *
-   * @param domainsupers Struct to handle all superdrops (both in and out of bounds of domain).
+   * @param allsupers Struct to handle all superdrops (both in and out of bounds of domain).
    *
    */
   SupersInDomain run_step(const unsigned int t_sdm, const GbxMaps &gbxmaps, viewd_gbx d_gbxs,
-                          SupersInDomain domainsupers, const SDMMonitor auto mo) const {
+                          SupersInDomain allsupers, const SDMMonitor auto mo) const {
     if (enactmotion.motion.on_step(t_sdm)) {
-      domainsupers = move_superdrops_in_domain(t_sdm, gbxmaps, d_gbxs, domainsupers);
+      allsupers = move_superdrops_in_domain(t_sdm, gbxmaps, d_gbxs, allsupers);
       mo.monitor_motion(d_gbxs);
     }
 
-    return domainsupers;
+    return allsupers;
   }
 
  private:
@@ -193,7 +193,7 @@ struct MoveSupersInDomain {
   // loops from first two function calls into 1 loop?
   */
   SupersInDomain move_superdrops_in_domain(const unsigned int t_sdm, const GbxMaps &gbxmaps,
-                                           viewd_gbx d_gbxs, SupersInDomain domainsupers) const {
+                                           viewd_gbx d_gbxs, SupersInDomain allsupers) const {
     int my_rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 
@@ -201,12 +201,12 @@ struct MoveSupersInDomain {
     enactmotion.move_supers_in_gridboxes(gbxmaps, d_gbxs);
 
     /* step (3) */
-    domainsupers = enactmotion.move_supers_between_gridboxes(gbxmaps, d_gbxs, domainsupers);
+    allsupers = enactmotion.move_supers_between_gridboxes(gbxmaps, d_gbxs, allsupers);
 
     /* step (4) */
-    domainsupers = apply_domain_boundary_conditions(gbxmaps, d_gbxs, domainsupers);
+    allsupers = apply_domain_boundary_conditions(gbxmaps, d_gbxs, allsupers);
 
-    return domainsupers;
+    return allsupers;
   }
 };
 

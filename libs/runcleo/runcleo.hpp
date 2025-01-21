@@ -117,23 +117,23 @@ class RunCLEO {
    *
    * @param t_end End time for timestepping.
    * @param gbxs DualView of gridboxes.
-   * @param domainsupers Struct to handle all superdroplets (both in and out of bounds of domain).
+   * @param allsupers Struct to handle all superdroplets (both in and out of bounds of domain).
    * @return 0 on success.
    */
   int timestep_cleo(const unsigned int t_end, const dualview_gbx gbxs,
-                    SupersInDomain domainsupers) const {
+                    SupersInDomain allsupers) const {
     std::cout << "\n--- timestepping ---\n";
 
     unsigned int t_mdl(0);
     while (t_mdl <= t_end) {
       /* start step (in general involves coupling) */
-      const auto t_next = (unsigned int)start_step(t_mdl, gbxs, domainsupers);
+      const auto t_next = (unsigned int)start_step(t_mdl, gbxs, allsupers);
 
       /* advance dynamics solver (optionally concurrent to SDM) */
       coupldyn_step(t_mdl, t_next);
 
       /* advance SDM (optionally concurrent to dynamics solver) */
-      sdm_step(t_mdl, t_next, gbxs, domainsupers);
+      sdm_step(t_mdl, t_next, gbxs, allsupers);
 
       /* proceed to next step (in general involves coupling) */
       t_mdl = proceed_to_next_step(t_next, gbxs);
@@ -157,7 +157,7 @@ class RunCLEO {
    * @return Size of the next timestep.
    */
   unsigned int start_step(const unsigned int t_mdl, dualview_gbx gbxs,
-                          const SupersInDomain domainsupers) const {
+                          const SupersInDomain allsupers) const {
     if (t_mdl % sdm.get_couplstep() == 0) {
       gbxs.sync_host();
       comms.receive_dynamics(sdm.gbxmaps, coupldyn, gbxs.view_host());
@@ -165,7 +165,7 @@ class RunCLEO {
     }
 
     gbxs.sync_device();
-    sdm.at_start_step(t_mdl, gbxs, domainsupers);
+    sdm.at_start_step(t_mdl, gbxs, allsupers);
 
     return get_next_step(t_mdl);
   }
@@ -219,14 +219,14 @@ class RunCLEO {
    * @param t_mdl Current timestep of the coupled model.
    * @param t_next Next timestep of the coupled model.
    * @param gbxs DualView of gridboxes.
-   * @param domainsupers Struct to handle all superdrops (both in and out of bounds of domain).
+   * @param allsupers Struct to handle all superdrops (both in and out of bounds of domain).
    */
   void sdm_step(const unsigned int t_mdl, unsigned int t_next, dualview_gbx gbxs,
-                SupersInDomain domainsupers) const {
+                SupersInDomain allsupers) const {
     Kokkos::Profiling::ScopedRegion region("timestep_sdm");
 
     gbxs.sync_device();  // get device up to date with host
-    sdm.run_step(t_mdl, t_next, gbxs.view_device(), domainsupers);
+    sdm.run_step(t_mdl, t_next, gbxs.view_device(), allsupers);
     gbxs.modify_device();  // mark device view of gbxs as modified
   }
 
@@ -311,14 +311,14 @@ class RunCLEO {
     // create runtime objects and prepare CLEO for timestepping
     Kokkos::Profiling::pushRegion("init");
     auto totsupers = create_supers(initconds.initsupers);
-    auto domainsupers = SupersInDomain(totsupers);
-    auto gbxs = create_gbxs(sdm.gbxmaps, initconds.initgbxs, domainsupers.get_totsupers());
+    auto allsupers = SupersInDomain(totsupers);
+    auto gbxs = create_gbxs(sdm.gbxmaps, initconds.initgbxs, allsupers.get_totsupers());
     prepare_to_timestep(gbxs);
     Kokkos::Profiling::popRegion();
 
     // do timestepping from t=0 to t=t_end
     Kokkos::Profiling::pushRegion("timestep");
-    timestep_cleo(t_end, gbxs, domainsupers);
+    timestep_cleo(t_end, gbxs, allsupers);
     Kokkos::Profiling::popRegion();
 
     Kokkos::Profiling::popRegion();
