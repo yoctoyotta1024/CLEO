@@ -142,17 +142,18 @@ class SDMMethods {
      */
     template <SDMMonitor SDMMo>
     void operator()(const unsigned int t_sdm, const unsigned int t_next, const viewd_gbx d_gbxs,
-                    const SDMMo mo) const {
+                    const SupersInDomain &allsupers, const SDMMo mo) const {
       Kokkos::Profiling::ScopedRegion region("timestep_sdm_microphysics");
 
       // TODO(all) use scratch space for parallel region
+      const auto domainsupers = allsupers.domain_supers();
       const size_t ngbxs(d_gbxs.extent(0));
       Kokkos::parallel_for(
           "sdm_microphysics", TeamPolicy(ngbxs, Kokkos::AUTO()),
           KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
             const auto ii = team_member.league_rank();
 
-            auto supers = d_gbxs(ii).supersingbx();
+            auto supers = d_gbxs(ii).supersingbx(domainsupers);
             for (unsigned int subt = t_sdm; subt < t_next; subt = microphys.next_step(subt)) {
               supers =
                   microphys.run_step(team_member, subt, supers, d_gbxs(ii).state,
@@ -216,10 +217,10 @@ class SDMMethods {
    * @param gbxs Dualview of gridboxes (on host and on device).
    */
   void at_start_step(const unsigned int t_mdl, const dualview_gbx gbxs,
-                     const SupersInDomain allsupers) const {
+                     const SupersInDomain &allsupers) const {
     const auto d_gbxs = gbxs.view_device();
-    const auto domain_totsupers = allsupers.domain_totsupers_readonly();
-    obs.at_start_step(t_mdl, d_gbxs, domain_totsupers);
+    const auto domainsupers = allsupers.domain_supers_readonly();
+    obs.at_start_step(t_mdl, d_gbxs, domainsupers);
   }
 
   /**
@@ -242,8 +243,8 @@ class SDMMethods {
     while (t_sdm < t_mdl_next) {
       const auto t_sdm_next = next_sdmstep(t_sdm, t_mdl_next);
 
-      superdrops_movement(t_sdm, d_gbxs, allsupers, mo);  // on host and device
-      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs, mo);    // on device
+      superdrops_movement(t_sdm, d_gbxs, allsupers, mo);           // on host and device
+      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs, allsupers, mo);  // on device
 
       t_sdm = t_sdm_next;
     }

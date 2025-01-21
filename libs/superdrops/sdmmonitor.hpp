@@ -29,8 +29,8 @@
 /**
  * @brief Concept of SDMmonitor to monitor various SDM processes.
  *
- * _Note:_ Constraints missing `{ mo.monitor_motion(d_gbxs) } -> std::same_as<void>;` to avoid
- * adding constraint over templated type "d_gbxs".
+ * _Note:_ Constraints missing `{ mo.monitor_motion(d_gbxs, domainsupers) } -> std::same_as<void>;`
+ * to avoid adding constraint over templated argument types.
  *
  * @tparam SDMMo Type that satisfies the SDMMonitor concept.
  */
@@ -101,9 +101,9 @@ struct CombinedSDMMonitor {
    *
    * Each monitor is run sequentially.
    */
-  void monitor_motion(const auto d_gbxs) const {
-    a.monitor_motion(d_gbxs);
-    b.monitor_motion(d_gbxs);
+  void monitor_motion(const auto d_gbxs, const auto domainsupers) const {
+    a.monitor_motion(d_gbxs, domainsupers);
+    b.monitor_motion(d_gbxs, domainsupers);
   }
 };
 
@@ -121,7 +121,7 @@ struct NullSDMMonitor {
   KOKKOS_FUNCTION
   void monitor_microphysics(const TeamMember &team_member, const viewd_constsupers supers) const {}
 
-  void monitor_motion(const auto d_gbxs) const {}
+  void monitor_motion(const auto d_gbxs, const auto domainsupers) const {}
 };
 
 #endif  //  LIBS_SUPERDROPS_SDMMONITOR_HPP_

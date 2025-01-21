@@ -92,7 +92,8 @@ struct MoveSupersInDomain {
     Kokkos::parallel_for([...]) is equivalent to:
     for (size_t ii(0); ii < ngbxs; ++ii) {[...]}
     when in serial */
-    void move_supers_in_gridboxes(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs) const {
+    void move_supers_in_gridboxes(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
+                                  const subviewd_supers domainsupers) const {
       const size_t ngbxs(d_gbxs.extent(0));
 
       Kokkos::parallel_for(
@@ -102,7 +103,7 @@ struct MoveSupersInDomain {
 
             auto &gbx = d_gbxs(ii);
             move_supers_in_gbx(team_member, gbx.get_gbxindex(), gbxmaps, gbx.state,
-                               gbx.supersingbx());
+                               gbx.supersingbx(domainsupers));
           });
     }
 
@@ -114,7 +115,7 @@ struct MoveSupersInDomain {
     _Note:_ totsupers is view of all superdrops (both in and out of bounds of domain).
     */
     SupersInDomain move_supers_between_gridboxes(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
-                                                 SupersInDomain allsupers) const {
+                                                 SupersInDomain &allsupers) const {
       auto totsupers = allsupers.get_totsupers();
 
       sort_supers(totsupers);
@@ -125,15 +126,16 @@ struct MoveSupersInDomain {
         totsupers = sendrecv_supers(gbxmaps, d_gbxs, totsupers);  // TODO(ALL): make GPU compatible
       }
 
+      allsupers.set_totsupers(totsupers);
+
+      const auto domainsupers = allsupers.domain_supers();
       const auto ngbxs = d_gbxs.extent(0);
       Kokkos::parallel_for(
           "move_supers_between_gridboxes", TeamPolicy(ngbxs, Kokkos::AUTO()),
           KOKKOS_LAMBDA(const TeamMember &team_member) {
             const auto ii = team_member.league_rank();
-            d_gbxs(ii).supersingbx.set_refs(team_member);
+            d_gbxs(ii).supersingbx.set_refs(team_member, domainsupers);
           });
-
-      allsupers.set_totsupers(totsupers);
 
       // /* optional (expensive!) test to raise error if
       // superdrops' gbxindex doesn't match gridbox's gbxindex */
@@ -141,7 +143,7 @@ struct MoveSupersInDomain {
       //     "check_sdgbxindex_during_motion", TeamPolicy(ngbxs, Kokkos::AUTO()),
       //     KOKKOS_LAMBDA(const TeamMember &team_member) {
       //       const auto ii = team_member.league_rank();
-      //       assert(d_gbxs(ii).supersingbx.iscorrect(team_member) &&
+      //       assert(d_gbxs(ii).supersingbx.iscorrect(team_member, totsupers) &&
       //              "incorrect references to superdrops in gridbox during motion");
       //     });
 
@@ -172,10 +174,10 @@ struct MoveSupersInDomain {
    *
    */
   SupersInDomain run_step(const unsigned int t_sdm, const GbxMaps &gbxmaps, viewd_gbx d_gbxs,
-                          SupersInDomain allsupers, const SDMMonitor auto mo) const {
+                          SupersInDomain &allsupers, const SDMMonitor auto mo) const {
     if (enactmotion.motion.on_step(t_sdm)) {
       allsupers = move_superdrops_in_domain(t_sdm, gbxmaps, d_gbxs, allsupers);
-      mo.monitor_motion(d_gbxs);
+      mo.monitor_motion(d_gbxs, allsupers.domain_supers_readonly());
     }
 
     return allsupers;
@@ -193,12 +195,12 @@ struct MoveSupersInDomain {
   // loops from first two function calls into 1 loop?
   */
   SupersInDomain move_superdrops_in_domain(const unsigned int t_sdm, const GbxMaps &gbxmaps,
-                                           viewd_gbx d_gbxs, SupersInDomain allsupers) const {
+                                           viewd_gbx d_gbxs, SupersInDomain &allsupers) const {
     int my_rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 
     /* steps (1 - 2) */
-    enactmotion.move_supers_in_gridboxes(gbxmaps, d_gbxs);
+    enactmotion.move_supers_in_gridboxes(gbxmaps, d_gbxs, allsupers.domain_supers());
 
     /* step (3) */
     allsupers = enactmotion.move_supers_between_gridboxes(gbxmaps, d_gbxs, allsupers);

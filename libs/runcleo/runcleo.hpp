@@ -121,7 +121,7 @@ class RunCLEO {
    * @return 0 on success.
    */
   int timestep_cleo(const unsigned int t_end, const dualview_gbx gbxs,
-                    SupersInDomain allsupers) const {
+                    SupersInDomain &allsupers) const {
     std::cout << "\n--- timestepping ---\n";
 
     unsigned int t_mdl(0);
@@ -157,7 +157,7 @@ class RunCLEO {
    * @return Size of the next timestep.
    */
   unsigned int start_step(const unsigned int t_mdl, dualview_gbx gbxs,
-                          const SupersInDomain allsupers) const {
+                          const SupersInDomain &allsupers) const {
     if (t_mdl % sdm.get_couplstep() == 0) {
       gbxs.sync_host();
       comms.receive_dynamics(sdm.gbxmaps, coupldyn, gbxs.view_host());
@@ -222,7 +222,7 @@ class RunCLEO {
    * @param allsupers Struct to handle all superdrops (both in and out of bounds of domain).
    */
   void sdm_step(const unsigned int t_mdl, unsigned int t_next, dualview_gbx gbxs,
-                SupersInDomain allsupers) const {
+                SupersInDomain &allsupers) const {
     Kokkos::Profiling::ScopedRegion region("timestep_sdm");
 
     gbxs.sync_device();  // get device up to date with host
@@ -310,9 +310,9 @@ class RunCLEO {
 
     // create runtime objects and prepare CLEO for timestepping
     Kokkos::Profiling::pushRegion("init");
-    auto totsupers = create_supers(initconds.initsupers);
-    auto allsupers = SupersInDomain(totsupers);
-    auto gbxs = create_gbxs(sdm.gbxmaps, initconds.initgbxs, allsupers.get_totsupers());
+    auto allsupers = SupersInDomain(create_supers(initconds.initsupers),
+                                    sdm.gbxmaps.get_local_ngridboxes_hostcopy());
+    auto gbxs = create_gbxs(sdm.gbxmaps, initconds.initgbxs, allsupers);
     prepare_to_timestep(gbxs);
     Kokkos::Profiling::popRegion();
 

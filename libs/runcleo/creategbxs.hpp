@@ -39,6 +39,7 @@
 #include "gridboxes/gbxindex.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
+#include "gridboxes/supersindomain.hpp"
 #include "gridboxes/supersingbx.hpp"
 #include "superdrops/state.hpp"
 #include "superdrops/superdrop.hpp"
@@ -106,17 +107,17 @@ class GenGridbox {
    * @tparam GbxMaps Type of the Gridbox Maps.
    * @param ii The index of the Gridbox.
    * @param gbxmaps The Gridbox Maps.
-   * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
+   * @param domainsupers The view of all super-droplets (in bounds of domain).
    * @return The generated Gridbox.
    */
   template <GridboxMaps GbxMaps>
   Gridbox operator()(const unsigned int ii, const GbxMaps &gbxmaps,
-                     const viewd_supers totsupers) const {
+                     const subviewd_constsupers domainsupers) const {
     const auto gbxindex = GbxindexGen->next(ii);
     const auto volume = gbxmaps.get_gbxvolume(gbxindex.value);
     const auto state = state_at(ii, volume);
 
-    return Gridbox(gbxindex, state, totsupers);
+    return Gridbox(gbxindex, state, domainsupers);
   }
 
   /**
@@ -133,20 +134,19 @@ class GenGridbox {
    * @param team_member The host team member reference.
    * @param ii The index of the Gridbox.
    * @param gbxmaps The Gridbox Maps.
-   * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
-   * @param h_totsupers The host mirror of all super-droplets (both in and out of bounds of domain).
+   * @param h_domainsupers Host mirror of view of all super-droplets (in bounds of domain).
    * @return The generated Gridbox.
    */
   template <GridboxMaps GbxMaps>
   Gridbox operator()(const HostTeamMember &team_member, const unsigned int ii,
-                     const GbxMaps &gbxmaps, const viewd_supers totsupers,
-                     const viewd_constsupers::HostMirror h_totsupers) const {
+                     const GbxMaps &gbxmaps,
+                     const subviewd_constsupers::HostMirror h_domainsupers) const {
     const auto gbxindex = GbxindexGen->next(ii);
     const auto volume = gbxmaps.get_gbxvolume(gbxindex.value);
     const auto state = state_at(ii, volume);
-    const auto refs = find_refs(team_member, h_totsupers, gbxindex.value);
+    const auto refs = find_refs(team_member, h_domainsupers, gbxindex.value);
 
-    return Gridbox(gbxindex, state, totsupers, refs);
+    return Gridbox(gbxindex, state, refs);
   }
 };
 
@@ -161,13 +161,13 @@ class GenGridbox {
  *
  * @param gbxmaps The Gridbox Maps.
  * @param gbxic The Gridbox initial conditions.
- * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
+ * @param domainsupers The view of all super-droplets (in bounds of domain).
  *
  * @return The view of initialised Gridboxes.
  */
 template <GridboxMaps GbxMaps, typename GbxInitConds>
 dualview_gbx create_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &gbxic,
-                         const viewd_supers totsupers);
+                         const SupersInDomain &allsupers);
 
 /**
  * @brief Initialise host view of Gridboxes.
@@ -179,7 +179,7 @@ dualview_gbx create_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &gbxic,
  * @code
  * for (size_t ii(0); ii < ngbxs; ++ii)
  * {
- *  h_gbxs(ii) = gen(ii, gbxmaps, totsupers);
+ *  h_gbxs(ii) = gen(ii, gbxmaps, domainsupers);
  * }
  * @endcode
  *
@@ -187,12 +187,13 @@ dualview_gbx create_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &gbxic,
  *
  * @param gbxmaps The Gridbox Maps.
  * @param gen The Gridbox generator.
- * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
+ * @param domainsupers The view of all super-droplets (in bounds of domain).
  * @param h_gbxs The view of Gridboxes on the host.
  */
 template <GridboxMaps GbxMaps>
 inline void initialise_gbxs_on_host(const GbxMaps &gbxmaps, const GenGridbox &gen,
-                                    const viewd_supers totsupers, const viewh_gbx h_gbxs);
+                                    const subviewd_constsupers domainsupers,
+                                    const viewh_gbx h_gbxs);
 
 /**
  * @brief Initialise a view of Gridboxes.
@@ -206,13 +207,13 @@ inline void initialise_gbxs_on_host(const GbxMaps &gbxmaps, const GenGridbox &ge
  *
  * @param gbxmaps The Gridbox Maps.
  * @param gbxic The initial conditions for the Gridboxes.
- * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
+ * @param domainsupers The view of all super-droplets (in bounds of domain).
  *
  * @return The initialised view of Gridboxes.
  */
 template <GridboxMaps GbxMaps, typename GbxInitConds>
 inline dualview_gbx initialise_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &gbxic,
-                                    const viewd_supers totsupers);
+                                    const subviewd_constsupers domainsupers);
 
 /**
  * @brief Check if gridbox initialisation is complete.
@@ -224,7 +225,8 @@ inline dualview_gbx initialise_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &
  * @param ngbxs_from_maps The number of gridboxes from gridbox maps.
  * @param gbxs The dualview containing gridboxes.
  */
-void is_gbxinit_complete(const size_t ngbxs_from_maps, dualview_gbx gbxs);
+void is_gbxinit_complete(const size_t ngbxs_from_maps, dualview_gbx gbxs,
+                         const viewd_constsupers totsupers);
 
 /**
  * @brief Print some information about initial Gridboxes.
@@ -250,20 +252,21 @@ void print_gbxs(const viewh_constgbx gbxs);
  *
  * @param gbxmaps The Gridbox Maps.
  * @param gbxic The Gridbox initial conditions.
- * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
+ * @param domainsupers The view of all super-droplets (in bounds of domain).
  *
  * @return The view of initialised Gridboxes.
  */
 template <GridboxMaps GbxMaps, typename GbxInitConds>
 dualview_gbx create_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &gbxic,
-                         const viewd_supers totsupers) {
+                         const SupersInDomain &allsupers) {
   Kokkos::Profiling::ScopedRegion region("init_gbxs");
 
   std::cout << "\n--- create gridboxes ---\ninitialising\n";
-  const auto gbxs = initialise_gbxs(gbxmaps, gbxic, totsupers);
+  const auto domainsupers = allsupers.domain_supers_readonly();
+  const auto gbxs = initialise_gbxs(gbxmaps, gbxic, domainsupers);
 
   std::cout << "checking initialisation\n";
-  is_gbxinit_complete(gbxmaps.get_local_ngridboxes_hostcopy(), gbxs);
+  is_gbxinit_complete(gbxmaps.get_local_ngridboxes_hostcopy(), gbxs, allsupers.get_totsupers());
 
   // // Print information about the created superdrops
   // print_gbxs(gbxs.view_host());
@@ -285,20 +288,20 @@ dualview_gbx create_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &gbxic,
  *
  * @param gbxmaps The Gridbox Maps.
  * @param gbxic The initial conditions for the Gridboxes.
- * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
+ * @param domainsupers The view of all super-droplets (in bounds of domain).
  *
  * @return The initialised view of Gridboxes.
  */
 template <GridboxMaps GbxMaps, typename GbxInitConds>
 inline dualview_gbx initialise_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &gbxic,
-                                    const viewd_supers totsupers) {
+                                    const subviewd_constsupers domainsupers) {
   // create dualview for gridboxes on device and host memory
   dualview_gbx gbxs("gbxs", gbxic.get_ngbxs());
 
   // initialise gridboxes on host
   const GenGridbox gen(gbxic);
   gbxs.sync_host();
-  initialise_gbxs_on_host(gbxmaps, gen, totsupers, gbxs.view_host());
+  initialise_gbxs_on_host(gbxmaps, gen, domainsupers, gbxs.view_host());
   gbxs.modify_host();
 
   // update device gridbox view to match host's gridbox view
@@ -317,7 +320,7 @@ inline dualview_gbx initialise_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &
  * @code
  * for (size_t ii(0); ii < ngbxs; ++ii)
  * {
- *  h_gbxs(ii) = gen(ii, gbxmaps, totsupers);
+ *  h_gbxs(ii) = gen(ii, gbxmaps, domainsupers);
  * }
  * @endcode
  *
@@ -325,23 +328,24 @@ inline dualview_gbx initialise_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &
  *
  * @param gbxmaps The Gridbox Maps.
  * @param gen The Gridbox generator.
- * @param totsupers The view of all super-droplets (both in and out of bounds of domain).
+ * @param domainsupers The view of all super-droplets (both in and out of bounds of domain).
  * @param h_gbxs The view of Gridboxes on the host.
  */
 template <GridboxMaps GbxMaps>
 inline void initialise_gbxs_on_host(const GbxMaps &gbxmaps, const GenGridbox &gen,
-                                    const viewd_supers totsupers, const viewh_gbx h_gbxs) {
+                                    const subviewd_constsupers domainsupers,
+                                    const viewh_gbx h_gbxs) {
   const size_t ngbxs = h_gbxs.extent(0);
 
-  auto h_totsupers =
-      Kokkos::create_mirror_view(totsupers);  // mirror totsupers in case view is on device memory
-  Kokkos::deep_copy(h_totsupers, totsupers);
+  auto h_domainsupers = Kokkos::create_mirror_view(
+      domainsupers);  // mirror domainsupers in case view is on device memory
+  Kokkos::deep_copy(h_domainsupers, domainsupers);
 
   Kokkos::parallel_for("initialise_gbxs_on_host", HostTeamPolicy(ngbxs, Kokkos::AUTO()),
                        [=](const HostTeamMember &team_member) {
                          const auto ii = team_member.league_rank();
 
-                         const auto gbx = gen(team_member, ii, gbxmaps, totsupers, h_totsupers);
+                         const auto gbx = gen(team_member, ii, gbxmaps, h_domainsupers);
 
                          /* use 1 thread on host to write gbx to view */
                          team_member.team_barrier();

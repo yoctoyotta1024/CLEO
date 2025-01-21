@@ -70,7 +70,7 @@ struct MonitorCondensation {
    *
    * @param d_gbxs The view of gridboxes in device memory.
    */
-  void monitor_motion(const viewd_constgbx d_gbxs) const {}
+  void monitor_motion(const viewd_constgbx d_gbxs, const subviewd_constsupers domainsupers) const {}
 
   /**
    * @brief Constructor for MonitorCondensation

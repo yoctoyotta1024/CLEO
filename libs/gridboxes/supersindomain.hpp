@@ -23,6 +23,7 @@
 #define LIBS_GRIDBOXES_SUPERSINDOMAIN_HPP_
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Pair.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 
 #include "gridboxes/findrefs.hpp"
@@ -32,36 +33,40 @@
 (i.e. within any of the gridboxes on a single node), e.g. through std::span or Kokkos::subview) */
 struct SupersInDomain {
  private:
+  Kokkos::pair<unsigned int, unsigned int> gbxindex_range; /**< {min, max} gbxindex of domain */
   viewd_supers totsupers; /**< view of all superdrops (both in and out of bounds of domain) */
+  kkpair_size_t
+      domainrefs; /**< position in view of (first, last) superdrop that occupies gridbox */
 
  public:
   SupersInDomain() = default;   // Kokkos requirement for a (dual)View
   ~SupersInDomain() = default;  // Kokkos requirement for a (dual)View
 
-  explicit SupersInDomain(const viewd_supers i_totsupers) : totsupers(i_totsupers) {}
+  explicit SupersInDomain(const viewd_supers totsupers_, const unsigned int gbxindex_max)
+      : gbxindex_range({0, gbxindex_max}),
+        totsupers(totsupers_),
+        domainrefs(find_domainrefs(totsupers, gbxindex_range)) {}
 
-  void set_totsupers(const viewd_supers i_totsupers) { totsupers = i_totsupers; }
+  void set_domainrefs() { domainrefs = find_domainrefs(totsupers, gbxindex_range); }
+
+  void set_totsupers(const viewd_supers totsupers_) {
+    totsupers = totsupers_;
+    set_domainrefs();
+  }
 
   viewd_supers get_totsupers() const { return totsupers; }
 
   /* returns the view of all the superdrops in the domain */
-  subviewd_supers domain_supers() const {
-    const auto domainrefs = find_domainrefs(totsupers);
-    return Kokkos::subview(totsupers, domainrefs);
-  }
+  subviewd_supers domain_supers() const { return Kokkos::subview(totsupers, domainrefs); }
 
   /* returns the view of all the superdrops in the domain. read-only means superdrops in
   the view are const */
-  subviewd_constsupers domain_totsupers_readonly() const {
-    const auto domainrefs = find_domainrefs(totsupers);
+  subviewd_constsupers domain_supers_readonly() const {
     return Kokkos::subview(totsupers, domainrefs);
   }
 
   /* returns the total number of all the superdrops in the domain (excluding out of bounds ones) */
-  size_t domain_nsupers() const {
-    const auto domainrefs = find_domainrefs(totsupers);
-    return domainrefs.second - domainrefs.first;
-  }
+  size_t domain_nsupers() const { return domainrefs.second - domainrefs.first; }
 };
 
 #endif  // LIBS_GRIDBOXES_SUPERSINDOMAIN_HPP_

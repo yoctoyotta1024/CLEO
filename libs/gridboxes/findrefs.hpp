@@ -31,7 +31,7 @@
 /* namespace containing values of constants with dimensions */
 namespace SetRefPreds {
 
-/* struct for SupersInGbx::set_refs() predicate to find _first_ superdrop in
+/* struct for SupersInGbx::set_refs(...) predicate to find _first_ superdrop in
 view which has matching sdgbxindex to idx */
 struct Ref0 {
   unsigned int idx;
@@ -41,7 +41,7 @@ struct Ref0 {
   }
 };
 
-/* struct for SupersInGbx::set_refs() predicate to find _last_ superdrop in
+/* struct for SupersInGbx::set_refs(...) predicate to find _last_ superdrop in
 view which has matching sdgbxindex to idx */
 struct Ref1 {
   unsigned int idx;
@@ -134,13 +134,15 @@ KOKKOS_INLINE_FUNCTION size_t makeref(const Iter start, const Iter iter) {
   return static_cast<size_t>(ref);
 }
 
-/* returns position in view of {first, last} superdrop that is in domain,
-ie. that has sdgbxindex < oob_idx. Function is outermost level of parallelism. */
+/* returns position in view of {first, last} superdrop that is in domain, where first is assumed to
+be at 0th position. Last is position of last superdrop with sdgbxindex < idx_max. Function valid
+in outermost level (outside) of parallelism. */
 template <typename ViewSupers>
-inline kkpair_size_t find_domainrefs(const ViewSupers totsupers) {
+inline kkpair_size_t find_domainrefs(
+    const ViewSupers totsupers, const Kokkos::pair<unsigned int, unsigned int> gbxindex_range) {
   namespace SRP = SetRefPreds;
-  const auto ref0 = size_t{0};
-  const auto ref1 = size_t{find_ref(totsupers, SRP::Ref0{LIMITVALUES::oob_gbxindex})};
+  const auto ref0 = size_t{find_ref(totsupers, SRP::Ref0{gbxindex_range.first})};
+  const auto ref1 = size_t{find_ref(totsupers, SRP::Ref1{gbxindex_range.second})};
 
   return {ref0, ref1};
 }

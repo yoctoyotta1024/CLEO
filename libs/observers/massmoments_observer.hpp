@@ -129,11 +129,11 @@ struct MassMomentsFunc {
    */
   KOKKOS_FUNCTION
   void operator()(const TeamMember &team_member, const viewd_constgbx d_gbxs,
-                  Buffer<uint64_t>::mirrorviewd_buffer d_mom0,
+                  const subviewd_constsupers d_supers, Buffer<uint64_t>::mirrorviewd_buffer d_mom0,
                   Buffer<float>::mirrorviewd_buffer d_mom1,
                   Buffer<float>::mirrorviewd_buffer d_mom2) const {
     const auto ii = team_member.league_rank();
-    const auto supers(d_gbxs(ii).supersingbx.readonly());
+    const auto supers = d_gbxs(ii).supersingbx.readonly(d_supers);
     calculate_massmoments(team_member, supers, d_mom0, d_mom1, d_mom2);
   }
 };
@@ -173,11 +173,11 @@ struct RaindropsMassMomentsFunc {
    */
   KOKKOS_FUNCTION
   void operator()(const TeamMember &team_member, const viewd_constgbx d_gbxs,
-                  Buffer<uint64_t>::mirrorviewd_buffer d_mom0,
+                  const subviewd_constsupers d_supers, Buffer<uint64_t>::mirrorviewd_buffer d_mom0,
                   Buffer<float>::mirrorviewd_buffer d_mom1,
                   Buffer<float>::mirrorviewd_buffer d_mom2) const {
     const auto ii = team_member.league_rank();
-    const auto supers(d_gbxs(ii).supersingbx.readonly());
+    const auto supers = d_gbxs(ii).supersingbx.readonly(d_supers);
     calculate_rainmassmoments(team_member, supers, d_mom0, d_mom1, d_mom2);
   }
 };
@@ -236,10 +236,11 @@ struct CollectMassMoments {
     using mirrorviewd_mom1 = XarrayAndViews<Store, float>::mirrorviewd_data;
     using mirrorviewd_mom2 = XarrayAndViews<Store, float>::mirrorviewd_data;
     FunctorFunc ffunc; /**< Functor to calculate mass moments within parallel team policy loop */
-    viewd_constgbx d_gbxs;   /**< View of gridboxes on device */
-    mirrorviewd_mom0 d_mom0; /**< Mirror view on device for 0th mass moment */
-    mirrorviewd_mom1 d_mom1; /**< Mirror view on device for 1st mass moment */
-    mirrorviewd_mom2 d_mom2; /**< Mirror view on device for 2nd mass moment */
+    viewd_constgbx d_gbxs;         /**< View of gridboxes on device */
+    subviewd_constsupers d_supers; /**< View of superdroplets (in domain) on device */
+    mirrorviewd_mom0 d_mom0;       /**< Mirror view on device for 0th mass moment */
+    mirrorviewd_mom1 d_mom1;       /**< Mirror view on device for 1st mass moment */
+    mirrorviewd_mom2 d_mom2;       /**< Mirror view on device for 2nd mass moment */
 
     /**
      * @brief Constructs a Functor object.
@@ -250,9 +251,14 @@ struct CollectMassMoments {
      * @param d_mom1 The mirror view for the 1st mass moment on the device.
      * @param d_mom2 The mirror view for the 2nd mass moment on the device.
      */
-    Functor(FunctorFunc ffunc, const viewd_constgbx d_gbxs, mirrorviewd_mom0 d_mom0,
-            mirrorviewd_mom1 d_mom1, mirrorviewd_mom2 d_mom2)
-        : ffunc(ffunc), d_gbxs(d_gbxs), d_mom0(d_mom0), d_mom1(d_mom1), d_mom2(d_mom2) {}
+    Functor(FunctorFunc ffunc, const viewd_constgbx d_gbxs, const subviewd_constsupers d_supers,
+            mirrorviewd_mom0 d_mom0, mirrorviewd_mom1 d_mom1, mirrorviewd_mom2 d_mom2)
+        : ffunc(ffunc),
+          d_gbxs(d_gbxs),
+          d_supers(d_supers),
+          d_mom0(d_mom0),
+          d_mom1(d_mom1),
+          d_mom2(d_mom2) {}
 
     /**
      * @brief Adapter to call functor to perform calculation of massmoments in each gridbox
@@ -260,7 +266,7 @@ struct CollectMassMoments {
      */
     KOKKOS_INLINE_FUNCTION
     void operator()(const TeamMember &team_member) const {
-      ffunc(team_member, d_gbxs, d_mom0, d_mom1, d_mom2);
+      ffunc(team_member, d_gbxs, d_supers, d_mom0, d_mom1, d_mom2);
     }
   };
 
@@ -295,7 +301,7 @@ struct CollectMassMoments {
             (mom1_ptr->d_data.extent(0) == d_gbxs.extent(0)) &&
             (mom2_ptr->d_data.extent(0) == d_gbxs.extent(0))) &&
            "d_data views for mass moments should be size of the number of gridboxes");
-    return Functor(ffunc, d_gbxs, mom0_ptr->d_data, mom1_ptr->d_data, mom2_ptr->d_data);
+    return Functor(ffunc, d_gbxs, d_supers, mom0_ptr->d_data, mom1_ptr->d_data, mom2_ptr->d_data);
   }
 
   /**

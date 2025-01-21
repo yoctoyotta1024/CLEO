@@ -29,7 +29,7 @@
 
 struct NullBoundaryConditions {
   SupersInDomain operator()(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
-                            const SupersInDomain allsupers) const {
+                            const SupersInDomain &allsupers) const {
     return allsupers;
   }
 };
