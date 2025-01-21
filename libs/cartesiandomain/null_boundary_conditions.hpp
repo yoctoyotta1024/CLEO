@@ -25,10 +25,13 @@
 
 #include "../kokkosaliases.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
+#include "gridboxes/supersindomain.hpp"
 
 struct NullBoundaryConditions {
-  void operator()(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
-                  const viewd_supers totsupers) const {}
+  SupersInDomain operator()(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
+                            const SupersInDomain domainsupers) const {
+    return domainsupers;
+  }
 };
 
 #endif  // LIBS_CARTESIANDOMAIN_NULL_BOUNDARY_CONDITIONS_HPP_

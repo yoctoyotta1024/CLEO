@@ -41,6 +41,7 @@
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/domainboundaries.hpp"
 #include "gridboxes/sortsupers.hpp"
+#include "gridboxes/supersindomain.hpp"
 #include "initialise/optional_config_params.hpp"
 #include "superdrops/superdrop.hpp"
 
@@ -123,11 +124,9 @@ struct AddSupersAtDomainTop {
   /*
   Call to apply boundary conditions to remove and then add superdroplets to the top of the domain
   abouve coord3lim.
-
-  _Note:_ totsupers is view of all superdrops (both in and out of bounds of domain).
   */
-  void operator()(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
-                  const viewd_supers totsupers) const;
+  SupersInDomain operator()(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
+                            SupersInDomain domainsupers) const;
 };
 
 #endif  // LIBS_CARTESIANDOMAIN_ADD_SUPERS_AT_DOMAIN_TOP_HPP_

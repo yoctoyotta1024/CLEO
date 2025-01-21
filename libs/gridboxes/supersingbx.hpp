@@ -100,12 +100,6 @@ struct SupersInGbx {
 
   /* returns current number of superdrops referred to by gridbox */
   KOKKOS_INLINE_FUNCTION size_t nsupers() const { return refs.second - refs.first; }
-
-  /* returns the total number of all the superdrops in the domain */
-  size_t domain_totnsupers() const {
-    const auto domainrefs = find_domainrefs(totsupers);
-    return domainrefs.second - domainrefs.first;
-  }
 };
 
 /* assumes totsupers is already sorted via sdgbxindex.

@@ -121,7 +121,7 @@ class RunCLEO {
    * @return 0 on success.
    */
   int timestep_cleo(const unsigned int t_end, const dualview_gbx gbxs,
-                    const SupersInDomain domainsupers) const {
+                    SupersInDomain domainsupers) const {
     std::cout << "\n--- timestepping ---\n";
 
     unsigned int t_mdl(0);
@@ -222,11 +222,11 @@ class RunCLEO {
    * @param domainsupers Struct to handle all superdrops (both in and out of bounds of domain).
    */
   void sdm_step(const unsigned int t_mdl, unsigned int t_next, dualview_gbx gbxs,
-                const SupersInDomain domainsupers) const {
+                SupersInDomain domainsupers) const {
     Kokkos::Profiling::ScopedRegion region("timestep_sdm");
 
     gbxs.sync_device();  // get device up to date with host
-    sdm.run_step(t_mdl, t_next, gbxs.view_device(), domainsupers.get_totsupers());
+    sdm.run_step(t_mdl, t_next, gbxs.view_device(), domainsupers);
     gbxs.modify_device();  // mark device view of gbxs as modified
   }
 

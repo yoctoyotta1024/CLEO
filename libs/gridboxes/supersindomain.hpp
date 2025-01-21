@@ -40,6 +40,8 @@ struct SupersInDomain {
 
   explicit SupersInDomain(const viewd_supers i_totsupers) : totsupers(i_totsupers) {}
 
+  void set_totsupers(const viewd_supers i_totsupers) { totsupers = i_totsupers; }
+
   viewd_supers get_totsupers() const { return totsupers; }
 
   /* returns the view of all the superdrops in the domain */
@@ -53,6 +55,12 @@ struct SupersInDomain {
   subviewd_constsupers domain_totsupers_readonly() const {
     const auto domainrefs = find_domainrefs(totsupers);
     return Kokkos::subview(totsupers, domainrefs);
+  }
+
+  /* returns the total number of all the superdrops in the domain (excluding out of bounds ones) */
+  size_t domain_nsupers() const {
+    const auto domainrefs = find_domainrefs(totsupers);
+    return domainrefs.second - domainrefs.first;
   }
 };
 

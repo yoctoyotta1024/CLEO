@@ -99,11 +99,11 @@ class SDMMethods {
    * @param totsupers View of all superdrops (both in and out of bounds of domain).
    * @param mo Monitor of SDM processes.
    */
-  void superdrops_movement(const unsigned int t_sdm, viewd_gbx d_gbxs, const viewd_supers totsupers,
+  void superdrops_movement(const unsigned int t_sdm, viewd_gbx d_gbxs, SupersInDomain &domainsupers,
                            const SDMMonitor auto mo) const {
     Kokkos::Profiling::ScopedRegion region("timestep_sdm_movement");
 
-    movesupers.run_step(t_sdm, gbxmaps, d_gbxs, totsupers, mo);
+    domainsupers = movesupers.run_step(t_sdm, gbxmaps, d_gbxs, domainsupers, mo);
   }
 
  public:
@@ -152,9 +152,11 @@ class SDMMethods {
           KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
             const auto ii = team_member.league_rank();
 
-            auto supers(d_gbxs(ii).supersingbx());
+            auto supers = d_gbxs(ii).supersingbx();
             for (unsigned int subt = t_sdm; subt < t_next; subt = microphys.next_step(subt)) {
-              supers = microphys.run_step(team_member, subt, supers, d_gbxs(ii).state, mo);
+              supers = microphys.run_step(
+                  team_member, subt, supers, d_gbxs(ii).state,
+                  mo);  // TODO(CB): explicitly feed supers back into domainsupers
             }
 
             mo.monitor_microphysics(team_member, supers);
@@ -233,15 +235,15 @@ class SDMMethods {
    * @param totsupers View of all superdrops (both in and out of bounds of domain).
    */
   void run_step(const unsigned int t_mdl, const unsigned int t_mdl_next, viewd_gbx d_gbxs,
-                const viewd_supers totsupers) const {
+                SupersInDomain &domainsupers) const {
     const SDMMonitor auto mo = obs.get_sdmmonitor();
 
     unsigned int t_sdm(t_mdl);
     while (t_sdm < t_mdl_next) {
       const auto t_sdm_next = next_sdmstep(t_sdm, t_mdl_next);
 
-      superdrops_movement(t_sdm, d_gbxs, totsupers, mo);  // on host and device
-      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs, mo);    // on device
+      superdrops_movement(t_sdm, d_gbxs, domainsupers, mo);  // on host and device
+      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs, mo);       // on device
 
       t_sdm = t_sdm_next;
     }

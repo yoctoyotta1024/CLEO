@@ -61,7 +61,8 @@ struct StreamOutObserver {
    * @param t_mdl Current model time.
    * @param d_gbxs View of the gridboxes on the device.
    */
-  void streamout_statement(const unsigned int t_mdl, const viewd_constgbx d_gbxs) const;
+  void streamout_statement(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
+                           const viewd_constsupers totsupers) const;
 
  public:
   /**
@@ -122,7 +123,7 @@ struct StreamOutObserver {
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                      const viewd_constsupers totsupers) const {
     if (on_step(t_mdl)) {
-      streamout_statement(t_mdl, d_gbxs);
+      streamout_statement(t_mdl, d_gbxs, totsupers);
     }
   }
 

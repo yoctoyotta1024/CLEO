@@ -34,6 +34,7 @@
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/sortsupers.hpp"
+#include "gridboxes/supersindomain.hpp"
 #include "mpi.h"
 #include "superdrops/motion.hpp"
 #include "superdrops/sdmmonitor.hpp"
@@ -44,7 +45,8 @@ function to move super-droplets between MPI processes, e.g. for superdroplets
 which move to/from gridboxes on different nodes.
 */
 template <GridboxMaps GbxMaps>
-void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd_supers totsupers);
+viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
+                             const viewd_supers totsupers);
 
 /*
 struct for functionality to move superdroplets throughtout
@@ -111,14 +113,16 @@ struct MoveSupersInDomain {
     when in serial
     _Note:_ totsupers is view of all superdrops (both in and out of bounds of domain).
     */
-    void move_supers_between_gridboxes(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
-                                       const viewd_supers totsupers) const {
+    SupersInDomain move_supers_between_gridboxes(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
+                                                 SupersInDomain domainsupers) const {
+      auto totsupers = domainsupers.get_totsupers();
+
       sort_supers(totsupers);
 
       int comm_size;
       MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
       if (comm_size > 1) {
-        sendrecv_supers(gbxmaps, d_gbxs, totsupers);  // TODO(ALL): make GPU compatible
+        totsupers = sendrecv_supers(gbxmaps, d_gbxs, totsupers);  // TODO(ALL): make GPU compatible
       }
 
       const auto ngbxs = d_gbxs.extent(0);
@@ -129,6 +133,8 @@ struct MoveSupersInDomain {
             d_gbxs(ii).supersingbx.set_refs(team_member);
           });
 
+      domainsupers.set_totsupers(totsupers);
+
       // /* optional (expensive!) test to raise error if
       // superdrops' gbxindex doesn't match gridbox's gbxindex */
       // Kokkos::parallel_for(
@@ -138,6 +144,8 @@ struct MoveSupersInDomain {
       //       assert(d_gbxs(ii).supersingbx.iscorrect(team_member) &&
       //              "incorrect references to superdrops in gridbox during motion");
       //     });
+
+      return domainsupers;
     }
   } enactmotion;
 
@@ -160,15 +168,17 @@ struct MoveSupersInDomain {
    * if current time, t_sdm, is time when superdrop motion should occur, enact movement of
    * superdroplets throughout domain.
    *
-   * @param totsupers View of all superdrops (both in and out of bounds of domain).
+   * @param domainsupers Struct to handle all superdrops (both in and out of bounds of domain).
    *
    */
-  void run_step(const unsigned int t_sdm, const GbxMaps &gbxmaps, viewd_gbx d_gbxs,
-                const viewd_supers totsupers, const SDMMonitor auto mo) const {
+  SupersInDomain run_step(const unsigned int t_sdm, const GbxMaps &gbxmaps, viewd_gbx d_gbxs,
+                          SupersInDomain domainsupers, const SDMMonitor auto mo) const {
     if (enactmotion.motion.on_step(t_sdm)) {
-      move_superdrops_in_domain(t_sdm, gbxmaps, d_gbxs, totsupers);
+      domainsupers = move_superdrops_in_domain(t_sdm, gbxmaps, d_gbxs, domainsupers);
       mo.monitor_motion(d_gbxs);
     }
+
+    return domainsupers;
   }
 
  private:
@@ -179,12 +189,11 @@ struct MoveSupersInDomain {
   (2) update their sdgbxindex accordingly (device)
   (3) move superdroplets between gridboxes (host)
   (4) (optional) apply domain boundary conditions (host and device)
-  _Note:_ totsupers is view of all superdrops (both in and out of bounds of domain).
   // TODO(all) use tasking to convert all 3 team policy
   // loops from first two function calls into 1 loop?
   */
-  void move_superdrops_in_domain(const unsigned int t_sdm, const GbxMaps &gbxmaps, viewd_gbx d_gbxs,
-                                 const viewd_supers totsupers) const {
+  SupersInDomain move_superdrops_in_domain(const unsigned int t_sdm, const GbxMaps &gbxmaps,
+                                           viewd_gbx d_gbxs, SupersInDomain domainsupers) const {
     int my_rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 
@@ -192,10 +201,12 @@ struct MoveSupersInDomain {
     enactmotion.move_supers_in_gridboxes(gbxmaps, d_gbxs);
 
     /* step (3) */
-    enactmotion.move_supers_between_gridboxes(gbxmaps, d_gbxs, totsupers);
+    domainsupers = enactmotion.move_supers_between_gridboxes(gbxmaps, d_gbxs, domainsupers);
 
     /* step (4) */
-    apply_domain_boundary_conditions(gbxmaps, d_gbxs, totsupers);
+    domainsupers = apply_domain_boundary_conditions(gbxmaps, d_gbxs, domainsupers);
+
+    return domainsupers;
   }
 };
 
@@ -204,7 +215,8 @@ function to move super-droplets between MPI processes, e.g. for superdroplets
 which move to/from gridboxes on different nodes.
 */
 template <GridboxMaps GbxMaps>
-void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd_supers totsupers) {
+viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
+                             const viewd_supers totsupers) {
   int comm_size, my_rank;
   MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
   MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
@@ -256,7 +268,7 @@ void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd
 
   if (local_superdrops + total_superdrops_to_recv > totsupers.extent(0)) {
     std::cout << "MAXIMUM NUMBER OF LOCAL SUPERDROPLETS EXCEEDED" << std::endl;
-    return;
+    return totsupers;
   }
 
   // Knowing how many superdroplets will be sent and received, allocate
@@ -366,6 +378,8 @@ void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd
     totsupers[i].set_sdgbxindex(LIMITVALUES::oob_gbxindex);
 
   sort_supers(totsupers);
+
+  return totsupers;
 }
 
 #endif  // LIBS_GRIDBOXES_MOVESUPERSINDOMAIN_HPP_
