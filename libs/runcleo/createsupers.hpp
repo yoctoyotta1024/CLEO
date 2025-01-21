@@ -151,7 +151,7 @@ viewd_supers initialise_supers(const SuperdropInitConds &sdic) {
   GenSuperdrop gen(sdic);
 
   // create superdrops view on device
-  viewd_supers supers("supers", gen.get_local_nsupers());
+  viewd_supers supers("supers", gen.get_maxnsupers());
 
   // initialise a mirror of superdrops view on host
   auto h_supers = initialise_supers_on_host(sdic, supers);
