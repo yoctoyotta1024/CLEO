@@ -66,7 +66,7 @@ SupersInDomain move_supers_between_gridboxes_again(const viewd_gbx d_gbxs,
                                                    SupersInDomain &allsupers) {
   auto totsupers = allsupers.get_totsupers();
 
-  sort_supers(totsupers);
+  totsupers = sort_supers(totsupers);
   allsupers.set_totsupers(totsupers);
 
   const auto domainsupers = allsupers.domain_supers();

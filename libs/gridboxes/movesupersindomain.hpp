@@ -46,7 +46,7 @@ which move to/from gridboxes on different nodes.
 */
 template <GridboxMaps GbxMaps>
 viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
-                             const viewd_supers totsupers);
+                             viewd_supers totsupers);
 
 /*
 struct for functionality to move superdroplets throughtout
@@ -118,7 +118,7 @@ struct MoveSupersInDomain {
                                                  SupersInDomain &allsupers) const {
       auto totsupers = allsupers.get_totsupers();
 
-      sort_supers(totsupers);
+      totsupers = sort_supers(totsupers);
 
       int comm_size;
       MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
@@ -218,7 +218,7 @@ which move to/from gridboxes on different nodes.
 */
 template <GridboxMaps GbxMaps>
 viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
-                             const viewd_supers totsupers) {
+                             viewd_supers totsupers) {
   int comm_size, my_rank;
   MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
   MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
@@ -379,7 +379,7 @@ viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
   for (unsigned int i = local_superdrops + total_superdrops_to_recv; i < totsupers.extent(0); i++)
     totsupers[i].set_sdgbxindex(LIMITVALUES::oob_gbxindex);
 
-  sort_supers(totsupers);
+  totsupers = sort_supers(totsupers);
 
   return totsupers;
 }
