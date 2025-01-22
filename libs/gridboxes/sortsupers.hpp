@@ -44,6 +44,9 @@ inline bool is_sorted_supers(const viewd_constsupers supers, const Comparator &c
 
 struct SortSupersBySdgbxindex {
  private:
+ public:
+  SortSupersBySdgbxindex() {}
+
   /* a precedes b if its sdgbxindex is smaller */
   struct SortComparator {
     KOKKOS_INLINE_FUNCTION
@@ -51,9 +54,6 @@ struct SortSupersBySdgbxindex {
       return (a.get_sdgbxindex()) < (b.get_sdgbxindex());
     }
   };
-
- public:
-  SortSupersBySdgbxindex() {}
 
   /* sort the "supers" view of superdroplets by their sdgbxindexes so that superdrops in the
   view are ordered from lowest to highest sdgbxindex. Note that sorting of superdrops with matching
