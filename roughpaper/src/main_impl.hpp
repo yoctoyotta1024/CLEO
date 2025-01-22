@@ -87,10 +87,11 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
   return FromFileDynamics(config.get_fromfiledynamics(), couplstep, ndims, nsteps);
 }
 
-inline InitialConditions auto create_initconds(const Config &config, const CartesianMaps &gbxmaps) {
+template <GridboxMaps GbxMaps>
+inline InitialConditions auto create_initconds(const Config &config, const GbxMaps &gbxmaps) {
   // const auto initsupers = InitAllSupersFromBinary(config.get_initsupersfrombinary());
   const auto initsupers = InitSupersFromBinary(config.get_initsupersfrombinary(), gbxmaps);
-  const auto initgbxs = InitGbxsNull(config.get_ngbxs());
+  const auto initgbxs = InitGbxsNull(gbxmaps.get_local_ngridboxes_hostcopy());
 
   return InitConds(initsupers, initgbxs);
 }
