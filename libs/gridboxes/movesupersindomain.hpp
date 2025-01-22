@@ -24,6 +24,7 @@
 #define LIBS_GRIDBOXES_MOVESUPERSINDOMAIN_HPP_
 
 #include <Kokkos_Core.hpp>
+#include <cassert>
 #include <concepts>
 #include <cstdint>
 #include <iostream>
@@ -268,6 +269,8 @@ viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
   total_superdrops_to_recv =
       std::accumulate(per_process_recv_superdrops.begin(), per_process_recv_superdrops.end(), 0);
 
+  assert((local_superdrops + total_superdrops_to_recv <= totsupers.extent(0)) &&
+         "must have enough space in supers view to receive superdroplets");
   if (local_superdrops + total_superdrops_to_recv > totsupers.extent(0)) {
     std::cout << "MAXIMUM NUMBER OF LOCAL SUPERDROPLETS EXCEEDED" << std::endl;
     return totsupers;
@@ -307,12 +310,13 @@ viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
   for (int process_index = 0; process_index < comm_size; process_index++)
     for (int superdrop = 0; superdrop < per_process_send_superdrops[process_index]; superdrop++) {
       superdrop_index = superdrops_indices_per_process[process_index][superdrop];
-      totsupers[superdrop_index].serialize_uint_components(superdrops_uint_send_data.begin() +
-                                                           send_superdrop_index * 2);
-      totsupers[superdrop_index].serialize_uint64_components(superdrops_uint64_send_data.begin() +
-                                                             send_superdrop_index);
-      totsupers[superdrop_index].serialize_double_components(superdrops_double_send_data.begin() +
-                                                             send_superdrop_index * 5);
+      totsupers(superdrop_index)
+          .serialize_uint_components(superdrops_uint_send_data.begin() + send_superdrop_index * 2);
+      totsupers(superdrop_index)
+          .serialize_uint64_components(superdrops_uint64_send_data.begin() + send_superdrop_index);
+      totsupers(superdrop_index)
+          .serialize_double_components(superdrops_double_send_data.begin() +
+                                       send_superdrop_index * 5);
       send_superdrop_index++;
     }
 
@@ -354,13 +358,13 @@ viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
 
   for (unsigned int i = local_superdrops; i < local_superdrops + total_superdrops_to_recv; i++) {
     int data_offset = i - local_superdrops;
-    totsupers[i].deserialize_components(superdrops_uint_recv_data.begin() + data_offset * 2,
+    totsupers(i).deserialize_components(superdrops_uint_recv_data.begin() + data_offset * 2,
                                         superdrops_uint64_recv_data.begin() + data_offset,
                                         superdrops_double_recv_data.begin() + data_offset * 5);
 
     // Get the local gridbox index which contains the superdroplet
-    auto drop_coords = std::array<double, 3>{totsupers[i].get_coord3(), totsupers[i].get_coord1(),
-                                             totsupers[i].get_coord2()};
+    auto drop_coords = std::array<double, 3>{totsupers(i).get_coord3(), totsupers(i).get_coord1(),
+                                             totsupers(i).get_coord2()};
     const auto b4 = std::array<double, 3>{drop_coords[0], drop_coords[1], drop_coords[2]};
     const auto gbxindex =
         (unsigned int)gbxmaps.get_domain_decomposition().get_local_bounding_gridbox(
@@ -370,14 +374,14 @@ viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
     // process here just the gridbox index update is necessary
     assert((drop_coords[0] == b4[0]) && (drop_coords[1] == b4[1]) && (drop_coords[2] == b4[2]) &&
            "drop coordinates should have already been corrected and so shoudn't have changed here");
-    totsupers[i].set_sdgbxindex(gbxindex);
+    totsupers(i).set_sdgbxindex(gbxindex);
 
     // TODO(ALL): add check_bounds to SD?
   }
 
   // Reset all remaining non-used superdroplet spots
   for (unsigned int i = local_superdrops + total_superdrops_to_recv; i < totsupers.extent(0); i++)
-    totsupers[i].set_sdgbxindex(LIMITVALUES::oob_gbxindex);
+    totsupers(i).set_sdgbxindex(LIMITVALUES::oob_gbxindex);
 
   totsupers = sort_supers(totsupers);
 
