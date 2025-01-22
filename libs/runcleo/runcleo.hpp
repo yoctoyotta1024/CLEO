@@ -310,8 +310,8 @@ class RunCLEO {
 
     // create runtime objects and prepare CLEO for timestepping
     Kokkos::Profiling::pushRegion("init");
-    auto allsupers = SupersInDomain(create_supers(initconds.initsupers),
-                                    sdm.gbxmaps.get_local_ngridboxes_hostcopy());
+    auto allsupers =
+        create_supers(initconds.initsupers, sdm.gbxmaps.get_local_ngridboxes_hostcopy());
     auto gbxs = create_gbxs(sdm.gbxmaps, initconds.initgbxs, allsupers);
     prepare_to_timestep(gbxs);
     Kokkos::Profiling::popRegion();

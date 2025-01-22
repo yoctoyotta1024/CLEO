@@ -64,10 +64,7 @@ for (size_t ii(0); ii < d_gbxs.extent(0); ++ii){[...]}.
 */
 SupersInDomain move_supers_between_gridboxes_again(const viewd_gbx d_gbxs,
                                                    SupersInDomain &allsupers) {
-  auto totsupers = allsupers.get_totsupers();
-
-  totsupers = sort_supers(totsupers);
-  allsupers.set_totsupers(totsupers);
+  allsupers.sort_totsupers();
 
   const auto domainsupers = allsupers.domain_supers();
   const size_t ngbxs(d_gbxs.extent(0));
@@ -202,7 +199,7 @@ viewh_constgbx hostcopy_one_gridbox(const viewd_constgbx d_gbxs, const size_t ii
 /* throws error if the size of newnsupers + oldnsupers > total space in totsupers view */
 size_t check_space_in_totsupers(const SupersInDomain &allsupers,
                                 const viewd_constsupers newsupers) {
-  const auto totsupers = allsupers.get_totsupers();
+  const auto totsupers = allsupers.get_totsupers_readonly();
   const auto oldnsupers = allsupers.domain_nsupers();
   if (oldnsupers + newsupers.extent(0) > totsupers.extent(0)) {
     const auto err = std::string(
@@ -219,11 +216,11 @@ totsupers view */
 void add_superdrops_for_gridboxes(const SupersInDomain &allsupers,
                                   const viewd_constsupers newsupers) {
   const auto totsupers = allsupers.get_totsupers();
-  const auto og_totnsupers = check_space_in_totsupers(allsupers, newsupers);
+  const auto og_ntotsupers = check_space_in_totsupers(allsupers, newsupers);
 
   Kokkos::parallel_for(
       "add_superdrops", Kokkos::RangePolicy<ExecSpace>(0, newsupers.extent(0)),
-      KOKKOS_LAMBDA(const size_t kk) { totsupers(kk + og_totnsupers) = newsupers(kk); });
+      KOKKOS_LAMBDA(const size_t kk) { totsupers(kk + og_ntotsupers) = newsupers(kk); });
 }
 
 /* returns host copy of {lower, upper} coord3 boundaries from gbxmaps for 'gbxindex' on device */

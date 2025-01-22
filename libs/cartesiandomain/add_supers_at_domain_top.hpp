@@ -40,7 +40,6 @@
 #include "../kokkosaliases.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/domainboundaries.hpp"
-#include "gridboxes/sortsupers.hpp"
 #include "gridboxes/supersindomain.hpp"
 #include "initialise/optional_config_params.hpp"
 #include "superdrops/superdrop.hpp"

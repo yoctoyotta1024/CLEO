@@ -28,13 +28,13 @@
  * superdroplets are sorted by ascending gridbox indexes. If the initialisation is incomplete
  * (the superdroplets are not sorted), it throws an exception with an appropriate error message.
  *
- * @param supers The view of super-droplets in device memory.
+ * @param allsupers Struct to handle all the super-droplets in device memory.
  *
  * @throws std::invalid_argument If the initialisation is incomplete i.e. the super-droplets
  * are not ordered correctly.
  */
-void is_sdsinit_complete(const viewd_constsupers supers) {
-  if (is_sorted(supers) == 0) {
+void is_sdsinit_complete(const SupersInDomain allsupers) {
+  if (allsupers.is_sorted() == 0) {
     const std::string err(
         "supers ordered incorrectly "
         "(ie. not sorted by asceding sdgbxindex");
@@ -48,18 +48,18 @@ void is_sdsinit_complete(const viewd_constsupers supers) {
  * This function prints information about each superdroplet, including its ID, Gridbox index,
  * spatial coordinates, and attributes.
  *
- * @param supers The view of super-droplets in device memory.
+ * @param totsupers The view of super-droplets in device memory.
  */
-void print_supers(const viewd_constsupers supers) {
-  auto h_supers =
-      Kokkos::create_mirror_view(supers);  // mirror of supers in case view is on device memory
-  Kokkos::deep_copy(h_supers, supers);
+void print_supers(const viewd_constsupers totsupers) {
+  auto h_totsupers =
+      Kokkos::create_mirror_view(totsupers);  // mirror of supers in case view is on device memory
+  Kokkos::deep_copy(h_totsupers, totsupers);
 
-  for (size_t kk(0); kk < h_supers.extent(0); ++kk) {
-    std::cout << "SD: " << h_supers(kk).sdId << " [gbx, (coords), (attrs)]: [ "
-              << h_supers(kk).get_sdgbxindex() << ", (" << h_supers(kk).get_coord3() << ", "
-              << h_supers(kk).get_coord1() << ", " << h_supers(kk).get_coord2() << "), ("
-              << h_supers(kk).is_solute() << ", " << h_supers(kk).get_radius() << ", "
-              << h_supers(kk).get_msol() << ", " << h_supers(kk).get_xi() << ") ] \n";
+  for (size_t kk(0); kk < h_totsupers.extent(0); ++kk) {
+    std::cout << "SD: " << h_totsupers(kk).sdId << " [gbx, (coords), (attrs)]: [ "
+              << h_totsupers(kk).get_sdgbxindex() << ", (" << h_totsupers(kk).get_coord3() << ", "
+              << h_totsupers(kk).get_coord1() << ", " << h_totsupers(kk).get_coord2() << "), ("
+              << h_totsupers(kk).is_solute() << ", " << h_totsupers(kk).get_radius() << ", "
+              << h_totsupers(kk).get_msol() << ", " << h_totsupers(kk).get_xi() << ") ] \n";
   }
 }

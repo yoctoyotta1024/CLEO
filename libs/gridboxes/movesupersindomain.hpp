@@ -34,7 +34,6 @@
 #include "../kokkosaliases.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
-#include "gridboxes/sortsupers.hpp"
 #include "gridboxes/supersindomain.hpp"
 #include "mpi.h"
 #include "superdrops/motion.hpp"
@@ -117,17 +116,17 @@ struct MoveSupersInDomain {
     */
     SupersInDomain move_supers_between_gridboxes(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
                                                  SupersInDomain &allsupers) const {
-      auto totsupers = allsupers.get_totsupers();
-
-      totsupers = sort_supers(totsupers);
-
       int comm_size;
       MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
+      // TODO(ALL): remove guard once domain decomposition is GPU compatible
       if (comm_size > 1) {
-        totsupers = sendrecv_supers(gbxmaps, d_gbxs, totsupers);  // TODO(ALL): make GPU compatible
+        // TODO(ALL): combine two sorts into one(?)
+        auto totsupers = allsupers.sort_totsupers_without_set();
+        totsupers = sendrecv_supers(gbxmaps, d_gbxs, totsupers);
+        allsupers.sort_and_set_totsupers(totsupers);
+      } else {
+        allsupers.sort_totsupers();
       }
-
-      allsupers.set_totsupers(totsupers);
 
       const auto domainsupers = allsupers.domain_supers();
       const auto ngbxs = d_gbxs.extent(0);
@@ -140,6 +139,7 @@ struct MoveSupersInDomain {
 
       // /* optional (expensive!) test to raise error if
       // superdrops' gbxindex doesn't match gridbox's gbxindex */
+      // const auto totsupers = allsupers.get_totsupers_readonly();
       // Kokkos::parallel_for(
       //     "check_sdgbxindex_during_motion", TeamPolicy(ngbxs, Kokkos::AUTO()),
       //     KOKKOS_LAMBDA(const TeamMember &team_member) {
@@ -382,8 +382,6 @@ viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
   // Reset all remaining non-used superdroplet spots
   for (unsigned int i = local_superdrops + total_superdrops_to_recv; i < totsupers.extent(0); i++)
     totsupers(i).set_sdgbxindex(LIMITVALUES::oob_gbxindex);
-
-  totsupers = sort_supers(totsupers);
 
   return totsupers;
 }
