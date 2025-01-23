@@ -134,9 +134,9 @@ KOKKOS_INLINE_FUNCTION size_t makeref(const Iter start, const Iter iter) {
   return static_cast<size_t>(ref);
 }
 
-/* returns position in view of {first, last} superdrop that is in domain, where first is assumed to
-be at 0th position. Last is position of last superdrop with sdgbxindex < idx_max. Function valid
-in outermost level (outside) of parallelism. */
+/* returns position in view of {first, last} superdrop that is in domain. First is position of
+first superdrop with sdgbxindex >= gbxindex_range.first. Last is position of last superdrop with
+sdgbxindex <= gbxindex_range.second. Function valid in outermost level (outside) of parallelism. */
 template <typename ViewSupers>
 inline kkpair_size_t find_domainrefs(
     const ViewSupers totsupers, const Kokkos::pair<unsigned int, unsigned int> gbxindex_range) {
@@ -145,6 +145,17 @@ inline kkpair_size_t find_domainrefs(
   const auto ref1 = size_t{find_ref(totsupers, SRP::Ref1{gbxindex_range.second})};
 
   return {ref0, ref1};
+}
+
+/* returns position in view of {first, last} superdrop that is in domain, where first is assumed to
+be at 0th position. Last is position of last superdrop with sdgbxindex < gbxindex_max.
+Function valid in outermost level (outside) of parallelism. */
+template <typename ViewSupers>
+inline kkpair_size_t find_domainrefs(const ViewSupers totsupers, const unsigned int gbxindex_max) {
+  namespace SRP = SetRefPreds;
+  const auto ref1 = size_t{find_ref(totsupers, SRP::Ref1{gbxindex_max})};
+
+  return {0, ref1};
 }
 
 #endif  // LIBS_GRIDBOXES_FINDREFS_HPP_
