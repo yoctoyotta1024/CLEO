@@ -53,4 +53,7 @@ using kokkos_dblmaph = Kokkos::UnorderedMap<unsigned int, double, HostSpace>;
 using viewd_ndims = Kokkos::View<size_t[3]>;
 /**< View in device memory for number of gridboxes in CartesianMaps. */
 
+/* Sorting Superdrops */
+using viewd_counts = Kokkos::View<size_t *>; /**< View in device memory for sorting superdroplets */
+
 #endif  // LIBS_KOKKOSALIASES_HPP_

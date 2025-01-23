@@ -52,9 +52,6 @@ struct SupersInDomain {
   }
 
  public:
-  SupersInDomain() = default;   // Kokkos requirement for a (dual)View
-  ~SupersInDomain() = default;  // Kokkos requirement for a (dual)View
-
   /* Assigns and sorts view for superdroplets, then identifies in-domain superdroplets.
   Gridbox indexes are assumed to start at 0, meaning superdroplets inside the domain are
   those with 0 <= sdgbxindex <= gbxindex_range.second (= gbxindex_max). */
@@ -62,9 +59,9 @@ struct SupersInDomain {
       : gbxindex_range({0, gbxindex_max}),
         totsupers(totsupers_),
         domainrefs({0, 0}),
-        sort_by_sdgbxindex(SortSupersBySdgbxindex()) {
-    totsupers = sort_by_sdgbxindex(totsupers_);
-    set_totsupers_domainrefs(totsupers_);
+        sort_by_sdgbxindex(SortSupersBySdgbxindex(gbxindex_range.second, totsupers.extent(0))) {
+    auto sorted_supers = sort_by_sdgbxindex(totsupers_);
+    set_totsupers_domainrefs(sorted_supers);
   }
 
   viewd_supers get_totsupers() const {
@@ -92,8 +89,8 @@ struct SupersInDomain {
   /* sort superdroplets by sdgbxindex and then (re-)set the totsupers view and the refs for the
   superdroplets that are within the domain (sdgbxindex within gbxindex_range for a given node) */
   viewd_supers sort_totsupers() {
-    auto totsupers_ = sort_by_sdgbxindex(totsupers);
-    set_totsupers_domainrefs(totsupers_);
+    auto sorted_supers = sort_by_sdgbxindex(totsupers);
+    set_totsupers_domainrefs(sorted_supers);
     return totsupers;
   }
 
