@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.32.0](https://github.com/yoctoyotta1024/CLEO/compare/e3164e2e0059fb518492332850c05abf7f20c832..v0.32.0) - 2025-01-23
+#### Features
+- replace kokkos/std sorting algorithm with counting sort algorithm - ([491f841](https://github.com/yoctoyotta1024/CLEO/commit/491f841fb8af867ffbbe159d3dcff28ead91b593)) - clara.bayley
+#### Refactoring
+- assume first position in totsupers is start of in domain supers and add docstrings - ([e3164e2](https://github.com/yoctoyotta1024/CLEO/commit/e3164e2e0059fb518492332850c05abf7f20c832)) - clara.bayley
+
+- - -
+
 ## [v0.31.0](https://github.com/yoctoyotta1024/CLEO/compare/1a24d6319861ff6b74b25d9d86508a6a218b3a98..v0.31.0) - 2025-01-23
 #### Bug Fixes
 - encapsulation of supers in parallel regions - ([61ed09a](https://github.com/yoctoyotta1024/CLEO/commit/61ed09ad62ad1cc2b790ca05cfecf52b9cc38a90)) - clara.bayley
