@@ -24,6 +24,7 @@
 #define LIBS_GRIDBOXES_MOVESUPERSINDOMAIN_HPP_
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_Profiling_ScopedRegion.hpp>
 #include <cassert>
 #include <concepts>
 #include <cstdint>
@@ -94,8 +95,9 @@ struct MoveSupersInDomain {
     when in serial */
     void move_supers_in_gridboxes(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
                                   const subviewd_supers domainsupers) const {
-      const size_t ngbxs(d_gbxs.extent(0));
+      Kokkos::Profiling::ScopedRegion region("sdm_movement_move_in_gridboxes");
 
+      const size_t ngbxs(d_gbxs.extent(0));
       Kokkos::parallel_for(
           "move_supers_in_gridboxes", TeamPolicy(ngbxs, Kokkos::AUTO()),
           KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
@@ -118,7 +120,7 @@ struct MoveSupersInDomain {
   void set_gridboxes_refs(const viewd_gbx d_gbxs, const subviewd_constsupers domainsupers) const {
     const auto ngbxs = d_gbxs.extent(0);
     Kokkos::parallel_for(
-        "move_supers_between_gridboxes", TeamPolicy(ngbxs, Kokkos::AUTO()),
+        "set_gridboxes_refs", TeamPolicy(ngbxs, Kokkos::AUTO()),
         KOKKOS_LAMBDA(const TeamMember &team_member) {
           const auto ii = team_member.league_rank();
           d_gbxs(ii).supersingbx.set_refs(team_member, domainsupers);
@@ -180,6 +182,8 @@ struct MoveSupersInDomain {
   */
   SupersInDomain move_supers_between_gridboxes(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
                                                SupersInDomain &allsupers) const {
+    Kokkos::Profiling::ScopedRegion region("sdm_movement_between_gridboxes");
+
     int comm_size;
     MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
 
@@ -221,7 +225,9 @@ struct MoveSupersInDomain {
     allsupers = move_supers_between_gridboxes(gbxmaps, d_gbxs, allsupers);
 
     /* step (4) */
+    Kokkos::Profiling::pushRegion("sdm_movement_boundary_conditions");
     allsupers = apply_domain_boundary_conditions(gbxmaps, d_gbxs, allsupers);
+    Kokkos::Profiling::popRegion();
 
     return allsupers;
   }

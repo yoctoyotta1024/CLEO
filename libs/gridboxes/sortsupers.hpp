@@ -127,16 +127,12 @@ struct SortSupersBySdgbxindex {
   TODO(CB): (optional) improvement when scatterview uses atomics (e.g. on GPUs) would be to loop
   over domainsupers and oobsupers like couting_sort(...) can. */
   viewd_counts create_cumlcounts(const viewd_constsupers totsupers) {
-    Kokkos::Profiling::pushRegion("sorting_create_cumlcounts_loop");
-
     const auto ntotsupers = size_t{totsupers.extent(0)};
     s_counts.reset();
     const auto functor = CreateCumlcountsFunctor{gbxindex_max, totsupers, counts, s_counts};
     Kokkos::parallel_for("increment_counts", Kokkos::RangePolicy<ExecSpace>(0, ntotsupers),
                          functor);
     Kokkos::Experimental::contribute(counts, s_counts);
-
-    Kokkos::Profiling::popRegion();
 
     Kokkos::Experimental::exclusive_scan("cumulative_sum", ExecSpace(), counts, cumlcounts, 0);
     Kokkos::Experimental::fill(ExecSpace(), counts, 0);  // reset in preparation for next call
@@ -149,12 +145,9 @@ struct SortSupersBySdgbxindex {
   their positions in a new view according to the CountingSortFunctor. May also modify superdroplets
   in totsupers, e.g. setting their sdgbxindex to LIMITVALUES::oob_gbxindex. */
   viewd_supers counting_sort(const viewd_supers totsupers) {
-    Kokkos::Profiling::pushRegion("sorting_counting_sort_func");
-
     const auto ntotsupers = size_t{totsupers.extent(0)};
     const auto functor = CountingSortFunctor{gbxindex_max, totsupers, totsupers_tmp, cumlcounts};
     Kokkos::parallel_for("counting_sort", Kokkos::RangePolicy<ExecSpace>(0, ntotsupers), functor);
-    Kokkos::Profiling::popRegion();
 
     /* assertion for debugging only works for hostspace cumlcounts */
     // assert((cumlcounts(counts.extent(0) - 1) == totsupers_tmp.extent(0)) &&
@@ -170,8 +163,6 @@ struct SortSupersBySdgbxindex {
   at the end of totsupers. */
   viewd_supers counting_sort(const viewd_constgbx d_gbxs, const subviewd_supers domainsupers,
                              const subviewd_supers oob_supers) {
-    Kokkos::Profiling::pushRegion("sorting_counting_sort_gbxs_func");
-
     const auto ngbxs = size_t{d_gbxs.extent(0)};
     Kokkos::parallel_for(
         "counting_sort_gbxs", TeamPolicy(ngbxs, Kokkos::AUTO()),
@@ -187,9 +178,7 @@ struct SortSupersBySdgbxindex {
     const auto functor = CountingSortFunctor{gbxindex_max, oob_supers, totsupers_tmp, cumlcounts};
     Kokkos::parallel_for("counting_sort_oob", Kokkos::RangePolicy<ExecSpace>(0, noobs), functor);
 
-    Kokkos::Profiling::popRegion();
-
-    // /* assertion for debugging only works for hostspace cumlcounts */
+    /* assertion for debugging only works for hostspace cumlcounts */
     // assert((cumlcounts(counts.extent(0) - 1) == totsupers_tmp.extent(0)) &&
     //        "last cumulative sum of totsupers count should equal expected number of totsupers");
 
@@ -218,8 +207,6 @@ struct SortSupersBySdgbxindex {
   */
   viewd_supers operator()(const viewd_supers totsupers, const viewd_constgbx d_gbxs,
                           kkpair_size_t domainrefs) {
-    Kokkos::Profiling::ScopedRegion region("sorting_func_gbxs");
-
     const auto domainsupers = Kokkos::subview(totsupers, domainrefs);
     const kkpair_size_t oobrefs = Kokkos::make_pair(domainrefs.second, totsupers.extent(0));
     const auto oob_supers = Kokkos::subview(totsupers, oobrefs);

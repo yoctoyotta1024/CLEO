@@ -89,8 +89,6 @@ struct SupersInDomain {
   /* sort superdroplets by sdgbxindex and then (re-)set the totsupers view and the refs for the
   superdroplets that are within the domain (sdgbxindex within gbxindex_range for a given node) */
   viewd_supers sort_totsupers(const viewd_constgbx d_gbxs) {
-    Kokkos::Profiling::ScopedRegion region("supers_in_domain_sort_totsupers");
-
     auto sorted_supers = sort_by_sdgbxindex(totsupers, d_gbxs, domainrefs);
     set_totsupers_domainrefs(sorted_supers);
     return totsupers;
@@ -101,8 +99,6 @@ struct SupersInDomain {
   nor the refs for the superdroplets that are within the domain. This means 'totsupers' may change,
   returned view may no longer be 'totsupers' and the domainrefs may be invalid. */
   viewd_supers sort_totsupers_without_set(const viewd_constgbx d_gbxs) {
-    Kokkos::Profiling::ScopedRegion region("supers_in_domain_sort_without_set");
-
     return sort_by_sdgbxindex(totsupers, d_gbxs, domainrefs);
   }
 
@@ -110,8 +106,6 @@ struct SupersInDomain {
   superdroplets by sdgbxindex with possible (re-)setting of the totsupers view and the refs for the
   superdroplets that are within the domain (sdgbxindex within gbxindex_range for a given node) */
   viewd_supers sort_and_set_totsupers(const viewd_supers totsupers_, const viewd_constgbx d_gbxs) {
-    Kokkos::Profiling::ScopedRegion region("supers_in_domain_sort_and_set");
-
     totsupers = totsupers_;
     return sort_totsupers(d_gbxs);
   }

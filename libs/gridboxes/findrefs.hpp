@@ -158,8 +158,6 @@ Function valid in outermost level (outside) of parallelism default implementatio
 template <typename ViewSupers>
 inline kkpair_size_t find_domainrefs(const Kokkos::HostSpace &ex, const ViewSupers totsupers,
                                      const unsigned int gbxindex_max) {
-  Kokkos::Profiling::ScopedRegion region("find_domainrefs_default_func");
-
   namespace SRP = SetRefPreds;
   const auto ref1 = size_t{find_ref(totsupers, SRP::Ref1{gbxindex_max})};
 
@@ -172,16 +170,12 @@ Function valid in outermost level (outside) of parallelism valid for CUDA device
 template <class ExecutionSpace, typename ViewSupers>
 inline kkpair_size_t find_domainrefs(const ExecutionSpace &ex, const ViewSupers totsupers,
                                      const unsigned int gbxindex_max) {
-  Kokkos::Profiling::ScopedRegion region("find_domainrefs_cuda_func");
-
   namespace SRP = SetRefPreds;
-
   auto ref1 = Kokkos::View<size_t[1]>("domainref1");
   Kokkos::parallel_for(
       "find_domainrefs_cuda", 1, KOKKOS_LAMBDA(const int i) {
         ref1(0) = size_t{find_ref(totsupers, SRP::Ref1{gbxindex_max})};
       });
-
   auto h_ref1 = Kokkos::create_mirror_view_and_copy(HostSpace(), ref1);
 
   return {0, h_ref1(0)};
