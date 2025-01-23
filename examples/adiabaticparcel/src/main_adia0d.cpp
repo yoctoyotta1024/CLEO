@@ -58,7 +58,8 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const unsigned
   return CvodeDynamics(config.get_cvodedynamics(), couplstep, &step2dimlesstime);
 }
 
-inline InitialConditions auto create_initconds(const Config &config) {
+template <GridboxMaps GbxMaps>
+inline InitialConditions auto create_initconds(const Config &config, const GbxMaps &gbxmaps) {
   const auto initsupers = InitAllSupersFromBinary(config.get_initsupersfrombinary());
   const auto initgbxs = InitGbxsCvode(config.get_cvodedynamics());
 
@@ -163,15 +164,15 @@ int main(int argc, char *argv[]) {
     auto store = FSStore(config.get_zarrbasedir());
     auto dataset = Dataset(store);
 
+    /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
+    const SDMMethods sdm(create_sdm(config, tsteps, dataset));
+
     /* Create coupldyn solver and coupling between coupldyn and SDM */
     CoupledDynamics auto coupldyn(create_coupldyn(config, tsteps.get_couplstep()));
     const CouplingComms<CartesianMaps, CvodeDynamics> auto comms = CvodeComms{};
 
     /* Initial conditions for CLEO run */
-    const InitialConditions auto initconds = create_initconds(config);
-
-    /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-    const SDMMethods sdm(create_sdm(config, tsteps, dataset));
+    const InitialConditions auto initconds = create_initconds(config, sdm.gbxmaps);
 
     /* Run CLEO (SDM coupled to dynamics solver) */
     const RunCLEO runcleo(sdm, coupldyn, comms);

@@ -32,6 +32,7 @@
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/movesupersindomain.hpp"
+#include "gridboxes/supersindomain.hpp"
 #include "observers/observers.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
@@ -98,11 +99,11 @@ class SDMMethods {
    * @param totsupers View of all superdrops (both in and out of bounds of domain).
    * @param mo Monitor of SDM processes.
    */
-  void superdrops_movement(const unsigned int t_sdm, viewd_gbx d_gbxs, const viewd_supers totsupers,
+  void superdrops_movement(const unsigned int t_sdm, viewd_gbx d_gbxs, SupersInDomain &allsupers,
                            const SDMMonitor auto mo) const {
     Kokkos::Profiling::ScopedRegion region("timestep_sdm_movement");
 
-    movesupers.run_step(t_sdm, gbxmaps, d_gbxs, totsupers, mo);
+    allsupers = movesupers.run_step(t_sdm, gbxmaps, d_gbxs, allsupers, mo);
   }
 
  public:
@@ -131,19 +132,16 @@ class SDMMethods {
      * Kokkos::parallel_for is nested parallelism within parallelised loop over gridboxes,
      * serial equivalent is simply: `for (size_t ii(0); ii < ngbxs; ++ii) { [...] }`
      *
-     * Kokkos::Profiling are null pointers unless a Kokkos profiler library has been
-     * exported to "KOKKOS_TOOLS_LIBS" prior to runtime so the lib gets dynamically loaded.
-     *
      * @param t_sdm Current timestep for SDM.
      * @param t_next Next timestep for SDM.
      * @param d_gbxs View of gridboxes on device.
+     * @param domainsupers View on device of all the superdroplets related to the gridboxes.
      * @param mo SDMMonitor to use.
      */
     template <SDMMonitor SDMMo>
-    void operator()(const unsigned int t_sdm, const unsigned int t_next, const viewd_gbx d_gbxs,
-                    const SDMMo mo) const {
-      Kokkos::Profiling::ScopedRegion region("timestep_sdm_microphysics");
-
+    void sdm_microphysics(const unsigned int t_sdm, const unsigned int t_next,
+                          const viewd_gbx d_gbxs, const subviewd_supers domainsupers,
+                          const SDMMo mo) const {
       // TODO(all) use scratch space for parallel region
       const size_t ngbxs(d_gbxs.extent(0));
       Kokkos::parallel_for(
@@ -151,15 +149,40 @@ class SDMMethods {
           KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
             const auto ii = team_member.league_rank();
 
-            auto supers(d_gbxs(ii).supersingbx());
+            auto supers = d_gbxs(ii).supersingbx(domainsupers);
             for (unsigned int subt = t_sdm; subt < t_next; subt = microphys.next_step(subt)) {
-              supers = microphys.run_step(team_member, subt, supers, d_gbxs(ii).state, mo);
+              supers = microphys.run_step(
+                  team_member, subt, supers, d_gbxs(ii).state,
+                  mo);  // TODO(CB): explicitly feed supers back into domainsupers
             }
 
             mo.monitor_microphysics(team_member, supers);
           });
     }
-  } sdm_microphysics;
+
+    /**
+     * @brief run SDM microphysics for each gridbox (using sub-timestepping routine).
+     *
+     * This operator is a wrapper around the function which runs SDM microphysics.
+     *
+     * Kokkos::Profiling are null pointers unless a Kokkos profiler library has been
+     * exported to "KOKKOS_TOOLS_LIBS" prior to runtime so the lib gets dynamically loaded.
+     *
+     * @param t_sdm Current timestep for SDM.
+     * @param t_next Next timestep for SDM.
+     * @param d_gbxs View of gridboxes on device.
+     * @param allsupers Struct to handle superdroplets in the domain.
+     * @param mo SDMMonitor to use.
+     */
+    template <SDMMonitor SDMMo>
+    void operator()(const unsigned int t_sdm, const unsigned int t_next, const viewd_gbx d_gbxs,
+                    const SupersInDomain &allsupers, const SDMMo mo) const {
+      Kokkos::Profiling::ScopedRegion region("timestep_sdm_microphysics");
+
+      const auto domainsupers = allsupers.domain_supers();
+      sdm_microphysics(t_sdm, t_next, d_gbxs, domainsupers, mo);
+    }
+  } microphysics;
   /**< instance of SDMMicrophysics, operator is call of SDM microphysics */
 
   /**
@@ -180,7 +203,7 @@ class SDMMethods {
         movesupers(movesupers),
         gbxmaps(gbxmaps),
         obs(obs),
-        sdm_microphysics({microphys}) {}
+        microphysics({microphys}) {}
 
   /**
    * @brief Get the coupling step value.
@@ -212,10 +235,11 @@ class SDMMethods {
    * @param t_mdl Current timestep of the coupled model.
    * @param gbxs Dualview of gridboxes (on host and on device).
    */
-  void at_start_step(const unsigned int t_mdl, const dualview_gbx gbxs) const {
+  void at_start_step(const unsigned int t_mdl, const dualview_gbx gbxs,
+                     const SupersInDomain &allsupers) const {
     const auto d_gbxs = gbxs.view_device();
-    const auto domain_totsupers = gbxs.view_host()(0).domain_totsupers_readonly();
-    obs.at_start_step(t_mdl, d_gbxs, domain_totsupers);
+    const auto domainsupers = allsupers.domain_supers_readonly();
+    obs.at_start_step(t_mdl, d_gbxs, domainsupers);
   }
 
   /**
@@ -231,15 +255,15 @@ class SDMMethods {
    * @param totsupers View of all superdrops (both in and out of bounds of domain).
    */
   void run_step(const unsigned int t_mdl, const unsigned int t_mdl_next, viewd_gbx d_gbxs,
-                const viewd_supers totsupers) const {
+                SupersInDomain &allsupers) const {
     const SDMMonitor auto mo = obs.get_sdmmonitor();
 
     unsigned int t_sdm(t_mdl);
     while (t_sdm < t_mdl_next) {
       const auto t_sdm_next = next_sdmstep(t_sdm, t_mdl_next);
 
-      superdrops_movement(t_sdm, d_gbxs, totsupers, mo);  // on host and device
-      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs, mo);    // on device
+      superdrops_movement(t_sdm, d_gbxs, allsupers, mo);       // on host and device
+      microphysics(t_sdm, t_sdm_next, d_gbxs, allsupers, mo);  // on device
 
       t_sdm = t_sdm_next;
     }

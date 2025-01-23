@@ -26,8 +26,8 @@ compilername=${2:-intel}                                        # "intel" or "gc
 path2CLEO=${3:-${HOME}/CLEO}                                    # must be absolute path
 path2build=${4:-${path2CLEO}/build}                             # should be absolute path
 enableyac=${5:-false}                                           # == "true" or otherwise false
-executables=${6:-"cleocoupledsdm testing"}                      # executable(s) to compile
-executable2run=${7:-${path2build}/roughpaper/src/${executable}} # path to executable to run
+executables=${6:-"cleocoupledsdm"}                              # executable(s) to compile
+executable2run=${7:-${path2build}/roughpaper/src/${executables}} # path to executable to run
 configfile=${8:-${path2CLEO}/roughpaper/src/config/config.yaml} # configuration to run
 stacksize_limit=${9:-204800}                                    # ulimit -s [stacksize_limit] (kB)
 ### ---------------------------------------------------- ###
@@ -75,8 +75,8 @@ echo "### ------------------------------------------- ###"
 
 ### ---------------- compile executables --------------- ###
 make_clean=false
-rm ${run_executable}
-compilecmd="${CLEO_PATH2BUILD}/scripts/bash/compile_cleo.sh ${executables} ${make_clean}"
+rm -f ${executable2run}
+compilecmd="${CLEO_PATH2CLEO}/scripts/bash/compile_cleo.sh ${executables} ${make_clean}"
 echo ${compilecmd}
 eval ${compilecmd}
 ### ---------------------------------------------------- ###
@@ -90,7 +90,7 @@ echo "### ------------------------------------------- ###"
 
 ### ------------------- run executable ----------------- ###
 cd ${CLEO_PATH2BUILD} && pwd
-runcmd="${CLEO_PATH2BUILD}/scripts/bash/run_cleo.sh ${executable2run} ${configfile} ${stacksize_limit}"
+runcmd="${CLEO_PATH2CLEO}/scripts/bash/run_cleo.sh ${executable2run} ${configfile} ${stacksize_limit}"
 echo ${runcmd}
 eval ${runcmd}
 ### -------------------------------------------------- ###

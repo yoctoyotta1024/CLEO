@@ -39,10 +39,10 @@
  */
 template <typename OFs>
 concept ObsFuncs = requires(OFs ofs, unsigned int t, const viewd_constgbx d_gbxs,
-                            const viewd_constsupers totsupers) {
+                            const subviewd_constsupers d_supers) {
   { ofs.before_timestepping(d_gbxs) } -> std::same_as<void>;
   { ofs.after_timestepping() } -> std::same_as<void>;
-  { ofs.at_start_step(t, d_gbxs, totsupers) } -> std::same_as<void>;
+  { ofs.at_start_step(t, d_gbxs, d_supers) } -> std::same_as<void>;
   { ofs.get_sdmmonitor() };
 };
 
@@ -119,12 +119,12 @@ struct ConstTstepObserver {
    *
    * @param t_mdl The unsigned int parameter representing the current model time.
    * @param d_gbxs The view of gridboxes in device memory.
-   * @param totsupers View of superdrops on device.
+   * @param d_supers View of superdrops on device.
    */
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
-                     const viewd_constsupers totsupers) const {
+                     const subviewd_constsupers d_supers) const {
     if (on_step(t_mdl)) {
-      do_obs.at_start_step(t_mdl, d_gbxs, totsupers);
+      do_obs.at_start_step(t_mdl, d_gbxs, d_supers);
     }
   }
 

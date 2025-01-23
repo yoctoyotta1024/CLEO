@@ -34,7 +34,8 @@
  * @param ngbxs_from_maps The number of gridboxes from gridbox maps.
  * @param gbxs The dualview containing gridboxes.
  */
-void is_gbxinit_complete(const size_t ngbxs_from_maps, dualview_gbx gbxs) {
+void is_gbxinit_complete(const size_t ngbxs_from_maps, dualview_gbx gbxs,
+                         const viewd_constsupers totsupers) {
   const auto ngbxs = size_t{gbxs.extent(0)};
   if (ngbxs != ngbxs_from_maps) {
     const std::string err(
@@ -49,7 +50,7 @@ void is_gbxinit_complete(const size_t ngbxs_from_maps, dualview_gbx gbxs) {
       "is_gbxinit_complete", TeamPolicy(ngbxs, Kokkos::AUTO()),
       KOKKOS_LAMBDA(const TeamMember &team_member) {
         const auto ii = team_member.league_rank();
-        assert(d_gbxs(ii).supersingbx.iscorrect(team_member) &&
+        assert(d_gbxs(ii).supersingbx.iscorrect(team_member, totsupers) &&
                "incorrect references to superdrops in gridbox");
       });
 }

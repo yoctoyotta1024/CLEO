@@ -24,6 +24,7 @@
 #define LIBS_GRIDBOXES_MOVESUPERSINDOMAIN_HPP_
 
 #include <Kokkos_Core.hpp>
+#include <cassert>
 #include <concepts>
 #include <cstdint>
 #include <iostream>
@@ -33,7 +34,7 @@
 #include "../kokkosaliases.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
-#include "gridboxes/sortsupers.hpp"
+#include "gridboxes/supersindomain.hpp"
 #include "mpi.h"
 #include "superdrops/motion.hpp"
 #include "superdrops/sdmmonitor.hpp"
@@ -44,7 +45,8 @@ function to move super-droplets between MPI processes, e.g. for superdroplets
 which move to/from gridboxes on different nodes.
 */
 template <GridboxMaps GbxMaps>
-void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd_supers totsupers);
+viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
+                             viewd_supers totsupers);
 
 /*
 struct for functionality to move superdroplets throughtout
@@ -90,7 +92,8 @@ struct MoveSupersInDomain {
     Kokkos::parallel_for([...]) is equivalent to:
     for (size_t ii(0); ii < ngbxs; ++ii) {[...]}
     when in serial */
-    void move_supers_in_gridboxes(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs) const {
+    void move_supers_in_gridboxes(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
+                                  const subviewd_supers domainsupers) const {
       const size_t ngbxs(d_gbxs.extent(0));
 
       Kokkos::parallel_for(
@@ -100,46 +103,41 @@ struct MoveSupersInDomain {
 
             auto &gbx = d_gbxs(ii);
             move_supers_in_gbx(team_member, gbx.get_gbxindex(), gbxmaps, gbx.state,
-                               gbx.supersingbx());
+                               gbx.supersingbx(domainsupers));
           });
-    }
-
-    /* (re)sorting supers based on their gbxindexes and then updating the span for each gridbox
-    accordingly.
-    Kokkos::parallel_for([...]) (on host) is equivalent to:
-    for (size_t ii(0); ii < ngbxs; ++ii){[...]}
-    when in serial
-    _Note:_ totsupers is view of all superdrops (both in and out of bounds of domain).
-    */
-    void move_supers_between_gridboxes(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
-                                       const viewd_supers totsupers) const {
-      sort_supers(totsupers);
-
-      int comm_size;
-      MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
-      if (comm_size > 1) {
-        sendrecv_supers(gbxmaps, d_gbxs, totsupers);  // TODO(ALL): make GPU compatible
-      }
-
-      const auto ngbxs = d_gbxs.extent(0);
-      Kokkos::parallel_for(
-          "move_supers_between_gridboxes", TeamPolicy(ngbxs, Kokkos::AUTO()),
-          KOKKOS_LAMBDA(const TeamMember &team_member) {
-            const auto ii = team_member.league_rank();
-            d_gbxs(ii).supersingbx.set_refs(team_member);
-          });
-
-      // /* optional (expensive!) test to raise error if
-      // superdrops' gbxindex doesn't match gridbox's gbxindex */
-      // Kokkos::parallel_for(
-      //     "check_sdgbxindex_during_motion", TeamPolicy(ngbxs, Kokkos::AUTO()),
-      //     KOKKOS_LAMBDA(const TeamMember &team_member) {
-      //       const auto ii = team_member.league_rank();
-      //       assert(d_gbxs(ii).supersingbx.iscorrect(team_member) &&
-      //              "incorrect references to superdrops in gridbox during motion");
-      //     });
     }
   } enactmotion;
+
+  /*
+  Updates the refs for each gridbox given domainsupers containing all the superdroplets within
+  the domain (on one node).
+  Kokkos::parallel_for([...]) (on host) is equivalent to:
+  for (size_t ii(0); ii < ngbxs; ++ii){[...]}
+  when in serial.
+  */
+  void set_gridboxes_refs(const viewd_gbx d_gbxs, const subviewd_constsupers domainsupers) const {
+    const auto ngbxs = d_gbxs.extent(0);
+    Kokkos::parallel_for(
+        "move_supers_between_gridboxes", TeamPolicy(ngbxs, Kokkos::AUTO()),
+        KOKKOS_LAMBDA(const TeamMember &team_member) {
+          const auto ii = team_member.league_rank();
+          d_gbxs(ii).supersingbx.set_refs(team_member, domainsupers);
+        });
+  }
+
+  /* (expensive!) test if superdrops' gbxindex doesn't match gridbox's gbxindex,
+  raise error is assertion fails */
+  void check_sdgbxindex_during_motion(const viewd_constgbx d_gbxs,
+                                      const viewd_constsupers totsupers) const {
+    const auto ngbxs = d_gbxs.extent(0);
+    Kokkos::parallel_for(
+        "check_sdgbxindex_during_motion", TeamPolicy(ngbxs, Kokkos::AUTO()),
+        KOKKOS_LAMBDA(const TeamMember &team_member) {
+          const auto ii = team_member.league_rank();
+          assert(d_gbxs(ii).supersingbx.iscorrect(team_member, totsupers) &&
+                 "incorrect references to superdrops in gridbox during motion");
+        });
+  }
 
   MoveSupersInDomain(const M mtn, const BoundaryConditions boundary_conditions)
       : enactmotion({mtn}), apply_domain_boundary_conditions(boundary_conditions) {}
@@ -160,42 +158,72 @@ struct MoveSupersInDomain {
    * if current time, t_sdm, is time when superdrop motion should occur, enact movement of
    * superdroplets throughout domain.
    *
-   * @param totsupers View of all superdrops (both in and out of bounds of domain).
+   * @param allsupers Struct to handle all superdrops (both in and out of bounds of domain).
    *
    */
-  void run_step(const unsigned int t_sdm, const GbxMaps &gbxmaps, viewd_gbx d_gbxs,
-                const viewd_supers totsupers, const SDMMonitor auto mo) const {
+  SupersInDomain run_step(const unsigned int t_sdm, const GbxMaps &gbxmaps, viewd_gbx d_gbxs,
+                          SupersInDomain &allsupers, const SDMMonitor auto mo) const {
     if (enactmotion.motion.on_step(t_sdm)) {
-      move_superdrops_in_domain(t_sdm, gbxmaps, d_gbxs, totsupers);
-      mo.monitor_motion(d_gbxs);
+      allsupers = move_superdrops_in_domain(t_sdm, gbxmaps, d_gbxs, allsupers);
+      mo.monitor_motion(d_gbxs, allsupers.domain_supers_readonly());
     }
+
+    return allsupers;
   }
 
  private:
   BoundaryConditions apply_domain_boundary_conditions;
+
+  /* (re)sorting supers, based on their gbxindexes and then updating the refs for each gridbox
+  accordingly. May also include MPI communication with moves superdroplets away from/into a node's
+  domain and/or check that superdroplets end up in correct gridboxes.
+  */
+  SupersInDomain move_supers_between_gridboxes(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
+                                               SupersInDomain &allsupers) const {
+    int comm_size;
+    MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
+
+    // TODO(ALL): remove guard once domain decomposition is GPU compatible
+    if (comm_size > 1) {
+      // TODO(ALL): combine two sorts into one(?)
+      auto totsupers = allsupers.sort_totsupers_without_set();
+      totsupers = sendrecv_supers(gbxmaps, d_gbxs, totsupers);
+      allsupers.sort_and_set_totsupers(totsupers);
+    } else {
+      allsupers.sort_totsupers();
+    }
+
+    set_gridboxes_refs(d_gbxs, allsupers.domain_supers());
+
+    // /* optional (expensive!) test if superdrops' gbxindex doesn't match gridbox's gbxindex */
+    // check_sdgbxindex_during_motion(d_gbxs, allsupers.get_totsupers_readonly());
+
+    return allsupers;
+  }
 
   /* enact movement of superdroplets throughout domain in three stages:
   (1) update their spatial coords according to type of motion. (device)
   (2) update their sdgbxindex accordingly (device)
   (3) move superdroplets between gridboxes (host)
   (4) (optional) apply domain boundary conditions (host and device)
-  _Note:_ totsupers is view of all superdrops (both in and out of bounds of domain).
   // TODO(all) use tasking to convert all 3 team policy
   // loops from first two function calls into 1 loop?
   */
-  void move_superdrops_in_domain(const unsigned int t_sdm, const GbxMaps &gbxmaps, viewd_gbx d_gbxs,
-                                 const viewd_supers totsupers) const {
+  SupersInDomain move_superdrops_in_domain(const unsigned int t_sdm, const GbxMaps &gbxmaps,
+                                           viewd_gbx d_gbxs, SupersInDomain &allsupers) const {
     int my_rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 
     /* steps (1 - 2) */
-    enactmotion.move_supers_in_gridboxes(gbxmaps, d_gbxs);
+    enactmotion.move_supers_in_gridboxes(gbxmaps, d_gbxs, allsupers.domain_supers());
 
     /* step (3) */
-    enactmotion.move_supers_between_gridboxes(gbxmaps, d_gbxs, totsupers);
+    allsupers = move_supers_between_gridboxes(gbxmaps, d_gbxs, allsupers);
 
     /* step (4) */
-    apply_domain_boundary_conditions(gbxmaps, d_gbxs, totsupers);
+    allsupers = apply_domain_boundary_conditions(gbxmaps, d_gbxs, allsupers);
+
+    return allsupers;
   }
 };
 
@@ -204,7 +232,8 @@ function to move super-droplets between MPI processes, e.g. for superdroplets
 which move to/from gridboxes on different nodes.
 */
 template <GridboxMaps GbxMaps>
-void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd_supers totsupers) {
+viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
+                             viewd_supers totsupers) {
   int comm_size, my_rank;
   MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
   MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
@@ -254,9 +283,11 @@ void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd
   total_superdrops_to_recv =
       std::accumulate(per_process_recv_superdrops.begin(), per_process_recv_superdrops.end(), 0);
 
+  assert((local_superdrops + total_superdrops_to_recv <= totsupers.extent(0)) &&
+         "must have enough space in supers view to receive superdroplets");
   if (local_superdrops + total_superdrops_to_recv > totsupers.extent(0)) {
     std::cout << "MAXIMUM NUMBER OF LOCAL SUPERDROPLETS EXCEEDED" << std::endl;
-    return;
+    return totsupers;
   }
 
   // Knowing how many superdroplets will be sent and received, allocate
@@ -293,12 +324,13 @@ void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd
   for (int process_index = 0; process_index < comm_size; process_index++)
     for (int superdrop = 0; superdrop < per_process_send_superdrops[process_index]; superdrop++) {
       superdrop_index = superdrops_indices_per_process[process_index][superdrop];
-      totsupers[superdrop_index].serialize_uint_components(superdrops_uint_send_data.begin() +
-                                                           send_superdrop_index * 2);
-      totsupers[superdrop_index].serialize_uint64_components(superdrops_uint64_send_data.begin() +
-                                                             send_superdrop_index);
-      totsupers[superdrop_index].serialize_double_components(superdrops_double_send_data.begin() +
-                                                             send_superdrop_index * 5);
+      totsupers(superdrop_index)
+          .serialize_uint_components(superdrops_uint_send_data.begin() + send_superdrop_index * 2);
+      totsupers(superdrop_index)
+          .serialize_uint64_components(superdrops_uint64_send_data.begin() + send_superdrop_index);
+      totsupers(superdrop_index)
+          .serialize_double_components(superdrops_double_send_data.begin() +
+                                       send_superdrop_index * 5);
       send_superdrop_index++;
     }
 
@@ -340,13 +372,13 @@ void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd
 
   for (unsigned int i = local_superdrops; i < local_superdrops + total_superdrops_to_recv; i++) {
     int data_offset = i - local_superdrops;
-    totsupers[i].deserialize_components(superdrops_uint_recv_data.begin() + data_offset * 2,
+    totsupers(i).deserialize_components(superdrops_uint_recv_data.begin() + data_offset * 2,
                                         superdrops_uint64_recv_data.begin() + data_offset,
                                         superdrops_double_recv_data.begin() + data_offset * 5);
 
     // Get the local gridbox index which contains the superdroplet
-    auto drop_coords = std::array<double, 3>{totsupers[i].get_coord3(), totsupers[i].get_coord1(),
-                                             totsupers[i].get_coord2()};
+    auto drop_coords = std::array<double, 3>{totsupers(i).get_coord3(), totsupers(i).get_coord1(),
+                                             totsupers(i).get_coord2()};
     const auto b4 = std::array<double, 3>{drop_coords[0], drop_coords[1], drop_coords[2]};
     const auto gbxindex =
         (unsigned int)gbxmaps.get_domain_decomposition().get_local_bounding_gridbox(
@@ -356,16 +388,16 @@ void sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, const viewd
     // process here just the gridbox index update is necessary
     assert((drop_coords[0] == b4[0]) && (drop_coords[1] == b4[1]) && (drop_coords[2] == b4[2]) &&
            "drop coordinates should have already been corrected and so shoudn't have changed here");
-    totsupers[i].set_sdgbxindex(gbxindex);
+    totsupers(i).set_sdgbxindex(gbxindex);
 
     // TODO(ALL): add check_bounds to SD?
   }
 
   // Reset all remaining non-used superdroplet spots
   for (unsigned int i = local_superdrops + total_superdrops_to_recv; i < totsupers.extent(0); i++)
-    totsupers[i].set_sdgbxindex(LIMITVALUES::oob_gbxindex);
+    totsupers(i).set_sdgbxindex(LIMITVALUES::oob_gbxindex);
 
-  sort_supers(totsupers);
+  return totsupers;
 }
 
 #endif  // LIBS_GRIDBOXES_MOVESUPERSINDOMAIN_HPP_

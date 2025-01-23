@@ -29,7 +29,7 @@
 #include <string>
 
 #include "../kokkosaliases.hpp"
-#include "gridboxes/sortsupers.hpp"
+#include "gridboxes/supersindomain.hpp"
 #include "runcleo/gensuperdrop.hpp"
 
 /**
@@ -57,19 +57,19 @@ viewd_supers initialise_supers(const SuperdropInitConds &sdic);
  *
  * The equivalent serial version of the Kokkos::parallel_for([...]) is:
  * @code
- * for (size_t kk(0); kk < totnsupers; ++kk)
+ * for (size_t kk(0); kk < ntotsupers; ++kk)
  * {
- *  h_supers(kk) = gen(kk);
+ *  h_totsupers(kk) = gen(kk);
  * }
  * @endcode
  *
  * @param sdic The instance of the super-droplets' initial conditions data.
- * @param supers The view of superdrops on device memory.
+ * @param totsupers The view of superdrops on device memory.
  * @return A mirror view of superdrops on host memory.
  */
 template <typename SuperdropInitConds>
 viewd_supers::HostMirror initialise_supers_on_host(const SuperdropInitConds &sdic,
-                                                   const viewd_supers supers);
+                                                   const viewd_supers totsupers);
 
 /**
  * @brief Check if superdroplets initialisation is complete.
@@ -78,12 +78,12 @@ viewd_supers::HostMirror initialise_supers_on_host(const SuperdropInitConds &sdi
  * superdroplets are sorted by ascending gridbox indexes. If the initialisation is incomplete
  * (the superdroplets are not sorted), it throws an exception with an appropriate error message.
  *
- * @param supers The view of super-droplets in device memory.
+ * @param allsupers Struct to handle all the super-droplets in device memory.
  *
  * @throws std::invalid_argument If the initialisation is incomplete i.e. the super-droplets
  * are not ordered correctly.
  */
-void is_sdsinit_complete(const viewd_constsupers supers);
+void is_sdsinit_complete(const SupersInDomain allsupers);
 
 /**
  * @brief Print statement about initialised super-droplets.
@@ -91,15 +91,15 @@ void is_sdsinit_complete(const viewd_constsupers supers);
  * This function prints information about each superdroplet, including its ID, Gridbox index,
  * spatial coordinates, and attributes.
  *
- * @param supers The view of super-droplets in device memory.
+ * @param totsupers The view of super-droplets in device memory.
  */
-void print_supers(const viewd_constsupers supers);
+void print_supers(const viewd_constsupers totsupers);
 
 /**
  * @brief Create a view of super-droplets in (device) memory.
  *
  * This function creates an ordered view of superdrops in device memory, where the number
- * of superdrops is specified by the parameter `totnsupers`. The superdrops are
+ * of superdrops is specified by the parameter `ntotsupers`. The superdrops are
  * ordered by the gridbox indexes and generated using a generator which uses
  * the initial conditions provided by the `SuperdropInitConds` type.
  *
@@ -108,31 +108,31 @@ void print_supers(const viewd_constsupers supers);
  *
  * @tparam SuperdropInitConds The type of the super-droplets' initial conditions data.
  * @param sdic The instance of the super-droplets' initial conditions data.
- * @return A view of super-droplets in device memory.
+ * @return Struct for handling super-droplets in device memory.
  */
 template <typename SuperdropInitConds>
-viewd_supers create_supers(const SuperdropInitConds &sdic) {
+SupersInDomain create_supers(const SuperdropInitConds &sdic, const unsigned int gbxindex_max) {
   Kokkos::Profiling::ScopedRegion region("init_supers");
 
   // Log message and create superdrops using the initial conditions
   std::cout << "\n--- create superdrops ---\ninitialising\n";
-  viewd_supers supers(initialise_supers(sdic));
+  auto totsupers = initialise_supers(sdic);
 
   // Log message and sort the view of superdrops
-  std::cout << "sorting\n";
-  supers = sort_supers(supers);
+  std::cout << "sorting and finding superdrops in domain\n";
+  auto allsupers = SupersInDomain(totsupers, gbxindex_max);
 
   // Log message and perform checks on the initialisation of superdrops
   std::cout << "checking initialisation\n";
-  is_sdsinit_complete(supers);
+  is_sdsinit_complete(allsupers);
 
   // // Print information about the created superdrops
-  // print_supers(supers);
+  // print_supers(totsupers);
 
   // Log message indicating the successful creation of superdrops
   std::cout << "--- create superdrops: success ---\n";
 
-  return supers;
+  return allsupers;
 }
 
 /**
@@ -151,15 +151,15 @@ viewd_supers initialise_supers(const SuperdropInitConds &sdic) {
   GenSuperdrop gen(sdic);
 
   // create superdrops view on device
-  viewd_supers supers("supers", gen.get_local_nsupers());
+  auto totsupers = viewd_supers("totsupers", gen.get_maxnsupers());
 
   // initialise a mirror of superdrops view on host
-  auto h_supers = initialise_supers_on_host(sdic, supers);
+  auto h_totsupers = initialise_supers_on_host(sdic, totsupers);
 
-  // Copy host view to device (h_supers to supers)
-  Kokkos::deep_copy(supers, h_supers);
+  // Copy host view to device (h_totsupers to totsupers)
+  Kokkos::deep_copy(totsupers, h_totsupers);
 
-  return supers;
+  return totsupers;
 }
 
 /**
@@ -173,29 +173,29 @@ viewd_supers initialise_supers(const SuperdropInitConds &sdic) {
  *
  * The equivalent serial version of the Kokkos::parallel_for([...]) is:
  * @code
- * for (size_t kk(0); kk < totnsupers; ++kk)
+ * for (size_t kk(0); kk < ntotsupers; ++kk)
  * {
- *  h_supers(kk) = gen(kk);
+ *  h_totsupers(kk) = gen(kk);
  * }
  * @endcode
  *
  * @param sdic The instance of the super-droplets' initial conditions data.
- * @param supers The view of superdrops on device memory.
+ * @param totsupers The view of superdrops on device memory.
  * @return A mirror view of superdrops on host memory.
  */
 template <typename SuperdropInitConds>
 viewd_supers::HostMirror initialise_supers_on_host(const SuperdropInitConds &sdic,
-                                                   const viewd_supers supers) {
+                                                   const viewd_supers totsupers) {
   // Create a mirror view of supers in case the original view is on device memory
-  auto h_supers = Kokkos::create_mirror_view(supers);
+  auto h_totsupers = Kokkos::create_mirror_view(totsupers);
 
   // Parallel initialisation of the mirror view
-  const size_t totnsupers(supers.extent(0));
+  const auto ntotsupers = size_t{totsupers.extent(0)};
   const GenSuperdrop gen(sdic);
-  Kokkos::parallel_for("initialise_supers_on_host", Kokkos::RangePolicy<HostSpace>(0, totnsupers),
-                       [=](const size_t kk) { h_supers(kk) = gen(kk); });
+  Kokkos::parallel_for("initialise_supers_on_host", Kokkos::RangePolicy<HostSpace>(0, ntotsupers),
+                       [=](const size_t kk) { h_totsupers(kk) = gen(kk); });
 
-  return h_supers;
+  return h_totsupers;
 }
 
 #endif  // LIBS_RUNCLEO_CREATESUPERS_HPP_

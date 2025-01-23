@@ -133,10 +133,10 @@ class GbxindexObserver {
    * observer concept.
    * @param t_mdl Current model timestep.
    * @param d_gbxs View of gridboxes on device.
-   * @param totsupers View of superdrops on device.
+   * @param d_supers View of superdrops on device.
    */
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
-                     const viewd_constsupers totsupers) const {}
+                     const subviewd_constsupers d_supers) const {}
 
   /**
    * @brief Get null monitor for SDM processes from observer.

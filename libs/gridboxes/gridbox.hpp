@@ -46,23 +46,16 @@ struct Gridbox {
 
   /* assumes supers view (or subview) already sorted via sdgbxindex. Constructor works
   outside of parallelism */
-  Gridbox(const Gbxindex igbxindex, const State istate, const viewd_supers totsupers)
-      : gbxindex(igbxindex), state(istate), supersingbx(totsupers, gbxindex.value) {}
+  Gridbox(const Gbxindex igbxindex, const State istate, const subviewd_constsupers domainsupers)
+      : gbxindex(igbxindex), state(istate), supersingbx(gbxindex.value, domainsupers) {}
 
   /* assumes supers view (or subview) already sorted via sdgbxindex. Constructor works within
   parallel team policy on host given member 'team_member' */
-  Gridbox(const Gbxindex igbxindex, const State istate, const viewd_supers totsupers,
-          const kkpair_size_t irefs)
-      : gbxindex(igbxindex), state(istate), supersingbx(totsupers, gbxindex.value, irefs) {}
+  Gridbox(const Gbxindex igbxindex, const State istate, const kkpair_size_t irefs)
+      : gbxindex(igbxindex), state(istate), supersingbx(gbxindex.value, irefs) {}
 
   KOKKOS_INLINE_FUNCTION
   auto get_gbxindex() const { return gbxindex.value; }
-
-  viewd_constsupers domain_totsupers_readonly() const {
-    return supersingbx.domain_totsupers_readonly();
-  }
-
-  size_t domain_totnsupers() const { return supersingbx.domain_totnsupers(); }
 };
 
 #endif  // LIBS_GRIDBOXES_GRIDBOX_HPP_

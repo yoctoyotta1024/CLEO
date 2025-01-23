@@ -38,11 +38,12 @@ subview have matching index. (2) all superdrops preceeding current
 subview do not have matching index. (3) all superdrops after current
 subview also do not have matching index. */
 KOKKOS_FUNCTION
-bool SupersInGbx::iscorrect(const TeamMember &team_member) const {
+bool SupersInGbx::iscorrect(const TeamMember &team_member,
+                            const viewd_constsupers totsupers) const {
   const auto pred = Pred{idx};
-  const auto crit1(is_pred(team_member, pred));
-  const auto crit2(is_prednot(team_member, pred, {0, refs.first}));
-  const auto crit3(is_prednot(team_member, pred, {refs.second, totsupers.extent(0)}));
+  const auto crit1(is_pred(team_member, pred, totsupers));
+  const auto crit2(is_prednot(team_member, pred, totsupers, {0, refs.first}));
+  const auto crit3(is_prednot(team_member, pred, totsupers, {refs.second, totsupers.extent(0)}));
 
   return (crit1 && crit2 && crit3);
 }
@@ -50,25 +51,23 @@ bool SupersInGbx::iscorrect(const TeamMember &team_member) const {
 /* returns true if all superdrops in subview
 between refs satisfy the Predicate "pred" */
 template <typename Pred>
-KOKKOS_FUNCTION bool SupersInGbx::is_pred(const TeamMember &team_member, const Pred pred) const {
-  namespace KE = Kokkos::Experimental;
-
-  return KE::all_of(team_member, (*this)(), pred);
+KOKKOS_FUNCTION bool SupersInGbx::is_pred(const TeamMember &team_member, const Pred pred,
+                                          const viewd_constsupers totsupers) const {
+  return Kokkos::Experimental::all_of(team_member, readonly(totsupers), pred);
 }
 
-/* returns true if all superdrops in subview
-between r0 and r1 do not satisfy pred */
+/* returns true if all superdrops in subview between r0 and r1 do not satisfy pred */
 template <typename Pred>
 KOKKOS_FUNCTION bool SupersInGbx::is_prednot(const TeamMember &team_member, const Pred pred,
+                                             const viewd_constsupers totsupers,
                                              const kkpair_size_t refs4pred) const {
-  namespace KE = Kokkos::Experimental;
-
   const auto supers4pred = Kokkos::subview(totsupers, refs4pred);
-
-  return KE::none_of(team_member, supers4pred, pred);
+  return Kokkos::Experimental::none_of(team_member, supers4pred, pred);
 }
 
-template KOKKOS_FUNCTION bool SupersInGbx::is_pred<Pred>(const TeamMember &, const Pred) const;
+template KOKKOS_FUNCTION bool SupersInGbx::is_pred<Pred>(const TeamMember &, const Pred,
+                                                         const viewd_constsupers) const;
 
 template KOKKOS_FUNCTION bool SupersInGbx::is_prednot<Pred>(const TeamMember &, const Pred,
+                                                            const viewd_constsupers,
                                                             const kkpair_size_t) const;

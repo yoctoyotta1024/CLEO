@@ -38,6 +38,7 @@
  */
 class GenSuperdrop {
  private:
+  size_t maxnsupers; /**< Maximum allowed superdroplets in the domain (total extent of view). */
   unsigned int nspacedims; /**< Number of spatial dimensions. */
   InitSupersData initdata; /**< instance of InitSupersData for initialising superdrops. */
 
@@ -82,9 +83,11 @@ class GenSuperdrop {
    */
   template <typename SuperdropInitConds>
   explicit GenSuperdrop(const SuperdropInitConds &sdic)
-      : nspacedims(sdic.get_nspacedims()), initdata(sdic.fetch_data()) {}
+      : maxnsupers(sdic.get_maxnsupers()),
+        nspacedims(sdic.get_nspacedims()),
+        initdata(sdic.fetch_data()) {}
 
-  unsigned int get_local_nsupers() { return initdata.sdgbxindexes.size(); }
+  auto get_maxnsupers() { return maxnsupers; }
 
   /**
    * @brief Generate a super-droplet using initial data for the kk'th superdrop.

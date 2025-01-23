@@ -51,17 +51,17 @@ class DoTotNsupersObs {
   std::shared_ptr<XarrayZarrArray<Store, uint32_t>> xzarr_ptr; /**< pointer to totnsupers array */
 
   /**
-   * @brief Write out the total number of superdroplets in totsupers view at the start of a timestep
+   * @brief Write out the total number of superdroplets in d_supers view at the start of a timestep
    * to an array in the dataset.
    *
    * _Note:_ conversion of totnsupers from size_t (arch dependent usually 8 bytes) to shorter 4
    * byte, unsigned int (unit32_t).
    *
-   * @param totsupers View of all the superdroplets to count (on device memory but metadata for
+   * @param d_supers View of all the superdroplets to count (on device memory but metadata for
    * extent of view is available on host).
    */
-  void at_start_step(const viewd_constsupers totsupers) const {
-    const auto data = static_cast<uint32_t>(totsupers.extent(0));
+  void at_start_step(const subviewd_constsupers d_supers) const {
+    const auto data = static_cast<uint32_t>(d_supers.extent(0));
     dataset.write_to_array(xzarr_ptr, data);
   }
 
@@ -97,15 +97,15 @@ class DoTotNsupersObs {
 
   /**
    * @brief Adapter to call at start step function which writes the total number of superdroplets in
-   * totsupers view to the array in the dataset.
+   * d_supers view to the array in the dataset.
    *
    * @param t_mdl Current model timestep.
    * @param d_gbxs View of gridboxes on device.
-   * @param totsupers View of superdrops on device.
+   * @param d_supers View of superdrops on device.
    */
   void at_start_step(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
-                     const viewd_constsupers totsupers) const {
-    at_start_step(totsupers);
+                     const subviewd_constsupers d_supers) const {
+    at_start_step(d_supers);
   }
 
   /**
