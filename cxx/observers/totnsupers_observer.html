@@ -423,15 +423,15 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK15DoTotNsupersObs13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers">
-<span id="_CPPv3NK15DoTotNsupersObs13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"></span><span id="_CPPv2NK15DoTotNsupersObs13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"></span><span id="DoTotNsupersObs::at_start_step__unsigned-iC.viewd_constgbxC.viewd_constsupersCC"></span><span class="target" id="classDoTotNsupersObs_1a72242bab5e950974016eec10f003964d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">at_start_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv414viewd_constgbx" title="viewd_constgbx"><span class="n"><span class="pre">viewd_constgbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv417viewd_constsupers" title="viewd_constsupers"><span class="n"><span class="pre">viewd_constsupers</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">totsupers</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK15DoTotNsupersObs13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Adapter to call at start step function which writes the total number of superdroplets in totsupers view to the array in the dataset. </p>
+<dt class="sig sig-object cpp" id="_CPPv4NK15DoTotNsupersObs13at_start_stepEKjK14viewd_constgbxK20subviewd_constsupers">
+<span id="_CPPv3NK15DoTotNsupersObs13at_start_stepEKjK14viewd_constgbxK20subviewd_constsupers"></span><span id="_CPPv2NK15DoTotNsupersObs13at_start_stepEKjK14viewd_constgbxK20subviewd_constsupers"></span><span id="DoTotNsupersObs::at_start_step__unsigned-iC.viewd_constgbxC.subviewd_constsupersCC"></span><span class="target" id="classDoTotNsupersObs_1acf9e08bbc99444976650b2258a709e13"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">at_start_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv414viewd_constgbx" title="viewd_constgbx"><span class="n"><span class="pre">viewd_constgbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv420subviewd_constsupers" title="subviewd_constsupers"><span class="n"><span class="pre">subviewd_constsupers</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">d_supers</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK15DoTotNsupersObs13at_start_stepEKjK14viewd_constgbxK20subviewd_constsupers" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Adapter to call at start step function which writes the total number of superdroplets in d_supers view to the array in the dataset. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>t_mdl</strong> – Current model timestep. </p></li>
 <li><p><strong>d_gbxs</strong> – View of gridboxes on device. </p></li>
-<li><p><strong>totsupers</strong> – View of superdrops on device. </p></li>
+<li><p><strong>d_supers</strong> – View of superdrops on device. </p></li>
 </ul>
 </dd>
 </dl>
@@ -452,13 +452,13 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-functions">Private Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK15DoTotNsupersObs13at_start_stepEK17viewd_constsupers">
-<span id="_CPPv3NK15DoTotNsupersObs13at_start_stepEK17viewd_constsupers"></span><span id="_CPPv2NK15DoTotNsupersObs13at_start_stepEK17viewd_constsupers"></span><span id="DoTotNsupersObs::at_start_step__viewd_constsupersCC"></span><span class="target" id="classDoTotNsupersObs_1a0c2c8a200886ea246d6bfe4bae5605c8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">at_start_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv417viewd_constsupers" title="viewd_constsupers"><span class="n"><span class="pre">viewd_constsupers</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">totsupers</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK15DoTotNsupersObs13at_start_stepEK17viewd_constsupers" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Write out the total number of superdroplets in totsupers view at the start of a timestep to an array in the dataset. </p>
+<dt class="sig sig-object cpp" id="_CPPv4NK15DoTotNsupersObs13at_start_stepEK20subviewd_constsupers">
+<span id="_CPPv3NK15DoTotNsupersObs13at_start_stepEK20subviewd_constsupers"></span><span id="_CPPv2NK15DoTotNsupersObs13at_start_stepEK20subviewd_constsupers"></span><span id="DoTotNsupersObs::at_start_step__subviewd_constsupersCC"></span><span class="target" id="classDoTotNsupersObs_1a839698228f85d43b72595e1231ab34c1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">at_start_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv420subviewd_constsupers" title="subviewd_constsupers"><span class="n"><span class="pre">subviewd_constsupers</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">d_supers</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK15DoTotNsupersObs13at_start_stepEK20subviewd_constsupers" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Write out the total number of superdroplets in d_supers view at the start of a timestep to an array in the dataset. </p>
 <p><em>Note:</em> conversion of totnsupers from size_t (arch dependent usually 8 bytes) to shorter 4 byte, unsigned int (unit32_t).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>totsupers</strong> – View of all the superdroplets to count (on device memory but metadata for extent of view is available on host). </p>
+<dd class="field-odd"><p><strong>d_supers</strong> – View of all the superdroplets to count (on device memory but metadata for extent of view is available on host). </p>
 </dd>
 </dl>
 </dd></dl>
@@ -539,7 +539,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 16 January 2025</div>
+              Last updated on 23 January 2025</div>
           </div>
           <div class="right-details">
             
@@ -566,9 +566,9 @@
 <li><a class="reference internal" href="#_CPPv4N15DoTotNsupersObsD0Ev"><code class="docutils literal notranslate"><span class="pre">DoTotNsupersObs::~DoTotNsupersObs()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK15DoTotNsupersObs19before_timesteppingEK14viewd_constgbx"><code class="docutils literal notranslate"><span class="pre">DoTotNsupersObs::before_timestepping()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK15DoTotNsupersObs18after_timesteppingEv"><code class="docutils literal notranslate"><span class="pre">DoTotNsupersObs::after_timestepping()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15DoTotNsupersObs13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"><code class="docutils literal notranslate"><span class="pre">DoTotNsupersObs::at_start_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15DoTotNsupersObs13at_start_stepEKjK14viewd_constgbxK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">DoTotNsupersObs::at_start_step()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK15DoTotNsupersObs14get_sdmmonitorEv"><code class="docutils literal notranslate"><span class="pre">DoTotNsupersObs::get_sdmmonitor()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15DoTotNsupersObs13at_start_stepEK17viewd_constsupers"><code class="docutils literal notranslate"><span class="pre">DoTotNsupersObs::at_start_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15DoTotNsupersObs13at_start_stepEK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">DoTotNsupersObs::at_start_step()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N15DoTotNsupersObs7datasetE"><code class="docutils literal notranslate"><span class="pre">DoTotNsupersObs::dataset</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N15DoTotNsupersObs9xzarr_ptrE"><code class="docutils literal notranslate"><span class="pre">DoTotNsupersObs::xzarr_ptr</span></code></a></li>
 </ul>

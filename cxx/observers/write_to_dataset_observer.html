@@ -414,15 +414,15 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK16DoWriteToDataset13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers">
-<span id="_CPPv3NK16DoWriteToDataset13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"></span><span id="_CPPv2NK16DoWriteToDataset13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"></span><span id="DoWriteToDataset::at_start_step__unsigned-iC.viewd_constgbxC.viewd_constsupersCC"></span><span class="target" id="classDoWriteToDataset_1ad8272a343669ba096f104beb3fa05898"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">at_start_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv414viewd_constgbx" title="viewd_constgbx"><span class="n"><span class="pre">viewd_constgbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv417viewd_constsupers" title="viewd_constsupers"><span class="n"><span class="pre">viewd_constsupers</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">totsupers</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16DoWriteToDataset13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers" title="Link to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK16DoWriteToDataset13at_start_stepEKjK14viewd_constgbxK20subviewd_constsupers">
+<span id="_CPPv3NK16DoWriteToDataset13at_start_stepEKjK14viewd_constgbxK20subviewd_constsupers"></span><span id="_CPPv2NK16DoWriteToDataset13at_start_stepEKjK14viewd_constgbxK20subviewd_constsupers"></span><span id="DoWriteToDataset::at_start_step__unsigned-iC.viewd_constgbxC.subviewd_constsupersCC"></span><span class="target" id="classDoWriteToDataset_1a29ceb40fb0c079c9f580c875d7892dab"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">at_start_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv414viewd_constgbx" title="viewd_constgbx"><span class="n"><span class="pre">viewd_constgbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">d_gbxs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../superdrops/kokkosaliases_sd.html#_CPPv420subviewd_constsupers" title="subviewd_constsupers"><span class="n"><span class="pre">subviewd_constsupers</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">d_supers</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK16DoWriteToDataset13at_start_stepEKjK14viewd_constgbxK20subviewd_constsupers" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Calls the parallel_write function during at_start_step. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>t_mdl</strong> – Current model time. </p></li>
 <li><p><strong>d_gbxs</strong> – View of gridboxes. </p></li>
-<li><p><strong>totsupers</strong> – View of superdroplets. </p></li>
+<li><p><strong>d_supers</strong> – View of superdroplets. </p></li>
 </ul>
 </dd>
 </dl>
@@ -558,7 +558,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 16 January 2025</div>
+              Last updated on 23 January 2025</div>
           </div>
           <div class="right-details">
             
@@ -584,7 +584,7 @@
 <li><a class="reference internal" href="#_CPPv4N16DoWriteToDataset16DoWriteToDatasetE17ParallelWriteData"><code class="docutils literal notranslate"><span class="pre">DoWriteToDataset::DoWriteToDataset()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK16DoWriteToDataset19before_timesteppingEK14viewd_constgbx"><code class="docutils literal notranslate"><span class="pre">DoWriteToDataset::before_timestepping()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK16DoWriteToDataset18after_timesteppingEv"><code class="docutils literal notranslate"><span class="pre">DoWriteToDataset::after_timestepping()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK16DoWriteToDataset13at_start_stepEKjK14viewd_constgbxK17viewd_constsupers"><code class="docutils literal notranslate"><span class="pre">DoWriteToDataset::at_start_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK16DoWriteToDataset13at_start_stepEKjK14viewd_constgbxK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">DoWriteToDataset::at_start_step()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK16DoWriteToDataset14get_sdmmonitorEv"><code class="docutils literal notranslate"><span class="pre">DoWriteToDataset::get_sdmmonitor()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N16DoWriteToDataset14parallel_writeE"><code class="docutils literal notranslate"><span class="pre">DoWriteToDataset::parallel_write</span></code></a></li>
 </ul>
