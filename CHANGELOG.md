@@ -2,6 +2,30 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.31.0](https://github.com/yoctoyotta1024/CLEO/compare/1a24d6319861ff6b74b25d9d86508a6a218b3a98..v0.31.0) - 2025-01-23
+#### Bug Fixes
+- encapsulation of supers in parallel regions - ([61ed09a](https://github.com/yoctoyotta1024/CLEO/commit/61ed09ad62ad1cc2b790ca05cfecf52b9cc38a90)) - clara.bayley
+- typos in bash script - ([e61fc3d](https://github.com/yoctoyotta1024/CLEO/commit/e61fc3d0931e884e78e5ece055cfee5c81eec5e0)) - clara.bayley
+- correct initial conditions and method to get size of supers view - ([b543045](https://github.com/yoctoyotta1024/CLEO/commit/b5430452c9dcc89c53114a00548a06293e422e36)) - clara.bayley
+#### Features
+- new struct to handle domain superdroplets - ([5c62ef1](https://github.com/yoctoyotta1024/CLEO/commit/5c62ef18040daeffc44dc4ce405164d12063a782)) - clara.bayley
+#### Miscellaneous Chores
+- rename SupersInDomain object - ([d2529be](https://github.com/yoctoyotta1024/CLEO/commit/d2529be2296d99948c84b047fe875ae4203a72a1)) - clara.bayley
+- rename observers supers sub-view - ([26e2eba](https://github.com/yoctoyotta1024/CLEO/commit/26e2ebae00b38d437ff87a501583522519ea369a)) - clara.bayley
+- use auto - ([7d0fd95](https://github.com/yoctoyotta1024/CLEO/commit/7d0fd954eeabfb3ef48f9dc88502694761cc9e12)) - clara.bayley
+#### Performance Improvements
+- nicer expression to reference gbx - ([67036d3](https://github.com/yoctoyotta1024/CLEO/commit/67036d3abe282b92fbd27b06b5308d1c9fa584a5)) - clara.bayley
+#### Refactoring
+- control sorting of totsupers from inside SupersInDomain struct - ([1ac934a](https://github.com/yoctoyotta1024/CLEO/commit/1ac934afa5fcc6a1b829b1ea39516e77f1f17d81)) - clara.bayley
+- use kokkos style element access and add assert for supers size - ([68a1aed](https://github.com/yoctoyotta1024/CLEO/commit/68a1aed168e7d900021572549360f5671519e1df)) - clara.bayley
+- return totsupers after sorting - ([944fb5b](https://github.com/yoctoyotta1024/CLEO/commit/944fb5bfe83f7589bfb81c8b72ddf1b54bfdbf5c)) - clara.bayley
+- initconds use gbxmaps for nullgbxs - ([c5e0268](https://github.com/yoctoyotta1024/CLEO/commit/c5e0268e94de1fff10c19d7f7852cadbbc95364a)) - clara.bayley
+- remove supers entire view from supersingbx object - ([d8ebeb5](https://github.com/yoctoyotta1024/CLEO/commit/d8ebeb51691a72327a2ee5ba1d966aadded836f6)) - clara.bayley
+- use domainsupers to alter superdroplets during motion - ([8a9d3e9](https://github.com/yoctoyotta1024/CLEO/commit/8a9d3e91ef4c29cb7c9b8e22c51064109725ce40)) - clara.bayley
+- don't use view in predcorr deltas - ([1a24d63](https://github.com/yoctoyotta1024/CLEO/commit/1a24d6319861ff6b74b25d9d86508a6a218b3a98)) - clara.bayley
+
+- - -
+
 ## [v0.30.1](https://github.com/yoctoyotta1024/CLEO/compare/ffbd7900b9ef26749c0fb9c6b619584b83c143a6..v0.30.1) - 2024-12-21
 #### Bug Fixes
 - add spdtest results for new bash scripts - ([ffbd790](https://github.com/yoctoyotta1024/CLEO/commit/ffbd7900b9ef26749c0fb9c6b619584b83c143a6)) - clara.bayley
