@@ -30,45 +30,52 @@
 #include "gridboxes/sortsupers.hpp"
 #include "superdrops/kokkosaliases_sd.hpp"
 
-/* References to identify the chunk of memory containing super-droplets occupying domain
-(i.e. within any of the gridboxes on a single node), e.g. through std::span or Kokkos::subview) */
+/* Struct which handles the references to identify the chunk of memory containing super-droplets
+occupying domain (i.e. within any of the gridboxes on a single node), e.g. through std::span or
+Kokkos::subview). Gridbox indexes are assumed to run from 0 to gbxindex_max so that Superdroplets
+inside the domain have 0 <= sdgbxindex <= gbxindex_max. Struct also contains menthods to sort
+and reassign the superdroplet view used to store superdroplets in the domain. */
 struct SupersInDomain {
  private:
   Kokkos::pair<unsigned int, unsigned int> gbxindex_range; /**< {min, max} gbxindex of domain */
-  viewd_supers totsupers; /**< view of all superdrops (both in and out of bounds of domain) */
-  kkpair_size_t
-      domainrefs; /**< position in view of (first, last) superdrop that occupies gridbox */
+  viewd_supers totsupers;   /**< view of all superdrops (both in and out of bounds of domain) */
+  kkpair_size_t domainrefs; /**< position in view of (first, last) superdrop that occupies domain */
   SortSupersBySdgbxindex sort_by_sdgbxindex; /**< method to sort view of superdrops by sdgbxindex */
 
+  /* Assign superdroplets view used to store superdroplets in the domain and update the domainrefs
+  for identifying the subview which contains in-domain superdroplets. Gridbox indexes are assumed
+  to start at 0, meaning superdroplets inside the domain are those with
+  0 <= sdgbxindex <= gbxindex_range.second (= gbxindex_max). */
   void set_totsupers_domainrefs(const viewd_supers totsupers_) {
     totsupers = totsupers_;
-    domainrefs = find_domainrefs(totsupers, gbxindex_range);
+    domainrefs = find_domainrefs(totsupers, gbxindex_range.second);
   }
 
  public:
-  SupersInDomain() = default;   // Kokkos requirement for a (dual)View
-  ~SupersInDomain() = default;  // Kokkos requirement for a (dual)View
-
+  /* Assigns and sorts view for superdroplets, then identifies in-domain superdroplets.
+  Gridbox indexes are assumed to start at 0, meaning superdroplets inside the domain are
+  those with 0 <= sdgbxindex <= gbxindex_range.second (= gbxindex_max). */
   explicit SupersInDomain(const viewd_supers totsupers_, const unsigned int gbxindex_max)
       : gbxindex_range({0, gbxindex_max}),
         totsupers(totsupers_),
         domainrefs({0, 0}),
-        sort_by_sdgbxindex(SortSupersBySdgbxindex()) {
-    totsupers = sort_by_sdgbxindex(totsupers_);
-    set_totsupers_domainrefs(totsupers_);
+        sort_by_sdgbxindex(SortSupersBySdgbxindex(gbxindex_range.second, totsupers.extent(0))) {
+    auto sorted_supers = sort_by_sdgbxindex(totsupers_);
+    set_totsupers_domainrefs(sorted_supers);
   }
 
   viewd_supers get_totsupers() const {
     return totsupers;
   }  // TODO(CB): replace with appending SDs func which could resize(?)
 
+  /* read-only means superdrops in the totsupers view are const */
   viewd_constsupers get_totsupers_readonly() const { return totsupers; }
 
-  /* returns the view of all the superdrops in the domain */
+  /* returns the view of all the superdrops in the domain (excluding out of bounds ones) */
   subviewd_supers domain_supers() const { return Kokkos::subview(totsupers, domainrefs); }
 
   /* returns the view of all the superdrops in the domain. read-only means superdrops in
-  the view are const */
+  the subview are const */
   subviewd_constsupers domain_supers_readonly() const {
     return Kokkos::subview(totsupers, domainrefs);
   }
@@ -82,8 +89,8 @@ struct SupersInDomain {
   /* sort superdroplets by sdgbxindex and then (re-)set the totsupers view and the refs for the
   superdroplets that are within the domain (sdgbxindex within gbxindex_range for a given node) */
   viewd_supers sort_totsupers() {
-    auto totsupers_ = sort_by_sdgbxindex(totsupers);
-    set_totsupers_domainrefs(totsupers_);
+    auto sorted_supers = sort_by_sdgbxindex(totsupers);
+    set_totsupers_domainrefs(sorted_supers);
     return totsupers;
   }
 
