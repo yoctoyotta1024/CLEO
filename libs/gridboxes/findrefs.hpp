@@ -77,20 +77,23 @@ KOKKOS_INLINE_FUNCTION kkpair_size_t find_refs(const TeamMemberType &team_member
 }
 
 /* returns distance from begining of totsupers view to the superdroplet that is first to fail
-to satisfy given Predicate "pred". Function is outermost level of parallelism. */
+to satisfy given Predicate "pred". Function is outermost level of parallelism. Parallel equivalent
+is experimental and appears to be slower (!):
+```
+namespace KE = Kokkos::Experimental;
+const auto iter = KE::partition_point("find_ref", ExecSpace(), totsupers, pred);
+return makeref(KE::begin(totsupers), iter);
+```
+*/
 template <typename Pred, typename ViewSupers>
 inline size_t find_ref(const ViewSupers totsupers, const Pred pred) {
-  namespace KE = Kokkos::Experimental;
-
-  /* iterator to first superdrop in totsupers that fails to satisfy pred */
-  const auto iter = KE::partition_point("find_ref", ExecSpace(), totsupers, pred);
-  return makeref(KE::begin(totsupers), iter);
+  return find_partition_point(totsupers, pred, 0, totsupers.extent(0));
 }
 
 /* returns element access index from begining of totsupers view to the superdroplet that
 is first to fail to satisfy given Predicate "pred". Function is 2nd level of nested parallelism,
 i.e. is thread parallelism within a league for a given team_member. Parallel equivalent
-is experimental (!):
+is experimental and appears to be slower (!):
 ```
 namespace KE = Kokkos::Experimental;
 const auto start = KE::begin(totsupers);
