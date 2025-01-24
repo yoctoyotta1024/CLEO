@@ -24,7 +24,7 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Sort.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
-#include <cassert>
+// #include <cassert>
 
 #include "../kokkosaliases.hpp"
 #include "superdrops/superdrop.hpp"
@@ -56,14 +56,16 @@ domain have 0 <= sdgbxindex <= gbxindex_max. Superdroplets outside of the domain
 (i.e. sdgbxindex > gbxindex_max) are not guarenteed to be sorted. */
 struct SortSupersBySdgbxindex {
  public:
-  size_t gbxindex_max;        /**< maximum gbxindex of in-domain superdroplets */
-  viewd_counts counts;        /**< number of superdroplets in each gridbox + outside of domain */
-  viewd_counts cumlcounts;    /**< cumulative version of counts */
-  viewd_supers totsupers_tmp; /**< temporary view of superdroplets used by sorting algorithm */
+  size_t gbxindex_max;          /**< maximum gbxindex of in-domain superdroplets */
+  viewd_counts counts;          /**< number of superdroplets in each gridbox + outside of domain */
+  scatterviewd_counts s_counts; /**< scatter view for atomics/duplicate ops with counts */
+  viewd_counts cumlcounts;      /**< cumulative version of counts */
+  viewd_supers totsupers_tmp;   /**< temporary view of superdroplets used by sorting algorithm */
 
   SortSupersBySdgbxindex(const size_t gbxindex_max_, const size_t ntotsupers)
       : gbxindex_max(gbxindex_max_),
         counts("counts", gbxindex_max + 1),
+        s_counts(counts),
         cumlcounts("cumlcounts", gbxindex_max + 1),
         totsupers_tmp("totsupers_tmp", ntotsupers) {}
 
@@ -99,11 +101,13 @@ struct SortSupersBySdgbxindex {
   Returns cumulative sum from position 0 to last position.  */
   viewd_counts create_cumlcounts(const viewd_constsupers totsupers) {
     const auto ntotsupers = size_t{totsupers.extent(0)};
+    s_counts.reset();
     Kokkos::parallel_for(
         "increment_counts", Kokkos::RangePolicy<ExecSpace>(0, ntotsupers),
         KOKKOS_CLASS_LAMBDA(const size_t kk) {
+          auto counts_ = s_counts.access();
           auto pos = get_count_position(totsupers(kk).get_sdgbxindex());
-          Kokkos::atomic_inc(&counts(pos));  // counts(sdgbxindex)++ or counts([last])++;
+          ++counts_(pos);  // atomic/duplicate "add" at ++counts(sdgbxindex) or ++counts([last]);
         });
 
     Kokkos::Experimental::exclusive_scan("cumulative_sum", ExecSpace(), counts, cumlcounts, 0);
@@ -123,7 +127,7 @@ struct SortSupersBySdgbxindex {
           totsupers(kk).set_sdgbxindex(LIMITVALUES::oob_gbxindex);  // fail-safe reset totsupers
         });
 
-    /* assertion for debugging only works for hostspace cumlcounts */
+    // /* assertion for debugging only works for hostspace cumlcounts */
     // assert((cumlcounts(counts.extent(0) - 1) == totsupers_tmp.extent(0)) &&
     //        "last cumulative sum of totsupers count should equal expected number of totsupers");
 
