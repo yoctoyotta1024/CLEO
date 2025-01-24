@@ -77,7 +77,8 @@ KOKKOS_INLINE_FUNCTION kkpair_size_t find_refs(const TeamMemberType &team_member
 }
 
 /* returns distance from begining of totsupers view to the superdroplet that is first to fail
-to satisfy given Predicate "pred". Function is outermost level of parallelism. Parallel equivalent
+to satisfy given Predicate "pred". Function can be outside or inside first-level of parallelism.
+Parallel equivalent outside parallelism (KOKKOS_INLINE_FUNCTION ->inline)
 is experimental and appears to be slower (!):
 ```
 namespace KE = Kokkos::Experimental;
@@ -86,7 +87,7 @@ return makeref(KE::begin(totsupers), iter);
 ```
 */
 template <typename Pred, typename ViewSupers>
-inline size_t find_ref(const ViewSupers totsupers, const Pred pred) {
+KOKKOS_INLINE_FUNCTION size_t find_ref(const ViewSupers totsupers, const Pred pred) {
   return find_partition_point(totsupers, pred, 0, totsupers.extent(0));
 }
 
@@ -137,9 +138,10 @@ KOKKOS_INLINE_FUNCTION size_t makeref(const Iter start, const Iter iter) {
   return static_cast<size_t>(ref);
 }
 
-/* returns position in view of {first, last} superdrop that is in domain. First is position of
-first superdrop with sdgbxindex >= gbxindex_range.first. Last is position of last superdrop with
-sdgbxindex <= gbxindex_range.second. Function valid in outermost level (outside) of parallelism. */
+/* returns position in view of {first, last} superdrop that is in domain. First is
+position of first superdrop with sdgbxindex >= gbxindex_range.first. Last is position
+of last superdrop with sdgbxindex <= gbxindex_range.second.
+Function valid in outermost level (outside) of parallelism on host. */
 template <typename ViewSupers>
 inline kkpair_size_t find_domainrefs(
     const ViewSupers totsupers, const Kokkos::pair<unsigned int, unsigned int> gbxindex_range) {
@@ -152,13 +154,37 @@ inline kkpair_size_t find_domainrefs(
 
 /* returns position in view of {first, last} superdrop that is in domain, where first is assumed to
 be at 0th position. Last is position of last superdrop with sdgbxindex < gbxindex_max.
-Function valid in outermost level (outside) of parallelism. */
+Function valid in outermost level (outside) of parallelism default implementation valid on host. */
 template <typename ViewSupers>
-inline kkpair_size_t find_domainrefs(const ViewSupers totsupers, const unsigned int gbxindex_max) {
+inline kkpair_size_t find_domainrefs(const Kokkos::HostSpace &ex, const ViewSupers totsupers,
+                                     const unsigned int gbxindex_max) {
+  Kokkos::Profiling::ScopedRegion region("find_domainrefs_default_func");
+
   namespace SRP = SetRefPreds;
   const auto ref1 = size_t{find_ref(totsupers, SRP::Ref1{gbxindex_max})};
 
   return {0, ref1};
+}
+
+/* returns position in view of {first, last} superdrop that is in domain, where first is assumed to
+be at 0th position. Last is position of last superdrop with sdgbxindex < gbxindex_max.
+Function valid in outermost level (outside) of parallelism valid for CUDA devices. */
+template <class ExecutionSpace, typename ViewSupers>
+inline kkpair_size_t find_domainrefs(const ExecutionSpace &ex, const ViewSupers totsupers,
+                                     const unsigned int gbxindex_max) {
+  Kokkos::Profiling::ScopedRegion region("find_domainrefs_cuda_func");
+
+  namespace SRP = SetRefPreds;
+
+  auto ref1 = Kokkos::View<size_t[1]>("domainref1");
+  Kokkos::parallel_for(
+      "find_domainrefs_cuda", 1, KOKKOS_LAMBDA(const int i) {
+        ref1(0) = size_t{find_ref(totsupers, SRP::Ref1{gbxindex_max})};
+      });
+
+  auto h_ref1 = Kokkos::create_mirror_view_and_copy(HostSpace(), ref1);
+
+  return {0, h_ref1(0)};
 }
 
 #endif  // LIBS_GRIDBOXES_FINDREFS_HPP_

@@ -48,7 +48,7 @@ struct SupersInDomain {
   0 <= sdgbxindex <= gbxindex_range.second (= gbxindex_max). */
   void set_totsupers_domainrefs(const viewd_supers totsupers_) {
     totsupers = totsupers_;
-    domainrefs = find_domainrefs(totsupers, gbxindex_range.second);
+    domainrefs = find_domainrefs(ExecSpace(), totsupers, gbxindex_range.second);
   }
 
  public:
