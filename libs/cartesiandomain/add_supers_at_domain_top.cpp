@@ -64,7 +64,7 @@ for (size_t ii(0); ii < d_gbxs.extent(0); ++ii){[...]}.
 */
 SupersInDomain move_supers_between_gridboxes_again(const viewd_gbx d_gbxs,
                                                    SupersInDomain &allsupers) {
-  allsupers.sort_totsupers();
+  allsupers.sort_totsupers(d_gbxs);
 
   const auto domainsupers = allsupers.domain_supers();
   const size_t ngbxs(d_gbxs.extent(0));

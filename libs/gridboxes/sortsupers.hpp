@@ -35,6 +35,34 @@ inline bool is_sorted_supers(const viewd_constsupers supers, const Comparator &c
   return Kokkos::Experimental::is_sorted("IsSupersSorted", ExecSpace(), supers, comp);
 }
 
+/* Returns position of superdroplet count in counts/cumlcounts views given its
+sdgbxindex. For in-domain superdroplets (0 <=sdgbxindex <= gbxindex_max),
+position in counts/cumlcounts views is at the value of sdgbxindex, e.g.
+if sdgbxindex=4, then position=4. If superdroplet has sdgbxindex > gbxindex_max
+its position is last position of counts/cumlcounts array, i.e. all superdroplets with
+sdgbxindex > gbxindex_max are found at last=(counts.extent(0) - 1) position of
+counts/cumlcounts array. */
+KOKKOS_INLINE_FUNCTION
+size_t _get_count_position(const size_t sdgbxindex, const size_t gbxindex_max,
+                           const viewd_counts counts) {
+  return !(sdgbxindex <= gbxindex_max) ? (counts.extent(0) - 1) : sdgbxindex;
+}
+
+/* Functor used in parallel regions of SortSupersBySdgbxindex counting_sort functions (see below) */
+struct CountingSortFunctor {
+  size_t gbxindex_max;
+  subviewd_supers supers;
+  viewd_supers totsupers_tmp;
+  viewd_counts cumlcounts;
+
+  void operator()(const size_t kk) const {
+    const auto pos = _get_count_position(supers(kk).get_sdgbxindex(), gbxindex_max, cumlcounts);
+    auto new_kk = Kokkos::atomic_fetch_add(&cumlcounts(pos), 1);
+    totsupers_tmp(new_kk) = supers(kk);
+    supers(kk).set_sdgbxindex(LIMITVALUES::oob_gbxindex);  // fail-safe reset totsupers
+  }
+};
+
 /* Counting sort algorithm to (stable) sort superdroplets inside the domain by sdgbxindex.
 Gridbox indexes are assumed to run from 0 to gbxindex_max so that Superdroplets inside the
 domain have 0 <= sdgbxindex <= gbxindex_max. Superdroplets outside of the domain
@@ -67,18 +95,6 @@ struct SortSupersBySdgbxindex {
     return is_sorted_supers(supers, SortComparator{});
   }
 
-  /* Returns position of superdroplet count in counts/cumlcounts views given its
-  sdgbxindex. For in-domain superdroplets (0 <=sdgbxindex <= gbxindex_max),
-  position in counts/cumlcounts views is at the value of sdgbxindex, e.g.
-  if sdgbxindex=4, then position=4. If superdroplet has sdgbxindex > gbxindex_max
-  its position is last position of counts/cumlcounts array, i.e. all superdroplets with
-  sdgbxindex > gbxindex_max are found at last=(counts.extent(0) - 1) position of
-  counts/cumlcounts array. */
-  KOKKOS_INLINE_FUNCTION
-  size_t get_count_position(const size_t sdgbxindex) const {
-    return !(sdgbxindex <= gbxindex_max) ? (counts.extent(0) - 1) : sdgbxindex;
-  }
-
   /* counts number of superdroplets in each gbx with sdgbxindex <= gbxindex_max and all
   superdroplets with sdgbxindex > gbxindex_max. E.g. if totsupers contains 5 supersdroplets
   with sdgbxindex=0, then counts array at position 0 will be 5, meanwhile all counts of
@@ -91,7 +107,8 @@ struct SortSupersBySdgbxindex {
         "increment_counts", Kokkos::RangePolicy<ExecSpace>(0, ntotsupers),
         KOKKOS_CLASS_LAMBDA(const size_t kk) {
           auto counts_ = s_counts.access();
-          auto pos = get_count_position(totsupers(kk).get_sdgbxindex());
+          const auto pos =
+              _get_count_position(totsupers(kk).get_sdgbxindex(), gbxindex_max, counts);
           ++counts_(pos);  // atomic/duplicate "add" at ++counts(sdgbxindex) or ++counts([last]);
         });
 
@@ -102,15 +119,45 @@ struct SortSupersBySdgbxindex {
   }
 
   viewd_supers counting_sort(const viewd_supers totsupers) {
+    Kokkos::Profiling::pushRegion("sorting_counting_sort_func");
+
     const auto ntotsupers = size_t{totsupers.extent(0)};
+    const auto functor = CountingSortFunctor{gbxindex_max, totsupers, totsupers_tmp, cumlcounts};
+    Kokkos::parallel_for("counting_sort", Kokkos::RangePolicy<ExecSpace>(0, ntotsupers), functor);
+    Kokkos::Profiling::popRegion();
+
+    /* assertion for debugging only works for hostspace cumlcounts */
+    // assert((cumlcounts(counts.extent(0) - 1) == totsupers_tmp.extent(0)) &&
+    //        "last cumulative sum of totsupers count should equal expected number of totsupers");
+
+    return totsupers_tmp;
+  }
+
+  /* same output as counting_sort(totsupers) but uses heirarchal loop over d_gbxs to reduce chance
+  of in atomic operation. In doing so, it implicitly totsupers=domainsupers+oob_supers,
+  i.e. that domainsupers is a subview of totsupers which starts and the same address as
+  totsupers and that oob_supers is a subview which starts at the end of domainsupers and ends
+  at the end of totsupers. */
+  viewd_supers counting_sort(const viewd_constgbx d_gbxs, const subviewd_supers domainsupers,
+                             const subviewd_supers oob_supers) {
+    Kokkos::Profiling::pushRegion("sorting_counting_sort_gbxs_func");
+
+    const auto ngbxs = size_t{d_gbxs.extent(0)};
     Kokkos::parallel_for(
-        "counting_sort", Kokkos::RangePolicy<ExecSpace>(0, ntotsupers),
-        KOKKOS_CLASS_LAMBDA(const size_t kk) {
-          const auto pos = get_count_position(totsupers(kk).get_sdgbxindex());
-          auto new_kk = Kokkos::atomic_fetch_add(&cumlcounts(pos), 1);
-          totsupers_tmp(new_kk) = totsupers(kk);
-          totsupers(kk).set_sdgbxindex(LIMITVALUES::oob_gbxindex);  // fail-safe reset totsupers
+        "counting_sort_gbxs", TeamPolicy(ngbxs, Kokkos::AUTO()),
+        KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
+          const auto ii = team_member.league_rank();
+          auto supers = d_gbxs(ii).supersingbx(domainsupers);
+          const auto nsupers = size_t{supers.extent(0)};
+          const auto functor = CountingSortFunctor{gbxindex_max, supers, totsupers_tmp, cumlcounts};
+          Kokkos::parallel_for(Kokkos::TeamThreadRange(team_member, nsupers), functor);
         });
+
+    const auto noobs = size_t{oob_supers.extent(0)};
+    const auto functor = CountingSortFunctor{gbxindex_max, oob_supers, totsupers_tmp, cumlcounts};
+    Kokkos::parallel_for("counting_sort_oob", Kokkos::RangePolicy<ExecSpace>(0, noobs), functor);
+
+    Kokkos::Profiling::popRegion();
 
     // /* assertion for debugging only works for hostspace cumlcounts */
     // assert((cumlcounts(counts.extent(0) - 1) == totsupers_tmp.extent(0)) &&
@@ -126,6 +173,28 @@ struct SortSupersBySdgbxindex {
   viewd_supers operator()(const viewd_supers totsupers) {
     cumlcounts = create_cumlcounts(totsupers);
     const auto sorted_supers = counting_sort(totsupers);
+    totsupers_tmp = totsupers;  // fail-safe reset totsupers_tmp
+    return sorted_supers;
+  }
+
+  /* Counting sort algorithm to (stable) sort superdroplets inside the domain by sdgbxindex.
+  Superdrops in totsupers may change (e.g. sdgbxindex may be set to LIMITVALUES::oob_gbxindex) and
+  returned view may not be the same totsupers view given as argument. Superdroplets outside of the
+  domain (i.e. sdgbxindex > gbxindex_max) are not guarenteed to be sorted. This operator calls
+  sorting functions with loop over gridboxes in order to reduce the chance of conflicts in atomic
+  operations. In doing so it assumes totsupers=domainsupers+oob_supers, i.e. that domainsupers is
+  a subview of totsupers which starts and the same address as totsupers and that oob_supers is a
+  subview which starts at the end of domainsupers and ends at the end of totsupers.
+  */
+  viewd_supers operator()(const viewd_supers totsupers, const viewd_constgbx d_gbxs,
+                          kkpair_size_t domainrefs) {
+    Kokkos::Profiling::ScopedRegion region("sorting_func_gbxs");
+
+    cumlcounts = create_cumlcounts(totsupers);
+    const auto domainsupers = Kokkos::subview(totsupers, domainrefs);
+    const kkpair_size_t oobrefs = Kokkos::make_pair(domainrefs.second, totsupers.extent(0));
+    const auto oob_supers = Kokkos::subview(totsupers, oobrefs);
+    const auto sorted_supers = counting_sort(d_gbxs, domainsupers, oob_supers);
     totsupers_tmp = totsupers;  // fail-safe reset totsupers_tmp
     return sorted_supers;
   }
