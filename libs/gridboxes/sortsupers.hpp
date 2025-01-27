@@ -35,21 +35,6 @@ inline bool is_sorted_supers(const viewd_constsupers supers, const Comparator &c
   return Kokkos::Experimental::is_sorted("IsSupersSorted", ExecSpace(), supers, comp);
 }
 
-/* sort each gridbox's "supers" view by the Comparator. No sorting between the gridboxes,
-nor for out of bounds superdroplets. */
-template <class Comparator>
-inline void sort_supers_within_gbxs(const subviewd_supers domainsupers, const viewd_constgbx gbxs,
-                                    const Comparator &comp) {
-  const auto ngbxs = gbxs.extent(0);
-  Kokkos::parallel_for(
-      "sort_supers_in_gbxs", TeamPolicy(ngbxs, Kokkos::AUTO()),
-      KOKKOS_LAMBDA(const TeamMember &team_member) {
-        const auto ii = team_member.league_rank();
-        auto supers = gbxs(ii).supersingbx(domainsupers);
-        Kokkos::Experimental::sort_team(team_member, supers, comp);
-      });
-}
-
 /* Counting sort algorithm to (stable) sort superdroplets inside the domain by sdgbxindex.
 Gridbox indexes are assumed to run from 0 to gbxindex_max so that Superdroplets inside the
 domain have 0 <= sdgbxindex <= gbxindex_max. Superdroplets outside of the domain
@@ -135,23 +120,11 @@ struct SortSupersBySdgbxindex {
   }
 
   /* Counting sort algorithm to (stable) sort superdroplets inside the domain by sdgbxindex.
-  Note that sorting of superdrops with matching sdgbxindex is not guarenteed to maintain their
-  previous order (possibly unstable sorting). */
-  viewd_supers operator()(const viewd_supers totsupers, const subviewd_supers domainsupers,
-                          const viewd_constgbx gbxs) {
-    sort_supers_within_gbxs(domainsupers, gbxs, SortComparator{});  // (optional)
-    const auto sorted_supers = (*this)(totsupers);
-    return sorted_supers;
-  }
-
-  /* Counting sort algorithm to (stable) sort superdroplets inside the domain by sdgbxindex.
   Superdrops in totsupers may change (e.g. sdgbxindex may be set to LIMITVALUES::oob_gbxindex) and
   returned view may not be the same totsupers view given as argument. Superdroplets outside of the
   domain (i.e. sdgbxindex > gbxindex_max) are not guarenteed to be sorted. */
   viewd_supers operator()(const viewd_supers totsupers) {
     cumlcounts = create_cumlcounts(totsupers);
-    // TODO(CB): (optional) insert here the creation of a length of counts array and then use more
-    // efficient moving in counting_sort
     const auto sorted_supers = counting_sort(totsupers);
     totsupers_tmp = totsupers;  // fail-safe reset totsupers_tmp
     return sorted_supers;
