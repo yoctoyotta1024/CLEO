@@ -55,6 +55,8 @@ struct CreateCumlcountsFunctor {
   viewd_counts counts;
   scatterviewd_counts s_counts;
 
+  /* loop over superdroplets with this functor counts how many superdroplets have each gbxindex
+  and how many have sdgbxindex > gbxindex_max. */
   void operator()(const size_t kk) const {
     auto counts_ = s_counts.access();
     const auto pos = _get_count_position(totsupers(kk).get_sdgbxindex(), gbxindex_max, counts);
@@ -69,6 +71,12 @@ struct CountingSortFunctor {
   viewd_supers totsupers_tmp;
   viewd_counts cumlcounts;
 
+  /* loop over superdroplets with this functor copies the superdroplets from supers to totsupers_tmp
+  in new order based on their sdgbxindexes such that they are sorted from lowest to highest
+  gbxindex (for superdroplets with sdgbxindex <= gbxindex_max). In the sorted view, superdroplets
+  with sgbxindex > gbxindex_max occur after those with sdgbxindex <= gbxindex_max but may not be
+  sorted amongst themselves. sdgbxindex is set to LIMITVALUES::oob_gbxindex for all superdroplets in
+  "supers" that are copied/moved to totsupers_tmp. */
   void operator()(const size_t kk) const {
     const auto pos = _get_count_position(supers(kk).get_sdgbxindex(), gbxindex_max, cumlcounts);
     auto new_kk = Kokkos::atomic_fetch_add(&cumlcounts(pos), 1);
@@ -132,6 +140,42 @@ struct SortSupersBySdgbxindex {
     return cumlcounts;
   }
 
+  /* same output as create_cumlcounts(totsupers) but uses heirarchal loop over d_gbxs to reduce
+  chance of in atomic operations in cases when scatterview uses atomics rather than duplication.
+  In doing so, it implicitly totsupers=domainsupers+oob_supers, i.e. that domainsupers is a
+  subview of totsupers which starts and the same address as totsupers and that oob_supers is a
+  subview which starts at the end of domainsupers and ends at the end of totsupers. */
+  viewd_counts create_cumlcounts(const viewd_constgbx d_gbxs, const subviewd_supers domainsupers,
+                                 const subviewd_supers oob_supers) {
+    s_counts.reset();
+    const auto ngbxs = size_t{d_gbxs.extent(0)};
+    Kokkos::parallel_for(
+        "increment_counts_gbxs", TeamPolicy(ngbxs, Kokkos::AUTO()),
+        KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
+          const auto ii = team_member.league_rank();
+          auto supers = d_gbxs(ii).supersingbx(domainsupers);
+          const auto nsupers = size_t{supers.extent(0)};
+          const auto functor = CreateCumlcountsFunctor{gbxindex_max, supers, counts, s_counts};
+          Kokkos::parallel_for(Kokkos::TeamThreadRange(team_member, nsupers), functor);
+        });
+    Kokkos::Experimental::contribute(counts, s_counts);
+
+    s_counts.reset();
+    const auto noobs = size_t{oob_supers.extent(0)};
+    const auto functor = CreateCumlcountsFunctor{gbxindex_max, oob_supers, counts, s_counts};
+    Kokkos::parallel_for("increment_counts_oob", Kokkos::RangePolicy<ExecSpace>(0, noobs), functor);
+    Kokkos::Experimental::contribute(counts, s_counts);
+
+    Kokkos::Experimental::exclusive_scan("cumulative_sum", ExecSpace(), counts, cumlcounts, 0);
+    Kokkos::Experimental::fill(ExecSpace(), counts, 0);  // reset in preparation for next call
+
+    return cumlcounts;
+  }
+
+  /* Part of counting sort algorithm involving copying/movement of superdroplets into new sorted
+  array. Takes superdroplets from start to end of original totsupers view and copies them to
+  their positions in a new view according to the CountingSortFunctor. May also modify superdroplets
+  in totsupers, e.g. setting their sdgbxindex to LIMITVALUES::oob_gbxindex. */
   viewd_supers counting_sort(const viewd_supers totsupers) {
     Kokkos::Profiling::pushRegion("sorting_counting_sort_func");
 
@@ -204,10 +248,11 @@ struct SortSupersBySdgbxindex {
                           kkpair_size_t domainrefs) {
     Kokkos::Profiling::ScopedRegion region("sorting_func_gbxs");
 
-    cumlcounts = create_cumlcounts(totsupers);
     const auto domainsupers = Kokkos::subview(totsupers, domainrefs);
     const kkpair_size_t oobrefs = Kokkos::make_pair(domainrefs.second, totsupers.extent(0));
     const auto oob_supers = Kokkos::subview(totsupers, oobrefs);
+
+    cumlcounts = create_cumlcounts(d_gbxs, domainsupers, oob_supers);
     const auto sorted_supers = counting_sort(d_gbxs, domainsupers, oob_supers);
     totsupers_tmp = totsupers;  // fail-safe reset totsupers_tmp
     return sorted_supers;
