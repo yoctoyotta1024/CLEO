@@ -195,7 +195,7 @@ struct MoveSupersInDomain {
 
     set_gridboxes_refs(d_gbxs, allsupers.domain_supers());
 
-    // /* optional (expensive!) test if superdrops' gbxindex doesn't match gridbox's gbxindex */
+    /* optional (expensive!) test if superdrops' gbxindex doesn't match gridbox's gbxindex */
     // check_sdgbxindex_during_motion(d_gbxs, allsupers.get_totsupers_readonly());
 
     return allsupers;
