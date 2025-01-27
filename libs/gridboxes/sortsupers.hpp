@@ -48,6 +48,20 @@ size_t _get_count_position(const size_t sdgbxindex, const size_t gbxindex_max,
   return !(sdgbxindex <= gbxindex_max) ? (counts.extent(0) - 1) : sdgbxindex;
 }
 
+/* Functor used in parallel region of SortSupersBySdgbxindex "create_cumlcounts" (see below) */
+struct CreateCumlcountsFunctor {
+  size_t gbxindex_max;
+  viewd_constsupers totsupers;
+  viewd_counts counts;
+  scatterviewd_counts s_counts;
+
+  void operator()(const size_t kk) const {
+    auto counts_ = s_counts.access();
+    const auto pos = _get_count_position(totsupers(kk).get_sdgbxindex(), gbxindex_max, counts);
+    ++counts_(pos);  // atomic/duplicate "add" at ++counts(sdgbxindex) or ++counts([last]);
+  };
+};
+
 /* Functor used in parallel regions of SortSupersBySdgbxindex counting_sort functions (see below) */
 struct CountingSortFunctor {
   size_t gbxindex_max;
@@ -101,16 +115,16 @@ struct SortSupersBySdgbxindex {
   superdroplets with sdgbxindex > gbxindex_max go into last position of counts array.
   Returns cumulative sum from position 0 to last position.  */
   viewd_counts create_cumlcounts(const viewd_constsupers totsupers) {
+    Kokkos::Profiling::pushRegion("sorting_create_cumlcounts_loop");
+
     const auto ntotsupers = size_t{totsupers.extent(0)};
+    const auto functor = CreateCumlcountsFunctor{gbxindex_max, totsupers, counts, s_counts};
     s_counts.reset();
-    Kokkos::parallel_for(
-        "increment_counts", Kokkos::RangePolicy<ExecSpace>(0, ntotsupers),
-        KOKKOS_CLASS_LAMBDA(const size_t kk) {
-          auto counts_ = s_counts.access();
-          const auto pos =
-              _get_count_position(totsupers(kk).get_sdgbxindex(), gbxindex_max, counts);
-          ++counts_(pos);  // atomic/duplicate "add" at ++counts(sdgbxindex) or ++counts([last]);
-        });
+    Kokkos::parallel_for("increment_counts", Kokkos::RangePolicy<ExecSpace>(0, ntotsupers),
+                         functor);
+    Kokkos::Experimental::contribute(counts, s_counts);
+
+    Kokkos::Profiling::popRegion();
 
     Kokkos::Experimental::exclusive_scan("cumulative_sum", ExecSpace(), counts, cumlcounts, 0);
     Kokkos::Experimental::fill(ExecSpace(), counts, 0);  // reset in preparation for next call
