@@ -2,6 +2,22 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.33.0](https://github.com/yoctoyotta1024/CLEO/compare/8f483c9f2dafc32dcd93ca2afb66a31ef97a21a9..v0.33.0) - 2025-01-28
+#### Bug Fixes
+- make GPU compatible - ([14d0562](https://github.com/yoctoyotta1024/CLEO/commit/14d0562901d321a510a5c0d6fb51880acba3f341)) - clara.bayley
+- make find_domainrefs GPU compatible - ([17bfc0d](https://github.com/yoctoyotta1024/CLEO/commit/17bfc0df4eea6aa8e60b24937c13034f088db17c)) - clara.bayley
+#### Features
+- add more plugs to profile superdroplet motion - ([accfbff](https://github.com/yoctoyotta1024/CLEO/commit/accfbff1eb3519d246a456cad45a098edee66151)) - clara.bayley
+- use gbxs in create_cumlcounts function to avoid atomic conflicts - ([aa1c31f](https://github.com/yoctoyotta1024/CLEO/commit/aa1c31fe30ede49c1aa9c0c906b4bd787a4f7447)) - clara.bayley
+- use gbxs in counting sort algorithm to reduce atomic conflicts - ([042e4f5](https://github.com/yoctoyotta1024/CLEO/commit/042e4f5fc0dc4a1c7cb6a86660f0b05c3be78849)) - clara.bayley
+#### Refactoring
+- use functor for create_cumlcounts loop - ([5140f0c](https://github.com/yoctoyotta1024/CLEO/commit/5140f0c18dd75e9864a342d003f7f59d3e24e34c)) - clara.bayley
+- remove optional extras from sorting algorithm - ([3345c04](https://github.com/yoctoyotta1024/CLEO/commit/3345c0467f8b0e66db88a58e15014f65941ed8a5)) - clara.bayley
+- use scatter view for counts summation to abstract atomics - ([efb47c5](https://github.com/yoctoyotta1024/CLEO/commit/efb47c577749b76bc95d72de1f043ddb01b63ac9)) - clara.bayley
+- use find_partition_point also in find_ref for outer level parallelism cases - ([8f483c9](https://github.com/yoctoyotta1024/CLEO/commit/8f483c9f2dafc32dcd93ca2afb66a31ef97a21a9)) - clara.bayley
+
+- - -
+
 ## [v0.32.0](https://github.com/yoctoyotta1024/CLEO/compare/e3164e2e0059fb518492332850c05abf7f20c832..v0.32.0) - 2025-01-23
 #### Features
 - replace kokkos/std sorting algorithm with counting sort algorithm - ([491f841](https://github.com/yoctoyotta1024/CLEO/commit/491f841fb8af867ffbbe159d3dcff28ead91b593)) - clara.bayley
