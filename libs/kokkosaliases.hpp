@@ -26,6 +26,7 @@
 #include <Kokkos_DualView.hpp>
 #include <Kokkos_Pair.hpp>
 #include <Kokkos_Random.hpp>
+#include <Kokkos_ScatterView.hpp>
 #include <Kokkos_UnorderedMap.hpp>
 #include <memory>
 
@@ -55,5 +56,7 @@ using viewd_ndims = Kokkos::View<size_t[3]>;
 
 /* Sorting Superdrops */
 using viewd_counts = Kokkos::View<size_t *>; /**< View in device memory for sorting superdroplets */
+/**< Scatter view for abstracted use of atomics/duplicates when computing sums for viewd_counts */
+using scatterviewd_counts = Kokkos::Experimental::ScatterView<size_t *>;
 
 #endif  // LIBS_KOKKOSALIASES_HPP_

@@ -48,7 +48,7 @@ struct SupersInDomain {
   0 <= sdgbxindex <= gbxindex_range.second (= gbxindex_max). */
   void set_totsupers_domainrefs(const viewd_supers totsupers_) {
     totsupers = totsupers_;
-    domainrefs = find_domainrefs(totsupers, gbxindex_range.second);
+    domainrefs = find_domainrefs(ExecSpace(), totsupers, gbxindex_range.second);
   }
 
  public:
@@ -88,8 +88,8 @@ struct SupersInDomain {
 
   /* sort superdroplets by sdgbxindex and then (re-)set the totsupers view and the refs for the
   superdroplets that are within the domain (sdgbxindex within gbxindex_range for a given node) */
-  viewd_supers sort_totsupers() {
-    auto sorted_supers = sort_by_sdgbxindex(totsupers);
+  viewd_supers sort_totsupers(const viewd_constgbx d_gbxs) {
+    auto sorted_supers = sort_by_sdgbxindex(totsupers, d_gbxs, domainrefs);
     set_totsupers_domainrefs(sorted_supers);
     return totsupers;
   }
@@ -98,14 +98,16 @@ struct SupersInDomain {
   intermediate state. Function sorts superdroplets by sdgbxindex but does not set the supers view
   nor the refs for the superdroplets that are within the domain. This means 'totsupers' may change,
   returned view may no longer be 'totsupers' and the domainrefs may be invalid. */
-  viewd_supers sort_totsupers_without_set() { return sort_by_sdgbxindex(totsupers); }
+  viewd_supers sort_totsupers_without_set(const viewd_constgbx d_gbxs) {
+    return sort_by_sdgbxindex(totsupers, d_gbxs, domainrefs);
+  }
 
   /* Only use if you know what you're doing(!) Assigns totsupers to given view and then sorts
   superdroplets by sdgbxindex with possible (re-)setting of the totsupers view and the refs for the
   superdroplets that are within the domain (sdgbxindex within gbxindex_range for a given node) */
-  viewd_supers sort_and_set_totsupers(const viewd_supers totsupers_) {
+  viewd_supers sort_and_set_totsupers(const viewd_supers totsupers_, const viewd_constgbx d_gbxs) {
     totsupers = totsupers_;
-    return sort_totsupers();
+    return sort_totsupers(d_gbxs);
   }
 };
 
