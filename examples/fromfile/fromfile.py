@@ -24,23 +24,59 @@ files for visual checks.
 import os
 import shutil
 import subprocess
-import sys
+import argparse
 from pathlib import Path
 import fromfile_inputfiles
 import fromfile_plotting
 
-path2CLEO = Path(sys.argv[1])
-path2build = Path(sys.argv[2])
-config_filename = Path(sys.argv[3])
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "path2CLEO", type=Path, help="Absolute path to CLEO directory (for PySD)"
+)
+parser.add_argument("path2build", type=Path, help="Absolute path to build directory")
+parser.add_argument(
+    "config_filename", type=Path, help="Absolute path to configuration YAML file"
+)
+parser.add_argument(
+    "--do_inputfiles",
+    type=str,
+    choices=["TRUE", "FALSE"],
+    default="TRUE",
+    help="Generate initial condition binary files",
+)
+parser.add_argument(
+    "--do_run_executable",
+    type=str,
+    choices=["TRUE", "FALSE"],
+    default="TRUE",
+    help="Run fromfile executable",
+)
+parser.add_argument(
+    "--do_plot_results",
+    type=str,
+    choices=["TRUE", "FALSE"],
+    default="TRUE",
+    help="Plot results of fromfile example",
+)
+args = parser.parse_args()
+
+path2CLEO = args.path2CLEO
+path2build = args.path2build
+config_filename = args.config_filename
+
+do_inputfiles = True
+if args.do_inputfiles == "FALSE":
+    do_inputfiles = False
+do_run_executable = True
+if args.do_run_executable == "FALSE":
+    do_run_executable = False
+do_plot_results = True
+if args.do_plot_results == "FALSE":
+    do_plot_results = False
 
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
-### --- essential paths and filenames --- ###
-do_inputfiles = True
-do_run_executable = True
-do_plot_results = True
-
 ### --- essential paths and filenames --- ###
 # path and filenames for creating initial SD conditions
 binpath = path2build / "bin"
