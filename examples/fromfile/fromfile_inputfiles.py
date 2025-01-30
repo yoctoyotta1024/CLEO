@@ -33,8 +33,6 @@ def main(
     thermofiles,
     isfigures=[True, True],  # booleans for [making, saving] initialisation figures
 ):
-    import numpy as np
-
     sys.path.append(str(path2CLEO))  # for imports from pySD package
 
     from src import gen_input_thermo
@@ -55,14 +53,14 @@ def main(
     constants_filename = path2CLEO / "libs" / "cleoconstants.hpp"
 
     ### --- settings for 3-D gridbox boundaries --- ###
-    zgrid = [0, 1500, 60]  # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
-    xgrid = [0, 1500, 50]  # evenly spaced xhalf coords [m]
-    ygrid = np.array([0, 100, 200, 300])  # array of yhalf coords [m]
+    zgrid = [0, 3000, 60]  # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
+    xgrid = [0, 3000, 50]  # evenly spaced xhalf coords [m]
+    ygrid = [0, 300, 50]  # array of yhalf coords [m]
 
     ### --- settings for initial superdroplets --- ###
     # settings for initial superdroplet coordinates
-    zlim = 1000  # max z coord of superdroplets
-    npergbx = 2  # number of superdroplets per gridbox
+    zlim = 1400  # max z coord of superdroplets
+    npergbx = 128  # number of superdroplets per gridbox
 
     monor = 1e-6  # all SDs have this same radius [m]
     dryr_sf = 1.0  # scale factor for dry radii [m]
