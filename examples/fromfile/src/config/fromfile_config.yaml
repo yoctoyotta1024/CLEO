@@ -22,15 +22,19 @@
 # and so can the thermodynamics files when using coupled thermodynamics "fromfile".
 #
 
+### Kokkos Initialization Parameters ###
+kokkos_settings:
+  num_threads: 16                                          # number of threads for host parallel backend
+
 ### SDM Runtime Parameters ###
 domain:
   nspacedims : 3                                          # no. of spatial dimensions to model
-  ngbxs : 2250                                            # total number of Gbxs
-  maxnsupers: 2880                                        # maximum number of SDs
+  ngbxs : 18000                                           # total number of Gbxs
+  maxnsupers: 1059840                                     # maximum number of SDs
 
 timesteps:
-  CONDTSTEP : 2                                           # time between SD condensation [s]
-  COLLTSTEP : 2                                           # time between SD collision [s]
+  CONDTSTEP : 1                                           # time between SD condensation [s]
+  COLLTSTEP : 1                                           # time between SD collision [s]
   MOTIONTSTEP : 3                                         # time between SDM motion [s]
   COUPLTSTEP : 1800                                       # time between dynamic couplings [s]
   OBSTSTEP : 1800                                         # time between SDM observations [s]
