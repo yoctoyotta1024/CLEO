@@ -27,19 +27,11 @@ import subprocess
 import sys
 from pathlib import Path
 import fromfile_inputfiles
+import fromfile_plotting
 
 path2CLEO = Path(sys.argv[1])
 path2build = Path(sys.argv[2])
 config_filename = Path(sys.argv[3])
-
-sys.path.append(str(path2CLEO))  # imports from pySD
-sys.path.append(
-    str(path2CLEO / "examples" / "exampleplotting")
-)  # imports from example plots package
-
-from src import plot_output_thermo
-from plotssrc import pltsds, pltmoms
-from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
 
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
@@ -109,41 +101,16 @@ if do_run_executable:
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
-
 ### ---------------------------------------------------------------- ###
 ### ------------------------- PLOT RESULTS ------------------------- ###
 ### ---------------------------------------------------------------- ###
 if do_plot_results:
-    # read in constants and intial setup from setup .txt file
-    config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
-    consts = pysetuptxt.get_consts(setupfile, isprint=True)
-    gbxs = pygbxsdat.get_gridboxes(grid_filename, consts["COORD0"], isprint=True)
-
-    time = pyzarr.get_time(dataset)
-    sddata = pyzarr.get_supers(dataset, consts)
-    maxnsupers = pyzarr.get_totnsupers(dataset)
-    thermo, winds = pyzarr.get_thermodata(
-        dataset, config["ntime"], gbxs["ndims"], consts, getwinds=True
-    )
-
-    # plot super-droplet results
-    savename = savefigpath / "fromfile_maxnsupers_validation.png"
-    pltmoms.plot_totnsupers(time, maxnsupers, savename=savename)
-
-    nsample = 1000
-    savename = savefigpath / "fromfile_motion2d_validation.png"
-    pltsds.plot_randomsample_superdrops_2dmotion(
-        sddata,
-        config["maxnsupers"],
-        nsample,
-        savename=savename,
-        arrows=False,
-        israndom=False,
-    )
-
-    # plot thermodynamics results
-    plot_output_thermo.plot_domain_thermodynamics_timeseries(
-        time, gbxs, thermo, winds, savedir=savefigpath
+    fromfile_plotting.main(
+        path2CLEO,
+        grid_filename,
+        setupfile,
+        dataset,
+        savefigpath,
     )
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
