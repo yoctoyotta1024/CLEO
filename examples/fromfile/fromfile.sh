@@ -26,7 +26,7 @@ executables="fromfile"
 
 pythonscript=${path2CLEO}/examples/fromfile/fromfile.py
 configfile=${path2CLEO}/examples/fromfile/src/config/fromfile_config.yaml
-script_args="${configfile}"
+script_args="${configfile} --do_inputfiles=TRUE --do_run_executable=TRUE --do_plot_results=TRUE"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
