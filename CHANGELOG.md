@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.33.1](https://github.com/yoctoyotta1024/CLEO/compare/2b624c97d680e468a97db0e1873347cf7f8e06ec..v0.33.1) - 2025-01-30
+#### Bug Fixes
+- gcc compiler error from taking address of rvalue - ([71a58db](https://github.com/yoctoyotta1024/CLEO/commit/71a58db95c403b9a69d430ad190a6bbee5645ca3)) - clara.bayley
+#### Refactoring
+- use argparse for fromfile args - ([05cc17c](https://github.com/yoctoyotta1024/CLEO/commit/05cc17c7dea9a56bd26884f4ddd6a2102ed603b1)) - clara.bayley
+- move fromfile plotting to seperate script - ([e0e45b0](https://github.com/yoctoyotta1024/CLEO/commit/e0e45b0e3d40190d564c798a1cc9355a6257caee)) - clara.bayley
+- add booleans to fromfile example run script - ([2b624c9](https://github.com/yoctoyotta1024/CLEO/commit/2b624c97d680e468a97db0e1873347cf7f8e06ec)) - clara.bayley
+
+- - -
+
 ## [v0.33.0](https://github.com/yoctoyotta1024/CLEO/compare/8f483c9f2dafc32dcd93ca2afb66a31ef97a21a9..v0.33.0) - 2025-01-28
 #### Bug Fixes
 - make GPU compatible - ([14d0562](https://github.com/yoctoyotta1024/CLEO/commit/14d0562901d321a510a5c0d6fb51880acba3f341)) - clara.bayley
