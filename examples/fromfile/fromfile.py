@@ -45,6 +45,11 @@ from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
+do_inputfiles = True
+do_run_executable = True
+do_plot_results = True
+
+### --- essential paths and filenames --- ###
 # path and filenames for creating initial SD conditions
 binpath = path2build / "bin"
 sharepath = path2build / "share"
@@ -62,43 +67,45 @@ dataset = binpath / "fromfile_sol.zarr"
 ### ---------------------------------------------------------------- ###
 ### ------------------- BINARY FILES GENERATION--------------------- ###
 ### ---------------------------------------------------------------- ###
-### --- ensure build, share and bin directories exist --- ###
-if path2CLEO == path2build:
-    raise ValueError("build directory cannot be CLEO")
-else:
-    path2build.mkdir(exist_ok=True)
-    sharepath.mkdir(exist_ok=True)
-    binpath.mkdir(exist_ok=True)
-    savefigpath.mkdir(exist_ok=True)
+if do_inputfiles:
+    ### --- ensure build, share and bin directories exist --- ###
+    if path2CLEO == path2build:
+        raise ValueError("build directory cannot be CLEO")
+    else:
+        path2build.mkdir(exist_ok=True)
+        sharepath.mkdir(exist_ok=True)
+        binpath.mkdir(exist_ok=True)
+        savefigpath.mkdir(exist_ok=True)
 
-### --- delete any existing initial conditions --- ###
-shutil.rmtree(grid_filename, ignore_errors=True)
-shutil.rmtree(initsupers_filename, ignore_errors=True)
-shutil.rmtree(
-    str(thermofiles)[:-4] + "*", ignore_errors=True
-)  # delete any existing dataset
+    ### --- delete any existing initial conditions --- ###
+    shutil.rmtree(grid_filename, ignore_errors=True)
+    shutil.rmtree(initsupers_filename, ignore_errors=True)
+    shutil.rmtree(
+        str(thermofiles)[:-4] + "*", ignore_errors=True
+    )  # delete any existing dataset
 
-fromfile_inputfiles.main(
-    path2CLEO,
-    path2build,
-    config_filename,
-    grid_filename,
-    initsupers_filename,
-    thermofiles,
-)
+    fromfile_inputfiles.main(
+        path2CLEO,
+        path2build,
+        config_filename,
+        grid_filename,
+        initsupers_filename,
+        thermofiles,
+    )
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
 ### ---------------------------------------------------------------- ###
 ### ---------------------- RUN CLEO EXECUTABLE --------------------- ###
 ### ---------------------------------------------------------------- ###
-os.chdir(path2build)
-subprocess.run(["pwd"])
-shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
-executable = path2build / "examples" / "fromfile" / "src" / "fromfile"
-print("Executable: " + str(executable))
-print("Config file: " + str(config_filename))
-subprocess.run(["srun", "--ntasks=4", executable, config_filename])
+if do_run_executable:
+    os.chdir(path2build)
+    subprocess.run(["pwd"])
+    shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
+    executable = path2build / "examples" / "fromfile" / "src" / "fromfile"
+    print("Executable: " + str(executable))
+    print("Config file: " + str(config_filename))
+    subprocess.run(["srun", "--ntasks=4", executable, config_filename])
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -106,37 +113,37 @@ subprocess.run(["srun", "--ntasks=4", executable, config_filename])
 ### ---------------------------------------------------------------- ###
 ### ------------------------- PLOT RESULTS ------------------------- ###
 ### ---------------------------------------------------------------- ###
-# read in constants and intial setup from setup .txt file
-config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
-consts = pysetuptxt.get_consts(setupfile, isprint=True)
-gbxs = pygbxsdat.get_gridboxes(grid_filename, consts["COORD0"], isprint=True)
+if do_plot_results:
+    # read in constants and intial setup from setup .txt file
+    config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
+    consts = pysetuptxt.get_consts(setupfile, isprint=True)
+    gbxs = pygbxsdat.get_gridboxes(grid_filename, consts["COORD0"], isprint=True)
 
-time = pyzarr.get_time(dataset)
-sddata = pyzarr.get_supers(dataset, consts)
-maxnsupers = pyzarr.get_totnsupers(dataset)
-thermo, winds = pyzarr.get_thermodata(
-    dataset, config["ntime"], gbxs["ndims"], consts, getwinds=True
-)
+    time = pyzarr.get_time(dataset)
+    sddata = pyzarr.get_supers(dataset, consts)
+    maxnsupers = pyzarr.get_totnsupers(dataset)
+    thermo, winds = pyzarr.get_thermodata(
+        dataset, config["ntime"], gbxs["ndims"], consts, getwinds=True
+    )
 
-# plot super-droplet results
-savename = savefigpath / "fromfile_maxnsupers_validation.png"
-pltmoms.plot_totnsupers(time, maxnsupers, savename=savename)
+    # plot super-droplet results
+    savename = savefigpath / "fromfile_maxnsupers_validation.png"
+    pltmoms.plot_totnsupers(time, maxnsupers, savename=savename)
 
-nsample = 1000
-savename = savefigpath / "fromfile_motion2d_validation.png"
-pltsds.plot_randomsample_superdrops_2dmotion(
-    sddata,
-    config["maxnsupers"],
-    nsample,
-    savename=savename,
-    arrows=False,
-    israndom=False,
-)
+    nsample = 1000
+    savename = savefigpath / "fromfile_motion2d_validation.png"
+    pltsds.plot_randomsample_superdrops_2dmotion(
+        sddata,
+        config["maxnsupers"],
+        nsample,
+        savename=savename,
+        arrows=False,
+        israndom=False,
+    )
 
-# plot thermodynamics results
-plot_output_thermo.plot_domain_thermodynamics_timeseries(
-    time, gbxs, thermo, winds, savedir=savefigpath
-)
-
+    # plot thermodynamics results
+    plot_output_thermo.plot_domain_thermodynamics_timeseries(
+        time, gbxs, thermo, winds, savedir=savefigpath
+    )
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
