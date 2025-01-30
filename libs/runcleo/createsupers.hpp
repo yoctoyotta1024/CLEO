@@ -190,7 +190,7 @@ viewd_supers::HostMirror initialise_supers_on_host(const SuperdropInitConds &sdi
   auto h_totsupers = Kokkos::create_mirror_view(totsupers);
 
   // Parallel initialisation of the mirror view
-  const auto ntotsupers = size_t{totsupers.extent(0)};
+  const auto ntotsupers = totsupers.extent(0);
   const GenSuperdrop gen(sdic);
   Kokkos::parallel_for("initialise_supers_on_host", Kokkos::RangePolicy<HostSpace>(0, ntotsupers),
                        [=](const size_t kk) { h_totsupers(kk) = gen(kk); });
