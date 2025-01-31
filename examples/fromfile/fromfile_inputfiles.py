@@ -26,10 +26,12 @@ import sys
 def main(
     path2CLEO,
     path2build,
+    savefigpath,
     config_filename,
     grid_filename,
     initsupers_filename,
     thermofiles,
+    isfigures=[True, True],  # booleans for [making, saving] initialisation figures
 ):
     import numpy as np
 
@@ -51,11 +53,6 @@ def main(
     ### --- essential paths and filenames --- ###
     # path and filenames for creating initial SD conditions
     constants_filename = path2CLEO / "libs" / "cleoconstants.hpp"
-
-    ### --- plotting initialisation figures --- ###
-    # booleans for [making, saving] initialisation figures
-    isfigures = [True, True]  # TODO(CB): move into args
-    savefigpath = path2build / "bin"  # binpath # TODO(CB): move into args
 
     ### --- settings for 3-D gridbox boundaries --- ###
     zgrid = [0, 1500, 60]  # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
@@ -145,5 +142,6 @@ def main(
 
 
 if __name__ == "__main__":
-    ### args = path2CLEO, path2build, config_filename, grid_filename, initsupers_filename, thermofiles
+    ### args = path2CLEO, path2build, savefigpath, config_filename,
+    #               grid_filename, initsupers_filename, thermofiles, isfigures
     main(*sys.argv[1:])
