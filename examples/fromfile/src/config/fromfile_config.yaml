@@ -38,7 +38,7 @@ timesteps:
   MOTIONTSTEP : 3                                         # time between SDM motion [s]
   COUPLTSTEP : 1800                                       # time between dynamic couplings [s]
   OBSTSTEP : 1800                                         # time between SDM observations [s]
-  T_END : 7200                                            # time span of integration from 0s to T_END [s]
+  T_END : 5400                                            # time span of integration from 0s to T_END [s]
 
 ### Initialisation Parameters ###
 inputfiles:
