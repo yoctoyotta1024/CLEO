@@ -29,8 +29,8 @@ kokkos_settings:
 ### SDM Runtime Parameters ###
 domain:
   nspacedims : 3                                          # no. of spatial dimensions to model
-  ngbxs : 18000                                           # total number of Gbxs
-  maxnsupers: 1059840                                     # maximum number of SDs
+  ngbxs : 144000                                          # total number of Gbxs
+  maxnsupers: 4239360                                     # maximum number of SDs
 
 timesteps:
   CONDTSTEP : 1                                           # time between SD condensation [s]
@@ -38,7 +38,7 @@ timesteps:
   MOTIONTSTEP : 3                                         # time between SDM motion [s]
   COUPLTSTEP : 1800                                       # time between dynamic couplings [s]
   OBSTSTEP : 1800                                         # time between SDM observations [s]
-  T_END : 5400                                            # time span of integration from 0s to T_END [s]
+  T_END : 3600                                            # time span of integration from 0s to T_END [s]
 
 ### Initialisation Parameters ###
 inputfiles:
