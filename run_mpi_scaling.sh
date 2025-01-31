@@ -111,15 +111,15 @@ if [[ " ${actions[@]} " =~ " run " ]]; then
   export CLEO_PATH2CLEO=${path2CLEO}
   export CLEO_BUILDTYPE=${buildtype}
   export CLEO_ENABLEYAC=${enableyac}
-  export KOKKOS_TOOLS_LIBS=/work/bm1183/m300950/kokkos_tools_lib/lib64/libkp_kernel_timer.so
-  export LD_LIBRARY_PATH=/work/bm1183/m300950/kokkos_tools_lib/lib64/:$LD_LIBRARY_PATH
   source ${path2CLEO}/scripts/bash/src/runtime_settings.sh ${stacksize_limit}
+  # export KOKKOS_TOOLS_LIBS=/work/bm1183/m300950/kokkos_tools_lib/lib64/libkp_kernel_timer.so
 
   exec="srun --ntasks=${ntasks} ${path2build}/examples/fromfile/src/fromfile ${configfile}"
   echo ${exec}
   eval ${exec}
 
-  /work/bm1183/m300950/kokkos_tools_lib/bin/kp_reader *.dat > ./bin/ntasks${ntasks}/kp_kerneltimer_ntasks${ntasks}.txt
+  # export LD_LIBRARY_PATH=/work/bm1183/m300950/kokkos_tools_lib/lib64/:$LD_LIBRARY_PATH
+  # /work/bm1183/m300950/kokkos_tools_lib/bin/kp_reader *.dat > ./bin/ntasks${ntasks}/kp_kerneltimer_ntasks${ntasks}.txt
 fi
 ### ---------------------------------------------------- ###
 
