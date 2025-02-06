@@ -22,7 +22,7 @@ module purge
 ### ---------------------------------------------------- ###
 buildtype=$1                                # "serial", "threads", "openmp" or "cuda"
 compilername=${2:-intel}                    # "intel" or "gcc"
-path2CLEO=${3:-${HOME}/CLEO}                # must be absolute path
+path2CLEO=${3:-${PROJECT}/bayley1/CLEO}     # must be absolute path
 path2build=${4:-${path2CLEO}/build}         # should be absolute path
 executables=${5:-"cleocoupledsdm"}          # list of executables to compile
 enabledebug=${6:-false}                     # == "true" or otherwise false
