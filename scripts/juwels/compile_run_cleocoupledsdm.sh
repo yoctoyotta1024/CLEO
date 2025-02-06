@@ -15,7 +15,6 @@
 
 set -e
 module purge
-spack unload --all
 
 ### ------------------ input parameters ---------------- ###
 ### ----- You need to edit these lines to specify ------ ###

@@ -18,7 +18,6 @@
 
 set -e
 module purge
-spack unload --all
 
 bashsrc=${CLEO_PATH2CLEO}/scripts/juwels/bash/src
 

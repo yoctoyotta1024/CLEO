@@ -18,7 +18,6 @@
 
 set -e
 module purge
-spack unload --all
 
 executable2run=$1
 configfile=$2

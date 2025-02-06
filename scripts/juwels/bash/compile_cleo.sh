@@ -17,7 +17,6 @@
 
 set -e
 module purge
-spack unload --all
 
 executables=$1
 make_clean=$2
