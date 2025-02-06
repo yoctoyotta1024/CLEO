@@ -1,11 +1,11 @@
 #!/bin/bash
 
 ### -------------- GCC compiler(s) Packages ------------ ###
-levante_gcc=gcc/11.2.0-gcc-11.2.0 # bcn7mbu # module load
-levante_gcc_cmake=cmake@3.26.3%gcc@=11.2.0/fuvwuhz # spack load
-levante_gcc_openmpi=openmpi@4.1.2%gcc@11.2.0 # spack load
-levante_gxx_compiler="/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpic++"
-levante_gcc_compiler="/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpicc"
+juwels_gcc=GCC/13.3.0 # module load
+juwels_gcc_cmake=CMake/3.29.3 # module load
+juwels_gcc_openmpi=OpenMPI/5.0.5 # module load
+juwels_gxx_compiler="/p/software/default/stages/2025/software/OpenMPI/5.0.5-GCC-13.3.0/bin/mpic++"
+juwels_gcc_compiler="/p/software/default/stages/2025/software/OpenMPI/5.0.5-GCC-13.3.0/bin/mpicc"
 levante_gcc_cuda=cuda@12.2.0%gcc@=11.2.0  # spack load
 levante_gcc_cuda_root="/sw/spack-levante/cuda-12.2.0-2ttufp/" # [cuda_root]/bin/nvcc") (can get hint for correct path via 'spack find -p nvhpc@23.9')
 levante_gcc_netcdf_yac=netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0 # module load

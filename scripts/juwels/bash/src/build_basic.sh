@@ -31,11 +31,11 @@ then
   fi
 elif [ "${CLEO_COMPILERNAME}" == "gcc" ]
 then
-  module load ${levante_gcc}
-  spack load ${levante_gcc_openmpi}
-  spack load ${levante_gcc_cmake}
-  export CLEO_CXX_COMPILER=${levante_gxx_compiler}
-  export CLEO_CC_COMPILER=${levante_gcc_compiler}
+  module load ${juwels_gcc}
+  module load ${juwels_gcc_openmpi}
+  module load ${juwels_gcc_cmake}
+  export CLEO_CXX_COMPILER=${juwels_gxx_compiler}
+  export CLEO_CC_COMPILER=${juwels_gcc_compiler}
 
   if [ "${CLEO_ENABLEDEBUG}" == "true" ]
   then

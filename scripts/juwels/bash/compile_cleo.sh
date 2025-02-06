@@ -43,9 +43,9 @@ then
   spack load ${levante_intel_cmake}
 elif [ "${CLEO_COMPILERNAME}" == "gcc" ]
 then
-  module load ${levante_gcc}
-  spack load ${levante_gcc_openmpi}
-  spack load ${levante_gcc_cmake}
+  module load ${juwels_gcc}
+  module load ${juwels_gcc_openmpi}
+  module load ${juwels_gcc_cmake}
   if [ "${CLEO_BUILDTYPE}" == "cuda" ]
   then
     spack load ${levante_gcc_cuda}
