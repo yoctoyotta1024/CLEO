@@ -6,12 +6,6 @@ juwels_gcc_cmake=CMake/3.29.3 # module load
 juwels_gcc_openmpi=OpenMPI/5.0.5 # module load
 juwels_gxx_compiler="/p/software/default/stages/2025/software/OpenMPI/5.0.5-GCC-13.3.0/bin/mpic++"
 juwels_gcc_compiler="/p/software/default/stages/2025/software/OpenMPI/5.0.5-GCC-13.3.0/bin/mpicc"
-levante_gcc_netcdf_yac=netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0 # module load
-levante_gcc_openblas_yac=openblas@0.3.18%gcc@=11.2.0 # spack load
-levante_gcc_python_yac=python@3.9.9%gcc@=11.2.0/fwv # spack load
-levante_gcc_cython_yac=py-cython@0.29.33%gcc@=11.2.0/j7b4fa # spack load
-levante_gcc_mpi4py_yac=py-mpi4py@3.1.2%gcc@=11.2.0/hdi5yl6 # spack load
-levante_gcc_fyamllib="/sw/spack-levante/libfyaml-0.7.12-fvbhgo/lib"
 ### ---------------------------------------------------- ###
 
 ### ------------- Intel compiler(s) Packages ------------ ###
