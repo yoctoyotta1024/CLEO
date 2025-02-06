@@ -15,11 +15,11 @@ source ${bashsrc}/juwels_packages.sh
 
 if [ "${CLEO_COMPILERNAME}" == "intel" ]
 then
-  module load ${levante_intel}
-  spack load ${levante_intel_openmpi}
-  spack load ${levante_intel_cmake}
-  export CLEO_CXX_COMPILER=${levante_icpc_compiler}
-  export CLEO_CC_COMPILER=${levante_icc_compiler}
+  module load ${juwels_intel}
+  module load ${juwels_intel_mpi}
+  module load ${juwels_intel_cmake}
+  export CLEO_CXX_COMPILER=${juwels_icpc_compiler}
+  export CLEO_CC_COMPILER=${juwels_icc_compiler}
 
   if [ "${CLEO_ENABLEDEBUG}" == "true" ]
   then
