@@ -48,7 +48,8 @@ then
   module load ${juwels_gcc_cmake}
   if [ "${CLEO_BUILDTYPE}" == "cuda" ]
   then
-    spack load ${levante_gcc_cuda}
+    echo "Bad inputs, CUDA build enabled but building CLEO with CUDA on JUWELS is not currently supported"
+    exit 1
   fi
 fi
 ### ---------------------------------------------------- ###

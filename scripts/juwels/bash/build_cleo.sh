@@ -44,8 +44,8 @@ then
   source ${bashsrc}/build_threads.sh
 elif [[ "${CLEO_BUILDTYPE}" == "cuda" ]];
 then
-  source ${bashsrc}/build_openmp.sh
-  source ${bashsrc}/build_cuda.sh
+  echo "Bad inputs, CUDA build enabled but building CLEO with CUDA on JUWELS is not currently supported"
+  exit 1
 fi
 
 if [ ${CLEO_ENABLEYAC} == "true" ]

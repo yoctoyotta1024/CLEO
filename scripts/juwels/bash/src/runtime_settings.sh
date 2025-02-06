@@ -29,11 +29,8 @@ fi
 ### --------------- set runtime optimisations----------- ###
 if [ "${CLEO_BUILDTYPE}" == "cuda" ]
 then
-  export UCX_RNDV_SCHEME=put_zcopy                        # Preferred communication scheme with Rendezvous protocol
-  export UCX_RNDV_THRESH=16384                            # Threshold when to switch transport from TCP to NVLINK [3]
-  export UCX_IB_GPU_DIRECT_RDMA=yes                       # Allow remote direct memory access from/to GPU
-  export UCX_TLS=cma,rc,mm,cuda_ipc,cuda_copy,gdr_copy    # Include cuda and gdr based transport layers for communication [4]
-  export UCX_MEMTYPE_CACHE=n                              # Prevent misdetection of GPU memory as host memory [5]
+  echo "Bad inputs, CUDA build enabled but building CLEO with CUDA on JUWELS is not currently supported"
+  exit 1
 fi
 
 export OMPI_MCA_osc="ucx"
