@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -e
-bashsrc=${CLEO_PATH2CLEO}/scripts/bash/src
+bashsrc=${CLEO_PATH2CLEO}/scripts/juwels/bash/src
 
 ### -------------------- check inputs ------------------ ###
 source ${bashsrc}/check_inputs.sh

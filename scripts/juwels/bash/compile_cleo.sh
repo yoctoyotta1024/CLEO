@@ -21,7 +21,7 @@ spack unload --all
 
 executables=$1
 make_clean=$2
-bashsrc=${CLEO_PATH2CLEO}/scripts/bash/src
+bashsrc=${CLEO_PATH2CLEO}/scripts/juwels/bash/src
 
 ### -------------------- check inputs ------------------ ###
 source ${bashsrc}/check_inputs.sh
@@ -34,7 +34,7 @@ check_compilername
 ### ---------------------------------------------------- ###
 
 ### ----------------- load compiler(s) ----------------- ###
-source ${bashsrc}/levante_packages.sh
+source ${bashsrc}/juwels_packages.sh
 
 if [ "${CLEO_COMPILERNAME}" == "intel" ]
 then

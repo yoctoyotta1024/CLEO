@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -e
-bashsrc=${CLEO_PATH2CLEO}/scripts/bash/src
+bashsrc=${CLEO_PATH2CLEO}/scripts/juwels/bash/src
 
 ### -------------------- check inputs ------------------ ###
 source ${bashsrc}/check_inputs.sh
@@ -21,7 +21,7 @@ fi
 ### ---------------------------------------------------- ###
 
 ### --------------- choose CUDA compiler --------------- ###
-source ${bashsrc}/levante_packages.sh
+source ${bashsrc}/juwels_packages.sh
 spack load ${levante_gcc_cuda}
 
 # set nvcc compiler used by Kokkos nvcc wrapper as CUDA_ROOT/bin/nvcc

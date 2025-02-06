@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -e
-bashsrc=${CLEO_PATH2CLEO}/scripts/bash/src
+bashsrc=${CLEO_PATH2CLEO}/scripts/juwels/bash/src
 
 ### -------------------- check inputs ------------------ ###
 source ${bashsrc}/check_inputs.sh
@@ -11,7 +11,7 @@ check_compilername
 ### ---------------------------------------------------- ###
 
 ### -------- choose compiler(s) and their flags -------- ###
-source ${bashsrc}/levante_packages.sh
+source ${bashsrc}/juwels_packages.sh
 
 if [ "${CLEO_COMPILERNAME}" == "intel" ]
 then
