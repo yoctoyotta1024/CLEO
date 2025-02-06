@@ -26,18 +26,10 @@ then
   exit 1
 fi
 
-export OMPI_MCA_osc="ucx"
-export OMPI_MCA_pml="ucx"
-export OMPI_MCA_btl="self"
-export UCX_HANDLE_ERRORS="bt"
-export OMPI_MCA_pml_ucx_opal_mem_hooks=1
-export OMPI_MCA_io="romio321"          # basic optimisation of I/O
-export UCX_TLS="shm,rc_mlx5,rc_x,self" # for jobs using LESS than 150 nodes
-
+export OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK}
+export SRUN_CPUS_PER_TASK=${SLURM_CPUS_PER_TASK}
 export OMP_PROC_BIND=spread # (!) will be overriden by KMP_AFFINITY
 export OMP_PLACES=threads # (!) will be overriden by KMP_AFFINITY
-export KMP_AFFINITY="granularity=fine,scatter" # (similar to OMP_PROC_BIND=spread)
-export KMP_LIBRARY="turnaround"
 
 export MALLOC_TRIM_THRESHOLD_="-1"
 
