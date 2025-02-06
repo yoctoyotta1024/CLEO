@@ -1,17 +1,16 @@
 #!/bin/bash
 #SBATCH --job-name=build_compile_cleo
-#SBATCH --partition=gpu
+#SBATCH --partition=devel
 #SBATCH --nodes=1
-#SBATCH --gpus=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=128
+#SBATCH --cpus-per-task=48
 #SBATCH --mem=940M
-#SBATCH --time=00:15:00
+#SBATCH --time=00:05:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
-#SBATCH --account=bm1183
-#SBATCH --output=./build/bin/build_compile_cleo_out.%j.out
-#SBATCH --error=./build/bin/build_compile_cleo_err.%j.out
+#SBATCH --account=exaww
+#SBATCH --output=./build_compile_cleo_out.%j.out
+#SBATCH --error=./build_compile_cleo_err.%j.out
 
 set -e
 module purge

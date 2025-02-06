@@ -1,14 +1,14 @@
 #!/bin/bash
 #SBATCH --job-name=compile_cleo
-#SBATCH --partition=gpu
+#SBATCH --partition=batch
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=128
+#SBATCH --cpus-per-task=48
 #SBATCH --mem=940M
 #SBATCH --time=00:05:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
-#SBATCH --account=bm1183
+#SBATCH --account=exaww
 #SBATCH --output=./build/bin/compile_cleo_out.%j.out
 #SBATCH --error=./build/bin/compile_cleo_err.%j.out
 
