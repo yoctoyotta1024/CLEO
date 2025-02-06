@@ -71,7 +71,7 @@ then
   echo ${cmd}
   eval ${cmd}
 fi
-cmd="make -j 128 ${executables}"
+cmd="make -j 96 ${executables}"
 echo ${cmd}
 eval ${cmd}
 ### ---------------------------------------------------- ###
