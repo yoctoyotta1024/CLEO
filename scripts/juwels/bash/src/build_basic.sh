@@ -32,7 +32,7 @@ then
 elif [ "${CLEO_COMPILERNAME}" == "gcc" ]
 then
   module load ${juwels_gcc}
-  module load ${juwels_gcc_openmpi}
+  module load ${juwels_gcc_mpi}
   module load ${juwels_gcc_cmake}
   export CLEO_CXX_COMPILER=${juwels_gxx_compiler}
   export CLEO_CC_COMPILER=${juwels_gcc_compiler}

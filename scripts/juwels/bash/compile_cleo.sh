@@ -43,7 +43,7 @@ then
 elif [ "${CLEO_COMPILERNAME}" == "gcc" ]
 then
   module load ${juwels_gcc}
-  module load ${juwels_gcc_openmpi}
+  module load ${juwels_gcc_mpi}
   module load ${juwels_gcc_cmake}
   if [ "${CLEO_BUILDTYPE}" == "cuda" ]
   then
