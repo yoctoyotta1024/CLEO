@@ -140,8 +140,6 @@ KOKKOS_INLINE_FUNCTION viewd_supers one_shuffle_supers(const TeamMember& team_me
     genpool.free_state(urbg.gen);
   });
 
-  team_member.team_barrier();  // synchronise threads
-
   return supers;
 }
 
