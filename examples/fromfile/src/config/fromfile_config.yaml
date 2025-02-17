@@ -22,6 +22,10 @@
 # and so can the thermodynamics files when using coupled thermodynamics "fromfile".
 #
 
+### Kokkos Initialization Parameters ###
+kokkos_settings:
+  num_threads: 16                                          # number of threads for host parallel backend
+
 ### SDM Runtime Parameters ###
 domain:
   nspacedims : 3                                          # no. of spatial dimensions to model
@@ -47,8 +51,8 @@ initsupers:
 
 ### Output Parameters ###
 outputdata:
-  setup_filename : ./bin/fromfile_setup.txt                   # .txt filename to copy configuration to
-  zarrbasedir : ./bin/fromfile_sol.zarr                       # zarr store base directory
+  setup_filename : ./bin/ntasks4/fromfile_setup.txt                   # .txt filename to copy configuration to
+  zarrbasedir : ./bin/ntasks4/fromfile_sol.zarr                       # zarr store base directory
   maxchunk : 2500000                                      # maximum no. of elements in chunks of zarr store array
 
 ### Coupled Dynamics Parameters ###

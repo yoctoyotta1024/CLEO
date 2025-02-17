@@ -44,6 +44,8 @@
 #include "initialise/optional_config_params.hpp"
 #include "superdrops/superdrop.hpp"
 
+namespace KCS = KokkosCleoSettings;
+
 struct LognormalDistribution {
   double numconc; /**< number concentration of new droplets */
   double geomean; /**< geometric mean of lognormal distribution */

@@ -41,6 +41,8 @@
 #include "superdrops/sdmmonitor.hpp"
 #include "superdrops/superdrop.hpp"
 
+namespace KCS = KokkosCleoSettings;
+
 /*
 function to move super-droplets between MPI processes, e.g. for superdroplets
 which move to/from gridboxes on different nodes.
@@ -99,7 +101,7 @@ struct MoveSupersInDomain {
 
       const size_t ngbxs(d_gbxs.extent(0));
       Kokkos::parallel_for(
-          "move_supers_in_gridboxes", TeamPolicy(ngbxs, Kokkos::AUTO()),
+          "move_supers_in_gridboxes", TeamPolicy(ngbxs,  KCS::team_size),
           KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
             const auto ii = team_member.league_rank();
 

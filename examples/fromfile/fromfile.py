@@ -38,6 +38,12 @@ parser.add_argument(
     "config_filename", type=Path, help="Absolute path to configuration YAML file"
 )
 parser.add_argument(
+    "--ntasks",
+    type=int,
+    default="4",
+    help="Number of MPI processes to run program with",
+)
+parser.add_argument(
     "--do_inputfiles",
     type=str,
     choices=["TRUE", "FALSE"],
@@ -63,6 +69,7 @@ args = parser.parse_args()
 path2CLEO = args.path2CLEO
 path2build = args.path2build
 config_filename = args.config_filename
+ntasks = args.ntasks
 
 do_inputfiles = True
 if args.do_inputfiles == "FALSE":
@@ -74,17 +81,19 @@ do_plot_results = True
 if args.do_plot_results == "FALSE":
     do_plot_results = False
 
+isfigures = [True, True]  # booleans for [making, saving] initialisation figures
+
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
 # path and filenames for creating initial SD conditions
-binpath = path2build / "bin"
+binpath = path2build / "bin" / f"ntasks{ntasks}"
 sharepath = path2build / "share"
 grid_filename = sharepath / "fromfile_dimlessGBxboundaries.dat"
 initsupers_filename = sharepath / "fromfile_dimlessSDsinit.dat"
 thermofiles = sharepath / "fromfile_dimlessthermo.dat"
-savefigpath = path2build / "bin"  # directory for saving figures
+savefigpath = binpath  # directory for saving figures
 
 # path and file names for plotting results
 setupfile = binpath / "fromfile_setup.txt"
@@ -102,7 +111,9 @@ if do_inputfiles:
     else:
         path2build.mkdir(exist_ok=True)
         sharepath.mkdir(exist_ok=True)
+        binpath.parent.mkdir(exist_ok=True)
         binpath.mkdir(exist_ok=True)
+        savefigpath.parent.mkdir(exist_ok=True)
         savefigpath.mkdir(exist_ok=True)
 
     ### --- delete any existing initial conditions --- ###
@@ -115,10 +126,12 @@ if do_inputfiles:
     fromfile_inputfiles.main(
         path2CLEO,
         path2build,
+        savefigpath,
         config_filename,
         grid_filename,
         initsupers_filename,
         thermofiles,
+        isfigures=isfigures,
     )
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
@@ -133,7 +146,7 @@ if do_run_executable:
     executable = path2build / "examples" / "fromfile" / "src" / "fromfile"
     print("Executable: " + str(executable))
     print("Config file: " + str(config_filename))
-    subprocess.run(["srun", "--ntasks=4", executable, config_filename])
+    subprocess.run(["srun", f"--ntasks={ntasks}", executable, config_filename])
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
