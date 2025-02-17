@@ -29,6 +29,8 @@
 #include "../kokkosaliases.hpp"
 #include "zarr/collective_dataset.hpp"
 
+namespace KCS = KokkosCleoSettings;
+
 /**
  * @brief Struct for a function-like object with operator() to call when using type as
  * parallel_gridboxes_func object in ParallelWriteGridboxes.
@@ -82,7 +84,7 @@ struct ParallelGridboxesTeamPolicyFunc {
   template <typename Functor>
   void operator()(const Functor functor, const viewd_constgbx d_gbxs) const {
     const size_t ngbxs(d_gbxs.extent(0));
-    Kokkos::parallel_for("write_gridboxes_team", TeamPolicy(ngbxs, Kokkos::AUTO()), functor);
+    Kokkos::parallel_for("write_gridboxes_team", TeamPolicy(ngbxs, KCS::team_size), functor);
   }
 };
 

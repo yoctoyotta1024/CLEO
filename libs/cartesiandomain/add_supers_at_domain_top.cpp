@@ -69,7 +69,7 @@ SupersInDomain move_supers_between_gridboxes_again(const viewd_gbx d_gbxs,
   const auto domainsupers = allsupers.domain_supers();
   const size_t ngbxs(d_gbxs.extent(0));
   Kokkos::parallel_for(
-      "move_supers_between_gridboxes_again", TeamPolicy(ngbxs, Kokkos::AUTO()),
+      "move_supers_between_gridboxes_again", TeamPolicy(ngbxs, KCS::team_size),
       KOKKOS_LAMBDA(const TeamMember &team_member) {
         const auto ii = team_member.league_rank();
         d_gbxs(ii).supersingbx.set_refs(team_member, domainsupers);

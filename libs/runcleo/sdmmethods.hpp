@@ -39,6 +39,8 @@
 #include "superdrops/sdmmonitor.hpp"
 #include "superdrops/superdrop.hpp"
 
+namespace KCS = KokkosCleoSettings;
+
 /**
  * @class SDMMethods
  * @brief Struct wrapping the core ingredients of the Super-droplet Model (SDM) part of CLEO.
@@ -145,7 +147,7 @@ class SDMMethods {
       // TODO(all) use scratch space for parallel region
       const size_t ngbxs(d_gbxs.extent(0));
       Kokkos::parallel_for(
-          "sdm_microphysics", TeamPolicy(ngbxs, Kokkos::AUTO()),
+          "sdm_microphysics", TeamPolicy(ngbxs, KCS::team_size),
           KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
             const auto ii = team_member.league_rank();
 
