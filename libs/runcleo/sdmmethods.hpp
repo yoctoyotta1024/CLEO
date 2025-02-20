@@ -50,7 +50,7 @@ subviewd_supers do_sdm_microphysics_subtimesteps(const TeamMember &team_member,
   const auto nsupers = static_cast<size_t>(supers.extent(0));
   Kokkos::parallel_for(Kokkos::TeamThreadRange(team_member, nsupers), [=](const size_t kk) {
     for (unsigned int subt = t_sdm; subt < t_next; subt = microphys.next_step(subt)) {
-      supers = microphys.run_step(team_member, subt, state, supers, kk, mo);
+      supers = microphys.run_step(team_member, subt, kk, supers, state, mo);
     }
   });
 
