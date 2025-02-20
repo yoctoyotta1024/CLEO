@@ -183,7 +183,7 @@ if "long2" in kernels:
 
 
 def run_exectuable(path2build, dataset, executable, config_filename):
-    """delete existing dataset, the run exectuable with given config file"""
+    """delete existing dataset, then run exectuable with given config file"""
     os.chdir(path2build)
     subprocess.run(["pwd"])
     shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
