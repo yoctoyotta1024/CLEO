@@ -41,6 +41,22 @@
 
 namespace KCS = KokkosCleoSettings;
 
+subviewd_supers do_sdm_microphysics_subtimesteps(const TeamMember &team_member,
+                                                 const MicrophysicalProcess auto &microphys,
+                                                 const unsigned int t_sdm,
+                                                 const unsigned int t_next,
+                                                 const subviewd_supers supers, State &state,
+                                                 const SDMMonitor auto mo) {
+  const auto nsupers = static_cast<size_t>(supers.extent(0));
+  Kokkos::parallel_for(Kokkos::TeamThreadRange(team_member, nsupers), [=](const size_t kk) {
+    for (unsigned int subt = t_sdm; subt < t_next; subt = microphys.next_step(subt)) {
+      supers = microphys.run_step(team_member, subt, state, supers, kk, mo);
+    }
+  });
+
+  return supers;
+}
+
 /**
  * @class SDMMethods
  * @brief Struct wrapping the core ingredients of the Super-droplet Model (SDM) part of CLEO.
@@ -152,12 +168,10 @@ class SDMMethods {
             const auto ii = team_member.league_rank();
 
             auto supers = d_gbxs(ii).supersingbx(domainsupers);
-            for (unsigned int subt = t_sdm; subt < t_next; subt = microphys.next_step(subt)) {
-              microphys.run_step(
-                  team_member, subt, supers, d_gbxs(ii).state,
-                  mo);  // TODO(CB): explicitly feed supers back into domainsupers
-            }
-
+            auto &state = d_gbxs(ii).state;
+            supers = do_sdm_microphysics_subtimesteps(
+                team_member, microphys, t_sdm, t_next, supers, state,
+                mo);  // TODO(CB): explicitly feed supers back into domainsupers
             mo.monitor_microphysics(team_member, supers);
           });
     }
