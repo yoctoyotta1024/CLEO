@@ -2,6 +2,38 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.34.0](https://github.com/yoctoyotta1024/CLEO/compare/ea35ec8cbcbc24a252621ab656e15cf98f584e26..v0.34.0) - 2025-02-24
+#### Bug Fixes
+- make examples compatible with refactored movesupersindomain struct - ([dd9b56d](https://github.com/yoctoyotta1024/CLEO/commit/dd9b56d91834436d78b6f7e1915f99e8693a2d0b)) - clara.bayley
+- make examples compatible with refactored movesupersindomain struct - ([2e4de85](https://github.com/yoctoyotta1024/CLEO/commit/2e4de8517e0bec5c60fc0ffac463d78be6774098)) - yoctoyotta1024
+- fix missing dynamic libraries at runtime - ([41f32c5](https://github.com/yoctoyotta1024/CLEO/commit/41f32c54bde7c996bf804f2b881c952edeb5fabe)) - yoctoyotta1024
+- remove spack unload - ([05e9774](https://github.com/yoctoyotta1024/CLEO/commit/05e9774812f50a46045708d7bf65f687f951c04e)) - yoctoyotta1024
+- path to juwels bash folder and juwels_packages - ([b7616f1](https://github.com/yoctoyotta1024/CLEO/commit/b7616f1a02be6b2e7b1d6bca7c3552b4875b6d61)) - yoctoyotta1024
+#### Features
+- new bash script to run divfree2d on juwels - ([296ebb7](https://github.com/yoctoyotta1024/CLEO/commit/296ebb79d90aa4f813fe0860c4ae6f66d663b0ad)) - yoctoyotta1024
+- new bash scripts to run CLEO on JUWELS - ([3b4619f](https://github.com/yoctoyotta1024/CLEO/commit/3b4619fbc9f64b5e3faa67133f730db811cb9641)) - yoctoyotta1024
+#### Performance Improvements
+- linting files - ([38d1b2f](https://github.com/yoctoyotta1024/CLEO/commit/38d1b2fa7e146cb596f93317aecb333a8665085d)) - clara.bayley
+#### Refactoring
+- rename files and move into movement directory - ([c6cb78e](https://github.com/yoctoyotta1024/CLEO/commit/c6cb78e22b743a6b42b6a79874810d09f627a0f0)) - yoctoyotta1024
+- movement of superdroplets across domain in seperate structure to MoveSupersInDomain - ([b67f5d2](https://github.com/yoctoyotta1024/CLEO/commit/b67f5d2ed608dfe48bf38a055f393927832ea041)) - yoctoyotta1024
+- delete redundant file - ([78791dc](https://github.com/yoctoyotta1024/CLEO/commit/78791dc91a47751ffec81a7e77460a1a04e5bb6a)) - yoctoyotta1024
+- rename motion -> sdmotion for clarity - ([5b80779](https://github.com/yoctoyotta1024/CLEO/commit/5b8077906594a97193c834a9cca0dc26c9711d12)) - yoctoyotta1024
+- use ParaStationMPI not OpenMPI with gcc compiler - ([f0f5a98](https://github.com/yoctoyotta1024/CLEO/commit/f0f5a9880f0f69bb61d465ceb11aa70ba68d0681)) - yoctoyotta1024
+- change runtime settings - ([62c5cf5](https://github.com/yoctoyotta1024/CLEO/commit/62c5cf58bba6e08c65d24fdff15f4e09dc6935b8)) - yoctoyotta1024
+- change SLURM settings - ([89b428b](https://github.com/yoctoyotta1024/CLEO/commit/89b428baecdbe471810b11e08af96491372b6d2e)) - yoctoyotta1024
+- lower cpu count for compiling - ([3e9e954](https://github.com/yoctoyotta1024/CLEO/commit/3e9e954c086c3ee6e2779ddccd3b6c4a75783aa2)) - yoctoyotta1024
+- change default path to CLEO repo - ([6a84aa3](https://github.com/yoctoyotta1024/CLEO/commit/6a84aa34ef5b4e0c65838a7090c69aa2848bc876)) - yoctoyotta1024
+- use juwels packages for intel compilers - ([f92bf06](https://github.com/yoctoyotta1024/CLEO/commit/f92bf06d073d2ba454e0ebe5045cf5efd2cd4033)) - yoctoyotta1024
+- don't support YAC builds on JUWELS - ([4e9967e](https://github.com/yoctoyotta1024/CLEO/commit/4e9967ebc76756e0c291cc83adf8f7c150f8cf3e)) - yoctoyotta1024
+- don't support CUDA builds on JUWELS - ([43da6bf](https://github.com/yoctoyotta1024/CLEO/commit/43da6bf770f4a875d22a2696505ad05963c3f3c5)) - yoctoyotta1024
+- use juwels packages for gcc compilers - ([a32a451](https://github.com/yoctoyotta1024/CLEO/commit/a32a4519915ca38076be6e244d15b66b8be24b31)) - yoctoyotta1024
+- set team size for heirarchal parallelism - ([a5c381e](https://github.com/yoctoyotta1024/CLEO/commit/a5c381e751b2de15ecfaf6b0ee06eebe49eb6a09)) - clara.bayley
+- set number of host threads in fromfile example config - ([9d833c7](https://github.com/yoctoyotta1024/CLEO/commit/9d833c7ed961b75766ff750f6dcd08db738d7ba8)) - clara.bayley
+- fromfile takes ntasks as argument - ([ea35ec8](https://github.com/yoctoyotta1024/CLEO/commit/ea35ec8cbcbc24a252621ab656e15cf98f584e26)) - clara.bayley
+
+- - -
+
 ## [v0.33.1](https://github.com/yoctoyotta1024/CLEO/compare/2b624c97d680e468a97db0e1873347cf7f8e06ec..v0.33.1) - 2025-01-30
 #### Bug Fixes
 - gcc compiler error from taking address of rvalue - ([71a58db](https://github.com/yoctoyotta1024/CLEO/commit/71a58db95c403b9a69d430ad190a6bbee5645ca3)) - clara.bayley
