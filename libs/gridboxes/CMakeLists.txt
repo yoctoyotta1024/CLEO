@@ -14,7 +14,6 @@ set(LIB_BINARY_DIR ${CLEO_BINARY_DIR}/lib)
 # Add executables and create library target
 set(SOURCES
 "gridbox.cpp"
-"movesupersindomain.cpp"
 "predcorr.cpp"
 "sortsupers.cpp"
 "supersingbx.cpp"
