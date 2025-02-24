@@ -60,15 +60,15 @@ after updating their gridbox indexes concordantly
 template <GridboxMaps GbxMaps, Motion<GbxMaps> M, typename BoundaryConditions>
 struct MoveSupersInDomain {
   /*
-  EnactMotion struct encapsulates motion so that parallel loops with KOKKOS_CLASS_LAMBDA
-  (ie. [=] on CPUs) functors only captures motion and not other members of MoveSupersInDomain
-  coincidentally (which may not be GPU compatible).
+  EnactSDMotion struct encapsulates superdroplet motion so that parallel loops with
+  KOKKOS_CLASS_LAMBDA (ie. [=] on CPUs) functors only captures motion and not other members
+  of MoveSupersInDomain coincidentally (which may not be GPU compatible).
   */
-  struct EnactMotion {
-    M motion;
+  struct EnactSDMotion {
+    M sdmotion;
 
     /* enact steps (1) and (2) movement of superdroplets for 1 gridbox:
-    (1) update their spatial coords according to type of motion. (device)
+    (1) update their spatial coords according to type of sdmotion. (device)
     (2) update their sdgbxindex accordingly (device).
     Kokkos::parallel_for([...]) is equivalent to:
     for (size_t kk(0); kk < supers.extent(0); ++kk) {[...]}
@@ -81,16 +81,16 @@ struct MoveSupersInDomain {
       Kokkos::parallel_for(Kokkos::TeamThreadRange(team_member, nsupers),
                            [&, this](const size_t kk) {
                              /* step (1) */
-                             motion.superdrop_coords(gbxindex, gbxmaps, state, supers(kk));
+                             sdmotion.superdrop_coords(gbxindex, gbxmaps, state, supers(kk));
 
                              /* step (2) */
-                             motion.superdrop_gbx(gbxindex, gbxmaps, supers(kk));
+                             sdmotion.superdrop_gbx(gbxindex, gbxmaps, supers(kk));
                            });
     }
 
     /* enact steps (1) and (2) movement of superdroplets
     throughout domain (i.e. for all gridboxes):
-    (1) update their spatial coords according to type of motion. (device)
+    (1) update their spatial coords according to type of sdmotion. (device)
     (2) update their sdgbxindex accordingly (device).
     Kokkos::parallel_for([...]) is equivalent to:
     for (size_t ii(0); ii < ngbxs; ++ii) {[...]}
@@ -110,7 +110,7 @@ struct MoveSupersInDomain {
                                gbx.supersingbx(domainsupers));
           });
     }
-  } enactmotion;
+  } enact_sdmotion;
 
   /*
   Updates the refs for each gridbox given domainsupers containing all the superdroplets within
@@ -144,18 +144,17 @@ struct MoveSupersInDomain {
   }
 
   MoveSupersInDomain(const M mtn, const BoundaryConditions boundary_conditions)
-      : enactmotion({mtn}), apply_domain_boundary_conditions(boundary_conditions) {}
+      : enact_sdmotion({mtn}), apply_domain_boundary_conditions(boundary_conditions) {}
 
   /* extra constructor useful to help when compiler cannot deduce type of GBxMaps */
   MoveSupersInDomain(const GbxMaps &gbxmaps, const M mtn,
                      const BoundaryConditions boundary_conditions)
       : MoveSupersInDomain(mtn, boundary_conditions) {}
 
-  /* returns time when superdroplet motion is
-  next due to occur given current time, t_sdm */
+  /* returns time when superdroplet motion is next due to occur given current time, t_sdm */
   KOKKOS_INLINE_FUNCTION
   unsigned int next_step(const unsigned int t_sdm) const {
-    return enactmotion.motion.next_step(t_sdm);
+    return enact_sdmotion.sdmotion.next_step(t_sdm);
   }
 
   /*
@@ -167,7 +166,7 @@ struct MoveSupersInDomain {
    */
   SupersInDomain run_step(const unsigned int t_sdm, const GbxMaps &gbxmaps, viewd_gbx d_gbxs,
                           SupersInDomain &allsupers, const SDMMonitor auto mo) const {
-    if (enactmotion.motion.on_step(t_sdm)) {
+    if (enact_sdmotion.sdmotion.on_step(t_sdm)) {
       allsupers = move_superdrops_in_domain(t_sdm, gbxmaps, d_gbxs, allsupers);
       mo.monitor_motion(d_gbxs, allsupers.domain_supers_readonly());
     }
@@ -208,7 +207,7 @@ struct MoveSupersInDomain {
   }
 
   /* enact movement of superdroplets throughout domain in three stages:
-  (1) update their spatial coords according to type of motion. (device)
+  (1) update their spatial coords according to type of sdmotion. (device)
   (2) update their sdgbxindex accordingly (device)
   (3) move superdroplets between gridboxes (host)
   (4) (optional) apply domain boundary conditions (host and device)
@@ -221,7 +220,7 @@ struct MoveSupersInDomain {
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 
     /* steps (1 - 2) */
-    enactmotion.move_supers_in_gridboxes(gbxmaps, d_gbxs, allsupers.domain_supers());
+    enact_sdmotion.move_supers_in_gridboxes(gbxmaps, d_gbxs, allsupers.domain_supers());
 
     /* step (3) */
     allsupers = move_supers_between_gridboxes(gbxmaps, d_gbxs, allsupers);
