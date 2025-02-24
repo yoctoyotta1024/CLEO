@@ -25,10 +25,17 @@ bashsrc=${CLEO_PATH2CLEO}/scripts/juwels/bash/src
 ### -------------------- check inputs ------------------ ###
 source ${bashsrc}/check_inputs.sh
 check_args_not_empty "${executable2run}" "${configfile}" "${CLEO_ENABLEYAC}" "${CLEO_COMPILERNAME}"
+check_args_not_empty "${CLEO_ENABLE_MPTRAC}"
 ### ---------------------------------------------------- ###
 
 ### ----------- load compiler(s) and libraries --------- ###
 source ${bashsrc}/juwels_packages.sh
+
+if [ "${CLEO_BUILDTYPE}" == "cuda" ]
+then
+  echo "Bad inputs, CUDA build enabled but building CLEO with CUDA on JUWELS is not currently supported"
+  exit 1
+fi
 
 if [ "${CLEO_COMPILERNAME}" == "intel" ]
 then
@@ -38,11 +45,6 @@ elif [ "${CLEO_COMPILERNAME}" == "gcc" ]
 then
   module load ${juwels_gcc}
   module load ${juwels_gcc_mpi}
-  if [ "${CLEO_BUILDTYPE}" == "cuda" ]
-  then
-    echo "Bad inputs, CUDA build enabled but building CLEO with CUDA on JUWELS is not currently supported"
-    exit 1
-  fi
 fi
 ### ---------------------------------------------------- ###
 

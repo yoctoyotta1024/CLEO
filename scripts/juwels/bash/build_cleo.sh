@@ -23,7 +23,7 @@ bashsrc=${CLEO_PATH2CLEO}/scripts/juwels/bash/src
 ### -------------------- check inputs ------------------ ###
 source ${bashsrc}/check_inputs.sh
 check_args_not_empty "${CLEO_BUILDTYPE}" "${CLEO_COMPILERNAME}" "${CLEO_ENABLEDEBUG}" \
-  "${CLEO_PATH2CLEO}" "${CLEO_PATH2BUILD}" "${CLEO_ENABLEYAC}"
+  "${CLEO_PATH2CLEO}" "${CLEO_PATH2BUILD}" "${CLEO_ENABLEYAC}" "${CLEO_ENABLE_MPTRAC}"
 
 check_source_and_build_paths
 check_buildtype
@@ -53,6 +53,18 @@ then
 else
   export CLEO_YAC_FLAGS="-DENABLE_YAC_COUPLING=OFF"
 fi
+
+if [ "${CLEO_ENABLE_MPTRAC}" == "true" ]
+then
+  if [ "${CLEO_COMPILERNAME}" != "gcc" ]
+  then
+    echo "Bad inputs, MPTRAC can only supported with gcc compilation on JUWELS"
+    exit 1
+  fi
+  export CLEO_MPTRAC_FLAGS="-DENABLE_MPTRAC=ON -DMPTRAC_MPI=1 -DMPTRAC_VERSION=special_edition"
+else
+  export CLEO_MPTRAC_FLAGS="-DENABLE_MPTRAC=OFF"
+fi
 ### ---------------------------------------------------- ###
 
 ### ---------------- build CLEO with cmake ------------- ###
@@ -74,6 +86,9 @@ echo "CLEO_ENABLEYAC: ${CLEO_ENABLEYAC}"
 echo "CLEO_YACYAXTROOT: ${CLEO_YACYAXTROOT}"
 echo "CLEO_YAC_FLAGS: ${CLEO_YAC_FLAGS}"
 echo "CLEO_MODULE_PATH: ${CLEO_MODULE_PATH}"
+
+echo "CLEO_ENABLE_MPTRAC: ${CLEO_ENABLE_MPTRAC}"
+echo "CLEO_MPTRAC_FLAGS: ${CLEO_MPTRAC_FLAGS}"
 echo "### ------------------------------------------- ###"
 
 cmake -DCMAKE_CXX_COMPILER=${CLEO_CXX_COMPILER} \
@@ -82,7 +97,7 @@ cmake -DCMAKE_CXX_COMPILER=${CLEO_CXX_COMPILER} \
     -DCMAKE_MODULE_PATH=${CLEO_MODULE_PATH} \
     -S ${CLEO_PATH2CLEO} -B ${CLEO_PATH2BUILD} \
     ${CLEO_KOKKOS_BASIC_FLAGS} ${CLEO_KOKKOS_HOST_FLAGS} ${CLEO_KOKKOS_DEVICE_FLAGS} \
-    ${CLEO_YAC_FLAGS}
+    ${CLEO_YAC_FLAGS} ${CLEO_MPTRAC_FLAGS}
 
 ### ensure these directories exist (it's a good idea for later use)
 mkdir -p ${CLEO_PATH2BUILD}/tmp

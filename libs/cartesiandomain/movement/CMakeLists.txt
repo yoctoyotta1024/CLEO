@@ -4,7 +4,7 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
 endif()
 
 # set library name and print directory of this CMakeLists.txt (source directory of library)
-set(LIBNAME "movement")
+set(LIBNAME "cartesian_movement")
 message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 # explicitly set library executables path to /lib in top level of build tree

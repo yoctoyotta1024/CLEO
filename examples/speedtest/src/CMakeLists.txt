@@ -15,7 +15,8 @@ set(CLEOLIBS gridboxes initialise observers runcleo superdrops zarr)
 add_executable(spdtest EXCLUDE_FROM_ALL "main_spdtest.cpp")
 
 # Add directories and link libraries to target
-target_link_libraries(spdtest PRIVATE coupldyn_fromfile cartesiandomain "${CLEOLIBS}")
+target_link_libraries(spdtest PRIVATE coupldyn_fromfile cartesiandomain
+  cartesian_movement "${CLEOLIBS}")
 target_link_libraries(spdtest PUBLIC Kokkos::kokkos)
 target_include_directories(spdtest PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
 
