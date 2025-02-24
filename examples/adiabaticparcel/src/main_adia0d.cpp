@@ -28,9 +28,10 @@
 
 #include "zarr/dataset.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
-#include "cartesiandomain/cartesianmotion.hpp"
+#include "cartesiandomain/movement/cartesian_motion.hpp"
+#include "cartesiandomain/movement/cartesian_movement.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
-#include "cartesiandomain/null_boundary_conditions.hpp"
+#include "cartesiandomain/movement/null_boundary_conditions.hpp"
 #include "coupldyn_cvode/cvodecomms.hpp"
 #include "coupldyn_cvode/cvodedynamics.hpp"
 #include "coupldyn_cvode/initgbxs_cvode.hpp"
@@ -76,7 +77,7 @@ inline auto create_movement(const CartesianMaps &gbxmaps) {
   const Motion<CartesianMaps> auto motion = NullMotion{};
   const auto boundary_conditions = NullBoundaryConditions{};
 
-  return MoveSupersInDomain(gbxmaps, motion, boundary_conditions);
+  return cartesian_movement(gbxmaps, motion, boundary_conditions);
 }
 
 inline MicrophysicalProcess auto create_microphysics(const Config &config,

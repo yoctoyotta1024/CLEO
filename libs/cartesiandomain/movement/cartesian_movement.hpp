@@ -30,7 +30,7 @@
 #include "superdrops/motion.hpp"
 
 template <Motion<CartesianMaps> M, typename BoundaryConditions>
-inline auto cartestian_movement(const CartesianMaps &gbxmaps,
+inline auto cartesian_movement(const CartesianMaps &gbxmaps,
   const M motion, const BoundaryConditions boundary_conditions) {
     const auto transport_across_domain = CartesianTransportAcrossDomain{};
   return MoveSupersInDomain<CartesianMaps, M, CartesianTransportAcrossDomain, BoundaryConditions>(
