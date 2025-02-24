@@ -46,8 +46,8 @@ some type of Motion) and then moving them between gridboxes
 after updating their gridbox indexes concordantly
 */
 // TODO(CB): use concepts to set contraints for MovementAcrossDomain and BCs
-template <GridboxMaps GbxMaps, Motion<GbxMaps> M,
-  typename TransportAcrossDomain, typename BoundaryConditions>
+template <GridboxMaps GbxMaps, Motion<GbxMaps> M, typename TransportAcrossDomain,
+          typename BoundaryConditions>
 struct MoveSupersInDomain {
   /*
   EnactSDMotion struct encapsulates superdroplet motion so that parallel loops with
@@ -91,7 +91,7 @@ struct MoveSupersInDomain {
 
       const size_t ngbxs(d_gbxs.extent(0));
       Kokkos::parallel_for(
-          "move_supers_in_gridboxes", TeamPolicy(ngbxs,  KCS::team_size),
+          "move_supers_in_gridboxes", TeamPolicy(ngbxs, KCS::team_size),
           KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
             const auto ii = team_member.league_rank();
 
@@ -134,7 +134,7 @@ struct MoveSupersInDomain {
   }
 
   MoveSupersInDomain(const M mtn, const TransportAcrossDomain transport_across_domain,
-      const BoundaryConditions boundary_conditions)
+                     const BoundaryConditions boundary_conditions)
       : enact_sdmotion({mtn}),
         transport_supers_across_domain(transport_across_domain),
         apply_domain_boundary_conditions(boundary_conditions) {}
@@ -168,8 +168,8 @@ struct MoveSupersInDomain {
   }
 
  private:
- TransportAcrossDomain transport_supers_across_domain;
- BoundaryConditions apply_domain_boundary_conditions;
+  TransportAcrossDomain transport_supers_across_domain;
+  BoundaryConditions apply_domain_boundary_conditions;
 
   /* (re)sorting supers, based on their gbxindexes and then updating the refs for each gridbox
   accordingly. May also include MPI communication with moves superdroplets away from/into a node's

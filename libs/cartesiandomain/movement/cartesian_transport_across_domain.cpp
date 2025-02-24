@@ -25,21 +25,21 @@
 /* (re)sorting supers based on their gbxindexes as step to 'move' superdroplets across the domain.
 May also include MPI communication with moves superdroplets away from/into a node's domain
 */
-SupersInDomain CartesianTransportAcrossDomain::operator()(const CartesianMaps &gbxmaps, const viewd_gbx d_gbxs,
-    SupersInDomain &allsupers) const {
+SupersInDomain CartesianTransportAcrossDomain::operator()(const CartesianMaps &gbxmaps,
+                                                          const viewd_gbx d_gbxs,
+                                                          SupersInDomain &allsupers) const {
+  int comm_size;
+  MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
 
-    int comm_size;
-    MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
-
-    // TODO(ALL): remove guard once domain decomposition is GPU compatible
-    if (comm_size > 1) {
-      // TODO(ALL): combine two sorts into one(?)
-      auto totsupers = allsupers.sort_totsupers_without_set(d_gbxs);
-      totsupers = sendrecv_supers(gbxmaps, d_gbxs, totsupers);
-      allsupers.sort_and_set_totsupers(totsupers, d_gbxs);
-    } else {
-      allsupers.sort_totsupers(d_gbxs);
-    }
-
-    return allsupers;
+  // TODO(ALL): remove guard once domain decomposition is GPU compatible
+  if (comm_size > 1) {
+    // TODO(ALL): combine two sorts into one(?)
+    auto totsupers = allsupers.sort_totsupers_without_set(d_gbxs);
+    totsupers = sendrecv_supers(gbxmaps, d_gbxs, totsupers);
+    allsupers.sort_and_set_totsupers(totsupers, d_gbxs);
+  } else {
+    allsupers.sort_totsupers(d_gbxs);
   }
+
+  return allsupers;
+}

@@ -38,8 +38,7 @@
 #include "superdrops/superdrop.hpp"
 #include "superdrops/terminalvelocity.hpp"
 
-/* wrapper of operator for use of function
-in PredCorrMotion's CheckBounds type */
+/* wrapper of operator for use of function in PredCorrMotion's CheckBounds type */
 struct CartesianCheckBounds {
   /* raise error if superdrop not either out of domain
   or within bounds (ie. lower_bound <= coord < upper_bound) */

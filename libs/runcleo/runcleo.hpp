@@ -279,9 +279,9 @@ class RunCLEO {
    * @param coupldyn CoupledDynamics object.
    * @param comms CouplingComms object.
    */
-  RunCLEO(const SDMMethods<GbxMaps, Microphys, M, TransportAcrossDomain, BoundaryConditions, Obs> &sdm,
-          CD &coupldyn,
-          const Comms &comms)
+  RunCLEO(
+      const SDMMethods<GbxMaps, Microphys, M, TransportAcrossDomain, BoundaryConditions, Obs> &sdm,
+      CD &coupldyn, const Comms &comms)
       : sdm(sdm), coupldyn(coupldyn), comms(comms) {
     check_coupling();
   }

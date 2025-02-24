@@ -201,9 +201,10 @@ class SDMMethods {
    * @param movesupers object that is type of super-droplets' Motion.
    * @param obs object that is type of Observer.
    */
-  SDMMethods(const unsigned int couplstep, const GbxMaps gbxmaps, const Microphys microphys,
-             const MoveSupersInDomain<GbxMaps, M, TransportAcrossDomain, BoundaryConditions> movesupers,
-             const Obs obs)
+  SDMMethods(
+      const unsigned int couplstep, const GbxMaps gbxmaps, const Microphys microphys,
+      const MoveSupersInDomain<GbxMaps, M, TransportAcrossDomain, BoundaryConditions> movesupers,
+      const Obs obs)
       : couplstep(couplstep),
         movesupers(movesupers),
         gbxmaps(gbxmaps),

@@ -28,9 +28,9 @@
 
 #include "zarr/dataset.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
+#include "cartesiandomain/createcartesianmaps.hpp"
 #include "cartesiandomain/movement/cartesian_motion.hpp"
 #include "cartesiandomain/movement/cartesian_movement.hpp"
-#include "cartesiandomain/createcartesianmaps.hpp"
 #include "cartesiandomain/movement/null_boundary_conditions.hpp"
 #include "coupldyn_cvode/cvodecomms.hpp"
 #include "coupldyn_cvode/cvodedynamics.hpp"

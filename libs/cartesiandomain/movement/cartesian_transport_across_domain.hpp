@@ -24,12 +24,12 @@
 #define LIBS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_TRANSPORT_ACROSS_DOMAIN_HPP_
 
 #include <Kokkos_Core.hpp>
+#include <array>
 #include <concepts>
 #include <cstdint>
 #include <iostream>
 #include <numeric>
 #include <vector>
-#include <array>
 
 #include "../../cleoconstants.hpp"
 #include "../../kokkosaliases.hpp"
@@ -37,8 +37,8 @@
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/supersindomain.hpp"
-#include "superdrops/superdrop.hpp"
 #include "mpi.h"
+#include "superdrops/superdrop.hpp"
 
 /*
 function to move super-droplets between MPI processes, e.g. for superdroplets
@@ -48,14 +48,13 @@ template <GridboxMaps GbxMaps>
 viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
                              viewd_supers totsupers);
 
-struct CartesianTransportAcrossDomain{
+struct CartesianTransportAcrossDomain {
   /* (re)sorting supers based on their gbxindexes as step to 'move' superdroplets across the domain.
   May also include MPI communication with moves superdroplets away from/into a node's domain
   */
   SupersInDomain operator()(const CartesianMaps &gbxmaps, const viewd_gbx d_gbxs,
-    SupersInDomain &allsupers) const;
+                            SupersInDomain &allsupers) const;
 };
-
 
 /*
 function to move super-droplets between MPI processes, e.g. for superdroplets
@@ -230,4 +229,4 @@ viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
   return totsupers;
 }
 
-#endif // LIBS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_TRANSPORT_ACROSS_DOMAIN_HPP_
+#endif  // LIBS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_TRANSPORT_ACROSS_DOMAIN_HPP_
