@@ -13,7 +13,6 @@ set(LIB_BINARY_DIR ${CLEO_BINARY_DIR}/lib)
 
 # Add executables and create library target
 set(SOURCES
-"add_supers_at_domain_top.cpp"
 "cartesianmaps.cpp"
 "createcartesianmaps.cpp"
 "cartesian_decomposition.cpp"

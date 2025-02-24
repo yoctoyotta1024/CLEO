@@ -4,12 +4,12 @@
  *
  * ----- CLEO -----
  * File: null_boundary_conditions.hpp
- * Project: cartesiandomain
+ * Project: movement
  * Created Date: Tuesday 16th April 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 18th April 2024
+ * Last Modified: Monday 24th Febuary 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -20,10 +20,10 @@
  * Super-Droplets and MoveSupersInDomain
  */
 
-#ifndef LIBS_CARTESIANDOMAIN_NULL_BOUNDARY_CONDITIONS_HPP_
-#define LIBS_CARTESIANDOMAIN_NULL_BOUNDARY_CONDITIONS_HPP_
+#ifndef LIBS_CARTESIANDOMAIN_MOVEMENT_NULL_BOUNDARY_CONDITIONS_HPP_
+#define LIBS_CARTESIANDOMAIN_MOVEMENT_NULL_BOUNDARY_CONDITIONS_HPP_
 
-#include "../kokkosaliases.hpp"
+#include "../../kokkosaliases.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "gridboxes/supersindomain.hpp"
 
@@ -35,4 +35,4 @@ struct NullBoundaryConditions {
   }
 };
 
-#endif  // LIBS_CARTESIANDOMAIN_NULL_BOUNDARY_CONDITIONS_HPP_
+#endif  // LIBS_CARTESIANDOMAIN_MOVEMENT_NULL_BOUNDARY_CONDITIONS_HPP_
