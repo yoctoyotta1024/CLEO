@@ -52,16 +52,18 @@ namespace KCS = KokkosCleoSettings;
  * @tparam GbxMaps Type of the GridboxMaps.
  * @tparam Microphys Type of the MicrophysicalProcess.
  * @tparam M Type of super-droplets' Motion.
+ * @tparam TransportAcrossDomain Type of super-droplets transport across domain.
+ * @tparam BoundaryConditions Type of boundary conditions for model
  * @tparam Obs Type of the Observer.
  */
 template <GridboxMaps GbxMaps, MicrophysicalProcess Microphys, Motion<GbxMaps> M,
-          typename BoundaryConditions, Observer Obs>
+          typename TransportAcrossDomain, typename BoundaryConditions, Observer Obs>
 class SDMMethods {
  private:
   unsigned int couplstep; /**< Coupling timestep. */
-  MoveSupersInDomain<GbxMaps, M, BoundaryConditions> movesupers;
-  /**< object for super-droplets' MoveSupersInDomain with certain type of Motion and
-   * BoundaryConditions. */
+  MoveSupersInDomain<GbxMaps, M, TransportAcrossDomain, BoundaryConditions> movesupers;
+  /**< object for super-droplets' MoveSupersInDomain with certain type of Motion, transport and
+   * boundary conditions. */
 
   /**
    * @brief Get the next timestep for SDM.
@@ -91,7 +93,7 @@ class SDMMethods {
    * This function moves superdroplets, including their movement between
    * gridboxes and boundary conditions, according to the `movesupers` struct.
    * `movesupers` is an instance of the MoveSupersInDomain templated type with a certain
-   * instance of a type of GridboxMaps, super-droplets' Motion and boundary conditions.
+   * instance of a type of GridboxMaps, super-droplets' Motion, transport and boundary conditions.
    *
    * Kokkos::Profiling are null pointers unless a Kokkos profiler library has been
    * exported to "KOKKOS_TOOLS_LIBS" prior to runtime so the lib gets dynamically loaded.
@@ -200,7 +202,8 @@ class SDMMethods {
    * @param obs object that is type of Observer.
    */
   SDMMethods(const unsigned int couplstep, const GbxMaps gbxmaps, const Microphys microphys,
-             const MoveSupersInDomain<GbxMaps, M, BoundaryConditions> movesupers, const Obs obs)
+             const MoveSupersInDomain<GbxMaps, M, TransportAcrossDomain, BoundaryConditions> movesupers,
+             const Obs obs)
       : couplstep(couplstep),
         movesupers(movesupers),
         gbxmaps(gbxmaps),

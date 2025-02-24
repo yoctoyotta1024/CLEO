@@ -64,11 +64,12 @@
  * @tparam Comms Type of CouplingComms.
  */
 template <CoupledDynamics CD, GridboxMaps GbxMaps, MicrophysicalProcess Microphys,
-          Motion<GbxMaps> M, typename BoundaryConditions, Observer Obs,
-          CouplingComms<GbxMaps, CD> Comms>
+          Motion<GbxMaps> M, typename TransportAcrossDomain, typename BoundaryConditions,
+          Observer Obs, CouplingComms<GbxMaps, CD> Comms>
 class RunCLEO {
  private:
-  const SDMMethods<GbxMaps, Microphys, M, BoundaryConditions, Obs> &sdm; /**< SDMMethods object. */
+  const SDMMethods<GbxMaps, Microphys, M, TransportAcrossDomain, BoundaryConditions, Obs> &sdm;
+  /**< SDMMethods object. */
   CD &coupldyn;       /**< CoupledDynamics object.  */
   const Comms &comms; /**< CouplingComms object. */
 
@@ -278,7 +279,8 @@ class RunCLEO {
    * @param coupldyn CoupledDynamics object.
    * @param comms CouplingComms object.
    */
-  RunCLEO(const SDMMethods<GbxMaps, Microphys, M, BoundaryConditions, Obs> &sdm, CD &coupldyn,
+  RunCLEO(const SDMMethods<GbxMaps, Microphys, M, TransportAcrossDomain, BoundaryConditions, Obs> &sdm,
+          CD &coupldyn,
           const Comms &comms)
       : sdm(sdm), coupldyn(coupldyn), comms(comms) {
     check_coupling();
