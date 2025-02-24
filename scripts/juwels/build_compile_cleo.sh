@@ -20,14 +20,15 @@ module purge
 ### ----- your build configuration and executables ----- ###
 ### ---------------------------------------------------- ###
 buildtype=$1                                # "serial", "threads", "openmp" or "cuda"
-compilername=${2:-intel}                    # "intel" or "gcc"
+compilername=${2:-gcc}                      # "intel" or "gcc"
 path2CLEO=${3:-${PROJECT}/bayley1/CLEO}     # must be absolute path
 path2build=${4:-${path2CLEO}/build}         # should be absolute path
 executables=${5:-"cleocoupledsdm"}          # list of executables to compile
 enabledebug=${6:-false}                     # == "true" or otherwise false
 enableyac=${7:-false}                       # == "true" or otherwise false
-yacyaxtroot=${8:-NA} # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
-make_clean=${9:-true}                       # == "true" or otherwise false
+yacyaxtroot=${8:-NA}                        # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
+enable_mptrac=${9:-true}                    # == "true" or otherwise false
+make_clean=${10:-true}                      # == "true" or otherwise false
 ### ---------------------------------------------------- ###
 
 ### ------------------ check arguments ----------------- ###
@@ -37,7 +38,8 @@ then
   exit 1
 fi
 source ${path2CLEO}/scripts/juwels/bash/src/check_inputs.sh
-check_args_not_empty "${buildtype}" "${compilername}" "${enabledebug}" "${path2CLEO}" "${path2build}" "${enableyac}"
+check_args_not_empty "${buildtype}" "${compilername}" "${path2CLEO}" "${path2build}"
+check_args_not_empty "${enabledebug}" "${enableyac}" "${enable_mptrac}"
 ### ---------------------------------------------------- ###
 
 ### ----------------- export inputs -------------------- ###
@@ -47,6 +49,7 @@ export CLEO_PATH2CLEO=${path2CLEO}
 export CLEO_PATH2BUILD=${path2build}
 export CLEO_ENABLEDEBUG=${enabledebug}
 export CLEO_ENABLEYAC=${enableyac}
+export CLEO_ENABLE_MPTRAC=${enable_mptrac}
 
 if [ ${CLEO_ENABLEYAC} == "true" ]
 then
@@ -70,6 +73,7 @@ echo "CLEO_PATH2BUILD = ${CLEO_PATH2BUILD}"
 echo "CLEO_ENABLEDEBUG = ${CLEO_ENABLEDEBUG}"
 echo "CLEO_ENABLEYAC = ${CLEO_ENABLEYAC}"
 echo "CLEO_YACYAXTROOT = ${CLEO_YACYAXTROOT}"
+echo "CLEO_ENABLE_MPTRAC = ${CLEO_ENABLE_MPTRAC}"
 echo "executables = ${executables}"
 echo "### ------------------------------------------- ###"
 ### ---------------------------------------------------- ###

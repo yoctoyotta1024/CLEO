@@ -15,7 +15,8 @@ set(CLEOLIBS gridboxes initialise observers runcleo superdrops zarr)
 add_executable(fromfile EXCLUDE_FROM_ALL "main_fromfile.cpp")
 
 # Add directories and link libraries to target
-target_link_libraries(fromfile PRIVATE coupldyn_fromfile cartesiandomain "${CLEOLIBS}")
+target_link_libraries(fromfile PRIVATE coupldyn_fromfile cartesiandomain
+  cartesian_movement "${CLEOLIBS}")
 target_link_libraries(fromfile PUBLIC Kokkos::kokkos MPI::MPI_CXX)
 target_include_directories(fromfile PRIVATE "${CLEO_SOURCE_DIR}/libs" ${MPI_INCLUDE_PATH}) # CLEO libs directory
 

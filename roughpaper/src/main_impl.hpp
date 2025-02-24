@@ -36,6 +36,7 @@
 #include "cartesiandomain/movement/add_supers_at_domain_top.hpp"
 #include "cartesiandomain/movement/cartesian_motion.hpp"
 #include "cartesiandomain/movement/cartesian_movement.hpp"
+#include "cartesiandomain/mptrac_movement/mptrac_movement.hpp"
 #include "cartesiandomain/movement/null_boundary_conditions.hpp"
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
 #include "coupldyn_fromfile/fromfilecomms.hpp"
@@ -122,7 +123,8 @@ template <GridboxMaps GbxMaps>
 inline auto create_movement(const Config &config, const Timesteps &tsteps, const GbxMaps &gbxmaps) {
   const auto motion = create_motion(tsteps.get_motionstep());
   const auto boundary_conditions = create_boundary_conditions(config);
-  const auto movement = cartesian_movement(gbxmaps, motion, boundary_conditions);
+  // const auto movement = cartesian_movement(gbxmaps, motion, boundary_conditions);
+  const auto movement = mptrac_movement(gbxmaps, motion, boundary_conditions);
   return movement;
 }
 

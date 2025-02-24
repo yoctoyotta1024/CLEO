@@ -15,7 +15,7 @@ set(CLEOLIBS gridboxes initialise observers runcleo superdrops zarr)
 add_executable(testikstraubcolls EXCLUDE_FROM_ALL "main_testikstraubcolls.cpp")
 
 # Add directories and link libraries to target
-target_link_libraries(testikstraubcolls PRIVATE cartesiandomain "${CLEOLIBS}")
+target_link_libraries(testikstraubcolls PRIVATE cartesiandomain cartesian_movement "${CLEOLIBS}")
 target_link_libraries(testikstraubcolls PUBLIC Kokkos::kokkos)
 target_include_directories(testikstraubcolls PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
 

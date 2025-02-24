@@ -25,7 +25,7 @@ add_library("${LIBNAME}" STATIC ${SOURCES})
 target_include_directories(${LIBNAME} PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
 
 # Link libraries to target library
-set(LINKLIBS initialise superdrops gridboxes movement)
+set(LINKLIBS initialise superdrops gridboxes)
 target_link_libraries(${LIBNAME} PUBLIC "${LINKLIBS}")
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 
@@ -39,4 +39,8 @@ set_target_properties(${LIBNAME} PROPERTIES
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)
 
-add_subdirectory(movement)
+add_subdirectory(movement EXCLUDE_FROM_ALL)
+
+if(ENABLE_MPTRAC)
+  add_subdirectory(mptrac_movement EXCLUDE_FROM_ALL)
+endif()

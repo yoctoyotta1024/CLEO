@@ -15,7 +15,8 @@ set(CLEOLIBS gridboxes initialise observers runcleo superdrops zarr)
 add_executable(bubble3d EXCLUDE_FROM_ALL "main_bubble3d.cpp")
 
 # Add directories and link libraries to target
-target_link_libraries(bubble3d PRIVATE coupldyn_yac cartesiandomain "${CLEOLIBS}")
+target_link_libraries(bubble3d PRIVATE coupldyn_yac cartesiandomain
+  cartesian_movement "${CLEOLIBS}")
 target_link_libraries(bubble3d PUBLIC Kokkos::kokkos)
 target_include_directories(bubble3d PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
 

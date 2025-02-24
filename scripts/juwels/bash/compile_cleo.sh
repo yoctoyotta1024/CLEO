@@ -25,15 +25,23 @@ bashsrc=${CLEO_PATH2CLEO}/scripts/juwels/bash/src
 ### -------------------- check inputs ------------------ ###
 source ${bashsrc}/check_inputs.sh
 check_args_not_empty "${CLEO_BUILDTYPE}" "${CLEO_COMPILERNAME}" \
-  "${CLEO_PATH2CLEO}" "${CLEO_PATH2BUILD}"
+  "${CLEO_PATH2CLEO}" "${CLEO_PATH2BUILD}" "${CLEO_ENABLE_MPTRAC}"
 
 check_source_and_build_paths
 check_buildtype
 check_compilername
 ### ---------------------------------------------------- ###
 
+
 ### ----------------- load compiler(s) ----------------- ###
+bashsrc=${CLEO_PATH2CLEO}/scripts/juwels/bash/src
 source ${bashsrc}/juwels_packages.sh
+
+if [ "${CLEO_BUILDTYPE}" == "cuda" ]
+then
+  echo "Bad inputs, CUDA build enabled but building CLEO with CUDA on JUWELS is not currently supported"
+  exit 1
+fi
 
 if [ "${CLEO_COMPILERNAME}" == "intel" ]
 then
@@ -45,11 +53,19 @@ then
   module load ${juwels_gcc}
   module load ${juwels_gcc_mpi}
   module load ${juwels_gcc_cmake}
-  if [ "${CLEO_BUILDTYPE}" == "cuda" ]
+fi
+### ---------------------------------------------------- ###
+
+### ----------- MPTRAC compile-time settings ----------- ###
+if [ "${CLEO_ENABLE_MPTRAC}" == "true" ]
+then
+  if [ "${CLEO_COMPILERNAME}" != "gcc" ]
   then
-    echo "Bad inputs, CUDA build enabled but building CLEO with CUDA on JUWELS is not currently supported"
+    echo "Bad inputs, MPTRAC can only supported with gcc compilation on JUWELS"
     exit 1
   fi
+  module load ${juwels_gcc_gsl}
+  module load ${juwels_gcc_netcdf}
 fi
 ### ---------------------------------------------------- ###
 
@@ -59,6 +75,7 @@ echo "CLEO_BUILDTYPE: ${CLEO_BUILDTYPE}"
 echo "CLEO_COMPILERNAME: ${CLEO_COMPILERNAME}"
 echo "CLEO_PATH2CLEO: ${CLEO_PATH2CLEO}"
 echo "CLEO_PATH2BUILD: ${CLEO_PATH2BUILD}"
+echo "CLEO_ENABLE_MPTRAC: ${CLEO_ENABLE_MPTRAC}"
 
 echo "executables: ${executables}"
 echo "make_clean: ${make_clean}"
