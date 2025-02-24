@@ -3,13 +3,13 @@
  *
  *
  * ----- CLEO -----
- * File: cartesianmotion.hpp
- * Project: cartesiandomain
+ * File: cartesian_motion.hpp
+ * Project: movement
  * Created Date: Wednesday 8th November 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 16th April 2024
+ * Last Modified: Monday 24th Febuary 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,23 +23,22 @@
  * conditions
  */
 
-#ifndef LIBS_CARTESIANDOMAIN_CARTESIANMOTION_HPP_
-#define LIBS_CARTESIANDOMAIN_CARTESIANMOTION_HPP_
+#ifndef LIBS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_MOTION_HPP_
+#define LIBS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_MOTION_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
 #include <cassert>
 #include <functional>
 
-#include "../cleoconstants.hpp"
+#include "../../cleoconstants.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/doubly_periodic_domain.hpp"
 #include "gridboxes/predcorrmotion.hpp"
 #include "superdrops/superdrop.hpp"
 #include "superdrops/terminalvelocity.hpp"
 
-/* wrapper of operator for use of function
-in PredCorrMotion's CheckBounds type */
+/* wrapper of operator for use of function in PredCorrMotion's CheckBounds type */
 struct CartesianCheckBounds {
   /* raise error if superdrop not either out of domain
   or within bounds (ie. lower_bound <= coord < upper_bound) */
@@ -69,4 +68,4 @@ inline PredCorrMotion<CartesianMaps, TV, CartesianCheckBounds> CartesianMotion(
                                                                  CartesianCheckBounds{});
 }
 
-#endif  // LIBS_CARTESIANDOMAIN_CARTESIANMOTION_HPP_
+#endif  // LIBS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_MOTION_HPP_

@@ -30,9 +30,10 @@
 
 #include "zarr/dataset.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
-#include "cartesiandomain/cartesianmotion.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
-#include "cartesiandomain/null_boundary_conditions.hpp"
+#include "cartesiandomain/movement/cartesian_motion.hpp"
+#include "cartesiandomain/movement/cartesian_movement.hpp"
+#include "cartesiandomain/movement/null_boundary_conditions.hpp"
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
 #include "coupldyn_fromfile/fromfilecomms.hpp"
 #include "gridboxes/gridboxmaps.hpp"
@@ -94,7 +95,7 @@ inline auto create_movement(const unsigned int motionstep, const CartesianMaps &
 
   const auto boundary_conditions = NullBoundaryConditions{};
 
-  return MoveSupersInDomain(gbxmaps, motion, boundary_conditions);
+  return cartesian_movement(gbxmaps, motion, boundary_conditions);
 }
 
 inline MicrophysicalProcess auto config_condensation(const Config &config,
