@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Superdrops Observer" href="superdrops_observer.html" /><link rel="prev" title="Time Observer" href="time_observer.html" />
 
-    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+    <!-- Generated with Sphinx 8.2.1 and Furo 2024.08.06 -->
         <title>Gbxindex Observer - CLEO 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
@@ -600,7 +600,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 17 February 2025</div>
+              Last updated on 24 February 2025</div>
           </div>
           <div class="right-details">
             
@@ -623,24 +623,24 @@
             <ul>
 <li><a class="reference internal" href="#">Gbxindex Observer</a><ul>
 <li><a class="reference internal" href="#_CPPv415GbxIndexFunctor"><code class="docutils literal notranslate"><span class="pre">GbxIndexFunctor</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N15GbxIndexFunctor15GbxIndexFunctorEK14viewd_constgbxN6BufferI8uint32_tE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">GbxIndexFunctor::GbxIndexFunctor()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15GbxIndexFunctorclEK6size_t"><code class="docutils literal notranslate"><span class="pre">GbxIndexFunctor::operator()()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15GbxIndexFunctor6d_gbxsE"><code class="docutils literal notranslate"><span class="pre">GbxIndexFunctor::d_gbxs</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15GbxIndexFunctor6d_dataE"><code class="docutils literal notranslate"><span class="pre">GbxIndexFunctor::d_data</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15GbxIndexFunctor15GbxIndexFunctorEK14viewd_constgbxN6BufferI8uint32_tE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">GbxIndexFunctor()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15GbxIndexFunctorclEK6size_t"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15GbxIndexFunctor6d_gbxsE"><code class="docutils literal notranslate"><span class="pre">d_gbxs</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15GbxIndexFunctor6d_dataE"><code class="docutils literal notranslate"><span class="pre">d_data</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv4I0E16GbxindexObserver"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N16GbxindexObserver16GbxindexObserverER7DatasetI5StoreEK6size_tK6size_t"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver::GbxindexObserver()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N16GbxindexObserverD0Ev"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver::~GbxindexObserver()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK16GbxindexObserver19before_timesteppingEK14viewd_constgbx"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver::before_timestepping()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK16GbxindexObserver18after_timesteppingEv"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver::after_timestepping()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK16GbxindexObserver13at_start_stepEKjK14viewd_constgbxK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver::at_start_step()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK16GbxindexObserver14get_sdmmonitorEv"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver::get_sdmmonitor()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK16GbxindexObserver8next_obsEKj"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver::next_obs()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK16GbxindexObserver7on_stepEKj"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver::on_step()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK16GbxindexObserver18collect_gbxindexesEK14viewd_constgbx"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver::collect_gbxindexes()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N16GbxindexObserver7datasetE"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver::dataset</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N16GbxindexObserver9xzarr_ptrE"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver::xzarr_ptr</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N16GbxindexObserver16GbxindexObserverER7DatasetI5StoreEK6size_tK6size_t"><code class="docutils literal notranslate"><span class="pre">GbxindexObserver()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N16GbxindexObserverD0Ev"><code class="docutils literal notranslate"><span class="pre">~GbxindexObserver()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK16GbxindexObserver19before_timesteppingEK14viewd_constgbx"><code class="docutils literal notranslate"><span class="pre">before_timestepping()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK16GbxindexObserver18after_timesteppingEv"><code class="docutils literal notranslate"><span class="pre">after_timestepping()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK16GbxindexObserver13at_start_stepEKjK14viewd_constgbxK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">at_start_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK16GbxindexObserver14get_sdmmonitorEv"><code class="docutils literal notranslate"><span class="pre">get_sdmmonitor()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK16GbxindexObserver8next_obsEKj"><code class="docutils literal notranslate"><span class="pre">next_obs()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK16GbxindexObserver7on_stepEKj"><code class="docutils literal notranslate"><span class="pre">on_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK16GbxindexObserver18collect_gbxindexesEK14viewd_constgbx"><code class="docutils literal notranslate"><span class="pre">collect_gbxindexes()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N16GbxindexObserver7datasetE"><code class="docutils literal notranslate"><span class="pre">dataset</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N16GbxindexObserver9xzarr_ptrE"><code class="docutils literal notranslate"><span class="pre">xzarr_ptr</span></code></a></li>
 </ul>
 </li>
 </ul>

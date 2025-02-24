@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="RunCLEO Module" href="../initialise/initialisemod.html" /><link rel="prev" title="WindVel Observer" href="windvel_observer.html" />
 
-    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+    <!-- Generated with Sphinx 8.2.1 and Furo 2024.08.06 -->
         <title>Massmoments Observer - CLEO 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
@@ -801,7 +801,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 17 February 2025</div>
+              Last updated on 24 February 2025</div>
           </div>
           <div class="right-details">
             
@@ -824,39 +824,39 @@
             <ul>
 <li><a class="reference internal" href="#">Massmoments Observer</a><ul>
 <li><a class="reference internal" href="#_CPPv415MassMomentsFunc"><code class="docutils literal notranslate"><span class="pre">MassMomentsFunc</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4NK15MassMomentsFuncclERK10TeamMemberK14viewd_constgbxK20subviewd_constsupersN6BufferI8uint64_tE18mirrorviewd_bufferEN6BufferIfE18mirrorviewd_bufferEN6BufferIfE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">MassMomentsFunc::operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15MassMomentsFuncclERK10TeamMemberK14viewd_constgbxK20subviewd_constsupersN6BufferI8uint64_tE18mirrorviewd_bufferEN6BufferIfE18mirrorviewd_bufferEN6BufferIfE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv424RaindropsMassMomentsFunc"><code class="docutils literal notranslate"><span class="pre">RaindropsMassMomentsFunc</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4NK24RaindropsMassMomentsFuncclERK10TeamMemberK14viewd_constgbxK20subviewd_constsupersN6BufferI8uint64_tE18mirrorviewd_bufferEN6BufferIfE18mirrorviewd_bufferEN6BufferIfE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">RaindropsMassMomentsFunc::operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK24RaindropsMassMomentsFuncclERK10TeamMemberK14viewd_constgbxK20subviewd_constsupersN6BufferI8uint64_tE18mirrorviewd_bufferEN6BufferIfE18mirrorviewd_bufferEN6BufferIfE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv4I00E18CollectMassMoments"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments18CollectMassMomentsEK11FunctorFuncK15XarrayZarrArrayI5Store8uint64_tEK15XarrayZarrArrayI5StorefEK15XarrayZarrArrayI5StorefEK6size_t"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::CollectMassMoments()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18CollectMassMoments11get_functorEK14viewd_constgbxK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::get_functor()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18CollectMassMoments15write_to_arraysERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::write_to_arrays()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18CollectMassMoments17write_arrayshapesERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::write_arrayshapes()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18CollectMassMoments22write_to_ragged_arraysERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::write_to_ragged_arrays()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18CollectMassMoments24write_ragged_arrayshapesERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::write_ragged_arrayshapes()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18CollectMassMoments16reallocate_viewsEK6size_t"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::reallocate_views()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4I0ENK18CollectMassMoments15write_one_arrayEvNSt10shared_ptrI14XarrayAndViewsI5Store1TEEERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::write_one_array()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4I0ENK18CollectMassMoments20write_one_arrayshapeEvNSt10shared_ptrI14XarrayAndViewsI5Store1TEEERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::write_one_arrayshape()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments5ffuncE"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::ffunc</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments8mom0_ptrE"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::mom0_ptr</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments8mom1_ptrE"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::mom1_ptr</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments8mom2_ptrE"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::mom2_ptr</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments18CollectMassMomentsEK11FunctorFuncK15XarrayZarrArrayI5Store8uint64_tEK15XarrayZarrArrayI5StorefEK15XarrayZarrArrayI5StorefEK6size_t"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18CollectMassMoments11get_functorEK14viewd_constgbxK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">get_functor()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18CollectMassMoments15write_to_arraysERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">write_to_arrays()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18CollectMassMoments17write_arrayshapesERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">write_arrayshapes()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18CollectMassMoments22write_to_ragged_arraysERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">write_to_ragged_arrays()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18CollectMassMoments24write_ragged_arrayshapesERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">write_ragged_arrayshapes()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18CollectMassMoments16reallocate_viewsEK6size_t"><code class="docutils literal notranslate"><span class="pre">reallocate_views()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I0ENK18CollectMassMoments15write_one_arrayEvNSt10shared_ptrI14XarrayAndViewsI5Store1TEEERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">write_one_array()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I0ENK18CollectMassMoments20write_one_arrayshapeEvNSt10shared_ptrI14XarrayAndViewsI5Store1TEEERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">write_one_arrayshape()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments5ffuncE"><code class="docutils literal notranslate"><span class="pre">ffunc</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments8mom0_ptrE"><code class="docutils literal notranslate"><span class="pre">mom0_ptr</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments8mom1_ptrE"><code class="docutils literal notranslate"><span class="pre">mom1_ptr</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments8mom2_ptrE"><code class="docutils literal notranslate"><span class="pre">mom2_ptr</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N18CollectMassMoments7FunctorE"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::Functor</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments7Functor16mirrorviewd_mom0E"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::Functor::mirrorviewd_mom0</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments7Functor16mirrorviewd_mom1E"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::Functor::mirrorviewd_mom1</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments7Functor16mirrorviewd_mom2E"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::Functor::mirrorviewd_mom2</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments7Functor7FunctorE11FunctorFuncK14viewd_constgbxK20subviewd_constsupers16mirrorviewd_mom016mirrorviewd_mom116mirrorviewd_mom2"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::Functor::Functor()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18CollectMassMoments7FunctorclERK10TeamMember"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::Functor::operator()()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments7Functor5ffuncE"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::Functor::ffunc</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments7Functor6d_gbxsE"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::Functor::d_gbxs</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments7Functor8d_supersE"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::Functor::d_supers</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments7Functor6d_mom0E"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::Functor::d_mom0</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments7Functor6d_mom1E"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::Functor::d_mom1</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments7Functor6d_mom2E"><code class="docutils literal notranslate"><span class="pre">CollectMassMoments::Functor::d_mom2</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments7Functor16mirrorviewd_mom0E"><code class="docutils literal notranslate"><span class="pre">mirrorviewd_mom0</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments7Functor16mirrorviewd_mom1E"><code class="docutils literal notranslate"><span class="pre">mirrorviewd_mom1</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments7Functor16mirrorviewd_mom2E"><code class="docutils literal notranslate"><span class="pre">mirrorviewd_mom2</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments7Functor7FunctorE11FunctorFuncK14viewd_constgbxK20subviewd_constsupers16mirrorviewd_mom016mirrorviewd_mom116mirrorviewd_mom2"><code class="docutils literal notranslate"><span class="pre">Functor()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18CollectMassMoments7FunctorclERK10TeamMember"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments7Functor5ffuncE"><code class="docutils literal notranslate"><span class="pre">ffunc</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments7Functor6d_gbxsE"><code class="docutils literal notranslate"><span class="pre">d_gbxs</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments7Functor8d_supersE"><code class="docutils literal notranslate"><span class="pre">d_supers</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments7Functor6d_mom0E"><code class="docutils literal notranslate"><span class="pre">d_mom0</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments7Functor6d_mom1E"><code class="docutils literal notranslate"><span class="pre">d_mom1</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18CollectMassMoments7Functor6d_mom2E"><code class="docutils literal notranslate"><span class="pre">d_mom2</span></code></a></li>
 </ul>
 </li>
 </ul>

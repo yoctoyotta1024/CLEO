@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Super-Droplet Kokkos Aliases" href="kokkosaliases_sd.html" /><link rel="prev" title="Condensation" href="condensation.html" />
 
-    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+    <!-- Generated with Sphinx 8.2.1 and Furo 2024.08.06 -->
         <title>Implicit Euler Method for Condensation - CLEO 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
@@ -826,7 +826,7 @@ Forward timestep previous radius ‘rprev’ by delt using an Implicit Euler met
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 17 February 2025</div>
+              Last updated on 24 February 2025</div>
           </div>
           <div class="right-details">
             
@@ -849,37 +849,37 @@ Forward timestep previous radius ‘rprev’ by delt using an Implicit Euler met
             <ul>
 <li><a class="reference internal" href="#">Implicit Euler Method for Condensation</a><ul>
 <li><a class="reference internal" href="#_CPPv418ImplicitIterations"><code class="docutils literal notranslate"><span class="pre">ImplicitIterations</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N18ImplicitIterations18ImplicitIterationsEK6size_tKdKd"><code class="docutils literal notranslate"><span class="pre">ImplicitIterations::ImplicitIterations()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18ImplicitIterations26integrate_condensation_odeERK12ODEConstantsKdKdd"><code class="docutils literal notranslate"><span class="pre">ImplicitIterations::integrate_condensation_ode()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18ImplicitIterations12initialguessERK12ODEConstantsKd"><code class="docutils literal notranslate"><span class="pre">ImplicitIterations::initialguess()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18ImplicitIterations25newtonraphson_niterationsERK12ODEConstantsKdKddK6size_t"><code class="docutils literal notranslate"><span class="pre">ImplicitIterations::newtonraphson_niterations()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18ImplicitIterations28newtonraphson_untilconvergedERK12ODEConstantsK6size_tKdKdd"><code class="docutils literal notranslate"><span class="pre">ImplicitIterations::newtonraphson_untilconverged()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18ImplicitIterations29iterate_rootfinding_algorithmERK12ODEConstantsKdKdd"><code class="docutils literal notranslate"><span class="pre">ImplicitIterations::iterate_rootfinding_algorithm()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18ImplicitIterations9ode_gfuncERK12ODEConstantsKdKdKd"><code class="docutils literal notranslate"><span class="pre">ImplicitIterations::ode_gfunc()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18ImplicitIterations19ode_gfuncderivativeERK12ODEConstantsKdKd"><code class="docutils literal notranslate"><span class="pre">ImplicitIterations::ode_gfuncderivative()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18ImplicitIterations21check_for_convergenceEKdKd"><code class="docutils literal notranslate"><span class="pre">ImplicitIterations::check_for_convergence()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18ImplicitIterations9maxnitersE"><code class="docutils literal notranslate"><span class="pre">ImplicitIterations::maxniters</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18ImplicitIterations4rtolE"><code class="docutils literal notranslate"><span class="pre">ImplicitIterations::rtol</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18ImplicitIterations4atolE"><code class="docutils literal notranslate"><span class="pre">ImplicitIterations::atol</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18ImplicitIterations18ImplicitIterationsEK6size_tKdKd"><code class="docutils literal notranslate"><span class="pre">ImplicitIterations()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18ImplicitIterations26integrate_condensation_odeERK12ODEConstantsKdKdd"><code class="docutils literal notranslate"><span class="pre">integrate_condensation_ode()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18ImplicitIterations12initialguessERK12ODEConstantsKd"><code class="docutils literal notranslate"><span class="pre">initialguess()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18ImplicitIterations25newtonraphson_niterationsERK12ODEConstantsKdKddK6size_t"><code class="docutils literal notranslate"><span class="pre">newtonraphson_niterations()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18ImplicitIterations28newtonraphson_untilconvergedERK12ODEConstantsK6size_tKdKdd"><code class="docutils literal notranslate"><span class="pre">newtonraphson_untilconverged()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18ImplicitIterations29iterate_rootfinding_algorithmERK12ODEConstantsKdKdd"><code class="docutils literal notranslate"><span class="pre">iterate_rootfinding_algorithm()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18ImplicitIterations9ode_gfuncERK12ODEConstantsKdKdKd"><code class="docutils literal notranslate"><span class="pre">ode_gfunc()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18ImplicitIterations19ode_gfuncderivativeERK12ODEConstantsKdKd"><code class="docutils literal notranslate"><span class="pre">ode_gfuncderivative()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18ImplicitIterations21check_for_convergenceEKdKd"><code class="docutils literal notranslate"><span class="pre">check_for_convergence()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18ImplicitIterations9maxnitersE"><code class="docutils literal notranslate"><span class="pre">maxniters</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18ImplicitIterations4rtolE"><code class="docutils literal notranslate"><span class="pre">rtol</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18ImplicitIterations4atolE"><code class="docutils literal notranslate"><span class="pre">atol</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N18ImplicitIterations12ODEConstantsE"><code class="docutils literal notranslate"><span class="pre">ImplicitIterations::ODEConstants</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N18ImplicitIterations12ODEConstants7s_ratioE"><code class="docutils literal notranslate"><span class="pre">ImplicitIterations::ODEConstants::s_ratio</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18ImplicitIterations12ODEConstants4akohE"><code class="docutils literal notranslate"><span class="pre">ImplicitIterations::ODEConstants::akoh</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18ImplicitIterations12ODEConstants4bkohE"><code class="docutils literal notranslate"><span class="pre">ImplicitIterations::ODEConstants::bkoh</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18ImplicitIterations12ODEConstants7ffactorE"><code class="docutils literal notranslate"><span class="pre">ImplicitIterations::ODEConstants::ffactor</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18ImplicitIterations12ODEConstants7s_ratioE"><code class="docutils literal notranslate"><span class="pre">s_ratio</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18ImplicitIterations12ODEConstants4akohE"><code class="docutils literal notranslate"><span class="pre">akoh</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18ImplicitIterations12ODEConstants4bkohE"><code class="docutils literal notranslate"><span class="pre">bkoh</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18ImplicitIterations12ODEConstants7ffactorE"><code class="docutils literal notranslate"><span class="pre">ffactor</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv413ImplicitEuler"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N13ImplicitEuler13ImplicitEulerEKdK6size_tKdKdKd"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::ImplicitEuler()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK13ImplicitEuler18solve_condensationEKdKN6Kokkos4pairIddEEKdKd"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::solve_condensation()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK13ImplicitEuler21first_unique_criteriaERKN18ImplicitIterations12ODEConstantsEKdKd"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::first_unique_criteria()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK13ImplicitEuler16critial_timestepERKN18ImplicitIterations12ODEConstantsE"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::critial_timestep()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK13ImplicitEuler22second_unique_criteriaERKN18ImplicitIterations12ODEConstantsEKd"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::second_unique_criteria()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK13ImplicitEuler35solve_with_adaptive_subtimesteppingERKN18ImplicitIterations12ODEConstantsEKddd"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::solve_with_adaptive_subtimestepping()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N13ImplicitEuler4deltE"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::delt</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N13ImplicitEuler10minsubdeltE"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::minsubdelt</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N13ImplicitEuler6implitE"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler::implit</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13ImplicitEuler13ImplicitEulerEKdK6size_tKdKdKd"><code class="docutils literal notranslate"><span class="pre">ImplicitEuler()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13ImplicitEuler18solve_condensationEKdKN6Kokkos4pairIddEEKdKd"><code class="docutils literal notranslate"><span class="pre">solve_condensation()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13ImplicitEuler21first_unique_criteriaERKN18ImplicitIterations12ODEConstantsEKdKd"><code class="docutils literal notranslate"><span class="pre">first_unique_criteria()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13ImplicitEuler16critial_timestepERKN18ImplicitIterations12ODEConstantsE"><code class="docutils literal notranslate"><span class="pre">critial_timestep()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13ImplicitEuler22second_unique_criteriaERKN18ImplicitIterations12ODEConstantsEKd"><code class="docutils literal notranslate"><span class="pre">second_unique_criteria()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13ImplicitEuler35solve_with_adaptive_subtimesteppingERKN18ImplicitIterations12ODEConstantsEKddd"><code class="docutils literal notranslate"><span class="pre">solve_with_adaptive_subtimestepping()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13ImplicitEuler4deltE"><code class="docutils literal notranslate"><span class="pre">delt</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13ImplicitEuler10minsubdeltE"><code class="docutils literal notranslate"><span class="pre">minsubdelt</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13ImplicitEuler6implitE"><code class="docutils literal notranslate"><span class="pre">implit</span></code></a></li>
 </ul>
 </li>
 </ul>

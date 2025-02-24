@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Dataset" href="dataset.html" /><link rel="prev" title="Buffer" href="buffer.html" />
 
-    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+    <!-- Generated with Sphinx 8.2.1 and Furo 2024.08.06 -->
         <title>Chunks - CLEO 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
@@ -619,7 +619,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 17 February 2025</div>
+              Last updated on 24 February 2025</div>
           </div>
           <div class="right-details">
             
@@ -644,16 +644,16 @@
 <li><a class="reference internal" href="#_CPPv411vec_productRKNSt6vectorI6size_tEE"><code class="docutils literal notranslate"><span class="pre">vec_product()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv411vec_productRKNSt6vectorI6size_tEEK6size_t"><code class="docutils literal notranslate"><span class="pre">vec_product()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv46Chunks"><code class="docutils literal notranslate"><span class="pre">Chunks</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N6Chunks6ChunksERKNSt6vectorI6size_tEERKNSt6vectorI6size_tEE"><code class="docutils literal notranslate"><span class="pre">Chunks::Chunks()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK6Chunks14get_chunkshapeEv"><code class="docutils literal notranslate"><span class="pre">Chunks::get_chunkshape()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK6Chunks24get_reducedarray_nchunksEv"><code class="docutils literal notranslate"><span class="pre">Chunks::get_reducedarray_nchunks()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK6Chunks22get_reduced_arrayshapeEv"><code class="docutils literal notranslate"><span class="pre">Chunks::get_reduced_arrayshape()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4I00ENK6Chunks11write_chunkE6size_tR5StoreKNSt11string_viewEK6size_tR6BufferI1TE"><code class="docutils literal notranslate"><span class="pre">Chunks::write_chunk()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4I00ENK6Chunks11write_chunkE6size_tR5StoreKNSt11string_viewEK6size_tKN6BufferI1TE15subviewh_bufferE"><code class="docutils literal notranslate"><span class="pre">Chunks::write_chunk()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4I00ENK6Chunks12write_chunksE6size_tR5StoreKNSt11string_viewEKN6BufferI1TE15subviewh_bufferEK6size_tK6size_tK6size_t"><code class="docutils literal notranslate"><span class="pre">Chunks::write_chunks()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK6Chunks11chunk_labelEK6size_t"><code class="docutils literal notranslate"><span class="pre">Chunks::chunk_label()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6Chunks10chunkshapeE"><code class="docutils literal notranslate"><span class="pre">Chunks::chunkshape</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6Chunks20reducedarray_nchunksE"><code class="docutils literal notranslate"><span class="pre">Chunks::reducedarray_nchunks</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6Chunks6ChunksERKNSt6vectorI6size_tEERKNSt6vectorI6size_tEE"><code class="docutils literal notranslate"><span class="pre">Chunks()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6Chunks14get_chunkshapeEv"><code class="docutils literal notranslate"><span class="pre">get_chunkshape()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6Chunks24get_reducedarray_nchunksEv"><code class="docutils literal notranslate"><span class="pre">get_reducedarray_nchunks()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6Chunks22get_reduced_arrayshapeEv"><code class="docutils literal notranslate"><span class="pre">get_reduced_arrayshape()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I00ENK6Chunks11write_chunkE6size_tR5StoreKNSt11string_viewEK6size_tR6BufferI1TE"><code class="docutils literal notranslate"><span class="pre">write_chunk()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I00ENK6Chunks11write_chunkE6size_tR5StoreKNSt11string_viewEK6size_tKN6BufferI1TE15subviewh_bufferE"><code class="docutils literal notranslate"><span class="pre">write_chunk()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I00ENK6Chunks12write_chunksE6size_tR5StoreKNSt11string_viewEKN6BufferI1TE15subviewh_bufferEK6size_tK6size_tK6size_t"><code class="docutils literal notranslate"><span class="pre">write_chunks()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6Chunks11chunk_labelEK6size_t"><code class="docutils literal notranslate"><span class="pre">chunk_label()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6Chunks10chunkshapeE"><code class="docutils literal notranslate"><span class="pre">chunkshape</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6Chunks20reducedarray_nchunksE"><code class="docutils literal notranslate"><span class="pre">reducedarray_nchunks</span></code></a></li>
 </ul>
 </li>
 </ul>

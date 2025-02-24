@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Time Observer" href="time_observer.html" /><link rel="prev" title="Collect Data For Dataset" href="collect_data_for_dataset.html" />
 
-    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+    <!-- Generated with Sphinx 8.2.1 and Furo 2024.08.06 -->
         <title>Generic Collect Data - CLEO 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
@@ -667,7 +667,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 17 February 2025</div>
+              Last updated on 24 February 2025</div>
           </div>
           <div class="right-details">
             
@@ -690,32 +690,32 @@
             <ul>
 <li><a class="reference internal" href="#">Generic Collect Data</a><ul>
 <li><a class="reference internal" href="#_CPPv4I00E14XarrayAndViews"><code class="docutils literal notranslate"><span class="pre">XarrayAndViews</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N14XarrayAndViews10viewh_dataE"><code class="docutils literal notranslate"><span class="pre">XarrayAndViews::viewh_data</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N14XarrayAndViews16mirrorviewd_dataE"><code class="docutils literal notranslate"><span class="pre">XarrayAndViews::mirrorviewd_data</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N14XarrayAndViews14XarrayAndViewsEK15XarrayZarrArrayI5Store1TEK6size_t"><code class="docutils literal notranslate"><span class="pre">XarrayAndViews::XarrayAndViews()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N14XarrayAndViews5xzarrE"><code class="docutils literal notranslate"><span class="pre">XarrayAndViews::xzarr</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N14XarrayAndViews6h_dataE"><code class="docutils literal notranslate"><span class="pre">XarrayAndViews::h_data</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N14XarrayAndViews6d_dataE"><code class="docutils literal notranslate"><span class="pre">XarrayAndViews::d_data</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14XarrayAndViews10viewh_dataE"><code class="docutils literal notranslate"><span class="pre">viewh_data</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14XarrayAndViews16mirrorviewd_dataE"><code class="docutils literal notranslate"><span class="pre">mirrorviewd_data</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14XarrayAndViews14XarrayAndViewsEK15XarrayZarrArrayI5Store1TEK6size_t"><code class="docutils literal notranslate"><span class="pre">XarrayAndViews()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14XarrayAndViews5xzarrE"><code class="docutils literal notranslate"><span class="pre">xzarr</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14XarrayAndViews6h_dataE"><code class="docutils literal notranslate"><span class="pre">h_data</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14XarrayAndViews6d_dataE"><code class="docutils literal notranslate"><span class="pre">d_data</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv4I000E18GenericCollectData"><code class="docutils literal notranslate"><span class="pre">GenericCollectData</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N18GenericCollectData18GenericCollectDataEK11FunctorFuncK15XarrayZarrArrayI5Store1TEK6size_t"><code class="docutils literal notranslate"><span class="pre">GenericCollectData::GenericCollectData()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18GenericCollectData11get_functorEK14viewd_constgbxK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">GenericCollectData::get_functor()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18GenericCollectData16reallocate_viewsEK6size_t"><code class="docutils literal notranslate"><span class="pre">GenericCollectData::reallocate_views()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18GenericCollectData15write_to_arraysERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">GenericCollectData::write_to_arrays()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18GenericCollectData22write_to_ragged_arraysERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">GenericCollectData::write_to_ragged_arrays()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18GenericCollectData17write_arrayshapesERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">GenericCollectData::write_arrayshapes()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18GenericCollectData24write_ragged_arrayshapesERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">GenericCollectData::write_ragged_arrayshapes()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18GenericCollectData5ffuncE"><code class="docutils literal notranslate"><span class="pre">GenericCollectData::ffunc</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18GenericCollectData3ptrE"><code class="docutils literal notranslate"><span class="pre">GenericCollectData::ptr</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18GenericCollectData18GenericCollectDataEK11FunctorFuncK15XarrayZarrArrayI5Store1TEK6size_t"><code class="docutils literal notranslate"><span class="pre">GenericCollectData()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18GenericCollectData11get_functorEK14viewd_constgbxK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">get_functor()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18GenericCollectData16reallocate_viewsEK6size_t"><code class="docutils literal notranslate"><span class="pre">reallocate_views()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18GenericCollectData15write_to_arraysERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">write_to_arrays()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18GenericCollectData22write_to_ragged_arraysERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">write_to_ragged_arrays()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18GenericCollectData17write_arrayshapesERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">write_arrayshapes()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18GenericCollectData24write_ragged_arrayshapesERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">write_ragged_arrayshapes()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18GenericCollectData5ffuncE"><code class="docutils literal notranslate"><span class="pre">ffunc</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18GenericCollectData3ptrE"><code class="docutils literal notranslate"><span class="pre">ptr</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N18GenericCollectData7FunctorE"><code class="docutils literal notranslate"><span class="pre">GenericCollectData::Functor</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N18GenericCollectData7Functor16mirrorviewd_dataE"><code class="docutils literal notranslate"><span class="pre">GenericCollectData::Functor::mirrorviewd_data</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18GenericCollectData7Functor7FunctorE11FunctorFuncK14viewd_constgbxK20subviewd_constsupers16mirrorviewd_data"><code class="docutils literal notranslate"><span class="pre">GenericCollectData::Functor::Functor()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK18GenericCollectData7FunctorclEK6size_t"><code class="docutils literal notranslate"><span class="pre">GenericCollectData::Functor::operator()()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18GenericCollectData7Functor5ffuncE"><code class="docutils literal notranslate"><span class="pre">GenericCollectData::Functor::ffunc</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18GenericCollectData7Functor6d_gbxsE"><code class="docutils literal notranslate"><span class="pre">GenericCollectData::Functor::d_gbxs</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18GenericCollectData7Functor8d_supersE"><code class="docutils literal notranslate"><span class="pre">GenericCollectData::Functor::d_supers</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N18GenericCollectData7Functor6d_dataE"><code class="docutils literal notranslate"><span class="pre">GenericCollectData::Functor::d_data</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18GenericCollectData7Functor16mirrorviewd_dataE"><code class="docutils literal notranslate"><span class="pre">mirrorviewd_data</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18GenericCollectData7Functor7FunctorE11FunctorFuncK14viewd_constgbxK20subviewd_constsupers16mirrorviewd_data"><code class="docutils literal notranslate"><span class="pre">Functor()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK18GenericCollectData7FunctorclEK6size_t"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18GenericCollectData7Functor5ffuncE"><code class="docutils literal notranslate"><span class="pre">ffunc</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18GenericCollectData7Functor6d_gbxsE"><code class="docutils literal notranslate"><span class="pre">d_gbxs</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18GenericCollectData7Functor8d_supersE"><code class="docutils literal notranslate"><span class="pre">d_supers</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N18GenericCollectData7Functor6d_dataE"><code class="docutils literal notranslate"><span class="pre">d_data</span></code></a></li>
 </ul>
 </li>
 </ul>

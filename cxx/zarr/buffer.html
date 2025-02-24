@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Chunks" href="chunks.html" /><link rel="prev" title="Zarr Module" href="zarrmod.html" />
 
-    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+    <!-- Generated with Sphinx 8.2.1 and Furo 2024.08.06 -->
         <title>Buffer - CLEO 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
@@ -591,7 +591,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 17 February 2025</div>
+              Last updated on 24 February 2025</div>
           </div>
           <div class="right-details">
             
@@ -614,21 +614,21 @@
             <ul>
 <li><a class="reference internal" href="#">Buffer</a><ul>
 <li><a class="reference internal" href="#_CPPv4I0E6Buffer"><code class="docutils literal notranslate"><span class="pre">Buffer</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N6Buffer12viewh_bufferE"><code class="docutils literal notranslate"><span class="pre">Buffer::viewh_buffer</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6Buffer15subviewh_bufferE"><code class="docutils literal notranslate"><span class="pre">Buffer::subviewh_buffer</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6Buffer18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">Buffer::mirrorviewd_buffer</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6Buffer6BufferEK6size_t"><code class="docutils literal notranslate"><span class="pre">Buffer::Buffer()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK6Buffer13get_chunksizeEv"><code class="docutils literal notranslate"><span class="pre">Buffer::get_chunksize()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK6Buffer8get_fillEv"><code class="docutils literal notranslate"><span class="pre">Buffer::get_fill()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK6Buffer9get_spaceEv"><code class="docutils literal notranslate"><span class="pre">Buffer::get_space()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6Buffer14copy_to_bufferEK12viewh_buffer"><code class="docutils literal notranslate"><span class="pre">Buffer::copy_to_buffer()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6Buffer14copy_to_bufferEK1T"><code class="docutils literal notranslate"><span class="pre">Buffer::copy_to_buffer()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4I0EN6Buffer21write_buffer_to_chunkEvR5StoreNSt11string_viewERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">Buffer::write_buffer_to_chunk()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6Buffer12reset_bufferEv"><code class="docutils literal notranslate"><span class="pre">Buffer::reset_buffer()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6Buffer20copy_ndata_to_bufferEK6size_tK12viewh_buffer"><code class="docutils literal notranslate"><span class="pre">Buffer::copy_ndata_to_buffer()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6Buffer9chunksizeE"><code class="docutils literal notranslate"><span class="pre">Buffer::chunksize</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6Buffer4fillE"><code class="docutils literal notranslate"><span class="pre">Buffer::fill</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N6Buffer6bufferE"><code class="docutils literal notranslate"><span class="pre">Buffer::buffer</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6Buffer12viewh_bufferE"><code class="docutils literal notranslate"><span class="pre">viewh_buffer</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6Buffer15subviewh_bufferE"><code class="docutils literal notranslate"><span class="pre">subviewh_buffer</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6Buffer18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">mirrorviewd_buffer</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6Buffer6BufferEK6size_t"><code class="docutils literal notranslate"><span class="pre">Buffer()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6Buffer13get_chunksizeEv"><code class="docutils literal notranslate"><span class="pre">get_chunksize()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6Buffer8get_fillEv"><code class="docutils literal notranslate"><span class="pre">get_fill()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6Buffer9get_spaceEv"><code class="docutils literal notranslate"><span class="pre">get_space()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6Buffer14copy_to_bufferEK12viewh_buffer"><code class="docutils literal notranslate"><span class="pre">copy_to_buffer()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6Buffer14copy_to_bufferEK1T"><code class="docutils literal notranslate"><span class="pre">copy_to_buffer()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I0EN6Buffer21write_buffer_to_chunkEvR5StoreNSt11string_viewERKNSt6stringE"><code class="docutils literal notranslate"><span class="pre">write_buffer_to_chunk()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6Buffer12reset_bufferEv"><code class="docutils literal notranslate"><span class="pre">reset_buffer()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6Buffer20copy_ndata_to_bufferEK6size_tK12viewh_buffer"><code class="docutils literal notranslate"><span class="pre">copy_ndata_to_buffer()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6Buffer9chunksizeE"><code class="docutils literal notranslate"><span class="pre">chunksize</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6Buffer4fillE"><code class="docutils literal notranslate"><span class="pre">fill</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6Buffer6bufferE"><code class="docutils literal notranslate"><span class="pre">buffer</span></code></a></li>
 </ul>
 </li>
 </ul>

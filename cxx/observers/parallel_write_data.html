@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Collect Data For Dataset" href="collect_data_for_dataset.html" /><link rel="prev" title="Template for Observer to Write To Dataset" href="write_to_dataset_observer.html" />
 
-    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+    <!-- Generated with Sphinx 8.2.1 and Furo 2024.08.06 -->
         <title>Parallel Write Data - CLEO 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
@@ -665,7 +665,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 17 February 2025</div>
+              Last updated on 24 February 2025</div>
           </div>
           <div class="right-details">
             
@@ -688,31 +688,31 @@
             <ul>
 <li><a class="reference internal" href="#">Parallel Write Data</a><ul>
 <li><a class="reference internal" href="#_CPPv432ParallelGridboxesRangePolicyFunc"><code class="docutils literal notranslate"><span class="pre">ParallelGridboxesRangePolicyFunc</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4I0ENK32ParallelGridboxesRangePolicyFuncclEvK7FunctorK14viewd_constgbx"><code class="docutils literal notranslate"><span class="pre">ParallelGridboxesRangePolicyFunc::operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I0ENK32ParallelGridboxesRangePolicyFuncclEvK7FunctorK14viewd_constgbx"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv431ParallelGridboxesTeamPolicyFunc"><code class="docutils literal notranslate"><span class="pre">ParallelGridboxesTeamPolicyFunc</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4I0ENK31ParallelGridboxesTeamPolicyFuncclEvK7FunctorK14viewd_constgbx"><code class="docutils literal notranslate"><span class="pre">ParallelGridboxesTeamPolicyFunc::operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I0ENK31ParallelGridboxesTeamPolicyFuncclEvK7FunctorK14viewd_constgbx"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv4I00_21CollectDataForDatasetI5StoreEE22ParallelWriteGridboxes"><code class="docutils literal notranslate"><span class="pre">ParallelWriteGridboxes</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N22ParallelWriteGridboxes22ParallelWriteGridboxesE21ParallelGridboxesFuncRK7DatasetI5StoreE11CollectData"><code class="docutils literal notranslate"><span class="pre">ParallelWriteGridboxes::ParallelWriteGridboxes()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N22ParallelWriteGridboxesD0Ev"><code class="docutils literal notranslate"><span class="pre">ParallelWriteGridboxes::~ParallelWriteGridboxes()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK22ParallelWriteGridboxesclEK14viewd_constgbxK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">ParallelWriteGridboxes::operator()()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N22ParallelWriteGridboxes23parallel_gridboxes_funcE"><code class="docutils literal notranslate"><span class="pre">ParallelWriteGridboxes::parallel_gridboxes_func</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N22ParallelWriteGridboxes7datasetE"><code class="docutils literal notranslate"><span class="pre">ParallelWriteGridboxes::dataset</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N22ParallelWriteGridboxes12collect_dataE"><code class="docutils literal notranslate"><span class="pre">ParallelWriteGridboxes::collect_data</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N22ParallelWriteGridboxes22ParallelWriteGridboxesE21ParallelGridboxesFuncRK7DatasetI5StoreE11CollectData"><code class="docutils literal notranslate"><span class="pre">ParallelWriteGridboxes()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N22ParallelWriteGridboxesD0Ev"><code class="docutils literal notranslate"><span class="pre">~ParallelWriteGridboxes()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK22ParallelWriteGridboxesclEK14viewd_constgbxK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N22ParallelWriteGridboxes23parallel_gridboxes_funcE"><code class="docutils literal notranslate"><span class="pre">parallel_gridboxes_func</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N22ParallelWriteGridboxes7datasetE"><code class="docutils literal notranslate"><span class="pre">dataset</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N22ParallelWriteGridboxes12collect_dataE"><code class="docutils literal notranslate"><span class="pre">collect_data</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv4I00E18CollectRaggedCount"><code class="docutils literal notranslate"><span class="pre">CollectRaggedCount</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I0_21CollectDataForDatasetI5StoreE_18CollectRaggedCountI5StoreEE19ParallelWriteSupers"><code class="docutils literal notranslate"><span class="pre">ParallelWriteSupers</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N19ParallelWriteSupers19ParallelWriteSupersERK7DatasetI5StoreE11CollectData11RaggedCount"><code class="docutils literal notranslate"><span class="pre">ParallelWriteSupers::ParallelWriteSupers()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N19ParallelWriteSupersD0Ev"><code class="docutils literal notranslate"><span class="pre">ParallelWriteSupers::~ParallelWriteSupers()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK19ParallelWriteSupersclEK14viewd_constgbxK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">ParallelWriteSupers::operator()()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4I0ENK19ParallelWriteSupers20parallel_supers_funcEvK7FunctorK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">ParallelWriteSupers::parallel_supers_func()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N19ParallelWriteSupers7datasetE"><code class="docutils literal notranslate"><span class="pre">ParallelWriteSupers::dataset</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N19ParallelWriteSupers12collect_dataE"><code class="docutils literal notranslate"><span class="pre">ParallelWriteSupers::collect_data</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N19ParallelWriteSupers12ragged_countE"><code class="docutils literal notranslate"><span class="pre">ParallelWriteSupers::ragged_count</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N19ParallelWriteSupers19ParallelWriteSupersERK7DatasetI5StoreE11CollectData11RaggedCount"><code class="docutils literal notranslate"><span class="pre">ParallelWriteSupers()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N19ParallelWriteSupersD0Ev"><code class="docutils literal notranslate"><span class="pre">~ParallelWriteSupers()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK19ParallelWriteSupersclEK14viewd_constgbxK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I0ENK19ParallelWriteSupers20parallel_supers_funcEvK7FunctorK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">parallel_supers_func()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N19ParallelWriteSupers7datasetE"><code class="docutils literal notranslate"><span class="pre">dataset</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N19ParallelWriteSupers12collect_dataE"><code class="docutils literal notranslate"><span class="pre">collect_data</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N19ParallelWriteSupers12ragged_countE"><code class="docutils literal notranslate"><span class="pre">ragged_count</span></code></a></li>
 </ul>
 </li>
 </ul>

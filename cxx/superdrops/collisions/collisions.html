@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Collision Kinetics" href="collisionkinetics.html" /><link rel="prev" title="Collisions Module" href="collisionsmod.html" />
 
-    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+    <!-- Generated with Sphinx 8.2.1 and Furo 2024.08.06 -->
         <title>Collisions - CLEO 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
@@ -627,7 +627,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 17 February 2025</div>
+              Last updated on 24 February 2025</div>
           </div>
           <div class="right-details">
             
@@ -652,17 +652,17 @@
 <li><a class="reference internal" href="#_CPPv4I0E15PairProbability"><code class="docutils literal notranslate"><span class="pre">PairProbability</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I0E10PairEnactX"><code class="docutils literal notranslate"><span class="pre">PairEnactX</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I_15PairProbability_10PairEnactXE12DoCollisions"><code class="docutils literal notranslate"><span class="pre">DoCollisions</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N12DoCollisions12DoCollisionsEKd11Probability14EnactCollision"><code class="docutils literal notranslate"><span class="pre">DoCollisions::DoCollisions()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK12DoCollisionsclERK10TeamMemberKj15subviewd_supersRK5StateK10SDMMonitor"><code class="docutils literal notranslate"><span class="pre">DoCollisions::operator()()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK12DoCollisions18scaled_probabilityERK9SuperdropRK9SuperdropKdKd"><code class="docutils literal notranslate"><span class="pre">DoCollisions::scaled_probability()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK12DoCollisions12assign_dropsER9SuperdropR9Superdrop"><code class="docutils literal notranslate"><span class="pre">DoCollisions::assign_drops()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK12DoCollisions25collide_superdroplet_pairER9SuperdropR9SuperdropKdKd"><code class="docutils literal notranslate"><span class="pre">DoCollisions::collide_superdroplet_pair()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK12DoCollisions14collide_supersERK10TeamMember15subviewd_supersKd"><code class="docutils literal notranslate"><span class="pre">DoCollisions::collide_supers()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK12DoCollisions13do_collisionsERK10TeamMember15subviewd_supersKd"><code class="docutils literal notranslate"><span class="pre">DoCollisions::do_collisions()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N12DoCollisions4DELTE"><code class="docutils literal notranslate"><span class="pre">DoCollisions::DELT</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N12DoCollisions11probabilityE"><code class="docutils literal notranslate"><span class="pre">DoCollisions::probability</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N12DoCollisions15enact_collisionE"><code class="docutils literal notranslate"><span class="pre">DoCollisions::enact_collision</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N12DoCollisions7genpoolE"><code class="docutils literal notranslate"><span class="pre">DoCollisions::genpool</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N12DoCollisions12DoCollisionsEKd11Probability14EnactCollision"><code class="docutils literal notranslate"><span class="pre">DoCollisions()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK12DoCollisionsclERK10TeamMemberKj15subviewd_supersRK5StateK10SDMMonitor"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK12DoCollisions18scaled_probabilityERK9SuperdropRK9SuperdropKdKd"><code class="docutils literal notranslate"><span class="pre">scaled_probability()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK12DoCollisions12assign_dropsER9SuperdropR9Superdrop"><code class="docutils literal notranslate"><span class="pre">assign_drops()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK12DoCollisions25collide_superdroplet_pairER9SuperdropR9SuperdropKdKd"><code class="docutils literal notranslate"><span class="pre">collide_superdroplet_pair()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK12DoCollisions14collide_supersERK10TeamMember15subviewd_supersKd"><code class="docutils literal notranslate"><span class="pre">collide_supers()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK12DoCollisions13do_collisionsERK10TeamMember15subviewd_supersKd"><code class="docutils literal notranslate"><span class="pre">do_collisions()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N12DoCollisions4DELTE"><code class="docutils literal notranslate"><span class="pre">DELT</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N12DoCollisions11probabilityE"><code class="docutils literal notranslate"><span class="pre">probability</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N12DoCollisions15enact_collisionE"><code class="docutils literal notranslate"><span class="pre">enact_collision</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N12DoCollisions7genpoolE"><code class="docutils literal notranslate"><span class="pre">genpool</span></code></a></li>
 </ul>
 </li>
 </ul>

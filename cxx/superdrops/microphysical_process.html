@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="State" href="state.html" /><link rel="prev" title="Super-Droplet Kokkos Aliases" href="kokkosaliases_sd.html" />
 
-    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+    <!-- Generated with Sphinx 8.2.1 and Furo 2024.08.06 -->
         <title>Microphysical Process - CLEO 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
@@ -710,7 +710,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 17 February 2025</div>
+              Last updated on 24 February 2025</div>
           </div>
           <div class="right-details">
             
@@ -734,29 +734,29 @@
 <li><a class="reference internal" href="#">Microphysical Process</a><ul>
 <li><a class="reference internal" href="#_CPPv4I0E20MicrophysicalProcess"><code class="docutils literal notranslate"><span class="pre">MicrophysicalProcess</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I_20MicrophysicalProcess_20MicrophysicalProcessE28CombinedMicrophysicalProcess"><code class="docutils literal notranslate"><span class="pre">CombinedMicrophysicalProcess</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N28CombinedMicrophysicalProcess28CombinedMicrophysicalProcessEK10Microphys1K10Microphys2"><code class="docutils literal notranslate"><span class="pre">CombinedMicrophysicalProcess::CombinedMicrophysicalProcess()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK28CombinedMicrophysicalProcess9next_stepEKj"><code class="docutils literal notranslate"><span class="pre">CombinedMicrophysicalProcess::next_step()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK28CombinedMicrophysicalProcess7on_stepEKj"><code class="docutils literal notranslate"><span class="pre">CombinedMicrophysicalProcess::on_step()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK28CombinedMicrophysicalProcess8run_stepERK10TeamMemberKj15subviewd_supersR5StateK10SDMMonitor"><code class="docutils literal notranslate"><span class="pre">CombinedMicrophysicalProcess::run_step()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N28CombinedMicrophysicalProcess1aE"><code class="docutils literal notranslate"><span class="pre">CombinedMicrophysicalProcess::a</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N28CombinedMicrophysicalProcess1bE"><code class="docutils literal notranslate"><span class="pre">CombinedMicrophysicalProcess::b</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N28CombinedMicrophysicalProcess28CombinedMicrophysicalProcessEK10Microphys1K10Microphys2"><code class="docutils literal notranslate"><span class="pre">CombinedMicrophysicalProcess()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK28CombinedMicrophysicalProcess9next_stepEKj"><code class="docutils literal notranslate"><span class="pre">next_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK28CombinedMicrophysicalProcess7on_stepEKj"><code class="docutils literal notranslate"><span class="pre">on_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK28CombinedMicrophysicalProcess8run_stepERK10TeamMemberKj15subviewd_supersR5StateK10SDMMonitor"><code class="docutils literal notranslate"><span class="pre">run_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N28CombinedMicrophysicalProcess1aE"><code class="docutils literal notranslate"><span class="pre">a</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N28CombinedMicrophysicalProcess1bE"><code class="docutils literal notranslate"><span class="pre">b</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv4rsK20MicrophysicalProcessK20MicrophysicalProcess"><code class="docutils literal notranslate"><span class="pre">operator&gt;&gt;()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv424NullMicrophysicalProcess"><code class="docutils literal notranslate"><span class="pre">NullMicrophysicalProcess</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4NK24NullMicrophysicalProcess9next_stepEKj"><code class="docutils literal notranslate"><span class="pre">NullMicrophysicalProcess::next_step()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK24NullMicrophysicalProcess7on_stepEKj"><code class="docutils literal notranslate"><span class="pre">NullMicrophysicalProcess::on_step()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK24NullMicrophysicalProcess8run_stepERK10TeamMemberKj15subviewd_supersR5StateK10SDMMonitor"><code class="docutils literal notranslate"><span class="pre">NullMicrophysicalProcess::run_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK24NullMicrophysicalProcess9next_stepEKj"><code class="docutils literal notranslate"><span class="pre">next_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK24NullMicrophysicalProcess7on_stepEKj"><code class="docutils literal notranslate"><span class="pre">on_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK24NullMicrophysicalProcess8run_stepERK10TeamMemberKj15subviewd_supersR5StateK10SDMMonitor"><code class="docutils literal notranslate"><span class="pre">run_step()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv4I0E16MicrophysicsFunc"><code class="docutils literal notranslate"><span class="pre">MicrophysicsFunc</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I_16MicrophysicsFuncE22ConstTstepMicrophysics"><code class="docutils literal notranslate"><span class="pre">ConstTstepMicrophysics</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N22ConstTstepMicrophysics22ConstTstepMicrophysicsEKjK1F"><code class="docutils literal notranslate"><span class="pre">ConstTstepMicrophysics::ConstTstepMicrophysics()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK22ConstTstepMicrophysics9next_stepEKj"><code class="docutils literal notranslate"><span class="pre">ConstTstepMicrophysics::next_step()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK22ConstTstepMicrophysics7on_stepEKj"><code class="docutils literal notranslate"><span class="pre">ConstTstepMicrophysics::on_step()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK22ConstTstepMicrophysics8run_stepERK10TeamMemberKj15subviewd_supersR5StateK10SDMMonitor"><code class="docutils literal notranslate"><span class="pre">ConstTstepMicrophysics::run_step()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N22ConstTstepMicrophysics8intervalE"><code class="docutils literal notranslate"><span class="pre">ConstTstepMicrophysics::interval</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N22ConstTstepMicrophysics15do_microphysicsE"><code class="docutils literal notranslate"><span class="pre">ConstTstepMicrophysics::do_microphysics</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N22ConstTstepMicrophysics22ConstTstepMicrophysicsEKjK1F"><code class="docutils literal notranslate"><span class="pre">ConstTstepMicrophysics()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK22ConstTstepMicrophysics9next_stepEKj"><code class="docutils literal notranslate"><span class="pre">next_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK22ConstTstepMicrophysics7on_stepEKj"><code class="docutils literal notranslate"><span class="pre">on_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK22ConstTstepMicrophysics8run_stepERK10TeamMemberKj15subviewd_supersR5StateK10SDMMonitor"><code class="docutils literal notranslate"><span class="pre">run_step()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N22ConstTstepMicrophysics8intervalE"><code class="docutils literal notranslate"><span class="pre">interval</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N22ConstTstepMicrophysics15do_microphysicsE"><code class="docutils literal notranslate"><span class="pre">do_microphysics</span></code></a></li>
 </ul>
 </li>
 </ul>

@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Xarray Metadata" href="xarray_metadata.html" /><link rel="prev" title="StoreAccessor" href="store_accessor.html" />
 
-    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+    <!-- Generated with Sphinx 8.2.1 and Furo 2024.08.06 -->
         <title>XarrayZarrArray - CLEO 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
@@ -634,7 +634,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 17 February 2025</div>
+              Last updated on 24 February 2025</div>
           </div>
           <div class="right-details">
             
@@ -659,22 +659,22 @@
 <li><a class="reference internal" href="#_CPPv4I0E17write_zattrs_jsonvR5StoreNSt11string_viewENSt11string_viewE"><code class="docutils literal notranslate"><span class="pre">write_zattrs_json()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv428reduced_arrayshape_from_dimsRKNSt13unordered_mapINSt6stringE6size_tEERKNSt6vectorINSt6stringEEE"><code class="docutils literal notranslate"><span class="pre">reduced_arrayshape_from_dims()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I00E15XarrayZarrArray"><code class="docutils literal notranslate"><span class="pre">XarrayZarrArray</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray15XarrayZarrArrayER5StoreRKNSt13unordered_mapINSt6stringE6size_tEEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEE"><code class="docutils literal notranslate"><span class="pre">XarrayZarrArray::XarrayZarrArray()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray15XarrayZarrArrayER5StoreRKNSt13unordered_mapINSt6stringE6size_tEEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEEKNSt11string_viewE"><code class="docutils literal notranslate"><span class="pre">XarrayZarrArray::XarrayZarrArray()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArrayD0Ev"><code class="docutils literal notranslate"><span class="pre">XarrayZarrArray::~XarrayZarrArray()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15XarrayZarrArray13get_arraydimsEv"><code class="docutils literal notranslate"><span class="pre">XarrayZarrArray::get_arraydims()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK15XarrayZarrArray12get_dimnamesEv"><code class="docutils literal notranslate"><span class="pre">XarrayZarrArray::get_dimnames()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray14write_to_arrayEK12viewh_buffer"><code class="docutils literal notranslate"><span class="pre">XarrayZarrArray::write_to_array()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray14write_to_arrayEK1T"><code class="docutils literal notranslate"><span class="pre">XarrayZarrArray::write_to_array()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray16write_arrayshapeERKNSt13unordered_mapINSt6stringE6size_tEE"><code class="docutils literal notranslate"><span class="pre">XarrayZarrArray::write_arrayshape()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray23write_ragged_arrayshapeEv"><code class="docutils literal notranslate"><span class="pre">XarrayZarrArray::write_ragged_arrayshape()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray12viewh_bufferE"><code class="docutils literal notranslate"><span class="pre">XarrayZarrArray::viewh_buffer</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray14set_arrayshapeERKNSt13unordered_mapINSt6stringE6size_tEE"><code class="docutils literal notranslate"><span class="pre">XarrayZarrArray::set_arrayshape()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray21set_ragged_arrayshapeEv"><code class="docutils literal notranslate"><span class="pre">XarrayZarrArray::set_ragged_arrayshape()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray4zarrE"><code class="docutils literal notranslate"><span class="pre">XarrayZarrArray::zarr</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray8dimnamesE"><code class="docutils literal notranslate"><span class="pre">XarrayZarrArray::dimnames</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray10arrayshapeE"><code class="docutils literal notranslate"><span class="pre">XarrayZarrArray::arrayshape</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray15last_totnchunksE"><code class="docutils literal notranslate"><span class="pre">XarrayZarrArray::last_totnchunks</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray15XarrayZarrArrayER5StoreRKNSt13unordered_mapINSt6stringE6size_tEEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEE"><code class="docutils literal notranslate"><span class="pre">XarrayZarrArray()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray15XarrayZarrArrayER5StoreRKNSt13unordered_mapINSt6stringE6size_tEEKNSt11string_viewEKNSt11string_viewEKdRKNSt6vectorI6size_tEERKNSt6vectorINSt6stringEEEKNSt11string_viewE"><code class="docutils literal notranslate"><span class="pre">XarrayZarrArray()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArrayD0Ev"><code class="docutils literal notranslate"><span class="pre">~XarrayZarrArray()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15XarrayZarrArray13get_arraydimsEv"><code class="docutils literal notranslate"><span class="pre">get_arraydims()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK15XarrayZarrArray12get_dimnamesEv"><code class="docutils literal notranslate"><span class="pre">get_dimnames()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray14write_to_arrayEK12viewh_buffer"><code class="docutils literal notranslate"><span class="pre">write_to_array()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray14write_to_arrayEK1T"><code class="docutils literal notranslate"><span class="pre">write_to_array()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray16write_arrayshapeERKNSt13unordered_mapINSt6stringE6size_tEE"><code class="docutils literal notranslate"><span class="pre">write_arrayshape()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray23write_ragged_arrayshapeEv"><code class="docutils literal notranslate"><span class="pre">write_ragged_arrayshape()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray12viewh_bufferE"><code class="docutils literal notranslate"><span class="pre">viewh_buffer</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray14set_arrayshapeERKNSt13unordered_mapINSt6stringE6size_tEE"><code class="docutils literal notranslate"><span class="pre">set_arrayshape()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray21set_ragged_arrayshapeEv"><code class="docutils literal notranslate"><span class="pre">set_ragged_arrayshape()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray4zarrE"><code class="docutils literal notranslate"><span class="pre">zarr</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray8dimnamesE"><code class="docutils literal notranslate"><span class="pre">dimnames</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray10arrayshapeE"><code class="docutils literal notranslate"><span class="pre">arrayshape</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N15XarrayZarrArray15last_totnchunksE"><code class="docutils literal notranslate"><span class="pre">last_totnchunks</span></code></a></li>
 </ul>
 </li>
 </ul>

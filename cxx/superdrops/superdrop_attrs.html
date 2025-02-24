@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Terminal Velocities" href="terminalvelocity.html" /><link rel="prev" title="Superdrop IDs" href="superdrop_ids.html" />
 
-    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+    <!-- Generated with Sphinx 8.2.1 and Furo 2024.08.06 -->
         <title>Superdrop Attributes - CLEO 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
@@ -676,7 +676,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 17 February 2025</div>
+              Last updated on 24 February 2025</div>
           </div>
           <div class="right-details">
             
@@ -699,32 +699,32 @@
             <ul>
 <li><a class="reference internal" href="#">Superdrop Attributes</a><ul>
 <li><a class="reference internal" href="#_CPPv416SoluteProperties"><code class="docutils literal notranslate"><span class="pre">SoluteProperties</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4NK16SoluteProperties7rho_solEv"><code class="docutils literal notranslate"><span class="pre">SoluteProperties::rho_sol()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK16SoluteProperties6mr_solEv"><code class="docutils literal notranslate"><span class="pre">SoluteProperties::mr_sol()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK16SoluteProperties5ionicEv"><code class="docutils literal notranslate"><span class="pre">SoluteProperties::ionic()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK16SoluteProperties7rho_solEv"><code class="docutils literal notranslate"><span class="pre">rho_sol()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK16SoluteProperties6mr_solEv"><code class="docutils literal notranslate"><span class="pre">mr_sol()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK16SoluteProperties5ionicEv"><code class="docutils literal notranslate"><span class="pre">ionic()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv414SuperdropAttrs"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N14SuperdropAttrs14SuperdropAttrsEv"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs::SuperdropAttrs()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N14SuperdropAttrsD0Ev"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs::~SuperdropAttrs()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N14SuperdropAttrs14SuperdropAttrsEK16SolutePropertiesK8uint64_tKdKdKb"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs::SuperdropAttrs()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK14SuperdropAttrs9is_soluteEv"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs::is_solute()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK14SuperdropAttrs10get_soluteEv"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs::get_solute()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK14SuperdropAttrs11get_rho_solEv"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs::get_rho_sol()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK14SuperdropAttrs10get_mr_solEv"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs::get_mr_sol()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK14SuperdropAttrs9get_ionicEv"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs::get_ionic()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N14SuperdropAttrs6set_xiEK8uint64_t"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs::set_xi()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N14SuperdropAttrs10set_radiusEKd"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs::set_radius()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N14SuperdropAttrs8set_msolEKd"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs::set_msol()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK14SuperdropAttrs4massEv"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs::mass()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK14SuperdropAttrs9dryradiusEv"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs::dryradius()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK14SuperdropAttrs6rcubedEv"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs::rcubed()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK14SuperdropAttrs3volEv"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs::vol()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N14SuperdropAttrs13change_radiusEKd"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs::change_radius()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N14SuperdropAttrs6soluteE"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs::solute</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N14SuperdropAttrs2xiE"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs::xi</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N14SuperdropAttrs6radiusE"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs::radius</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N14SuperdropAttrs4msolE"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs::msol</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14SuperdropAttrs14SuperdropAttrsEv"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14SuperdropAttrsD0Ev"><code class="docutils literal notranslate"><span class="pre">~SuperdropAttrs()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14SuperdropAttrs14SuperdropAttrsEK16SolutePropertiesK8uint64_tKdKdKb"><code class="docutils literal notranslate"><span class="pre">SuperdropAttrs()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK14SuperdropAttrs9is_soluteEv"><code class="docutils literal notranslate"><span class="pre">is_solute()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK14SuperdropAttrs10get_soluteEv"><code class="docutils literal notranslate"><span class="pre">get_solute()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK14SuperdropAttrs11get_rho_solEv"><code class="docutils literal notranslate"><span class="pre">get_rho_sol()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK14SuperdropAttrs10get_mr_solEv"><code class="docutils literal notranslate"><span class="pre">get_mr_sol()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK14SuperdropAttrs9get_ionicEv"><code class="docutils literal notranslate"><span class="pre">get_ionic()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14SuperdropAttrs6set_xiEK8uint64_t"><code class="docutils literal notranslate"><span class="pre">set_xi()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14SuperdropAttrs10set_radiusEKd"><code class="docutils literal notranslate"><span class="pre">set_radius()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14SuperdropAttrs8set_msolEKd"><code class="docutils literal notranslate"><span class="pre">set_msol()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK14SuperdropAttrs4massEv"><code class="docutils literal notranslate"><span class="pre">mass()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK14SuperdropAttrs9dryradiusEv"><code class="docutils literal notranslate"><span class="pre">dryradius()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK14SuperdropAttrs6rcubedEv"><code class="docutils literal notranslate"><span class="pre">rcubed()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK14SuperdropAttrs3volEv"><code class="docutils literal notranslate"><span class="pre">vol()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14SuperdropAttrs13change_radiusEKd"><code class="docutils literal notranslate"><span class="pre">change_radius()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14SuperdropAttrs6soluteE"><code class="docutils literal notranslate"><span class="pre">solute</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14SuperdropAttrs2xiE"><code class="docutils literal notranslate"><span class="pre">xi</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14SuperdropAttrs6radiusE"><code class="docutils literal notranslate"><span class="pre">radius</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N14SuperdropAttrs4msolE"><code class="docutils literal notranslate"><span class="pre">msol</span></code></a></li>
 </ul>
 </li>
 </ul>

@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Nsupers Observer" href="nsupers_observer.html" /><link rel="prev" title="Gbxindex Observer" href="gbxindex_observer.html" />
 
-    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+    <!-- Generated with Sphinx 8.2.1 and Furo 2024.08.06 -->
         <title>Superdrops Observer - CLEO 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
@@ -941,7 +941,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 17 February 2025</div>
+              Last updated on 24 February 2025</div>
           </div>
           <div class="right-details">
             
@@ -965,50 +965,50 @@
 <li><a class="reference internal" href="#">Superdrops Observer</a><ul>
 <li><a class="reference internal" href="#_CPPv4I000E24CollectSuperdropVariable21CollectDataForDatasetI5StoreERK7DatasetI5StoreEK11FunctorFuncKNSt11string_viewEKNSt11string_viewEKdK6size_t"><code class="docutils literal notranslate"><span class="pre">CollectSuperdropVariable()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv414SdgbxindexFunc"><code class="docutils literal notranslate"><span class="pre">SdgbxindexFunc</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4NK14SdgbxindexFuncclEK6size_t14viewd_constgbxK20subviewd_constsupersN6BufferI8uint32_tE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">SdgbxindexFunc::operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK14SdgbxindexFuncclEK6size_t14viewd_constgbxK20subviewd_constsupersN6BufferI8uint32_tE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv4I0E17CollectSdgbxindex21CollectDataForDatasetI5StoreERK7DatasetI5StoreEK6size_t"><code class="docutils literal notranslate"><span class="pre">CollectSdgbxindex()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv48SdIdFunc"><code class="docutils literal notranslate"><span class="pre">SdIdFunc</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4NK8SdIdFuncclEK6size_t14viewd_constgbxK20subviewd_constsupersN6BufferI8uint32_tE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">SdIdFunc::operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8SdIdFuncclEK6size_t14viewd_constgbxK20subviewd_constsupersN6BufferI8uint32_tE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv4I0E11CollectSdId21CollectDataForDatasetI5StoreERK7DatasetI5StoreEK6size_t"><code class="docutils literal notranslate"><span class="pre">CollectSdId()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv46XiFunc"><code class="docutils literal notranslate"><span class="pre">XiFunc</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4NK6XiFuncclEK6size_t14viewd_constgbxK20subviewd_constsupersN6BufferI8uint64_tE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">XiFunc::operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6XiFuncclEK6size_t14viewd_constgbxK20subviewd_constsupersN6BufferI8uint64_tE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv4I0E9CollectXi21CollectDataForDatasetI5StoreERK7DatasetI5StoreEK6size_t"><code class="docutils literal notranslate"><span class="pre">CollectXi()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv410RadiusFunc"><code class="docutils literal notranslate"><span class="pre">RadiusFunc</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4NK10RadiusFuncclEK6size_t14viewd_constgbxK20subviewd_constsupersN6BufferIfE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">RadiusFunc::operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10RadiusFuncclEK6size_t14viewd_constgbxK20subviewd_constsupersN6BufferIfE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv4I0E13CollectRadius21CollectDataForDatasetI5StoreERK7DatasetI5StoreEK6size_t"><code class="docutils literal notranslate"><span class="pre">CollectRadius()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv48MsolFunc"><code class="docutils literal notranslate"><span class="pre">MsolFunc</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4NK8MsolFuncclEK6size_t14viewd_constgbxK20subviewd_constsupersN6BufferIfE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">MsolFunc::operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK8MsolFuncclEK6size_t14viewd_constgbxK20subviewd_constsupersN6BufferIfE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv4I0E11CollectMsol21CollectDataForDatasetI5StoreERK7DatasetI5StoreEK6size_t"><code class="docutils literal notranslate"><span class="pre">CollectMsol()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv410Coord3Func"><code class="docutils literal notranslate"><span class="pre">Coord3Func</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4NK10Coord3FuncclEK6size_t14viewd_constgbxK20subviewd_constsupersN6BufferIfE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">Coord3Func::operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10Coord3FuncclEK6size_t14viewd_constgbxK20subviewd_constsupersN6BufferIfE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv4I0E13CollectCoord321CollectDataForDatasetI5StoreERK7DatasetI5StoreEK6size_t"><code class="docutils literal notranslate"><span class="pre">CollectCoord3()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv410Coord1Func"><code class="docutils literal notranslate"><span class="pre">Coord1Func</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4NK10Coord1FuncclEK6size_t14viewd_constgbxK20subviewd_constsupersN6BufferIfE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">Coord1Func::operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10Coord1FuncclEK6size_t14viewd_constgbxK20subviewd_constsupersN6BufferIfE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv4I0E13CollectCoord121CollectDataForDatasetI5StoreERK7DatasetI5StoreEK6size_t"><code class="docutils literal notranslate"><span class="pre">CollectCoord1()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv410Coord2Func"><code class="docutils literal notranslate"><span class="pre">Coord2Func</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4NK10Coord2FuncclEK6size_t14viewd_constgbxK20subviewd_constsupersN6BufferIfE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">Coord2Func::operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10Coord2FuncclEK6size_t14viewd_constgbxK20subviewd_constsupersN6BufferIfE18mirrorviewd_bufferE"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv4I0E13CollectCoord221CollectDataForDatasetI5StoreERK7DatasetI5StoreEK6size_t"><code class="docutils literal notranslate"><span class="pre">CollectCoord2()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I0E11RaggedCount"><code class="docutils literal notranslate"><span class="pre">RaggedCount</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N11RaggedCount11RaggedCountERK7DatasetI5StoreEK6size_t"><code class="docutils literal notranslate"><span class="pre">RaggedCount::RaggedCount()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK11RaggedCount14write_to_arrayERK7DatasetI5StoreEK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">RaggedCount::write_to_array()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK11RaggedCount16write_arrayshapeERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">RaggedCount::write_arrayshape()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N11RaggedCount9xzarr_ptrE"><code class="docutils literal notranslate"><span class="pre">RaggedCount::xzarr_ptr</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N11RaggedCount11RaggedCountERK7DatasetI5StoreEK6size_t"><code class="docutils literal notranslate"><span class="pre">RaggedCount()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK11RaggedCount14write_to_arrayERK7DatasetI5StoreEK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">write_to_array()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK11RaggedCount16write_arrayshapeERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">write_arrayshape()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N11RaggedCount9xzarr_ptrE"><code class="docutils literal notranslate"><span class="pre">xzarr_ptr</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv4I0E18SuperdropsObserver8ObserverKjRK7DatasetI5StoreEK6size_t21CollectDataForDatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">SuperdropsObserver()</span></code></a></li>

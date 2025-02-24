@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Generic Collect Data" href="generic_collect_data.html" /><link rel="prev" title="Parallel Write Data" href="parallel_write_data.html" />
 
-    <!-- Generated with Sphinx 8.1.3 and Furo 2024.08.06 -->
+    <!-- Generated with Sphinx 8.2.1 and Furo 2024.08.06 -->
         <title>Collect Data For Dataset - CLEO 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
@@ -614,7 +614,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 17 February 2025</div>
+              Last updated on 24 February 2025</div>
           </div>
           <div class="right-details">
             
@@ -638,36 +638,36 @@
 <li><a class="reference internal" href="#">Collect Data For Dataset</a><ul>
 <li><a class="reference internal" href="#_CPPv4I00E21CollectDataForDataset"><code class="docutils literal notranslate"><span class="pre">CollectDataForDataset</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I0_21CollectDataForDatasetI5StoreE_21CollectDataForDatasetI5StoreEE29CombinedCollectDataForDataset"><code class="docutils literal notranslate"><span class="pre">CombinedCollectDataForDataset</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N29CombinedCollectDataForDataset29CombinedCollectDataForDatasetEK12CollectData1K12CollectData2"><code class="docutils literal notranslate"><span class="pre">CombinedCollectDataForDataset::CombinedCollectDataForDataset()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK29CombinedCollectDataForDataset11get_functorEK14viewd_constgbxK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">CombinedCollectDataForDataset::get_functor()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK29CombinedCollectDataForDataset15write_to_arraysERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">CombinedCollectDataForDataset::write_to_arrays()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK29CombinedCollectDataForDataset22write_to_ragged_arraysERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">CombinedCollectDataForDataset::write_to_ragged_arrays()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK29CombinedCollectDataForDataset17write_arrayshapesERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">CombinedCollectDataForDataset::write_arrayshapes()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK29CombinedCollectDataForDataset24write_ragged_arrayshapesERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">CombinedCollectDataForDataset::write_ragged_arrayshapes()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK29CombinedCollectDataForDataset16reallocate_viewsEK6size_t"><code class="docutils literal notranslate"><span class="pre">CombinedCollectDataForDataset::reallocate_views()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N29CombinedCollectDataForDataset1aE"><code class="docutils literal notranslate"><span class="pre">CombinedCollectDataForDataset::a</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N29CombinedCollectDataForDataset1bE"><code class="docutils literal notranslate"><span class="pre">CombinedCollectDataForDataset::b</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N29CombinedCollectDataForDataset29CombinedCollectDataForDatasetEK12CollectData1K12CollectData2"><code class="docutils literal notranslate"><span class="pre">CombinedCollectDataForDataset()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK29CombinedCollectDataForDataset11get_functorEK14viewd_constgbxK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">get_functor()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK29CombinedCollectDataForDataset15write_to_arraysERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">write_to_arrays()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK29CombinedCollectDataForDataset22write_to_ragged_arraysERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">write_to_ragged_arrays()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK29CombinedCollectDataForDataset17write_arrayshapesERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">write_arrayshapes()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK29CombinedCollectDataForDataset24write_ragged_arrayshapesERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">write_ragged_arrayshapes()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK29CombinedCollectDataForDataset16reallocate_viewsEK6size_t"><code class="docutils literal notranslate"><span class="pre">reallocate_views()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N29CombinedCollectDataForDataset1aE"><code class="docutils literal notranslate"><span class="pre">a</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N29CombinedCollectDataForDataset1bE"><code class="docutils literal notranslate"><span class="pre">b</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N29CombinedCollectDataForDataset7FunctorE"><code class="docutils literal notranslate"><span class="pre">CombinedCollectDataForDataset::Functor</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N29CombinedCollectDataForDataset7Functor7FunctorEK12CollectData1K12CollectData2K14viewd_constgbxK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">CombinedCollectDataForDataset::Functor::Functor()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK29CombinedCollectDataForDataset7FunctorclEK6size_t"><code class="docutils literal notranslate"><span class="pre">CombinedCollectDataForDataset::Functor::operator()()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK29CombinedCollectDataForDataset7FunctorclERK10TeamMember"><code class="docutils literal notranslate"><span class="pre">CombinedCollectDataForDataset::Functor::operator()()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N29CombinedCollectDataForDataset7Functor9a_functorE"><code class="docutils literal notranslate"><span class="pre">CombinedCollectDataForDataset::Functor::a_functor</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4N29CombinedCollectDataForDataset7Functor9b_functorE"><code class="docutils literal notranslate"><span class="pre">CombinedCollectDataForDataset::Functor::b_functor</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N29CombinedCollectDataForDataset7Functor7FunctorEK12CollectData1K12CollectData2K14viewd_constgbxK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">Functor()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK29CombinedCollectDataForDataset7FunctorclEK6size_t"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK29CombinedCollectDataForDataset7FunctorclERK10TeamMember"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N29CombinedCollectDataForDataset7Functor9a_functorE"><code class="docutils literal notranslate"><span class="pre">a_functor</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N29CombinedCollectDataForDataset7Functor9b_functorE"><code class="docutils literal notranslate"><span class="pre">b_functor</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
 <li><a class="reference internal" href="#_CPPv4I_21CollectDataForDatasetI7FSStoreE_21CollectDataForDatasetI7FSStoreEErsDaK12CollectData1K12CollectData2"><code class="docutils literal notranslate"><span class="pre">operator&gt;&gt;()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I0E25NullCollectDataForDataset"><code class="docutils literal notranslate"><span class="pre">NullCollectDataForDataset</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4NK25NullCollectDataForDataset11get_functorEK14viewd_constgbxK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">NullCollectDataForDataset::get_functor()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK25NullCollectDataForDataset15write_to_arraysERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">NullCollectDataForDataset::write_to_arrays()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK25NullCollectDataForDataset22write_to_ragged_arraysERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">NullCollectDataForDataset::write_to_ragged_arrays()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK25NullCollectDataForDataset17write_arrayshapesERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">NullCollectDataForDataset::write_arrayshapes()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK25NullCollectDataForDataset24write_ragged_arrayshapesERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">NullCollectDataForDataset::write_ragged_arrayshapes()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK25NullCollectDataForDataset16reallocate_viewsEK6size_t"><code class="docutils literal notranslate"><span class="pre">NullCollectDataForDataset::reallocate_views()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK25NullCollectDataForDataset11get_functorEK14viewd_constgbxK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">get_functor()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK25NullCollectDataForDataset15write_to_arraysERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">write_to_arrays()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK25NullCollectDataForDataset22write_to_ragged_arraysERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">write_to_ragged_arrays()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK25NullCollectDataForDataset17write_arrayshapesERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">write_arrayshapes()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK25NullCollectDataForDataset24write_ragged_arrayshapesERK7DatasetI5StoreE"><code class="docutils literal notranslate"><span class="pre">write_ragged_arrayshapes()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK25NullCollectDataForDataset16reallocate_viewsEK6size_t"><code class="docutils literal notranslate"><span class="pre">reallocate_views()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N25NullCollectDataForDataset7FunctorE"><code class="docutils literal notranslate"><span class="pre">NullCollectDataForDataset::Functor</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4NK25NullCollectDataForDataset7FunctorclEK6size_t"><code class="docutils literal notranslate"><span class="pre">NullCollectDataForDataset::Functor::operator()()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK25NullCollectDataForDataset7FunctorclERK10TeamMember"><code class="docutils literal notranslate"><span class="pre">NullCollectDataForDataset::Functor::operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK25NullCollectDataForDataset7FunctorclEK6size_t"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK25NullCollectDataForDataset7FunctorclERK10TeamMember"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
 </ul>
 </li>
 </ul>
