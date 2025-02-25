@@ -29,6 +29,7 @@
 #include <iostream>
 #include <numeric>
 #include <vector>
+#include <memory>
 
 #include "../../cleoconstants.hpp"
 #include "../../kokkosaliases.hpp"
@@ -38,8 +39,16 @@
 #include "gridboxes/supersindomain.hpp"
 #include "mpi.h"
 #include "superdrops/superdrop.hpp"
+#include "/p/project/exaww/bayley1/CLEO/build/_deps/mptrac-src/src/mptrac.h"
 
 struct MPTRACTransportAcrossDomain {
+  /*
+  function to move super-droplets between MPI processes using MPTRAC library,
+  e.g. for superdroplets which move to/from gridboxes on different nodes.
+  */
+  viewd_supers sendrecv_supers(const CartesianMaps &gbxmaps, const viewd_gbx d_gbxs,
+                              viewd_supers totsupers) const;
+
   /* (re)sorting supers based on their gbxindexes as step to 'move' superdroplets across the domain.
   May also include MPI communication with moves superdroplets away from/into a node's domain
   */
