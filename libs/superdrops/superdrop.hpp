@@ -26,6 +26,9 @@
 #define LIBS_SUPERDROPS_SUPERDROP_HPP_
 
 #include <cstdint>
+#include <vector>
+#include <memory>
+#include <type_traits>
 
 #include "superdrop_attrs.hpp"
 #include "superdrop_ids.hpp"
@@ -336,6 +339,32 @@ class Superdrop {
     coord2 = *double_source++;
     attrs.radius = *double_source++;
     attrs.msol = *double_source;
+  }
+
+  /*
+   * !!! ~~~ dont touch unless you REALLY know what you're doing ~~~ !!!
+   * (for Compatibility with MPTRAC in C) creates shared pointer of
+   * MPTRAC_ParticlePtr type, aka 'p_ptr', then loads p_ptr with RAW
+   * RAW pointers to droplet attirbutes casted to double pointers
+  */
+  template <typename MPTRAC_ParticlePtr>
+  MPTRAC_ParticlePtr _make_mptrac_compatible_ptr(){
+    auto p_ptr = MPTRAC_ParticlePtr{};
+    p_ptr.q[0] = reinterpret_cast<double*>(&sdgbxindex);
+    p_ptr.q[1] = reinterpret_cast<double*>(&coord3);
+    p_ptr.q[2] = reinterpret_cast<double*>(&coord1);
+    p_ptr.q[3] = reinterpret_cast<double*>(&coord2);
+
+    p_ptr.q[4] = reinterpret_cast<double*>(&attrs.xi);
+    p_ptr.q[5] = reinterpret_cast<double*>(&attrs.radius);
+    p_ptr.q[6] = reinterpret_cast<double*>(&attrs.msol);
+
+    if constexpr (std::is_same_v<Superdrop::IDType, IntID>) // TODO(ALL): don't do when using EmptyID
+    {
+      p_ptr.q[7] = reinterpret_cast<double*>(&sdId.value); // only assign when IntId (not EmptyID)
+    }
+
+    return p_ptr;
   }
 };
 

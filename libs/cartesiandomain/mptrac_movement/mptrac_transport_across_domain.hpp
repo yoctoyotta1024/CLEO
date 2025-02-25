@@ -7,7 +7,7 @@
  * Project: mptrac_movement
  * Created Date: Monday 24th Febuary 2025
  * Author: Clara Bayley (CB)
- * Additional Contributors:
+ * Additional Contributors: Jan Clemens (JC)
  * -----
  * Last Modified: Monday 24th Febuary 2025
  * Modified By: CB
@@ -29,6 +29,7 @@
 #include <iostream>
 #include <numeric>
 #include <vector>
+#include <memory>
 
 #include "../../cleoconstants.hpp"
 #include "../../kokkosaliases.hpp"
@@ -37,10 +38,19 @@
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/supersindomain.hpp"
 #include "mpi.h"
-#include "mptrac.h"
 #include "superdrops/superdrop.hpp"
 
 struct MPTRACTransportAcrossDomain {
+  /* define MPI_Datatype for MPTRAC superdroplet particle */
+  void register_MPI_type_particle(MPI_Datatype *MPI_Particle, const int nquantities) const;
+
+  /*
+  function to move super-droplets between MPI processes using MPTRAC library,
+  e.g. for superdroplets which move to/from gridboxes on different nodes.
+  */
+  viewd_supers sendrecv_supers(const CartesianMaps &gbxmaps, const viewd_gbx d_gbxs,
+                              viewd_supers totsupers) const;
+
   /* (re)sorting supers based on their gbxindexes as step to 'move' superdroplets across the domain.
   May also include MPI communication with moves superdroplets away from/into a node's domain
   */

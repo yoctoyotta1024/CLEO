@@ -94,6 +94,10 @@ class CartesianDecomposition {
 
   // Sets the behavior of all dimensions
   void set_dimensions_bound_behavior(std::array<size_t, 3> behaviors);
+
+  std::map<std::array<int, 3>, int> get_neighboring_processes() const {
+    return neighboring_processes;
+  }
 };
 
 // Given the global domain, a global decomposition and a partition index,
