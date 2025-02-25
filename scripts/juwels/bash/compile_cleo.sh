@@ -64,6 +64,8 @@ echo "executables: ${executables}"
 echo "make_clean: ${make_clean}"
 echo "### ------------------------------------------- ###"
 
+module load GSL netCDF/4.9.2
+
 cd ${CLEO_PATH2BUILD} && pwd
 if [ "${make_clean}" == "true" ]
 then
