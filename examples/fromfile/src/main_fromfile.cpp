@@ -32,7 +32,8 @@
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
 #include "cartesiandomain/movement/cartesian_motion.hpp"
-#include "cartesiandomain/movement/cartesian_movement.hpp"
+// #include "cartesiandomain/movement/cartesian_movement.hpp"
+#include "cartesiandomain/mptrac_movement/mptrac_movement.hpp"
 #include "cartesiandomain/movement/null_boundary_conditions.hpp"
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
 #include "coupldyn_fromfile/fromfilecomms.hpp"
@@ -95,7 +96,8 @@ inline auto create_movement(const unsigned int motionstep, const CartesianMaps &
 
   const auto boundary_conditions = NullBoundaryConditions{};
 
-  return cartesian_movement(gbxmaps, motion, boundary_conditions);
+  // return cartesian_movement(gbxmaps, motion, boundary_conditions);
+  return mptrac_movement(gbxmaps, motion, boundary_conditions);
 }
 
 template <typename Store>
