@@ -5,7 +5,7 @@
 #SBATCH --ntasks-per-node=4
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=10G
-#SBATCH --time=00:10:00
+#SBATCH --time=00:03:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=exaww
@@ -29,7 +29,8 @@ pythonscript=${path2CLEO}/examples/fromfile/fromfile.py
 configfile=${path2CLEO}/examples/fromfile/src/config/fromfile_config.yaml
 script_args="${configfile} --do_inputfiles=TRUE --do_run_executable=TRUE --do_plot_results=TRUE --ntasks=4"
 
-enable_mptrac=false
+# enable_mptrac=false
+enable_mptrac=true
 enableyac=false
 yacyaxtroot=NA
 enabledebug=false
