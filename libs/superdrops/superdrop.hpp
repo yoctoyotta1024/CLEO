@@ -327,7 +327,7 @@ class Superdrop {
                               std::vector<uint64_t>::iterator uint64_source,
                               std::vector<double>::iterator double_source) {
     sdgbxindex = *uint_source++;
-    sdId.value = static_cast<size_t>(*uint_source); // TODO(ALL): don't do if using EmptyID
+    sdId.value = static_cast<size_t>(*uint_source);  // TODO(ALL): don't do if using EmptyID
 
     attrs.xi = *uint64_source;
 
