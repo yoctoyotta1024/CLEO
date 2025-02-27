@@ -57,6 +57,10 @@ viewd_supers totsupers) const
 {
   int comm_rank;
   MPI_Comm_rank(MPI_COMM_WORLD, &comm_rank);
+ 
+  if (comm_rank == 0){
+    std::cout << "----------> start MPTRAC <----------\n";
+  }
 
   /* define destination ranks for current MPI rank */
   constexpr int ndestinations = 26;
@@ -81,6 +85,8 @@ viewd_supers totsupers) const
   const auto nparticles = totsupers.extent(0);
   auto particles_ptr = std::vector<particle_ptr_t>{};
   auto target_ranks = std::vector<int>{};
+  int is_first_rank = 0;
+  size_t is_first_sdId = 0;
   for (size_t ip = 0; ip < nparticles; ++ip){
     auto &drop = totsupers(ip);
     const auto p_ptr = drop._make_mptrac_compatible_ptr<particle_ptr_t>();
@@ -96,9 +102,30 @@ viewd_supers totsupers) const
       // check ```sdgbxindex < ngbxs``` assumes 0 <= local_gbxindexes < ngbxs
       // (!) calculation of drop's rank must match calculation according to domain_decomposition
       rank_dest = (LIMITVALUES::oob_gbxindex - 1) - sdgbxindex;
+
+      if (comm_rank == 0 && is_first_rank == 0){
+        std::cout << "first superdrop to move: ip=" << ip << "\n";
+        std::cout << "first superdrop to move: rank=" << rank_dest << "\n";
+        std::cout << "first superdrop to move: sdId=" << drop.sdId.get_value() << "\n";
+        std::cout << "first superdrop to move: q[0]=" << sdgbxindex << "\n";
+        std::cout << "first superdrop to move: q[1]=" << *particles_ptr.at(ip).q[1] << "\n";
+        std::cout << "first superdrop to move: q[2]=" << *particles_ptr.at(ip).q[2] << "\n";
+        std::cout << "first superdrop to move: q[3]=" << *particles_ptr.at(ip).q[3] << "\n";
+        std::cout << "first superdrop to move: q[4]=" << *(uint64_t*)(particles_ptr.at(ip).q[4]) << "\n";
+        std::cout << "first superdrop to move: q[5]=" << *particles_ptr.at(ip).q[5] << "\n";
+        std::cout << "first superdrop to move: q[6]=" << *particles_ptr.at(ip).q[6] << "\n";
+        std::cout << "first superdrop to move: q[7]=" << *(uint64_t*)(particles_ptr.at(ip).q[7]) << "\n";
+        is_first_rank = rank_dest;
+        is_first_sdId = drop.sdId.get_value();
+      }
+
     }
     target_ranks.push_back(rank_dest);
   }
+  std::cout << "bcast before: " << is_first_rank << ", " << is_first_sdId << "\n";
+  MPI_Bcast(&is_first_rank, 1, MPI_INT, 0, MPI_COMM_WORLD);
+  MPI_Bcast(&is_first_sdId, 1, MPI_UNSIGNED_LONG_LONG, 0, MPI_COMM_WORLD);
+  std::cout << "bcast after: " << is_first_rank << ", " << is_first_sdId << "\n";
 
   /* define MPI_Datatype for particle */
   MPI_Datatype MPI_Particle;
@@ -116,6 +143,25 @@ viewd_supers totsupers) const
     target_ranks.data(),
     q_sizes.data()
   );
+
+  if (comm_rank == is_first_rank) {
+    for (size_t ip = 0; ip < nparticles; ++ip){
+      auto &drop = totsupers(ip);
+      if (drop.sdId.get_value() == is_first_sdId){
+          std::cout << "first superdrop that moved: dest_ip=" << ip << "\n";
+          std::cout << "first superdrop that moved: dest_rank=" << is_first_rank << "\n";
+          std::cout << "first superdrop that moved: sdId=" << is_first_sdId << "\n";
+          std::cout << "first superdrop that moved: q[0]=" << drop.get_sdgbxindex() << "\n";
+          std::cout << "first superdrop that moved: q[1]=" << drop.get_coord3() << "\n";
+          std::cout << "first superdrop that moved: q[2]=" << drop.get_coord1() << "\n";
+          std::cout << "first superdrop that moved: q[3]=" << drop.get_coord2() << "\n";
+          std::cout << "first superdrop that moved: q[4]=" << drop.get_xi() << "\n";
+          std::cout << "first superdrop that moved: q[5]=" << drop.get_radius() << "\n";
+          std::cout << "first superdrop that moved: q[6]=" << drop.get_msol() << "\n";
+          std::cout << "first superdrop that moved: q[7]=" << drop.sdId.get_value() << "\n";
+      }
+    }
+  }
 
   /* add correction to sdgbxindexes of superdroplets that were sent/recieved */
   for (size_t ip = 0; ip < nparticles; ++ip){
@@ -146,6 +192,10 @@ viewd_supers totsupers) const
             "drop coordinates should have already been corrected and so shoudn't have changed here");
       }
     }
+  }
+
+  if (comm_rank == 0){
+    std::cout << "----------> finish MPTRAC <----------\n";
   }
 
   return totsupers;
