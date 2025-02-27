@@ -28,7 +28,7 @@ then
   mkdir ${path2build}/share
 
   module purge
-  ${path2CLEO}/scripts/bash/build_cleo_openmp.sh \
+  ${path2CLEO}/scripts/levante/bash/build_cleo_openmp.sh \
     ${path2CLEO}/ ${path2build} true ${path2yac}
 
 elif [ "${action}" == "compile" ]
@@ -41,7 +41,7 @@ then
   module load netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0
   spack load openblas@0.3.18%gcc@=11.2.0
 
-  ${path2CLEO}/scripts/bash/compile_cleo.sh openmp ${path2build} bubble3d
+  ${path2CLEO}/scripts/levante/bash/compile_cleo.sh openmp ${path2build} bubble3d
 
 elif [ "${action}" == "inputfiles" ]
 then

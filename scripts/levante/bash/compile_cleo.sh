@@ -21,7 +21,7 @@ spack unload --all
 
 executables=$1
 make_clean=$2
-bashsrc=${CLEO_PATH2CLEO}/scripts/bash/src
+bashsrc=${CLEO_PATH2CLEO}/scripts/levante/bash/src
 
 ### -------------------- check inputs ------------------ ###
 source ${bashsrc}/check_inputs.sh

@@ -38,7 +38,7 @@ then
   echo "Please provide path to CLEO source directory"
   exit 1
 fi
-source ${path2CLEO}/scripts/bash/src/check_inputs.sh
+source ${path2CLEO}/scripts/levante/bash/src/check_inputs.sh
 check_args_not_empty "${buildtype}" "${compilername}" "${enabledebug}" "${path2CLEO}" "${path2build}" "${enableyac}"
 ### ---------------------------------------------------- ###
 
@@ -77,13 +77,13 @@ echo "### ------------------------------------------- ###"
 ### ---------------------------------------------------- ###
 
 ### --------------------- build CLEO ------------------- ###
-buildcmd="${CLEO_PATH2CLEO}/scripts/bash/build_cleo.sh"
+buildcmd="${CLEO_PATH2CLEO}/scripts/levante/bash/build_cleo.sh"
 echo ${buildcmd}
 eval ${buildcmd}
 ### ---------------------------------------------------- ###
 
 ### ---------------- compile executables --------------- ###
-compilecmd="${CLEO_PATH2CLEO}/scripts/bash/compile_cleo.sh \"${executables}\" ${make_clean}"
+compilecmd="${CLEO_PATH2CLEO}/scripts/levante/bash/compile_cleo.sh \"${executables}\" ${make_clean}"
 echo ${compilecmd}
 eval ${compilecmd}
 ### ---------------------------------------------------- ###

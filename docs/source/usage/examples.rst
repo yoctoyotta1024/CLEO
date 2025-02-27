@@ -25,9 +25,9 @@ Configure the Bash Scripts
 The bash script for every example provides command line arguments to ``examples/run_example.sh``. This
 script has three steps:
 
-1) It builds CLEO by running ``scripts/bash/build_cleo.sh``,
+1) It builds CLEO by running ``scripts/levante/bash/build_cleo.sh``,
 
-2) It compiles the specified exectuable(s) by running ``scripts/bash/compile_cleo.sh``,
+2) It compiles the specified exectuable(s) by running ``scripts/levante/bash/compile_cleo.sh``,
 
 3) It runs the example's Python script.
 
