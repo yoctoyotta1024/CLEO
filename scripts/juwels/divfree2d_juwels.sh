@@ -30,6 +30,7 @@ configfile=${path2CLEO}/examples/divfreemotion/src/config/divfree2d_config.yaml
 script_args="${configfile}"
 
 enableyac=false
+yacyaxtroot=NA
 enabledebug=false
 make_clean=false
 stacksize_limit=204800 # ulimit -s [stacksize_limit] (kB)

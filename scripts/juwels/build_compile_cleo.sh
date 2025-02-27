@@ -26,7 +26,7 @@ path2build=${4:-${path2CLEO}/build}         # should be absolute path
 executables=${5:-"cleocoupledsdm"}          # list of executables to compile
 enabledebug=${6:-false}                     # == "true" or otherwise false
 enableyac=${7:-false}                       # == "true" or otherwise false
-yacyaxtroot=${8:-/work/bm1183/m300950/yacyaxt} # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
+yacyaxtroot=${8:-NA} # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
 make_clean=${9:-true}                       # == "true" or otherwise false
 ### ---------------------------------------------------- ###
 

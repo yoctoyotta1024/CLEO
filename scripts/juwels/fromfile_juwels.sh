@@ -30,6 +30,7 @@ configfile=${path2CLEO}/examples/fromfile/src/config/fromfile_config.yaml
 script_args="${configfile} --do_inputfiles=TRUE --do_run_executable=TRUE --do_plot_results=TRUE --ntasks=4"
 
 enableyac=false
+yacyaxtroot=NA
 enabledebug=false
 make_clean=false
 stacksize_limit=204800 # ulimit -s [stacksize_limit] (kB)
