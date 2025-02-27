@@ -33,7 +33,7 @@ script_args="${configfile} golovin long1 long2"
 ### ---------------------------------------------------- ###
 
 ### ---------- build, compile and run example ---------- ###
-${path2CLEO}/examples/run_example.sh \
+${path2CLEO}/examples/run_example_levante.sh \
   ${buildtype} ${path2CLEO} ${path2build} ${enableyac} \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###

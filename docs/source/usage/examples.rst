@@ -22,7 +22,7 @@ for documentation on Levante's partitions), or change the build configuration.
 Configure the Bash Scripts
 --------------------------
 
-The bash script for every example provides command line arguments to ``examples/run_example.sh``. This
+The bash script for every example provides command line arguments to ``examples/run_example_levante.sh``. This
 script has three steps:
 
 1) It builds CLEO by running ``scripts/levante/bash/build_cleo.sh``,
@@ -32,7 +32,7 @@ script has three steps:
 3) It runs the example's Python script.
 
 
-You will need to configure ```examples/run_example.sh``` in the following ways:
+You will need to configure ```examples/run_example_levante.sh``` in the following ways:
 
 * Use your Conda (or Mamba) environment:
 
@@ -80,7 +80,7 @@ the conditions for cusp bifurcation and the plots will not be exactly identical 
 a) Arabas and Shima 2017
 ########################
 
-2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example.sh`` and
+2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example_levante.sh`` and
 ``examples/adiabaticparcel/as2017.sh``.
 
 3. Execute the bash script ``as2017.sh``, e.g.
@@ -95,7 +95,7 @@ similar to the columns of figure 5 from Arabas and Shima 2017 :cite:`arabasshima
 b) Cusp Bifurcation
 ###################
 
-2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example.sh`` and
+2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example_levante.sh`` and
 ``examples/adiabaticparcel/cuspbifurc.sh``.
 
 3. Execute the bash script ``cuspbifurc.sh``, e.g.
@@ -155,7 +155,7 @@ Running the Box Model Collisions Examples
 a) Shima et al. 2009
 ####################
 
-2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example.sh`` and
+2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example_levante.sh`` and
 ``examples/boxmodelcollisions/shima2009.sh``.
 
 3. Execute the bash script ``shima2009.sh``, e.g.
@@ -188,7 +188,7 @@ Fig.2(b) and Fig.2(c) of Shima et al. 2009 :cite:p:`shima2009`.
 b) Breakup
 ##########
 
-2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example.sh`` and
+2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example_levante.sh`` and
 ``examples/boxmodelcollisions/breakup.sh``.
 
 3. Execute the bash script ``breakup.sh``, e.g.
@@ -209,7 +209,7 @@ Divergence Free Motion
 
   $ cd ~/CLEO/examples/divfreemotion/
 
-2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example.sh`` and
+2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example_levante.sh`` and
 ``examples/boxmodelcollisions/divfree2d.sh``.
 
 3. Execute the bash script ``divfree2d.sh``, e.g.
@@ -234,7 +234,7 @@ should remain constant over time, as shown in the plot produced and by default c
 
   $ cd ~/CLEO/examples/rainshaft1d/
 
-2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example.sh`` and
+2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example_levante.sh`` and
 ``examples/boxmodelcollisions/rainshaft1d.sh``.
 
 3. Execute the bash script ``rainshaft1d.sh``, e.g.
@@ -256,7 +256,7 @@ Constant 2-D Thermodynamics
 
   $ cd ~/CLEO/examples/constthermo2d/
 
-2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example.sh`` and
+2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example_levante.sh`` and
 ``examples/boxmodelcollisions/constthermo2d.sh``.
 
 3. Execute the bash script ``constthermo2d.sh``, e.g.
@@ -281,7 +281,7 @@ parallelism, and (3) "serial" without parallelism.
 
   $ cd ~/CLEO/examples/speedtest/
 
-2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example.sh`` and
+2. :ref:`Configure the bash scripts<configurebash>`, ``examples/run_example_levante.sh`` and
 ``examples/boxmodelcollisions/speedtest.sh``.
 
 3. Execute the bash script ``speedtest.sh``, e.g.
