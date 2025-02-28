@@ -80,8 +80,7 @@ jobs:
           -DCMAKE_C_COMPILER=mpicc \
           -DCMAKE_CXX_COMPILER=mpic++ \
           -DCMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3" \
-          -DKokkos_ENABLE_SERIAL=ON \
-          -DENABLE_YAC_COUPLING=OFF
+          -DKokkos_ENABLE_SERIAL=ON
 
       - name: Compile Example
         run: cd build && make ${{ matrix.target }}
@@ -124,9 +123,8 @@ jobs:
           -DCMAKE_CXX_COMPILER=mpic++ \
           -DCMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3" \
           -DKokkos_ENABLE_SERIAL=ON \
-          -DENABLE_YAC_COUPLING=ON \
-          -DYAXT_ROOT=${{ runner.temp }}/yaxt \
-          -DYAC_ROOT=${{ runner.temp }}/yac \
+          -DCLEO_YAXT_ROOT=${{ runner.temp }}/yaxt \
+          -DCLEO_YAC_ROOT=${{ runner.temp }}/yac \
           -DCMAKE_MODULE_PATH=${PWD}/libs/coupldyn_yac/cmake
 
       - name: Compile YAC Example
@@ -152,8 +150,7 @@ jobs:
           -DCMAKE_C_COMPILER=mpicc \
           -DCMAKE_CXX_COMPILER=mpic++ \
           -DCMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3" \
-          -DKokkos_ENABLE_SERIAL=ON \
-          -DENABLE_YAC_COUPLING=OFF
+          -DKokkos_ENABLE_SERIAL=ON
 
       - name: Parallelization execution test
         run: |

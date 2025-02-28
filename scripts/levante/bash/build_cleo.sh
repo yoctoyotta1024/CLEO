@@ -52,7 +52,7 @@ if [ ${CLEO_ENABLEYAC} == "true" ]
 then
   source ${bashsrc}/build_yac.sh
 else
-  export CLEO_YAC_FLAGS="-DENABLE_YAC_COUPLING=OFF"
+  export CLEO_YAC_FLAGS=""
 fi
 ### ---------------------------------------------------- ###
 

@@ -51,7 +51,7 @@ then
   echo "Bad inputs, YAC build enabled but building CLEO with YAC on JUWELS is not currently supported"
   exit 1
 else
-  export CLEO_YAC_FLAGS="-DENABLE_YAC_COUPLING=OFF"
+  export CLEO_YAC_FLAGS=""
 fi
 ### ---------------------------------------------------- ###
 
