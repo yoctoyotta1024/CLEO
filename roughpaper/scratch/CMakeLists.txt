@@ -8,7 +8,7 @@ endif()
 
 # set project name and print directory of this CMakeLists.txt (source directory of project)
 project("roughpaper_scratch_test")
-message("${PROJECT_NAME} PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
+message(STATUS "CLEO including ${PROJECT_NAME} with PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 #set compiler flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -g -gdwarf-4")

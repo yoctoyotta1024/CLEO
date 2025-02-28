@@ -14,8 +14,8 @@ project(CLEO
 
 find_package(MPI REQUIRED)
 
-message("CLEO_SOURCE_DIR: ${CLEO_SOURCE_DIR}")
-message("CLEO_BINARY_DIR: ${CLEO_BINARY_DIR}")
+message(STATUS "CLEO source from CLEO_SOURCE_DIR: ${CLEO_SOURCE_DIR}")
+message(STATUS "CLEO build in CLEO_BINARY_DIR: ${CLEO_BINARY_DIR}")
 
 # ensure C++ compiler uses certain settings
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
@@ -34,7 +34,7 @@ message(STATUS "Using yaml-cpp installation from: ${yamlcpppath}")
 add_subdirectory(${yamlcpppath} ${CLEO_BINARY_DIR}/yaml-cpp)
 
 # print default compiler flags
-message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+message(STATUS "CLEO primary CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 
 # add directories of CLEO libray and main program
 add_subdirectory(libs)

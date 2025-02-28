@@ -5,14 +5,13 @@ endif()
 
 # set library name and print directory of this CMakeLists.txt (source directory of library) and print directory of this CMakeLists.txt (source directory of library)
 set(LIBNAME "coupldyn_yac")
-message("${LIBNAME} LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
+message(STATUS "CLEO using ${LIBNAME} with LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 # explicitly set library executables path to /lib in top level of build tree
 set(LIB_BINARY_DIR ${CLEO_BINARY_DIR}/lib)
 
-
-message(STATUS "Using YAC installation from: ${CLEO_YAC_ROOT}")
-message(STATUS "Using YAXT installation from: ${CLEO_YAXT_ROOT}")
+message(STATUS "Using YAC pre-installed in: ${CLEO_YAC_ROOT}")
+message(STATUS "Using YAXT pre-installed in: ${CLEO_YAXT_ROOT}")
 
 find_package(MPI REQUIRED)
 find_package(YAC REQUIRED)
