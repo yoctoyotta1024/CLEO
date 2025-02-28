@@ -40,7 +40,15 @@ message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 add_subdirectory(libs)
 
 # add directories for specific examples of CLEO
-add_subdirectory(examples EXCLUDE_FROM_ALL)
+if(CLEO_NO_EXAMPLES)
+  message(STATUS "CLEO excluding examples CLEO_NO_EXAMPLES=${CLEO_NO_EXAMPLES}")
+else()
+  add_subdirectory(examples EXCLUDE_FROM_ALL)
+endif()
 
 # add directory for roughpaper / quick tests
-add_subdirectory(roughpaper EXCLUDE_FROM_ALL)
+if(CLEO_NO_ROUGHPAPER)
+  message(STATUS "CLEO excluding roughpaper CLEO_NO_ROUGHPAPER=${CLEO_NO_ROUGHPAPER}")
+else()
+  add_subdirectory(roughpaper EXCLUDE_FROM_ALL)
+endif()
