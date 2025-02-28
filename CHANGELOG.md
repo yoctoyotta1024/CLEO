@@ -2,6 +2,27 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.35.0](https://github.com/yoctoyotta1024/CLEO/compare/d5f98316f312a19b9be9fc5f754fb6786515271b..v0.35.0) - 2025-02-28
+#### Bug Fixes
+- fix missing yacyaxtroot arg to bash scripts - ([0ff84d2](https://github.com/yoctoyotta1024/CLEO/commit/0ff84d217c51086d7a012785e79ad5ad44ecc717)) - yoctoyotta1024
+#### Documentation
+- **(examples)** docstring typo fix - ([d5f9831](https://github.com/yoctoyotta1024/CLEO/commit/d5f98316f312a19b9be9fc5f754fb6786515271b)) - Sylwester Arabas
+- better file explanation - ([dd9fe6d](https://github.com/yoctoyotta1024/CLEO/commit/dd9fe6d7082a67d05d360d85a460a7962bbc0b3f)) - yoctoyotta1024
+#### Features
+- new bash script to run fromfile example on juwels - ([383343a](https://github.com/yoctoyotta1024/CLEO/commit/383343ae626afea6a3238ac66a2d5ed93867746e)) - yoctoyotta1024
+#### Miscellaneous Chores
+- correct typo in docstring - ([8ad406e](https://github.com/yoctoyotta1024/CLEO/commit/8ad406edce2487b12bc80e624868cec9f0cdd2f2)) - yoctoyotta1024
+- add TODOs - ([42ae76d](https://github.com/yoctoyotta1024/CLEO/commit/42ae76dd1b47a6f225070bfa9552b91ea41a23f6)) - yoctoyotta1024
+#### Performance Improvements
+- formatting - ([7a9dc1f](https://github.com/yoctoyotta1024/CLEO/commit/7a9dc1fe2194f2bc27cd9fc0cf371511779643af)) - clara.bayley
+- delete unwanted comment - ([28bea10](https://github.com/yoctoyotta1024/CLEO/commit/28bea10cd24acf853d3af1ed3d6e3220a55a4966)) - yoctoyotta1024
+#### Refactoring
+- file rename - ([9610dbe](https://github.com/yoctoyotta1024/CLEO/commit/9610dbe1ea413285a0cf6d43e11493ac95c0a119)) - clara.bayley
+- move levante bash scripts into levante - ([f6b0d3e](https://github.com/yoctoyotta1024/CLEO/commit/f6b0d3edcbdaf02537955f4b659b392f3cef68e6)) - clara.bayley
+- remove macros for non-gpu superdrop functions - ([81dc834](https://github.com/yoctoyotta1024/CLEO/commit/81dc834e06f94d3bde5259b347568ae52c5de431)) - yoctoyotta1024
+
+- - -
+
 ## [v0.34.0](https://github.com/yoctoyotta1024/CLEO/compare/ea35ec8cbcbc24a252621ab656e15cf98f584e26..v0.34.0) - 2025-02-24
 #### Bug Fixes
 - make examples compatible with refactored movesupersindomain struct - ([dd9b56d](https://github.com/yoctoyotta1024/CLEO/commit/dd9b56d91834436d78b6f7e1915f99e8693a2d0b)) - clara.bayley
