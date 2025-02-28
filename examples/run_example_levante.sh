@@ -62,7 +62,7 @@ echo "---------------------------"
 ### ---------------------------------------------------- ###
 
 ### --------------- build and compile CLEO ------------- ###
-cmd="${path2CLEO}/scripts/build_compile_cleo.sh \
+cmd="${path2CLEO}/scripts/levante/build_compile_cleo.sh \
   ${buildtype}
   ${compilername}
   ${path2CLEO}
@@ -80,7 +80,7 @@ eval ${cmd}
 export CLEO_PATH2CLEO=${path2CLEO}
 export CLEO_BUILDTYPE=${buildtype}
 export CLEO_ENABLEYAC=${enableyac}
-source ${path2CLEO}/scripts/bash/src/runtime_settings.sh ${stacksize_limit}
+source ${path2CLEO}/scripts/levante/bash/src/runtime_settings.sh ${stacksize_limit}
 
 # TODO(all): split python scripts away from running executable
 ${python} ${pythonscript} ${path2CLEO} ${path2build} ${script_args}

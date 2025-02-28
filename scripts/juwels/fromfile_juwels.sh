@@ -1,33 +1,33 @@
 #!/bin/bash
-#SBATCH --job-name=divfree2d
+#SBATCH --job-name=fromfile
 #SBATCH --partition=devel
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=48
+#SBATCH --ntasks-per-node=4
+#SBATCH --cpus-per-task=8
 #SBATCH --mem=10G
 #SBATCH --time=00:10:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=exaww
-#SBATCH --output=./divfree2d_out.%j.out
-#SBATCH --error=./divfree2d_err.%j.out
+#SBATCH --output=./fromfile_out.%j.out
+#SBATCH --error=./fromfile_err.%j.out
 
 ### ------------------ Input Parameters ---------------- ###
 ### ------ You MUST edit these lines to set your ------- ###
 ### ---- build type, directories, the executable(s) ---- ###
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
-compilername=intel
-buildtype="openmp"
+compilername=gcc
+buildtype="serial"
 path2CLEO=${PROJECT}/bayley1/CLEO/
-path2build=${PROJECT}/bayley1/CLEO/build_divfree2d/
-executables="divfree2d"
+path2build=${PROJECT}/bayley1/CLEO/build_fromfile/
+executables="fromfile"
 
 cleoenv=/p/project1/exaww/bayley1/micromamba/envs/cleoenv
 python=${cleoenv}/bin/python
-pythonscript=${path2CLEO}/examples/divfreemotion/divfree2d.py
-configfile=${path2CLEO}/examples/divfreemotion/src/config/divfree2d_config.yaml
-script_args="${configfile}"
+pythonscript=${path2CLEO}/examples/fromfile/fromfile.py
+configfile=${path2CLEO}/examples/fromfile/src/config/fromfile_config.yaml
+script_args="${configfile} --do_inputfiles=TRUE --do_run_executable=TRUE --do_plot_results=TRUE --ntasks=4"
 
 enableyac=false
 yacyaxtroot=NA
@@ -67,7 +67,7 @@ eval ${cmd}
 ### ---------------------------------------------------- ###
 
 ### ----------- load compiler(s) and libraries --------- ###
-source ${bashsrc}/juwels_packages.sh
+source ${path2CLEO}/scripts/juwels/bash/src/juwels_packages.sh
 
 if [ "${compilername}" == "intel" ]
 then
@@ -86,6 +86,8 @@ fi
 ### ---------------------------------------------------- ###
 
 ### --------- run model through Python script ---------- ###
+module load GSL netCDF/4.9.2
+
 export CLEO_PATH2CLEO=${path2CLEO}
 export CLEO_BUILDTYPE=${buildtype}
 export CLEO_ENABLEYAC=${enableyac}

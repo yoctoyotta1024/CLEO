@@ -77,7 +77,7 @@ struct CountingSortFunctor {
   /* loop over superdroplets with this functor copies the superdroplets from supers to totsupers_tmp
   in new order based on their sdgbxindexes such that they are sorted from lowest to highest
   gbxindex (for superdroplets with sdgbxindex <= gbxindex_max). In the sorted view, superdroplets
-  with sgbxindex > gbxindex_max occur after those with sdgbxindex <= gbxindex_max but may not be
+  with sdgbxindex > gbxindex_max occur after those with sdgbxindex <= gbxindex_max but may not be
   sorted amongst themselves. sdgbxindex is set to LIMITVALUES::oob_gbxindex for all superdroplets in
   "supers" that are copied/moved to totsupers_tmp. */
   KOKKOS_INLINE_FUNCTION

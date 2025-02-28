@@ -218,8 +218,6 @@ viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
     assert((drop_coords[0] == b4[0]) && (drop_coords[1] == b4[1]) && (drop_coords[2] == b4[2]) &&
            "drop coordinates should have already been corrected and so shoudn't have changed here");
     totsupers(i).set_sdgbxindex(gbxindex);
-
-    // TODO(ALL): add check_bounds to SD?
   }
 
   // Reset all remaining non-used superdroplet spots

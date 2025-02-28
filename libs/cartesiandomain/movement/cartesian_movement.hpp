@@ -17,8 +17,7 @@
  * -----
  * File Description:
  * Movement of a superdroplet in a cartesian domain, optionally distributed across
- * more than one MPI process, using certain boundary onditions and the predictor corretor
- * method for superdroplet motion
+ * more than one MPI process, using certain boundary conditions and a method for superdroplet motion
  */
 
 #ifndef LIBS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_MOVEMENT_HPP_

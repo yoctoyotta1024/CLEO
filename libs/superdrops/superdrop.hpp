@@ -308,7 +308,6 @@ class Superdrop {
     coord2 += delta2;
   }
 
-  KOKKOS_INLINE_FUNCTION
   void serialize_double_components(std::vector<double>::iterator target) const {
     *target++ = coord3;
     *target++ = coord1;
@@ -317,21 +316,18 @@ class Superdrop {
     *target = attrs.msol;
   }
 
-  KOKKOS_INLINE_FUNCTION
   void serialize_uint_components(std::vector<unsigned int>::iterator target) {
     *target++ = sdgbxindex;
-    *target = static_cast<unsigned int>(sdId.get_value());
+    *target = static_cast<unsigned int>(sdId.get_value());  // TODO(ALL): don't do if using EmptyID
   }
 
-  KOKKOS_INLINE_FUNCTION
   void serialize_uint64_components(std::vector<uint64_t>::iterator target) { *target = attrs.xi; }
 
-  KOKKOS_INLINE_FUNCTION
   void deserialize_components(std::vector<unsigned int>::iterator uint_source,
                               std::vector<uint64_t>::iterator uint64_source,
                               std::vector<double>::iterator double_source) {
     sdgbxindex = *uint_source++;
-    sdId.value = static_cast<size_t>(*uint_source);
+    sdId.value = static_cast<size_t>(*uint_source);  // TODO(ALL): don't do if using EmptyID
 
     attrs.xi = *uint64_source;
 

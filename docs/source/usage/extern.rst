@@ -25,8 +25,8 @@ To build CLEO with dependency on YAC, you will first need to install YAXT and YA
 How to Install YAC (and YAXT)
 #############################
 
-The easiest way to install YAXT and YAC is to run the ``install_yac.sh`` bash script found in
-``scripts/bash/``. Note you will need to provide the path to the directory where you want
+The easiest way (on Levante) to install YAXT and YAC is to run the ``install_yac.sh`` bash script found in
+``scripts/levante/bash/``. Note you will need to provide the path to the directory where you want
 to put the installations.
 
 Alternatively you can download `YAXT <https://swprojects.dkrz.de/redmine/>`_ and

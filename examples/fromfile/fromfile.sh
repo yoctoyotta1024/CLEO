@@ -32,7 +32,7 @@ script_args="${configfile} --do_inputfiles=TRUE --do_run_executable=TRUE --do_pl
 ### ---------------------------------------------------- ###
 
 ### ---------- build, compile and run example ---------- ###
-${path2CLEO}/examples/run_example.sh \
+${path2CLEO}/examples/run_example_levante.sh \
   ${buildtype} ${path2CLEO} ${path2build} ${enableyac} \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###
