@@ -21,6 +21,7 @@ compilername=gcc
 buildtype="serial"
 path2CLEO=${PROJECT}/bayley1/CLEO/
 path2build=${PROJECT}/bayley1/CLEO/build_fromfile/
+build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian"
 executables="fromfile"
 
 cleoenv=/p/project1/exaww/bayley1/micromamba/envs/cleoenv
@@ -57,6 +58,7 @@ cmd="${path2CLEO}/scripts/juwels/build_compile_cleo.sh \
   ${compilername}
   ${path2CLEO}
   ${path2build}
+  "\"${build_flags}\""
   "\"${executables}\""
   ${enabledebug}
   ${enableyac}

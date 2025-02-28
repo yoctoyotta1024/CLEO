@@ -19,15 +19,16 @@ module purge
 ### ----- You need to edit these lines to specify ------ ###
 ### ----- your build configuration and executables ----- ###
 ### ---------------------------------------------------- ###
-buildtype=$1                                # "serial", "threads", "openmp" or "cuda"
-compilername=${2:-intel}                    # "intel" or "gcc"
-path2CLEO=${3:-${PROJECT}/bayley1/CLEO}     # must be absolute path
-path2build=${4:-${path2CLEO}/build}         # should be absolute path
-executables=${5:-"cleocoupledsdm"}          # list of executables to compile
-enabledebug=${6:-false}                     # == "true" or otherwise false
-enableyac=${7:-false}                       # == "true" or otherwise false
-yacyaxtroot=${8:-NA}                        # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
-make_clean=${9:-true}                       # == "true" or otherwise false
+buildtype=$1                                   # "serial", "threads", "openmp" or "cuda"
+compilername=${2:-intel}                       # "intel" or "gcc"
+path2CLEO=${3:-${PROJECT}/bayley1/CLEO}        # must be absolute path
+path2build=${4:-${path2CLEO}/build}            # should be absolute path
+build_flags=${5:-"-DCLEO_COUPLED_DYNAMICS="""} # CLEO_BUILD_FLAGS
+executables=${6:-"cleocoupledsdm"}             # list of executables to compile
+enabledebug=${7:-false}                        # == "true" or otherwise false
+enableyac=${8:-false}                          # == "true" or otherwise false
+yacyaxtroot=${9:-NA}                           # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
+make_clean=${10:-true}                          # == "true" or otherwise false
 ### ---------------------------------------------------- ###
 
 ### ------------------ check arguments ----------------- ###
@@ -45,6 +46,7 @@ export CLEO_BUILDTYPE=${buildtype}
 export CLEO_COMPILERNAME=${compilername}
 export CLEO_PATH2CLEO=${path2CLEO}
 export CLEO_PATH2BUILD=${path2build}
+export CLEO_BUILD_FLAGS=${build_flags}
 export CLEO_ENABLEDEBUG=${enabledebug}
 export CLEO_ENABLEYAC=${enableyac}
 
@@ -67,6 +69,7 @@ echo "CLEO_BUILDTYPE = ${CLEO_BUILDTYPE}"
 echo "CLEO_COMPILERNAME = ${CLEO_COMPILERNAME}"
 echo "CLEO_PATH2CLEO = ${CLEO_PATH2CLEO}"
 echo "CLEO_PATH2BUILD = ${CLEO_PATH2BUILD}"
+echo "CLEO_BUILD_FLAGS = ${CLEO_BUILD_FLAGS}"
 echo "CLEO_ENABLEDEBUG = ${CLEO_ENABLEDEBUG}"
 echo "CLEO_ENABLEYAC = ${CLEO_ENABLEYAC}"
 echo "CLEO_YACYAXTROOT = ${CLEO_YACYAXTROOT}"

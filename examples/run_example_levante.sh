@@ -26,10 +26,11 @@
 buildtype=$1
 path2CLEO=$2
 path2build=$3
-enableyac=$4
-executables="$5"
-pythonscript=$6
-script_args="$7"
+build_flags=$4
+enableyac=$5
+executables="$6"
+pythonscript=$7
+script_args="$8"
 
 cleoenv=/work/bm1183/m300950/bin/envs/cleoenv
 python=${cleoenv}/bin/python3
@@ -54,6 +55,7 @@ echo "buildtype = ${buildtype}"
 echo "compilername = ${compilername}"
 echo "path2CLEO = ${path2CLEO}"
 echo "path2build = ${path2build}"
+echo "build_flags = ${build_flags}"
 echo "enableyac = ${enableyac}"
 echo "executables = ${executables}"
 echo "pythonscript = ${pythonscript}"
@@ -67,6 +69,7 @@ cmd="${path2CLEO}/scripts/levante/build_compile_cleo.sh \
   ${compilername}
   ${path2CLEO}
   ${path2build}
+  "\"${build_flags}\""
   "\"${executables}\""
   ${enabledebug}
   ${enableyac}
