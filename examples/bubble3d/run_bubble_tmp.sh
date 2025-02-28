@@ -27,9 +27,16 @@ then
   mkdir ${path2build}/bin
   mkdir ${path2build}/share
 
-  module purge
-  ${path2CLEO}/scripts/levante/bash/build_cleo_openmp.sh \
-    ${path2CLEO}/ ${path2build} true ${path2yac}
+  gcc=gcc/11.2.0-gcc-11.2.0
+  openmpi=openmpi/4.1.2-gcc-11.2.0
+  netcdf=netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0 # must match gcc and openmpi
+  spack load openblas@0.3.18%gcc@=11.2.0
+  module load ${gcc} ${openmpi} ${netcdf}
+
+  CLEO_YAC_FLAGS="-D"${cleo_yac_module_path}" -DC -DCLEO_YAC_ROOT=${CLEO_YACYAXTROOT}/yac"
+  cmake -S ${path2CLEO} -B ${path2build} -DCLEO_COUPLED_DYNAMICS="yac" \
+    -DCLEO_YAC_MODULE_PATH="${path2CLEO}/libs/coupldyn_yac/cmake" \
+    -DCLEO_YAXT_ROOT=${path2yac}/yaxt -DCLEO_YAC_ROOT=${path2yac}/yac
 
 elif [ "${action}" == "compile" ]
 then
