@@ -7,11 +7,18 @@ endif()
 set(LIBNAME "coupldyn_yac")
 message(STATUS "CLEO using ${LIBNAME} with LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 
+enable_language(C)
+message(STATUS "CLEO ${LIBNAME} enabling C language")
+
 # explicitly set library executables path to /lib in top level of build tree
 set(LIB_BINARY_DIR ${CLEO_BINARY_DIR}/lib)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CLEO_YAC_MODULE_PATH})
+message(STATUS "CMAKE_MODULE_PATH: ${CMAKE_MODULE_PATH}")
 message(STATUS "Using YAC pre-installed in: ${CLEO_YAC_ROOT}")
 message(STATUS "Using YAXT pre-installed in: ${CLEO_YAXT_ROOT}")
+set(YAC_ROOT ${CLEO_YAC_ROOT})
+set(YAXT_ROOT ${CLEO_YAXT_ROOT})
 
 find_package(MPI REQUIRED)
 find_package(YAC REQUIRED)
@@ -23,7 +30,6 @@ set(SOURCES
 )
 # must use STATIC (not(!) SHARED) lib for linking to executable if build is CUDA enabled with Kokkos
 add_library("${LIBNAME}" STATIC ${SOURCES})
-enable_language(C)
 
 # Add directories for target library
 # target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")

@@ -2,6 +2,7 @@
 
 set -e
 bashsrc=${CLEO_PATH2CLEO}/scripts/levante/bash/src
+cleo_yac_module_path="${CLEO_PATH2CLEO}/libs/coupldyn_yac/cmake"
 
 ### -------------------- check inputs ------------------ ###
 source ${bashsrc}/check_inputs.sh
@@ -31,6 +32,7 @@ fi
 source ${bashsrc}/levante_packages.sh
 module load ${levante_gcc_netcdf_yac}
 spack load ${levante_gcc_openblas_yac}
-export CLEO_YAC_FLAGS="-DCLEO_YAXT_ROOT=${CLEO_YACYAXTROOT}/yaxt -DCLEO_YAC_ROOT=${CLEO_YACYAXTROOT}/yac"
-export CLEO_MODULE_PATH="${CLEO_MODULE_PATH} ${CLEO_PATH2CLEO}/libs/coupldyn_yac/cmake"
+export CLEO_YAC_FLAGS="-DCLEO_YAC_MODULE_PATH="${cleo_yac_module_path}" \
+  -DCLEO_YAXT_ROOT=${CLEO_YACYAXTROOT}/yaxt \
+  -DCLEO_YAC_ROOT=${CLEO_YACYAXTROOT}/yac"
 ### ---------------------------------------------------- ###
