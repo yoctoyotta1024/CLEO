@@ -5,7 +5,7 @@ endif()
 
 # set project name and print directory of this CMakeLists.txt (source directory of project)
 project("roughpaper_src_cleocoupledsdm")
-message("${PROJECT_NAME} PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
+message(STATUS "CLEO including ${PROJECT_NAME} with PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 # Set libraries from CLEO to link with executable
 set(CLEOLIBS gridboxes initialise observers runcleo superdrops zarr)
