@@ -390,14 +390,14 @@ To execute these scripts you will therefore need to be on a node in the GPU part
 for documentation on Levante’s partitions), or change the build configuration.</p>
 <section id="configure-the-bash-scripts">
 <span id="configurebash"></span><h2>Configure the Bash Scripts<a class="headerlink" href="#configure-the-bash-scripts" title="Link to this heading">¶</a></h2>
-<p>The bash script for every example provides command line arguments to <code class="docutils literal notranslate"><span class="pre">examples/run_example.sh</span></code>. This
+<p>The bash script for every example provides command line arguments to <code class="docutils literal notranslate"><span class="pre">examples/run_example_levante.sh</span></code>. This
 script has three steps:</p>
 <ol class="arabic simple">
-<li><p>It builds CLEO by running <code class="docutils literal notranslate"><span class="pre">scripts/bash/build_cleo.sh</span></code>,</p></li>
-<li><p>It compiles the specified exectuable(s) by running <code class="docutils literal notranslate"><span class="pre">scripts/bash/compile_cleo.sh</span></code>,</p></li>
+<li><p>It builds CLEO by running <code class="docutils literal notranslate"><span class="pre">scripts/levante/bash/build_cleo.sh</span></code>,</p></li>
+<li><p>It compiles the specified exectuable(s) by running <code class="docutils literal notranslate"><span class="pre">scripts/levante/bash/compile_cleo.sh</span></code>,</p></li>
 <li><p>It runs the example’s Python script.</p></li>
 </ol>
-<p>You will need to configure <code class="docutils literal notranslate"><span class="pre">`examples/run_example.sh`</span></code> in the following ways:</p>
+<p>You will need to configure <code class="docutils literal notranslate"><span class="pre">`examples/run_example_levante.sh`</span></code> in the following ways:</p>
 <ul>
 <li><p>Use your Conda (or Mamba) environment:</p>
 <p>replace the path in the line stating <code class="docutils literal notranslate"><span class="pre">cleoenv=[…]</span></code> with the path to your environment.</p>
@@ -439,7 +439,7 @@ the conditions for cusp bifurcation and the plots will not be exactly identical 
 </div>
 <section id="a-arabas-and-shima-2017">
 <h3>a) Arabas and Shima 2017<a class="headerlink" href="#a-arabas-and-shima-2017" title="Link to this heading">¶</a></h3>
-<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example.sh</span></code> and
+<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example_levante.sh</span></code> and
 <code class="docutils literal notranslate"><span class="pre">examples/adiabaticparcel/as2017.sh</span></code>.</p>
 <ol class="arabic simple" start="3">
 <li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">as2017.sh</span></code>, e.g.</p></li>
@@ -452,7 +452,7 @@ similar to the columns of figure 5 from Arabas and Shima 2017 <span id="id3">[<a
 </section>
 <section id="b-cusp-bifurcation">
 <h3>b) Cusp Bifurcation<a class="headerlink" href="#b-cusp-bifurcation" title="Link to this heading">¶</a></h3>
-<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example.sh</span></code> and
+<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example_levante.sh</span></code> and
 <code class="docutils literal notranslate"><span class="pre">examples/adiabaticparcel/cuspbifurc.sh</span></code>.</p>
 <ol class="arabic simple" start="3">
 <li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">cuspbifurc.sh</span></code>, e.g.</p></li>
@@ -500,7 +500,7 @@ efficiency from Low and List 1982(a) <span id="id10">[<a class="reference intern
 </section>
 <section id="a-shima-et-al-2009">
 <h3>a) Shima et al. 2009<a class="headerlink" href="#a-shima-et-al-2009" title="Link to this heading">¶</a></h3>
-<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example.sh</span></code> and
+<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example_levante.sh</span></code> and
 <code class="docutils literal notranslate"><span class="pre">examples/boxmodelcollisions/shima2009.sh</span></code>.</p>
 <ol class="arabic simple" start="3">
 <li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">shima2009.sh</span></code>, e.g.</p></li>
@@ -525,7 +525,7 @@ Fig.2(b) and Fig.2(c) of Shima et al. 2009 <span id="id15">[<a class="reference 
 </section>
 <section id="b-breakup">
 <h3>b) Breakup<a class="headerlink" href="#b-breakup" title="Link to this heading">¶</a></h3>
-<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example.sh</span></code> and
+<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example_levante.sh</span></code> and
 <code class="docutils literal notranslate"><span class="pre">examples/boxmodelcollisions/breakup.sh</span></code>.</p>
 <ol class="arabic simple" start="3">
 <li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">breakup.sh</span></code>, e.g.</p></li>
@@ -545,7 +545,7 @@ run. You can change this by editing <code class="docutils literal notranslate"><
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>~/CLEO/examples/divfreemotion/
 </pre></div>
 </div>
-<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example.sh</span></code> and
+<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example_levante.sh</span></code> and
 <code class="docutils literal notranslate"><span class="pre">examples/boxmodelcollisions/divfree2d.sh</span></code>.</p>
 <ol class="arabic simple" start="3">
 <li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">divfree2d.sh</span></code>, e.g.</p></li>
@@ -567,7 +567,7 @@ should remain constant over time, as shown in the plot produced and by default c
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>~/CLEO/examples/rainshaft1d/
 </pre></div>
 </div>
-<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example.sh</span></code> and
+<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example_levante.sh</span></code> and
 <code class="docutils literal notranslate"><span class="pre">examples/boxmodelcollisions/rainshaft1d.sh</span></code>.</p>
 <ol class="arabic simple" start="3">
 <li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">rainshaft1d.sh</span></code>, e.g.</p></li>
@@ -586,7 +586,7 @@ reference solutions please <a class="reference internal" href="contact.html#cont
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>~/CLEO/examples/constthermo2d/
 </pre></div>
 </div>
-<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example.sh</span></code> and
+<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example_levante.sh</span></code> and
 <code class="docutils literal notranslate"><span class="pre">examples/boxmodelcollisions/constthermo2d.sh</span></code>.</p>
 <ol class="arabic simple" start="3">
 <li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">constthermo2d.sh</span></code>, e.g.</p></li>
@@ -608,7 +608,7 @@ parallelism, and (3) “serial” without parallelism.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>~/CLEO/examples/speedtest/
 </pre></div>
 </div>
-<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example.sh</span></code> and
+<p>2. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">examples/run_example_levante.sh</span></code> and
 <code class="docutils literal notranslate"><span class="pre">examples/boxmodelcollisions/speedtest.sh</span></code>.</p>
 <ol class="arabic simple" start="3">
 <li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">speedtest.sh</span></code>, e.g.</p></li>
@@ -665,7 +665,7 @@ script.</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 24 February 2025</div>
+              Last updated on 28 February 2025</div>
           </div>
           <div class="right-details">
             
