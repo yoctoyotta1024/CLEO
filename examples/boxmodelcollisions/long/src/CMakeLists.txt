@@ -6,7 +6,7 @@ endif()
 
 # set project name and print directory of this CMakeLists.txt (source directory of project)
 project("boxmodelcollisions_long")
-message("PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
+message(STATUS "CLEO including ${PROJECT_NAME} with PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 # Set libraries from CLEO to link with executable
 set(CLEOLIBS gridboxes initialise observers runcleo superdrops zarr)
