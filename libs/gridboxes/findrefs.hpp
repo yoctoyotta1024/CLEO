@@ -55,7 +55,7 @@ struct Ref1 {
 /* returns position in view of {first, last} superdrop that occupies gridbox,
 ie. that has sdgbxindex == idx. Function is outermost level of parallelism. */
 template <typename ViewSupers>
-inline kkpair_size_t find_refs(const ViewSupers totsupers, unsigned int idx) {
+KOKKOS_INLINE_FUNCTION kkpair_size_t find_refs(const ViewSupers totsupers, unsigned int idx) {
   namespace SRP = SetRefPreds;
   const auto ref0 = size_t{find_ref(totsupers, SRP::Ref0{idx})};
   const auto ref1 = size_t{find_ref(totsupers, SRP::Ref1{idx})};

@@ -112,11 +112,8 @@ struct MoveSupersInDomain {
   void set_gridboxes_refs(const viewd_gbx d_gbxs, const subviewd_constsupers domainsupers) const {
     const auto ngbxs = d_gbxs.extent(0);
     Kokkos::parallel_for(
-        "set_gridboxes_refs", TeamPolicy(ngbxs, Kokkos::AUTO()),
-        KOKKOS_LAMBDA(const TeamMember &team_member) {
-          const auto ii = team_member.league_rank();
-          d_gbxs(ii).supersingbx.set_refs(team_member, domainsupers);
-        });
+        "set_gridboxes_refs", Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
+        KOKKOS_LAMBDA(const size_t ii) { d_gbxs(ii).supersingbx.set_refs(domainsupers); });
   }
 
   /* (expensive!) test if superdrops' gbxindex doesn't match gridbox's gbxindex,

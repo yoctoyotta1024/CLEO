@@ -76,7 +76,7 @@ struct SupersInGbx {
   sets 'refs' to pair with positions of first and last
   superdrops in view which have matching sdgbxindex to idx.
   Function is outside of parallelism (ie. in serial code). */
-  inline void set_refs(const subviewd_constsupers domainsupers);
+  KOKKOS_INLINE_FUNCTION void set_refs(const subviewd_constsupers domainsupers);
 
   /* assumes domainsupers is already sorted via sdgbxindex.
   sets 'refs' to pair with positions of first and last
@@ -108,7 +108,7 @@ struct SupersInGbx {
 sets 'refs' to pair with positions of first and last
 superdrops in view which have matching sdgbxindex to idx.
 Function is outside of parallelism (ie. in serial code). */
-inline void SupersInGbx::set_refs(const subviewd_constsupers domainsupers) {
+KOKKOS_INLINE_FUNCTION void SupersInGbx::set_refs(const subviewd_constsupers domainsupers) {
   refs = find_refs(domainsupers, idx);
 }
 
