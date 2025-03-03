@@ -48,6 +48,10 @@ template <GridboxMaps GbxMaps>
 viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
                              viewd_supers totsupers);
 
+/*
+ * struct satisfying TransportAcrossDomain concept for transporting superdroplets around a
+ * cartesian domain, optionally with MPI communicaiton of superdroplets between nodes
+ */
 struct CartesianTransportAcrossDomain {
   /* (re)sorting supers based on their gbxindexes as step to 'move' superdroplets across the domain.
   May also include MPI communication with moves superdroplets away from/into a node's domain

@@ -33,6 +33,7 @@
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/supersindomain.hpp"
+#include "gridboxes/transport_across_domain.hpp"
 #include "mpi.h"
 #include "superdrops/motion.hpp"
 #include "superdrops/sdmmonitor.hpp"
@@ -94,13 +95,12 @@ spatial coordinates (according to some type of Motion) and then updating their g
 concordantly and moving them between gridboxes afterwards (MPI communication and sorting) and
 finally applying any additional bounday conditions.
 */
-// TODO(CB): use concepts to set contraints for MovementAcrossDomain and BCs
-template <GridboxMaps GbxMaps, Motion<GbxMaps> M, typename TransportAcrossDomain,
+template <GridboxMaps GbxMaps, Motion<GbxMaps> M, TransportAcrossDomain<GbxMaps> T,
           typename BoundaryConditions>
 class MoveSupersInDomain {
  private:
   M sdmotion;
-  TransportAcrossDomain transport_supers_across_domain;
+  T transport_across_domain;
   BoundaryConditions apply_domain_boundary_conditions;
 
   /* (expensive!) test if superdrops' gbxindex doesn't match gridbox's gbxindex,
@@ -144,7 +144,7 @@ class MoveSupersInDomain {
                                                SupersInDomain &allsupers) const {
     Kokkos::Profiling::ScopedRegion region("sdm_movement_between_gridboxes");
 
-    allsupers = transport_supers_across_domain(gbxmaps, d_gbxs, allsupers);
+    allsupers = transport_across_domain(gbxmaps, d_gbxs, allsupers);
 
     set_gridboxes_refs(d_gbxs, allsupers.domain_supers());
 
@@ -200,10 +200,10 @@ class MoveSupersInDomain {
   }
 
  public:
-  MoveSupersInDomain(const M mtn, const TransportAcrossDomain transport_across_domain,
+  MoveSupersInDomain(const M i_sdmotion, const T i_transport_across_domain,
                      const BoundaryConditions boundary_conditions)
-      : sdmotion(mtn),
-        transport_supers_across_domain(transport_across_domain),
+      : sdmotion(i_sdmotion),
+        transport_across_domain(i_transport_across_domain),
         apply_domain_boundary_conditions(boundary_conditions) {}
 
   /* extra constructor useful to help when compiler cannot deduce type of GBxMaps */
