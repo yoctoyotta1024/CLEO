@@ -39,8 +39,8 @@ SupersInDomain move_supers_between_gridboxes_again(const viewd_gbx d_gbxs,
 Call to apply boundary conditions to remove and then add superdroplets to the top of the domain
 above coord3lim.
 */
-SupersInDomain AddSupersAtDomainTop::operator()(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
-                                                SupersInDomain &allsupers) const {
+SupersInDomain AddSupersAtDomainTop::apply(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
+                                           SupersInDomain &allsupers) const {
   const auto gbxindexes_for_newsupers =
       remove_superdrops_from_gridboxes(gbxmaps, d_gbxs, allsupers.domain_supers(), coord3lim);
 

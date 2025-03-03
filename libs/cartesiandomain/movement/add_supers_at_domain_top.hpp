@@ -126,8 +126,8 @@ struct AddSupersAtDomainTop {
   Call to apply boundary conditions to remove and then add superdroplets to the top of the domain
   abouve coord3lim.
   */
-  SupersInDomain operator()(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
-                            SupersInDomain &allsupers) const;
+  SupersInDomain apply(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
+                       SupersInDomain &allsupers) const;
 };
 
 #endif  // LIBS_CARTESIANDOMAIN_MOVEMENT_ADD_SUPERS_AT_DOMAIN_TOP_HPP_

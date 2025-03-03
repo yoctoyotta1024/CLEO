@@ -30,6 +30,7 @@
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
+#include "gridboxes/boundary_conditions.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/supersindomain.hpp"
@@ -96,12 +97,12 @@ concordantly and moving them between gridboxes afterwards (MPI communication and
 finally applying any additional bounday conditions.
 */
 template <GridboxMaps GbxMaps, Motion<GbxMaps> M, TransportAcrossDomain<GbxMaps> T,
-          typename BoundaryConditions>
+          BoundaryConditions<GbxMaps> BCs>
 class MoveSupersInDomain {
  private:
   M sdmotion;
   T transport_across_domain;
-  BoundaryConditions apply_domain_boundary_conditions;
+  BCs boundary_conditions;
 
   /* (expensive!) test if superdrops' gbxindex doesn't match gridbox's gbxindex,
   raise error is assertion fails */
@@ -178,7 +179,7 @@ class MoveSupersInDomain {
   (1) update their spatial coords according to type of sdmotion. (device)
   (2) update their sdgbxindex accordingly (device)
   (3) move superdroplets between gridboxes (host)
-  (4) apply domain boundary conditions (host and device)
+  (4) apply domain boundary conditions (host and/or device)
   */
   SupersInDomain move_superdrops_in_domain(const unsigned int t_sdm, const GbxMaps &gbxmaps,
                                            viewd_gbx d_gbxs, SupersInDomain &allsupers) const {
@@ -193,7 +194,7 @@ class MoveSupersInDomain {
 
     /* step (4) */
     Kokkos::Profiling::pushRegion("sdm_movement_boundary_conditions");
-    allsupers = apply_domain_boundary_conditions(gbxmaps, d_gbxs, allsupers);
+    allsupers = boundary_conditions.apply(gbxmaps, d_gbxs, allsupers);
     Kokkos::Profiling::popRegion();
 
     return allsupers;
@@ -201,15 +202,15 @@ class MoveSupersInDomain {
 
  public:
   MoveSupersInDomain(const M i_sdmotion, const T i_transport_across_domain,
-                     const BoundaryConditions boundary_conditions)
+                     const BCs i_boundary_conditions)
       : sdmotion(i_sdmotion),
         transport_across_domain(i_transport_across_domain),
-        apply_domain_boundary_conditions(boundary_conditions) {}
+        boundary_conditions(i_boundary_conditions) {}
 
-  /* extra constructor useful to help when compiler cannot deduce type of GBxMaps */
-  MoveSupersInDomain(const GbxMaps &gbxmaps, const M mtn,
-                     const BoundaryConditions boundary_conditions)
-      : MoveSupersInDomain(mtn, boundary_conditions) {}
+  /* extra constructor useful to help when compiler cannot deduce type of GbxMaps */
+  MoveSupersInDomain(const GbxMaps &gbxmaps, const M i_sdmotion, const T i_transport_across_domain,
+                     const BCs i_boundary_conditions)
+      : MoveSupersInDomain(i_sdmotion, i_transport_across_domain, i_boundary_conditions) {}
 
   /* returns time when superdroplet motion is next due to occur given current time, t_sdm */
   KOKKOS_INLINE_FUNCTION
