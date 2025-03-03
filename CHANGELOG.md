@@ -2,6 +2,21 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.35.1](https://github.com/yoctoyotta1024/CLEO/compare/41b23c3e0d0b2b55a7dfac6f1c76963b20ad2568..v0.35.1) - 2025-03-03
+#### Bug Fixes
+- export yac and yaxt root to names YAC_ROOT and YAXT_ROOT - ([1670bf3](https://github.com/yoctoyotta1024/CLEO/commit/1670bf3ee9d1d325661e75c84971a0a328e2c20a)) - clara.bayley
+- bash syntax errors - ([41b23c3](https://github.com/yoctoyotta1024/CLEO/commit/41b23c3e0d0b2b55a7dfac6f1c76963b20ad2568)) - clara.bayley
+#### Continuous Integration
+- add coupled_dynamics and domain flags to builds - ([c78e993](https://github.com/yoctoyotta1024/CLEO/commit/c78e9930e922c973836b35cd74f6de474d20f2c2)) - clara.bayley
+#### Refactoring
+- set flags in bash scripts for cleo cmake macros using CLEO_BUILD_FLAGS - ([25ecbbe](https://github.com/yoctoyotta1024/CLEO/commit/25ecbbe28b022359d687e1ec588ce07843e0678b)) - clara.bayley
+- improve build status messages - ([28eed21](https://github.com/yoctoyotta1024/CLEO/commit/28eed21e044cd281a160683b9eee10b497372ddb)) - clara.bayley
+- rename yac root flags and delete ENABLE_YAC_COUPLING redundant flag - ([ef669ca](https://github.com/yoctoyotta1024/CLEO/commit/ef669ca0104b0438d5b663c0aa665de1dedd9a9c)) - clara.bayley
+- CLEO_[XXX] macros (flags) in CMakeLists.txt to not build exmaples and/or roughpaper - ([87cb1b4](https://github.com/yoctoyotta1024/CLEO/commit/87cb1b427e1ace2cd181512b7956043cee1aa89c)) - clara.bayley
+- CLEO_[XXX] macros (flags) in CMakeLists.txt which determine coupled_dynamics and domain type - ([cd348ea](https://github.com/yoctoyotta1024/CLEO/commit/cd348eadebc579a30eab6baa458035a4e3c0a376)) - clara.bayley
+
+- - -
+
 ## [v0.35.0](https://github.com/yoctoyotta1024/CLEO/compare/d5f98316f312a19b9be9fc5f754fb6786515271b..v0.35.0) - 2025-02-28
 #### Bug Fixes
 - fix missing yacyaxtroot arg to bash scripts - ([0ff84d2](https://github.com/yoctoyotta1024/CLEO/commit/0ff84d217c51086d7a012785e79ad5ad44ecc717)) - yoctoyotta1024
