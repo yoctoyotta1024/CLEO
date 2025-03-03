@@ -178,11 +178,10 @@ struct DoCondensation {
    * @param mo Monitor of SDM processes.
    * @return The updated view super-droplets.
    */
-  KOKKOS_INLINE_FUNCTION subviewd_supers operator()(const TeamMember &team_member,
-                                                    const unsigned int subt, subviewd_supers supers,
-                                                    State &state, const SDMMonitor auto mo) const {
+  KOKKOS_INLINE_FUNCTION void operator()(const TeamMember &team_member, const unsigned int subt,
+                                         subviewd_supers supers, State &state,
+                                         const SDMMonitor auto mo) const {
     do_condensation(team_member, supers, state, mo);
-    return supers;
   }
 };
 

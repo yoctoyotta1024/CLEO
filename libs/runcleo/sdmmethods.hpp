@@ -155,7 +155,7 @@ class SDMMethods {
 
             auto supers = d_gbxs(ii).supersingbx(domainsupers);
             for (unsigned int subt = t_sdm; subt < t_next; subt = microphys.next_step(subt)) {
-              supers = microphys.run_step(
+              microphys.run_step(
                   team_member, subt, supers, d_gbxs(ii).state,
                   mo);  // TODO(CB): explicitly feed supers back into domainsupers
             }

@@ -138,12 +138,12 @@ struct DoCollisions {
    * @param VOLUME The volume.
    * @return True if the collision event results in null superdrops with xi=0), otherwise false.
    */
-  KOKKOS_INLINE_FUNCTION bool collide_superdroplet_pair(Superdrop &dropA, Superdrop &dropB,
+  KOKKOS_INLINE_FUNCTION void collide_superdroplet_pair(Superdrop &dropA, Superdrop &dropB,
                                                         const double scale_p,
                                                         const double VOLUME) const {
     /* 1. assign references to each superdrop in pair
     that will collide such that (drop1.xi) >= (drop2.xi) */
-    const auto drops(assign_drops(dropA, dropB));  // {drop1, drop2}
+    const auto drops = assign_drops(dropA, dropB);  // {drop1, drop2}
 
     /* 2. calculate scaled probability of
     collision for pair of superdroplets */
@@ -155,9 +155,7 @@ struct DoCollisions {
     const auto phi = urbg.drand(0.0, 1.0);      // random number in range [0.0, 1.0]
     genpool.free_state(urbg.gen);
 
-    const auto isnull = enact_collision(drops.first, drops.second, prob, phi);
-
-    return isnull;
+    enact_collision(drops.first, drops.second, prob, phi);
   }
 
   /**
@@ -179,25 +177,18 @@ struct DoCollisions {
    * @param volume The volume in which to calculate the probability of collisions.
    * @return The number of null (xi=0) superdrops.
    */
-  KOKKOS_INLINE_FUNCTION size_t collide_supers(const TeamMember &team_member,
-                                               subviewd_supers supers, const double volume) const {
+  KOKKOS_INLINE_FUNCTION void collide_supers(const TeamMember &team_member, subviewd_supers supers,
+                                             const double volume) const {
     const auto nsupers = static_cast<size_t>(supers.extent(0));
     const auto npairs = size_t{nsupers / 2};  // no. pairs of superdrops (=floor() for nsupers > 0)
     const auto scale_p = double{nsupers * (nsupers - 1.0) / (2.0 * npairs)};
     const auto VOLUME = double{volume * dlc::VOL0};  // volume in which collisions occur [m^3]
 
-    auto totnumnull = size_t{0};  // number of null superdrops
-    Kokkos::parallel_reduce(
-        Kokkos::TeamThreadRange(team_member, npairs),
-        [&, this](const size_t jj, size_t &numnull) {
-          const auto kk = size_t{jj * 2};
-          const auto isnull =
-              collide_superdroplet_pair(supers(kk), supers(kk + 1), scale_p, VOLUME);
-          numnull += static_cast<size_t>(isnull);
-        },
-        totnumnull);
-
-    return totnumnull;
+    Kokkos::parallel_for(Kokkos::TeamThreadRange(team_member, npairs), [&, this](const size_t jj) {
+      const auto kk = size_t{jj * 2};
+      collide_superdroplet_pair(supers(kk), supers(kk + 1), scale_p, VOLUME);
+    });
+    team_member.team_barrier();  // synchronise threads
   }
 
   /**
@@ -213,18 +204,14 @@ struct DoCollisions {
    * @param volume The volume in which to calculate the probability of collisions.
    * @return The updated superdroplets.
    */
-  KOKKOS_INLINE_FUNCTION subviewd_supers do_collisions(const TeamMember &team_member,
-                                                       subviewd_supers supers,
-                                                       const double volume) const {
+  KOKKOS_INLINE_FUNCTION void do_collisions(const TeamMember &team_member, subviewd_supers supers,
+                                            const double volume) const {
     /* Randomly shuffle order of superdroplet objects
     in supers in order to generate random pairs */
     supers = one_shuffle_supers(team_member, supers, genpool);
 
     /* collide all randomly generated pairs of SDs */
-    const auto totnumnull = collide_supers(team_member, supers, volume);
-
-    assert((totnumnull == 0) && "no null superdrops should exist");
-    return supers;
+    collide_supers(team_member, supers, volume);
   }
 
  public:
@@ -259,11 +246,10 @@ struct DoCollisions {
    * @param mo Monitor of SDM processes.
    * @return The updated superdroplets.
    */
-  KOKKOS_INLINE_FUNCTION subviewd_supers operator()(const TeamMember &team_member,
-                                                    const unsigned int subt, subviewd_supers supers,
-                                                    const State &state,
-                                                    const SDMMonitor auto mo) const {
-    return do_collisions(team_member, supers, state.get_volume());
+  KOKKOS_INLINE_FUNCTION void operator()(const TeamMember &team_member, const unsigned int subt,
+                                         subviewd_supers supers, const State &state,
+                                         const SDMMonitor auto mo) const {
+    do_collisions(team_member, supers, state.get_volume());
   }
 };
 
