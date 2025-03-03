@@ -29,10 +29,12 @@
 #include <Kokkos_StdAlgorithms.hpp>
 
 #include "./kokkosaliases.hpp"
+#include "gridboxes/boundary_conditions.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/movesupersindomain.hpp"
 #include "gridboxes/supersindomain.hpp"
+#include "gridboxes/transport_across_domain.hpp"
 #include "observers/observers.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
@@ -53,15 +55,15 @@ namespace KCS = KokkosCleoSettings;
  * @tparam Microphys Type of the MicrophysicalProcess.
  * @tparam M Type of super-droplets' Motion.
  * @tparam TransportAcrossDomain Type of super-droplets transport across domain.
- * @tparam BoundaryConditions Type of boundary conditions for model
+ * @tparam BoundaryConditions Type of boundary conditions for superdroplet motion
  * @tparam Obs Type of the Observer.
  */
 template <GridboxMaps GbxMaps, MicrophysicalProcess Microphys, Motion<GbxMaps> M,
-          typename TransportAcrossDomain, typename BoundaryConditions, Observer Obs>
+          TransportAcrossDomain<GbxMaps> T, BoundaryConditions<GbxMaps> BCs, Observer Obs>
 class SDMMethods {
  private:
   unsigned int couplstep; /**< Coupling timestep. */
-  MoveSupersInDomain<GbxMaps, M, TransportAcrossDomain, BoundaryConditions> movesupers;
+  MoveSupersInDomain<GbxMaps, M, T, BCs> movesupers;
   /**< object for super-droplets' MoveSupersInDomain with certain type of Motion, transport and
    * boundary conditions. */
 
@@ -155,9 +157,8 @@ class SDMMethods {
 
             auto supers = d_gbxs(ii).supersingbx(domainsupers);
             for (unsigned int subt = t_sdm; subt < t_next; subt = microphys.next_step(subt)) {
-              microphys.run_step(
-                  team_member, subt, supers, d_gbxs(ii).state,
-                  mo);  // TODO(CB): explicitly feed supers back into domainsupers
+              microphys.run_step(team_member, subt, supers, d_gbxs(ii).state,
+                                 mo);  // TODO(CB): explicitly feed supers back into domainsupers
             }
 
             mo.monitor_microphysics(team_member, supers);
@@ -201,10 +202,8 @@ class SDMMethods {
    * @param movesupers object that is type of super-droplets' Motion.
    * @param obs object that is type of Observer.
    */
-  SDMMethods(
-      const unsigned int couplstep, const GbxMaps gbxmaps, const Microphys microphys,
-      const MoveSupersInDomain<GbxMaps, M, TransportAcrossDomain, BoundaryConditions> movesupers,
-      const Obs obs)
+  SDMMethods(const unsigned int couplstep, const GbxMaps gbxmaps, const Microphys microphys,
+             const MoveSupersInDomain<GbxMaps, M, T, BCs> movesupers, const Obs obs)
       : couplstep(couplstep),
         movesupers(movesupers),
         gbxmaps(gbxmaps),

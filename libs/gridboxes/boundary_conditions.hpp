@@ -38,8 +38,12 @@ concept BoundaryConditions =
       { b.apply(gbxmaps, d_gbxs, allsupers) } -> std::convertible_to<SupersInDomain>;
     };
 
-template <GridboxMaps GbxMaps>
+/*
+ * struct satisfying BoundaryConditions concept for applying domain boundary conditions which
+ * does nothing.
+ */
 struct NullBoundaryConditions {
+  template <GridboxMaps GbxMaps>
   SupersInDomain apply(const GbxMaps &gbxmaps, viewd_gbx d_gbxs,
                        const SupersInDomain &allsupers) const {
     return allsupers;

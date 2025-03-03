@@ -16,8 +16,8 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Implementation of AddSupersAtDomainTop definition of the Domain Boundary Conditions to use
- * for Cartesian GridBox Maps, Motion of Super-Droplets and MoveSupersInDomain
+ * Implementation of AddSupersAtDomainTop type satisyfing the BoundaryConditions concept
+ * to use for a Cartesian Domain in MoveSupersInDomain.
  */
 
 #include "./add_supers_at_domain_top.hpp"

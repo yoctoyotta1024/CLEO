@@ -32,10 +32,12 @@
 #include <string>
 
 #include "../kokkosaliases.hpp"
+#include "gridboxes/boundary_conditions.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/movesupersindomain.hpp"
 #include "gridboxes/supersindomain.hpp"
+#include "gridboxes/transport_across_domain.hpp"
 #include "initialise/initialconditions.hpp"
 #include "observers/observers.hpp"
 #include "runcleo/coupleddynamics.hpp"
@@ -60,15 +62,17 @@
  * @tparam GbxMaps Type of GridboxMaps.
  * @tparam Microphys Type of MicrophysicalProcess.
  * @tparam M Type of Motion.
+ * @tparam TransportAcrossDomain Type of super-droplets transport across domain.
+ * @tparam BoundaryConditions Type of boundary conditions for superdroplet motion
  * @tparam Obs Type of Observer.
  * @tparam Comms Type of CouplingComms.
  */
 template <CoupledDynamics CD, GridboxMaps GbxMaps, MicrophysicalProcess Microphys,
-          Motion<GbxMaps> M, typename TransportAcrossDomain, typename BoundaryConditions,
+          Motion<GbxMaps> M, TransportAcrossDomain<GbxMaps> T, BoundaryConditions<GbxMaps> BCs,
           Observer Obs, CouplingComms<GbxMaps, CD> Comms>
 class RunCLEO {
  private:
-  const SDMMethods<GbxMaps, Microphys, M, TransportAcrossDomain, BoundaryConditions, Obs> &sdm;
+  const SDMMethods<GbxMaps, Microphys, M, T, BCs, Obs> &sdm;
   /**< SDMMethods object. */
   CD &coupldyn;       /**< CoupledDynamics object.  */
   const Comms &comms; /**< CouplingComms object. */
@@ -279,9 +283,8 @@ class RunCLEO {
    * @param coupldyn CoupledDynamics object.
    * @param comms CouplingComms object.
    */
-  RunCLEO(
-      const SDMMethods<GbxMaps, Microphys, M, TransportAcrossDomain, BoundaryConditions, Obs> &sdm,
-      CD &coupldyn, const Comms &comms)
+  RunCLEO(const SDMMethods<GbxMaps, Microphys, M, T, BCs, Obs> &sdm, CD &coupldyn,
+          const Comms &comms)
       : sdm(sdm), coupldyn(coupldyn), comms(comms) {
     check_coupling();
   }

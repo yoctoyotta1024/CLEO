@@ -29,9 +29,9 @@
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
 #include "cartesiandomain/movement/cartesian_movement.hpp"
-#include "cartesiandomain/movement/null_boundary_conditions.hpp"
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
 #include "coupldyn_fromfile/fromfilecomms.hpp"
+#include "gridboxes/boundary_conditions.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "initialise/config.hpp"
 #include "initialise/init_all_supers_from_binary.hpp"
@@ -136,7 +136,7 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
 
 inline auto create_movement(const CartesianMaps &gbxmaps) {
   const Motion<CartesianMaps> auto motion = NullMotion{};
-  const auto boundary_conditions = NullBoundaryConditions{};
+  const BoundaryConditions<CartesianMaps> auto boundary_conditions = NullBoundaryConditions{};
 
   return cartesian_movement(gbxmaps, motion, boundary_conditions);
 }

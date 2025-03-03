@@ -16,8 +16,8 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * A definition of the Domain Boundary Conditions to use for Cartesian GridBox Maps, Motion of
- * Super-Droplets and MoveSupersInDomain
+ * A definition of the a type satisyfing the BoundaryConditions concept
+ * to use for a Cartesian Domain in MoveSupersInDomain.
  */
 
 #ifndef LIBS_CARTESIANDOMAIN_MOVEMENT_ADD_SUPERS_AT_DOMAIN_TOP_HPP_
@@ -107,6 +107,10 @@ struct CreateSuperdrop {
   Superdrop operator()(const CartesianMaps &gbxmaps, const unsigned int gbxindex) const;
 };
 
+/*
+ * struct satisfying BoundaryConditions concept for applying domain boundary conditions which
+ * add superdroplets to gridboxes above a certain height.
+ */
 struct AddSupersAtDomainTop {
  private:
   size_t newnsupers; /**< number of superdroplets to add to gridboxes above coord3lim */
