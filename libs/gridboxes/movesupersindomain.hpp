@@ -48,8 +48,8 @@ functors only captures motion and not other members of MoveSupersInDomain coinci
 */
 template <GridboxMaps GbxMaps, Motion<GbxMaps> M>
 struct MoveSupersInGridboxesFunctor {
-  const M &sdmotion;
-  const GbxMaps &gbxmaps;
+  const M sdmotion;
+  const GbxMaps gbxmaps;
   const viewd_gbx d_gbxs;
   const subviewd_supers domainsupers;
 
@@ -66,15 +66,15 @@ struct MoveSupersInGridboxesFunctor {
   void move_supers_in_gbx(const TeamMember &team_member, const unsigned int gbxindex,
                           const State &state, const subviewd_supers supers) const {
     const size_t nsupers(supers.extent(0));
-    const auto &sdmotion_ = sdmotion;
-    const auto &gbxmaps_ = gbxmaps;
+    const auto &_sdmotion = sdmotion;
+    const auto &_gbxmaps = gbxmaps;
     Kokkos::parallel_for(Kokkos::TeamThreadRange(team_member, nsupers),
-                         [sdmotion_, gbxmaps_, gbxindex, &state, supers](const size_t kk) {
+                         [_sdmotion, _gbxmaps, gbxindex, &state, supers](const size_t kk) {
                            /* step (1) */
-                           sdmotion_.superdrop_coords(gbxindex, gbxmaps_, state, supers(kk));
+                           _sdmotion.superdrop_coords(gbxindex, _gbxmaps, state, supers(kk));
 
                            /* step (2) */
-                           sdmotion_.superdrop_gbx(gbxindex, gbxmaps_, supers(kk));
+                           _sdmotion.superdrop_gbx(gbxindex, _gbxmaps, supers(kk));
                          });
   }
 
@@ -99,11 +99,7 @@ finally applying any additional bounday conditions.
 template <GridboxMaps GbxMaps, Motion<GbxMaps> M, TransportAcrossDomain<GbxMaps> T,
           BoundaryConditions<GbxMaps> BCs>
 class MoveSupersInDomain {
- private:
-  M sdmotion;
-  T transport_across_domain;
-  BCs boundary_conditions;
-
+ public:
   /* (expensive!) test if superdrops' gbxindex doesn't match gridbox's gbxindex,
   raise error is assertion fails */
   void check_sdgbxindex_during_motion(const viewd_constgbx d_gbxs,
@@ -133,6 +129,31 @@ class MoveSupersInDomain {
   }
 
   /*
+   * call operator of MoveSupersInGridboxesFunctor struct to enact steps (1) and (2) of superdroplet
+   * motion:
+   * (1) update superdroplets' spatial coords according to type of sdmotion. (device)
+   * (2) update superdroplets' sdgbxindex accordingly (device).
+   *
+   * Kokkos::parallel_for([...]) is equivalent to:
+   * for (size_t ii(0); ii < ngbxs; ++ii) {[...]}
+   * when in serial
+   */
+  void move_supers_in_gridboxes(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
+                                const subviewd_supers domainsupers) const {
+    Kokkos::Profiling::ScopedRegion region("sdm_movement_move_in_gridboxes");
+
+    const size_t ngbxs(d_gbxs.extent(0));
+    const auto functor =
+        MoveSupersInGridboxesFunctor<GbxMaps, M>{sdmotion, gbxmaps, d_gbxs, domainsupers};
+    Kokkos::parallel_for("move_supers_in_gridboxes", TeamPolicy(ngbxs, KCS::team_size), functor);
+  }
+
+ private:
+  M sdmotion;
+  T transport_across_domain;
+  BCs boundary_conditions;
+
+  /*
    * step (3) move superdroplets between gridboxes
    *
    * (re)sorting supers, based on their gbxindexes and then updating the refs for each gridbox
@@ -153,26 +174,6 @@ class MoveSupersInDomain {
     // check_sdgbxindex_during_motion(d_gbxs, allsupers.get_totsupers_readonly());
 
     return allsupers;
-  }
-
-  /*
-   * call operator of MoveSupersInGridboxesFunctor struct to enact steps (1) and (2) of superdroplet
-   * motion:
-   * (1) update superdroplets' spatial coords according to type of sdmotion. (device)
-   * (2) update superdroplets' sdgbxindex accordingly (device).
-   *
-   * Kokkos::parallel_for([...]) is equivalent to:
-   * for (size_t ii(0); ii < ngbxs; ++ii) {[...]}
-   * when in serial
-   */
-  void move_supers_in_gridboxes(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
-                                const subviewd_supers domainsupers) const {
-    Kokkos::Profiling::ScopedRegion region("sdm_movement_move_in_gridboxes");
-
-    const size_t ngbxs(d_gbxs.extent(0));
-    const auto functor =
-        MoveSupersInGridboxesFunctor<GbxMaps, M>{sdmotion, gbxmaps, d_gbxs, domainsupers};
-    Kokkos::parallel_for("move_supers_in_gridboxes", TeamPolicy(ngbxs, KCS::team_size), functor);
   }
 
   /* enact movement of superdroplets throughout domain in three stages:
