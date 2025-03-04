@@ -26,13 +26,15 @@
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/movement/cartesian_transport_across_domain.hpp"
 #include "gridboxes/movesupersindomain.hpp"
+#include "gridboxes/transport_across_domain.hpp"
 #include "superdrops/motion.hpp"
 
-template <Motion<CartesianMaps> M, typename BoundaryConditions>
+template <Motion<CartesianMaps> M, BoundaryConditions<CartesianMaps> BCs>
 inline auto cartesian_movement(const CartesianMaps &gbxmaps, const M motion,
-                               const BoundaryConditions boundary_conditions) {
-  const auto transport_across_domain = CartesianTransportAcrossDomain{};
-  return MoveSupersInDomain<CartesianMaps, M, CartesianTransportAcrossDomain, BoundaryConditions>(
+                               const BCs boundary_conditions) {
+  const TransportAcrossDomain<CartesianMaps> auto transport_across_domain =
+      CartesianTransportAcrossDomain{};
+  return MoveSupersInDomain<CartesianMaps, M, CartesianTransportAcrossDomain, BCs>(
       motion, transport_across_domain, boundary_conditions);
 }
 

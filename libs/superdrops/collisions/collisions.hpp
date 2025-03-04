@@ -68,44 +68,20 @@ concept PairEnactX = requires(X x, Superdrop &drop, double d) {
   { x(drop, drop, d, d) } -> std::convertible_to<bool>;
 };
 
-/**
- * @struct DoCollisions
- * @brief Implements microphysical processes for collisions between superdroplets.
- * @tparam Probability The type representing the pair probability object.
- * @tparam EnactCollision The type representing the pair enactment object.
- */
+/*
+CollideSupersFunctor struct encapsulates superdroplet collisions so that parallel loop
+in collide_supers function (see below) only captures necessary objects and not
+other members of DoCollisions coincidentally
+*/
 template <PairProbability Probability, PairEnactX EnactCollision>
-struct DoCollisions {
- private:
-  const double DELT; /**< time interval [s] over which probability of collision is calculated. */
-  const Probability probability; /**< Probability object for calculating collision probabilities. */
-  const EnactCollision enact_collision; /**< Enactment object for enacting collision events. */
-  const GenRandomPool genpool;          /**< Kokkos thread-safe random number generator pool.*/
-
-  /**
-   * @brief Scaled probability of collision for a pair of super-droplets.
-   *
-   * Returns the probability of pair of super-droplets colliding according to
-   * Shima et al. 2009 ("p_alpha" in paper). Function assumes drop1.xi >= drop2.xi.
-   *
-   * _Note:_ multiplicity, xi, of drop1 is cast to double for the calculation.
-   *
-   * @param drop1 The first super-droplet.
-   * @param drop2 The second super-droplet.
-   * @param scale_p The scaling factor.
-   * @param VOLUME The volume.
-   * @return The scaled probability of the collision.
-   */
-  KOKKOS_INLINE_FUNCTION double scaled_probability(const Superdrop &drop1, const Superdrop &drop2,
-                                                   const double scale_p,
-                                                   const double VOLUME) const {
-    const auto prob_jk = double{probability(drop1, drop2, DELT, VOLUME)};
-    const auto large_xi = static_cast<double>(drop1.get_xi());  // casting to double (!)
-
-    const auto prob = double{scale_p * large_xi * prob_jk};
-
-    return prob;
-  }
+struct CollideSupersFunctor {
+  const Probability &probability;        /**< Object for calculating collision probabilities. */
+  const EnactCollision &enact_collision; /**< Enactment object for enacting collision events. */
+  const GenRandomPool genpool;           /**< Kokkos thread-safe random number generator pool.*/
+  const subviewd_supers supers;          /**< The randomly shuffled view of super-droplets. */
+  const double scale_p;                  /**< The probability scaling factor. */
+  const double DELT;   /**< time interval [s] over which probability of collision is calculated. */
+  const double VOLUME; /**< The volume [m^-3]. */
 
   /**
    * @brief Assigns references to super-droplets in a pair based on their multiplicities.
@@ -127,6 +103,31 @@ struct DoCollisions {
   }
 
   /**
+   * @brief Scaled probability of collision for a pair of super-droplets.
+   *
+   * Returns the probability of pair of super-droplets colliding according to
+   * Shima et al. 2009 ("p_alpha" in paper). Function assumes drop1.xi >= drop2.xi.
+   *
+   * _Note:_ multiplicity, xi, of drop1 is cast to double for the calculation.
+   *
+   * @param drop1 The first super-droplet.
+   * @param drop2 The second super-droplet.
+   * @param scale_p The probability scaling factor.
+   * @param VOLUME The volume [m^-3].
+   * @return The scaled probability of the collision.
+   */
+  KOKKOS_INLINE_FUNCTION double scaled_probability(const Superdrop &drop1, const Superdrop &drop2,
+                                                   const double scale_p,
+                                                   const double VOLUME) const {
+    const auto prob_jk = double{probability(drop1, drop2, DELT, VOLUME)};
+    const auto large_xi = static_cast<double>(drop1.get_xi());  // casting to double (!)
+
+    const auto prob = double{scale_p * large_xi * prob_jk};
+
+    return prob;
+  }
+
+  /**
    * @brief Performs collision event for a pair of superdroplets.
    *
    * Monte Carlo Routine from Shima et al. 2009 for collision-coalescence generalised to any
@@ -134,29 +135,51 @@ struct DoCollisions {
    *
    * @param dropA The first superdroplet.
    * @param dropB The second superdroplet.
-   * @param scale_p The scaling factor.
-   * @param VOLUME The volume.
+   * @param scale_p The probability scaling factor.
+   * @param VOLUME The volume [m^-3].
    * @return True if the collision event results in null superdrops with xi=0), otherwise false.
    */
   KOKKOS_INLINE_FUNCTION void collide_superdroplet_pair(Superdrop &dropA, Superdrop &dropB,
                                                         const double scale_p,
                                                         const double VOLUME) const {
-    /* 1. assign references to each superdrop in pair
-    that will collide such that (drop1.xi) >= (drop2.xi) */
+    /* 1. assign references to each superdrop in pair that will collide
+    such that (drop1.xi) >= (drop2.xi) */
     const auto drops = assign_drops(dropA, dropB);  // {drop1, drop2}
 
-    /* 2. calculate scaled probability of
-    collision for pair of superdroplets */
+    /* 2. calculate scaled probability of collision for pair of superdroplets */
     const auto prob = scaled_probability(drops.first, drops.second, scale_p, VOLUME);
 
-    /* 3. Monte Carlo Step: use random number to
-    enact (or not) collision of superdroplets pair */
+    /* 3. Monte Carlo Step: use random number to enact (or not) collision of superdroplets pair */
     URBG<ExecSpace> urbg{genpool.get_state()};  // thread safe random number generator
     const auto phi = urbg.drand(0.0, 1.0);      // random number in range [0.0, 1.0]
     genpool.free_state(urbg.gen);
 
     enact_collision(drops.first, drops.second, prob, phi);
   }
+
+  /*
+   * operator for functor with parallel (TeamThreadRangePolicy) loop over superdroplet pairs
+   * in supers view in order to call collide_superdroplet_pair
+   */
+  KOKKOS_INLINE_FUNCTION void operator()(const size_t jj) const {
+    const auto kk = size_t{jj * 2};
+    collide_superdroplet_pair(supers(kk), supers(kk + 1), scale_p, VOLUME);
+  }
+};
+
+/**
+ * @struct DoCollisions
+ * @brief Implements microphysical processes for collisions between superdroplets.
+ * @tparam Probability The type representing the pair probability object.
+ * @tparam EnactCollision The type representing the pair enactment object.
+ */
+template <PairProbability Probability, PairEnactX EnactCollision>
+struct DoCollisions {
+ private:
+  const double DELT; /**< time interval [s] over which probability of collision is calculated. */
+  const Probability probability; /**< Probability object for calculating collision probabilities. */
+  const EnactCollision enact_collision; /**< Enactment object for enacting collision events. */
+  const GenRandomPool genpool;          /**< Kokkos thread-safe random number generator pool.*/
 
   /**
    * @brief Performs collisions between super-droplets in supers view.
@@ -184,10 +207,9 @@ struct DoCollisions {
     const auto scale_p = double{nsupers * (nsupers - 1.0) / (2.0 * npairs)};
     const auto VOLUME = double{volume * dlc::VOL0};  // volume in which collisions occur [m^3]
 
-    Kokkos::parallel_for(Kokkos::TeamThreadRange(team_member, npairs), [&, this](const size_t jj) {
-      const auto kk = size_t{jj * 2};
-      collide_superdroplet_pair(supers(kk), supers(kk + 1), scale_p, VOLUME);
-    });
+    const auto functor =
+        CollideSupersFunctor{probability, enact_collision, genpool, supers, scale_p, DELT, VOLUME};
+    Kokkos::parallel_for(Kokkos::TeamThreadRange(team_member, npairs), functor);
     team_member.team_barrier();  // synchronise threads
   }
 

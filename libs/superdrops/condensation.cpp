@@ -54,15 +54,32 @@ double DoCondensation::superdroplets_change(const TeamMember &team_member,
   const auto ffactor = diffusion_factor(state.press, state.temp, psat);
 
   auto totmass_condensed = double{0.0};  // cumulative change to liquid mass in parcel volume 'dm'
-  Kokkos::parallel_reduce(
-      Kokkos::TeamThreadRange(team_member, nsupers),
-      [&, this](const size_t kk, double &mass_condensed) {
-        const auto deltamass = superdrop_mass_change(supers(kk), state.temp, s_ratio, ffactor);
-        mass_condensed += deltamass;
-      },
-      totmass_condensed);
+  const auto functor = SuperdropletsChangeFunctor{impe, supers, state, s_ratio, ffactor};
+  Kokkos::parallel_reduce(Kokkos::TeamThreadRange(team_member, nsupers), functor,
+                          totmass_condensed);
 
   return totmass_condensed;
+}
+
+/**
+ * @brief Applies the effect of condensation / evaporation on the thermodynamics of the State.
+ *
+ * if do_alter_thermo is true, use a single team member to change the thermodynamics of the
+ * State due to the effect of condensation / evaporation.
+ *
+ * @param team_member The Kokkos team member.
+ * @param totmass_condensed The total mass of liquid condensed.
+ * @param state The State of the volume containing the super-droplets
+ * (prior to condensation / evaporation).
+ */
+KOKKOS_FUNCTION
+void DoCondensation::effect_on_thermodynamic_state(const TeamMember &team_member,
+                                                   const double totmass_condensed,
+                                                   State &state) const {
+  if (do_alter_thermo) {
+    const auto functor = EffectOnThermodynamicStateFunctor{totmass_condensed};
+    Kokkos::single(Kokkos::PerTeam(team_member), functor, state);
+  }
 }
 
 /**
@@ -82,8 +99,9 @@ double DoCondensation::superdroplets_change(const TeamMember &team_member,
  * @return The mass of liquid condensed or evaporated.
  */
 KOKKOS_FUNCTION
-double DoCondensation::superdrop_mass_change(Superdrop &drop, const double temp,
-                                             const double s_ratio, const double ffactor) const {
+double SuperdropletsChangeFunctor::superdrop_mass_change(Superdrop &drop, const double temp,
+                                                         const double s_ratio,
+                                                         const double ffactor) const {
   /* do not pass r by reference here!! copy value into iterator */
   const auto ab_kohler = kohler_factors(drop, temp);  // pair = {akoh, bkoh}
   const auto newr = impe.solve_condensation(s_ratio, ab_kohler, ffactor,
@@ -99,34 +117,6 @@ double DoCondensation::superdrop_mass_change(Superdrop &drop, const double temp,
 }
 
 /**
- * @brief Applies the effect of condensation / evaporation on the thermodynamics of the State.
- *
- * if do_alter_thermo is true, use a single team member to change the thermodynamics of the
- * State due to the effect of condensation / evaporation.
- *
- * @param team_member The Kokkos team member.
- * @param totmass_condensed The total mass of liquid condensed.
- * @param state The State of the volume containing the super-droplets
- * (prior to condensation / evaporation).
- */
-KOKKOS_FUNCTION
-void DoCondensation::effect_on_thermodynamic_state(const TeamMember &team_member,
-                                                   const double totmass_condensed,
-                                                   State &state) const {
-  Kokkos::single(
-      Kokkos::PerTeam(team_member),
-      [&, this](State &state) {
-        if (do_alter_thermo) {
-          constexpr double R0cubed_VOL0 = dlc::R0 * dlc::R0 * dlc::R0 / dlc::VOL0;
-          const auto totrho_condensed = double{totmass_condensed / state.get_volume() *
-                                               R0cubed_VOL0};  // drho_condensed_vapour/dt * delta t
-          state = state_change(totrho_condensed, state);
-        }
-      },
-      state);
-}
-
-/**
  * @brief Changes the thermodynamic variables of the State.
  *
  * Changes the thermodynamic variables, temperature, vapour and liquid mass mixing ratios
@@ -138,8 +128,8 @@ void DoCondensation::effect_on_thermodynamic_state(const TeamMember &team_member
  * (prior to condensation / evaporation).
  * @return The updated State.
  */
-KOKKOS_FUNCTION State DoCondensation::state_change(const double totrho_condensed,
-                                                   State &state) const {
+KOKKOS_FUNCTION State EffectOnThermodynamicStateFunctor::state_change(const double totrho_condensed,
+                                                                      State &state) const {
   const auto delta_qcond = double{totrho_condensed / dlc::Rho_dry};
   const auto delta_temp =
       double{(dlc::Latent_v / moist_specifc_heat(state.qvap, state.qcond)) * delta_qcond};
