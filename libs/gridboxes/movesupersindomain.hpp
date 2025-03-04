@@ -66,10 +66,10 @@ struct MoveSupersInGridboxesFunctor {
   void move_supers_in_gbx(const TeamMember &team_member, const unsigned int gbxindex,
                           const State &state, const subviewd_supers supers) const {
     const size_t nsupers(supers.extent(0));
-    const auto &_sdmotion = sdmotion;
-    const auto &_gbxmaps = gbxmaps;
+    auto &_sdmotion = this->sdmotion;
+    auto &_gbxmaps = this->gbxmaps;
     Kokkos::parallel_for(Kokkos::TeamThreadRange(team_member, nsupers),
-                         [_sdmotion, _gbxmaps, gbxindex, &state, supers](const size_t kk) {
+                         [=, &_sdmotion, &_gbxmaps](const size_t kk) {
                            /* step (1) */
                            _sdmotion.superdrop_coords(gbxindex, _gbxmaps, state, supers(kk));
 
