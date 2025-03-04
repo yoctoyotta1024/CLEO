@@ -43,7 +43,7 @@ if [ "${buildtype}" == "cuda" ]
 then
   compilername=gcc
 else
-  compilername=intel
+  compilername=gcc #intel
 fi
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
@@ -84,6 +84,10 @@ export CLEO_PATH2CLEO=${path2CLEO}
 export CLEO_BUILDTYPE=${buildtype}
 export CLEO_ENABLEYAC=${enableyac}
 source ${path2CLEO}/scripts/levante/bash/src/runtime_settings.sh ${stacksize_limit}
+
+export KOKKOS_TOOLS_LIBS=/work/bm1183/m300950/kokkos_tools_lib/lib64/libkp_kernel_logger.so
+export KOKKOS_TOOLS_LIBS=/work/bm1183/m300950/kokkos_tools_lib/lib64/libkp_space_time_stack.so
+export KOKKOS_TOOLS_LIBS=/work/bm1183/m300950/kokkos_tools_lib/lib64/libkp_kernel_timer.so
 
 # TODO(all): split python scripts away from running executable
 ${python} ${pythonscript} ${path2CLEO} ${path2build} ${script_args}

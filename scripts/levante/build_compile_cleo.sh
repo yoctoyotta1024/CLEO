@@ -79,11 +79,11 @@ echo "executables = ${executables}"
 echo "### ------------------------------------------- ###"
 ### ---------------------------------------------------- ###
 
-### --------------------- build CLEO ------------------- ###
-buildcmd="${CLEO_PATH2CLEO}/scripts/levante/bash/build_cleo.sh"
-echo ${buildcmd}
-eval ${buildcmd}
-### ---------------------------------------------------- ###
+# ### --------------------- build CLEO ------------------- ###
+# buildcmd="${CLEO_PATH2CLEO}/scripts/levante/bash/build_cleo.sh"
+# echo ${buildcmd}
+# eval ${buildcmd}
+# ### ---------------------------------------------------- ###
 
 ### ---------------- compile executables --------------- ###
 compilecmd="${CLEO_PATH2CLEO}/scripts/levante/bash/compile_cleo.sh \"${executables}\" ${make_clean}"

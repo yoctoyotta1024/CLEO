@@ -29,11 +29,11 @@ kokkos_settings:
 domain:
   nspacedims: 0                                                 # no. of spatial dimensions to model
   ngbxs: 1                                                      # total number of Gbxs
-  maxnsupers: 8192                                              # maximum number of SDs
+  maxnsupers: 4096                                              # maximum number of SDs
 
 timesteps:
   CONDTSTEP: 200                                                # time between SD condensation [s]
-  COLLTSTEP: 0.1                                                # time between SD collision [s]
+  COLLTSTEP: 1                                                  # time between SD collision [s]
   MOTIONTSTEP: 200                                              # time between SDM motion [s]
   COUPLTSTEP: 2000                                              # time between dynamic couplings [s]
   OBSTSTEP: 200                                                 # time between SDM observations [s]
@@ -46,7 +46,7 @@ inputfiles:
 
 initsupers:
   type: frombinary                                              # type of initialisation of super-droplets
-  initsupers_filename: /home/m/m300950/CLEO/build_colls0d/cuda/share/shima2009_dimlessSDsinit_2.dat # binary filename for initialisation of SDs
+  initsupers_filename: /home/m/m300950/CLEO/build_colls0d/openmp/share/shima2009_dimlessSDsinit_1.dat # binary filename for initialisation of SDs
 
 ### Output Parameters ###
 outputdata:

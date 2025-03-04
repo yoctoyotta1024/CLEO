@@ -41,9 +41,9 @@ sys.path.append(
 
 import attrgens_shima2009
 from plotssrc import shima2009fig
-from pySD import editconfigfile, geninitconds
+from pySD import editconfigfile  # , geninitconds
 from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
-from pySD.initsuperdropsbinary_src import rgens, probdists, attrsgen
+from pySD.initsuperdropsbinary_src import rgens, probdists  # , attrsgen
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 
 ### ---------------------------------------------------------------- ###
@@ -116,70 +116,70 @@ dryradiigen = rgens.MonoAttrGen(dryradius)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
-### ---------------------------------------------------------------- ###
-### ------------------- BINARY FILES GENERATION--------------------- ###
-### ---------------------------------------------------------------- ###
-### --- ensure build, share and bin directories exist --- ###
-if path2CLEO == path2build:
-    raise ValueError("build directory cannot be CLEO")
-else:
-    path2build.mkdir(exist_ok=True)
-    sharepath.mkdir(exist_ok=True)
-    binpath.mkdir(exist_ok=True)
-    if isfigures[1]:
-        savefigpath.mkdir(exist_ok=True)
+# ### ---------------------------------------------------------------- ###
+# ### ------------------- BINARY FILES GENERATION--------------------- ###
+# ### ---------------------------------------------------------------- ###
+# ### --- ensure build, share and bin directories exist --- ###
+# if path2CLEO == path2build:
+#     raise ValueError("build directory cannot be CLEO")
+# else:
+#     path2build.mkdir(exist_ok=True)
+#     sharepath.mkdir(exist_ok=True)
+#     binpath.mkdir(exist_ok=True)
+#     if isfigures[1]:
+#         savefigpath.mkdir(exist_ok=True)
 
-### --- delete any existing initial conditions --- ###
-shutil.rmtree(grid_filename, ignore_errors=True)
-shutil.rmtree(initsupers_filename_1, ignore_errors=True)
-shutil.rmtree(initsupers_filename_2, ignore_errors=True)
+# ### --- delete any existing initial conditions --- ###
+# shutil.rmtree(grid_filename, ignore_errors=True)
+# shutil.rmtree(initsupers_filename_1, ignore_errors=True)
+# shutil.rmtree(initsupers_filename_2, ignore_errors=True)
 
-### ----- write gridbox boundaries binary ----- ###
-geninitconds.generate_gridbox_boundaries(
-    grid_filename,
-    zgrid,
-    xgrid,
-    ygrid,
-    constants_filename,
-    isprintinfo=True,
-    isfigures=isfigures,
-    savefigpath=savefigpath,
-)
-
-
-### ----- write initial superdroplets binary ----- ###
-def initial_conditions_for_setup(
-    initsupers_filename, nsupers, radiigen, xiprobdist, numconc, savelabel
-):
-    initattrsgen = attrsgen.AttrsGenerator(
-        radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
-    )
-    geninitconds.generate_initial_superdroplet_conditions(
-        initattrsgen,
-        initsupers_filename,
-        config_filename,
-        constants_filename,
-        grid_filename,
-        nsupers,
-        numconc,
-        isprintinfo=True,
-        isfigures=isfigures,
-        savefigpath=savefigpath,
-        gbxs2plt="all",
-        savelabel=savelabel,
-    )
+# ### ----- write gridbox boundaries binary ----- ###
+# geninitconds.generate_gridbox_boundaries(
+#     grid_filename,
+#     zgrid,
+#     xgrid,
+#     ygrid,
+#     constants_filename,
+#     isprintinfo=True,
+#     isfigures=isfigures,
+#     savefigpath=savefigpath,
+# )
 
 
-if "golovin" in kernels or "long1" in kernels:
-    initial_conditions_for_setup(
-        initsupers_filename_1, nsupers_1, radiigen_1, xiprobdist_1, numconc_1, "_1"
-    )
-if "long2" in kernels:
-    initial_conditions_for_setup(
-        initsupers_filename_2, nsupers_2, radiigen_2, xiprobdist_2, numconc_2, "_2"
-    )
-### ---------------------------------------------------------------- ###
-### ---------------------------------------------------------------- ###
+# ### ----- write initial superdroplets binary ----- ###
+# def initial_conditions_for_setup(
+#     initsupers_filename, nsupers, radiigen, xiprobdist, numconc, savelabel
+# ):
+#     initattrsgen = attrsgen.AttrsGenerator(
+#         radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
+#     )
+#     geninitconds.generate_initial_superdroplet_conditions(
+#         initattrsgen,
+#         initsupers_filename,
+#         config_filename,
+#         constants_filename,
+#         grid_filename,
+#         nsupers,
+#         numconc,
+#         isprintinfo=True,
+#         isfigures=isfigures,
+#         savefigpath=savefigpath,
+#         gbxs2plt="all",
+#         savelabel=savelabel,
+#     )
+
+
+# if "golovin" in kernels or "long1" in kernels:
+#     initial_conditions_for_setup(
+#         initsupers_filename_1, nsupers_1, radiigen_1, xiprobdist_1, numconc_1, "_1"
+#     )
+# if "long2" in kernels:
+#     initial_conditions_for_setup(
+#         initsupers_filename_2, nsupers_2, radiigen_2, xiprobdist_2, numconc_2, "_2"
+#     )
+# ### ---------------------------------------------------------------- ###
+# ### ---------------------------------------------------------------- ###
 
 
 def run_exectuable(path2build, dataset, executable, config_filename):
