@@ -462,65 +462,6 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-functions">Private Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK12DoCollisions18scaled_probabilityERK9SuperdropRK9SuperdropKdKd">
-<span id="_CPPv3NK12DoCollisions18scaled_probabilityERK9SuperdropRK9SuperdropKdKd"></span><span id="_CPPv2NK12DoCollisions18scaled_probabilityERK9SuperdropRK9SuperdropKdKd"></span><span id="DoCollisions::scaled_probability__SuperdropCR.SuperdropCR.doubleC.doubleCC"></span><span class="target" id="structDoCollisions_1a19037a8811ba66427273feb25d88a17c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">scaled_probability</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop2</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">scale_p</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">VOLUME</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK12DoCollisions18scaled_probabilityERK9SuperdropRK9SuperdropKdKd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Scaled probability of collision for a pair of super-droplets. </p>
-<p>Returns the probability of pair of super-droplets colliding according to Shima et al. 2009 (“p_alpha” in paper). Function assumes drop1.xi &gt;= drop2.xi.</p>
-<p><em>Note:</em> multiplicity, xi, of drop1 is cast to double for the calculation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>drop1</strong> – The first super-droplet. </p></li>
-<li><p><strong>drop2</strong> – The second super-droplet. </p></li>
-<li><p><strong>scale_p</strong> – The scaling factor. </p></li>
-<li><p><strong>VOLUME</strong> – The volume. </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The scaled probability of the collision. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK12DoCollisions12assign_dropsER9SuperdropR9Superdrop">
-<span id="_CPPv3NK12DoCollisions12assign_dropsER9SuperdropR9Superdrop"></span><span id="_CPPv2NK12DoCollisions12assign_dropsER9SuperdropR9Superdrop"></span><span id="DoCollisions::assign_drops__SuperdropR.SuperdropRC"></span><span class="target" id="structDoCollisions_1ab27f1653bb85bd9f06efb8a402da48f1"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">assign_drops</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dropA</span></span>, <a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dropB</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK12DoCollisions12assign_dropsER9SuperdropR9Superdrop" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Assigns references to super-droplets in a pair based on their multiplicities. </p>
-<p>Compare dropA’s multiplicity with dropB’s, and returns (non-const) references to dropA and dropB in a pair {drop1, drop2} such that drop1’s multiplicity is always &gt;= drop2’s. *</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dropA</strong> – The first super-droplet. </p></li>
-<li><p><strong>dropB</strong> – The second super-droplet. </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A pair of references to super-droplets ordered by descending xi value. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK12DoCollisions25collide_superdroplet_pairER9SuperdropR9SuperdropKdKd">
-<span id="_CPPv3NK12DoCollisions25collide_superdroplet_pairER9SuperdropR9SuperdropKdKd"></span><span id="_CPPv2NK12DoCollisions25collide_superdroplet_pairER9SuperdropR9SuperdropKdKd"></span><span id="DoCollisions::collide_superdroplet_pair__SuperdropR.SuperdropR.doubleC.doubleCC"></span><span class="target" id="structDoCollisions_1a5407dd693a70f5bff34d1e4c400d02e5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">collide_superdroplet_pair</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dropA</span></span>, <a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">dropB</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">scale_p</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">VOLUME</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK12DoCollisions25collide_superdroplet_pairER9SuperdropR9SuperdropKdKd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Performs collision event for a pair of superdroplets. </p>
-<p>Monte Carlo Routine from Shima et al. 2009 for collision-coalescence generalised to any collision-[X] process for a pair of super-droplets.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>dropA</strong> – The first superdroplet. </p></li>
-<li><p><strong>dropB</strong> – The second superdroplet. </p></li>
-<li><p><strong>scale_p</strong> – The scaling factor. </p></li>
-<li><p><strong>VOLUME</strong> – The volume. </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>True if the collision event results in null superdrops with xi=0), otherwise false. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK12DoCollisions14collide_supersERK10TeamMember15subviewd_supersKd">
 <span id="_CPPv3NK12DoCollisions14collide_supersERK10TeamMember15subviewd_supersKd"></span><span id="_CPPv2NK12DoCollisions14collide_supersERK10TeamMember15subviewd_supersKd"></span><span id="DoCollisions::collide_supers__TeamMemberCR.subviewd_supers.doubleCC"></span><span class="target" id="structDoCollisions_1abb4c02680dc70523e48ea832cf8e7f73"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">collide_supers</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases_sd.html#_CPPv410TeamMember" title="TeamMember"><span class="n"><span class="pre">TeamMember</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">team_member</span></span>, <a class="reference internal" href="../kokkosaliases_sd.html#_CPPv415subviewd_supers" title="subviewd_supers"><span class="n"><span class="pre">subviewd_supers</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">supers</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">volume</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK12DoCollisions14collide_supersERK10TeamMember15subviewd_supersKd" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Performs collisions between super-droplets in supers view. </p>
@@ -627,7 +568,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 03 March 2025</div>
+              Last updated on 04 March 2025</div>
           </div>
           <div class="right-details">
             
@@ -654,9 +595,6 @@
 <li><a class="reference internal" href="#_CPPv4I_15PairProbability_10PairEnactXE12DoCollisions"><code class="docutils literal notranslate"><span class="pre">DoCollisions</span></code></a><ul>
 <li><a class="reference internal" href="#_CPPv4N12DoCollisions12DoCollisionsEKd11Probability14EnactCollision"><code class="docutils literal notranslate"><span class="pre">DoCollisions()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK12DoCollisionsclERK10TeamMemberKj15subviewd_supersRK5StateK10SDMMonitor"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK12DoCollisions18scaled_probabilityERK9SuperdropRK9SuperdropKdKd"><code class="docutils literal notranslate"><span class="pre">scaled_probability()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK12DoCollisions12assign_dropsER9SuperdropR9Superdrop"><code class="docutils literal notranslate"><span class="pre">assign_drops()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK12DoCollisions25collide_superdroplet_pairER9SuperdropR9SuperdropKdKd"><code class="docutils literal notranslate"><span class="pre">collide_superdroplet_pair()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK12DoCollisions14collide_supersERK10TeamMember15subviewd_supersKd"><code class="docutils literal notranslate"><span class="pre">collide_supers()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK12DoCollisions13do_collisionsERK10TeamMember15subviewd_supersKd"><code class="docutils literal notranslate"><span class="pre">do_collisions()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N12DoCollisions4DELTE"><code class="docutils literal notranslate"><span class="pre">DELT</span></code></a></li>

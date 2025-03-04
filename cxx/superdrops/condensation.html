@@ -472,28 +472,6 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK14DoCondensation21superdrop_mass_changeER9SuperdropKdKdKd">
-<span id="_CPPv3NK14DoCondensation21superdrop_mass_changeER9SuperdropKdKdKd"></span><span id="_CPPv2NK14DoCondensation21superdrop_mass_changeER9SuperdropKdKdKd"></span><span id="DoCondensation::superdrop_mass_change__SuperdropR.doubleC.doubleC.doubleCC"></span><span class="target" id="structDoCondensation_1a86faab079b5ec6a6fc2873d8d970bfc0"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">superdrop_mass_change</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">temp</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">s_ratio</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ffactor</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14DoCondensation21superdrop_mass_changeER9SuperdropKdKdKd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Updates the super-droplet radius and returns the mass of liquid condensed or evaporated. </p>
-<p><p>Updates the super-droplet radius due to radial growth/shrink via condensation and diffusion of water vapour according to equations from “An Introduction To Clouds From The Microscale to</p>
-<p>Climate” by Lohmann, Luond and Mahrt, 1st edition. New radius is calculated using ‘impe’</p>
-<a class="reference internal" href="impliciteuler.html#classImplicitEuler"><span class="std std-ref">ImplicitEuler</span></a> instance which iteratively solves forward integration of condensation-diffusion ODE. Return mass of liquid that condensed onto / evaporated off of droplet.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>drop</strong> – The super-droplet. </p></li>
-<li><p><strong>temp</strong> – The ambient temperature. </p></li>
-<li><p><strong>s_ratio</strong> – The saturation ratio. </p></li>
-<li><p><strong>ffactor</strong> – The sum of the diffusion factors. </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The mass of liquid condensed or evaporated. </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK14DoCondensation29effect_on_thermodynamic_stateERK10TeamMemberKdR5State">
 <span id="_CPPv3NK14DoCondensation29effect_on_thermodynamic_stateERK10TeamMemberKdR5State"></span><span id="_CPPv2NK14DoCondensation29effect_on_thermodynamic_stateERK10TeamMemberKdR5State"></span><span id="DoCondensation::effect_on_thermodynamic_state__TeamMemberCR.doubleC.StateRC"></span><span class="target" id="structDoCondensation_1a06d3a1c2c2e0a193b8ddb1cd798c49d7"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">effect_on_thermodynamic_state</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="kokkosaliases_sd.html#_CPPv410TeamMember" title="TeamMember"><span class="n"><span class="pre">TeamMember</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">team_member</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">totmass_condensed</span></span>, <a class="reference internal" href="state.html#_CPPv45State" title="State"><span class="n"><span class="pre">State</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">state</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14DoCondensation29effect_on_thermodynamic_stateERK10TeamMemberKdR5State" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Applies the effect of condensation / evaporation on the thermodynamics of the <a class="reference internal" href="state.html#structState"><span class="std std-ref">State</span></a>. </p>
@@ -505,24 +483,6 @@
 <li><p><strong>totmass_condensed</strong> – The total mass of liquid condensed. </p></li>
 <li><p><strong>state</strong> – The <a class="reference internal" href="state.html#structState"><span class="std std-ref">State</span></a> of the volume containing the super-droplets (prior to condensation / evaporation). </p></li>
 </ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK14DoCondensation12state_changeEKdR5State">
-<span id="_CPPv3NK14DoCondensation12state_changeEKdR5State"></span><span id="_CPPv2NK14DoCondensation12state_changeEKdR5State"></span><span id="DoCondensation::state_change__doubleC.StateRC"></span><span class="target" id="structDoCondensation_1a4bdd1fcddda4530d0264a8b202931712"></span><a class="reference internal" href="state.html#_CPPv45State" title="State"><span class="n"><span class="pre">State</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">state_change</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">totrho_condensed</span></span>, <a class="reference internal" href="state.html#_CPPv45State" title="State"><span class="n"><span class="pre">State</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">state</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK14DoCondensation12state_changeEKdR5State" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Changes the thermodynamic variables of the <a class="reference internal" href="state.html#structState"><span class="std std-ref">State</span></a>. </p>
-<p>Changes the thermodynamic variables, temperature, vapour and liquid mass mixing ratios (qvap and qcond respectively) of the <a class="reference internal" href="state.html#structState"><span class="std std-ref">State</span></a> given the total change in condensed water mass in its volume.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>totrho_condensed</strong> – The total condensed water mass in volume of <a class="reference internal" href="state.html#structState"><span class="std std-ref">State</span></a>. </p></li>
-<li><p><strong>state</strong> – The <a class="reference internal" href="state.html#structState"><span class="std std-ref">State</span></a> of the volume containing the super-droplets (prior to condensation / evaporation). </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The updated <a class="reference internal" href="state.html#structState"><span class="std std-ref">State</span></a>. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -605,7 +565,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 03 March 2025</div>
+              Last updated on 04 March 2025</div>
           </div>
           <div class="right-details">
             
@@ -632,9 +592,7 @@
 <li><a class="reference internal" href="#_CPPv4NK14DoCondensationclERK10TeamMemberKj15subviewd_supersR5StateK10SDMMonitor"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK14DoCondensation15do_condensationERK10TeamMemberK15subviewd_supersR5StateK10SDMMonitor"><code class="docutils literal notranslate"><span class="pre">do_condensation()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK14DoCondensation20superdroplets_changeERK10TeamMemberK15subviewd_supersRK5State"><code class="docutils literal notranslate"><span class="pre">superdroplets_change()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK14DoCondensation21superdrop_mass_changeER9SuperdropKdKdKd"><code class="docutils literal notranslate"><span class="pre">superdrop_mass_change()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK14DoCondensation29effect_on_thermodynamic_stateERK10TeamMemberKdR5State"><code class="docutils literal notranslate"><span class="pre">effect_on_thermodynamic_state()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK14DoCondensation12state_changeEKdR5State"><code class="docutils literal notranslate"><span class="pre">state_change()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N14DoCondensation15do_alter_thermoE"><code class="docutils literal notranslate"><span class="pre">do_alter_thermo</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N14DoCondensation4impeE"><code class="docutils literal notranslate"><span class="pre">impe</span></code></a></li>
 </ul>
