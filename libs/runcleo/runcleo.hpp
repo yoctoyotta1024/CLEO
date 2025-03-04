@@ -200,7 +200,7 @@ class RunCLEO {
    * @see SDMMethods::get_couplstep()
    */
   unsigned int get_next_step(const unsigned int t_mdl) const {
-    const auto next_couplstep = [&, t_mdl]() {
+    const auto next_couplstep = [=, *this]() {
       const auto interval = (unsigned int)sdm.get_couplstep();
       return ((t_mdl / interval) + 1) * interval;
     };
