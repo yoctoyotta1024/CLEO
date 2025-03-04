@@ -4,103 +4,133 @@
 Regions:
 
 - runcleo
- (REGION)   0.443926 1 0.443926 98.831303 36.170317
+ (REGION)   0.387262 1 0.387262 79.272881 39.898792
 - timestep
- (REGION)   0.438037 1 0.438037 97.520247 35.690496
+ (REGION)   0.374338 1 0.374338 76.627288 38.567240
 - timestep_sdm
- (REGION)   0.364330 121 0.003011 81.110820 29.684968
+ (REGION)   0.316013 121 0.002612 64.688051 32.558109
 - timestep_sdm_movement
- (REGION)   0.237315 484 0.000490 52.833473 19.336014
+ (REGION)   0.274686 484 0.000568 56.228477 28.300325
+- sdm_movement_between_gridboxes
+ (REGION)   0.256332 404 0.000634 52.471459 26.409383
 - timestep_sdm_microphysics
- (REGION)   0.125556 484 0.000259 27.952450 10.230048
+ (REGION)   0.039814 484 0.000082 8.149910 4.101927
+- sdm_movement_move_in_gridboxes
+ (REGION)   0.015965 404 0.000040 3.268144 1.644888
 - init
- (REGION)   0.005886 1 0.005886 1.310419 0.479588
-- init_gbxs
- (REGION)   0.003596 1 0.003596 0.800593 0.293001
+ (REGION)   0.012919 1 0.012919 2.644569 1.331036
 - init_supers
- (REGION)   0.002195 1 0.002195 0.488700 0.178855
+ (REGION)   0.011652 1 0.011652 2.385173 1.200480
+- init_gbxs
+ (REGION)   0.001214 1 0.001214 0.248512 0.125079
+- sdm_movement_boundary_conditions
+ (REGION)   0.000123 404 0.000000 0.025134 0.012650
 - timestep_coupldyn
- (REGION)   0.000039 121 0.000000 0.008652 0.003166
+ (REGION)   0.000022 121 0.000000 0.004490 0.002260
 
 -------------------------------------------------------------------------
 Kernels:
 
-- sdm_microphysics
- (ParFor)   0.124565 484 0.000257 27.732012 10.149372
-- move_supers_in_gridboxes
- (ParFor)   0.080136 404 0.000198 17.840654 6.529329
 - Kokkos::View::initialization [buffer] via memset
- (ParFor)   0.063733 26 0.002451 14.188966 5.192883
+ (ParFor)   0.078383 26 0.003015 16.045158 8.075680
 - reset_buffer
- (ParFor)   0.045648 52 0.000878 10.162698 3.719348
-- move_supers_between_gridboxes
- (ParFor)   0.039888 404 0.000099 8.880358 3.250037
-- Kokkos::ViewFill-1D
- (ParFor)   0.023173 62 0.000374 5.158924 1.888065
-- write_gridboxes_team
- (ParFor)   0.016976 242 0.000070 3.779290 1.383146
-- write_gridboxes_range
- (ParFor)   0.013725 121 0.000113 3.055662 1.118312
-- find_ref
- (ParRed)   0.011540 134 0.000086 2.569191 0.940274
-- set_cartesian_maps
- (ParFor)   0.010732 1 0.010732 2.389306 0.874439
+ (ParFor)   0.067615 52 0.001300 13.840757 6.966184
+- Kokkos::ScatterView::ResetDuplicates [duplicated_counts]
+ (ParFor)   0.056926 406 0.000140 11.652754 5.864942
+- Kokkos::ScatterView::ReduceDuplicates [duplicated_counts]
+ (ParFor)   0.056726 405 0.000140 11.611758 5.844308
+- sdm_microphysics
+ (ParFor)   0.038587 484 0.000080 7.898762 3.975522
+- counting_sort_gbxs
+ (ParFor)   0.038140 404 0.000094 7.807302 3.929489
+- counting_sort_oob
+ (ParFor)   0.033512 404 0.000083 6.859910 3.452658
+- set_gridboxes_refs
+ (ParFor)   0.031615 404 0.000078 6.471572 3.257204
+- increment_counts
+ (ParFor)   0.015400 405 0.000038 3.152331 1.586598
+- move_supers_in_gridboxes
+ (ParFor)   0.013151 404 0.000033 2.692007 1.354912
 - write_supers
- (ParFor)   0.009467 121 0.000078 2.107721 0.771385
+ (ParFor)   0.010241 121 0.000085 2.096299 1.055087
+- cumulative_sum
+ (ParScan)  0.010223 405 0.000025 2.092736 1.053294
+- write_gridboxes_team
+ (ParFor)   0.007730 242 0.000032 1.582339 0.796406
+- write_gridboxes_range
+ (ParFor)   0.005817 121 0.000048 1.190829 0.599356
+- Kokkos::fill_view_api_default
+ (ParFor)   0.005791 405 0.000014 1.185363 0.596605
 - Kokkos::View::initialization [h_data] via memset
- (ParFor)   0.004045 1919 0.000002 0.900647 0.329619
-- is_gbxinit_complete
- (ParFor)   0.002600 1 0.002600 0.578828 0.211840
-- Kokkos::Impl::BitsetCount::apply
- (ParRed)   0.000847 11 0.000077 0.188590 0.069020
-- Kokkos::View::initialization [gbxs]
- (ParFor)   0.000429 1 0.000429 0.095543 0.034967
+ (ParFor)   0.005593 1487 0.000004 1.144904 0.576241
+- Kokkos::ViewFill-1D
+ (ParFor)   0.003446 62 0.000056 0.705469 0.355069
 - initialise_supers_on_host
- (ParFor)   0.000429 1 0.000429 0.095543 0.034967
+ (ParFor)   0.002977 1 0.002977 0.609422 0.306728
+- find_domainrefs_cuda
+ (ParFor)   0.002472 405 0.000006 0.506054 0.254702
+- set_cartesian_maps
+ (ParFor)   0.002084 1 0.002084 0.426600 0.214712
+- is_gbxinit_complete
+ (ParFor)   0.000716 1 0.000716 0.146560 0.073765
+- Kokkos::Impl::BitsetCount::apply
+ (ParRed)   0.000195 11 0.000018 0.039922 0.020093
 - initialise_gbxs_on_host
- (ParFor)   0.000415 1 0.000415 0.092411 0.033821
+ (ParFor)   0.000183 1 0.000183 0.037482 0.018865
 - receive_dynamics
- (ParFor)   0.000344 3 0.000115 0.076593 0.028032
-- IsSupersSorted
- (ParRed)   0.000122 1 0.000122 0.027123 0.009927
-- Kokkos::View::initialization [supers] via memset
- (ParFor)   0.000111 1 0.000111 0.024735 0.009052
-- collect_gbxs_data
- (ParFor)   0.000065 1 0.000065 0.014491 0.005303
-- Kokkos::View::destruction [gbxs]
- (ParFor)   0.000063 1 0.000063 0.014013 0.005128
+ (ParFor)   0.000173 3 0.000058 0.035432 0.017833
+- counting_sort
+ (ParFor)   0.000139 1 0.000139 0.028453 0.014321
+- Kokkos::View::initialization [totsupers] via memset
+ (ParFor)   0.000138 1 0.000138 0.028258 0.014222
+- Kokkos::View::initialization [domainref1] via memset
+ (ParFor)   0.000095 405 0.000000 0.019473 0.009801
+- Kokkos::Impl::host_space_deepcopy_double
+ (ParFor)   0.000095 1 0.000095 0.019424 0.009776
 - Kokkos::View::initialization [UnorderedMap - values] via memset
- (ParFor)   0.000043 31 0.000001 0.009501 0.003477
-- Kokkos::View::initialization [UnorderedMap - keys] via memset
- (ParFor)   0.000031 31 0.000001 0.006953 0.002545
+ (ParFor)   0.000067 31 0.000002 0.013616 0.006853
+- IsSupersSorted
+ (ParRed)   0.000059 1 0.000059 0.012055 0.006067
+- Kokkos::View::initialization [totsupers_tmp_mirror] via memset
+ (ParFor)   0.000051 1 0.000051 0.010444 0.005257
+- Kokkos::View::initialization [gbxs] via memset
+ (ParFor)   0.000049 1 0.000049 0.010005 0.005036
 - Kokkos::View::initialization [Kokkos::Random_XorShift64::state] via memset
- (ParFor)   0.000023 1 0.000023 0.005149 0.001884
-- Kokkos::View::initialization [UnorderedMap - size] via memset
- (ParFor)   0.000006 31 0.000000 0.001327 0.000486
-- Kokkos::View::initialization [UnorderedMap - scalars] via memset
- (ParFor)   0.000006 31 0.000000 0.001274 0.000466
+ (ParFor)   0.000039 1 0.000039 0.008004 0.004028
+- collect_gbxs_data
+ (ParFor)   0.000023 1 0.000023 0.004685 0.002358
+- Kokkos::View::initialization [UnorderedMap - keys] via memset
+ (ParFor)   0.000022 31 0.000001 0.004588 0.002309
+- Kokkos::View::initialization [totsupers_tmp] via memset
+ (ParFor)   0.000017 1 0.000017 0.003465 0.001744
 - Kokkos::View::initialization [UnorderedMap - bitset] via memset
- (ParFor)   0.000005 31 0.000000 0.001115 0.000408
-- Kokkos::View::initialization [Bitset] via memset
- (ParFor)   0.000004 9 0.000000 0.000955 0.000350
-- Kokkos::View::initialization [UnorderedMap scalars] via memset
- (ParFor)   0.000001 9 0.000000 0.000212 0.000078
+ (ParFor)   0.000008 31 0.000000 0.001611 0.000811
+- Kokkos::View::initialization [UnorderedMap - size] via memset
+ (ParFor)   0.000008 31 0.000000 0.001611 0.000811
+- Kokkos::View::initialization [cumlcounts] via memset
+ (ParFor)   0.000004 1 0.000004 0.000781 0.000393
+- Kokkos::View::initialization [UnorderedMap - scalars] via memset
+ (ParFor)   0.000003 31 0.000000 0.000586 0.000295
 - Kokkos::View::initialization [Kokkos::Random_XorShift64::locks] via memset
- (ParFor)   0.000001 1 0.000001 0.000212 0.000078
-- Kokkos::View::initialization [deltas] via memset
- (ParFor)   0.000000 1 0.000000 0.000000 0.000000
-- Kokkos::View::initialization [DualView::modified_flags] via memset
- (ParFor)   0.000000 1 0.000000 0.000000 0.000000
+ (ParFor)   0.000001 1 0.000001 0.000244 0.000123
 - Kokkos::View::initialization [global_ndims] via memset
- (ParFor)   0.000000 1 0.000000 0.000000 0.000000
+ (ParFor)   0.000001 1 0.000001 0.000195 0.000098
+- Kokkos::View::initialization [DualView::modified_flags] via memset
+ (ParFor)   0.000001 1 0.000001 0.000195 0.000098
+- Kokkos::View::initialization [Bitset] via memset
+ (ParFor)   0.000001 9 0.000000 0.000195 0.000098
+- Kokkos::View::initialization [UnorderedMap scalars] via memset
+ (ParFor)   0.000001 9 0.000000 0.000195 0.000098
+- Kokkos::View::initialization [counts] via memset
+ (ParFor)   0.000001 1 0.000001 0.000195 0.000098
 
 -------------------------------------------------------------------------
 Summary:
 
-Total Execution Time (incl. Kokkos + non-Kokkos):                   1.22732 seconds
-Total Time in Kokkos kernels:                                       0.44918 seconds
-   -> Time outside Kokkos kernels:                                  0.77815 seconds
-   -> Percentage in Kokkos kernels:                                   36.60 %
-Total Calls to Kokkos Kernels:                                         4170
+Total Execution Time (incl. Kokkos + non-Kokkos):                   0.97061 seconds
+Total Time in Kokkos kernels:                                       0.48852 seconds
+   -> Time outside Kokkos kernels:                                  0.48209 seconds
+   -> Percentage in Kokkos kernels:                                   50.33 %
+Total Calls to Kokkos Kernels:                                         7252
 
 -------------------------------------------------------------------------
