@@ -44,6 +44,38 @@
 namespace KCS = KokkosCleoSettings;
 
 /**
+ * @struct SDMMicrophysicsFunctor
+ * @brief Structure for encapsulating the microphysics process in SDM.
+ *
+ * The `operator()` is called for SDM microphysics, and it uses Kokkos parallel_for(...)
+ * for parallelized execution over gridboxes and/or superdroplets. Struct ensures parallel region
+ * only captures objects relevant to microphysics and not other members of SDMMethods
+ * (which may not be GPU compatible).
+ *
+ * @tparam Microphys Type of the MicrophysicalProcess.
+ */
+template <MicrophysicalProcess Microphys, SDMMonitor SDMMo>
+struct SDMMicrophysicsFunctor {
+  const Microphys microphys;          /**< object that is type of MicrophysicalProcess. */
+  const unsigned int t_sdm;           /**< current timestep for SDM. */
+  const unsigned int t_next;          /**< next timestep for SDM. */
+  const viewd_gbx d_gbxs;             /** view of gridboxes on device. */
+  const subviewd_supers domainsupers; /**view on device of all superdroplets in all gridboxes. */
+  const SDMMo mo;                     /**< object that is type of SDMMonitor to use. */
+
+  KOKKOS_INLINE_FUNCTION void operator()(const TeamMember &team_member) const {
+    const auto ii = team_member.league_rank();
+    auto supers = d_gbxs(ii).supersingbx(domainsupers);
+    for (unsigned int subt = t_sdm; subt < t_next; subt = microphys.next_step(subt)) {
+      microphys.run_step(team_member, subt, supers, d_gbxs(ii).state, mo);
+      // TODO(CB): explicitly feed supers back into domainsupers after microphys.run_step(...)?
+    }
+
+    mo.monitor_microphysics(team_member, supers);
+  }
+};
+
+/**
  * @class SDMMethods
  * @brief Struct wrapping the core ingredients of the Super-droplet Model (SDM) part of CLEO.
  *
@@ -113,82 +145,54 @@ class SDMMethods {
   }
 
  public:
-  GbxMaps gbxmaps; /**< object that is type of GridboxMaps. */
-  Obs obs;         /**< object that is type of Observer. */
+  GbxMaps gbxmaps;     /**< object that is type of GridboxMaps. */
+  Obs obs;             /**< object that is type of Observer. */
+  Microphys microphys; /**< object that is type of MicrophysicalProcess. */
 
   /**
-   * @struct SDMMicrophysics
-   * @brief Structure for encapsulating the microphysics process in SDM.
+   * @brief run SDM microphysics for each gridbox (using sub-timestepping routine).
    *
-   * The `operator()` is called for SDM microphysics, and it uses Kokkos
-   * parallel_for for parallelized execution. struct required so that
-   * capture by value KOKKOS_CLASS_LAMBDA (ie. [=] on CPU) only captures
-   * objects relevant to microphysics and not other members of SDMMethods
-   * (which may not be GPU compatible).
+   * This function runs SDM microphysics for each gridbox using a sub-timestepping routine.
+   * Kokkos::parallel_for is nested parallelism within parallelised loop over gridboxes,
+   * serial equivalent is simply: `for (size_t ii(0); ii < ngbxs; ++ii) { [...] }`
    *
-   * @tparam Microphys Type of the MicrophysicalProcess.
+   * @param t_sdm Current timestep for SDM.
+   * @param t_next Next timestep for SDM.
+   * @param d_gbxs View of gridboxes on device.
+   * @param domainsupers View on device of all the superdroplets related to the gridboxes.
+   * @param mo SDMMonitor to use.
    */
-  struct SDMMicrophysics {
-    Microphys microphys; /**< type of MicrophysicalProcess. */
+  template <SDMMonitor SDMMo>
+  void sdm_microphysics(const unsigned int t_sdm, const unsigned int t_next, const viewd_gbx d_gbxs,
+                        const subviewd_supers domainsupers, const SDMMo mo) const {
+    // TODO(all) use scratch space for parallel region
+    const size_t ngbxs(d_gbxs.extent(0));
+    const auto functor = SDMMicrophysicsFunctor{microphys, t_sdm, t_next, d_gbxs, domainsupers, mo};
+    Kokkos::parallel_for("sdm_microphysics", TeamPolicy(ngbxs, KCS::team_size), functor);
+  }
 
-    /**
-     * @brief run SDM microphysics for each gridbox (using sub-timestepping routine).
-     *
-     * This function runs SDM microphysics for each gridbox using a sub-timestepping routine.
-     * Kokkos::parallel_for is nested parallelism within parallelised loop over gridboxes,
-     * serial equivalent is simply: `for (size_t ii(0); ii < ngbxs; ++ii) { [...] }`
-     *
-     * @param t_sdm Current timestep for SDM.
-     * @param t_next Next timestep for SDM.
-     * @param d_gbxs View of gridboxes on device.
-     * @param domainsupers View on device of all the superdroplets related to the gridboxes.
-     * @param mo SDMMonitor to use.
-     */
-    template <SDMMonitor SDMMo>
-    void sdm_microphysics(const unsigned int t_sdm, const unsigned int t_next,
-                          const viewd_gbx d_gbxs, const subviewd_supers domainsupers,
-                          const SDMMo mo) const {
-      // TODO(all) use scratch space for parallel region
-      const size_t ngbxs(d_gbxs.extent(0));
-      Kokkos::parallel_for(
-          "sdm_microphysics", TeamPolicy(ngbxs, KCS::team_size),
-          KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
-            const auto ii = team_member.league_rank();
+  /**
+   * @brief run SDM microphysics for each gridbox (using sub-timestepping routine).
+   *
+   * This operator is a wrapper around the function which runs SDM microphysics.
+   *
+   * Kokkos::Profiling are null pointers unless a Kokkos profiler library has been
+   * exported to "KOKKOS_TOOLS_LIBS" prior to runtime so the lib gets dynamically loaded.
+   *
+   * @param t_sdm Current timestep for SDM.
+   * @param t_next Next timestep for SDM.
+   * @param d_gbxs View of gridboxes on device.
+   * @param allsupers Struct to handle superdroplets in the domain.
+   * @param mo SDMMonitor to use.
+   */
+  template <SDMMonitor SDMMo>
+  void sdm_microphysics(const unsigned int t_sdm, const unsigned int t_next, const viewd_gbx d_gbxs,
+                        const SupersInDomain &allsupers, const SDMMo mo) const {
+    Kokkos::Profiling::ScopedRegion region("timestep_sdm_microphysics");
 
-            auto supers = d_gbxs(ii).supersingbx(domainsupers);
-            for (unsigned int subt = t_sdm; subt < t_next; subt = microphys.next_step(subt)) {
-              microphys.run_step(team_member, subt, supers, d_gbxs(ii).state,
-                                 mo);  // TODO(CB): explicitly feed supers back into domainsupers
-            }
-
-            mo.monitor_microphysics(team_member, supers);
-          });
-    }
-
-    /**
-     * @brief run SDM microphysics for each gridbox (using sub-timestepping routine).
-     *
-     * This operator is a wrapper around the function which runs SDM microphysics.
-     *
-     * Kokkos::Profiling are null pointers unless a Kokkos profiler library has been
-     * exported to "KOKKOS_TOOLS_LIBS" prior to runtime so the lib gets dynamically loaded.
-     *
-     * @param t_sdm Current timestep for SDM.
-     * @param t_next Next timestep for SDM.
-     * @param d_gbxs View of gridboxes on device.
-     * @param allsupers Struct to handle superdroplets in the domain.
-     * @param mo SDMMonitor to use.
-     */
-    template <SDMMonitor SDMMo>
-    void operator()(const unsigned int t_sdm, const unsigned int t_next, const viewd_gbx d_gbxs,
-                    const SupersInDomain &allsupers, const SDMMo mo) const {
-      Kokkos::Profiling::ScopedRegion region("timestep_sdm_microphysics");
-
-      const auto domainsupers = allsupers.domain_supers();
-      sdm_microphysics(t_sdm, t_next, d_gbxs, domainsupers, mo);
-    }
-  } microphysics;
-  /**< instance of SDMMicrophysics, operator is call of SDM microphysics */
+    const auto domainsupers = allsupers.domain_supers();
+    sdm_microphysics(t_sdm, t_next, d_gbxs, domainsupers, mo);
+  }
 
   /**
    * @brief Constructor for SDMMethods.
@@ -208,7 +212,7 @@ class SDMMethods {
         movesupers(movesupers),
         gbxmaps(gbxmaps),
         obs(obs),
-        microphysics({microphys}) {}
+        microphys(microphys) {}
 
   /**
    * @brief Get the coupling step value.
@@ -267,8 +271,8 @@ class SDMMethods {
     while (t_sdm < t_mdl_next) {
       const auto t_sdm_next = next_sdmstep(t_sdm, t_mdl_next);
 
-      superdrops_movement(t_sdm, d_gbxs, allsupers, mo);       // on host and device
-      microphysics(t_sdm, t_sdm_next, d_gbxs, allsupers, mo);  // on device
+      superdrops_movement(t_sdm, d_gbxs, allsupers, mo);           // on host and device
+      sdm_microphysics(t_sdm, t_sdm_next, d_gbxs, allsupers, mo);  // on device
 
       t_sdm = t_sdm_next;
     }
