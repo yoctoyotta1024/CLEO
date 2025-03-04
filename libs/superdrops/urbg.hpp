@@ -134,7 +134,7 @@ KOKKOS_INLINE_FUNCTION viewd_supers shuffle_supers(const viewd_supers supers,
 KOKKOS_INLINE_FUNCTION viewd_supers one_shuffle_supers(const TeamMember& team_member,
                                                        const viewd_supers supers,
                                                        const GenRandomPool genpool) {
-  Kokkos::single(Kokkos::PerTeam(team_member), [&]() {
+  Kokkos::single(Kokkos::PerTeam(team_member), [=]() {
     URBG<ExecSpace> urbg{genpool.get_state()};
     shuffle_supers(supers, urbg);
     genpool.free_state(urbg.gen);
