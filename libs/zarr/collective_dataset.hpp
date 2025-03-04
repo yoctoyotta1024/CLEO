@@ -281,7 +281,8 @@ class Dataset {
    * @param max_superdroplets The maximum number of superdroplets of the model
    */
   void set_max_superdroplets(unsigned int max_superdroplets) {
-    global_superdroplet_ordering.get()->resize(max_superdroplets, -1);
+    constexpr unsigned int fill_value = std::numeric_limits<unsigned int>::max();
+    global_superdroplet_ordering.get()->resize(max_superdroplets, fill_value);
   }
 
   /**

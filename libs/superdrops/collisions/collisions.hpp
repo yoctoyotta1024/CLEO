@@ -142,16 +142,14 @@ struct CollideSupersFunctor {
   KOKKOS_INLINE_FUNCTION void collide_superdroplet_pair(Superdrop &dropA, Superdrop &dropB,
                                                         const double scale_p,
                                                         const double VOLUME) const {
-    /* 1. assign references to each superdrop in pair
-    that will collide such that (drop1.xi) >= (drop2.xi) */
+    /* 1. assign references to each superdrop in pair that will collide
+    such that (drop1.xi) >= (drop2.xi) */
     const auto drops = assign_drops(dropA, dropB);  // {drop1, drop2}
 
-    /* 2. calculate scaled probability of
-    collision for pair of superdroplets */
+    /* 2. calculate scaled probability of collision for pair of superdroplets */
     const auto prob = scaled_probability(drops.first, drops.second, scale_p, VOLUME);
 
-    /* 3. Monte Carlo Step: use random number to
-    enact (or not) collision of superdroplets pair */
+    /* 3. Monte Carlo Step: use random number to enact (or not) collision of superdroplets pair */
     URBG<ExecSpace> urbg{genpool.get_state()};  // thread safe random number generator
     const auto phi = urbg.drand(0.0, 1.0);      // random number in range [0.0, 1.0]
     genpool.free_state(urbg.gen);
