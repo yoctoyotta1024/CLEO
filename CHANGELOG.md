@@ -2,6 +2,29 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.36.0](https://github.com/yoctoyotta1024/CLEO/compare/e06bdbabbf5e0d96994d4391b1f67403a1f83bb0..v0.36.0) - 2025-03-04
+#### Bug Fixes
+- avoid casting -1, use constants instead - ([4b6b42e](https://github.com/yoctoyotta1024/CLEO/commit/4b6b42ea84bc49e2f410ed8fbc71e18bfbce803e)) - clara.bayley
+- make privacy of functions and capture of values compatible with GPUs - ([fa95f75](https://github.com/yoctoyotta1024/CLEO/commit/fa95f7573375e88a0995f41ecc901b069ce2eb81)) - clara.bayley
+#### Features
+- new concept to define acceptable structures for boundary conditions in superdroplet movement - ([3a8860b](https://github.com/yoctoyotta1024/CLEO/commit/3a8860b97fa73b0c7fddb218554231e8b9934e4e)) - clara.bayley
+- new concept to define acceptable structures for transporting superdroplets around the domain - ([feadc96](https://github.com/yoctoyotta1024/CLEO/commit/feadc9665be9e6cdf3281a8b58886945233a7a0b)) - clara.bayley
+#### Refactoring
+- update timing for speedtest example solution - ([9fb90a2](https://github.com/yoctoyotta1024/CLEO/commit/9fb90a2c133d6af5b2e7846c58bf0b210ae8c2f2)) - clara.bayley
+- faster cuda implementation with class capture - ([12fd7e1](https://github.com/yoctoyotta1024/CLEO/commit/12fd7e1599f3f88abb5d75b010d9b4b335171c7e)) - clara.bayley
+- move functors outside of DoCondensation for clearer encapsulation - ([52402d6](https://github.com/yoctoyotta1024/CLEO/commit/52402d691ef616c68936602d67de3fbcbcfaaf9c)) - clara.bayley
+- move functors outside of DoCollisions for better encapsulation and clarity - ([202bdea](https://github.com/yoctoyotta1024/CLEO/commit/202bdeaad33f9b9ec71485f0913a8f1b0d714102)) - clara.bayley
+- capture by value in single thread shuffling - ([ea3d054](https://github.com/yoctoyotta1024/CLEO/commit/ea3d05426f526c9f721d1ae4a4a97befa263e881)) - clara.bayley
+- capture by value in lambda for runcleo references - ([611cc6b](https://github.com/yoctoyotta1024/CLEO/commit/611cc6b06cd8de7cc028cc5f616a288aba82776d)) - clara.bayley
+- move functors outside of SDMMethods for clearer encapsulation - ([26fe16a](https://github.com/yoctoyotta1024/CLEO/commit/26fe16a4483710bb5705ed7cc91cd70d1e8f11b7)) - clara.bayley
+- use concepts in runcleo and examples to constrain boundary conditions and transport templates - ([02c3026](https://github.com/yoctoyotta1024/CLEO/commit/02c3026cdf2575a501b0d7a1bee61980a4b9e307)) - clara.bayley
+- move functors outside of MoveSupersInDomain for better encapsulation - ([91321a8](https://github.com/yoctoyotta1024/CLEO/commit/91321a8bde566bdf61c932a58c742ba89fe6c42b)) - clara.bayley
+- don't use set refs with team_member when not needing nested loops - ([ae6ae29](https://github.com/yoctoyotta1024/CLEO/commit/ae6ae29c7e7daac1937b09f3ffe17db688f91067)) - clara.bayley
+- don't hold subview returned as unused variable - ([14f6210](https://github.com/yoctoyotta1024/CLEO/commit/14f6210a9e01fbb09d283f5e62b2d81bf3d11bf0)) - clara.bayley
+- don't assert total nullsupers from collisions - ([e06bdba](https://github.com/yoctoyotta1024/CLEO/commit/e06bdbabbf5e0d96994d4391b1f67403a1f83bb0)) - clara.bayley
+
+- - -
+
 ## [v0.35.1](https://github.com/yoctoyotta1024/CLEO/compare/41b23c3e0d0b2b55a7dfac6f1c76963b20ad2568..v0.35.1) - 2025-03-03
 #### Bug Fixes
 - export yac and yaxt root to names YAC_ROOT and YAXT_ROOT - ([1670bf3](https://github.com/yoctoyotta1024/CLEO/commit/1670bf3ee9d1d325661e75c84971a0a328e2c20a)) - clara.bayley
