@@ -1,12 +1,11 @@
 #!/bin/bash
 #SBATCH --job-name=shima2009
-#SBATCH --partition=gpu
+#SBATCH --partition=compute
 #SBATCH --nodes=1
-#SBATCH --gpus=4
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=128
 #SBATCH --mem=10G
-#SBATCH --time=00:20:00
+#SBATCH --time=00:02:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=bm1183
@@ -19,16 +18,16 @@
 ### ---- build type, directories, the executable(s) ---- ###
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
-buildtype="cuda"
+buildtype="openmp"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_colls0d/${buildtype}/
 build_flags="-DCLEO_COUPLED_DYNAMICS=null -DCLEO_DOMAIN=cartesian -DCLEO_NO_ROUGHPAPER=true"
 enableyac=false
-executables="golcolls longcolls"
+executables="golcolls"
 
 pythonscript=${path2CLEO}/examples/boxmodelcollisions/shima2009.py
 configfile=${path2CLEO}/examples/boxmodelcollisions/shima2009_config.yaml
-script_args="${configfile} golovin long1 long2"
+script_args="${configfile} golovin"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
