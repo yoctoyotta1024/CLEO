@@ -10,12 +10,3 @@ Header file: ``<libs/superdrops/collisions/urbg.hpp>``
    :protected-members:
    :members:
    :undoc-members:
-
-.. doxygenfunction:: device_swap
-   :project: superdrops
-
-.. doxygenfunction:: shuffle_supers
-   :project: superdrops
-
-.. doxygenfunction:: one_shuffle_supers
-   :project: superdrops
