@@ -1,8 +1,8 @@
 Randomness Generation
 =====================
 
-Header file: ``<libs/superdrops/urbg.hpp>``
-`[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/superdrops/urbg.hpp>`_
+Header file: ``<libs/superdrops/collisions/urbg.hpp>``
+`[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/superdrops/collisions/urbg.hpp>`_
 
 .. doxygenstruct:: URBG
    :project: superdrops

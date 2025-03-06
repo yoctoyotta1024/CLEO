@@ -32,7 +32,7 @@
 #include "../sdmmonitor.hpp"
 #include "../state.hpp"
 #include "../superdrop.hpp"
-#include "../urbg.hpp"
+#include "./shuffle.hpp"
 
 namespace dlc = dimless_constants;
 
@@ -230,7 +230,7 @@ struct DoCollisions {
                                             const double volume) const {
     /* Randomly shuffle order of superdroplet objects
     in supers in order to generate random pairs */
-    supers = one_shuffle_supers(team_member, supers, genpool);
+    supers = shuffle_supers(team_member, supers, genpool);
 
     /* collide all randomly generated pairs of SDs */
     collide_supers(team_member, supers, volume);
