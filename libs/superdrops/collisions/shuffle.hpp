@@ -2,76 +2,35 @@
  * Copyright (c) 2024 MPI-M, Clara Bayley
  *
  * ----- CLEO -----
- * File: urbg.hpp
- * Project: superdrops
- * Created Date: Friday 13th October 2023
+ * File: shuffle.hpp
+ * Project: collisions
+ * Created Date: Thursday 6th March 2025
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Thursday 6th March 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Struct (for Kokkos compatibility) to generate random numbers for SDM (e.g. to randomly shuffle
- * super-droplet's vector) based on C++11 standard UniformRandomBitGenerator (URBG). File also
- * contains Kokkos compatibile thread-safe versions of C++ shuffling algorithms.
+ * Functions for Kokkos compatibile thread-safe versions of C++ Fisher-Yates serial shuffling
+ * algorithm, and of MergeShuffle parallelsised shuffling algorithm. MergeShuffle comes from
+ * "A Very Fast, Parallel Random Permutation Algorithm", Axel Bacher, Olivier Bodini,
+ * Alexandros Hollender, and Jérémie Lumbroso, August 14, 2015. See also their code
+ * repository: https://github.com/axel-bacher/mergeshuffle)
  */
 
-#ifndef LIBS_SUPERDROPS_URBG_HPP_
-#define LIBS_SUPERDROPS_URBG_HPP_
+#ifndef LIBS_SUPERDROPS_COLLISIONS_SHUFFLE_HPP_
+#define LIBS_SUPERDROPS_COLLISIONS_SHUFFLE_HPP_
 
 #include <Kokkos_Core.hpp>
-#include <Kokkos_Random.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
-#include <cstdint>
 
-#include "kokkosaliases_sd.hpp"
-#include "superdrop.hpp"
-
-/**
- * @brief Struct wrapping Kokkos random number generator.
- *
- * Generates random numbers in the range [start, end]. Result equivalent to
- * std::uniform_int_distribution with parameters [a, b] = [start, end], where g = C++11
- * UniformRandomBitGenerator (URBG). Useful e.g. for using urand(start, end) function of Kokkos
- * random number generator 'gen' to generate random numbers for shuffling super-droplets array by
- * swapping elements in range [start, end] (e.g, for linear sampling of super-droplet pairs in
- * SDM collision algorithm).
- *
- * @tparam DeviceType The Kokkos device type.
- */
-template <class DeviceType>
-struct URBG {
-  Kokkos::Random_XorShift64<DeviceType> gen; /**< Kokkos random number generator */
-
-  /**
-   * @brief Draws a random 64-bit unsigned integer (uint64_t) from a uniform distribution in the
-   * range [start, end].
-   *
-   * @param start The lower bound of the range.
-   * @param end The upper bound of the range.
-   * @return The random 8-byte unsigned integer.
-   */
-  KOKKOS_INLINE_FUNCTION
-  uint64_t operator()(const uint64_t start, const uint64_t end) {
-    return gen.urand(start, end);  // unsigned int rand
-  }
-
-  /**
-   * @brief Draws a random number (double) from a uniform distribution in the range [start, end].
-   *
-   * @param start The lower bound of the range.
-   * @param end The upper bound of the range.
-   * @return The random double.
-   */
-  KOKKOS_INLINE_FUNCTION
-  double drand(const double start, const double end) {
-    return gen.drand(start, end);  // double rand
-  }
-};
+#include "../kokkosaliases_sd.hpp"
+#include "../superdrop.hpp"
+#include "./urbg.hpp"
 
 /**
  * @brief Swaps the values of two super-droplets.
@@ -131,9 +90,9 @@ KOKKOS_INLINE_FUNCTION viewd_supers shuffle_supers(const viewd_supers supers,
  * @param genpool The random number generator pool.
  * @return The shuffled view of superdroplets.
  */
-KOKKOS_INLINE_FUNCTION viewd_supers one_shuffle_supers(const TeamMember& team_member,
-                                                       const viewd_supers supers,
-                                                       const GenRandomPool genpool) {
+KOKKOS_INLINE_FUNCTION viewd_supers shuffle_supers(const TeamMember& team_member,
+                                                   const viewd_supers supers,
+                                                   const GenRandomPool genpool) {
   Kokkos::single(Kokkos::PerTeam(team_member), [=]() {
     URBG<ExecSpace> urbg{genpool.get_state()};
     shuffle_supers(supers, urbg);
@@ -145,4 +104,4 @@ KOKKOS_INLINE_FUNCTION viewd_supers one_shuffle_supers(const TeamMember& team_me
   return supers;
 }
 
-#endif  // LIBS_SUPERDROPS_URBG_HPP_
+#endif  // LIBS_SUPERDROPS_COLLISIONS_SHUFFLE_HPP_
