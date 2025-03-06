@@ -189,7 +189,7 @@ struct DoCollisions {
    *
    * Function uses Kokkos nested parallelism for paralelism over supers inside parallelised loop
    * for member 'teamMember'.
-   * In serial Kokkos::parallel_reduce([...]) is equivalent to summing numnull over for loop:
+   * In serial Kokkos::parallel_for([...]) is equivalent to loop:
    * for (size_t jj(0); jj < npairs; ++jj) {[...]}.
    *
    * _NOTE:_ function assumes supers is already randomly shuffled and these superdrops are
