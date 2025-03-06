@@ -18,3 +18,5 @@ modeling rebound and/or breakup as well as coalescence.
    collisionkinetics
    coalescence
    coalbure
+   shuffle
+   urbg
