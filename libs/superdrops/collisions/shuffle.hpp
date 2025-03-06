@@ -32,29 +32,43 @@
 #include "../superdrop.hpp"
 #include "./urbg.hpp"
 
+KOKKOS_FUNCTION viewd_supers merge_shuffle_supers(const TeamMember& team_member,
+                                                  const viewd_supers supers,
+                                                  const GenRandomPool genpool);
+
+/*
+ * wrapper function to make it easier to chaneg shuffling algorithm (e.g. to switch to FisherYates
+ * for debugging)
+ */
+KOKKOS_INLINE_FUNCTION viewd_supers shuffle_supers(const TeamMember& team_member,
+                                                   const viewd_supers supers,
+                                                   const GenRandomPool genpool) {
+  return merge_shuffle_supers(team_member, supers, genpool);
+}
+
+/**
+ * @brief Swaps the values of two super-droplets.
+ *
+ * Equivalent to C++98 std::swap but works on device as well as host (gpu compatible).
+ *
+ * _Note:_ Involves a copy construction and two assignment operations, which may not be
+ * efficient if Superdrop class stores large quantities of data.
+ *
+ * @param a The first super-droplet.
+ * @param b The second super-droplet.
+ */
+KOKKOS_INLINE_FUNCTION void device_swap(Superdrop& a, Superdrop& b) const {
+  Superdrop c(a);
+  a = b;
+  b = c;
+}
+
 /*
 Thread-Safe Kokkos compatible version of Fisher-Yates shuffling algorithm for
 super-droplets. Shuffling is done in serial (slow!) on single thread per team, we
 maintain this code in case it's needed for easier debugging (not for performance!)
 */
 struct FisherYatesShuffle {
-  /**
-   * @brief Swaps the values of two super-droplets.
-   *
-   * Equivalent to C++98 std::swap but works on device as well as host (gpu compatible).
-   *
-   * _Note:_ Involves a copy construction and two assignment operations, which may not be
-   * efficient if Superdrop class stores large quantities of data.
-   *
-   * @param a The first super-droplet.
-   * @param b The second super-droplet.
-   */
-  KOKKOS_INLINE_FUNCTION void device_swap(Superdrop& a, Superdrop& b) const {
-    Superdrop c(a);
-    a = b;
-    b = c;
-  }
-
   /**
    * @brief Shuffles the order of super-droplets in a view.
    *
@@ -67,14 +81,9 @@ struct FisherYatesShuffle {
    * @return The shuffled view of super-droplets.
    */
   template <class DeviceType>
-  KOKKOS_INLINE_FUNCTION viewd_supers shuffle_supers(const viewd_supers supers,
-                                                     URBG<DeviceType> urbg) const {
-    namespace KE = Kokkos::Experimental;
-
-    const auto first = KE::begin(supers);
-    const auto dist =
-        KE::distance(first, KE::end(supers) - 1);  // distance to last element from 1st
-
+  KOKKOS_INLINE_FUNCTION viewd_supers shuffle_supers(URBG<DeviceType> urbg,
+                                                     const viewd_supers supers, const auto first,
+                                                     const auto dist) const {
     for (auto iter(dist); iter > 0; --iter) {
       const auto randiter = urbg(0, iter);  // random uint64_t equidistributed between [0, i]
       device_swap(*(first + iter), *(first + randiter));
@@ -100,12 +109,5 @@ struct FisherYatesShuffle {
   KOKKOS_FUNCTION viewd_supers operator()(const TeamMember& team_member, const viewd_supers supers,
                                           const GenRandomPool genpool) const;
 };
-
-KOKKOS_INLINE_FUNCTION viewd_supers shuffle_supers(const TeamMember& team_member,
-                                                   const viewd_supers supers,
-                                                   const GenRandomPool genpool) {
-  const auto shuffle = FisherYatesShuffle{};
-  return shuffle(team_member, supers, genpool);
-}
 
 #endif  // LIBS_SUPERDROPS_COLLISIONS_SHUFFLE_HPP_
