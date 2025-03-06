@@ -12,6 +12,7 @@ set(LIB_BINARY_DIR ${CMAKE_BINARY_DIR}/lib)
 
 # Add executables and create library target
 set(SOURCES
+  "shuffle.cpp"
   "coalbure_flag.cpp"
   "coalescence.cpp"
   "collisionkinetics.cpp"
