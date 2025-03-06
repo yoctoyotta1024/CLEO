@@ -22,6 +22,9 @@
 #ifndef LIBS_SUPERDROPS_COLLISIONS_COLLISIONS_HPP_
 #define LIBS_SUPERDROPS_COLLISIONS_COLLISIONS_HPP_
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-variable"
+
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Random.hpp>
 #include <concepts>
@@ -274,5 +277,7 @@ struct DoCollisions {
     do_collisions(team_member, supers, state.get_volume());
   }
 };
+
+#pragma GCC diagnostic pop
 
 #endif  // LIBS_SUPERDROPS_COLLISIONS_COLLISIONS_HPP_
