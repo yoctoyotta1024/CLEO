@@ -60,7 +60,7 @@ using viewd_counts = Kokkos::View<size_t *>; /**< View in device memory for sort
 using scatterviewd_counts = Kokkos::Experimental::ScatterView<size_t *>;
 
 namespace KokkosCleoSettings {
-constexpr auto team_size = Kokkos::AUTO();
+constexpr auto team_size = 16;  // Kokkos::AUTO();
 /**< configurable number threads per team for hierarchical parallelism over superdroplets */
 }  // namespace KokkosCleoSettings
 
