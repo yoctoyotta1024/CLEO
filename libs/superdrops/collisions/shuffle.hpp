@@ -32,6 +32,11 @@
 #include "../superdrop.hpp"
 #include "./urbg.hpp"
 
+/*
+Thread-Safe Kokkos compatible version of Fisher-Yates shuffling algorithm for
+super-droplets. Shuffling is done in serial (slow!) on single thread per team, we
+maintain this code in case it's needed for easier debugging (not for performance!)
+*/
 struct FisherYatesShuffle {
   /**
    * @brief Swaps the values of two super-droplets.
@@ -92,18 +97,15 @@ struct FisherYatesShuffle {
    * @param genpool The random number generator pool.
    * @return The shuffled view of superdroplets.
    */
-  KOKKOS_INLINE_FUNCTION viewd_supers shuffle_supers(const TeamMember& team_member,
-                                                     const viewd_supers supers,
-                                                     const GenRandomPool genpool) const {
-    Kokkos::single(Kokkos::PerTeam(team_member), [=, *this]() {
-      URBG<ExecSpace> urbg{genpool.get_state()};
-      shuffle_supers(supers, urbg);
-      genpool.free_state(urbg.gen);
-    });
-    team_member.team_barrier();  // synchronise threads
-
-    return supers;
-  }
+  KOKKOS_FUNCTION viewd_supers operator()(const TeamMember& team_member, const viewd_supers supers,
+                                          const GenRandomPool genpool) const;
 };
+
+KOKKOS_INLINE_FUNCTION viewd_supers shuffle_supers(const TeamMember& team_member,
+                                                   const viewd_supers supers,
+                                                   const GenRandomPool genpool) {
+  const auto shuffle = FisherYatesShuffle{};
+  return shuffle(team_member, supers, genpool);
+}
 
 #endif  // LIBS_SUPERDROPS_COLLISIONS_SHUFFLE_HPP_
