@@ -57,7 +57,7 @@ KOKKOS_INLINE_FUNCTION viewd_supers shuffle_supers(const TeamMember& team_member
  * @param a The first super-droplet.
  * @param b The second super-droplet.
  */
-KOKKOS_INLINE_FUNCTION void device_swap(Superdrop& a, Superdrop& b) const {
+KOKKOS_INLINE_FUNCTION void device_swap(Superdrop& a, Superdrop& b) {
   Superdrop c(a);
   a = b;
   b = c;
@@ -85,7 +85,7 @@ struct FisherYatesShuffle {
                                                      const viewd_supers supers, const auto first,
                                                      const auto dist) const {
     for (auto iter(dist); iter > 0; --iter) {
-      const auto randiter = urbg(0, iter);  // random uint64_t equidistributed between [0, i]
+      const auto randiter = urbg(0, iter);  // random uint64_t equidistributed between [0, iter]
       device_swap(*(first + iter), *(first + randiter));
     }
 
@@ -109,5 +109,47 @@ struct FisherYatesShuffle {
   KOKKOS_FUNCTION viewd_supers operator()(const TeamMember& team_member, const viewd_supers supers,
                                           const GenRandomPool genpool) const;
 };
+
+/*
+ * C++ and Kokkos compatible version of ```merge(unsigned int *t, unsigned int m, unsigned int n)```
+ * from "A Very Fast, Parallel Random Permutation Algorithm", Axel Bacher, Olivier Bodini,
+ * Alexandros Hollender, and Jérémie Lumbroso, August 14, 2015. see:
+ * https://github.com/axel-bacher/mergeshuffle/blob/master/merge.c
+ */
+template <class DeviceType>
+KOKKOS_INLINE_FUNCTION void merge_blocks(URBG<DeviceType> urbg, const viewd_supers supers,
+                                         const size_t j, const size_t k, const size_t l) {
+  namespace KE = Kokkos::Experimental;
+
+  const auto first = KE::begin(supers);  // iterator to first superdrop (like C pointer in merge.c)
+  auto u = j;                            // initial start position of 1st block
+  auto v = k - j;                        // initial start position of 2nd block
+  auto w = l - j;                        // initial end position of 2nd block
+
+  // take elements from two blocks until one block is exhausted
+  while (true) {
+    if (urbg(0, 1)) {
+      if (v == w) {
+        break;
+      } else {
+        const auto iter = v++;
+        device_swap(*(first + u), *(first + iter));
+      }
+    } else {
+      if (u == v) {
+        break;
+      } else {
+        u++;
+      }
+    }
+  }
+
+  // finish merge with Fisher-Yates
+  while (u < w) {
+    const auto iter = u++;
+    const auto randiter = urbg(0, u);  // random uint64_t equidistributed between [0, previous_u+1]
+    device_swap(*(first + randiter), *(first + iter));
+  }
+}
 
 #endif  // LIBS_SUPERDROPS_COLLISIONS_SHUFFLE_HPP_

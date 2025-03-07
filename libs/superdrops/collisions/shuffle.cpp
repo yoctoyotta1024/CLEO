@@ -30,11 +30,6 @@
  * Axel Bacher, Olivier Bodini, Alexandros Hollender, and Jérémie Lumbroso, August 14, 2015.
  * see: https://github.com/axel-bacher/mergeshuffle/blob/master/merge_omp.c
  */
-
-KOKKOS_FUNCTION void merge_blocks(const viewd_supers supers, const GenRandomPool genpool) {
-  // WIP
-}
-
 KOKKOS_FUNCTION viewd_supers merge_shuffle_supers(const TeamMember &team_member,
                                                   const viewd_supers supers,
                                                   const GenRandomPool genpool) {
@@ -67,7 +62,9 @@ KOKKOS_FUNCTION viewd_supers merge_shuffle_supers(const TeamMember &team_member,
         const size_t j = (nn * i) >> c;
         const size_t k = (nn * (i + p)) >> c;
         const size_t l = (nn * (i + 2 * p)) >> c;
-        merge_blocks(t + j, k - j, l - j);  // WIP
+        URBG<ExecSpace> urbg{genpool.get_state()};
+        merge_blocks(urbg, supers, j, k, l);
+        genpool.free_state(urbg.gen);
       }
     }
   });
