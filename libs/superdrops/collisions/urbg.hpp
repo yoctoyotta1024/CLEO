@@ -30,12 +30,12 @@
 /**
  * @brief Struct wrapping Kokkos random number generator.
  *
- * Generates random numbers in the range [start, end]. Result equivalent to
- * std::uniform_int_distribution with parameters [a, b] = [start, end], where g = C++11
+ * Generates random numbers in the range [start, end). Result equivalent to
+ * std::uniform_int_distribution with parameters [a, b) = [start, end), where g = C++11
  * UniformRandomBitGenerator (URBG). Useful e.g. for using urand(start, end) function of Kokkos
  * random number generator 'gen' to generate random numbers for shuffling super-droplets array by
- * swapping elements in range [start, end] (e.g, for linear sampling of super-droplet pairs in
- * SDM collision algorithm).
+ * swapping elements in range [start, end), e.g, for linear sampling of super-droplet pairs in
+ * SDM collision algorithm.
  *
  * @tparam DeviceType The Kokkos device type.
  */
@@ -45,7 +45,9 @@ struct URBG {
 
   /**
    * @brief Draws a random 64-bit unsigned integer (uint64_t) from a uniform distribution in the
-   * range [start, end].
+   * range [start, end).
+   *
+   * includes start, excludes end value.
    *
    * @param start The lower bound of the range.
    * @param end The upper bound of the range.
@@ -57,7 +59,9 @@ struct URBG {
   }
 
   /**
-   * @brief Draws a random number (double) from a uniform distribution in the range [start, end].
+   * @brief Draws a random number (double) from a uniform distribution in the range [start, end).
+   *
+   * includes start, excludes end value.
    *
    * @param start The lower bound of the range.
    * @param end The upper bound of the range.
