@@ -111,7 +111,7 @@ KOKKOS_INLINE_FUNCTION viewd_supers shuffle_supers(const viewd_supers supers,
   const auto dist = KE::distance(first, KE::end(supers) - 1);  // distance to last element from 1st
 
   for (auto iter(dist); iter > 0; --iter) {
-    const auto randiter = urbg(0, iter);  // random uint64_t equidistributed between [0, i]
+    const auto randiter = urbg(0, iter + 1);  // random uint64_t equidistributed between [0, i]
     device_swap(*(first + iter), *(first + randiter));
   }
 
