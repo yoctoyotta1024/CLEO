@@ -71,6 +71,16 @@ struct URBG {
   double drand(const double start, const double end) {
     return gen.drand(start, end);  // double rand
   }
+
+  /**
+   * @brief Draws a random byte either 0 or 1 with 50% chance of either.
+   *
+   * @return The random single-byte boolean.
+   */
+  KOKKOS_INLINE_FUNCTION
+  bool flip() {
+    return static_cast<bool>(gen.rand(0, 2));  // 1 byte: 0 or 1
+  }
 };
 
 #endif  // LIBS_SUPERDROPS_COLLISIONS_URBG_HPP_
