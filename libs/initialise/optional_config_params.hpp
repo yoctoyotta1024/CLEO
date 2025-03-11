@@ -62,8 +62,10 @@ struct OptionalConfigParams {
   void set_boundary_conditions(const YAML::Node& config);
 
   /*** Kokkos Initialization Parameters ***/
-  bool is_default_kokkos_settings = true;         /**< true = default kokkos initialization */
-  Kokkos::InitializationSettings kokkos_settings; /**< is default unless config */
+  struct KokkosSettings {
+    bool is_default = true; /**< true = default kokkos initialization */
+    Kokkos::InitializationSettings kokkos_initialization_settings; /**< is default unless config */
+  } kokkos_settings;
 
   /*** Super-Droplet Microphysics Parameters ***/
   struct CondensationParams {
