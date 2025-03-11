@@ -51,32 +51,35 @@ void OptionalConfigParams::set_kokkos_settings(const YAML::Node &config) {
   const YAML::Node node = config["kokkos_settings"];
 
   if (node["num_threads"]) {
-    kokkos_settings.set_num_threads(node["num_threads"].as<int>());
-    is_default_kokkos_settings = false;
+    kokkos_settings.kokkos_initialization_settings.set_num_threads(node["num_threads"].as<int>());
+    kokkos_settings.is_default = false;
   }
 
   if (node["device_id"]) {
-    kokkos_settings.set_device_id(node["device_id"].as<int>());
-    is_default_kokkos_settings = false;
+    kokkos_settings.kokkos_initialization_settings.set_device_id(node["device_id"].as<int>());
+    kokkos_settings.is_default = false;
   }
 
   if (node["map_device_id_by"]) {
-    kokkos_settings.set_map_device_id_by(node["map_device_id_by"].as<std::string>());
-    is_default_kokkos_settings = false;
+    kokkos_settings.kokkos_initialization_settings.set_map_device_id_by(
+        node["map_device_id_by"].as<std::string>());
+    kokkos_settings.is_default = false;
   }
 }
 
 void OptionalConfigParams::print_kokkos_settings() const {
   std::cout << "\n-------- Kokkos Configuration Parameters --------------"
-            << "\nusing default kokkos settings (bool): " << is_default_kokkos_settings;
-  if (kokkos_settings.has_num_threads()) {
-    std::cout << "\nnum_threads: " << kokkos_settings.get_num_threads();
+            << "\nusing default kokkos settings (bool): " << kokkos_settings.is_default;
+  if (kokkos_settings.kokkos_initialization_settings.has_num_threads()) {
+    std::cout << "\nnum_threads: "
+              << kokkos_settings.kokkos_initialization_settings.get_num_threads();
   }
-  if (kokkos_settings.has_device_id()) {
-    std::cout << "\ndevice_id: " << kokkos_settings.get_device_id();
+  if (kokkos_settings.kokkos_initialization_settings.has_device_id()) {
+    std::cout << "\ndevice_id: " << kokkos_settings.kokkos_initialization_settings.get_device_id();
   }
-  if (kokkos_settings.has_map_device_id_by()) {
-    std::cout << "\nmap_device_id_by: " << kokkos_settings.get_map_device_id_by();
+  if (kokkos_settings.kokkos_initialization_settings.has_map_device_id_by()) {
+    std::cout << "\nmap_device_id_by: "
+              << kokkos_settings.kokkos_initialization_settings.get_map_device_id_by();
   }
   std::cout << "\n---------------------------------------------------------\n";
 }
