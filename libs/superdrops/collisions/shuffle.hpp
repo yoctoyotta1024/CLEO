@@ -43,9 +43,7 @@ KOKKOS_FUNCTION viewd_supers merge_shuffle_supers(const TeamMember& team_member,
  */
 KOKKOS_INLINE_FUNCTION viewd_supers shuffle_supers(const TeamMember& team_member,
                                                    const viewd_supers supers,
-                                                   const GenRandomPool genpool) {
-  return merge_shuffle_supers(team_member, supers, genpool);
-}
+                                                   const GenRandomPool genpool);
 
 /**
  * @brief Swaps the values of two super-droplets.
@@ -158,6 +156,21 @@ KOKKOS_INLINE_FUNCTION void merge_blocks(URBG<DeviceType> urbg, const viewd_supe
     const auto randiter = urbg(0, u + 1);  // random uint64_t equidistributed between [0, u]
     device_swap(*(first + randiter), *(first + u));
     ++u;
+  }
+}
+
+/*
+ * wrapper function to make it easier to chaneg shuffling algorithm (e.g. to
+ * switch to FisherYates for debugging)
+ */
+KOKKOS_INLINE_FUNCTION viewd_supers shuffle_supers(const TeamMember& team_member,
+                                                   const viewd_supers supers,
+                                                   const GenRandomPool genpool) {
+  if (team_member.team_size() > 1) {
+    return merge_shuffle_supers(team_member, supers, genpool);  // parallelised shuffle
+  } else {
+    const auto shuffle = FisherYatesShuffle{};
+    return shuffle(team_member, supers, genpool);  // default serial shuffle
   }
 }
 
