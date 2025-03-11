@@ -141,20 +141,23 @@ KOKKOS_INLINE_FUNCTION void merge_blocks(URBG<DeviceType> urbg, const viewd_supe
     if (urbg.flip()) {
       if (v == w) {
         break;
-      };
-      const auto iter = v++;
-      device_swap(*(first + u), *(first + iter));
-    } else if (u == v) {
-      break;
+      }
+      device_swap(*(first + u), *(first + v));
+      ++v;
+    } else {
+      if (u == v) {
+        break;
+      }
+      // no swap nor increment here
     }
-    u++;
+    ++u;
   }
 
   // finish merge with Fisher-Yates
   while (u < w) {
     const auto randiter = urbg(0, u + 1);  // random uint64_t equidistributed between [0, u]
-    const auto iter = u++;
-    device_swap(*(first + randiter), *(first + iter));
+    device_swap(*(first + randiter), *(first + u));
+    ++u;
   }
 }
 
