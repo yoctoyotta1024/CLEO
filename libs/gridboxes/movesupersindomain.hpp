@@ -106,7 +106,7 @@ class MoveSupersInDomain {
                                       const viewd_constsupers totsupers) const {
     const auto ngbxs = d_gbxs.extent(0);
     Kokkos::parallel_for(
-        "check_sdgbxindex_during_motion", TeamPolicy(ngbxs, Kokkos::AUTO()),
+        "check_sdgbxindex_during_motion", TeamPolicy(ngbxs, KCS::team_size),
         KOKKOS_LAMBDA(const TeamMember &team_member) {
           const auto ii = team_member.league_rank();
           assert(d_gbxs(ii).supersingbx.iscorrect(team_member, totsupers) &&
