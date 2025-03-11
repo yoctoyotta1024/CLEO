@@ -7,9 +7,9 @@
  * Project: superdrops
  * Created Date: Thursday 26th October 2023
  * Author: Clara Bayley (CB)
- * Additional Contributors:
+ * Additional Contributors: Florian Poydenot
  * -----
- * Last Modified: Tuesday 18th June 2024
+ * Last Modified: Tuesday 11th March 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,6 +30,7 @@
 #include <cassert>
 
 #include "../cleoconstants.hpp"
+#include "thermodynamic_equations.hpp"
 
 namespace dlc = dimless_constants;
 
@@ -52,10 +53,10 @@ struct ImplicitIterations {
    * @brief Struct for constants of ODE during integration
    */
   struct ODEConstants {
-    double s_ratio;  ///< Supersaturation ratio.
-    double akoh;     ///< Kelvin factor in Kohler theory "a".
-    double bkoh;     ///< Raoult factor in Kohler theory "b".
-    double ffactor;  ///< Sum of heat and vapor diffusion factors.
+    double s_ratio;     ///< Supersaturation ratio.
+    double akoh;        ///< Kelvin factor in Kohler theory "a".
+    double bkoh;        ///< Raoult factor in Kohler theory "b".
+    double ffactor_fv;  ///< (Sum of heat and vapor diffusion factors) / ventilation factor.
   };
 
   /**
@@ -268,7 +269,7 @@ class ImplicitEuler {
    */
   KOKKOS_FUNCTION double critial_timestep(const ImplicitIterations::ODEConstants &odeconsts) const {
     const double cuberoot = Kokkos::pow(5.0 * odeconsts.bkoh / odeconsts.akoh, 1.5);
-    return 2.5 * odeconsts.ffactor / odeconsts.akoh * cuberoot;
+    return 2.5 * odeconsts.ffactor_fv / odeconsts.akoh * cuberoot;
   }
 
   /**

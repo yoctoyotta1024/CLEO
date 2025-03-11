@@ -7,9 +7,9 @@
  * Project: superdrops
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
- * Additional Contributors:
+ * Additional Contributors: Florian Poydenot
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Tuesday 11th March 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -43,8 +43,9 @@
 KOKKOS_FUNCTION double ImplicitEuler::solve_condensation(
     const double s_ratio, const Kokkos::pair<double, double> kohler_ab, const double ffactor,
     const double rprev) const {
+  const auto ffactor_fv = ffactor / ventilation_factor(rprev);
   const auto odeconsts =
-      ImplicitIterations::ODEConstants{s_ratio, kohler_ab.first, kohler_ab.second, ffactor};
+      ImplicitIterations::ODEConstants{s_ratio, kohler_ab.first, kohler_ab.second, ffactor_fv};
 
   auto ziter = implit.initialguess(odeconsts, rprev);
   const bool ucrit1 = first_unique_criteria(odeconsts, rprev, ziter);
@@ -315,7 +316,7 @@ KOKKOS_FUNCTION double ImplicitIterations::ode_gfunc(const ODEConstants &odecons
 
   const auto alpha = double{odeconsts.s_ratio - 1 - odeconsts.akoh / radius +
                             odeconsts.bkoh / Kokkos::pow(radius, 3.0)};
-  const auto beta = double{2.0 * subdelt / (rsqrd * odeconsts.ffactor)};
+  const auto beta = double{2.0 * subdelt / (rsqrd * odeconsts.ffactor_fv)};
   const auto gamma = double{Kokkos::pow(rprev / radius, 2.0)};
 
   return 1 - gamma - alpha * beta;
@@ -340,7 +341,7 @@ KOKKOS_FUNCTION double ImplicitIterations::ode_gfuncderivative(const ODEConstant
 
   const auto alpha =
       double{odeconsts.akoh / radius - 3.0 * odeconsts.bkoh / Kokkos::pow(radius, 3.0)};
-  const auto beta = double{subdelt / (rsqrd * odeconsts.ffactor)};
+  const auto beta = double{subdelt / (rsqrd * odeconsts.ffactor_fv)};
 
   return 1 - alpha * beta;
 }
