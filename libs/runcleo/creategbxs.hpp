@@ -44,6 +44,8 @@
 #include "superdrops/state.hpp"
 #include "superdrops/superdrop.hpp"
 
+namespace KCS = KokkosCleoSettings;
+
 /**
  * @brief A generator for initial Gridboxes.
  *
