@@ -2,7 +2,7 @@
  * Copyright (c) 2024 MPI-M, Clara Bayley
  *
  * ----- CLEO -----
- * File: shuffle.hpp
+ * File: shuffle.cpp
  * Project: collisions
  * Created Date: Thursday 6th March 2025
  * Author: Clara Bayley (CB)
