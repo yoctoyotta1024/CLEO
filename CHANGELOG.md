@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.36.1](https://github.com/yoctoyotta1024/CLEO/compare/c01d9b1dae3c71ff9cfe77d93114c7750b303dd1..v0.36.1) - 2025-03-12
+#### Bug Fixes
+- mistake in range of valid values for fisher-yates shuffle - ([0ed7d10](https://github.com/yoctoyotta1024/CLEO/commit/0ed7d10bfd96614886f1f88a6923b51ed02874d3)) - clara.bayley
+#### Performance Improvements
+- delete unused header file from examples - ([c01d9b1](https://github.com/yoctoyotta1024/CLEO/commit/c01d9b1dae3c71ff9cfe77d93114c7750b303dd1)) - clara.bayley
+#### Refactoring
+- kokkos configuration parameters in a struct - ([dd52dd7](https://github.com/yoctoyotta1024/CLEO/commit/dd52dd7157df52e482f7a062ecf1e3916632d4b5)) - clara.bayley
+- inclue ventillation coefficient in condensation.evaporation equation - ([d489a5a](https://github.com/yoctoyotta1024/CLEO/commit/d489a5a19bd244d6ece2fafa3e3b4b008eb237c8)) - clara.bayley
+
+- - -
+
 ## [v0.36.0](https://github.com/yoctoyotta1024/CLEO/compare/e06bdbabbf5e0d96994d4391b1f67403a1f83bb0..v0.36.0) - 2025-03-04
 #### Bug Fixes
 - avoid casting -1, use constants instead - ([4b6b42e](https://github.com/yoctoyotta1024/CLEO/commit/4b6b42ea84bc49e2f410ed8fbc71e18bfbce803e)) - clara.bayley
