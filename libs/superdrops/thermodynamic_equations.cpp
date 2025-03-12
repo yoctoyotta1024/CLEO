@@ -7,9 +7,9 @@
  * Project: superdrops
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
- * Additional Contributors:
+ * Additional Contributors: Florian Poydenot
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Tuesday 11th March 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -112,4 +112,31 @@ double diffusion_factor(const double press, const double temp, const double psat
   const auto fdl = double{TEMP / (DIFFUSE_V * PSAT) / dlc::F0};                  // fdl eqn [7.25]
 
   return dlc::Rho_l * (fkl + fdl);  // total constant from sum of diffusion factors
+}
+
+/**
+ * @brief Calculate the ventilation factor for the condensation-diffusion growth equation.
+ *
+ * Equation for ventilation factor, $f_v$, is fit to data from Kinzer and Gunn (1951) and from
+ * Pruppacher and Rasmussen (1979) according to Florian Poydenot, whereby
+ * $f_v = 1 + \frac{1}{\frac{1}{c_1R^\alpha} + \frac{1}{c_2R^\beta}}$
+ * where $c_1 = 6.954*10^7$, $\alpha=1.963$, $c_2=1.069*10^3$, $\beta=0.702$, and $R$ is the radius
+ * of the water droplet in [m].
+ *
+ * @param radius The droplet radius.
+ * @return The (dimensionless) ventilation factor.
+ */
+KOKKOS_FUNCTION
+double ventilation_factor(const double radius) {
+  constexpr double C1 = 6.954e+7;
+  constexpr double A = 1.963;
+  constexpr double C2 = 1.069e+3;
+  constexpr double B = 0.702;
+
+  const auto a = double{1.0 / (C1 * Kokkos::pow(radius * dlc::R0, A))};
+  const auto b = double{1.0 / (C2 * Kokkos::pow(radius * dlc::R0, B))};
+
+  const auto vent_factor = double{1.0 + 1.0 / (a + b)};
+
+  return vent_factor;
 }
