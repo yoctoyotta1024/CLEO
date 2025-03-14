@@ -123,11 +123,17 @@ double diffusion_factor(const double press, const double temp, const double psat
  * where $c_1 = 6.954*10^7$, $\alpha=1.963$, $c_2=1.069*10^3$, $\beta=0.702$, and $R$ is the radius
  * of the water droplet in [m].
  *
+ * Equation is capped at fv=20 (corresponds to the value of the uncapped fv when the
+ * droplet radius is ~3.30mm) because droplets greater than ~3mm have a constant
+ * fall speed in all conventional terminal velocity formulations (see terminal_velocity.hpp
+ * for the available terminal velocity parameterisations in CLEO).
+ *
  * @param radius The droplet radius.
  * @return The (dimensionless) ventilation factor.
  */
 KOKKOS_FUNCTION
 double ventilation_factor(const double radius) {
+  constexpr double vent_factor_max = 20;  // no larger than value for ~3.3mm droplets
   constexpr double C1 = 6.954e+7;
   constexpr double A = 1.963;
   constexpr double C2 = 1.069e+3;
@@ -138,5 +144,5 @@ double ventilation_factor(const double radius) {
 
   const auto vent_factor = double{1.0 + 1.0 / (a + b)};
 
-  return vent_factor;
+  return Kokkos::fmin(vent_factor, vent_factor_max);
 }
