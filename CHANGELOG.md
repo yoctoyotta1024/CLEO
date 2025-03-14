@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.36.2](https://github.com/yoctoyotta1024/CLEO/compare/9d56849e3964350f79e5b76cf6253043199e15f6..v0.36.2) - 2025-03-14
+#### Bug Fixes
+- add cap to ventilation factor for droplet radii > ~3mm - ([9d56849](https://github.com/yoctoyotta1024/CLEO/commit/9d56849e3964350f79e5b76cf6253043199e15f6)) - clara.bayley
+
+- - -
+
 ## [v0.36.1](https://github.com/yoctoyotta1024/CLEO/compare/c01d9b1dae3c71ff9cfe77d93114c7750b303dd1..v0.36.1) - 2025-03-12
 #### Bug Fixes
 - mistake in range of valid values for fisher-yates shuffle - ([0ed7d10](https://github.com/yoctoyotta1024/CLEO/commit/0ed7d10bfd96614886f1f88a6923b51ed02874d3)) - clara.bayley
