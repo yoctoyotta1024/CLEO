@@ -45,6 +45,9 @@ SupersInDomain MPTRACTransportAcrossDomain::operator()(const CartesianMaps &gbxm
     allsupers.sort_totsupers(d_gbxs);
   }
 
+  std::cout << "FORCE TERMINATE DEBUGGING STOP" << std::flush;
+  throw std::runtime_error("DEBUGGING STOP");
+
   return allsupers;
 }
 

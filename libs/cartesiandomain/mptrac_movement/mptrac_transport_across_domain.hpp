@@ -30,6 +30,7 @@
 #include <numeric>
 #include <vector>
 #include <memory>
+#include <stdexcept>
 
 #include "../../cleoconstants.hpp"
 #include "../../kokkosaliases.hpp"
