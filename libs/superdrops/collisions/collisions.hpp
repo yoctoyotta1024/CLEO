@@ -32,7 +32,7 @@
 #include "../sdmmonitor.hpp"
 #include "../state.hpp"
 #include "../superdrop.hpp"
-#include "../urbg.hpp"
+#include "./shuffle.hpp"
 
 namespace dlc = dimless_constants;
 
@@ -189,7 +189,7 @@ struct DoCollisions {
    *
    * Function uses Kokkos nested parallelism for paralelism over supers inside parallelised loop
    * for member 'teamMember'.
-   * In serial Kokkos::parallel_reduce([...]) is equivalent to summing numnull over for loop:
+   * In serial Kokkos::parallel_for([...]) is equivalent to loop:
    * for (size_t jj(0); jj < npairs; ++jj) {[...]}.
    *
    * _NOTE:_ function assumes supers is already randomly shuffled and these superdrops are
@@ -230,7 +230,7 @@ struct DoCollisions {
                                             const double volume) const {
     /* Randomly shuffle order of superdroplet objects
     in supers in order to generate random pairs */
-    supers = one_shuffle_supers(team_member, supers, genpool);
+    supers = shuffle_supers(team_member, supers, genpool);
 
     /* collide all randomly generated pairs of SDs */
     collide_supers(team_member, supers, volume);
