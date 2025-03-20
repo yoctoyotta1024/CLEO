@@ -15,8 +15,12 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Implementaiton file for functions for Kokkos compatibile thread-safe
- * versions of C++ Fisher-Yates serial shuffling algorithm.
+ * Functions for Kokkos compatibile thread-safe versions of C++ Fisher-Yates
+ * serial shuffling algorithm, and of MergeShuffle parallelsised shuffling
+ * algorithm. MergeShuffle comes from "A Very Fast, Parallel Random Permutation
+ * Algorithm", Axel Bacher, Olivier Bodini, Alexandros Hollender, and Jérémie
+ * Lumbroso, August 14, 2015. See also their code repository:
+ * https://github.com/axel-bacher/mergeshuffle)
  */
 
 #ifndef LIBS_SUPERDROPS_COLLISIONS_SHUFFLE_HPP_
@@ -28,6 +32,23 @@
 #include "../kokkosaliases_sd.hpp"
 #include "../superdrop.hpp"
 #include "./urbg.hpp"
+
+/*
+ * wrapper function to make it easier to chaneg shuffling algorithm (e.g. to
+ * switch to Fisher-Yates for debugging)
+ */
+KOKKOS_FUNCTION viewd_supers shuffle_supers(const TeamMember& team_member,
+                                            const viewd_supers supers, const GenRandomPool genpool);
+
+/*
+ * C++ and Kokkos compatible version of ```shuffle(unsigned int *t, unsigned int
+ * n)``` from "A Very Fast, Parallel Random Permutation Algorithm", Axel Bacher,
+ * Olivier Bodini, Alexandros Hollender, and Jérémie Lumbroso, August 14, 2015.
+ * see: https://github.com/axel-bacher/mergeshuffle/blob/master/merge_omp.c
+ */
+KOKKOS_FUNCTION viewd_supers merge_shuffle_supers(const TeamMember& team_member,
+                                                  const viewd_supers supers,
+                                                  const GenRandomPool genpool);
 
 /**
  * @brief Randomly shuffles the order of super-droplet objects in a view
@@ -46,8 +67,9 @@
  * @param genpool The random number generator pool.
  * @return The shuffled view of superdroplets.
  */
-KOKKOS_FUNCTION viewd_supers shuffle_supers(const TeamMember& team_member,
-                                            const viewd_supers supers, const GenRandomPool genpool);
+KOKKOS_FUNCTION viewd_supers fisher_yates_shuffle_supers(const TeamMember& team_member,
+                                                         const viewd_supers supers,
+                                                         const GenRandomPool genpool);
 /**
  * @brief Swaps the values of two super-droplets.
  *
@@ -85,8 +107,50 @@ template <class DeviceType>
 KOKKOS_INLINE_FUNCTION void fisher_yates_shuffle(URBG<DeviceType> urbg, const auto first,
                                                  const auto dist) {
   for (auto iter(dist); iter > 0; --iter) {
-    const auto randiter = urbg(0, iter + 1);  // random uint64_t equidistributed between [0, i]
+    const auto randiter = urbg(0, iter + 1);  // random uint64_t equidistributed between [0, iter]
     device_swap(*(first + iter), *(first + randiter));
+  }
+}
+
+/*
+ * C++ and Kokkos compatible version of ```merge(unsigned int *t, unsigned int
+ * m, unsigned int n)``` from "A Very Fast, Parallel Random Permutation
+ * Algorithm", Axel Bacher, Olivier Bodini, Alexandros Hollender, and Jérémie
+ * Lumbroso, August 14, 2015. see:
+ * https://github.com/axel-bacher/mergeshuffle/blob/master/merge.c
+ */
+template <class DeviceType>
+KOKKOS_INLINE_FUNCTION void merge_blocks(URBG<DeviceType> urbg, const viewd_supers supers,
+                                         const size_t j, const size_t k, const size_t l) {
+  namespace KE = Kokkos::Experimental;
+
+  const auto first = KE::begin(supers);  // iterator to first superdrop (like C pointer in merge.c)
+  auto u = KE::distance(first, first + j);  // initial start position of 1st block
+  auto v = KE::distance(first, first + k);  // initial start position of 2nd block
+  auto w = KE::distance(first, first + l);  // initial end position of 2nd block
+
+  // take elements from two blocks until one block is exhausted
+  while (true) {
+    if (urbg.flip()) {
+      if (v == w) {
+        break;
+      }
+      device_swap(*(first + u), *(first + v));
+      ++v;
+    } else {
+      if (u == v) {
+        break;
+      }
+      // no swap nor increment here
+    }
+    ++u;
+  }
+
+  // finish merge with Fisher-Yates
+  while (u < w) {
+    const auto randiter = urbg(0, u + 1);  // random uint64_t equidistributed between [0, u]
+    device_swap(*(first + randiter), *(first + u));
+    ++u;
   }
 }
 

@@ -12,3 +12,9 @@ Header file: ``<libs/superdrops/collisions/shuffle.hpp>``
 
 .. doxygenfunction:: fisher_yates_shuffle
    :project: superdrops
+
+.. doxygenfunction:: fisher_yates_shuffle_supers
+   :project: superdrops
+
+.. doxygenfunction:: merge_shuffle_supers
+   :project: superdrops
