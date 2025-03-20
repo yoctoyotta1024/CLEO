@@ -2,6 +2,18 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.37.0](https://github.com/yoctoyotta1024/CLEO/compare/0660ceba4f48b21d60d8c5c5efd69d0bce61672e..v0.37.0) - 2025-03-20
+#### Documentation
+- clearer docstrings about urbg random number ranges - ([2468457](https://github.com/yoctoyotta1024/CLEO/commit/2468457e6e44957891f684e994332b20ed7174b8)) - clara.bayley
+- correct docstring - ([0660ceb](https://github.com/yoctoyotta1024/CLEO/commit/0660ceba4f48b21d60d8c5c5efd69d0bce61672e)) - clara.bayley
+#### Features
+- new file for shuffling superdroplets algorithm - ([82bd2a2](https://github.com/yoctoyotta1024/CLEO/commit/82bd2a254b91534e42911dc68418299cad032127)) - clara.bayley
+#### Refactoring
+- more uses KCS::team_size instead of Kokkos::AUTO - ([2a000c1](https://github.com/yoctoyotta1024/CLEO/commit/2a000c14a2a71b1c0c65342ea094306b40a0c5e5)) - clara.bayley
+- split shuffle implementations into .cpp file - ([ad01b1b](https://github.com/yoctoyotta1024/CLEO/commit/ad01b1b36091d2a3d59dcadfdfa26575018c072a)) - clara.bayley
+
+- - -
+
 ## [v0.36.2](https://github.com/yoctoyotta1024/CLEO/compare/9d56849e3964350f79e5b76cf6253043199e15f6..v0.36.2) - 2025-03-14
 #### Bug Fixes
 - add cap to ventilation factor for droplet radii > ~3mm - ([9d56849](https://github.com/yoctoyotta1024/CLEO/commit/9d56849e3964350f79e5b76cf6253043199e15f6)) - clara.bayley
