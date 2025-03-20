@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Collisions" href="collisions.html" /><link rel="prev" title="Superdrops Module" href="../superdropsmod.html" />
+<link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Randomness Generation" href="urbg.html" /><link rel="prev" title="Coalescence-Breakup-Rebound" href="coalbure.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>Collisions Module - CLEO 0.1.0 documentation</title>
+        <title>Thread-Safe Superdroplet Shuffling Algorithms - CLEO 0.1.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -179,7 +179,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -269,12 +269,12 @@
 </ul>
 </li>
 <li class="toctree-l2 current has-children"><a class="reference internal" href="../superdropsmod.html">Superdrops Module</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Superdrops Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l3 current has-children current-page"><a class="current reference internal" href="#">Collisions Module</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Collisions Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 current has-children"><a class="reference internal" href="collisionsmod.html">Collisions Module</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Collisions Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="collisions.html">Collisions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="collisionkinetics.html">Collision Kinetics</a></li>
 <li class="toctree-l4"><a class="reference internal" href="coalescence.html">Coalescence</a></li>
 <li class="toctree-l4"><a class="reference internal" href="coalbure.html">Coalescence-Breakup-Rebound</a></li>
-<li class="toctree-l4"><a class="reference internal" href="shuffle.html">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
+<li class="toctree-l4 current current-page"><a class="current reference internal" href="#">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
 <li class="toctree-l4"><a class="reference internal" href="urbg.html">Randomness Generation</a></li>
 </ul>
 </li>
@@ -356,7 +356,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../../../_sources/cxx/superdrops/collisions/collisionsmod.rst.txt" title="View this page">
+  <a class="muted-link" href="../../../_sources/cxx/superdrops/collisions/shuffle.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -370,28 +370,75 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="collisions-module">
-<h1>Collisions Module<a class="headerlink" href="#collisions-module" title="Link to this heading">¶</a></h1>
-<p>This module of CLEO contains the all the implementation of the Super-Droplet
-Model (SDM) collision algorithm from <span id="id1">[<a class="reference internal" href="../../../references.html#id31" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">SKK+09</a>]</span> extended to include the options of
-modeling rebound and/or breakup as well as coalescence.</p>
-<div class="toctree-wrapper compound">
-<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="collisions.html">Collisions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="collisionkinetics.html">Collision Kinetics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="coalescence.html">Coalescence</a></li>
-<li class="toctree-l1"><a class="reference internal" href="coalbure.html">Coalescence-Breakup-Rebound</a></li>
-<li class="toctree-l1"><a class="reference internal" href="shuffle.html">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
-<li class="toctree-l1"><a class="reference internal" href="urbg.html">Randomness Generation</a></li>
+          <section id="thread-safe-superdroplet-shuffling-algorithms">
+<h1>Thread-Safe Superdroplet Shuffling Algorithms<a class="headerlink" href="#thread-safe-superdroplet-shuffling-algorithms" title="Link to this heading">¶</a></h1>
+<p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/superdrops/collisions/shuffle.hpp&gt;</span></code>
+<a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/superdrops/collisions/shuffle.hpp">[source]</a></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv414shuffle_supersRK10TeamMemberK12viewd_supersK13GenRandomPool">
+<span id="_CPPv314shuffle_supersRK10TeamMemberK12viewd_supersK13GenRandomPool"></span><span id="_CPPv214shuffle_supersRK10TeamMemberK12viewd_supersK13GenRandomPool"></span><span id="shuffle_supers__TeamMemberCR.viewd_supersC.GenRandomPoolC"></span><span class="target" id="shuffle_8hpp_1a307826fd8861f8924f12f852ee44866f"></span><a class="reference internal" href="../kokkosaliases_sd.html#_CPPv412viewd_supers" title="viewd_supers"><span class="n"><span class="pre">viewd_supers</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">shuffle_supers</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases_sd.html#_CPPv410TeamMember" title="TeamMember"><span class="n"><span class="pre">TeamMember</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">team_member</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases_sd.html#_CPPv412viewd_supers" title="viewd_supers"><span class="n"><span class="pre">viewd_supers</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">supers</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases_sd.html#_CPPv413GenRandomPool" title="GenRandomPool"><span class="n"><span class="pre">GenRandomPool</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">genpool</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414shuffle_supersRK10TeamMemberK12viewd_supersK13GenRandomPool" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Randomly shuffles the order of super-droplet objects in a view using Fisher-Yates algorithm. </p>
+<p>Thread-Safe Kokkos compatible version of Fisher-Yates shuffling algorithm for super-droplets. Shuffling is done in serial (slow!) on single thread per team</p>
+<p>Uses only one member of a Kokkos team to randomly shuffle the order of super-droplet objects in the ‘supers’ view using Kokkos compatible rewrite of C++ standard library Fisher-Yates shuffling algorithm. Afterwards synchronizes the team and returns the view of shuffled super-droplets. Uses Kokkos thread safe random number generator from pool.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>team_member</strong> – The Kokkos team member. </p></li>
+<li><p><strong>supers</strong> – The view of superdroplets to shuffle. </p></li>
+<li><p><strong>genpool</strong> – The random number generator pool. </p></li>
 </ul>
-</div>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The shuffled view of superdroplets. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv411device_swapR9SuperdropR9Superdrop">
+<span id="_CPPv311device_swapR9SuperdropR9Superdrop"></span><span id="_CPPv211device_swapR9SuperdropR9Superdrop"></span><span id="device_swap__SuperdropR.SuperdropR"></span><span class="target" id="shuffle_8hpp_1a0775f5aaf60b7c7564de25bc95321dbd"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">device_swap</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">a</span></span>, <a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411device_swapR9SuperdropR9Superdrop" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Swaps the values of two super-droplets. </p>
+<p>Equivalent to C++98 std::swap but works on device as well as host (gpu compatible).</p>
+<p><em>Note:</em> Involves a copy construction and two assignment operations, which may not be efficient if <a class="reference internal" href="../superdrop.html#classSuperdrop"><span class="std std-ref">Superdrop</span></a> class stores large quantities of data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> – The first super-droplet. </p></li>
+<li><p><strong>b</strong> – The second super-droplet. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0E20fisher_yates_shufflev4URBGI10DeviceTypeEKDaKDa">
+<span id="_CPPv3I0E20fisher_yates_shuffle4URBGI10DeviceTypeEKDaKDa"></span><span id="_CPPv2I0E20fisher_yates_shuffle4URBGI10DeviceTypeEKDaKDa"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DeviceType</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="shuffle_8hpp_1aa38a7d8fbd36f1335ef3a5f8cd6aa8c8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">fisher_yates_shuffle</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="urbg.html#_CPPv4I0E4URBG" title="URBG"><span class="n"><span class="pre">URBG</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0E20fisher_yates_shufflev4URBGI10DeviceTypeEKDaKDa" title="fisher_yates_shuffle::DeviceType"><span class="n"><span class="pre">DeviceType</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">urbg</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">first</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dist</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0E20fisher_yates_shufflev4URBGI10DeviceTypeEKDaKDa" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Shuffles the order of super-droplets in a view. </p>
+<p>Randomly shuffles the order of super-droplets using the <a class="reference internal" href="urbg.html#structURBG"><span class="std std-ref">URBG</span></a> (Uniform Random Bit Generator) struct (on device). Supers included in shuffle are from iterators in range [first, first+dist] (inclusive), e.g. if first points to the 5th superdroplet and dist=2, then the 5th, 6th and 7th superdroplets will be shuffled amongst each other.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>DeviceType</strong> – The Kokkos device type. </p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>supers</strong> – The view of super-droplets to shuffle. </p></li>
+<li><p><strong>urbg</strong> – The random number generator. </p></li>
+<li><p><strong>first</strong> – iterator/pointer to first element in supers to shuffle </p></li>
+<li><p><strong>dist</strong> – number of elements (including first) to shuffle </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The shuffled view of super-droplets. </p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 
         </article>
@@ -399,23 +446,23 @@ modeling rebound and/or breakup as well as coalescence.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="collisions.html">
+          <a class="next-page" href="urbg.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Collisions</div>
+                <div class="title">Randomness Generation</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="../superdropsmod.html">
+          <a class="prev-page" href="coalbure.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Superdrops Module</div>
+                <div class="title">Coalescence-Breakup-Rebound</div>
                 
               </div>
             </a>
@@ -438,8 +485,29 @@ modeling rebound and/or breakup as well as coalescence.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Thread-Safe Superdroplet Shuffling Algorithms</a><ul>
+<li><a class="reference internal" href="#_CPPv414shuffle_supersRK10TeamMemberK12viewd_supersK13GenRandomPool"><code class="docutils literal notranslate"><span class="pre">shuffle_supers()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv411device_swapR9SuperdropR9Superdrop"><code class="docutils literal notranslate"><span class="pre">device_swap()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I0E20fisher_yates_shufflev4URBGI10DeviceTypeEKDaKDa"><code class="docutils literal notranslate"><span class="pre">fisher_yates_shuffle()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

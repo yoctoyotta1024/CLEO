@@ -274,6 +274,8 @@
 <li class="toctree-l4"><a class="reference internal" href="collisionkinetics.html">Collision Kinetics</a></li>
 <li class="toctree-l4"><a class="reference internal" href="coalescence.html">Coalescence</a></li>
 <li class="toctree-l4"><a class="reference internal" href="coalbure.html">Coalescence-Breakup-Rebound</a></li>
+<li class="toctree-l4"><a class="reference internal" href="shuffle.html">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="urbg.html">Randomness Generation</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="../condensation.html">Condensation</a></li>
@@ -286,7 +288,6 @@
 <li class="toctree-l3"><a class="reference internal" href="../superdrop_attrs.html">Superdrop Attributes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../terminalvelocity.html">Terminal Velocities</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../thermodynamic_equations.html">Thermodynamic Equations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../urbg.html">Randomness Generation</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../zarr/zarrmod.html">Zarr Module</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of Zarr Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -466,7 +467,7 @@
 <span id="_CPPv3NK12DoCollisions14collide_supersERK10TeamMember15subviewd_supersKd"></span><span id="_CPPv2NK12DoCollisions14collide_supersERK10TeamMember15subviewd_supersKd"></span><span id="DoCollisions::collide_supers__TeamMemberCR.subviewd_supers.doubleCC"></span><span class="target" id="structDoCollisions_1abb4c02680dc70523e48ea832cf8e7f73"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">collide_supers</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases_sd.html#_CPPv410TeamMember" title="TeamMember"><span class="n"><span class="pre">TeamMember</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">team_member</span></span>, <a class="reference internal" href="../kokkosaliases_sd.html#_CPPv415subviewd_supers" title="subviewd_supers"><span class="n"><span class="pre">subviewd_supers</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">supers</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">volume</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK12DoCollisions14collide_supersERK10TeamMember15subviewd_supersKd" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Performs collisions between super-droplets in supers view. </p>
 <p>Enacts collisions for pairs of super-droplets in supers view adapted from collision-coalescence of Shima et al. 2009 to generalise to allow for other types of collision-[X] events.</p>
-<p>Function uses Kokkos nested parallelism for paralelism over supers inside parallelised loop for member ‘teamMember’. In serial Kokkos::parallel_reduce([…]) is equivalent to summing numnull over for loop: for (size_t jj(0); jj &lt; npairs; ++jj) {[…]}.</p>
+<p>Function uses Kokkos nested parallelism for paralelism over supers inside parallelised loop for member ‘teamMember’. In serial Kokkos::parallel_for([…]) is equivalent to loop: for (size_t jj(0); jj &lt; npairs; ++jj) {[…]}.</p>
 <p><em>NOTE:</em> function assumes supers is already randomly shuffled and these superdrops are colliding some ‘VOLUME’ [m^3]).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -568,7 +569,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 14 March 2025</div>
+              Last updated on 20 March 2025</div>
           </div>
           <div class="right-details">
             

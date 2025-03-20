@@ -272,6 +272,8 @@
 <li class="toctree-l4"><a class="reference internal" href="cxx/superdrops/collisions/collisionkinetics.html">Collision Kinetics</a></li>
 <li class="toctree-l4"><a class="reference internal" href="cxx/superdrops/collisions/coalescence.html">Coalescence</a></li>
 <li class="toctree-l4"><a class="reference internal" href="cxx/superdrops/collisions/coalbure.html">Coalescence-Breakup-Rebound</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cxx/superdrops/collisions/shuffle.html">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="cxx/superdrops/collisions/urbg.html">Randomness Generation</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="cxx/superdrops/condensation.html">Condensation</a></li>
@@ -284,7 +286,6 @@
 <li class="toctree-l3"><a class="reference internal" href="cxx/superdrops/superdrop_attrs.html">Superdrop Attributes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cxx/superdrops/terminalvelocity.html">Terminal Velocities</a></li>
 <li class="toctree-l3"><a class="reference internal" href="cxx/superdrops/thermodynamic_equations.html">Thermodynamic Equations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="cxx/superdrops/urbg.html">Randomness Generation</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="cxx/zarr/zarrmod.html">Zarr Module</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of Zarr Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -726,7 +727,7 @@
 </li>
         <li><a href="pySD/cxx2py.html#pySD.cxx2py.derive_more_floats">derive_more_floats() (in module pySD.cxx2py)</a>
 </li>
-        <li><a href="cxx/superdrops/urbg.html#_CPPv411device_swapR9SuperdropR9Superdrop">device_swap (C++ function)</a>
+        <li><a href="cxx/superdrops/collisions/shuffle.html#_CPPv411device_swapR9SuperdropR9Superdrop">device_swap (C++ function)</a>
 </li>
         <li><a href="cxx/superdrops/thermodynamic_equations.html#_CPPv416diffusion_factorKdKdKd">diffusion_factor (C++ function)</a>
 </li>
@@ -888,6 +889,8 @@
   <h2>F</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="cxx/superdrops/collisions/shuffle.html#_CPPv4I0E20fisher_yates_shufflev4URBGI10DeviceTypeEKDaKDa">fisher_yates_shuffle (C++ function)</a>
+</li>
         <li><a href="cxx/zarr/fsstore.html#_CPPv47FSStore">FSStore (C++ class)</a>
 </li>
         <li><a href="cxx/zarr/fsstore.html#_CPPv4N7FSStore7basedirE">FSStore::basedir (C++ member)</a>
@@ -1313,8 +1316,6 @@
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="cxx/superdrops/urbg.html#_CPPv418one_shuffle_supersRK10TeamMemberK12viewd_supersK13GenRandomPool">one_shuffle_supers (C++ function)</a>
-</li>
         <li><a href="cxx/superdrops/superdrop_ids.html#_CPPv4lsRNSt7ostreamERK5IntID">operator&lt;&lt; (C++ function)</a>, <a href="cxx/superdrops/superdrop_ids.html#_CPPv4lsRNSt7ostreamERK7EmptyID">[1]</a>
 </li>
         <li><a href="cxx/observers/collect_data_for_dataset.html#_CPPv4I_21CollectDataForDatasetI7FSStoreE_21CollectDataForDatasetI7FSStoreEErsDaK12CollectData1K12CollectData2">operator&gt;&gt; (C++ function)</a>, <a href="cxx/observers/observers.html#_CPPv4rsK8ObserverK8Observer">[1]</a>, <a href="cxx/superdrops/microphysical_process.html#_CPPv4rsK20MicrophysicalProcessK20MicrophysicalProcess">[2]</a>
@@ -1593,7 +1594,7 @@
 </li>
         <li><a href="cxx/runcleo/sdmmethods.html#_CPPv4NK10SDMMethods19superdrops_movementEKj9viewd_gbxR14SupersInDomainK10SDMMonitor">SDMMethods::superdrops_movement (C++ function)</a>
 </li>
-        <li><a href="cxx/superdrops/urbg.html#_CPPv4I0E14shuffle_supers12viewd_supersK12viewd_supers4URBGI10DeviceTypeE">shuffle_supers (C++ function)</a>
+        <li><a href="cxx/superdrops/collisions/shuffle.html#_CPPv414shuffle_supersRK10TeamMemberK12viewd_supersK13GenRandomPool">shuffle_supers (C++ function)</a>
 </li>
         <li><a href="cxx/superdrops/terminalvelocity.html#_CPPv422SimmelTerminalVelocity">SimmelTerminalVelocity (C++ struct)</a>
 </li>
@@ -1837,15 +1838,15 @@
   <h2>U</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="cxx/superdrops/urbg.html#_CPPv4I0E4URBG">URBG (C++ struct)</a>
+        <li><a href="cxx/superdrops/collisions/urbg.html#_CPPv4I0E4URBG">URBG (C++ struct)</a>
 </li>
-        <li><a href="cxx/superdrops/urbg.html#_CPPv4N4URBG5drandEKdKd">URBG::drand (C++ function)</a>
+        <li><a href="cxx/superdrops/collisions/urbg.html#_CPPv4N4URBG5drandEKdKd">URBG::drand (C++ function)</a>
 </li>
-        <li><a href="cxx/superdrops/urbg.html#_CPPv4N4URBG3genE">URBG::gen (C++ member)</a>
+        <li><a href="cxx/superdrops/collisions/urbg.html#_CPPv4N4URBG3genE">URBG::gen (C++ member)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="cxx/superdrops/urbg.html#_CPPv4N4URBGclEK8uint64_tK8uint64_t">URBG::operator() (C++ function)</a>
+        <li><a href="cxx/superdrops/collisions/urbg.html#_CPPv4N4URBGclEK8uint64_tK8uint64_t">URBG::operator() (C++ function)</a>
 </li>
         <li><a href="cxx/observers/windvel_observer.html#_CPPv48UvelFunc">UvelFunc (C++ struct)</a>
 </li>
@@ -2065,7 +2066,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 14 March 2025</div>
+              Last updated on 20 March 2025</div>
           </div>
           <div class="right-details">
             
