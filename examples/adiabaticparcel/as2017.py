@@ -43,7 +43,6 @@ sys.path.append(
 from plotssrc import as2017fig
 from pySD import editconfigfile, geninitconds
 from pySD.initsuperdropsbinary_src import rgens, dryrgens, probdists, attrsgen
-from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat, sdtracing
 
 ############### INPUTS ##################
@@ -70,8 +69,6 @@ ygrid = np.asarray([0, 100])
 numconcs = [500e6, 500e6, 50e6]
 monors = [0.05e-6, 0.1e-6, 0.1e-6]
 
-# volume SD sample occupies (entire domain) [m^3]
-samplevol = rgrid.calc_domainvol(zgrid, xgrid, ygrid)
 # do not generate superdroplet coords
 coord3gen = None
 coord1gen = None
