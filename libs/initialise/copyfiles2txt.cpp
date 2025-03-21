@@ -35,6 +35,13 @@ void copyfiles2txt(const std::filesystem::path setup_filename,
   const auto setup_filestr = setup_filename.string();
   std::cout << "----- writing to new setup file: " << setup_filestr << " -----\n";
 
+  // Create parent directory(s) for setup_filename if not existing
+  const std::filesystem::path parent_dir = setup_filename.parent_path();
+  if (!std::filesystem::exists(parent_dir)) {
+    std::cout << "creating directories: " << parent_dir << "\n";
+    std::filesystem::create_directories(parent_dir);
+  }
+
   std::ofstream wfile;
 
   wfile.open(setup_filestr, std::ios::out | std::ios::trunc);  // clear previous contents

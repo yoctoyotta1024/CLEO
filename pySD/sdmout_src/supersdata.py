@@ -119,8 +119,9 @@ class SupersData(SuperdropProperties):
         self.coord1 = self.tryvar(ds, rgdcount, "coord1")
         self.coord2 = self.tryvar(ds, rgdcount, "coord2")
 
-        # probably microns ie. 'micro m'
-        self.radius_units = self.tryunits(ds, "radius")
+        self.radius_units = self.tryunits(
+            ds, "radius"
+        )  # probably microns ie. 'micro-m'
         self.msol_units = self.tryunits(ds, "msol")  # probably gramms
         self.coord3_units = self.tryunits(ds, "coord3")  # probably meters
         self.coord1_units = self.tryunits(ds, "coord1")  # probably meters

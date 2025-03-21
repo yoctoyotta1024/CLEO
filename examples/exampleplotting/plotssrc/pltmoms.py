@@ -6,7 +6,7 @@ Created Date: Tuesday 21st November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 3rd May 2024
+Last Modified: Friday 21st March 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -22,8 +22,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def plot_totnsupers(time, totnsupers, savename=""):
-    fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(8, 5), sharex=True)
+def plot_totnsupers(time, totnsupers, savename="", fig=None, ax=None):
+    if fig is None:
+        fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(8, 5), sharex=True)
 
     ax.plot(time.mins, totnsupers)
 
