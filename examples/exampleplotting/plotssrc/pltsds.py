@@ -129,6 +129,7 @@ def plot_randomsample_superdrops_2dmotion(
     nsample,
     savename="",
     arrows=False,
+    ids2plot=None,
     israndom=True,
     fig=None,
     ax=None,
@@ -138,11 +139,12 @@ def plot_randomsample_superdrops_2dmotion(
     if fig is None:
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(6, 6))
 
-    minid, maxid = 0, int(totnsupers)  # largest value of ids to sample
-    if israndom:
-        ids2plot = random.sample(list(range(minid, maxid, 1)), nsample)
-    else:
-        ids2plot = np.linspace(0, maxid - 1, nsample, dtype=int)
+    if ids2plot is None:
+        minid, maxid = 0, int(totnsupers)  # largest value of ids to sample
+        if israndom:
+            ids2plot = random.sample(list(range(minid, maxid, 1)), nsample)
+        else:
+            ids2plot = np.linspace(0, maxid - 1, nsample, dtype=int)
 
     mks = MarkerStyle("o", fillstyle="full")
     coordz = (
@@ -191,5 +193,28 @@ def plot_randomsample_superdrops_2dmotion(
         print("Figure .png saved as: " + str(savename))
 
     plt.show()
+
+    return fig, ax
+
+
+def plot_superdrops_2dmotion(
+    sddata,
+    ids2plot,
+    savename="",
+    arrows=False,
+    fig=None,
+    ax=None,
+):
+    fig, ax = plot_randomsample_superdrops_2dmotion(
+        sddata,
+        np.nan,
+        np.nan,
+        savename=savename,
+        arrows=arrows,
+        ids2plot=ids2plot,
+        israndom=False,
+        fig=fig,
+        ax=ax,
+    )
 
     return fig, ax
