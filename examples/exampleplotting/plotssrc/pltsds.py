@@ -128,6 +128,7 @@ def plot_randomsample_superdrops_2dmotion(
     totnsupers,
     nsample,
     savename="",
+    colors=None,
     arrows=False,
     ids2plot=None,
     israndom=True,
@@ -156,7 +157,10 @@ def plot_randomsample_superdrops_2dmotion(
         / 1000
     )  # [km]
 
-    ax.plot(coordx, coordz, linestyle="", marker=mks, markersize=0.4)
+    if colors is not None:
+        ax.scatter(coordx, coordz, marker=mks, s=0.4, cmap=colors[0], c=colors[1])
+    else:
+        ax.plot(coordx, coordz, linestyle="", marker=mks, markersize=0.4)
 
     if arrows:
         n2plt = min(300, coordx.shape[1])
@@ -201,6 +205,7 @@ def plot_superdrops_2dmotion(
     sddata,
     ids2plot,
     savename="",
+    colors=None,
     arrows=False,
     fig=None,
     ax=None,
@@ -210,6 +215,7 @@ def plot_superdrops_2dmotion(
         np.nan,
         np.nan,
         savename=savename,
+        colors=colors,
         arrows=arrows,
         ids2plot=ids2plot,
         israndom=False,
