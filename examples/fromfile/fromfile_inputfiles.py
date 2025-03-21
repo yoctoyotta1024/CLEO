@@ -55,9 +55,9 @@ def main(
     constants_filename = path2CLEO / "libs" / "cleoconstants.hpp"
 
     ### --- settings for 3-D gridbox boundaries --- ###
-    zgrid = [0, 1500, 60]  # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
-    xgrid = [0, 1500, 50]  # evenly spaced xhalf coords [m]
-    ygrid = np.array([0, 100, 200, 300])  # array of yhalf coords [m]
+    zgrid = [0, 1500, 500]  # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
+    xgrid = [0, 1500, 500]  # evenly spaced xhalf coords [m]
+    ygrid = np.array([0, 100])  # array of yhalf coords [m]
 
     ### --- settings for initial superdroplets --- ###
     # settings for initial superdroplet coordinates
