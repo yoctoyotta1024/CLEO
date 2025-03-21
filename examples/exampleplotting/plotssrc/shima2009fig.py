@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Sunday 16th June 2024
+Last Modified: Friday 21st March 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -68,7 +68,11 @@ def plot_validation_figure(
         hist, hcens = calc_massdens_distrib(
             rspan, nbins, domainvol, xi, radius, sddata, smoothsig
         )
-        ax.plot(hcens, hist, label=tlab, color=c)
+
+        if smoothsig:
+            ax.plot(hcens, hist, label=tlab, color=c)
+        else:
+            ax.step(hcens, hist, label=tlab, where="mid", color=c)
 
         if witherr:
             golsol, hcens = golovin_analytical(
