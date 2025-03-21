@@ -2,6 +2,20 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.38.0](https://github.com/yoctoyotta1024/CLEO/compare/0fe36e7ee4d460a91b8ca8ae46b1cf6a11cda008..v0.38.0) - 2025-03-21
+#### Features
+- update version number to current v0.38.0 - ([383ae3c](https://github.com/yoctoyotta1024/CLEO/commit/383ae3c0a7bb4c7fbb637afff7fcbdfbe8b08131)) - clara.bayley
+#### Performance Improvements
+- remove redundant variable - ([445a6d9](https://github.com/yoctoyotta1024/CLEO/commit/445a6d9845026abc898244b38529504f83a9f0a5)) - clara.bayley
+#### Refactoring
+- add option to color 2d motion plot - ([02b4579](https://github.com/yoctoyotta1024/CLEO/commit/02b457955d3937e82250bfe19f90985ff52d409d)) - clara.bayley
+- add option to plot 2-d motion of already chosen superdrops - ([db63f5b](https://github.com/yoctoyotta1024/CLEO/commit/db63f5bea94bb41b6987e3c9eafa4a0432e1373a)) - clara.bayley
+- add better option to plot without smoothing - ([0c64f7a](https://github.com/yoctoyotta1024/CLEO/commit/0c64f7a38f4a88155c1b2712b6c2b7ad58e4d7e4)) - clara.bayley
+- create parent directories if not already existing - ([4892b40](https://github.com/yoctoyotta1024/CLEO/commit/4892b40b923dc78b38db2f5fd80506cefe4cb9f3)) - clara.bayley
+- add option to plot on given fig,ax - ([0fe36e7](https://github.com/yoctoyotta1024/CLEO/commit/0fe36e7ee4d460a91b8ca8ae46b1cf6a11cda008)) - clara.bayley
+
+- - -
+
 ## [v0.37.0](https://github.com/yoctoyotta1024/CLEO/compare/0660ceba4f48b21d60d8c5c5efd69d0bce61672e..v0.37.0) - 2025-03-20
 #### Documentation
 - clearer docstrings about urbg random number ranges - ([2468457](https://github.com/yoctoyotta1024/CLEO/commit/2468457e6e44957891f684e994332b20ed7174b8)) - clara.bayley
