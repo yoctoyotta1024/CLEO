@@ -104,11 +104,13 @@ template <typename Store>
 inline Observer auto create_superdrops_observer(const unsigned int interval,
                                                 Dataset<Store> &dataset, const int maxchunk) {
   CollectDataForDataset<Store> auto sdid = CollectSdId(dataset, maxchunk);
+  CollectDataForDataset<Store> auto sdgbxindex =
+      CollectSdgbxindex(dataset, maxchunk);
   CollectDataForDataset<Store> auto coord3 = CollectCoord3(dataset, maxchunk);
   CollectDataForDataset<Store> auto coord1 = CollectCoord1(dataset, maxchunk);
   CollectDataForDataset<Store> auto coord2 = CollectCoord2(dataset, maxchunk);
 
-  const auto collect_data = sdid >> coord3 >> coord1 >> coord2;
+  const auto collect_data = sdid >> sdgbxindex >> coord3 >> coord1 >> coord2;
   return SuperdropsObserver(interval, dataset, maxchunk, collect_data);
 }
 
