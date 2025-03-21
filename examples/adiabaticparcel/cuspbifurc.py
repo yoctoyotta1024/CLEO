@@ -44,7 +44,6 @@ from plotssrc import pltsds, as2017fig
 from pySD import geninitconds
 from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat, sdtracing
 from pySD.initsuperdropsbinary_src import rgens, dryrgens, probdists, attrsgen
-from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 
 
 ############### INPUTS ##################
@@ -81,8 +80,6 @@ radiigen = rgens.MonoAttrGen(monor)
 dryradiigen = dryrgens.ScaledRadiiGen(1.0)
 xiprobdist = probdists.DiracDelta(monor)
 
-# volume SD sample occupies (entire domain) [m^3]
-samplevol = rgrid.calc_domainvol(zgrid, xgrid, ygrid)
 # do not generate SD coords
 coord3gen = None
 coord1gen = None

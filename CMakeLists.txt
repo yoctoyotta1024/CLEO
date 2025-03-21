@@ -9,7 +9,7 @@ cmake_minimum_required(VERSION 3.18.0)
 project(CLEO
   LANGUAGES CXX
   DESCRIPTION "CLEO by Clara Bayley and other developers"
-  VERSION 0.1.0
+  VERSION 0.38.0
 )
 
 find_package(MPI REQUIRED)
