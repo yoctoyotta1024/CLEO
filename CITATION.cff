@@ -23,6 +23,6 @@ authors:
   given-names: "Clara"
   orcid: "https://orcid.org/0000-0002-4540-9382"
 title: "CLEO, an implementation of a Super-Droplet Model"
-version: 0.1.0
+version: 0.38.0
 date-released: 2nd May 2024
 url: "https://github.com/yoctoyotta1024/CLEO.git"
