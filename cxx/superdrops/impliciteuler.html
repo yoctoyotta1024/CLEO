@@ -411,7 +411,7 @@
 <p>Uses at least 2 iterations of the Newton Raphson method and then checks if convergence criteria has been met (if a root of the g(Z) polynomial has been converged upon), else performs upto maxniters number of further iterations, checking for convergence after each one.</p>
 <p>
 Employs the Implicit Euler method (with potential sub-timestepping based on uniqueness criteria of Matsushima et. al), 2023 to forward timestep previous radius ‘rprev’ by subdelt according to the condensation/evaporation ODE. Implict timestepping equation defined in section 5.1.2 of Shima et al. 2009 and is root of polynomial g(z) = 0, where z = [R_i(t+delt)]^squared.</p>
-<p>Uses at least ‘niters’ iterations of the Newton Raphson method and then checks if convergence criteria has been met (if a root of the g(Z) polynomial has been converged upon), else performs upto maxniters number of further iterations, checking for convergence after each one.</p>
+<p>Uses at least ‘niters’ iterations of the Newton Raphson method and then checks if convergence criteria has been met (if a root of the g(Z) polynomial has been converged upon), else performs upto maxniters number of further iterations, checking for convergence after each one. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -419,9 +419,6 @@ Employs the Implicit Euler method (with potential sub-timestepping based on uniq
 <li><p><strong>subdelt</strong> – Time over which to integrate ODE </p></li>
 <li><p><strong>rprev</strong> – Radius of droplet at previous timestep. </p></li>
 <li><p><strong>ziter</strong> – Initial value for ziter.</p></li>
-<li><p><strong>odeconsts</strong> – Constants of ODE during integration </p></li>
-<li><p><strong>subdelt</strong> – Time over which to integrate ODE </p></li>
-<li><p><strong>rprev</strong> – Radius of droplet at previous timestep. </p></li>
 </ul>
 </dd>
 </dl>
@@ -433,6 +430,9 @@ Employs the Implicit Euler method (with potential sub-timestepping based on uniq
 <dd><p>Returns appropriate initial guess (ie. a reasonable guess) for the Newton-Raphson method. </p>
 <p>This method returns an initial guess for the Newton-Raphson method based on the given radius from the previous timestep and the current supersaturation ratio.</p>
 <p>Guess is supposed to be a reasonable value for initial ‘ziter’ to use as first iteration of NR method in rootfinding algorithm for timestepping condensation/evaporation ODE. Here the guess criteria are as in SCALE-SDM for making initial guess for given droplet much greater than its (activation radius)^2 if the supersaturation &gt; its activation supersaturation.</p>
+<p>
+This method returns an initial guess for the Newton-Raphson method based on the given radius from the previous timestep and the current supersaturation ratio.</p>
+<p>Guess is supposed to be a reasonable value for initial ‘ziter’ to use as first iteration of NR method in rootfinding algorithm for timestepping condensation/evaporation ODE. Here the guess criteria are as in SCALE-SDM for making initial guess for given droplet much greater than its (activation radius)^2 if the supersaturation &gt; its activation supersaturation. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -441,7 +441,7 @@ Employs the Implicit Euler method (with potential sub-timestepping based on uniq
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Initial guess for ziter. </p>
+<dd class="field-even"><p>Initial guess for ziter.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -454,6 +454,8 @@ Employs the Implicit Euler method (with potential sub-timestepping based on uniq
 <span id="_CPPv3NK18ImplicitIterations25newtonraphson_niterationsERK12ODEConstantsKdKddK6size_t"></span><span id="_CPPv2NK18ImplicitIterations25newtonraphson_niterationsERK12ODEConstantsKdKddK6size_t"></span><span id="ImplicitIterations::newtonraphson_niterations__ODEConstantsCR.doubleC.doubleC.double.sCC"></span><span class="target" id="structImplicitIterations_1a80e9e1e0b7f87dfded438b70984b6a81"></span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">newtonraphson_niterations</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N18ImplicitIterations12ODEConstantsE" title="ImplicitIterations::ODEConstants"><span class="n"><span class="pre">ODEConstants</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">odeconsts</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">subdelt</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rprev</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ziter</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">niters</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK18ImplicitIterations25newtonraphson_niterationsERK12ODEConstantsKdKddK6size_t" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Performs niters number of Newton-Raphson iterations. </p>
 <p>Function integrates (timesteps) condensation ODE by delt given initial guess for ziter, (which is usually radius^squared from previous timestep). Uses Newton Raphson iterative method with ‘niters’ number of iterations then returns updated ziter and boolean which is true if rootfinding has passed convergence test.</p>
+<p>
+Function integrates (timesteps) condensation ODE by delt given initial guess for ziter, (which is usually radius^squared from previous timestep). Uses Newton Raphson iterative method with ‘niters’ number of iterations then returns updated ziter and boolean which is true if rootfinding has passed convergence test. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -465,7 +467,7 @@ Employs the Implicit Euler method (with potential sub-timestepping based on uniq
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The updated value of ziter. </p>
+<dd class="field-even"><p>The updated value of ziter.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -476,15 +478,10 @@ Employs the Implicit Euler method (with potential sub-timestepping based on uniq
 <dd><p>Performs Newton-Raphson iterations until convergence or maximum number of iterations is reached. </p>
 <p>After every iteration, convergence criteria is tested and error is raised if method does not converge within ‘niterslimit’ iterations. Otherwise once convergence test is passed, function returns the new value for the ziter (which is the radius^2 at timestep ‘t+delt’). Refer to section 5.1.2 Shima et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details.</p>
 <p>
-After every iteration, convergence criteria is tested and error is raised if method does not converge within ‘maxniters’ iterations. Otherwise once convergence test is passed, function returns the new value for the ziter (which is the radius^2 at timestep ‘t+delt’). Refer to section 5.1.2 Shima et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details.</p>
+After every iteration, convergence criteria is tested and error is raised if method does not converge within ‘maxniters’ iterations. Otherwise once convergence test is passed, function returns the new value for the ziter (which is the radius^2 at timestep ‘t+delt’). Refer to section 5.1.2 Shima et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>odeconsts</strong> – Constants of ODE during integration </p></li>
-<li><p><strong>subdelt</strong> – Time over which to integrate ODE </p></li>
-<li><p><strong>niterslimit</strong> – The maxiumum number of iterations to attempt. </p></li>
-<li><p><strong>rprev</strong> – Radius at the previous timestep. </p></li>
-<li><p><strong>ziter</strong> – The current guess for ziter. </p></li>
 <li><p><strong>odeconsts</strong> – Constants of ODE during integration </p></li>
 <li><p><strong>subdelt</strong> – Time over which to integrate ODE </p></li>
 <li><p><strong>niterslimit</strong> – The maxiumum number of iterations to attempt. </p></li>
@@ -495,9 +492,6 @@ After every iteration, convergence criteria is tested and error is raised if met
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The updated value of ziter.</p>
 </dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The updated value of ziter. </p>
-</dd>
 </dl>
 </dd></dl>
 
@@ -507,6 +501,9 @@ After every iteration, convergence criteria is tested and error is raised if met
 <dd><p>Perform one iteration of the Newton-Raphson rootfinding algorithm. </p>
 <p>This function performs one iteration of the Newton-Raphson rootfinding algorithm, i.e. ziter^(m) -&gt; ziter^(m+1) for iteration m+1 starting at m=1. Returns the updated value of ziter alongside a boolean which is true if the new value of ziter passes the convergence test.</p>
 <p><em>Note:</em> ziter is limited to &gt;= 1e-8 so it’s always &gt; 0.0</p>
+<p>
+This function performs one iteration of the Newton-Raphson rootfinding algorithm, i.e. ziter^(m) -&gt; ziter^(m+1) for iteration m+1 starting at m=1. Returns the updated value of ziter alongside a boolean which is true if the new value of ziter passes the convergence test.</p>
+<p><em>Note:</em> ziter is limited to &gt;= 1e-8 so it’s always &gt; 0.0 </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -517,7 +514,7 @@ After every iteration, convergence criteria is tested and error is raised if met
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A pair of the updated ziter and a boolean which is true if a root is converged upon. </p>
+<dd class="field-even"><p>A pair of the updated ziter and a boolean which is true if a root is converged upon.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -529,6 +526,10 @@ After every iteration, convergence criteria is tested and error is raised if met
 <p>This method computes the value of g(z) / z * subdelt used in the root-finding Newton-Raphson method for the dr/dt condensation / evaporation ODE.</p>
 <p>ODE is for radial growth/shrink of each superdroplet due to condensation and diffusion of water vapour according to equations from “An Introduction To Clouds….” (see note at top of file).</p>
 <p><em>Note:</em> z = ziter = radius^2.</p>
+<p>
+This method computes the value of g(z) / z * subdelt used in the root-finding Newton-Raphson method for the dr/dt condensation / evaporation ODE.</p>
+<p>ODE is for radial growth/shrink of each superdroplet due to condensation and diffusion of water vapour according to equations from “An Introduction To Clouds….” (see note at top of file).</p>
+<p><em>Note:</em> z = ziter = radius^2. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -539,7 +540,7 @@ After every iteration, convergence criteria is tested and error is raised if met
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>RHS of g(z) / z * subdelt evaluted at rqrd. </p>
+<dd class="field-even"><p>RHS of g(z) / z * subdelt evaluted at rqrd.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -549,6 +550,8 @@ After every iteration, convergence criteria is tested and error is raised if met
 <span id="_CPPv3NK18ImplicitIterations19ode_gfuncderivativeERK12ODEConstantsKdKd"></span><span id="_CPPv2NK18ImplicitIterations19ode_gfuncderivativeERK12ODEConstantsKdKd"></span><span id="ImplicitIterations::ode_gfuncderivative__ODEConstantsCR.doubleC.doubleCC"></span><span class="target" id="structImplicitIterations_1abb03991ca1d84bfd08c141acfccb5929"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ode_gfuncderivative</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N18ImplicitIterations12ODEConstantsE" title="ImplicitIterations::ODEConstants"><span class="n"><span class="pre">ODEConstants</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">odeconsts</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">subdelt</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rsqrd</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK18ImplicitIterations19ode_gfuncderivativeERK12ODEConstantsKdKd" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Returns the value of the derivative of g(z) with respect to z. </p>
 <p>This method computes the value of dg(z)/dz * subdelt, where dg(z)/dz is the derivative of g(z) with respect to z=rsqr. g(z) is polynomial to find root of using Newton Raphson Method consistent as in ode_gfunc(…).</p>
+<p>
+This method computes the value of dg(z)/dz * subdelt, where dg(z)/dz is the derivative of g(z) with respect to z=rsqr. g(z) is polynomial to find root of using Newton Raphson Method consistent as in ode_gfunc(…). </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -558,7 +561,7 @@ After every iteration, convergence criteria is tested and error is raised if met
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>RHS of dg(z)/dz * subdelt evaluted at rqrd. </p>
+<dd class="field-even"><p>RHS of dg(z)/dz * subdelt evaluted at rqrd.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -668,14 +671,10 @@ After every iteration, convergence criteria is tested and error is raised if met
 <dd><p>Integrates the condensation / evaporation ODE employing the Implicit Euler method similarly to Matsushima et. al, 2023. </p>
 <p>Forward timestep previous radius ‘rprev’ by delt using an Implicit Euler method (possibly with sub-timestepping) to integrate the condensation/evaporation ODE using fixed thermodynamics from the start of the timestep.</p>
 <p>
-Forward timestep previous radius ‘rprev’ by delt using an Implicit Euler method (possibly with sub-timestepping) to integrate the condensation/evaporation ODE using fixed thermodynamics from the start of the timestep. Sub-timestepping employed when unique solution to g(Z) within required radius range is not guarenteed. Criteria as in appendix C of Matsushima et. al, 2023 except minimum sub-timestep is limited by minsubdelt.</p>
+Forward timestep previous radius ‘rprev’ by delt using an Implicit Euler method (possibly with sub-timestepping) to integrate the condensation/evaporation ODE using fixed thermodynamics from the start of the timestep. Sub-timestepping employed when unique solution to g(Z) within required radius range is not guarenteed. Criteria as in appendix C of Matsushima et. al, 2023 except minimum sub-timestep is limited by minsubdelt. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>s_ratio</strong> – The saturation ratio. </p></li>
-<li><p><strong>kohler_ab</strong> – A pair containing ‘a’ and ‘b’ factors for Kohler curve in that order. </p></li>
-<li><p><strong>ffactor</strong> – The sum of the diffusion factors. </p></li>
-<li><p><strong>rprev</strong> – Previous radius at time = t </p></li>
 <li><p><strong>s_ratio</strong> – The saturation ratio. </p></li>
 <li><p><strong>kohler_ab</strong> – A pair containing ‘a’ and ‘b’ factors for Kohler curve in that order. </p></li>
 <li><p><strong>ffactor</strong> – The sum of the diffusion factors. </p></li>
@@ -684,9 +683,6 @@ Forward timestep previous radius ‘rprev’ by delt using an Implicit Euler met
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Updated radius for time = t + delt</p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Updated radius for time = t + delt </p>
 </dd>
 </dl>
 </dd></dl>
@@ -699,6 +695,8 @@ Forward timestep previous radius ‘rprev’ by delt using an Implicit Euler met
 <span id="_CPPv3NK13ImplicitEuler21first_unique_criteriaERKN18ImplicitIterations12ODEConstantsEKdKd"></span><span id="_CPPv2NK13ImplicitEuler21first_unique_criteriaERKN18ImplicitIterations12ODEConstantsEKdKd"></span><span id="ImplicitEuler::first_unique_criteria__ImplicitIterations::ODEConstantsCR.doubleC.doubleCC"></span><span class="target" id="classImplicitEuler_1a84392239a3ee0acaa9a3882ddd24c038"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">first_unique_criteria</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv418ImplicitIterations" title="ImplicitIterations"><span class="n"><span class="pre">ImplicitIterations</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N18ImplicitIterations12ODEConstantsE" title="ImplicitIterations::ODEConstants"><span class="n"><span class="pre">ODEConstants</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">odeconsts</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rprev</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ziter</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13ImplicitEuler21first_unique_criteriaERKN18ImplicitIterations12ODEConstantsEKdKd" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Test of uniqueness criteria for un-activated droplets in environment with supersaturation less than its activation supersaturation. </p>
 <p>Returns true if solution to g(Z) is guarenteed to be unique because it meets the uniquenes criteria of Case 2 from Matsushima et al. 2023 (see appendix C), namely that there is only one real root to g(Z) in the range 0 &lt; Z &lt; critical_R^2, where critical_R is the critical i.e. activation radius of the droplet. Here we use the less stringent constrain that S &lt;= S_crit rather than S &lt;= 1, and we ensure the current value for ziter is also less than the critical_R as it must be to guarentee solution in range 0 &lt; R &lt; critical_R is converged upon.</p>
+<p>
+Returns true if solution to g(Z) is guarenteed to be unique because it meets the uniquenes criteria of Case 2 from Matsushima et al. 2023 (see appendix C), namely that there is only one real root to g(Z) in the range 0 &lt; Z &lt; critical_R^2, where critical_R is the critical i.e. activation radius of the droplet. Here we use the less stringent constrain that S &lt;= S_crit rather than S &lt;= 1, and we ensure the current value for ziter is also less than the critical_R as it must be to guarentee solution in range 0 &lt; R &lt; critical_R is converged upon. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -708,7 +706,7 @@ Forward timestep previous radius ‘rprev’ by delt using an Implicit Euler met
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Boolean = true if solution is guarenteed to be unique. </p>
+<dd class="field-even"><p>Boolean = true if solution is guarenteed to be unique.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -751,6 +749,8 @@ Forward timestep previous radius ‘rprev’ by delt using an Implicit Euler met
 <span id="_CPPv3NK13ImplicitEuler35solve_with_adaptive_subtimesteppingERKN18ImplicitIterations12ODEConstantsEKddd"></span><span id="_CPPv2NK13ImplicitEuler35solve_with_adaptive_subtimesteppingERKN18ImplicitIterations12ODEConstantsEKddd"></span><span id="ImplicitEuler::solve_with_adaptive_subtimestepping__ImplicitIterations::ODEConstantsCR.doubleC.double.doubleC"></span><span class="target" id="classImplicitEuler_1adfec5750207fb6d02d0f891f053fbf45"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">solve_with_adaptive_subtimestepping</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv418ImplicitIterations" title="ImplicitIterations"><span class="n"><span class="pre">ImplicitIterations</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="#_CPPv4N18ImplicitIterations12ODEConstantsE" title="ImplicitIterations::ODEConstants"><span class="n"><span class="pre">ODEConstants</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">odeconsts</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">delt</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rprev</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ziter</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13ImplicitEuler35solve_with_adaptive_subtimesteppingERKN18ImplicitIterations12ODEConstantsEKddd" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Integrates the condensation / evaporation ODE employing the Implicit Euler method similarly to Matsushima et. al, 2023 with an adaptive timestepping subroutine. </p>
 <p>Forward timestep previous radius ‘rprev’ by delt using an Implicit Euler method with sub-timestepping to integrate the condensation/evaporation ODE using fixed thermodynamics from the start of the timestep. Sub-timestepping employed to try to ensure uique solution to g(Z) as Matsushima et. al, 2023 except minimum sub-timestep is limited by minsubdelt. If critdelt &lt; minsubdelt the uniqueness is not guarenteed. Reducing minsubdelt therefore increases the likelyhood of having a unique solution to g(Z), i.e. the accuracy of the solver is increased.</p>
+<p>
+Forward timestep previous radius ‘rprev’ by delt using an Implicit Euler method with sub-timestepping to integrate the condensation/evaporation ODE using fixed thermodynamics from the start of the timestep. Sub-timestepping employed to try to ensure uique solution to g(Z) as Matsushima et. al, 2023 except minimum sub-timestep is limited by minsubdelt. If critdelt &lt; minsubdelt the uniqueness is not guarenteed. Reducing minsubdelt therefore increases the likelyhood of having a unique solution to g(Z), i.e. the accuracy of the solver is increased. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -761,7 +761,7 @@ Forward timestep previous radius ‘rprev’ by delt using an Implicit Euler met
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Updated radius^2 for time = t + delt </p>
+<dd class="field-even"><p>Updated radius^2 for time = t + delt</p>
 </dd>
 </dl>
 </dd></dl>

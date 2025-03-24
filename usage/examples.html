@@ -385,22 +385,21 @@ would like to a copy of the reference solutions please <a class="reference inter
 example’s Python script. There are bash scripts to help you do all this on DKRZ’s Levante HPC. The
 following instructions are intended to guide you through running each example using their bash
 script.</p>
-<p>Please Note: the bash script for most of the examples chooses a build configuration which uses GPUs.
+<p>Please Note: the bash script for some of the examples chooses a build configuration which uses GPUs.
 To execute these scripts you will therefore need to be on a node in the GPU partition of Levante
 (<a class="reference external" href="https://docs.dkrz.de/doc/levante/running-jobs/partitions-and-limits.html">see here</a>
 for documentation on Levante’s partitions), or change the build configuration.</p>
 <section id="configure-the-bash-scripts">
 <span id="configurebash"></span><h2>Configure the Bash Scripts<a class="headerlink" href="#configure-the-bash-scripts" title="Link to this heading">¶</a></h2>
 <p>The bash script for every example provides command line arguments to <code class="docutils literal notranslate"><span class="pre">examples/run_example_levante.sh</span></code>. This
-script has three steps:</p>
+script has two steps:</p>
 <ol class="arabic simple">
-<li><p>It builds CLEO by running <code class="docutils literal notranslate"><span class="pre">scripts/levante/bash/build_cleo.sh</span></code>,</p></li>
-<li><p>It compiles the specified exectuable(s) by running <code class="docutils literal notranslate"><span class="pre">scripts/levante/bash/compile_cleo.sh</span></code>,</p></li>
-<li><p>It runs the example’s Python script.</p></li>
+<li><p>It builds and compiles the specified exectuable(s) of CLEO by running <code class="docutils literal notranslate"><span class="pre">scripts/levante/build_compile_cleo.sh</span> <span class="pre">[args]</span></code></p></li>
+<li><p>It generates input files, runs the exectuable(s), and plots the results by calling the example’s Python script.</p></li>
 </ol>
-<p>You will need to configure <code class="docutils literal notranslate"><span class="pre">`examples/run_example_levante.sh`</span></code> in the following ways:</p>
+<p>You will need to configure <code class="docutils literal notranslate"><span class="pre">examples/run_example_levante.sh</span></code> in the following ways:</p>
 <ul>
-<li><p>Use your Conda (or Mamba) environment:</p>
+<li><p>Use your Conda (or Micromamba) environment:</p>
 <p>replace the path in the line stating <code class="docutils literal notranslate"><span class="pre">cleoenv=[…]</span></code> with the path to your environment.</p>
 </li>
 <li><p>Use your Python version:</p>
@@ -411,7 +410,9 @@ script has three steps:</p>
 directories, or to <code class="docutils literal notranslate"><span class="pre">yacyaxtroot=&quot;&quot;</span></code> if you do not intend to run an example that requires YAC.</p>
 </li>
 </ul>
-<p>You can optionally configure the bash script specific to each example in the following ways:</p>
+<p>You can optionally configure the bash script specific to each example
+(found in the relevant example’s directory e.g. <code class="docutils literal notranslate"><span class="pre">examples/boxmodelcollisions/shima2009.sh</span></code>)
+in the following ways:</p>
 <ul>
 <li><p>Choose your build configuration:</p>
 <p>choose which parallelism to utilise by modifying the <code class="docutils literal notranslate"><span class="pre">buildtype</span></code> parameter. The options are

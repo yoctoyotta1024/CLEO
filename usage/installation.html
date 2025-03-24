@@ -385,11 +385,13 @@ some extra paths in the bash and Python scripts.</p>
 </pre></div>
 </div>
 <p>Everything will also be much easier for you if you set up and use an environment with the packages
-we suggest in our environment.yml file, e.g. using Conda:</p>
+we suggest in our environment.yml file, e.g. using Conda/Micromamba:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>micromamba<span class="w"> </span>create<span class="w"> </span>--file<span class="o">=</span>environment.yml
 <span class="gp">$ </span>micromamba<span class="w"> </span>activate<span class="w"> </span>cleoenv
 </pre></div>
 </div>
+<p><em>Note</em>: on Levante you need to first load an openmpi package to install mpi4py, e.g. via
+<code class="docutils literal notranslate"><span class="pre">`module</span> <span class="pre">load</span> <span class="pre">openmpi/4.1.2-gcc-11.2.0`</span></code></p>
 <p>Finally we suggest you use pre-commit. You can install our hooks via:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>pre-commit<span class="w"> </span>install
 </pre></div>

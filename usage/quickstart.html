@@ -381,26 +381,90 @@
 <p>Start by following the steps to <a class="reference internal" href="installation.html"><span class="doc">install CLEO</span></a>.</p>
 <p>To use CLEO as an SDM coupled to a dynamics solver, essentially your task is to contruct a
 <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> file.</p>
-<p>Have a look at <code class="docutils literal notranslate"><span class="pre">roughpaper/src/main.cpp</span></code> for inspiration. Depending on the setup you desire, you need to
-include different instantiations of the core concepts of CLEO in your <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code>. For example you
-need to specify the type of super-droplet motion, microphysics, observer, and coupled dynamics.</p>
+<p>Have a look at <code class="docutils literal notranslate"><span class="pre">roughpaper/src/main.cpp</span></code> and <code class="docutils literal notranslate"><span class="pre">roughpaper/src/main_impl.hpp</span></code> for inspiration.
+Depending on the setup you desire, you need to include different instantiations of the core concepts
+of CLEO in your main.cpp. For example for the SDM part of CLEO you need to specify the coupling
+timestep, the gridbox maps for the domain, and the type of super-droplet motion, microphysics and
+observer.</p>
 <p>Once you’ve done that, your should have constructed all the necesary ingredients for CLEO so that
-the end of your <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> looks something like this:</p>
-<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cm">/* Initialise Kokkos parallel environment */</span>
-<span class="n">Kokkos</span><span class="o">::</span><span class="n">initialize</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">get_kokkos_initialization_settings</span><span class="p">());</span>
-<span class="p">{</span>
-<span class="w">  </span><span class="n">Kokkos</span><span class="o">::</span><span class="n">print_configuration</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">);</span>
+the end of your <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> contains a main function that looks something like this:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">argv</span><span class="p">[])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">argc</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">throw</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">invalid_argument</span><span class="p">(</span><span class="s">&quot;configuration file(s) not specified&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
 
-<span class="w">  </span><span class="cm">/* CLEO Super-Droplet Model (excluding coupled dynamics solver) */</span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">SDMMethods</span><span class="w"> </span><span class="n">sdm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">create_sdm</span><span class="p">(</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">tsteps</span><span class="p">,</span><span class="w"> </span><span class="n">dataset</span><span class="p">);</span>
+<span class="w">  </span><span class="n">MPI_Init</span><span class="p">(</span><span class="o">&amp;</span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">argv</span><span class="p">);</span>
 
-<span class="w">  </span><span class="cm">/* Run CLEO (SDM coupled to dynamics solver) */</span>
-<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">runcleo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">RunCLEO</span><span class="p">(</span><span class="n">sdm</span><span class="p">,</span><span class="w"> </span><span class="n">coupldyn</span><span class="p">,</span><span class="w"> </span><span class="n">comms</span><span class="p">);</span>
-<span class="w">  </span><span class="n">runcleo</span><span class="p">(</span><span class="n">initconds</span><span class="p">,</span><span class="w"> </span><span class="n">t_end</span><span class="p">);</span>
+<span class="w">  </span><span class="cm">/* Read input parameters from configuration file(s) */</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">config_filename</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">filesystem</span><span class="o">::</span><span class="n">path</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span><span class="w">  </span><span class="c1">// path to configuration file</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Config</span><span class="p">(</span><span class="n">config_filename</span><span class="p">);</span>
+
+<span class="w">  </span><span class="cm">/* Initialise Kokkos parallel environment */</span>
+<span class="w">  </span><span class="n">Kokkos</span><span class="o">::</span><span class="n">initialize</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">get_kokkos_initialization_settings</span><span class="p">());</span>
+<span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Kokkos</span><span class="o">::</span><span class="n">print_configuration</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">);</span>
+
+<span class="w">    </span><span class="cm">/* Create timestepping parameters from configuration */</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">tsteps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Timesteps</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">get_timesteps</span><span class="p">());</span>
+
+<span class="w">    </span><span class="cm">/* Create Xarray dataset wit Zarr backend for writing output data to a store */</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">store</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FSStore</span><span class="p">(</span><span class="n">config</span><span class="p">.</span><span class="n">get_zarrbasedir</span><span class="p">());</span>
+<span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">dataset</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Dataset</span><span class="p">(</span><span class="n">store</span><span class="p">);</span>
+
+<span class="w">    </span><span class="cm">/* CLEO Super-Droplet Model (excluding coupled dynamics solver) */</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">SDMMethods</span><span class="w"> </span><span class="n">sdm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">create_sdm</span><span class="p">(</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">tsteps</span><span class="p">,</span><span class="w"> </span><span class="n">dataset</span><span class="p">);</span>
+
+<span class="w">    </span><span class="cm">/* Solver of dynamics coupled to CLEO SDM */</span>
+<span class="w">    </span><span class="n">CoupledDynamics</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">coupldyn</span><span class="w"> </span><span class="o">=</span>
+<span class="w">        </span><span class="n">create_coupldyn</span><span class="p">(</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">sdm</span><span class="p">.</span><span class="n">gbxmaps</span><span class="p">,</span><span class="w"> </span><span class="n">tsteps</span><span class="p">.</span><span class="n">get_couplstep</span><span class="p">(),</span><span class="w"> </span><span class="n">tsteps</span><span class="p">.</span><span class="n">get_t_end</span><span class="p">());</span>
+
+<span class="w">    </span><span class="cm">/* coupling between coupldyn and SDM */</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">CouplingComms</span><span class="o">&lt;</span><span class="n">CartesianMaps</span><span class="p">,</span><span class="w"> </span><span class="n">FromFileDynamics</span><span class="o">&gt;</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">comms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">FromFileComms</span><span class="p">{};</span>
+
+<span class="w">    </span><span class="cm">/* Initial conditions for CLEO run */</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">InitialConditions</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">initconds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">create_initconds</span><span class="p">(</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">sdm</span><span class="p">.</span><span class="n">gbxmaps</span><span class="p">);</span>
+
+<span class="w">    </span><span class="cm">/* Run CLEO (SDM coupled to dynamics solver) */</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">RunCLEO</span><span class="w"> </span><span class="n">runcleo</span><span class="p">(</span><span class="n">sdm</span><span class="p">,</span><span class="w"> </span><span class="n">coupldyn</span><span class="p">,</span><span class="w"> </span><span class="n">comms</span><span class="p">);</span>
+<span class="w">    </span><span class="n">runcleo</span><span class="p">(</span><span class="n">initconds</span><span class="p">,</span><span class="w"> </span><span class="n">tsteps</span><span class="p">.</span><span class="n">get_t_end</span><span class="p">());</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="n">Kokkos</span><span class="o">::</span><span class="n">finalize</span><span class="p">();</span>
+
+<span class="w">  </span><span class="n">MPI_Finalize</span><span class="p">();</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
-<span class="n">Kokkos</span><span class="o">::</span><span class="n">finalize</span><span class="p">();</span>
 </pre></div>
 </div>
+<p>where for example the SDM is set-up as:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">template</span><span class="w"> </span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">Store</span><span class="o">&gt;</span>
+<span class="kr">inline</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">create_sdm</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Config</span><span class="w"> </span><span class="o">&amp;</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">Timesteps</span><span class="w"> </span><span class="o">&amp;</span><span class="n">tsteps</span><span class="p">,</span><span class="w"> </span><span class="n">Dataset</span><span class="o">&lt;</span><span class="n">Store</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&amp;</span><span class="n">dataset</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">couplstep</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="n">tsteps</span><span class="p">.</span><span class="n">get_couplstep</span><span class="p">();</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">GridboxMaps</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">gbxmaps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">create_gbxmaps</span><span class="p">(</span><span class="n">config</span><span class="p">);</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">MicrophysicalProcess</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">microphys</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">create_microphysics</span><span class="p">(</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">tsteps</span><span class="p">);</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">MoveSupersInDomain</span><span class="w"> </span><span class="n">movesupers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">create_movement</span><span class="p">(</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">tsteps</span><span class="p">,</span><span class="w"> </span><span class="n">gbxmaps</span><span class="p">);</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">Observer</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">obs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">create_observer</span><span class="p">(</span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">tsteps</span><span class="p">,</span><span class="w"> </span><span class="n">dataset</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">SDMMethods</span><span class="p">(</span><span class="n">couplstep</span><span class="p">,</span><span class="w"> </span><span class="n">gbxmaps</span><span class="p">,</span><span class="w"> </span><span class="n">microphys</span><span class="p">,</span><span class="w"> </span><span class="n">movesupers</span><span class="p">,</span><span class="w"> </span><span class="n">obs</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>and for example the <code class="docutils literal notranslate"><span class="pre">create_microphysics</span></code> function sets up the microphysics as:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kr">inline</span><span class="w"> </span><span class="n">MicrophysicalProcess</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">create_microphysics</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">Config</span><span class="w"> </span><span class="o">&amp;</span><span class="n">config</span><span class="p">,</span>
+<span class="w">                                                    </span><span class="k">const</span><span class="w"> </span><span class="n">Timesteps</span><span class="w"> </span><span class="o">&amp;</span><span class="n">tsteps</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">config</span><span class="p">.</span><span class="n">get_condensation</span><span class="p">();</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">MicrophysicalProcess</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">cond</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="n">Condensation</span><span class="p">(</span><span class="n">tsteps</span><span class="p">.</span><span class="n">get_condstep</span><span class="p">(),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">step2dimlesstime</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">do_alter_thermo</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">maxniters</span><span class="p">,</span>
+<span class="w">                </span><span class="n">c</span><span class="p">.</span><span class="n">rtol</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">atol</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">MINSUBTSTEP</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">realtime2dimless</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">PairProbability</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">coalprob</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LongHydroProb</span><span class="p">(</span><span class="mf">1.0</span><span class="p">);</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="n">MicrophysicalProcess</span><span class="w"> </span><span class="k">auto</span><span class="w"> </span><span class="n">colls</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CollCoal</span><span class="p">(</span><span class="n">tsteps</span><span class="p">.</span><span class="n">get_collstep</span><span class="p">(),</span><span class="w"> </span><span class="o">&amp;</span><span class="n">step2realtime</span><span class="p">,</span><span class="w"> </span><span class="n">coalprob</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">colls</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">cond</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Have a look at <code class="docutils literal notranslate"><span class="pre">roughpaper/src/main.cpp</span></code> and <code class="docutils literal notranslate"><span class="pre">roughpaper/src/main_impl.hpp</span></code> for inspiration.</p>
 </section>
 
         </article>

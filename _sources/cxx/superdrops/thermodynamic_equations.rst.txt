@@ -21,3 +21,6 @@ Header file: ``<libs/superdrops/thermodynamic_equations.hpp>``
 
 .. doxygenfunction:: diffusion_factor
    :project: superdrops
+
+.. doxygenfunction:: ventilation_factor
+   :project: superdrops

@@ -13,13 +13,15 @@ some extra paths in the bash and Python scripts.
 
 
 Everything will also be much easier for you if you set up and use an environment with the packages
-we suggest in our environment.yml file, e.g. using Conda:
+we suggest in our environment.yml file, e.g. using Conda/Micromamba:
 
 .. code-block:: console
 
   $ micromamba create --file=environment.yml
   $ micromamba activate cleoenv
 
+*Note*: on Levante you need to first load an openmpi package to install mpi4py, e.g. via
+```module load openmpi/4.1.2-gcc-11.2.0```
 
 Finally we suggest you use pre-commit. You can install our hooks via:
 

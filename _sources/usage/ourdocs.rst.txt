@@ -13,7 +13,7 @@ in your preferred browser. E.g.
 
 .. code-block:: console
 
-  $ cd ~/CLEO/docs && mkdir build && mkdir build/doxygen
+  $ cd ~/CLEO/docs && mkdir -p build/doxygen
   $ doxygen doxygen/doxygen.dox && make html
   $ open build/html/index.html
 

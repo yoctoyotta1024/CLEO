@@ -457,6 +457,8 @@ initialise Gridboxes (i.e. GBxs).</p>
 <span id="_CPPv3NK10GenGridbox8state_atEKjKd"></span><span id="_CPPv2NK10GenGridbox8state_atEKjKd"></span><span id="GenGridbox::state_at__unsigned-iC.doubleCC"></span><span class="target" id="classGenGridbox_1aa72605d81b3050986f609f44b2808961"></span><a class="reference internal" href="../superdrops/state.html#_CPPv45State" title="State"><span class="n"><span class="pre">State</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">state_at</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ii</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">volume</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10GenGridbox8state_atEKjKd" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Get the state of a specified Gridbox from the initial conditions. </p>
 <p>This function returns the state of the Gridbox at the ii’th index in the initial conditions given by the <a class="reference internal" href="#classGenGridbox"><span class="std std-ref">GenGridbox</span></a> struct.</p>
+<p>
+This function returns the state of the Gridbox at the ii’th index in the initial conditions given by the <a class="reference internal" href="#classGenGridbox"><span class="std std-ref">GenGridbox</span></a> struct. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -465,7 +467,7 @@ initialise Gridboxes (i.e. GBxs).</p>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The <a class="reference internal" href="../superdrops/state.html#structState"><span class="std std-ref">State</span></a> of the Gridbox. </p>
+<dd class="field-even"><p>The <a class="reference internal" href="../superdrops/state.html#structState"><span class="std std-ref">State</span></a> of the Gridbox.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -545,10 +547,10 @@ This function creates Gridboxes based on the provided gridbox maps and initial c
 <dd class="field-even"><ul class="simple">
 <li><p><strong>gbxmaps</strong> – The Gridbox Maps. </p></li>
 <li><p><strong>gbxic</strong> – The Gridbox initial conditions. </p></li>
-<li><p><strong>domainsupers</strong> – The view of all super-droplets (in bounds of domain).</p></li>
+<li><p><strong>allsupers</strong> – The view of all super-droplets (in bounds of domain).</p></li>
 <li><p><strong>gbxmaps</strong> – The Gridbox Maps. </p></li>
 <li><p><strong>gbxic</strong> – The Gridbox initial conditions. </p></li>
-<li><p><strong>domainsupers</strong> – The view of all super-droplets (in bounds of domain).</p></li>
+<li><p><strong>allsupers</strong> – The view of all super-droplets (in bounds of domain).</p></li>
 </ul>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
@@ -635,14 +637,13 @@ This function initialises Gridboxes in host memory using data from Gridbox Maps,
 <p>This function checks if the number of created gridboxes is consistent with the number of gridboxes from gridbox maps and if each gridbox has correct references to superdroplets.</p>
 <p>
 This function checks if the number of created gridboxes is consistent with the number of gridboxes from gridbox maps and if each gridbox has correct references to superdroplets.</p>
-<p>Kokkos::parallel_for([…]) (on host) is equivalent to: for (size_t ii(0); ii &lt; ngbxs; ++ii){[…]} when in serial</p>
+<p>Kokkos::parallel_for([…]) (on host) is equivalent to: for (size_t ii(0); ii &lt; ngbxs; ++ii){[…]} when in serial </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>ngbxs_from_maps</strong> – The number of gridboxes from gridbox maps. </p></li>
-<li><p><strong>gbxs</strong> – The dualview containing gridboxes.</p></li>
-<li><p><strong>ngbxs_from_maps</strong> – The number of gridboxes from gridbox maps. </p></li>
 <li><p><strong>gbxs</strong> – The dualview containing gridboxes. </p></li>
+<li><p><strong>totsupers</strong> – The view containing superdroplets on device.</p></li>
 </ul>
 </dd>
 </dl>
@@ -653,9 +654,11 @@ This function checks if the number of created gridboxes is consistent with the n
 <span id="_CPPv310print_gbxsK14viewh_constgbx"></span><span id="_CPPv210print_gbxsK14viewh_constgbx"></span><span id="print_gbxs__viewh_constgbxC"></span><span class="target" id="creategbxs_8hpp_1ae68259108df12474abd11ceb16412799"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">print_gbxs</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv414viewh_constgbx" title="viewh_constgbx"><span class="n"><span class="pre">viewh_constgbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">gbxs</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410print_gbxsK14viewh_constgbx" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Print some information about initial Gridboxes. </p>
 <p>This function prints information about each Gridbox, including its index, volume, and number of super-droplets.</p>
+<p>
+This function prints information about each Gridbox, including its index, volume, and number of super-droplets. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>h_gbxs</strong> – The host view of Gridboxes. </p>
+<dd class="field-odd"><p><strong>h_gbxs</strong> – The host view of Gridboxes.</p>
 </dd>
 </dl>
 </dd></dl>

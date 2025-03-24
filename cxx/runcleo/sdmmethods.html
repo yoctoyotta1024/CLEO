@@ -488,6 +488,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>t_mdl</strong> – Current timestep of the coupled model. </p></li>
 <li><p><strong>gbxs</strong> – Dualview of gridboxes (on host and on device). </p></li>
+<li><p><strong>allsupers</strong> – View of all (inside and outside of domain) superdroplets on device. </p></li>
 </ul>
 </dd>
 </dl>
@@ -504,7 +505,7 @@
 <li><p><strong>t_mdl</strong> – Current timestep of the coupled model. </p></li>
 <li><p><strong>t_mdl_next</strong> – Next timestep of the coupled model. </p></li>
 <li><p><strong>d_gbxs</strong> – View of gridboxes on device. </p></li>
-<li><p><strong>totsupers</strong> – View of all superdrops (both in and out of bounds of domain). </p></li>
+<li><p><strong>allsupers</strong> – View of all superdrops (both in and out of bounds of domain). </p></li>
 </ul>
 </dd>
 </dl>
@@ -563,7 +564,7 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>t_sdm</strong> – Current timestep for SDM. </p></li>
 <li><p><strong>d_gbxs</strong> – View of gridboxes on device. </p></li>
-<li><p><strong>totsupers</strong> – View of all superdrops (both in and out of bounds of domain). </p></li>
+<li><p><strong>allsupers</strong> – View of all superdrops (both in and out of bounds of domain). </p></li>
 <li><p><strong>mo</strong> – Monitor of SDM processes. </p></li>
 </ul>
 </dd>

@@ -445,19 +445,13 @@
 <p><em>Note:</em> Function starts with conversion from dimentionless to real temperature [Kelvin], TEMP = temp*Temp0, and returns dimensionless pressure from real psat = PSAT/P0.</p>
 <p>
 Equation adapted from Bjorn Steven’s “make_tetens” python function from his module “moist_thermodynamics.saturation_vapour_pressures” available upon request on gitlab. Original paper for formula is Murray, F. W. (1967) “On the Computation of Saturation Vapor Pressure”, Journal of Applied Meteorology and Climatology 6, 203–204.</p>
-<p><em>Note:</em> Function starts with conversion from dimentionless to real temperature [Kelvin], TEMP = temp*Temp0, and returns dimensionless pressure from real psat = PSAT/P0.</p>
+<p><em>Note:</em> Function starts with conversion from dimentionless to real temperature [Kelvin], TEMP = temp*Temp0, and returns dimensionless pressure from real psat = PSAT/P0. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>temp</strong> – The (dimensionless) ambient temperature. </p></li>
-<li><p><strong>temp</strong> – The (dimensionless) ambient temperature. </p></li>
-</ul>
+<dd class="field-odd"><p><strong>temp</strong> – The (dimensionless) ambient temperature. </p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The (dimensionless) saturation pressure.</p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The (dimensionless) saturation pressure. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -494,6 +488,24 @@ Equation adapted from Bjorn Steven’s “make_tetens” python function from hi
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The (dimensionless) diffusion factor. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv418ventilation_factorKd">
+<span id="_CPPv318ventilation_factorKd"></span><span id="_CPPv218ventilation_factorKd"></span><span id="ventilation_factor__doubleC"></span><span class="target" id="thermodynamic__equations_8hpp_1a08d61bebba13e5691cc19e13fc626b8e"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ventilation_factor</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">radius</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418ventilation_factorKd" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Calculate the ventilation factor for the condensation-diffusion growth equation. </p>
+<p>Equation for ventilation factor, $f_v$, is fit to data from Kinzer and Gunn (1951) and from Pruppacher and Rasmussen (1979) according to Florian Poydenot, whereby <span class="math notranslate nohighlight">\( f_v = 1 + \frac{1}{\frac{1}{c_1R^\alpha} + \frac{1}{c_2R^\beta}} \)</span> where <span class="math notranslate nohighlight">\( c_1 = 6.954*10^7 \)</span>, <span class="math notranslate nohighlight">\( \alpha=1.963 \)</span>, <span class="math notranslate nohighlight">\( c_2=1.069*10^3 \)</span>, <span class="math notranslate nohighlight">\( \beta=0.702 \)</span>, and <span class="math notranslate nohighlight">\(R\)</span> is the radius of the water droplet in [m].</p>
+<p>
+Equation for ventilation factor, $f_v$, is fit to data from Kinzer and Gunn (1951) and from Pruppacher and Rasmussen (1979) according to Florian Poydenot, whereby $ f_v = 1 + \frac{1}{\frac{1}{c_1R^\alpha} + \frac{1}{c_2R^\beta}} $ where $ c_1 = 6.954*10^7 $, $ \alpha=1.963 $, $ c_2=1.069*10^3 $, $ \beta=0.702 $, and $R$ is the radius of the water droplet in [m].</p>
+<p>Equation is capped at fv=20 (corresponds to the value of the uncapped fv when the droplet radius is ~3.30mm) because droplets greater than ~3mm have a constant fall speed in all conventional terminal velocity formulations (see terminal_velocity.hpp for the available terminal velocity parameterisations in CLEO). </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>radius</strong> – The droplet radius. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The (dimensionless) ventilation factor.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -563,6 +575,7 @@ Equation adapted from Bjorn Steven’s “make_tetens” python function from hi
 <li><a class="reference internal" href="#_CPPv419saturation_pressureKd"><code class="docutils literal notranslate"><span class="pre">saturation_pressure()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv431saturation_pressure_murphy_koopKd"><code class="docutils literal notranslate"><span class="pre">saturation_pressure_murphy_koop()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv416diffusion_factorKdKdKd"><code class="docutils literal notranslate"><span class="pre">diffusion_factor()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv418ventilation_factorKd"><code class="docutils literal notranslate"><span class="pre">ventilation_factor()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -580,5 +593,6 @@ Equation adapted from Bjorn Steven’s “make_tetens” python function from hi
     <script src="../../_static/scripts/furo.js?v=5fa4622c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </body>
 </html>

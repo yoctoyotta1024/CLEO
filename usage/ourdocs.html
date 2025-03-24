@@ -388,7 +388,7 @@ extension we integrate C++ documentation created using Doxygen. You can
 build our documentation locally by building the Doxygen .xml files
 followed by the Sphinx .html files, which you can then view
 in your preferred browser. E.g.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>~/CLEO/docs<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>mkdir<span class="w"> </span>build<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>mkdir<span class="w"> </span>build/doxygen
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>~/CLEO/docs<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>build/doxygen
 <span class="gp">$ </span>doxygen<span class="w"> </span>doxygen/doxygen.dox<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>html
 <span class="gp">$ </span>open<span class="w"> </span>build/html/index.html
 </pre></div>
