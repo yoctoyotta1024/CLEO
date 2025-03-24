@@ -31,8 +31,7 @@ jobs:
         run: pytest .
       - name: Generate Doxygen Documentation
         run: cd docs &&
-          mkdir build &&
-          mkdir build/doxygen &&
+          mkdir -p build/doxygen &&
           /usr/share/miniconda/envs/cienv/bin/doxygen doxygen/doxygen.dox
         shell: bash
       - name: Build docs

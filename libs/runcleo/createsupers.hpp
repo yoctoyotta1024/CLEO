@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 19th April 2024
+ * Last Modified: Monday 24th March 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -108,6 +108,7 @@ void print_supers(const viewd_constsupers totsupers);
  *
  * @tparam SuperdropInitConds The type of the super-droplets' initial conditions data.
  * @param sdic The instance of the super-droplets' initial conditions data.
+ * @param gbxindex_max max value for superdroplet gridbox indexes (0 <= sdgbxindex < gbxindex)
  * @return Struct for handling super-droplets in device memory.
  */
 template <typename SuperdropInitConds>

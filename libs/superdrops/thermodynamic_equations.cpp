@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Florian Poydenot
  * -----
- * Last Modified: Tuesday 11th March 2025
+ * Last Modified: Monday 24th March 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -37,8 +37,6 @@
  * _Note:_ Function starts with conversion from dimentionless to real temperature [Kelvin],
  * TEMP = temp*Temp0, and returns dimensionless pressure from real psat = PSAT/P0.
  *
- * @param temp The (dimensionless) ambient temperature.
- * @return The (dimensionless) saturation pressure.
  */
 KOKKOS_FUNCTION
 double saturation_pressure(const double temp) {
@@ -119,8 +117,9 @@ double diffusion_factor(const double press, const double temp, const double psat
  *
  * Equation for ventilation factor, $f_v$, is fit to data from Kinzer and Gunn (1951) and from
  * Pruppacher and Rasmussen (1979) according to Florian Poydenot, whereby
- * $f_v = 1 + \frac{1}{\frac{1}{c_1R^\alpha} + \frac{1}{c_2R^\beta}}$
- * where $c_1 = 6.954*10^7$, $\alpha=1.963$, $c_2=1.069*10^3$, $\beta=0.702$, and $R$ is the radius
+ * $ f_v = 1 + \frac{1}{\frac{1}{c_1R^\alpha} + \frac{1}{c_2R^\beta}} $
+ * where $ c_1 = 6.954*10^7 $, $ \alpha=1.963 $, $ c_2=1.069*10^3 $,
+ * $ \beta=0.702 $, and $R$ is the radius
  * of the water droplet in [m].
  *
  * Equation is capped at fv=20 (corresponds to the value of the uncapped fv when the
@@ -128,8 +127,6 @@ double diffusion_factor(const double press, const double temp, const double psat
  * fall speed in all conventional terminal velocity formulations (see terminal_velocity.hpp
  * for the available terminal velocity parameterisations in CLEO).
  *
- * @param radius The droplet radius.
- * @return The (dimensionless) ventilation factor.
  */
 KOKKOS_FUNCTION
 double ventilation_factor(const double radius) {

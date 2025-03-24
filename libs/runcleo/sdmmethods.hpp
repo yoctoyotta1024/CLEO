@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Saturday 15th June 2024
+ * Last Modified: Monday 24th March 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -134,7 +134,7 @@ class SDMMethods {
    *
    * @param t_sdm Current timestep for SDM.
    * @param d_gbxs View of gridboxes on device.
-   * @param totsupers View of all superdrops (both in and out of bounds of domain).
+   * @param allsupers View of all superdrops (both in and out of bounds of domain).
    * @param mo Monitor of SDM processes.
    */
   void superdrops_movement(const unsigned int t_sdm, viewd_gbx d_gbxs, SupersInDomain &allsupers,
@@ -243,6 +243,7 @@ class SDMMethods {
    *
    * @param t_mdl Current timestep of the coupled model.
    * @param gbxs Dualview of gridboxes (on host and on device).
+   * @param allsupers View of all (inside and outside of domain) superdroplets on device.
    */
   void at_start_step(const unsigned int t_mdl, const dualview_gbx gbxs,
                      const SupersInDomain &allsupers) const {
@@ -261,7 +262,7 @@ class SDMMethods {
    * @param t_mdl Current timestep of the coupled model.
    * @param t_mdl_next Next timestep of the coupled model.
    * @param d_gbxs View of gridboxes on device.
-   * @param totsupers View of all superdrops (both in and out of bounds of domain).
+   * @param allsupers View of all superdrops (both in and out of bounds of domain).
    */
   void run_step(const unsigned int t_mdl, const unsigned int t_mdl_next, viewd_gbx d_gbxs,
                 SupersInDomain &allsupers) const {

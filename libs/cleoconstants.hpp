@@ -75,7 +75,7 @@ namespace DC = dimmed_constants;
 
 /* characterstic scales */
 constexpr double W0 = 1.0;                        /**< Characteristic velocity [m/s]. */
-constexpr double TIME0 = 1000.0;                  /**< Rimescale [s]. */
+constexpr double TIME0 = 1000.0;                  /**< Timescale [s]. */
 constexpr double COORD0 = TIME0 * W0;             /**< Coordinate grid scale [m]. */
 constexpr double VOL0 = COORD0 * COORD0 * COORD0; /**< Volume scale [m^3]. */
 

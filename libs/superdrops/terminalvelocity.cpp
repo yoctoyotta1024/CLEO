@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Monday 24th March 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -94,9 +94,6 @@ double SimmelTerminalVelocity::operator()(const Superdrop &drop) const {
  * by  R. R. Rogers, D. Baumgardner, S. A. Ethier, D. A. Carter, and W. L. Ecklund (1993).
  * Formulation is approximation of Gunn and Kinzer (1949) tabulated values.
  *
- * @param drop The super-droplet.
- *
- * @return The (dimensionless) terminal velocity.
  */
 KOKKOS_FUNCTION
 double RogersYauTerminalVelocity::operator()(const Superdrop &drop) const {
@@ -129,9 +126,6 @@ double RogersYauTerminalVelocity::operator()(const Superdrop &drop) const {
  * by  R. R. Rogers, D. Baumgardner, S. A. Ethier, D. A. Carter, and W. L. Ecklund (1993).
  * Formulation is approximation of Gunn and Kinzer (1949) tabulated values.
  *
- * @param drop The super-droplet.
- *
- * @return The (dimensionless) terminal velocity.
  */
 KOKKOS_FUNCTION
 double RogersGKTerminalVelocity::operator()(const Superdrop &drop) const {

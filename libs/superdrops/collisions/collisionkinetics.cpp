@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Monday 24th March 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,11 +28,6 @@
  * Returns cke, where cke = collision kinetic energy [Joules] as formulated in Low and
  * List 1982(a) eqn 3.1 given the dimensionless radii, r1 and r2, and the dimensionless
  * terminal velocities of droplets, terminalv1 and terminalv2, respectively.
- *
- * @param r1 The radius of the first superdroplet.
- * @param r2 The radius of the second superdroplet.
- * @param terminalv1 The terminal velocity of the first superdroplet.
- * @param terminalv2 The terminal velocity of the second superdroplet.
  *
  * @return The collision kinetic energy [Joules].
  */
