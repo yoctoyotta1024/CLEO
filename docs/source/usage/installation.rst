@@ -20,6 +20,9 @@ we suggest in our environment.yml file, e.g. using Conda/Micromamba:
   $ micromamba create --file=environment.yml
   $ micromamba activate cleoenv
 
+_Note_: on Levante you need to first load an openmpi package to install mpi4py, e.g. via
+```module load openmpi/4.1.2-gcc-11.2.0```
+
 Finally we suggest you use pre-commit. You can install our hooks via:
 
 .. code-block:: console
