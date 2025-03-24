@@ -2,6 +2,24 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.38.2](https://github.com/yoctoyotta1024/CLEO/compare/b17c906d030eabac61421e979bb8d4c105603444..v0.38.2) - 2025-03-24
+#### Bug Fixes
+- typo - ([b17c906](https://github.com/yoctoyotta1024/CLEO/commit/b17c906d030eabac61421e979bb8d4c105603444)) - clara.bayley
+#### Documentation
+- update info on examples - ([4588d2c](https://github.com/yoctoyotta1024/CLEO/commit/4588d2ce88d25d7c28791c1f3c7e7b1350f94651)) - clara.bayley
+- include more information in the quickstart - ([bbf0cfd](https://github.com/yoctoyotta1024/CLEO/commit/bbf0cfdab9126b425719ce0fc75248a624765ea0)) - clara.bayley
+- update requirements - ([cac5301](https://github.com/yoctoyotta1024/CLEO/commit/cac5301147c81ad783640d7f6508164471f4ecfa)) - clara.bayley
+- add title - ([7ceb73a](https://github.com/yoctoyotta1024/CLEO/commit/7ceb73ac63a2330cde88ab2c94c4e5b15915a608)) - clara.bayley
+- fix doxstring errors - ([5a02ed9](https://github.com/yoctoyotta1024/CLEO/commit/5a02ed9cf9299c686b44dc7f673a9e1a39558b8e)) - clara.bayley
+- note on installing mpi4py on levante - ([fa4d8f4](https://github.com/yoctoyotta1024/CLEO/commit/fa4d8f4fa4943bffaf1c11f58dc1a041ed69c355)) - clara.bayley
+- correct mamba/conda - ([0911c34](https://github.com/yoctoyotta1024/CLEO/commit/0911c34f901d5c29f030292fa750c99c1b27e180)) - clara.bayley
+#### Performance Improvements
+- two commands in one - ([fd8ea03](https://github.com/yoctoyotta1024/CLEO/commit/fd8ea03e500a3b76bb3853812ef515af3de69c26)) - clara.bayley
+#### Refactoring
+- cleaner env creation - ([b3f96a1](https://github.com/yoctoyotta1024/CLEO/commit/b3f96a1567729dfafb926313b7e527ad6f1b8851)) - clara.bayley
+
+- - -
+
 ## [v0.38.1](https://github.com/yoctoyotta1024/CLEO/compare/107f77c58aa94206f3ba90a515f8927aec8cb980..v0.38.1) - 2025-03-24
 #### Bug Fixes
 - update openmpi package for levante when usign intel compiler - ([107f77c](https://github.com/yoctoyotta1024/CLEO/commit/107f77c58aa94206f3ba90a515f8927aec8cb980)) - clara.bayley
