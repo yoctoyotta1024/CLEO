@@ -1,9 +1,9 @@
 name: cleoenv
+channels:
+    - conda-forge
 dependencies:
-    - python>=3.9
-    - pytest
-    - sphinx
-    - conda-forge::doxygen>=1.10.0
+    - python==3.13
+    - doxygen>=1.10.0
     - pip
     - pip:
       - -r requirements.txt
