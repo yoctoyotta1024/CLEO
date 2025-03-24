@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.38.1](https://github.com/yoctoyotta1024/CLEO/compare/107f77c58aa94206f3ba90a515f8927aec8cb980..v0.38.1) - 2025-03-24
+#### Bug Fixes
+- update openmpi package for levante when usign intel compiler - ([107f77c](https://github.com/yoctoyotta1024/CLEO/commit/107f77c58aa94206f3ba90a515f8927aec8cb980)) - clara.bayley
+
+- - -
+
 ## [v0.38.0](https://github.com/yoctoyotta1024/CLEO/compare/0fe36e7ee4d460a91b8ca8ae46b1cf6a11cda008..v0.38.0) - 2025-03-21
 #### Features
 - update version number to current v0.38.0 - ([383ae3c](https://github.com/yoctoyotta1024/CLEO/commit/383ae3c0a7bb4c7fbb637afff7fcbdfbe8b08131)) - clara.bayley
