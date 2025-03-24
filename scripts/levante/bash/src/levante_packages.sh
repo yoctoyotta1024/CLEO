@@ -19,7 +19,7 @@ levante_gcc_fyamllib="/sw/spack-levante/libfyaml-0.7.12-fvbhgo/lib"
 ### ------------- Intel compiler(s) Packages ------------ ###
 levante_intel=intel-oneapi-compilers/2023.2.1-gcc-11.2.0 # module load
 levante_intel_cmake=cmake@3.23.1%oneapi # spack load
-levante_intel_openmpi=openmpi@4.1.5%oneapi # spack load
+levante_intel_openmpi=openmpi@4.1.5%oneapi/3ccjsdq # spack load
 levante_icpc_compiler="/sw/spack-levante/openmpi-4.1.6-ux3zoj/bin/mpic++"
 levante_icc_compiler="/sw/spack-levante/openmpi-4.1.6-ux3zoj/bin/mpicc"
 ### ---------------------------------------------------- ###
