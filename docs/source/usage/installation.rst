@@ -13,13 +13,12 @@ some extra paths in the bash and Python scripts.
 
 
 Everything will also be much easier for you if you set up and use an environment with the packages
-we suggest in our environment.yml file, e.g. using Conda:
+we suggest in our environment.yml file, e.g. using Conda/Micromamba:
 
 .. code-block:: console
 
   $ micromamba create --file=environment.yml
   $ micromamba activate cleoenv
-
 
 Finally we suggest you use pre-commit. You can install our hooks via:
 

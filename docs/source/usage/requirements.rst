@@ -51,11 +51,11 @@ our environment.yml file and are the following: ``matplotlib``, ``numpy``, ``sci
 them too. We kindly ask that you also :ref:`contact us <contact>` or `open a new
 issue <https://github.com/yoctoyotta1024/CLEO/issues/new>`_ on our GitHub repository to notify us.
 
-You can install Python packages to an existing Conda (or Mamba) environment via:
+You can install Python packages to an existing Conda (or Micromamba) environment via:
 
 .. code-block:: console
 
-  $ micromamba activate [your conda environment]
+  $ micromamba activate [your environment]
   $ python -m pip install [package name(s)]
 
 YAC

@@ -34,7 +34,7 @@ script has three steps:
 
 You will need to configure ```examples/run_example_levante.sh``` in the following ways:
 
-* Use your Conda (or Mamba) environment:
+* Use your Conda (or Micromamba) environment:
 
   replace the path in the line stating ``cleoenv=[…]`` with the path to your environment.
 
