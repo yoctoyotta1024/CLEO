@@ -10,6 +10,8 @@ Programming Guide
    Please consider that this project is under active development
    and our documentation is a work in progress.
 
+Motivation
+----------
 It seems apparent that a new implementation of SDM is required; capable of modelling warm rain
 in LES with realistic boundary conditions and large scale forcings, and capable of application
 in large regional domains, with horizontal extents O(100km). CLEO is an attempt to build such
