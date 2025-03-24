@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Monday 24th March 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -69,6 +69,7 @@ struct MonitorCondensation {
    * @brief Placeholder function to obey SDMMonitor concept does nothing.
    *
    * @param d_gbxs The view of gridboxes in device memory.
+   * @param domainsupers The view of superdroplets within the domain in device memory.
    */
   void monitor_motion(const viewd_constgbx d_gbxs, const subviewd_constsupers domainsupers) const {}
 

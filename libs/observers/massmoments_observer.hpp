@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Monday 24th March 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -123,6 +123,7 @@ struct MassMomentsFunc {
    *
    * @param team_member The Kokkos team member.
    * @param d_gbxs The view of gridboxes on device.
+   * @param d_supers The view of superdroplets on device.
    * @param d_mom0 The mirror view buffer for the 0th mass moment.
    * @param d_mom1 The mirror view buffer for the 1st mass moment.
    * @param d_mom2 The mirror view buffer for the 2nd mass moment.
@@ -167,6 +168,7 @@ struct RaindropsMassMomentsFunc {
    *
    * @param team_member The Kokkos team member.
    * @param d_gbxs The view of gridboxes on device.
+   * @param d_supers The view of superdroplets on device.
    * @param d_mom0 The mirror view buffer for the 0th mass moment.
    * @param d_mom1 The mirror view buffer for the 1st mass moment.
    * @param d_mom2 The mirror view buffer for the 2nd mass moment.
@@ -247,6 +249,7 @@ struct CollectMassMoments {
      *
      * @param ffunc The functor to calculate mass moments within a parallel team policy loop.
      * @param d_gbxs The view of gridboxes on the device.
+     * @param d_supers The view of superdroplets on the device.
      * @param d_mom0 The mirror view for the 0th mass moment on the device.
      * @param d_mom1 The mirror view for the 1st mass moment on the device.
      * @param d_mom2 The mirror view for the 2nd mass moment on the device.

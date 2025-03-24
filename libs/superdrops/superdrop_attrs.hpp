@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Monday 24th March 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -86,6 +86,7 @@ struct SuperdropAttrs {
    * @param xi The multiplicity of superdroplet.
    * @param radius The radius of superdroplet.
    * @param msol The mass of solute dissolved.
+   * @param allow_nans Boolean to allow non-real superdroplets
    */
   KOKKOS_FUNCTION
   SuperdropAttrs(const SoluteProperties solute, const uint64_t xi, const double radius,

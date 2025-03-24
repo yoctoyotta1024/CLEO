@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 25th May 2024
+ * Last Modified: Monday 24th March 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -60,6 +60,7 @@ struct StreamOutObserver {
    *
    * @param t_mdl Current model time.
    * @param d_gbxs View of the gridboxes on the device.
+   * @param d_supers View of the superdroplets on the device.
    */
   void streamout_statement(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                            const subviewd_constsupers d_supers) const;

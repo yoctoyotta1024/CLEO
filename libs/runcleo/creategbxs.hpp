@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 25th May 2024
+ * Last Modified: Monday 24th March 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -163,7 +163,7 @@ class GenGridbox {
  *
  * @param gbxmaps The Gridbox Maps.
  * @param gbxic The Gridbox initial conditions.
- * @param domainsupers The view of all super-droplets (in bounds of domain).
+ * @param allsupers The view of all super-droplets (in bounds of domain).
  *
  * @return The view of initialised Gridboxes.
  */
@@ -226,6 +226,7 @@ inline dualview_gbx initialise_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &
  *
  * @param ngbxs_from_maps The number of gridboxes from gridbox maps.
  * @param gbxs The dualview containing gridboxes.
+ * @param totsupers The view containing superdroplets on device.
  */
 void is_gbxinit_complete(const size_t ngbxs_from_maps, dualview_gbx gbxs,
                          const viewd_constsupers totsupers);
@@ -254,7 +255,7 @@ void print_gbxs(const viewh_constgbx gbxs);
  *
  * @param gbxmaps The Gridbox Maps.
  * @param gbxic The Gridbox initial conditions.
- * @param domainsupers The view of all super-droplets (in bounds of domain).
+ * @param allsupers The view of all super-droplets (in bounds of domain).
  *
  * @return The view of initialised Gridboxes.
  */

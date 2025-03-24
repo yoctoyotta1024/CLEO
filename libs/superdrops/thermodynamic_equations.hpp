@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Florian Poydenot
  * -----
- * Last Modified: Tuesday 11th March 2025
+ * Last Modified: Monday 24th March 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -143,8 +143,9 @@ double diffusion_factor(const double press, const double temp, const double psat
  *
  * Equation for ventilation factor, $f_v$, is fit to data from Kinzer and Gunn (1951) and from
  * Pruppacher and Rasmussen (1979) according to Florian Poydenot, whereby
- * $f_v = 1 + \frac{1}{\frac{1}{c_1R^\alpha} + \frac{1}{c_2R^\beta}}$
- * where $c_1 = 6.954*10^7$, $\alpha=1.963$, $c_2=1.069*10^3$, $\beta=0.702$, and $R$ is the radius
+ * \f$ f_v = 1 + \frac{1}{\frac{1}{c_1R^\alpha} + \frac{1}{c_2R^\beta}} \f$
+ * where \f$ c_1 = 6.954*10^7 \f$, \f$ \alpha=1.963 \f$, \f$ c_2=1.069*10^3 \f$,
+ * \f$ \beta=0.702 \f$, and \f$R\f$ is the radius
  * of the water droplet in [m].
  *
  * @param radius The droplet radius.

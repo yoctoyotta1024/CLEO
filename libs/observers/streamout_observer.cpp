@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th April 2024
+ * Last Modified: Monday 24th March 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -32,8 +32,6 @@
  * Additionally, it prints the total number of superdroplets in the domain and the total number of
  * gridboxes.
  *
- * @param t_mdl Current model time.
- * @param d_gbxs View of the gridboxes on the device.
  */
 void StreamOutObserver::streamout_statement(const unsigned int t_mdl, const viewd_constgbx d_gbxs,
                                             const subviewd_constsupers d_supers) const {

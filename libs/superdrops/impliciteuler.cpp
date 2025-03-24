@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Florian Poydenot
  * -----
- * Last Modified: Tuesday 11th March 2025
+ * Last Modified: Monday 24th March 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -34,11 +34,6 @@
  * required radius range is not guarenteed. Criteria as in appendix C of Matsushima et. al, 2023
  * except minimum sub-timestep is limited by minsubdelt.
  *
- * @param s_ratio The saturation ratio.
- * @param kohler_ab A pair containing 'a' and 'b' factors for Kohler curve in that order.
- * @param ffactor The sum of the diffusion factors.
- * @param rprev Previous radius at time = t
- * @return Updated radius for time = t + delt
  */
 KOKKOS_FUNCTION double ImplicitEuler::solve_condensation(
     const double s_ratio, const Kokkos::pair<double, double> kohler_ab, const double ffactor,
@@ -73,10 +68,6 @@ KOKKOS_FUNCTION double ImplicitEuler::solve_condensation(
  * than the critical_R as it must be to guarentee solution in range 0 < R < critical_R
  * is converged upon.
  *
- * @param odeconsts Constants of ODE during integration
- * @param rprev Radius at previous timestep
- * @param ziter Current guess for ziter.
- * @return Boolean = true if solution is guarenteed to be unique.
  */
 KOKKOS_FUNCTION bool ImplicitEuler::first_unique_criteria(
     const ImplicitIterations::ODEConstants &odeconsts, const double rprev,
@@ -106,11 +97,6 @@ KOKKOS_FUNCTION bool ImplicitEuler::first_unique_criteria(
  * increases the likelyhood of having a unique solution to g(Z), i.e. the accuracy of the
  * solver is increased.
  *
- * @param odeconsts Constants of ODE during integration
- * @param delt Time over which to integrate ODE over.
- * @param rprev Previous radius at time = t
- * @param ziter Initial guess for ziter.
- * @return Updated radius^2 for time = t + delt
  */
 KOKKOS_FUNCTION double ImplicitEuler::solve_with_adaptive_subtimestepping(
     const ImplicitIterations::ODEConstants &odeconsts, const double delt, double rprev,
@@ -141,9 +127,6 @@ KOKKOS_FUNCTION double ImplicitEuler::solve_with_adaptive_subtimestepping(
  * criteria has been met (if a root of the g(Z) polynomial has been converged upon), else performs
  * upto maxniters number of further iterations, checking for convergence after each one.
  *
- * @param odeconsts Constants of ODE during integration
- * @param subdelt Time over which to integrate ODE
- * @param rprev Radius of droplet at previous timestep.
  */
 KOKKOS_FUNCTION
 double ImplicitIterations::integrate_condensation_ode(const ODEConstants &odeconsts,
@@ -172,9 +155,6 @@ double ImplicitIterations::integrate_condensation_ode(const ODEConstants &odecon
  * criteria are as in SCALE-SDM for making initial guess for given droplet much greater
  * than its (activation radius)^2 if the supersaturation > its activation supersaturation.
  *
- * @param odeconsts Constants of ODE during integration
- * @param rprev Radius of droplet at previous timestep.
- * @return Initial guess for ziter.
  */
 KOKKOS_FUNCTION double ImplicitIterations::initialguess(const ODEConstants &odeconsts,
                                                         const double rprev) const {
@@ -200,12 +180,6 @@ KOKKOS_FUNCTION double ImplicitIterations::initialguess(const ODEConstants &odec
  * with 'niters' number of iterations then returns updated ziter and boolean which is true if
  * rootfinding has passed convergence test.
  *
- * @param odeconsts Constants of ODE during integration
- * @param subdelt Time over which to integrate ODE
- * @param rprev Radius at previous timestep
- * @param ziter The current guess for ziter.
- * @param niters Number of iterations of NR method to perform
- * @return The updated value of ziter.
  */
 KOKKOS_FUNCTION Kokkos::pair<double, bool> ImplicitIterations::newtonraphson_niterations(
     const ODEConstants &odeconsts, const double subdelt, const double rprev, double ziter,
@@ -232,12 +206,6 @@ KOKKOS_FUNCTION Kokkos::pair<double, bool> ImplicitIterations::newtonraphson_nit
  * returns the new value for the ziter (which is the radius^2 at timestep 't+delt'). Refer to
  * section 5.1.2 Shima et al. 2009 and section 3.3.3 of Matsushima et al. 2023 for more details.
  *
- * @param odeconsts Constants of ODE during integration
- * @param subdelt Time over which to integrate ODE
- * @param niterslimit The maxiumum number of iterations to attempt.
- * @param rprev Radius at the previous timestep.
- * @param ziter The current guess for ziter.
- * @return The updated value of ziter.
  */
 KOKKOS_FUNCTION double ImplicitIterations::newtonraphson_untilconverged(
     const ODEConstants &odeconsts, const size_t niterslimit, const double subdelt,
@@ -267,11 +235,6 @@ KOKKOS_FUNCTION double ImplicitIterations::newtonraphson_untilconverged(
  *
  * _Note:_ ziter is limited to >= 1e-8 so it's always > 0.0
  *
- * @param odeconsts Constants of ODE during integration
- * @param subdelt Time over which to integrate ODE
- * @param rprev Radius at the previous timestep.
- * @param ziter The current guess for ziter.
- * @return A pair of the updated ziter and a boolean which is true if a root is converged upon.
  */
 KOKKOS_FUNCTION
 Kokkos::pair<double, bool> ImplicitIterations::iterate_rootfinding_algorithm(
@@ -303,11 +266,6 @@ Kokkos::pair<double, bool> ImplicitIterations::iterate_rootfinding_algorithm(
  *
  * _Note:_ z = ziter = radius^2.
  *
- * @param odeconsts Constants of ODE during integration
- * @param subdelt Time over which to integrate ODE
- * @param rprev Radius at the previous timestep.
- * @param rsqrd Current radius squared.
- * @return RHS of g(z) / z * subdelt evaluted at rqrd.
  */
 KOKKOS_FUNCTION double ImplicitIterations::ode_gfunc(const ODEConstants &odeconsts,
                                                      const double subdelt, const double rprev,
@@ -329,10 +287,6 @@ KOKKOS_FUNCTION double ImplicitIterations::ode_gfunc(const ODEConstants &odecons
  * g(z) with respect to z=rsqr. g(z) is polynomial to find root of using Newton Raphson Method
  * consistent as in ode_gfunc(...).
  *
- * @param odeconsts Constants of ODE during integration
- * @param subdelt Time over which to integrate ODE
- * @param rsqrd Current radius squared.
- * @return RHS of dg(z)/dz * subdelt evaluted at rqrd.
  */
 KOKKOS_FUNCTION double ImplicitIterations::ode_gfuncderivative(const ODEConstants &odeconsts,
                                                                const double subdelt,

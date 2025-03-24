@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 6th March 2025
+ * Last Modified: Monday 24th March 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -75,7 +75,6 @@ KOKKOS_INLINE_FUNCTION void device_swap(Superdrop& a, Superdrop& b) {
  * 7th superdroplets will be shuffled amongst each other.
  *
  * @tparam DeviceType The Kokkos device type.
- * @param supers The view of super-droplets to shuffle.
  * @param urbg The random number generator.
  * @param first iterator/pointer to first element in supers to shuffle
  * @param dist number of elements (including first) to shuffle

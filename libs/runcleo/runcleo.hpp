@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Monday 24th March 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -159,6 +159,7 @@ class RunCLEO {
    *
    * @param t_mdl Current timestep of the coupled model.
    * @param gbxs DualView of gridboxes.
+   * @param allsupers View of all (inside and outside of domain) superdroplets.
    * @return Size of the next timestep.
    */
   unsigned int start_step(const unsigned int t_mdl, dualview_gbx gbxs,

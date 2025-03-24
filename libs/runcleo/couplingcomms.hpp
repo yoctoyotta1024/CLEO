@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Monday 24th March 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -64,6 +64,7 @@ struct NullComms {
    * This function does nothing as it represents a null communication handler.
    *
    * @tparam CD The coupled dynamics solver type.
+   * @param gbxmaps The Gridbox Maps.
    * @param coupldyn The coupled dynamics solver object.
    * @param h_gbxs The view of Gridboxes.
    */
@@ -76,6 +77,7 @@ struct NullComms {
    * This function does nothing as it represents a null communication handler.
    *
    * @tparam CD The coupled dynamics solver type.
+   * @param gbxmaps The Gridbox Maps.
    * @param h_gbxs The view of Gridboxes.
    * @param coupldyn The coupled dynamics solver object.
    */
