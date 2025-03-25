@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.38.3](https://github.com/yoctoyotta1024/CLEO/compare/077501a990f4a7a06e0755a05bedfda095529784..v0.38.3) - 2025-03-25
+#### Bug Fixes
+- fail-safe way to use modules in bash scripts - ([077501a](https://github.com/yoctoyotta1024/CLEO/commit/077501a990f4a7a06e0755a05bedfda095529784)) - clara.bayley
+
+- - -
+
 ## [v0.38.2](https://github.com/yoctoyotta1024/CLEO/compare/b17c906d030eabac61421e979bb8d4c105603444..v0.38.2) - 2025-03-24
 #### Bug Fixes
 - typo - ([b17c906](https://github.com/yoctoyotta1024/CLEO/commit/b17c906d030eabac61421e979bb8d4c105603444)) - clara.bayley
