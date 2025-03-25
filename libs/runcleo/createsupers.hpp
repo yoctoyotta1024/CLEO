@@ -124,8 +124,8 @@ SupersInDomain create_supers(const SuperdropInitConds &sdic, const unsigned int 
   auto allsupers = SupersInDomain(totsupers, gbxindex_max);
 
   // Log message and perform checks on the initialisation of superdrops
-  std::cout << "checking initialisation\n";
-  is_sdsinit_complete(allsupers);
+  // std::cout << "checking initialisation\n";
+  // is_sdsinit_complete(allsupers);
 
   // // Print information about the created superdrops
   // print_supers(totsupers);
