@@ -20,6 +20,7 @@
 ### ---------------------------------------------------- ###
 dobuild=$1 # == "build" or otherwise
 
+source /etc/profile
 module purge
 spack unload --all
 module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0

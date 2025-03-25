@@ -14,6 +14,7 @@
 #SBATCH --error=./build/bin/build_compile_cleo_err.%j.out
 
 set -e
+source /etc/profile
 module purge
 spack unload --all
 

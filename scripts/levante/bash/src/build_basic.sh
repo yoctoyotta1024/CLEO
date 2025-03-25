@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+source /etc/profile
 bashsrc=${CLEO_PATH2CLEO}/scripts/levante/bash/src
 
 ### -------------------- check inputs ------------------ ###

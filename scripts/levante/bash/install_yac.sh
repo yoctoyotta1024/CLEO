@@ -16,6 +16,7 @@
 ### running script sucessfully installs YAC and YAXT for
 ### gcc 11.2.0 compiler with openmpi 4.1.2 on Levante
 ### ------------------------------------------------------- ###
+source /etc/profile
 module purge
 spack unload --all
 

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+source /etc/profile
 bashsrc=${CLEO_PATH2CLEO}/scripts/levante/bash/src
 cleo_yac_module_path="${CLEO_PATH2CLEO}/libs/coupldyn_yac/cmake"
 

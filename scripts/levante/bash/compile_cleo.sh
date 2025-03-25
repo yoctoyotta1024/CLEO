@@ -16,6 +16,7 @@
 ### variables have already exported (!)
 
 set -e
+source /etc/profile
 module purge
 spack unload --all
 
