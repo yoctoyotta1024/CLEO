@@ -11,6 +11,8 @@
   # system_installs:
   #  install_tree: /sw/spack-levante
 
+source /etc/profile
+
 action=$1
 path2CLEO=${2:-${HOME}/CLEO}
 path2yac=${3:-/work/bm1183/m300950/yacyaxt}
