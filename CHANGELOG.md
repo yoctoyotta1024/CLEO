@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.39.0](https://github.com/yoctoyotta1024/CLEO/compare/57b2f11b3c1a44bd30936477c463a28061aec4bf..v0.39.0) - 2025-03-26
+#### Bug Fixes
+- remove conflicting black and ruff python formatting - ([7adb597](https://github.com/yoctoyotta1024/CLEO/commit/7adb5976a5aac9c174e042984acb9668b1ad1970)) - clara.bayley
+#### Features
+- split thermodynamics generation into thermo and wind fields seperately - ([57b2f11](https://github.com/yoctoyotta1024/CLEO/commit/57b2f11b3c1a44bd30936477c463a28061aec4bf)) - clara.bayley
+#### Refactoring
+- use threads for constthermo2d and in speedtest builds - ([c0f4043](https://github.com/yoctoyotta1024/CLEO/commit/c0f40435c2ceaca1516aeea35efe6e9b81abe552)) - clara.bayley
+- make examples compatible with thermogen changes - ([909f471](https://github.com/yoctoyotta1024/CLEO/commit/909f471e4a18772c2b0f685c5517e7f02e607fce)) - clara.bayley
+
+- - -
+
 ## [v0.38.3](https://github.com/yoctoyotta1024/CLEO/compare/077501a990f4a7a06e0755a05bedfda095529784..v0.38.3) - 2025-03-25
 #### Bug Fixes
 - fail-safe way to use modules in bash scripts - ([077501a](https://github.com/yoctoyotta1024/CLEO/commit/077501a990f4a7a06e0755a05bedfda095529784)) - clara.bayley
