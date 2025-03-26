@@ -190,7 +190,7 @@ def check_datashape(thermodata, ndata, ndims, ntime):
 
 
 def write_thermodynamics_binary(
-    thermofiles, thermogen, config_filename, constants_filename, grid_filename
+    thermofiles, thermodyngen, config_filename, constants_filename, grid_filename
 ):
     """write binarys for thermodynamic data over time on C staggered
     grid. So that pressure, temperature, qvap and qcond are defined at
@@ -207,7 +207,7 @@ def write_thermodynamics_binary(
     gbxbounds, ndims = read_dimless_gbxboundaries_binary(
         grid_filename, COORD0=inputs["COORD0"], return_ndims=True, isprint=False
     )
-    thermodata = thermogen.generate_thermo(gbxbounds, ndims, inputs["ntime"])
+    thermodata = thermodyngen.generate_thermodyn(gbxbounds, ndims, inputs["ntime"])
 
     dth = DimlessThermodynamics(inputs=inputs)
     thermodata, scale_factors = dth.makedimless(thermodata)

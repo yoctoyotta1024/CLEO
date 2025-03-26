@@ -18,4 +18,6 @@ dynamics solver.
 
    create_thermodynamics
    read_thermodynamics
+   thermodyngen
    thermogen
+   windsgen
