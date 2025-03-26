@@ -2,11 +2,10 @@
 <html class="no-js" lang="en" data-content_root="../../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Coalescence" href="coalescence.html" /><link rel="prev" title="Collisions" href="collisions.html" />
+    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>Collision Kinetics - CLEO 0.38.0 documentation</title>
+        <title>pySD.thermobinary_src.thermodyngen - CLEO 0.38.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -179,7 +178,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -200,7 +199,7 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../intro/intro.html">Programming Guide</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Programming Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../intro/background.html">Background to the Super-Droplet Model (SDM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../intro/motivation.html">Motivation for CLEO</a></li>
@@ -260,76 +259,76 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../pySD/writebinary.html">WRITEBINARY</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="../../cxx.html">API: C++ Library</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of API: C++ Library</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../runcleo/runcleomod.html">RunCLEO Module</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../runcleo/coupleddynamics.html">CoupledDynamics</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../runcleo/couplingcomms.html">CouplingComms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../runcleo/creategbxs.html">Create Gridboxes Sub-Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../runcleo/createsupers.html">Create Super-droplets Sub-Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../runcleo/runcleo.html">RunCLEO</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../runcleo/sdmmethods.html">SDMMethods</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cxx/cxx.html">API: C++ Library</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of API: C++ Library</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cxx/runcleo/runcleomod.html">RunCLEO Module</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/runcleo/coupleddynamics.html">CoupledDynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/runcleo/couplingcomms.html">CouplingComms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/runcleo/creategbxs.html">Create Gridboxes Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/runcleo/createsupers.html">Create Super-droplets Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/runcleo/runcleo.html">RunCLEO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/runcleo/sdmmethods.html">SDMMethods</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current has-children"><a class="reference internal" href="../superdropsmod.html">Superdrops Module</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Superdrops Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l3 current has-children"><a class="reference internal" href="collisionsmod.html">Collisions Module</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Collisions Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l4"><a class="reference internal" href="collisions.html">Collisions</a></li>
-<li class="toctree-l4 current current-page"><a class="current reference internal" href="#">Collision Kinetics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="coalescence.html">Coalescence</a></li>
-<li class="toctree-l4"><a class="reference internal" href="coalbure.html">Coalescence-Breakup-Rebound</a></li>
-<li class="toctree-l4"><a class="reference internal" href="shuffle.html">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
-<li class="toctree-l4"><a class="reference internal" href="urbg.html">Randomness Generation</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cxx/superdrops/superdropsmod.html">Superdrops Module</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Superdrops Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../cxx/superdrops/collisions/collisionsmod.html">Collisions Module</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Collisions Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../cxx/superdrops/collisions/collisions.html">Collisions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cxx/superdrops/collisions/collisionkinetics.html">Collision Kinetics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cxx/superdrops/collisions/coalescence.html">Coalescence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cxx/superdrops/collisions/coalbure.html">Coalescence-Breakup-Rebound</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cxx/superdrops/collisions/shuffle.html">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../cxx/superdrops/collisions/urbg.html">Randomness Generation</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="../condensation.html">Condensation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../impliciteuler.html">Implicit Euler Method for Condensation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../kokkosaliases_sd.html">Super-Droplet Kokkos Aliases</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../microphysical_process.html">Microphysical Process</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../state.html">State</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../superdrop.html">Superdrop</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../superdrop_ids.html">Superdrop IDs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../superdrop_attrs.html">Superdrop Attributes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../terminalvelocity.html">Terminal Velocities</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../thermodynamic_equations.html">Thermodynamic Equations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/superdrops/condensation.html">Condensation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/superdrops/impliciteuler.html">Implicit Euler Method for Condensation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/superdrops/kokkosaliases_sd.html">Super-Droplet Kokkos Aliases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/superdrops/microphysical_process.html">Microphysical Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/superdrops/state.html">State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/superdrops/superdrop.html">Superdrop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/superdrops/superdrop_ids.html">Superdrop IDs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/superdrops/superdrop_attrs.html">Superdrop Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/superdrops/terminalvelocity.html">Terminal Velocities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/superdrops/thermodynamic_equations.html">Thermodynamic Equations</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../zarr/zarrmod.html">Zarr Module</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of Zarr Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../zarr/buffer.html">Buffer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../zarr/chunks.html">Chunks</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../zarr/dataset.html">Dataset</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../zarr/fsstore.html">FSStore</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../zarr/store_accessor.html">StoreAccessor</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../zarr/xarray_zarr_array.html">XarrayZarrArray</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../zarr/xarray_metadata.html">Xarray Metadata</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../zarr/zarr_array.html">ZarrArray</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../zarr/zarr_metadata.html">Zarr Metadata</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../zarr/zarr_group.html">ZarrGroup</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cxx/zarr/zarrmod.html">Zarr Module</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of Zarr Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/zarr/buffer.html">Buffer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/zarr/chunks.html">Chunks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/zarr/dataset.html">Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/zarr/fsstore.html">FSStore</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/zarr/store_accessor.html">StoreAccessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/zarr/xarray_zarr_array.html">XarrayZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/zarr/xarray_metadata.html">Xarray Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/zarr/zarr_array.html">ZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/zarr/zarr_metadata.html">Zarr Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/zarr/zarr_group.html">ZarrGroup</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../observers/observersmod.html">Observers Module</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of Observers Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../observers/observers.html">Observers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../observers/streamout_observer.html">StreamOut Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../observers/consttstep_observer.html">Constant Time Step Observers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../observers/write_to_dataset_observer.html">Template for Observer to Write To Dataset</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../observers/parallel_write_data.html">Parallel Write Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../observers/collect_data_for_dataset.html">Collect Data For Dataset</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../observers/generic_collect_data.html">Generic Collect Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../observers/time_observer.html">Time Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../observers/gbxindex_observer.html">Gbxindex Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../observers/superdrops_observer.html">Superdrops Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../observers/nsupers_observer.html">Nsupers Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../observers/totnsupers_observer.html">TotNsupers Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../observers/state_observer.html">State Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../observers/thermo_observer.html">Thermodynamics Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../observers/windvel_observer.html">WindVel Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../observers/massmoments_observer.html">Massmoments Observer</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cxx/observers/observersmod.html">Observers Module</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of Observers Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/observers/observers.html">Observers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/observers/streamout_observer.html">StreamOut Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/observers/consttstep_observer.html">Constant Time Step Observers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/observers/write_to_dataset_observer.html">Template for Observer to Write To Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/observers/parallel_write_data.html">Parallel Write Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/observers/collect_data_for_dataset.html">Collect Data For Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/observers/generic_collect_data.html">Generic Collect Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/observers/time_observer.html">Time Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/observers/gbxindex_observer.html">Gbxindex Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/observers/superdrops_observer.html">Superdrops Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/observers/nsupers_observer.html">Nsupers Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/observers/totnsupers_observer.html">TotNsupers Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/observers/state_observer.html">State Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/observers/thermo_observer.html">Thermodynamics Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/observers/windvel_observer.html">WindVel Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/observers/massmoments_observer.html">Massmoments Observer</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../initialise/initialisemod.html">RunCLEO Module</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../initialise/initialconditions.html">InitialConditions</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cxx/initialise/initialisemod.html">RunCLEO Module</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cxx/initialise/initialconditions.html">InitialConditions</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../cleoconstants.html">CLEO Constants</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../kokkosaliases.html">Kokkos Aliases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cxx/cleoconstants.html">CLEO Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cxx/kokkosaliases.html">Kokkos Aliases</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../../usage/contributing.html">Contributing</a></li>
@@ -357,13 +356,7 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="view-this-page">
-  <a class="muted-link" href="../../../_sources/cxx/superdrops/collisions/collisionkinetics.rst.txt" title="View this page">
-    <svg><use href="#svg-eye"></use></svg>
-    <span class="visually-hidden">View this page</span>
-  </a>
-</div>
-<div class="theme-toggle-container theme-toggle-content">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
@@ -372,119 +365,83 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="collision-kinetics">
-<h1>Collision Kinetics<a class="headerlink" href="#collision-kinetics" title="Link to this heading">¶</a></h1>
-<p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/superdrops/collisions/collisionkinetics.hpp&gt;</span></code>
-<a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/superdrops/collisions/collisionkinetics.hpp">[source]</a></p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv424collision_kinetic_energyKdKdKdKd">
-<span id="_CPPv324collision_kinetic_energyKdKdKdKd"></span><span id="_CPPv224collision_kinetic_energyKdKdKdKd"></span><span id="collision_kinetic_energy__doubleC.doubleC.doubleC.doubleC"></span><span class="target" id="collisionkinetics_8hpp_1a4d987fe60902236eff7410a11697dedb"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">collision_kinetic_energy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">r1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">r2</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">terminalv1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">terminalv2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424collision_kinetic_energyKdKdKdKd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Calculates the collision kinetic energy between two droplets. </p>
-<p>Returns cke, where cke = collision kinetic energy [Joules] as formulated in Low and List 1982(a) eqn 3.1 given the dimensionless radii, r1 and r2, and the dimensionless terminal velocities of droplets, terminalv1 and terminalv2, respectively.</p>
-<p>
-Returns cke, where cke = collision kinetic energy [Joules] as formulated in Low and List 1982(a) eqn 3.1 given the dimensionless radii, r1 and r2, and the dimensionless terminal velocities of droplets, terminalv1 and terminalv2, respectively.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>r1</strong> – The radius of the first superdroplet. </p></li>
-<li><p><strong>r2</strong> – The radius of the second superdroplet. </p></li>
-<li><p><strong>terminalv1</strong> – The terminal velocity of the first superdroplet. </p></li>
-<li><p><strong>terminalv2</strong> – The terminal velocity of the second superdroplet.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The collision kinetic energy.</p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The collision kinetic energy [Joules]. </p>
-</dd>
-</dl>
-</dd></dl>
+          <h1>Source code for pySD.thermobinary_src.thermodyngen</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Copyright (c) 2024 MPI-M, Clara Bayley</span>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv415coal_surfenergyKdKd">
-<span id="_CPPv315coal_surfenergyKdKd"></span><span id="_CPPv215coal_surfenergyKdKd"></span><span id="coal_surfenergy__doubleC.doubleC"></span><span class="target" id="collisionkinetics_8hpp_1a390cd104db46eecdff219fbb335da260"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coal_surfenergy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">r1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">r2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415coal_surfenergyKdKd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Calculates the surface tension energy of a coalesced droplet. </p>
-<p>Returns the surface tension energy of a single spherical droplet, as calculated by equation 4.3 of Low and List 1982, equiavelent to two droplets which coalesce.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>r1</strong> – The dimensionless radius of one droplet involed in coalescence. </p></li>
-<li><p><strong>r2</strong> – The dimensionless radius of the other droplet involed in coalescence. </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The surface tension energy of the superdroplet [Joules]. </p>
-</dd>
-</dl>
-</dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv410surfenergyKd">
-<span id="_CPPv310surfenergyKd"></span><span id="_CPPv210surfenergyKd"></span><span id="surfenergy__doubleC"></span><span class="target" id="collisionkinetics_8hpp_1ae0c72767aa35081a8d44a1bc5bf40cdf"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">surfenergy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">radius</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410surfenergyKd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Calculates the surface tension energy of a single droplet. </p>
-<p>Returns the energy due to surface tension of a single droplet, analogous to equation 4.2 of Low and List 1982</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>radius</strong> – The dimensionless radius of the droplet. </p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The surface tension energy of the droplet [Joules]. </p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sd">----- CLEO -----</span>
+<span class="sd">File: thermodyngen.py</span>
+<span class="sd">Project: thermobinary_src</span>
+<span class="sd">Created Date: Wednesday 26th March 2025</span>
+<span class="sd">Author: Clara Bayley (CB)</span>
+<span class="sd">Additional Contributors:</span>
+<span class="sd">-----</span>
+<span class="sd">Last Modified: Wednesday 26th March 2025</span>
+<span class="sd">Modified By: CB</span>
+<span class="sd">-----</span>
+<span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
+<span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
+<span class="sd">-----</span>
+<span class="sd">File Description:</span>
+<span class="sd">Thermodyanmics generator to generate winds, temperature, pressure, qvap and qcond fields</span>
+<span class="sd">from thermo and winds generators in order to create files which CLEO can read for fromfile dynamics.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv416total_surfenergyKdKd">
-<span id="_CPPv316total_surfenergyKdKd"></span><span id="_CPPv216total_surfenergyKdKd"></span><span id="total_surfenergy__doubleC.doubleC"></span><span class="target" id="collisionkinetics_8hpp_1afd84e163cc8fcd964ee4712ad0870f27"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">total_surfenergy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">r1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">r2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416total_surfenergyKdKd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Calculates the sum of the surface energy of a pair of droplets. </p>
-<p>Returns the total energy due to surface tension by summing the individual surface tension energies for a pair of droplets with radii r1 and r2 as in equation 4.2 of Low and List 1982.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>r1</strong> – The dimensionless radius of the first superdroplet. </p></li>
-<li><p><strong>r2</strong> – The dimensionless radius of the second superdroplet. </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The total surface energy of the pair of superdroplets [Joules]. </p>
-</dd>
-</dl>
-</dd></dl>
 
-</section>
+<div class="viewcode-block" id="ThermodynamicsGenerator">
+<a class="viewcode-back" href="../../../pySD/thermobinary_src/thermodyngen.html#pySD.thermobinary_src.thermodyngen.ThermodynamicsGenerator">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ThermodynamicsGenerator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;create thermodynamics from winds generator (for wvel, vvel and uvel) and thermo generator</span>
+<span class="sd">    (for temperature, pressure, qvap and qcond) flow field&quot;&quot;&quot;</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">thermogen</span><span class="p">,</span>
+        <span class="n">windsgen</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">thermogen</span> <span class="o">=</span> <span class="n">thermogen</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">windsgen</span> <span class="o">=</span> <span class="n">windsgen</span>
+
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    create thermodynamics from winds generator (for wvel, vvel and uvel) and thermo generator</span>
+<span class="sd">    (for temperature, pressure, qvap and qcond) flow field</span>
+
+<span class="sd">    THERMODATA is dictionary with keys: &quot;temp&quot;, &quot;press&quot; &quot;qvap&quot; &quot;qcond&quot;</span>
+<span class="sd">    WINDSDATA is dictionary with keys: &quot;wwvel&quot;, &quot;vvel&quot; and &quot;uvel&quot;</span>
+<span class="sd">    THERMODYNDATA is combination of two dictionaries. Note if keys are not distinct error thrown,</span>
+<span class="sd">    or data from key in THERMODATA is overwritten by data from matching key in WINDDATA</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">generate_thermodyn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">ntime</span><span class="p">):</span>
+        <span class="n">THERMODATA</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">thermogen</span><span class="o">.</span><span class="n">generate_thermo</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">ntime</span><span class="p">)</span>  <span class="c1"># dict</span>
+        <span class="n">WINDDATA</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">windsgen</span><span class="o">.</span><span class="n">generate_winds</span><span class="p">(</span>
+            <span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">ntime</span><span class="p">,</span> <span class="n">THERMODATA</span>
+        <span class="p">)</span>  <span class="c1"># dict</span>
+
+        <span class="n">matching_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">THERMODATA</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">WINDDATA</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">assert</span> <span class="p">(</span>
+            <span class="ow">not</span> <span class="n">matching_keys</span>
+        <span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;THERMODATA and WINDDATA cannot have matching keys, unsafe overwriting&quot;</span>
+
+        <span class="n">THERMODYNDATA</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">THERMODATA</span><span class="p">,</span> <span class="o">**</span><span class="n">WINDDATA</span><span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">THERMODYNDATA</span></div>
+
+</pre></div>
         </article>
       </div>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="coalescence.html">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">Coalescence</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
-          <a class="prev-page" href="collisions.html">
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-              <div class="page-info">
-                <div class="context">
-                  <span>Previous</span>
-                </div>
-                
-                <div class="title">Collisions</div>
-                
-              </div>
-            </a>
+          
+          
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -504,30 +461,8 @@ Returns cke, where cke = collision kinetic energy [Joules] as formulated in Low 
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Collision Kinetics</a><ul>
-<li><a class="reference internal" href="#_CPPv424collision_kinetic_energyKdKdKdKd"><code class="docutils literal notranslate"><span class="pre">collision_kinetic_energy()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv415coal_surfenergyKdKd"><code class="docutils literal notranslate"><span class="pre">coal_surfenergy()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv410surfenergyKd"><code class="docutils literal notranslate"><span class="pre">surfenergy()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv416total_surfenergyKdKd"><code class="docutils literal notranslate"><span class="pre">total_surfenergy()</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

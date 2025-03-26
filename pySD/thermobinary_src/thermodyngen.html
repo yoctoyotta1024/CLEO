@@ -2,10 +2,11 @@
 <html class="no-js" lang="en" data-content_root="../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="THERMOGEN" href="thermogen.html" /><link rel="prev" title="READ_THERMODYNAMICS" href="read_thermodynamics.html" />
 
     <!-- Generated with Sphinx 8.2.3 and Furo 2024.08.06 -->
-        <title>pySD.cxx2py - CLEO 0.38.0 documentation</title>
+        <title>THERMODYNGEN - CLEO 0.38.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=354aac6f" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -178,7 +179,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -199,7 +200,7 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../intro/intro.html">Programming Guide</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Programming Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../intro/background.html">Background to the Super-Droplet Model (SDM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../intro/motivation.html">Motivation for CLEO</a></li>
@@ -215,48 +216,48 @@
 <li class="toctree-l1"><a class="reference internal" href="../../usage/installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/examples.html">Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../usage/quickstart.html">Quickstart</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../pySD/pySD.html">API: PySD</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of API: PySD</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../pySD/gbxboundariesbinary_src/gbxboundariesbinary_src.html">GbxBoundariesBinary</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of GbxBoundariesBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/gbxboundariesbinary_src/create_gbxboundaries.html">CREATE_GBXBOUNDARIES</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/gbxboundariesbinary_src/read_gbxboundaries.html">READ_GBXBOUNDARIES</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../pySD.html">API: PySD</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of API: PySD</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../gbxboundariesbinary_src/gbxboundariesbinary_src.html">GbxBoundariesBinary</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of GbxBoundariesBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../gbxboundariesbinary_src/create_gbxboundaries.html">CREATE_GBXBOUNDARIES</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../gbxboundariesbinary_src/read_gbxboundaries.html">READ_GBXBOUNDARIES</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../pySD/initsuperdropsbinary_src/initsuperdropsbinary_src.html">InitSuperdropsBinary</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of InitSuperdropsBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/initsuperdropsbinary_src/create_initsuperdrops.html">CREATE_INITSUPERDROPS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/initsuperdropsbinary_src/read_initsuperdrops.html">READ_INITSUPERDROPS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/initsuperdropsbinary_src/attrsgen.html">ATTRSGEN</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/initsuperdropsbinary_src/crdgens.html">CRDGENS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/initsuperdropsbinary_src/probdists.html">PROBDISTS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/initsuperdropsbinary_src/rgens.html">RGENS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/initsuperdropsbinary_src/dryrgens.html">DRYRGENS</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../initsuperdropsbinary_src/initsuperdropsbinary_src.html">InitSuperdropsBinary</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of InitSuperdropsBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../initsuperdropsbinary_src/create_initsuperdrops.html">CREATE_INITSUPERDROPS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../initsuperdropsbinary_src/read_initsuperdrops.html">READ_INITSUPERDROPS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../initsuperdropsbinary_src/attrsgen.html">ATTRSGEN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../initsuperdropsbinary_src/crdgens.html">CRDGENS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../initsuperdropsbinary_src/probdists.html">PROBDISTS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../initsuperdropsbinary_src/rgens.html">RGENS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../initsuperdropsbinary_src/dryrgens.html">DRYRGENS</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../pySD/thermobinary_src/thermobinary_src.html">ThermoBinary</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of ThermoBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/thermobinary_src/create_thermodynamics.html">CREATE_THERMODYNAMICS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/thermobinary_src/read_thermodynamics.html">READ_THERMODYNAMICS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/thermobinary_src/thermodyngen.html">THERMODYNGEN</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/thermobinary_src/thermogen.html">THERMOGEN</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/thermobinary_src/windsgen.html">WINDSGEN</a></li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="thermobinary_src.html">ThermoBinary</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of ThermoBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="create_thermodynamics.html">CREATE_THERMODYNAMICS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="read_thermodynamics.html">READ_THERMODYNAMICS</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">THERMODYNGEN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="thermogen.html">THERMOGEN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="windsgen.html">WINDSGEN</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../pySD/sdmout_src/sdmout_src.html">SDMOut</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of SDMOut</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/sdmout_src/pyzarr.html">PYZARR</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/sdmout_src/pysetuptxt.html">PYSETUPTXT</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/sdmout_src/pygbxsdat.html">PYGBXSDAT</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/sdmout_src/timedata.html">TIMEDATA</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/sdmout_src/thermodata.html">THERMODATA</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/sdmout_src/supersdata.html">SUPERSDATA</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/sdmout_src/sdtracing.html">SDTRACING</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/sdmout_src/massmoms.html">MASSMOMS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/sdmout_src/thermoeqns.html">THERMOEQNS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../pySD/sdmout_src/ensembzarr.html">ENSEMBZARR</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../sdmout_src/sdmout_src.html">SDMOut</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of SDMOut</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../sdmout_src/pyzarr.html">PYZARR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdmout_src/pysetuptxt.html">PYSETUPTXT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdmout_src/pygbxsdat.html">PYGBXSDAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdmout_src/timedata.html">TIMEDATA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdmout_src/thermodata.html">THERMODATA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdmout_src/supersdata.html">SUPERSDATA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdmout_src/sdtracing.html">SDTRACING</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdmout_src/massmoms.html">MASSMOMS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdmout_src/thermoeqns.html">THERMOEQNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../sdmout_src/ensembzarr.html">ENSEMBZARR</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../pySD/cxx2py.html">CXX2PY</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../pySD/readconfigfile.html">READCONFIGFILE</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../pySD/editconfigfile.html">EDITCONFIGFILE</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../pySD/readbinary.html">READBINARY</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../pySD/writebinary.html">WRITEBINARY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../cxx2py.html">CXX2PY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../readconfigfile.html">READCONFIGFILE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../editconfigfile.html">EDITCONFIGFILE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../readbinary.html">READBINARY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../writebinary.html">WRITEBINARY</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../cxx/cxx.html">API: C++ Library</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of API: C++ Library</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -356,7 +357,13 @@
           <span>Back to top</span>
         </a>
         <div class="content-icon-container">
-          <div class="theme-toggle-container theme-toggle-content">
+          <div class="view-this-page">
+  <a class="muted-link" href="../../_sources/pySD/thermobinary_src/thermodyngen.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
@@ -365,179 +372,66 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <h1>Source code for pySD.cxx2py</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">Copyright (c) 2024 MPI-M, Clara Bayley</span>
+          <section id="thermodyngen">
+<h1>THERMODYNGEN<a class="headerlink" href="#thermodyngen" title="Link to this heading">¶</a></h1>
+<p>Combines thermogen and windsgen into single object</p>
+<p id="module-pySD.thermobinary_src.thermodyngen">Copyright (c) 2024 MPI-M, Clara Bayley</p>
+<p>—– CLEO —–
+File: thermodyngen.py
+Project: thermobinary_src
+Created Date: Wednesday 26th March 2025
+Author: Clara Bayley (CB)
+Additional Contributors:
+—–
+Last Modified: Wednesday 26th March 2025
+Modified By: CB
+—–
+License: BSD 3-Clause “New” or “Revised” License
+<a class="reference external" href="https://opensource.org/licenses/BSD-3-Clause">https://opensource.org/licenses/BSD-3-Clause</a>
+—–
+File Description:
+Thermodyanmics generator to generate winds, temperature, pressure, qvap and qcond fields
+from thermo and winds generators in order to create files which CLEO can read for fromfile dynamics.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pySD.thermobinary_src.thermodyngen.ThermodynamicsGenerator">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pySD.thermobinary_src.thermodyngen.</span></span><span class="sig-name descname"><span class="pre">ThermodynamicsGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">thermogen</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">windsgen</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pySD/thermobinary_src/thermodyngen.html#ThermodynamicsGenerator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pySD.thermobinary_src.thermodyngen.ThermodynamicsGenerator" title="Link to this definition">¶</a></dt>
+<dd><p>create thermodynamics from winds generator (for wvel, vvel and uvel) and thermo generator
+(for temperature, pressure, qvap and qcond) flow field</p>
+</dd></dl>
 
+</section>
 
-<span class="sd">----- CLEO -----</span>
-<span class="sd">File: cxx2py.py</span>
-<span class="sd">Project: pySD</span>
-<span class="sd">Created Date: Friday 13th October 2023</span>
-<span class="sd">Author: Clara Bayley (CB)</span>
-<span class="sd">Additional Contributors:</span>
-<span class="sd">-----</span>
-<span class="sd">Last Modified: Tuesday 7th May 2024</span>
-<span class="sd">Modified By: CB</span>
-<span class="sd">-----</span>
-<span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
-<span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
-<span class="sd">-----</span>
-<span class="sd">File Description:</span>
-<span class="sd">&quot;&quot;&quot;</span>
-
-<span class="c1">######## function(s) for converting c++ values into python ones  ########</span>
-
-
-<div class="viewcode-block" id="print_dict_statement">
-<a class="viewcode-back" href="../../pySD/cxx2py.html#pySD.cxx2py.print_dict_statement">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">print_dict_statement</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">dictname</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;print key, value pairs for dictionary created by reading filename&quot;&quot;&quot;</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">---- &quot;</span> <span class="o">+</span> <span class="n">dictname</span> <span class="o">+</span> <span class="s2">&quot; from &quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;-----&quot;</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">dict</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="nb">dict</span><span class="p">[</span><span class="n">c</span><span class="p">])</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---------------------------------------------</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="remove_excess_line">
-<a class="viewcode-back" href="../../pySD/cxx2py.html#pySD.cxx2py.remove_excess_line">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">remove_excess_line</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;removes white spaces and</span>
-<span class="sd">    and comments from a line&quot;&quot;&quot;</span>
-
-    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="s2">&quot;#&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
-        <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="p">[:</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)]</span>
-
-    <span class="k">return</span> <span class="n">line</span></div>
-
-
-
-<div class="viewcode-block" id="line_with_assignment">
-<a class="viewcode-back" href="../../pySD/cxx2py.html#pySD.cxx2py.line_with_assignment">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">line_with_assignment</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;find all the lines in a file</span>
-<span class="sd">    which have form [...] = [...] ;</span>
-<span class="sd">    ie. lines which assign variables. return</span>
-<span class="sd">    list of these lines truncatd at ;&quot;&quot;&quot;</span>
-
-    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="s2">&quot;double&quot;</span> <span class="ow">in</span> <span class="n">line</span> <span class="ow">or</span> <span class="s2">&quot;int&quot;</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
-        <span class="n">ind1</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span>
-        <span class="n">ind2</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">ind2</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">ind1</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;/&quot;</span><span class="p">:</span>
-            <span class="n">goodline</span> <span class="o">=</span> <span class="n">line</span><span class="p">[:</span> <span class="n">ind2</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
-            <span class="k">return</span> <span class="n">goodline</span>
-
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">False</span></div>
-
-
-
-<div class="viewcode-block" id="where_typename_ends">
-<a class="viewcode-back" href="../../pySD/cxx2py.html#pySD.cxx2py.where_typename_ends">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">where_typename_ends</span><span class="p">(</span><span class="n">line</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;finds index where c++ name for</span>
-<span class="sd">    variable type ends for a const double,</span>
-<span class="sd">    double, int or const int.&quot;&quot;&quot;</span>
-
-    <span class="k">if</span> <span class="n">line</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;int&quot;</span><span class="p">:</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;int&quot;</span>
-    <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;double&quot;</span><span class="p">:</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;double&quot;</span>
-    <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">11</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;constdouble&quot;</span><span class="p">:</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;constdouble&quot;</span>
-    <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;constint&quot;</span><span class="p">:</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;constint&quot;</span>
-    <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">12</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;constexprint&quot;</span><span class="p">:</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;constexprint&quot;</span>
-    <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">15</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;constexprdouble&quot;</span><span class="p">:</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;constexprdouble&quot;</span>
-    <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">20</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;constexprunsignedint&quot;</span><span class="p">:</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;constexprunsignedint&quot;</span>
-    <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">17</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;constexpruint64_t&quot;</span><span class="p">:</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="s2">&quot;constexpruint64_t&quot;</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;c++ type for variable not understood&quot;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="read_cxxconsts_into_floats">
-<a class="viewcode-back" href="../../pySD/cxx2py.html#pySD.cxx2py.read_cxxconsts_into_floats">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">read_cxxconsts_into_floats</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;returns dictionary of value: float from</span>
-<span class="sd">    (const) doubles and (const) ints</span>
-<span class="sd">    assigned in a c++ file. Also returns</span>
-<span class="sd">    dictionary of notfloats for values that</span>
-<span class="sd">    couldn&#39;t be converted&quot;&quot;&quot;</span>
-
-    <span class="n">floats</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">notfloats</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-        <span class="n">rlines</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">filelines</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">filelines</span><span class="p">:</span>
-            <span class="n">goodline</span> <span class="o">=</span> <span class="n">line_with_assignment</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">goodline</span><span class="p">:</span>
-                <span class="n">rlines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">goodline</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">rlines</span><span class="p">:</span>
-            <span class="n">x</span> <span class="o">=</span> <span class="n">where_typename_ends</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="n">x</span> <span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)]</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">line</span><span class="p">[</span><span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="p">:</span> <span class="n">line</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;;&quot;</span><span class="p">)]</span>
-
-            <span class="k">try</span><span class="p">:</span>
-                <span class="n">floats</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-                <span class="n">notfloats</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
-
-    <span class="k">return</span> <span class="n">floats</span></div>
-
-
-
-<div class="viewcode-block" id="derive_more_floats">
-<a class="viewcode-back" href="../../pySD/cxx2py.html#pySD.cxx2py.derive_more_floats">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">derive_more_floats</span><span class="p">(</span><span class="n">consts</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;return mconsts dictionary containing</span>
-<span class="sd">    some derived key,values from values in</span>
-<span class="sd">    consts dictionary&quot;&quot;&quot;</span>
-
-    <span class="n">mconsts</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;COORD0&quot;</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;TIME0&quot;</span><span class="p">]</span>
-        <span class="o">*</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;W0&quot;</span><span class="p">],</span>  <span class="c1"># characteristic coordinate grid scale [m]</span>
-        <span class="s2">&quot;RGAS_DRY&quot;</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;RGAS_UNIV&quot;</span><span class="p">]</span>
-        <span class="o">/</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;MR_DRY&quot;</span><span class="p">],</span>  <span class="c1"># specific gas constant for dry air [J/Kg/K]</span>
-        <span class="s2">&quot;RGAS_V&quot;</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;RGAS_UNIV&quot;</span><span class="p">]</span>
-        <span class="o">/</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;MR_WATER&quot;</span><span class="p">],</span>  <span class="c1"># specific gas constant for water [J/Kg/K]</span>
-        <span class="s2">&quot;CP0&quot;</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;CP_DRY&quot;</span><span class="p">],</span>  <span class="c1"># characteristic Heat capacity [J/Kg/K]</span>
-        <span class="s2">&quot;Mr_ratio&quot;</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;MR_WATER&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;MR_DRY&quot;</span><span class="p">],</span>
-    <span class="p">}</span>
-
-    <span class="n">mconsts</span><span class="p">[</span><span class="s2">&quot;RHO0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;P0&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span>
-        <span class="n">mconsts</span><span class="p">[</span><span class="s2">&quot;CP0&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;TEMP0&quot;</span><span class="p">]</span>
-    <span class="p">)</span>  <span class="c1"># characteristic density [Kg/m^3]</span>
-    <span class="n">mconsts</span><span class="p">[</span><span class="s2">&quot;MASS0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">consts</span><span class="p">[</span><span class="s2">&quot;R0&quot;</span><span class="p">]</span> <span class="o">**</span> <span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">&quot;RHO0&quot;</span><span class="p">]</span>  <span class="c1"># characteristic mass [Kg]</span>
-
-    <span class="k">return</span> <span class="n">mconsts</span></div>
-
-</pre></div>
         </article>
       </div>
       <footer>
         
         <div class="related-pages">
-          
-          
+          <a class="next-page" href="thermogen.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">THERMOGEN</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="read_thermodynamics.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">READ_THERMODYNAMICS</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -557,8 +451,27 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">THERMODYNGEN</a><ul>
+<li><a class="reference internal" href="#pySD.thermobinary_src.thermodyngen.ThermodynamicsGenerator"><code class="docutils literal notranslate"><span class="pre">ThermodynamicsGenerator</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
