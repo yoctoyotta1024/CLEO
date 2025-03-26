@@ -18,7 +18,7 @@
 ### ---- build type, directories, the executable(s) ---- ###
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
-buildtype="openmp"
+buildtype="threads"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_const2d/
 build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian -DCLEO_NO_ROUGHPAPER=true"
