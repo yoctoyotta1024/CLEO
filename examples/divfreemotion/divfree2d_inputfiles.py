@@ -42,7 +42,7 @@ def main(
         probdists,
         attrsgen,
     )
-    from pySD.thermobinary_src import thermogen
+    from pySD.thermobinary_src import thermogen, windsgen, thermodyngen
 
     ### ---------------------------------------------------------------- ###
     ### ----------------------- INPUT PARAMETERS ----------------------- ###
@@ -84,7 +84,7 @@ def main(
     numconc = np.sum(scalefacs)
 
     ### --- settings for 2D Thermodynamics --- ###
-    PRESS0 = 100000  # [Pa]
+    PRESS = 100000  # [Pa]
     THETA = 298.15  # [K]
     qcond = 0.0  # [Kg/Kg]
     WMAX = 0.6  # [m/s]
@@ -115,20 +115,20 @@ def main(
     )
 
     ### ----- write thermodynamics binaries ----- ###
-    thermodyngen = thermogen.SimpleThermo2DFlowField(
+    thermog = thermogen.Simple2TierRelativeHumidity(
         config_filename,
         constants_filename,
-        PRESS0,
+        PRESS,
         THETA,
         qvapmethod,
         sratios,
         Zbase,
         qcond,
-        WMAX,
-        Zlength,
-        Xlength,
-        VVEL,
     )
+    windsg = windsgen.Simple2DFlowField(
+        config_filename, constants_filename, WMAX, Zlength, Xlength, VVEL
+    )
+    thermodyngen = thermodyngen.ThermodynamicsGenerator(thermog, windsg)
     geninitconds.generate_thermodynamics_conditions_fromfile(
         thermofiles,
         thermodyngen,

@@ -30,11 +30,6 @@ repos:
         description: python linter
     -   id: ruff-format
         description: python formatter
--   repo: https://github.com/psf/black-pre-commit-mirror
-    rev: 24.3.0
-    hooks:
-    -   id: black-jupyter
-        description: formating ipynb notebook
 -   repo: https://gitlab.com/daverona/pre-commit/cpp
     rev: 0.8.0
     hooks:

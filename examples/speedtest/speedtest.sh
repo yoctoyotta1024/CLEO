@@ -36,7 +36,7 @@ mkdir ${path2build}
 mkdir ${path2build}/bin
 
 ### ---- run test for different types of parallelism ---- ###
-buildtypes=("cuda" "openmp" "serial")
+buildtypes=("cuda" "openmp" "threads" "serial")
 for buildtype in "${buildtypes[@]}"
 do
   script_args="${configfile} ${path2build}/bin/ ${path2kokkostools} ${buildtype}"

@@ -27,7 +27,7 @@ sys.path.append("../../../..")  # for imports from pySD package
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 
 
-class TimeVarying3DThermo:
+class TimeVarying3DThermodyn:
     """create some sinusoidal thermodynamics that varies in time and is
     hetergenous throughout 3D domain"""
 
@@ -98,7 +98,7 @@ class TimeVarying3DThermo:
             np.sin(zfulls / ztilda) * np.sin(xfulls / xtilda) + np.sin(yfulls / ytilda)
         )
 
-    def generate_thermo(self, gbxbounds, ndims, ntime):
+    def generate_thermodyn(self, gbxbounds, ndims, ntime):
         PRESS = self.generate_3dsinusoidal_variable(gbxbounds, ndims, self.PRESSz0)
         TEMP = self.generate_3dsinusoidal_variable(gbxbounds, ndims, self.TEMPz0)
         qvap = self.generate_3dsinusoidal_variable(gbxbounds, ndims, self.qvapz0)

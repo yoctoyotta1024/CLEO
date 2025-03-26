@@ -43,7 +43,7 @@ from plotssrc import pltsds, pltmoms, animations
 from pySD import geninitconds
 from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
 from pySD.initsuperdropsbinary_src import crdgens, rgens, dryrgens, probdists, attrsgen
-from pySD.thermobinary_src import thermogen
+from pySD.thermobinary_src import thermogen, thermodyngen
 
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
@@ -87,7 +87,7 @@ scalefacs = [6e6, 4e6]
 numconc = np.sum(scalefacs)
 
 ### --- settings for 2D Thermodynamics --- ###
-PRESS0 = 101315  # [Pa]
+PRESSz0 = 101315  # [Pa]
 THETA = 288.15  # [K]
 qcond = 0.0  # [Kg/Kg]
 WMAX = 0.6  # [m/s]
@@ -134,21 +134,19 @@ geninitconds.generate_gridbox_boundaries(
 )
 
 ### ----- write thermodynamics binaries ----- ###
-thermodyngen = thermogen.ConstDryHydrostaticAdiabat(
+thermog = thermogen.DryHydrostaticAdiabatic2TierRelH(
     config_filename,
     constants_filename,
-    PRESS0,
+    PRESSz0,
     THETA,
     qvapmethod,
     sratios,
     Zbase,
     qcond,
-    WMAX,
-    Zlength,
-    Xlength,
-    VVEL,
     moistlayer,
 )
+windsg = thermog.create_default_windsgen(WMAX, Zlength, Xlength, VVEL)
+thermodyngen = thermodyngen.ThermodynamicsGenerator(thermog, windsg)
 geninitconds.generate_thermodynamics_conditions_fromfile(
     thermofiles,
     thermodyngen,

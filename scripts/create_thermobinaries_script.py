@@ -26,7 +26,7 @@ from pathlib import Path
 
 sys.path.append(sys.argv[1])  # path to pySD (same as to CLEO)
 from pySD import geninitconds
-from pySD.thermobinary_src import thermogen
+from pySD.thermobinary_src import thermogen, windsgen, thermodyngen
 
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### --- absolute or relative paths for --- ###
@@ -50,17 +50,17 @@ thermofiles = binariespath / "dimlessthermo.dat"
 
 ### --- Choose Initial Thermodynamic Conditions for Gridboxes  --- ###
 
-### --- Constant and Uniform --- ###
+### --- Thermo (temp, press, qvap and cond) Conditions  --- ###
+
+# ### --- Constant and Uniform --- ###
 # P_INIT = 101500.0                       # initial pressure [Pa]
 # TEMP_INIT = 288.15                      # initial parcel temperature [T]
 # relh_init = 0.999                       # initial relative humidity (%)
+# qvap = None                             # use relative humidity to set qvap
 # qc_init = 0.0                           # initial liquid water content []
-# W_INIT = 0.0                           # initial vertical (coord3) velocity [m/s]
-# U_INIT = 0.0                            # initial eastwards (coord1) velocity [m/s]
-# V_INIT = 0.0                            # initial northwards (coord2) velocity [m/s]
-# thermodyngen = thermogen.ConstUniformThermo(P_INIT, TEMP_INIT, None,
-#                                     qc_init, W_INIT, U_INIT, V_INIT,
-#                                     relh=relh_init, constants_filename=constants_filename)
+# thermog = thermogen.ConstUniformThermo(P_INIT, TEMP_INIT, None,
+#                              qc_init, relh=relh_init,
+#                              constants_filename=constants_filename)
 
 ### --- 1-D T and qv set by Lapse Rates --- ###
 PRESS0 = 101315  # [Pa]
@@ -70,12 +70,7 @@ Zbase = 800  # [m]
 TEMPlapses = [9.8, 6.5]  # -dT/dz [K/km]
 qvaplapses = [2.97, "saturated"]  # -dvap/dz [g/Kg km^-1]
 qcond = 0.0  # [Kg/Kg]
-WMAX = 0.0  # [m/s]
-Wlength = (
-    1000  # [m] use constant W (Wlength=0.0), or sinusoidal 1-D profile below cloud base
-)
-
-thermodyngen = thermogen.ConstHydrostaticLapseRates(
+thermog = thermogen.HydrostaticLapseRates(
     config_filename,
     constants_filename,
     PRESS0,
@@ -85,41 +80,64 @@ thermodyngen = thermogen.ConstHydrostaticLapseRates(
     TEMPlapses,
     qvaplapses,
     qcond,
-    WMAX,
-    None,
-    None,
-    Wlength,
 )
 
-# ### --- 2D Flow Field with Hydrostatic --- ###
-# ### ---       or Simple z Profile      --- ###
-# PRESS0 = 101500 # [Pa]
-# THETA = 289 # [K]
-# qcond = 0.0 # [Kg/Kg]
-# WMAX = 0.6 # [m/s]
-# VVEL = None # [m/s]
-# Zlength = 1500 # [m]
-# Xlength = 1500 # [m]
-
+# ### --- Hydrostatic Dry Adiabat --- ###
+# ### ---   or Simple z Profile   --- ###
+# PRESSz0 = 101500  # [Pa]
+# THETA = 289  # [K]
+# qcond = 0.0  # [Kg/Kg]
 # qvapmethod = "sratio"
-# Zbase = 750 # [m]
-# sratios = [0.85, 1.0001] # s_ratio [below, above] Zbase
-# moistlayer = False
-# moistlayer = {
-#     "z1": 700,
-#     "z2": 800,
-#     "x1": 0,
-#     "x2": 750,
-#     "mlsratio": 1.005
-# }
-# thermodyngen = thermogen.ConstDryHydrostaticAdiabat(config_filename, constants_filename, PRESS0,
+# Zbase = 750  # [m]
+# sratios = [0.85, 1.0001]  # s_ratio [below, above] Zbase
+# # moistlayer = False
+# moistlayer = {"z1": 700, "z2": 800, "x1": 0, "x2": 750, "mlsratio": 1.005}
+# thermog = thermogen.DryHydrostaticAdiabatic2TierRelH(
+#     config_filename,
+#     constants_filename,
+#     PRESSz0,
+#     THETA,
+#     qvapmethod,
+#     sratios,
+#     Zbase,
+#     qcond,
+#     moistlayer,
+# )
+# thermog = thermogen.Simple2TierRelativeHumidity(config_filename, constants_filename, PRESSz0,
 #                                         THETA, qvapmethod, sratios, Zbase,
-#                                         qcond, WMAX, Zlength, Xlength,
-#                                         VVEL, moistlayer)
-# thermodyngen = thermogen.SimpleThermo2DFlowField(config_filename, constants_filename, PRESS0,
-#                                         THETA, qvapmethod, sratios, Zbase,
-#                                         qcond, WMAX, Zlength, Xlength,
-#                                         VVEL)
+#                                         qcond)
+
+### --- Wind Field (wvel, vvel, uvel) Conditions  --- ###
+
+# ### --- Constant and Uniform --- ###
+# W_INIT = 0.0                           # initial vertical (coord3) velocity [m/s]
+# U_INIT = 0.0                            # initial eastwards (coord1) velocity [m/s]
+# V_INIT = 0.0                            # initial northwards (coord2) velocity [m/s]
+# windsg = windsgen.ConstUniformWinds(W_INIT, U_INIT, V_INIT)
+
+# ### --- 1D Vertical Sinusoid --- ###
+# WMAX = 0.0  # [m/s]
+# UVEL = None
+# VVEL = None
+# Wlength = (
+#     1000  # [m] use constant W (Wlength=0.0), or sinusoidal 1-D profile below cloud base
+# )
+# windsg = windsgen.SinusoidalUpdraught(WMAX, UVEL, VVEL, Wlength)
+
+### --- 2D Flow Field --- ###
+WMAX = 0.6  # [m/s]
+VVEL = 1.0  # [m/s]
+Zlength = 1500  # [m]
+Xlength = 1500  # [m]
+# windsg = thermog.create_default_windsgen(
+#     WMAX, Zlength, Xlength, VVEL
+# )  # only for DryHydrostaticAdiabatic2TierRelH
+windsg = windsgen.Simple2DFlowField(
+    config_filename, constants_filename, WMAX, Zlength, Xlength, VVEL
+)
+
+### --- Thermodynamic + Winds Conditions  --- ###
+thermodyngen = thermodyngen.ThermodynamicsGenerator(thermog, windsg)
 ### ---------------------------------------------------------------- ###
 
 ### -------------------- BINARY FILE GENERATION--------------------- ###

@@ -42,7 +42,7 @@ from plotssrc import pltsds, pltmoms, animations
 from pySD import geninitconds
 from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
 from pySD.initsuperdropsbinary_src import crdgens, rgens, dryrgens, probdists, attrsgen
-from pySD.thermobinary_src import thermogen
+from pySD.thermobinary_src import thermogen, windsgen, thermodyngen
 
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
@@ -134,7 +134,7 @@ geninitconds.generate_gridbox_boundaries(
 )
 
 ### ----- write thermodynamics binaries ----- ###
-thermodyngen = thermogen.ConstHydrostaticLapseRates(
+thermog = thermogen.HydrostaticLapseRates(
     config_filename,
     constants_filename,
     PRESS0,
@@ -144,11 +144,9 @@ thermodyngen = thermogen.ConstHydrostaticLapseRates(
     TEMPlapses,
     qvaplapses,
     qcond,
-    WVEL,
-    None,
-    None,
-    Wlength,
 )
+windsg = windsgen.SinusoidalUpdraught(WVEL, None, None, Wlength)
+thermodyngen = thermodyngen.ThermodynamicsGenerator(thermog, windsg)
 geninitconds.generate_thermodynamics_conditions_fromfile(
     thermofiles,
     thermodyngen,
