@@ -42,7 +42,7 @@ sys.path.append(
 
 from pySD import geninitconds
 from pySD.initsuperdropsbinary_src import crdgens, rgens, dryrgens, probdists, attrsgen
-from pySD.thermobinary_src import thermogen
+from pySD.thermobinary_src import thermogen, windsgen, thermodyngen
 
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
@@ -86,16 +86,16 @@ scalefacs = [6e6, 4e6]
 numconc = np.sum(scalefacs)
 
 ### --- settings for 3D Thermodynamics --- ###
-PRESS0 = 100000  # [Pa]
+PRESS = 100000  # [Pa]
 THETA = 298.15  # [K]
 qcond = 0.0  # [Kg/Kg]
+qvapmethod = "sratio"
+Zbase = 750  # [m]
+sratios = [0.85, 1.1]  # s_ratio [below, above] Zbase
 WMAX = 3.0  # [m/s]
 VVEL = 1.0  # [m/s]
 Zlength = 1500  # [m]
 Xlength = 1500  # [m]
-qvapmethod = "sratio"
-Zbase = 750  # [m]
-sratios = [0.85, 1.1]  # s_ratio [below, above] Zbase
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
@@ -164,20 +164,20 @@ geninitconds.generate_gridbox_boundaries(
 )
 
 ### ----- write thermodynamics binaries ----- ###
-thermodyngen = thermogen.SimpleThermo2DFlowField(
+thermog = thermogen.Simple2TierRelativeHumidity(
     config_filename,
     constants_filename,
-    PRESS0,
+    PRESS,
     THETA,
     qvapmethod,
     sratios,
     Zbase,
     qcond,
-    WMAX,
-    Zlength,
-    Xlength,
-    VVEL,
 )
+windsg = windsgen.Simple2DFlowField(
+    config_filename, constants_filename, WMAX, Zlength, Xlength, VVEL
+)
+thermodyngen = thermodyngen.ThermodynamicsGenerator(thermog, windsg)
 geninitconds.generate_thermodynamics_conditions_fromfile(
     thermofiles,
     thermodyngen,

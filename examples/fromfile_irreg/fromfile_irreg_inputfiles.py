@@ -104,7 +104,7 @@ def main(
         savefigpath=savefigpath,
     )
     ### ----- write thermodynamics binaries ----- ###
-    thermodyngen = gen_input_thermo.TimeVarying3DThermo(
+    thermodyngen = gen_input_thermo.TimeVarying3DThermodyn(
         PRESSz0, TEMPz0, qvapz0, qcondz0, WMAX, Zlength, Xlength, VMAX, Ylength
     )
     geninitconds.generate_thermodynamics_conditions_fromfile(
