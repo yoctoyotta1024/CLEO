@@ -1,16 +1,4 @@
 #!/bin/bash
-#SBATCH --job-name=runexample
-#SBATCH --partition=compute
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=1
-#SBATCH --mem=940MB
-#SBATCH --time=00:05:00
-#SBATCH --mail-user=clara.bayley@mpimet.mpg.de
-#SBATCH --mail-type=FAIL
-#SBATCH --account=bm1183
-#SBATCH --output=./runexample_out.%j.out
-#SBATCH --error=./runexample_err.%j.out
 
 example=$1
 sbatch=$2
