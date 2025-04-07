@@ -6,8 +6,6 @@
 #SBATCH --cpus-per-task=48
 #SBATCH --mem=940M
 #SBATCH --time=00:05:00
-#SBATCH --mail-user=clara.bayley@mpimet.mpg.de
-#SBATCH --mail-type=FAIL
 #SBATCH --account=exaww
 #SBATCH --output=./build_cleo_out.%j.out
 #SBATCH --error=./build_cleo_err.%j.out
