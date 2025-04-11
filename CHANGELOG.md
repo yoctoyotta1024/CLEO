@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.39.1](https://github.com/yoctoyotta1024/CLEO/compare/f5c01a097ad62b1a5544bc19b1931dc95b0af24a..v0.39.1) - 2025-04-11
+#### Bug Fixes
+- use relative path from current script in bash directories - ([c85b4e9](https://github.com/yoctoyotta1024/CLEO/commit/c85b4e98ec11ed07478e215c438c7d6ec8b30626)) - clara.bayley
+#### Refactoring
+- allow no executables to be compiled - ([1167c0e](https://github.com/yoctoyotta1024/CLEO/commit/1167c0eb9cedc3502bd2acd631480d8bf732a667)) - clara.bayley
+- remove mail user from SLURM jobs - ([f5c01a0](https://github.com/yoctoyotta1024/CLEO/commit/f5c01a097ad62b1a5544bc19b1931dc95b0af24a)) - clara.bayley
+
+- - -
+
 ## [v0.39.0](https://github.com/yoctoyotta1024/CLEO/compare/57b2f11b3c1a44bd30936477c463a28061aec4bf..v0.39.0) - 2025-03-26
 #### Bug Fixes
 - remove conflicting black and ruff python formatting - ([7adb597](https://github.com/yoctoyotta1024/CLEO/commit/7adb5976a5aac9c174e042984acb9668b1ad1970)) - clara.bayley
