@@ -16,7 +16,8 @@
 set -e
 module purge
 
-bashsrc=${CLEO_PATH2CLEO}/scripts/juwels/bash/src
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+bashsrc=${SCRIPT_DIR}/src
 
 ### -------------------- check inputs ------------------ ###
 source ${bashsrc}/check_inputs.sh

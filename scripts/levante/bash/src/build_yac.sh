@@ -2,7 +2,8 @@
 
 set -e
 source /etc/profile
-bashsrc=${CLEO_PATH2CLEO}/scripts/levante/bash/src
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+bashsrc=${SCRIPT_DIR}
 cleo_yac_module_path="${CLEO_PATH2CLEO}/libs/coupldyn_yac/cmake"
 
 ### -------------------- check inputs ------------------ ###
