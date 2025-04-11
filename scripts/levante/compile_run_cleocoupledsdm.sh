@@ -27,7 +27,7 @@ compilername=${2:-intel}                                        # "intel" or "gc
 path2CLEO=${3:-${HOME}/CLEO}                                    # must be absolute path
 path2build=${4:-${path2CLEO}/build}                             # should be absolute path
 enableyac=${5:-false}                                           # == "true" or otherwise false
-executables=${6:-"cleocoupledsdm"}                              # executable(s) to compile
+executables=${6:-"cleocoupledsdm"}                              # executable(s) to compile or "NONE"
 executable2run=${7:-${path2build}/roughpaper/src/${executables}} # path to executable to run
 configfile=${8:-${path2CLEO}/roughpaper/src/config/config.yaml} # configuration to run
 stacksize_limit=${9:-204800}                                    # ulimit -s [stacksize_limit] (kB)

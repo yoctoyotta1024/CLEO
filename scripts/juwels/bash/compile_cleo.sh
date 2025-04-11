@@ -16,7 +16,7 @@
 set -e
 module purge
 
-executables=$1
+executables=$1                     # if == "NONE" only libraries built
 make_clean=$2
 bashsrc=${CLEO_PATH2CLEO}/scripts/juwels/bash/src
 
@@ -63,13 +63,20 @@ echo "make_clean: ${make_clean}"
 echo "### ------------------------------------------- ###"
 
 cd ${CLEO_PATH2BUILD} && pwd
+
 if [ "${make_clean}" == "true" ]
 then
   cmd="make clean"
   echo ${cmd}
   eval ${cmd}
 fi
-cmd="make -j 96 ${executables}"
+
+if [ ${executables} == "NONE" ]
+then
+  cmd="make -j 96"
+else
+  cmd="make -j 96 ${executables}"
+fi
 echo ${cmd}
 eval ${cmd}
 ### ---------------------------------------------------- ###
