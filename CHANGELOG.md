@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.39.2](https://github.com/yoctoyotta1024/CLEO/compare/ff2accbdbc00d2884d9597ba8702896319b69945..v0.39.2) - 2025-04-11
+#### Bug Fixes
+- update acyronym - ([ff2accb](https://github.com/yoctoyotta1024/CLEO/commit/ff2accbdbc00d2884d9597ba8702896319b69945)) - clara.bayley
+
+- - -
+
 ## [v0.39.1](https://github.com/yoctoyotta1024/CLEO/compare/f5c01a097ad62b1a5544bc19b1931dc95b0af24a..v0.39.1) - 2025-04-11
 #### Bug Fixes
 - use relative path from current script in bash directories - ([c85b4e9](https://github.com/yoctoyotta1024/CLEO/commit/c85b4e98ec11ed07478e215c438c7d6ec8b30626)) - clara.bayley
