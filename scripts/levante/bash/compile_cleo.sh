@@ -20,7 +20,9 @@ spack unload --all
 
 executables=$1                     # if == "NONE" only libraries built
 make_clean=$2
-bashsrc=${CLEO_PATH2CLEO}/scripts/levante/bash/src
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+bashsrc=${SCRIPT_DIR}/src
 
 ### -------------------- check inputs ------------------ ###
 source ${bashsrc}/check_inputs.sh
