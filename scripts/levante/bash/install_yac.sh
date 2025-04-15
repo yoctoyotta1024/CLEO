@@ -31,24 +31,29 @@ yac_tag=v3.5.2
 yac_version=yac_$yac_tag
 yac_source=https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/$yac_tag/$yac_version.tar.gz
 
-gcc=gcc/11.2.0-gcc-11.2.0
-openmpi=openmpi/4.1.2-gcc-11.2.0
-netcdf=netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0 # must match gcc and openmpi
-netcdf_root=/sw/spack-levante/netcdf-c-4.8.1-6qheqr # must match with `module show ${netcdf}`
-fyaml_root=/sw/spack-levante/libfyaml-0.7.12-fvbhgo # must match with `spack location -i libfyaml``
-python=python@3.9.9%gcc@=11.2.0/fwv
-pycython=py-cython@0.29.33%gcc@=11.2.0/j7b4fa
-pympi4py=py-mpi4py@3.1.2%gcc@=11.2.0/hdi5yl6
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+bashsrc=${SCRIPT_DIR}/src
+source ${bashsrc}/levante_packages.sh
 
-CC=/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpicc # must match gcc
-FC=/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpif90 # must match gcc
+gcc=${levante_gcc}
+openmpi=${levante_gcc_openmpi}
+netcdf=${levante_gcc_netcdf_yac}
+netcdf_root=${levante_gcc_netcdf_root}
+fyaml_root=${levante_gcc_fyaml_root}
+CC=${levante_gcc_compiler}
+FC=${levante_f90_compiler}
+
+python=${levante_gcc_python_yac}
+pycython=${levante_gcc_cython_yac}
+pympi4py=${levante_gcc_mpi4py_yac}
 
 if [ "${root4YAC}" == "" ]
 then
   echo "Bad input, please specify absolute path for where you want to install YAC"
 else
   mkdir ${root4YAC}
-  module load ${gcc} ${openmpi} ${netcdf}
+  module load ${gcc} ${netcdf}
+  spack load ${openmpi}
   ### ----------------- load Python ------------------------ ###
   spack load ${python}
   spack load ${pycython}
