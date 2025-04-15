@@ -89,6 +89,7 @@ def run_exectuable(path2CLEO, path2build, config_filename, dataset):
     print("CLEO Executable: " + cleoproc)
     print("CLEO Config file: " + cleoproc_args)
 
+    python = sys.executable
     pythonproc = str(path2CLEO / "examples" / "bubble3d" / "yac_bubble_data_reader.py")
     pythonproc_args = [str(path2build), str(config_filename)]
     print("YAC script: " + pythonproc)
@@ -103,7 +104,7 @@ def run_exectuable(path2CLEO, path2build, config_filename, dataset):
         ":",
         "-n",
         "1",
-        "python",
+        python,
         pythonproc,
     ] + pythonproc_args
     print(" ".join(cmd))
