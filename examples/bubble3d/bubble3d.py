@@ -22,6 +22,7 @@ piggyback ICON bubble test case
 
 import os
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -89,39 +90,41 @@ def run_exectuable(path2CLEO, path2build, config_filename, dataset):
     print("CLEO Config file: " + cleoproc_args)
 
     pythonproc = str(path2CLEO / "examples" / "bubble3d" / "yac_bubble_data_reader.py")
-    pythonproc_args = " ".join([str(path2build), str(config_filename)])
+    pythonproc_args = [str(path2build), str(config_filename)]
     print("YAC script: " + pythonproc)
-    print("YAC arguments: " + pythonproc_args)
+    print("YAC arguments: " + " ".join(pythonproc_args))
 
-    cmd = (
-        "mpiexec -n 1 "
-        + cleoproc
-        + " "
-        + cleoproc_args
-        + " : -n 1 python "
-        + pythonproc
-        + " "
-        + pythonproc_args
-    )
-    print(cmd)
-    os.system(cmd)
+    cmd = [
+        "mpiexec",
+        "-n",
+        "1",
+        cleoproc,
+        cleoproc_args,
+        ":",
+        "-n",
+        "1",
+        "python",
+        pythonproc,
+    ] + pythonproc_args
+    print(" ".join(cmd))
+    subprocess.run(cmd)
 
 
 run_exectuable(path2CLEO, path2build, config_filename, dataset)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
-# ### ---------------------------------------------------------------- ###
-# ### ------------------------- PLOT RESULTS ------------------------- ###
-# ### ---------------------------------------------------------------- ###
-# TODO(CB): plot results
-# # read in constants and intial setup from setup .txt file
-# config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
-# consts = pysetuptxt.get_consts(setupfile, isprint=True)
-# gbxs = pygbxsdat.get_gridboxes(grid_filename, consts["COORD0"], isprint=True)
 
-# time = pyzarr.get_time(dataset)
-# sddata = pyzarr.get_supers(dataset, consts)
-# maxnsupers = pyzarr.get_totnsupers(dataset)
-# ### ---------------------------------------------------------------- ###
-# ### ---------------------------------------------------------------- ###
+### ---------------------------------------------------------------- ###
+### ------------------------- PLOT RESULTS ------------------------- ###
+### ---------------------------------------------------------------- ###
+def plot_results(path2CLEO):
+    plotting_script = path2CLEO / "examples" / "bubble3d" / "bubble3d_plotting.py"
+    python = sys.executable
+    cmd = [python, plotting_script, path2CLEO, path2build, config_filename]
+    subprocess.run(cmd)
+
+
+plot_results(path2CLEO)
+### ---------------------------------------------------------------- ###
+### ---------------------------------------------------------------- ###
