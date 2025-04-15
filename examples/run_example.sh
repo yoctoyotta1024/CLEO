@@ -34,8 +34,6 @@ cleoenv=/work/bm1183/m300950/bin/envs/cleoenv
 python=${cleoenv}/bin/python3
 yacyaxtroot=/work/bm1183/m300950/yacyaxt
 spack load cmake@3.23.1%gcc
-module load python3/2022.01-gcc-11.2.0
-source activate ${cleoenv}
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
@@ -65,6 +63,13 @@ ${path2CLEO}/scripts/bash/compile_cleo.sh ${cleoenv} ${buildtype} ${path2build} 
 export OMP_PROC_BIND=spread
 export OMP_PLACES=threads
 
-# TODO(all): add exports to paths required if YAC is enabled
+if [ "${enableyac}" == "true" ]
+then
+  module load openmpi/4.1.2-gcc-11.2.0
+
+  export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/sw/spack-levante/libfyaml-0.7.12-fvbhgo/lib
+  export PYTHONPATH=${PYTHONPATH}:${yacyaxtroot}/yac/python # path to YAC python bindings
+fi
+
 ${python} ${pythonscript} ${path2CLEO} ${path2build} ${script_args}
 ### ---------------------------------------------------- ###

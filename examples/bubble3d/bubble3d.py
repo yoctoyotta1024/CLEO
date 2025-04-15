@@ -9,7 +9,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 11th September 2024
+Last Modified: Tuesday 15th April 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -28,7 +28,6 @@ from pathlib import Path
 path2CLEO = Path(sys.argv[1])
 path2build = Path(sys.argv[2])
 config_filename = Path(sys.argv[3])
-icon_grid_file = sys.argv[4]  # TODO(CB): move to config file
 
 import bubble3d_inputfiles
 
@@ -70,7 +69,6 @@ bubble3d_inputfiles.main(
     config_filename,
     grid_filename,
     initsupers_filename,
-    icon_grid_file,
     SDgbxs2plt,
 )
 ### ---------------------------------------------------------------- ###
@@ -85,14 +83,27 @@ def run_exectuable(path2CLEO, path2build, config_filename, dataset):
     os.chdir(path2build)
     os.system("pwd")
     shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
-    executable = str(path2build / "examples" / "yac" / "bubble3d" / "src" / "bubble3d")
-    config_filename = str(config_filename)
-    print("Executable: " + str(executable))
-    print("Config file: " + str(config_filename))
+    cleoproc = str(path2build / "examples" / "bubble3d" / "src" / "bubble3d")
+    cleoproc_args = str(config_filename)
+    print("CLEO Executable: " + cleoproc)
+    print("CLEO Config file: " + cleoproc_args)
 
-    cleoproc = executable + " " + config_filename
-    pythonproc = path2CLEO + "/examples/yac/bubble3d/yac_icon_data_reader.py"
-    cmd = "mpiexec -n 1 " + cleoproc + " : -n 1 python " + pythonproc
+    pythonproc = str(path2CLEO / "examples" / "bubble3d" / "yac_bubble_data_reader.py")
+    pythonproc_args = " ".join([str(path2build), str(config_filename)])
+    print("YAC script: " + pythonproc)
+    print("YAC arguments: " + pythonproc_args)
+
+    cmd = (
+        "mpiexec -n 1 "
+        + cleoproc
+        + " "
+        + cleoproc_args
+        + " : -n 1 python "
+        + pythonproc
+        + " "
+        + pythonproc_args
+    )
+    print(cmd)
     os.system(cmd)
 
 
