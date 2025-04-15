@@ -41,7 +41,7 @@ then
   spack load openblas@0.3.18%gcc@=11.2.0
 
   ${path2CLEO}/scripts/bash/compile_cleo.sh \
-     /work/bm1183/m300950/mambaenvs/cleoenv openmp ${path2build} bubble3d
+      /work/bm1183/m300950/bin/envs/cleoenv openmp ${path2build} bubble3d
 
 elif [ "${action}" == "inputfiles" ]
 then
