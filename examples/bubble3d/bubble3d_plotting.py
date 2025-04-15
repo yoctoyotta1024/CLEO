@@ -9,7 +9,7 @@ Created Date: Monday 6th January 2025
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 7th January 2025
+Last Modified: Tuesday 15th April 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -139,7 +139,7 @@ for v, var in enumerate(vars):
     print("Figure .png saved as: " + str(savename))
 # %%
 maxid = np.amax(sddata.sdId[0])
-nsample = 4799
+nsample = 1000
 sample_attrs = ["coord3", "coord1", "radius"]
 sample = sdtracing.attrs_for_superdroplets_sample(
     sddata, sample_attrs, ndrops2sample=nsample, minid=0, maxid=maxid
@@ -153,7 +153,7 @@ vlims = [-5.0, 5.0]
 
 
 # %%
-def plot_2d_supers(xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlims):
+def plot_2d_supers(xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlims, xlims):
     nplots = len(t2plts)
     fig, axes = plt.subplots(
         nrows=1,
@@ -172,8 +172,9 @@ def plot_2d_supers(xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlims):
 
     ## superdroplets scatter plot
     size = sample["radius"]
+    shift = xlims[1]
     coord3_km = sample["coord3"] / 1000
-    coord1_km = sample["coord1"] / 1000 - 50
+    coord1_km = sample["coord1"] / 1000 - shift
 
     for m in range(0, nplots):
         tidx = np.argmin(abs(time.mins - t2plts[m]))
@@ -184,7 +185,7 @@ def plot_2d_supers(xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlims):
         axs[m].set_title(
             "{:.0f} mins".format(time.mins[tidx]), fontsize=fontsize, y=1.025
         )
-        axs[m].set_xlim([-50, 50])
+        axs[m].set_xlim(xlims)
         axs[m].set_ylim([0, 2.5])
         axs[m].spines["top"].set_visible(False)
         axs[m].spines["right"].set_visible(False)
@@ -192,8 +193,8 @@ def plot_2d_supers(xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlims):
     for ax in axs:
         ax.set_yticks([0, 1.25, 2.5])
         ax.set_yticklabels([0, "", 2.5], fontsize=fontsize)
-        ax.set_xticks([-50, 0, 50])
-        ax.set_xticklabels([-50, "", 50], fontsize=fontsize)
+        ax.set_xticks([xlims[0], 0, xlims[1]])
+        ax.set_xticklabels([xlims[0], "", xlims[1]], fontsize=fontsize)
     for ax in axs[1:]:
         ax.set_xticklabels([])
         ax.set_yticklabels([])
@@ -217,7 +218,10 @@ def plot_2d_supers(xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlims):
 
 
 t2plts = [0, 30, 60, 90, 120]  # mins
-fig, axs = plot_2d_supers(xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlims)
+xl = (np.amax(gbxs["xhalf"]) - np.amin(gbxs["xhalf"])) / 2 / 1000
+fig, axs = plot_2d_supers(
+    xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlims, [-xl, xl]
+)
 savename = path2build / "bin" / "bubble_motion.png"
 fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
 print("Figure .png saved as: " + str(savename))
@@ -225,7 +229,7 @@ print("Figure .png saved as: " + str(savename))
 
 # %%
 maxid = np.amax(sddata.sdId[0])
-nsample = 500
+nsample = 1000
 sample_attrs = ["coord3", "coord1", "radius"]
 sample = sdtracing.attrs_for_superdroplets_sample(
     sddata, sample_attrs, ndrops2sample=nsample, minid=0, maxid=maxid
@@ -239,7 +243,9 @@ vlims = [-10.0, 10.0]
 
 
 # %%
-def plot_2d_supers_contours(xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlims):
+def plot_2d_supers_contours(
+    xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlims, xlims
+):
     nplots = len(t2plts)
     fig, axes = plt.subplots(
         nrows=1,
@@ -260,8 +266,9 @@ def plot_2d_supers_contours(xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlim
 
     ## superdroplets scatter plot
     size = sample["radius"] * 5
+    shift = xlims[1]
     coord3_km = sample["coord3"] / 1000
-    coord1_km = sample["coord1"] / 1000 - 50
+    coord1_km = sample["coord1"] / 1000 - shift
 
     tidx = np.argmin(abs(time.mins - t2plts[-1]))
     c = np.repeat([time.mins[: tidx + 1]], coord3_km.shape[1], axis=0).T
@@ -285,7 +292,7 @@ def plot_2d_supers_contours(xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlim
         axs[m].set_title(
             "{:.0f} mins".format(time.mins[tidx]), fontsize=fontsize, y=1.025
         )
-        axs[m].set_xlim([-17, 13])
+        axs[m].set_xlim(xlims)
         axs[m].set_ylim([0, 2.5])
         axs[m].spines["top"].set_visible(False)
         axs[m].spines["right"].set_visible(False)
@@ -293,8 +300,8 @@ def plot_2d_supers_contours(xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlim
     for ax in axs:
         ax.set_yticks([0, 1.25, 2.5])
         ax.set_yticklabels([0, "", 2.5], fontsize=fontsize)
-        ax.set_xticks([-17, 0, 13])
-        ax.set_xticklabels([-15, "", 15], fontsize=fontsize)
+        ax.set_xticks([xlims[0], 0, xlims[1]])
+        ax.set_xticklabels([xlims[0], "", xlims[1]], fontsize=fontsize)
     for ax in axs[1:]:
         ax.set_xticklabels([])
         ax.set_yticklabels([])
@@ -331,8 +338,9 @@ def plot_2d_supers_contours(xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlim
 
 
 t2plts = [20, 50, 80]  # mins
+xl = (np.amax(gbxs["xhalf"]) - np.amin(gbxs["xhalf"])) / 2 / 1000
 fig, axs = plot_2d_supers_contours(
-    xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlims
+    xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlims, [-xl, xl]
 )
 savename = path2build / "bin" / "bubble_motion_v2.png"
 fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
