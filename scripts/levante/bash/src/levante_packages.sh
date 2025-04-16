@@ -16,10 +16,7 @@ levante_gcc_fyaml_root=/sw/spack-levante/libfyaml-0.7.12-fvbhgo # match `spack l
 levante_gcc_fyamllib="${levante_gcc_fyaml_root}/lib"
 levante_gcc_mpi4py_yac=py-mpi4py@3.1.2%gcc@=11.2.0/hdi5yl6 # spack load
 ### specific packages for YAC installation only
-### Note: python version used to install yac must match version used to run model
 levante_f90_compiler="/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpif90"
-levante_gcc_python_yac=python@3.9.9%gcc@=11.2.0/fwv # spack load
-levante_gcc_cython_yac=py-cython@0.29.33%gcc@=11.2.0/j7b4fa # spack load
 levante_gcc_netcdf_root=/sw/spack-levante/netcdf-c-4.8.1-6qheqr # match `module show ${netcdf}`
 ### ---------------------------------------------------- ###
 
