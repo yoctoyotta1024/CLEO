@@ -14,7 +14,6 @@ levante_gcc_netcdf_yac=netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0 # module load
 levante_gcc_openblas_yac=openblas@0.3.18%gcc@=11.2.0 # spack load
 levante_gcc_fyaml_root=/sw/spack-levante/libfyaml-0.7.12-fvbhgo # match `spack location -i libfyaml`
 levante_gcc_fyamllib="${levante_gcc_fyaml_root}/lib"
-levante_gcc_mpi4py_yac=py-mpi4py@3.1.2%gcc@=11.2.0/hdi5yl6 # spack load
 ### specific packages for YAC installation only
 levante_f90_compiler="/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpif90"
 levante_gcc_netcdf_root=/sw/spack-levante/netcdf-c-4.8.1-6qheqr # match `module show ${netcdf}`

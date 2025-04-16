@@ -17,7 +17,7 @@ then
   check_args_not_empty "${CLEO_YACYAXTROOT}"
   source ${bashsrc}/levante_packages.sh
 
-  spack load ${levante_gcc_mpi4py_yac}
+  spack load ${levante_gcc_openmpi}
 
   export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${levante_gcc_fyamllib}
   export PYTHONPATH=${PYTHONPATH}:${CLEO_YACYAXTROOT}/yac/python # path to YAC python bindings
