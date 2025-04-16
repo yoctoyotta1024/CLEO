@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.39.3](https://github.com/yoctoyotta1024/CLEO/compare/a9dd722d8b1b24b980a851e555368e0fe4ce80be..v0.39.3) - 2025-04-16
+#### Bug Fixes
+- need mpi4py in using yac at runtime - ([525da8f](https://github.com/yoctoyotta1024/CLEO/commit/525da8f8c8b9c0732b97175b1b4351b5bb7ec276)) - clara.bayley
+#### Refactoring
+- remove spack packages from yac runtime settings - ([17a5dc5](https://github.com/yoctoyotta1024/CLEO/commit/17a5dc521a10ef5693a0a15b3d0b4fdcd9a1be8d)) - clara.bayley
+- lower python version to match than used to make python bindings on levante - ([37c296a](https://github.com/yoctoyotta1024/CLEO/commit/37c296a4fe937281f7dd95526ed76d19edcbadb7)) - clara.bayley
+- use levante_packages bash in yac installation - ([a9dd722](https://github.com/yoctoyotta1024/CLEO/commit/a9dd722d8b1b24b980a851e555368e0fe4ce80be)) - clara.bayley
+
+- - -
+
 ## [v0.39.2](https://github.com/yoctoyotta1024/CLEO/compare/ff2accbdbc00d2884d9597ba8702896319b69945..v0.39.2) - 2025-04-11
 #### Bug Fixes
 - update acyronym - ([ff2accb](https://github.com/yoctoyotta1024/CLEO/commit/ff2accbdbc00d2884d9597ba8702896319b69945)) - clara.bayley
