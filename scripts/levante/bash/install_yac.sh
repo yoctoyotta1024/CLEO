@@ -18,9 +18,9 @@ source /etc/profile
 module purge
 spack unload --all
 
-set -ex
-
 root4YAC=$1 # absolute path for YAC and YAXT installations
+python=$2 # name or absolute path to python to make YAC python bindngs with
+### Note: python version used to install yac must match version used to run model
 
 yaxt_tag=0.11.1
 yaxt_version=yaxt-${yaxt_tag}
@@ -43,22 +43,13 @@ fyaml_root=${levante_gcc_fyaml_root}
 CC=${levante_gcc_compiler}
 FC=${levante_f90_compiler}
 
-python=${levante_gcc_python_yac}
-pycython=${levante_gcc_cython_yac}
-pympi4py=${levante_gcc_mpi4py_yac}
-
-if [ "${root4YAC}" == "" ]
+if [[ "${root4YAC}" == "" || "${python}" == "" ]]
 then
-  echo "Bad input, please specify absolute path for where you want to install YAC"
+  echo "Bad input, please specify absolute path for where you want to install YAC and python to use to make bindings"
 else
   mkdir ${root4YAC}
   module load ${gcc} ${netcdf}
   spack load ${openmpi}
-  ### ----------------- load Python ------------------------ ###
-  spack load ${python}
-  spack load ${pycython}
-  spack load ${pympi4py}
-  ### ------------------------------------------------------ ###
 
   ### --------------------- install YAXT ------------------- ###
   mkdir ${root4YAC}/${yaxt_version}
@@ -90,6 +81,7 @@ else
     CFLAGS="-O0 -g -Wall" \
     FCFLAGS="-O0 -g -Wall -cpp -fimplicit-none" \
     LDFLAGS="-lm" \
+    PYTHON=${python} \
     --disable-mpi-checks \
     --with-yaxt-root=${root4YAC}/yaxt \
     --with-netcdf-root=${netcdf_root} \

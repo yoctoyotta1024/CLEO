@@ -2,7 +2,7 @@ name: cleoenv
 channels:
     - conda-forge
 dependencies:
-    - python==3.9.9 # matches version of python used to make yac bindings on levante
+    - python==3.13
     - doxygen>=1.10.0
     - pip
     - pip:
