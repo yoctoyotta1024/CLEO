@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.39.4](https://github.com/yoctoyotta1024/CLEO/compare/25acc999a08780bbc2ee02a395bbfa156f50bb18..v0.39.4) - 2025-04-16
+#### Bug Fixes
+- 525da8f8c8b9c0732b97175b1b4351b5bb7ec276 need mpi at runtime when using yac - ([4d11a8a](https://github.com/yoctoyotta1024/CLEO/commit/4d11a8ac1b4f0a33780920e4ae718d39ad2d67c8)) - clara.bayley
+#### Refactoring
+- revert 37c296a4fe937281f7dd95526ed76d19edcbadb7 and add requirements - ([f7b513b](https://github.com/yoctoyotta1024/CLEO/commit/f7b513b2eff96d8ef74f3fa69f90ba2b16b3aa13)) - clara.bayley
+- use python given as argument to create YAC python bindings - ([25acc99](https://github.com/yoctoyotta1024/CLEO/commit/25acc999a08780bbc2ee02a395bbfa156f50bb18)) - clara.bayley
+
+- - -
+
 ## [v0.39.3](https://github.com/yoctoyotta1024/CLEO/compare/a9dd722d8b1b24b980a851e555368e0fe4ce80be..v0.39.3) - 2025-04-16
 #### Bug Fixes
 - need mpi4py in using yac at runtime - ([525da8f](https://github.com/yoctoyotta1024/CLEO/commit/525da8f8c8b9c0732b97175b1b4351b5bb7ec276)) - clara.bayley
