@@ -9,7 +9,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 7th May 2024
+Last Modified: Wednesday 16th April 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -208,7 +208,7 @@ for i in range(len(monors)):
 
         ### plot results
         wlab = "<w> = {:.1f}".format(config["W_avg"] * 100) + "cm s$^{-1}$"
-        axs = as2017fig.condensation_validation_subplots(
+        as2017fig.condensation_validation_subplots(
             axs, time, sd0["radius"], supersat[:, 0, 0, 0], zprof, lwdth=lwdth, lab=wlab
         )
 
