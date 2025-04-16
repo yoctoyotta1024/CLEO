@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 17th April 2024
+Last Modified: Wednesday 16th April 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -56,7 +56,7 @@ def plot_kohlercurve_with_criticalpoints(ax, r, solutemass, temperature, IONIC, 
     s_eq, rcrit, scrit = kohler_curve(
         rkoh, solutemass, temperature, IONIC, MR_SOL, criticalpoints=True
     )
-    ax.plot(
+    l1 = ax.plot(
         rkoh,
         s_eq * 100,
         label="K\u00F6hler curve",
@@ -64,8 +64,10 @@ def plot_kohlercurve_with_criticalpoints(ax, r, solutemass, temperature, IONIC, 
         linestyle="-",
         linewidth=3,
         zorder=-1,
-    )
-    ax.scatter(rcrit, scrit * 100, marker="x", color="darkred", s=100, zorder=-2)
+    )[0]
+    c1 = ax.scatter(rcrit, scrit * 100, marker="x", color="darkred", s=100, zorder=-2)
+
+    return [l1, c1]
 
 
 def condensation_validation_subplots(
@@ -84,56 +86,56 @@ def condensation_validation_subplots(
     lab_b = "descent"
     col_b, lstyle_b = "orange", "--"
 
-    axs[0].plot(
+    l1 = axs[0].plot(
         supersat[:hlf] * 100,
         zprof[:hlf],
         label=lab_a,
         color=col_a,
         linestyle=lstyle_a,
         linewidth=lwdth,
-    )
-    axs[0].plot(
+    )[0]
+    l2 = axs[0].plot(
         supersat[hlf:] * 100,
         zprof[hlf:],
         label=lab_b,
         color=col_b,
         linestyle=lstyle_b,
         linewidth=lwdth,
-    )
+    )[0]
     axs[0].set_xlabel("supersaturation /%")
     axs[0].set_ylabel("displacement /m")
 
-    axs[1].plot(
+    l3 = axs[1].plot(
         radius[:hlf],
         supersat[:hlf] * 100,
         color=col_a,
         linestyle=lstyle_a,
         linewidth=lwdth,
-    )
-    axs[1].plot(
+    )[0]
+    l4 = axs[1].plot(
         radius[hlf:],
         supersat[hlf:] * 100,
         color=col_b,
         linestyle=lstyle_b,
         linewidth=lwdth,
-    )
+    )[0]
     axs[1].set_xlabel("radius /\u03BCm")
     axs[1].set_ylabel("supersaturation /%")
 
-    axs[2].plot(
+    l5 = axs[2].plot(
         radius[:qtr], zprof[:qtr], color=col_a, linestyle=lstyle_a, linewidth=lwdth
-    )
-    axs[2].plot(
+    )[0]
+    l6 = axs[2].plot(
         radius[3 * qtr :],
         zprof[3 * qtr :],
         color=col_b,
         linestyle=lstyle_b,
         linewidth=lwdth,
-    )
+    )[0]
     axs[2].set_xlabel("radius /\u03BCm")
     axs[2].set_ylabel("displacement /m")
 
-    return axs
+    return [l1, l2, l3, l4, l5, l6]
 
 
 def arabas_shima_2017_fig(
@@ -160,7 +162,7 @@ def arabas_shima_2017_fig(
         axs[1], radius, msol[0], temp[0], IONIC, MR_SOL
     )
 
-    axs = condensation_validation_subplots(axs, time, radius, supersat, zprof)
+    condensation_validation_subplots(axs, time, radius, supersat, zprof)
 
     axs[0].legend(loc="lower right")
     axs[1].legend(loc="upper left")
