@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.39.5](https://github.com/yoctoyotta1024/CLEO/compare/736fbcbe88438e642b358a38915a28c69970a683..v0.39.5) - 2025-04-17
+#### Bug Fixes
+- error in Long 1974 collision efficieny git status - ([3643b33](https://github.com/yoctoyotta1024/CLEO/commit/3643b333c3e5f298562b06dc66f69e600024056d)) - clara.bayley
+#### Refactoring
+- return lines not axes from figure - ([736fbcb](https://github.com/yoctoyotta1024/CLEO/commit/736fbcbe88438e642b358a38915a28c69970a683)) - clara.bayley
+
+- - -
+
 ## [v0.39.4](https://github.com/yoctoyotta1024/CLEO/compare/25acc999a08780bbc2ee02a395bbfa156f50bb18..v0.39.4) - 2025-04-16
 #### Bug Fixes
 - 525da8f8c8b9c0732b97175b1b4351b5bb7ec276 need mpi at runtime when using yac - ([4d11a8a](https://github.com/yoctoyotta1024/CLEO/commit/4d11a8ac1b4f0a33780920e4ae718d39ad2d67c8)) - clara.bayley
