@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Thursday 17th April 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -34,9 +34,11 @@ double LongHydroProb::kerneleff(const Superdrop &drop1, const Superdrop &drop2) 
   constexpr double rlim =
       5e-5 / dlc::R0;  // 50 micron limit to determine collision-coalescence efficiency (eff)
   constexpr double colleff_lim = 0.001;  // minimum efficiency if larger droplet's radius < rlim
+
   constexpr double A1 =
-      4.5e4 * dlc::R0 * dlc::R0;  // constants in efficiency calc if larger droplet's radius < rlim
-  constexpr double A2 = 3e-4 / dlc::R0;
+      4.5e4 * dlc::R0 * dlc::R0 *
+      100;  // dimensionless constants in efficiency calc if larger droplet's radius < rlim
+  constexpr double A2 = 3e-4 / dlc::R0 / 100;
 
   const auto smallr = double{Kokkos::fmin(drop1.get_radius(), drop2.get_radius())};
   const auto bigr = double{Kokkos::fmax(drop1.get_radius(), drop2.get_radius())};
