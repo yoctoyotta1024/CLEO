@@ -31,23 +31,18 @@
   collisions where R > rlim, eff(R,r) = colleff(R,r) = 1). */
 KOKKOS_FUNCTION
 double LongHydroProb::kerneleff(const Superdrop &drop1, const Superdrop &drop2) const {
-  constexpr double rlim =
-      5e-5 / dlc::R0;  // 50 micron limit to determine collision-coalescence efficiency (eff)
-  constexpr double colleff_lim = 0.001;  // minimum efficiency if larger droplet's radius < rlim
+  constexpr double k1 = 4.5e16 * dlc::R0 * dlc::R0;
+  constexpr double k2 = 3e-10 / dlc::R0;
+  constexpr double rlim = 5e-5 / dlc::R0;
+  constexpr double colleff_min = 0.001;
 
-  constexpr double A1 =
-      4.5e4 * dlc::R0 * dlc::R0 *
-      100;  // dimensionless constants in efficiency calc if larger droplet's radius < rlim
-  constexpr double A2 = 3e-4 / dlc::R0 / 100;
+  const auto rsmall = double{Kokkos::fmin(drop1.get_radius(), drop2.get_radius())};
+  const auto rbig = double{Kokkos::fmax(drop1.get_radius(), drop2.get_radius())};
 
-  const auto smallr = double{Kokkos::fmin(drop1.get_radius(), drop2.get_radius())};
-  const auto bigr = double{Kokkos::fmax(drop1.get_radius(), drop2.get_radius())};
-
-  /* calculate collision-coalescence efficiency, eff = colleff * coaleff */
   auto colleff = double{1.0};
-  if (bigr < rlim) {
-    const auto colleff_calc = double{A1 * bigr * bigr * (1 - A2 / smallr)};
-    colleff = Kokkos::fmax(colleff_calc, colleff_lim);  // colleff >= colleff_lim
+  if (rbig < rlim) {
+    colleff = k1 * rbig * rbig * (1 - (k2 / rsmall));
+    colleff = Kokkos::fmax(colleff, colleff_min);
   }
 
   const auto eff = colleff * coaleff;
