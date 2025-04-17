@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.39.6](https://github.com/yoctoyotta1024/CLEO/compare/ea79f2a57af61c360e3af46091a5971b70c0b668..v0.39.6) - 2025-04-17
+#### Bug Fixes
+- fix major bug in calculation of collision probability - ([ea79f2a](https://github.com/yoctoyotta1024/CLEO/commit/ea79f2a57af61c360e3af46091a5971b70c0b668)) - clara.bayley
+#### Documentation
+- remove no longer relevant statement - ([eb2bce7](https://github.com/yoctoyotta1024/CLEO/commit/eb2bce7a06d014f3705bb44336ada7016c440f03)) - clara.bayley
+#### Refactoring
+- initial conditions as in Shima et al. 2009 - ([ef16652](https://github.com/yoctoyotta1024/CLEO/commit/ef166525726af75bfaa89bcc170d3ec0c1b8d579)) - clara.bayley
+
+- - -
+
 ## [v0.39.5](https://github.com/yoctoyotta1024/CLEO/compare/736fbcbe88438e642b358a38915a28c69970a683..v0.39.5) - 2025-04-17
 #### Bug Fixes
 - error in Long 1974 collision efficieny git status - ([3643b33](https://github.com/yoctoyotta1024/CLEO/commit/3643b333c3e5f298562b06dc66f69e600024056d)) - clara.bayley
