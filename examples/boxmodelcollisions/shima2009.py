@@ -43,7 +43,7 @@ import attrgens_shima2009
 from plotssrc import shima2009fig
 from pySD import editconfigfile, geninitconds
 from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
-from pySD.initsuperdropsbinary_src import rgens, probdists, attrsgen
+from pySD.initsuperdropsbinary_src import rgens, attrsgen
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 
 ### ---------------------------------------------------------------- ###
@@ -94,9 +94,9 @@ params_1 = {
 }
 
 # radius distirbution from exponential in droplet volume for setup 2
-rspan_2 = [5e-7, 5e-5]  # max and min range of radii to sample [m]
-volexpr0_2 = 20.117e-6  # peak of volume exponential distribution [m]
-numconc_2 = (3 / 2) ** 3 * 2**23  # total no. conc of real droplets [m^-3]
+rspan_2 = [0.62e-6, 6.34e-2]  # max and min range of radii to sample [m]
+volexpr0_2 = 10.117e-6  # peak of volume exponential distribution [m]
+numconc_2 = 27 * 2**23  # total no. conc of real droplets [m^-3]
 params_2 = {
     "COLLTSTEP": 0.1,
     "maxnsupers": nsupers_2[0],
@@ -108,8 +108,10 @@ xiprobdist_1 = attrgens_shima2009.SampleXiShima2009()
 radiigen_1 = attrgens_shima2009.SampleRadiiShima2009(
     volexpr0_1, rspan_1
 )  # radii are sampled from rspan [m]
-xiprobdist_2 = probdists.VolExponential(volexpr0_2, rspan_2)
-radiigen_2 = rgens.SampleLog10RadiiGen(rspan_2)
+xiprobdist_2 = attrgens_shima2009.SampleXiShima2009()
+radiigen_2 = attrgens_shima2009.SampleRadiiShima2009(
+    volexpr0_2, rspan_2
+)  # radii are sampled from rspan [m]
 samplevol = rgrid.calc_domainvol(zgrid, xgrid, ygrid)
 dryradiigen = rgens.MonoAttrGen(dryradius)
 
