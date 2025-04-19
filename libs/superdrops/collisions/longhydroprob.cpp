@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 17th April 2025
+ * Last Modified: Friday 18th April 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -31,8 +31,8 @@
   collisions where R > rlim, eff(R,r) = colleff(R,r) = 1). */
 KOKKOS_FUNCTION
 double LongHydroProb::kerneleff(const Superdrop &drop1, const Superdrop &drop2) const {
-  constexpr double k1 = 4.5e16 * dlc::R0 * dlc::R0;
-  constexpr double k2 = 3e-10 / dlc::R0;
+  constexpr double k1 = 4.5e4 * dlc::R0 * dlc::R0 * 100 * 100;
+  constexpr double k2 = 3e-4 / dlc::R0 / 100;
   constexpr double rlim = 5e-5 / dlc::R0;
   constexpr double colleff_min = 0.001;
 
