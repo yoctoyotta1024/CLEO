@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.39.7](https://github.com/yoctoyotta1024/CLEO/compare/dbec7a4c7ea667b5241b1016a3c29f9fb9727bcd..v0.39.7) - 2025-04-19
+#### Bug Fixes
+- fix major bug in calculation of collision probability - ([dbec7a4](https://github.com/yoctoyotta1024/CLEO/commit/dbec7a4c7ea667b5241b1016a3c29f9fb9727bcd)) - clara.bayley
+
+- - -
+
 ## [v0.39.6](https://github.com/yoctoyotta1024/CLEO/compare/ea79f2a57af61c360e3af46091a5971b70c0b668..v0.39.6) - 2025-04-17
 #### Bug Fixes
 - fix major bug in calculation of collision probability - ([ea79f2a](https://github.com/yoctoyotta1024/CLEO/commit/ea79f2a57af61c360e3af46091a5971b70c0b668)) - clara.bayley
