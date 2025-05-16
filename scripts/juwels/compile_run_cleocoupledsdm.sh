@@ -19,15 +19,16 @@ module purge
 ### ----- You need to edit these lines to specify ------ ###
 ### ----- your build configuration and executables ----- ###
 ### ---------------------------------------------------- ###
-buildtype=$1                                                    # "serial", "threads", "openmp" or "cuda"
-compilername=${2:-intel}                                        # "intel" or "gcc"
-path2CLEO=${3:-${PROJECT}/bayley1/CLEO}                         # must be absolute path
-path2build=${4:-${path2CLEO}/build}                             # should be absolute path
-enableyac=${5:-false}                                           # == "true" or otherwise false
-executables=${6:-"cleocoupledsdm"}                              # executable(s) to compile or "NONE"
-executable2run=${7:-${path2build}/roughpaper/src/${executables}} # path to executable to run
-configfile=${8:-${path2CLEO}/roughpaper/src/config/config.yaml} # configuration to run
-stacksize_limit=${9:-204800}                                    # ulimit -s [stacksize_limit] (kB)
+buildtype=$1                                                     # "serial", "threads", "openmp" or "cuda"
+compilername=${2:-intel}                                         # "intel" or "gcc"
+path2CLEO=${3:-${PROJECT}/bayley1/CLEO}                          # must be absolute path
+path2build=${4:-${path2CLEO}/build}                              # should be absolute path
+enableyac=${5:-false}                                            # == "true" or otherwise false
+yacyaxtroot=${9:-NA}                           # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
+executables=${7:-"cleocoupledsdm"}                               # executable(s) to compile or "NONE"
+executable2run=${8:-${path2build}/roughpaper/src/${executables}} # path to executable to run
+configfile=${9:-${path2CLEO}/roughpaper/src/config/config.yaml}  # configuration to run
+stacksize_limit=${10:-204800}                                    # ulimit -s [stacksize_limit] (kB)
 ### ---------------------------------------------------- ###
 
 ### -------------------- check inputs ------------------ ###
@@ -60,6 +61,11 @@ export CLEO_COMPILERNAME=${compilername}
 export CLEO_PATH2CLEO=${path2CLEO}
 export CLEO_PATH2BUILD=${path2build}
 export CLEO_ENABLEYAC=${enableyac}
+
+if [ ${CLEO_ENABLEYAC} == "true" ]
+then
+  export CLEO_YACYAXTROOT=${yacyaxtroot}
+fi
 ### ---------------------------------------------------- ###
 
 ### --------------- print compiling inputs ------------- ###
@@ -68,6 +74,7 @@ echo "CLEO_BUILDTYPE = ${CLEO_BUILDTYPE}"
 echo "CLEO_COMPILERNAME = ${CLEO_COMPILERNAME}"
 echo "CLEO_PATH2BUILD = ${CLEO_PATH2BUILD}"
 echo "CLEO_ENABLEYAC = ${CLEO_ENABLEYAC}"
+echo "CLEO_YACYAXTROOT = ${CLEO_YACYAXTROOT}"
 echo "### ------------------------------------------- ###"
 ### ---------------------------------------------------- ###
 
