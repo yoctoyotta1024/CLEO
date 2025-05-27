@@ -1,5 +1,5 @@
-"""
-Copyright (c) 2024 MPI-M, Clara Bayley
+'''
+Copyright (c) 2025 MPI-M, Clara Bayley
 
 
 ----- CLEO -----
@@ -9,7 +9,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 7th May 2024
+Last Modified: Tuesday 27th May 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -17,13 +17,15 @@ https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
 python class to handle superdroplet attributes data from SDM zarr store in ragged array format
-"""
+'''
+
 
 import numpy as np
 import xarray as xr
 import awkward as ak
+import warnings
 from pathlib import Path
-
+from typing import Optional
 
 class SuperdropProperties:
     """Contains attributes common to all superdroplets and functions
@@ -35,8 +37,9 @@ class SuperdropProperties:
         # density of liquid in droplets (=density of water at 300K) [Kg/m^3]
         self.RHO_L = consts["RHO_L"]
 
-        # droplet solute properties
-        self.RHO_SOL = consts["RHO_SOL"]  # density of (dry) solute [Kg/m^3]
+        # density of (dry) solute [Kg/m^3]
+        self.RHO_SOL = consts["RHO_SOL"]
+
         # Mr of solute [g/mol]
         self.MR_SOL = consts["MR_SOL"]
 
@@ -101,50 +104,49 @@ class SuperdropProperties:
 
         return self.RHO_L * v_w * 1000  # [g]
 
-
 class SupersData(SuperdropProperties):
-    def __init__(self, dataset, consts):
-        SuperdropProperties.__init__(self, consts)
+    def __init__(self, dataset: Path, consts: Optional[dict]=None):
+        if consts is not None:
+          SuperdropProperties.__init__(self, consts)
+        else:
+          warnings.warn("No superdroplet properties attached to superdroplet dataset")
 
         ds = self.tryopen_dataset(dataset)
-        rgdcount = ds["raggedcount"].values  # ragged count variable
+        raggedcount = ds["raggedcount"]  # ragged count variable
 
-        self.sdId = self.tryvar(ds, rgdcount, "sdId")
-        self.sdgbxindex = self.tryvar(ds, rgdcount, "sdgbxindex")
-        self.xi = self.tryvar(ds, rgdcount, "xi")
-        self.radius = self.tryvar(ds, rgdcount, "radius")
-        self.msol = self.tryvar(ds, rgdcount, "msol")
+        self.sdId = self.tryvar(ds, raggedcount, "sdId")
+        self.sdgbxindex = self.tryvar(ds, raggedcount, "sdgbxindex")
+        self.xi = self.tryvar(ds, raggedcount, "xi")
+        self.radius = self.tryvar(ds, raggedcount, "radius")
+        self.msol = self.tryvar(ds, raggedcount, "msol")
 
-        self.coord3 = self.tryvar(ds, rgdcount, "coord3")
-        self.coord1 = self.tryvar(ds, rgdcount, "coord1")
-        self.coord2 = self.tryvar(ds, rgdcount, "coord2")
+        self.coord3 = self.tryvar(ds, raggedcount, "coord3")
+        self.coord1 = self.tryvar(ds, raggedcount, "coord1")
+        self.coord2 = self.tryvar(ds, raggedcount, "coord2")
 
-        self.radius_units = self.tryunits(
-            ds, "radius"
-        )  # probably microns ie. 'micro-m'
+        self.radius_units = self.tryunits(ds, "radius")  # probably microns
         self.msol_units = self.tryunits(ds, "msol")  # probably gramms
         self.coord3_units = self.tryunits(ds, "coord3")  # probably meters
         self.coord1_units = self.tryunits(ds, "coord1")  # probably meters
         self.coord2_units = self.tryunits(ds, "coord2")  # probably meters
 
-    def tryopen_dataset(self, dataset):
+    def tryopen_dataset(self, dataset: Path):
         if isinstance(dataset, str) or isinstance(dataset, Path):
             print("supers dataset: ", dataset)
             return xr.open_dataset(dataset, engine="zarr", consolidated=False)
         else:
             return dataset
 
-    def tryvar(self, ds, raggedcount, var):
-        """attempts to return variable in form of ragged array
-        (ak.Array) with dims [time, raggedcount]
-        for a variable "var" in xarray dataset 'ds'.
+    def tryvar(self, ds: xr.Dataset, raggedcount: xr.DataArray, var: str):
+        """attempts to return variable in form of ragged array (ak.Array) with dims
+        [time, raggedcount] for a variable "var" in xarray dataset 'ds'.
         If attempt fails, returns empty array instead"""
         try:
-            return ak.unflatten(ds[var].values, raggedcount)
+            return ak.unflatten(ds[var].values, raggedcount.values)
         except KeyError:
             return ak.Array([])
 
-    def tryunits(self, ds, var):
+    def tryunits(self, ds: xr.Dataset, var: str):
         """attempts to return the units of a variable
         in xarray dataset 'ds'. If attempt fails, returns null"""
         try:
