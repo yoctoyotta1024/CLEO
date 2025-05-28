@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Wednesday 28th May 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,14 +22,16 @@
 #ifndef LIBS_ZARR_CHUNKS_HPP_
 #define LIBS_ZARR_CHUNKS_HPP_
 
+#include <mpi.h>
+
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
 #include <cassert>
 #include <string>
 #include <string_view>
 #include <vector>
-#include <mpi.h>
 
+#include "configuration/communicator.hpp"
 #include "zarr/buffer.hpp"
 
 /**
@@ -73,6 +75,7 @@ class Chunks {
   std::vector<size_t> chunkshape; /**< Shape of chunks along each dimension (constant) */
   std::vector<size_t> reducedarray_nchunks;
   /**< Number chunks of array along all but outermost dimension of array (constant) */
+  MPI_Comm comm; /**< (YAC compatible) communicator for MPI domain decomposition */
 
   /**
    * @brief Create label for a chunk given current number of chunks written to array.
@@ -122,7 +125,9 @@ class Chunks {
 
     // Since only process 0 writes the data, only it should check the sizes
     int my_rank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    comm = init_communicator::get_communicator();
+    MPI_Comm_rank(comm, &my_rank);
+
     if (my_rank == 0)
       assert((reduced_arrayshape.size() == chunkshape.size() - 1) &&
              "number of dimensions of reduced array must be "
