@@ -12,6 +12,7 @@ set(LIB_BINARY_DIR ${CMAKE_BINARY_DIR}/lib)
 
 # Add executables and create library target
 set(SOURCES
+"communicator.cpp"
 "copyfiles2txt.cpp"
 "gbx_bounds_from_binary.cpp"
 "init_all_supers_from_binary.cpp"
