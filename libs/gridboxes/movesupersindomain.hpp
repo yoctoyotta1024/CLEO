@@ -232,6 +232,8 @@ class MoveSupersInDomain {
                                            viewd_gbx d_gbxs, SupersInDomain &allsupers,
                                            const SDMMonitor auto mo) const {
     int my_rank;
+    MPI_Comm comm;
+    comm = init_communicator::get_communicator();
     MPI_Comm_rank(comm, &my_rank);
 
     /* steps (1 - 2) */
