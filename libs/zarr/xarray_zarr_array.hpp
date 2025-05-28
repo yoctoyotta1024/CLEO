@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Wednesday 28th May 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -23,6 +23,8 @@
 #ifndef LIBS_ZARR_XARRAY_ZARR_ARRAY_HPP_
 #define LIBS_ZARR_XARRAY_ZARR_ARRAY_HPP_
 
+#include <mpi.h>
+
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
 #include <algorithm>
@@ -31,8 +33,8 @@
 #include <string_view>
 #include <unordered_map>
 #include <vector>
-#include <mpi.h>
 
+#include "configuration/communicator.hpp"
 #include "zarr/xarray_metadata.hpp"
 #include "zarr/zarr_array.hpp"
 
@@ -98,6 +100,7 @@ class XarrayZarrArray {
   std::vector<std::string> dimnames; /**< ordered list of names of each dimenion of array */
   std::vector<size_t> arrayshape;    /**< current size of the array along each of its dimensions */
   size_t last_totnchunks;            /**< Number of chunks of array since arrayshape last written */
+  MPI_Comm comm; /**< (YAC compatible) communicator for MPI domain decomposition */
 
   /**
    * @brief Sets shape of array along each dimension to be the same size as each of its dimensions
@@ -162,7 +165,8 @@ class XarrayZarrArray {
     assert((chunkshape.size() == dimnames.size()) &&
            "number of named dimensions of array must match number dimensions of chunks");
     int my_rank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    comm = init_communicator::get_communicator();
+    MPI_Comm_rank(comm, &my_rank);
 
     if (my_rank == 0) {
       write_arrayshape(datasetdims);
@@ -194,20 +198,20 @@ class XarrayZarrArray {
     assert((chunkshape.size() == dimnames.size()) &&
            "number of named dimensions of array must match number dimensions of chunks");
     int my_rank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    comm = init_communicator::get_communicator();
+    MPI_Comm_rank(comm, &my_rank);
 
     if (my_rank == 0) {
-        write_zattrs_json(store, name,
-                          xarray_metadata<T>(units, scale_factor, dimnames, sampledimname));
+      write_zattrs_json(store, name,
+                        xarray_metadata<T>(units, scale_factor, dimnames, sampledimname));
     }
   }
 
   ~XarrayZarrArray() {
     int my_rank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    MPI_Comm_rank(comm, &my_rank);
 
-    if (my_rank == 0)
-      zarr.write_arrayshape(arrayshape);
+    if (my_rank == 0) zarr.write_arrayshape(arrayshape);
   }
 
   /**
@@ -224,9 +228,7 @@ class XarrayZarrArray {
     return arraydims;
   }
 
-  std::vector<std::string> get_dimnames() const {
-    return dimnames;
-  }
+  std::vector<std::string> get_dimnames() const { return dimnames; }
 
   /**
    * @brief Writes data from Kokkos view in host memory to chunks of a Zarr array in a store
