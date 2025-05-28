@@ -18,11 +18,6 @@ path2CLEO=${2:-${HOME}/CLEO}
 path2yac=${3:-/work/bm1183/m300950/yacyaxt}
 path2build=${4:-${HOME}/CLEO/build_bubble3d}
 
-icon_grid_file=/work/bm1183/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc
-icon_data_file=/work/bm1183/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc
-icon_grid_file_copy=${path2build}/share/icon_grid_file_aes_bubble_atm_cgrid_ml.nc
-icon_data_file_copy=${path2build}/share/icon_data_file_aes_bubble_atm_3d_ml_20080801T000000Z.nc
-
 if [ "${action}" == "build" ]
 then
   mkdir ${path2build}
@@ -54,9 +49,6 @@ then
 
 elif [ "${action}" == "inputfiles" ]
 then
-  cp ${icon_grid_file} ${icon_grid_file_copy}
-  cp ${icon_data_file} ${icon_data_file_copy}
-
   cleoenv=/work/bm1183/m300950/bin/envs/cleoenv
   python=${cleoenv}/bin/python3
   ${python} ${path2CLEO}/examples/bubble3d/bubble3d_inputfiles.py \
@@ -65,7 +57,6 @@ then
    ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
    ${path2build}/share/bubble3d_dimlessGBxboundaries.dat \
    ${path2build}/share/bubble3d_dimlessSDsinit.dat \
-   ${icon_grid_file_copy} \
    0
 
 elif [ "${action}" == "run" ]
@@ -93,6 +84,10 @@ then
   cleo_coupling_timestep=60 # must match CLEO config file [seconds]
   cleo_t_end=7200 # must match CLEO config file [seconds]
   cleo_num_vertical_levels=24 # must match CLEO grid_filename
+
+  # must match bubble3d_inputfiles.py
+  icon_grid_file_copy=${path2build}/share/icon_grid_file_aes_bubble_atm_cgrid_ml.nc
+  icon_data_file_copy=${path2build}/share/icon_data_file_aes_bubble_atm_3d_ml_20080801T000000Z.nc
 
   mpiexec -n 1 ${path2build}/examples/bubble3d/src/bubble3d \
     ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
