@@ -43,6 +43,7 @@
 #include <vector>
 
 #include "cartesiandomain/cartesian_decomposition.hpp"  // TODO(CB): remove dependency on cartesiandomain (also in zarr's CMakeLists)
+#include "configuration/communicator.hpp"
 #include "zarr/xarray_zarr_array.hpp"
 #include "zarr/zarr_group.hpp"
 
@@ -69,6 +70,7 @@ class Dataset {
   /**< map from name of each dimension in dataset to their size */
   std::unordered_map<std::string, std::vector<size_t>> distributed_datasetdims;
   int my_rank, comm_size;
+  MPI_Comm comm; /**< (YAC compatible) communicator for MPI domain decomposition */
 
   /**
    * @brief Collects the distributed process-local size of dimensions
@@ -76,13 +78,13 @@ class Dataset {
    * @param dim A pair with the dimension name and local size
    */
   void collect_distributed_dim_size(const std::pair<std::string, size_t> &dim) {
-    MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
-    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    MPI_Comm_size(comm, &comm_size);
+    MPI_Comm_rank(comm, &my_rank);
 
     std::vector<size_t> distributed_sizes(comm_size);
 
     MPI_Gather(&(dim.second), 1, MPI_UNSIGNED_LONG, distributed_sizes.data(), 1, MPI_UNSIGNED_LONG,
-               0, MPI_COMM_WORLD);
+               0, comm);
 
     // For process 0, save the distributed sizes of all processes to avoid extra
     // exchanges in each write
@@ -183,7 +185,7 @@ class Dataset {
   void collect_global_array(float *target, float *local_source, int local_size, int *receive_counts,
                             int *receive_displacements) const {
     MPI_Gatherv(local_source, local_size, MPI_FLOAT, target, receive_counts, receive_displacements,
-                MPI_FLOAT, 0, MPI_COMM_WORLD);
+                MPI_FLOAT, 0, comm);
   }
 
   /**
@@ -192,7 +194,7 @@ class Dataset {
   void collect_global_array(unsigned int *target, unsigned int *local_source, int local_size,
                             int *receive_counts, int *receive_displacements) const {
     MPI_Gatherv(local_source, local_size, MPI_UNSIGNED, target, receive_counts,
-                receive_displacements, MPI_UNSIGNED, 0, MPI_COMM_WORLD);
+                receive_displacements, MPI_UNSIGNED, 0, comm);
   }
 
   /**
@@ -201,7 +203,7 @@ class Dataset {
   void collect_global_array(size_t *target, size_t *local_source, int local_size,
                             int *receive_counts, int *receive_displacements) const {
     MPI_Gatherv(local_source, local_size, MPI_UNSIGNED_LONG, target, receive_counts,
-                receive_displacements, MPI_UNSIGNED_LONG, 0, MPI_COMM_WORLD);
+                receive_displacements, MPI_UNSIGNED_LONG, 0, comm);
   }
 
   /**
@@ -238,6 +240,7 @@ class Dataset {
         "  \"title\": \"Dataset from CLEO is Xarray and NetCDF compatible Zarr Group of Arrays\""
         "\n}";
     global_superdroplet_ordering = std::make_shared<std::vector<unsigned int>>();
+    comm = init_communicator::get_communicator();
   }
 
   /**
@@ -468,7 +471,7 @@ class Dataset {
                       const T data) const {
     T recv_data = data;
     if (std::same_as<T, unsigned int>) {
-      MPI_Reduce(&data, &recv_data, 1, MPI_UNSIGNED, MPI_SUM, 0, MPI_COMM_WORLD);
+      MPI_Reduce(&data, &recv_data, 1, MPI_UNSIGNED, MPI_SUM, 0, comm);
     }
     if (my_rank == 0) {
       xzarr_ptr->write_to_array(recv_data);
@@ -496,7 +499,7 @@ class Dataset {
     int local_size = h_data.extent(0);
 
     // Since there is no defined dimensions for ragged arrays collect the array sizes directly
-    MPI_Gather(&local_size, 1, MPI_INT, distributed_sizes.data(), 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Gather(&local_size, 1, MPI_INT, distributed_sizes.data(), 1, MPI_INT, 0, comm);
     int global_size = std::accumulate(distributed_sizes.begin(), distributed_sizes.end(), 0);
     Kokkos::View<T *, HostSpace> global_data("global_output_data", global_size);
 
