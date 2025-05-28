@@ -12,7 +12,6 @@ set(LIB_BINARY_DIR ${CMAKE_BINARY_DIR}/lib)
 
 # Add executables and create library target
 set(SOURCES
-"communicator.cpp"
 "copyfiles2txt.cpp"
 "gbx_bounds_from_binary.cpp"
 "init_all_supers_from_binary.cpp"
@@ -21,6 +20,7 @@ set(SOURCES
 "readbinary.cpp"
 "required_config_params.cpp"
 "timesteps.cpp"
+"communicator.cpp"
 )
 # must use STATIC (not(!) SHARED) lib for linking to executable if build is CUDA enabled with Kokkos
 add_library("${LIBNAME}" STATIC ${SOURCES})

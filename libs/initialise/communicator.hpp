@@ -24,7 +24,6 @@
 #define LIBS_INITIALISE_COMMUNICATOR_HPP_
 
 #include <mpi.h>
-#include <yaml-cpp/yaml.h>
 
 #include <cmath>
 #include <filesystem>
