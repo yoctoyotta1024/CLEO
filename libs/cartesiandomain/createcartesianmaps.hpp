@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 19th April 2024
+ * Last Modified: Wednesday 28th May 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -39,6 +39,7 @@
 #include "cartesiandomain/cartesian_decomposition.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/doubly_periodic_domain.hpp"
+#include "configuration/communicator.hpp"
 #include "initialise/gbx_bounds_from_binary.hpp"
 
 /* creates cartesian maps instance using gridbox bounds read from
