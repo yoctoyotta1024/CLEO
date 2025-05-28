@@ -29,8 +29,8 @@ kokkos_settings:
 ### SDM Runtime Parameters ###
 domain:
   nspacedims : 3                                          # no. of spatial dimensions to model
-  ngbxs : 1440                                            # total number of Gbxs
-  maxnsupers: 1440                                        # maximum number of SDs
+  ngbxs : 4800                                            # total number of Gbxs
+  maxnsupers: 4800                                        # maximum number of SDs
 
 timesteps:
   CONDTSTEP : 2                                           # time between SD condensation [s]
@@ -57,7 +57,7 @@ outputdata:
 
 coupled_dynamics:
   type: yac
-  lower_longitude: -0.989601687                               # must match xgrid domain delta_x
-  upper_longitude: 0.895353906
-  lower_latitude: -0.392699082                                # must match ygrid domain delta_y
-  upper_latitude: 0.392699082
+  lower_longitude: -3.29867229                                # must match xgrid domain delta_x
+  upper_longitude: 2.98451302
+  lower_latitude: -1.25665                                    # must match ygrid domain delta_y
+  upper_latitude: 1.25665
