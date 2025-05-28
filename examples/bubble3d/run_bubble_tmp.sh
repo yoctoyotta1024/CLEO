@@ -79,22 +79,14 @@ then
   export OMP_PROC_BIND=spread
   export OMP_PLACES=threads
 
-  icon_grid_name="icon_atmos_grid" # must match CLEO (see yac_cartesian_dynamics.cpp)
-  icon_data_timestep=30 # must match ICON data file [seconds]
-  cleo_coupling_timestep=60 # must match CLEO config file [seconds]
-  cleo_t_end=7200 # must match CLEO config file [seconds]
-  cleo_num_vertical_levels=24 # must match CLEO grid_filename
-
-  # must match bubble3d_inputfiles.py
-  icon_grid_file_copy=${path2build}/share/icon_grid_file_aes_bubble_atm_cgrid_ml.nc
-  icon_data_file_copy=${path2build}/share/icon_data_file_aes_bubble_atm_3d_ml_20080801T000000Z.nc
+  python -m pip install ruamel.yaml
 
   mpiexec -n 1 ${path2build}/examples/bubble3d/src/bubble3d \
     ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
     : -n 1 python \
     ${path2CLEO}/examples/bubble3d/yac_bubble_data_reader.py \
-    ${icon_grid_file_copy} ${icon_data_file_copy} ${icon_grid_name} ${icon_data_timestep} \
-    ${cleo_coupling_timestep} ${cleo_t_end} ${cleo_num_vertical_levels}
+    ${path2build} \
+    ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml
 
 elif [ "${action}" == "plot" ]
 then

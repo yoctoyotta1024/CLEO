@@ -9,7 +9,7 @@ Created Date: Friday 19th July 2024
 Author: Wilton Loch (WL)
 Additional Contributors: Clara Bayley (CB)
 -----
-Last Modified: Friday 16th August 2024
+Last Modified: Wednesday 28th May 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -24,6 +24,8 @@ output data and CLEO (e.g. for the bubble test case)
 
 from yac import YAC, UnstructuredGrid, Field, Location, Calendar, TimeUnit, def_calendar
 from netCDF4 import Dataset
+from pathlib import Path
+from ruamel.yaml import YAML
 import numpy as np
 import sys
 
@@ -132,14 +134,27 @@ def prepare_data_for_yac(source):
     return target
 
 
-# TODO(CB): (move variables to and) read in variables from CLEO config file
-grid_filename = sys.argv[1]
-data_filename = sys.argv[2]
-grid_name = sys.argv[3]  # must match CLEO (see yac_cartesian_dynamics.cpp)
-DATATSTEP = float(sys.argv[4])  # must match ICON data file [seconds]
-COUPLTSTEP = float(sys.argv[5])  # must match CLEO config file [seconds]
-T_END = float(sys.argv[6])  # must match CLEO config file [seconds]
-num_vertical_levels = int(sys.argv[7])  # must match CLEO grid_filename
+# Load the icon yac configuration parameters from the config YAML file
+path2build = Path(sys.argv[1])
+config_filename = Path(sys.argv[2])
+yaml = YAML()
+with open(config_filename, "r") as file:
+    config = yaml.load(file)
+icon_yac_config = config["icon_yac_config"]
+
+orginal_icon_grid_file = Path(icon_yac_config["orginal_icon_grid_file"])
+orginal_icon_data_file = Path(icon_yac_config["orginal_icon_data_file"])
+grid_filename = str(
+    path2build / "share" / orginal_icon_grid_file.name
+)  # as in bubble3d_inputfiles.py
+data_filename = str(
+    path2build / "share" / orginal_icon_data_file.name
+)  # as in bubble3d_inputfiles.py
+grid_name = icon_yac_config["icon_grid_name"]
+DATATSTEP = icon_yac_config["icon_data_timestep"]
+COUPLTSTEP = config["timesteps"]["COUPLTSTEP"]
+T_END = config["timesteps"]["T_END"]
+num_vertical_levels = icon_yac_config["num_vertical_levels"]
 
 msg = (
     "--- INPUT ARGS ---"
