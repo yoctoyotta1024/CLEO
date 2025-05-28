@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 1st May 2024
+ * Last Modified: Wednesday 28th May 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -122,7 +122,9 @@ local index by subtracting gridboxes_slice_start
 kkpair_size_t correct_neighbor_indices(kkpair_size_t neighbours, const std::vector<size_t> ndims,
                                        const CartesianDecomposition &domain_decomposition) {
   int my_rank;
-  MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+  MPI_Comm comm;
+  comm = init_communicator::get_communicator();
+  MPI_Comm_rank(comm, &my_rank);
   std::array<size_t, 3> neighbor_coordinates;
 
   if (neighbours.first != LIMITVALUES::oob_gbxindex) {
@@ -150,7 +152,9 @@ cartesian domain */
 void set_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary &gfb,
                         CartesianMaps &gbxmaps) {
   int my_rank;
-  MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+  MPI_Comm comm;
+  comm = init_communicator::get_communicator();
+  MPI_Comm_rank(comm, &my_rank);
 
   if (nspacedims > 3) {
     throw std::invalid_argument("only 0 <= nspacedims <= 3 is valid ");
@@ -272,7 +276,9 @@ conditions where neighbour of gridbox in a certain direction is itself). Null di
 void set_null_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary &gfb,
                              CartesianMaps &gbxmaps) {
   int my_rank;
-  MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+  MPI_Comm comm;
+  comm = init_communicator::get_communicator();
+  MPI_Comm_rank(comm, &my_rank);
 
   if (nspacedims >= 3) {
     throw std::invalid_argument("null model dimensions only valid for 0 <= nspacedims < 3");

@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 24th Febuary 2025
+ * Last Modified: Wednesday 28th May 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -29,7 +29,9 @@ SupersInDomain CartesianTransportAcrossDomain::operator()(const CartesianMaps &g
                                                           const viewd_gbx d_gbxs,
                                                           SupersInDomain &allsupers) const {
   int comm_size;
-  MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
+  MPI_Comm comm;
+  comm = init_communicator::get_communicator();
+  MPI_Comm_size(comm, &comm_size);
 
   // TODO(ALL): remove guard once domain decomposition is GPU compatible
   if (comm_size > 1) {
