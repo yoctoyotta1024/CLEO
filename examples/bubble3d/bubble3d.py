@@ -9,7 +9,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 11th September 2024
+Last Modified: Tuesday 15th April 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -22,13 +22,13 @@ piggyback ICON bubble test case
 
 import os
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
 path2CLEO = Path(sys.argv[1])
 path2build = Path(sys.argv[2])
 config_filename = Path(sys.argv[3])
-icon_grid_file = sys.argv[4]  # TODO(CB): move to config file
 
 import bubble3d_inputfiles
 
@@ -70,7 +70,6 @@ bubble3d_inputfiles.main(
     config_filename,
     grid_filename,
     initsupers_filename,
-    icon_grid_file,
     SDgbxs2plt,
 )
 ### ---------------------------------------------------------------- ###
@@ -85,32 +84,48 @@ def run_exectuable(path2CLEO, path2build, config_filename, dataset):
     os.chdir(path2build)
     os.system("pwd")
     shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
-    executable = str(path2build / "examples" / "yac" / "bubble3d" / "src" / "bubble3d")
-    config_filename = str(config_filename)
-    print("Executable: " + str(executable))
-    print("Config file: " + str(config_filename))
+    cleoproc = str(path2build / "examples" / "bubble3d" / "src" / "bubble3d")
+    cleoproc_args = str(config_filename)
+    print("CLEO Executable: " + cleoproc)
+    print("CLEO Config file: " + cleoproc_args)
 
-    cleoproc = executable + " " + config_filename
-    pythonproc = path2CLEO + "/examples/yac/bubble3d/yac_icon_data_reader.py"
-    cmd = "mpiexec -n 1 " + cleoproc + " : -n 1 python " + pythonproc
-    os.system(cmd)
+    python = sys.executable
+    pythonproc = str(path2CLEO / "examples" / "bubble3d" / "yac_bubble_data_reader.py")
+    pythonproc_args = [str(path2build), str(config_filename)]
+    print("YAC script: " + pythonproc)
+    print("YAC arguments: " + " ".join(pythonproc_args))
+
+    cmd = [
+        "mpiexec",
+        "-n",
+        "1",
+        cleoproc,
+        cleoproc_args,
+        ":",
+        "-n",
+        "1",
+        python,
+        pythonproc,
+    ] + pythonproc_args
+    print(" ".join(cmd))
+    subprocess.run(cmd)
 
 
 run_exectuable(path2CLEO, path2build, config_filename, dataset)
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
-# ### ---------------------------------------------------------------- ###
-# ### ------------------------- PLOT RESULTS ------------------------- ###
-# ### ---------------------------------------------------------------- ###
-# TODO(CB): plot results
-# # read in constants and intial setup from setup .txt file
-# config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
-# consts = pysetuptxt.get_consts(setupfile, isprint=True)
-# gbxs = pygbxsdat.get_gridboxes(grid_filename, consts["COORD0"], isprint=True)
 
-# time = pyzarr.get_time(dataset)
-# sddata = pyzarr.get_supers(dataset, consts)
-# maxnsupers = pyzarr.get_totnsupers(dataset)
-# ### ---------------------------------------------------------------- ###
-# ### ---------------------------------------------------------------- ###
+### ---------------------------------------------------------------- ###
+### ------------------------- PLOT RESULTS ------------------------- ###
+### ---------------------------------------------------------------- ###
+def plot_results(path2CLEO):
+    plotting_script = path2CLEO / "examples" / "bubble3d" / "bubble3d_plotting.py"
+    python = sys.executable
+    cmd = [python, plotting_script, path2CLEO, path2build, config_filename]
+    subprocess.run(cmd)
+
+
+plot_results(path2CLEO)
+### ---------------------------------------------------------------- ###
+### ---------------------------------------------------------------- ###
