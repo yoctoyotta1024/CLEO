@@ -20,6 +20,7 @@ set(SOURCES
 "init_supers_from_binary.cpp"
 "readbinary.cpp"
 "timesteps.cpp"
+"communicator.cpp"
 )
 # must use STATIC (not(!) SHARED) lib for linking to executable if build is CUDA enabled with Kokkos
 add_library("${LIBNAME}" STATIC ${SOURCES})
