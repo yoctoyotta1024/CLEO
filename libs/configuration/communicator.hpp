@@ -31,19 +31,16 @@
 #include <string>
 #include <vector>
 
+#include "../cleoconstants.hpp"
 #include "configuration/config.hpp"
 
 class init_communicator {
- private:
-  bool yac_present;
-  // const Config &config;
  public:
-  int rank;
-  int size;
-  MPI_Comm comm;
-  // Constructor
-  // init_communicator(const std::filesystem::path config_filename)
+  static int yac_comp_id;
+  static MPI_Comm comm;
+  bool yac_present;
   explicit init_communicator(const Config &config);
+  static MPI_Comm get_communicator();
 };
 
 #endif  // LIBS_CONFIGURATION_COMMUNICATOR_HPP_
