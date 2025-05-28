@@ -19,19 +19,6 @@
 
 #include "cartesian_decomposition.hpp"
 
-#include <mpi.h>
-
-#include <algorithm>
-#include <array>
-#include <cassert>
-#include <cmath>
-#include <iostream>
-#include <limits>
-#include <vector>
-
-#include "cartesiandomain/domainboundaries.hpp"
-#include "domainboundaries.hpp"
-
 CartesianDecomposition::CartesianDecomposition() { comm = init_communicator::get_communicator(); }
 
 CartesianDecomposition::~CartesianDecomposition() {}
