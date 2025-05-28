@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 28th May 2025
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -185,11 +185,6 @@ class MoveSupersInDomain {
   */
   SupersInDomain move_superdrops_in_domain(const unsigned int t_sdm, const GbxMaps &gbxmaps,
                                            viewd_gbx d_gbxs, SupersInDomain &allsupers) const {
-    int my_rank;
-    MPI_Comm comm;
-    comm = init_communicator::get_communicator();
-    MPI_Comm_rank(comm, &my_rank);
-
     /* steps (1 - 2) */
     move_supers_in_gridboxes(gbxmaps, d_gbxs, allsupers.domain_supers());
 
