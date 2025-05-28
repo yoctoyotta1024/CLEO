@@ -17,6 +17,7 @@ action=$1
 path2CLEO=${2:-${HOME}/CLEO}
 path2yac=${3:-/work/bm1183/m300950/yacyaxt}
 path2build=${4:-${HOME}/CLEO/build_bubble3d}
+python=${5:-/work/bm1183/m300950/bin/envs/cleoenv/bin/python}
 
 if [ "${action}" == "build" ]
 then
@@ -49,8 +50,6 @@ then
 
 elif [ "${action}" == "inputfiles" ]
 then
-  cleoenv=/work/bm1183/m300950/bin/envs/cleoenv
-  python=${cleoenv}/bin/python3
   ${python} ${path2CLEO}/examples/bubble3d/bubble3d_inputfiles.py \
    ${path2CLEO} \
    ${path2build} \
@@ -65,13 +64,8 @@ then
 
   module purge
   spack unload --all
-  # note version of python must match the YAC python bindings (e.g. module load python3/2022.01-gcc-11.2.0)
+  # note version of python must match the YAC python bindings (e.g. spack load python@3.9.9%gcc@=11.2.0/fwv)
   module load openmpi/4.1.2-gcc-11.2.0 # same mpi as loaded for the build
-  ### ----------------- load Python ------------------------ ###
-  spack load python@3.9.9%gcc@=11.2.0/fwv
-  spack load py-cython@0.29.33%gcc@=11.2.0/j7b4fa
-  spack load py-mpi4py@3.1.2%gcc@=11.2.0/hdi5yl6
-  ### ------------------------------------------------------ ###
 
   export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/sw/spack-levante/libfyaml-0.7.12-fvbhgo/lib
   export PYTHONPATH=${PYTHONPATH}:${path2yac}/yac/python # path to python bindings
@@ -79,19 +73,16 @@ then
   export OMP_PROC_BIND=spread
   export OMP_PLACES=threads
 
-  python -m pip install ruamel.yaml
-
   mpiexec -n 1 ${path2build}/examples/bubble3d/src/bubble3d \
     ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
-    : -n 1 python \
+    : -n 1 ${python} \
     ${path2CLEO}/examples/bubble3d/yac_bubble_data_reader.py \
     ${path2build} \
     ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml
 
 elif [ "${action}" == "plot" ]
 then
-  /work/bm1183/m300950/bin/envs/cleoenv/bin/python \
-    ${path2CLEO}/examples/bubble3d/bubble3d_plotting.py \
+  ${python} ${path2CLEO}/examples/bubble3d/bubble3d_plotting.py \
     ${path2CLEO} \
     ${path2build} \
     ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml
