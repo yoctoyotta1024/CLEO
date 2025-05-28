@@ -29,6 +29,7 @@
 
 #include "../cleoconstants.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
+#include "configuration/communicator.hpp"
 #include "configuration/optional_config_params.hpp"
 #include "initialise/init_all_supers_from_binary.hpp"
 #include "initialise/initialconditions.hpp"
@@ -42,8 +43,9 @@ struct InitSupersFromBinary {
   size_t maxnsupers;  /**< total number of super-droplets (in kokkos view on device) */
   size_t initnsupers; /**< initial no. of super-droplets to initialise */
   std::filesystem::path initsupers_filename; /**< filename for super-droplets' initial conditons */
-  unsigned int nspacedims; /**< number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D) */
-  const CartesianMaps &gbxmaps;
+  unsigned int nspacedims;      /**< number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D) */
+  const CartesianMaps &gbxmaps; /**< hook to get to gridbox maps for current cartesian domain */
+  MPI_Comm comm;                /**< (YAC compatible) communicator for MPI domain decomposition */
 
   /* returns InitSupersData created by reading some data from a binary file and
   filling the rest with un-initialised super-droplets */
@@ -76,6 +78,7 @@ struct InitSupersFromBinary {
                             std::to_string(maxnsupers) + " < " + std::to_string(initnsupers));
       throw std::invalid_argument(err);
     }
+    comm = init_communicator::get_communicator();
   }
 
   auto get_maxnsupers() const { return maxnsupers; }
