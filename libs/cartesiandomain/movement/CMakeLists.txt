@@ -24,7 +24,7 @@ target_include_directories(${LIBNAME} PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO 
 
 # Add directories and link libraries for target library
 # target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
-set(LINKLIBS initialise superdrops gridboxes)
+set(LINKLIBS configuration superdrops gridboxes)
 target_link_libraries(${LIBNAME} PUBLIC "${LINKLIBS}")
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 
