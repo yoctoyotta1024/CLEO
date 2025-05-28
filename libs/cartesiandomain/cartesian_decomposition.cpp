@@ -374,6 +374,8 @@ int find_best_decomposition(std::vector<std::vector<size_t>> &factors,
   int comm_size, best_factorization = -1;
   double vertical_split_penalization = 1.0;
 
+  MPI_Comm comm;
+  comm = init_communicator::get_communicator();
   MPI_Comm_size(comm, &comm_size);
 
   // Calculates the ideal (most even possible) division and initializes the minimum error
