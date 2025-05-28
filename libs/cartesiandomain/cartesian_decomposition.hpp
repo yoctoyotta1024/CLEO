@@ -20,12 +20,20 @@
 #ifndef LIBS_CARTESIANDOMAIN_CARTESIAN_DECOMPOSITION_HPP_
 #define LIBS_CARTESIANDOMAIN_CARTESIAN_DECOMPOSITION_HPP_
 
+#include <mpi.h>
+
+#include <algorithm>
 #include <array>
+#include <cassert>
+#include <cmath>
 #include <cstddef>
+#include <iostream>
+#include <limits>
 #include <map>
 #include <vector>
 
 #include "../cleoconstants.hpp"
+#include "cartesiandomain/domainboundaries.hpp"
 #include "configuration/communicator.hpp"
 
 class CartesianDecomposition {
