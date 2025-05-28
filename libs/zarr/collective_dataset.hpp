@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Wilton Jaciel Loch
  * -----
- * Last Modified: Friday 02nd August 2024
+ * Last Modified: Wednesday 28th May 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -42,7 +42,7 @@
 #include <utility>
 #include <vector>
 
-#include "cartesiandomain/cartesian_decomposition.hpp"
+#include "cartesiandomain/cartesian_decomposition.hpp"  // TODO(CB): remove dependency on cartesiandomain (also in zarr's CMakeLists)
 #include "zarr/xarray_zarr_array.hpp"
 #include "zarr/zarr_group.hpp"
 
