@@ -35,7 +35,7 @@ them yourself.
 
 yaml-cpp
 --------
-CLEO's ``initialise`` library depends on the ```yaml-cpp``` package to read and write YAML files. You
+CLEO's ``configuration`` library depends on the ```yaml-cpp``` package to read and write YAML files. You
 can find more information about it from `its repository: <https://github.com/jbeder/yaml-cpp>`_.
 
 The yaml-cpp library for CLEO is automatically built using CMAKE and compiled if required.

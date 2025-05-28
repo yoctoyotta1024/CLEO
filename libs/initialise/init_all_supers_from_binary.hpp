@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Wednesday 28th May 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -33,8 +33,8 @@
 #include <string_view>
 #include <vector>
 
+#include "configuration/optional_config_params.hpp"
 #include "initialise/initialconditions.hpp"
-#include "initialise/optional_config_params.hpp"
 #include "initialise/readbinary.hpp"
 #include "superdrops/superdrop.hpp"
 
