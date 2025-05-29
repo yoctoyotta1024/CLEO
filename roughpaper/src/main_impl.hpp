@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 19th July 2024
+ * Last Modified: Thursday 29th May 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -184,10 +184,11 @@ inline Observer auto create_superdrops_observer(const unsigned int interval,
   CollectDataForDataset<Store> auto radius = CollectRadius(dataset, maxchunk);
   CollectDataForDataset<Store> auto msol = CollectMsol(dataset, maxchunk);
   CollectDataForDataset<Store> auto coord3 = CollectCoord3(dataset, maxchunk);
-  // CollectDataForDataset<Store> auto coord1 = CollectCoord1(dataset, maxchunk);
-  // CollectDataForDataset<Store> auto coord2 = CollectCoord2(dataset, maxchunk);
+  CollectDataForDataset<Store> auto coord1 = CollectCoord1(dataset, maxchunk);
+  CollectDataForDataset<Store> auto coord2 = CollectCoord2(dataset, maxchunk);
 
-  const auto collect_sddata = coord3 >> msol >> radius >> xi >> sdgbxindex >> sdid;
+  const auto collect_sddata =
+      coord1 >> coord2 >> coord3 >> msol >> radius >> xi >> sdgbxindex >> sdid;
   return SuperdropsObserver(interval, dataset, maxchunk, collect_sddata);
 }
 

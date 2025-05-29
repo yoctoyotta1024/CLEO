@@ -26,7 +26,7 @@ from pathlib import Path
 
 sys.path.append(sys.argv[1])  # path to pySD (same as to CLEO)
 from pySD import geninitconds
-from pySD.initsuperdropsbinary_src import rgens, dryrgens, probdists, attrsgen
+from pySD.initsuperdropsbinary_src import rgens, dryrgens, probdists, attrsgen, crdgens
 
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### --- absolute or relative paths for --- ###
@@ -120,22 +120,22 @@ xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
 ### --- Choice of Superdroplet Coord3 Generator --- ###
 # monocoord3           = 1000                        # all SDs have this same coord3 [m]
 # coord3gen            =  crdgens.MonoCoordGen(monocoord3)
-# coord3gen = crdgens.SampleCoordGen(True)  # sample coord3 range randomly or not
-coord3gen = None  # do not generate superdroplet coord3s
+coord3gen = crdgens.SampleCoordGen(True)  # sample coord3 range randomly or not
+# coord3gen = None  # do not generate superdroplet coord3s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord1 Generator --- ###
 # monocoord1           = 200                        # all SDs have this same coord1 [m]
 # coord1gen            =  crdgens.MonoCoordGen(monocoord1)
-# coord1gen            =  crdgens.SampleCoordGen(True) # sample coord1 range randomly or not
-coord1gen = None  # do not generate superdroplet coord1s
+coord1gen = crdgens.SampleCoordGen(True)  # sample coord1 range randomly or not
+# coord1gen = None  # do not generate superdroplet coord1s
 ### ----------------------------------------------- ###
 
 ### --- Choice of Superdroplet Coord2 Generator --- ###
 # monocoord2           = 1000                        # all SDs have this same coord2 [m]
 # coord2gen            =  crdgens.MonoCoordGen(monocoord2)
-# coord2gen            =  crdgens.SampleCoordGen(True) # sample coord1 range randomly or not
-coord2gen = None  # do not generate superdroplet coord2s
+coord2gen = crdgens.SampleCoordGen(True)  # sample coord1 range randomly or not
+# coord2gen = None  # do not generate superdroplet coord2s
 ### ----------------------------------------------- ###
 
 ### ---------------------------------------------------------------- ###
