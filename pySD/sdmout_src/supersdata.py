@@ -1,4 +1,4 @@
-'''
+"""
 Copyright (c) 2025 MPI-M, Clara Bayley
 
 
@@ -9,7 +9,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 27th May 2025
+Last Modified: Thursday 29th May 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -17,7 +17,7 @@ https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
 python class to handle superdroplet attributes data from SDM zarr store in ragged array format
-'''
+"""
 
 
 import numpy as np
@@ -26,6 +26,11 @@ import awkward as ak
 import warnings
 from pathlib import Path
 from typing import Optional
+
+warnings.warn(
+    "supersdata module is depreciated since CLEO v0.40.0,\nreplaced by superdrops"
+)
+
 
 class SuperdropProperties:
     """Contains attributes common to all superdroplets and functions
@@ -104,12 +109,13 @@ class SuperdropProperties:
 
         return self.RHO_L * v_w * 1000  # [g]
 
+
 class SupersData(SuperdropProperties):
-    def __init__(self, dataset: Path, consts: Optional[dict]=None):
+    def __init__(self, dataset: Path, consts: Optional[dict] = None):
         if consts is not None:
-          SuperdropProperties.__init__(self, consts)
+            SuperdropProperties.__init__(self, consts)
         else:
-          warnings.warn("No superdroplet properties attached to superdroplet dataset")
+            warnings.warn("No superdroplet properties attached to superdroplet dataset")
 
         ds = self.tryopen_dataset(dataset)
         raggedcount = ds["raggedcount"]  # ragged count variable
