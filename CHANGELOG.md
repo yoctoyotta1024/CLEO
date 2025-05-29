@@ -2,6 +2,27 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.40.0](https://github.com/yoctoyotta1024/CLEO/compare/29a1591c5c7142307475c5587b028c240e5c86dc..v0.40.0) - 2025-05-29
+#### Bug Fixes
+- fix superdroplet plotting when domain is smaller than 100km - ([0d11ffe](https://github.com/yoctoyotta1024/CLEO/commit/0d11ffe90d643e7a3d4f38168f2c4e61e86242a2)) - clara.bayley
+#### Features
+- new script for plotting bubble - ([b2d57d1](https://github.com/yoctoyotta1024/CLEO/commit/b2d57d10c5c05d16cf4c07f0ef0e8c0eb4bb0e25)) - clara.bayley
+#### Refactoring
+- export yacyaxt root if running example with yac - ([e0c1959](https://github.com/yoctoyotta1024/CLEO/commit/e0c1959cc10d3005e4daa868c6d03c88486cf967)) - clara.bayley
+- use gcc compiler when enabled yac in example - ([b096fa3](https://github.com/yoctoyotta1024/CLEO/commit/b096fa3051ddfc362f825553a72146a8c6d85582)) - clara.bayley
+- remove unnecesary parts of tmp_working_bubble script - ([8595efd](https://github.com/yoctoyotta1024/CLEO/commit/8595efd3e15f35d6c9bedbdf26c81aa0f8d791f9)) - clara.bayley
+- use cleoenv python to run bubble - ([6c645ed](https://github.com/yoctoyotta1024/CLEO/commit/6c645ed7dcdef54ef6062f89820a74574ec59c92)) - clara.bayley
+- update bubble script to run and plot bubble - ([a3d31d0](https://github.com/yoctoyotta1024/CLEO/commit/a3d31d07de86071b601eeec1d294db9d9e7fc173)) - clara.bayley
+- read config from yac_bubble_data_reader - ([05b24fa](https://github.com/yoctoyotta1024/CLEO/commit/05b24fa52709549aae90f3e981128b1770ac342b)) - clara.bayley
+- move icon yac init parameters into yaml config file - ([66080ef](https://github.com/yoctoyotta1024/CLEO/commit/66080ef6d616f1cb29fe6c282127cd2f2602d631)) - clara.bayley
+- add alternative bubble plot - ([d33e7ff](https://github.com/yoctoyotta1024/CLEO/commit/d33e7ffb2de0087db3e034919a49b06eedc3d2a9)) - clara.bayley
+- add more superdroplet attribute observers - ([4c66d8e](https://github.com/yoctoyotta1024/CLEO/commit/4c66d8e79adbcce3e2bbf4e0dbcaee53933f01ce)) - clara.bayley
+- adapt cleo domain for bubble to crop inside central portion of icon domain - ([770d369](https://github.com/yoctoyotta1024/CLEO/commit/770d369dfd602188db66515917d97ef84ce99031)) - clara.bayley
+- adapt cleo domain for bubble to match entire icon domain - ([5056765](https://github.com/yoctoyotta1024/CLEO/commit/5056765048a40d75327e41ad3de5398af4bc966b)) - clara.bayley
+- add yacyaxt root export to compile/run cleo bash in case yac enabled - ([29a1591](https://github.com/yoctoyotta1024/CLEO/commit/29a1591c5c7142307475c5587b028c240e5c86dc)) - clara.bayley
+
+- - -
+
 ## [v0.39.7](https://github.com/yoctoyotta1024/CLEO/compare/dbec7a4c7ea667b5241b1016a3c29f9fb9727bcd..v0.39.7) - 2025-04-19
 #### Bug Fixes
 - fix major bug in calculation of collision probability - ([dbec7a4](https://github.com/yoctoyotta1024/CLEO/commit/dbec7a4c7ea667b5241b1016a3c29f9fb9727bcd)) - clara.bayley
