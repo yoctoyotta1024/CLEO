@@ -31,22 +31,18 @@ then
   spack load openblas@0.3.18%gcc@=11.2.0
   module load ${gcc} ${openmpi} ${netcdf}
 
-  CLEO_YAC_FLAGS="-D"${cleo_yac_module_path}" -DC -DCLEO_YAC_ROOT=${CLEO_YACYAXTROOT}/yac"
   cmake -S ${path2CLEO} -B ${path2build} -DCLEO_COUPLED_DYNAMICS="yac" \
     -DCLEO_YAC_MODULE_PATH="${path2CLEO}/libs/coupldyn_yac/cmake" \
     -DCLEO_YAXT_ROOT=${path2yac}/yaxt -DCLEO_YAC_ROOT=${path2yac}/yac
 
 elif [ "${action}" == "compile" ]
 then
-  cd ${path2build}
-
   module purge
   spack unload --all
   module load openmpi/4.1.2-gcc-11.2.0
-  module load netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0
-  spack load openblas@0.3.18%gcc@=11.2.0
 
-  ${path2CLEO}/scripts/levante/bash/compile_cleo.sh openmp ${path2build} bubble3d
+  cd ${path2build}
+  make -j 128 bubble3d
 
 elif [ "${action}" == "inputfiles" ]
 then
@@ -60,8 +56,6 @@ then
 
 elif [ "${action}" == "run" ]
 then
-  cd ${path2build}
-
   module purge
   spack unload --all
   # note version of python must match the YAC python bindings (e.g. spack load python@3.9.9%gcc@=11.2.0/fwv)
@@ -73,6 +67,7 @@ then
   export OMP_PROC_BIND=spread
   export OMP_PLACES=threads
 
+  cd ${path2build}
   mpiexec -n 1 ${path2build}/examples/bubble3d/src/bubble3d \
     ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
     : -n 1 ${python} \
