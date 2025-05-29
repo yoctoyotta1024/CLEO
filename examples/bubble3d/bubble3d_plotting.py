@@ -9,7 +9,7 @@ Created Date: Monday 6th January 2025
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 15th April 2025
+Last Modified: Friday 30th May 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -55,7 +55,7 @@ sys.path.append(
     str(args.path2CLEO / "examples" / "exampleplotting")
 )  # imports from example plots package
 
-from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat, sdtracing
+from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
 
 # %%
 path2build = args.path2build
@@ -76,7 +76,7 @@ gbxindex = pyzarr.get_gbxindex(ds, gbxs["ndims"])
 thermo, winds = pyzarr.get_thermodata(
     ds, config["ntime"], gbxs["ndims"], consts, getwinds=True
 )
-sddata = pyzarr.get_supers(ds, consts)
+superdrops = pyzarr.get_supers(ds, consts)
 totnsupers = pyzarr.get_totnsupers(ds)
 
 xfull_km = (gbxs["xfull"] - (gbxs["xfull"][-1] + gbxs["xfull"][0]) / 2) / 1000
@@ -138,12 +138,9 @@ for v, var in enumerate(vars):
     fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
     print("Figure .png saved as: " + str(savename))
 # %%
-maxid = np.amax(sddata.sdId[0])
 nsample = 1000
 sample_attrs = ["coord3", "coord1", "radius"]
-sample = sdtracing.attrs_for_superdroplets_sample(
-    sddata, sample_attrs, ndrops2sample=nsample, minid=0, maxid=maxid
-)
+sample = superdrops.random_sample("sdId", nsample, variables2sample=sample_attrs)
 
 # %%
 wind_var = winds["wvel"]
@@ -228,12 +225,10 @@ print("Figure .png saved as: " + str(savename))
 
 
 # %%
-maxid = np.amax(sddata.sdId[0])
 nsample = 1000
 sample_attrs = ["coord3", "coord1", "radius"]
-sample = sdtracing.attrs_for_superdroplets_sample(
-    sddata, sample_attrs, ndrops2sample=nsample, minid=0, maxid=maxid
-)
+sample = superdrops.random_sample("sdId", nsample, variables2sample=sample_attrs)
+
 
 # %%
 wind_var = winds["wvel"]

@@ -64,7 +64,7 @@ gbxs = pygbxsdat.get_gridboxes(grid_filename, consts["COORD0"], isprint=True)
 ds = pyzarr.get_rawdataset(dataset)
 
 time = pyzarr.get_time(ds)
-sddata = pyzarr.get_supers(ds, consts)
+superdrops = pyzarr.get_supers(ds, consts)
 ### ---------------------------------------------------------------- ###
 
 ### ----------------- plot individual superdroplets ---------------- ###
@@ -72,18 +72,18 @@ savename = ""
 if savefig:
     savename = savefigpath / "randomsample_attrs.png"
 pltsds.plot_randomsample_superdrops(
-    time, sddata, config["maxnsupers"], nsample, savename=savename
+    time, superdrops, config["maxnsupers"], nsample, savename=savename
 )
 if savefig:
     savename = savefigpath / "randomsample_2dmotion.png"
 pltsds.plot_randomsample_superdrops_2dmotion(
-    sddata, config["maxnsupers"], nsample, arrows=False
+    superdrops, config["maxnsupers"], nsample, arrows=False
 )
 ### ---------------------------------------------------------------- ###
 
 ### ------------------ plot droplet distributions ------------------ ###
 if rspan == ["min", "max"]:
-    non_nanradius = ak.nan_to_none(sddata["radius"])
+    non_nanradius = ak.nan_to_none(superdrops["radius"])
     rspan = [ak.min(non_nanradius), ak.max(non_nanradius)]
 
 if smoothsig_mass:
@@ -91,8 +91,8 @@ if smoothsig_mass:
 if savefig:
     savename = savefigpath / "domain_mass_distrib.png"
 fig, ax = pltdist.plot_domainmass_distribs(
-    time.secs,
-    sddata,
+    time,
+    superdrops,
     t2plts,
     gbxs["domainvol"],
     rspan,
@@ -108,8 +108,8 @@ if smoothsig_num:
 if savefig:
     savename = savefigpath / "domain_numconc_distrib.png"
 fig, ax = pltdist.plot_domainnumconc_distribs(
-    time.secs,
-    sddata,
+    time,
+    superdrops,
     t2plts,
     gbxs["domainvol"],
     rspan,

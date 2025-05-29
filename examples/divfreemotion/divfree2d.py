@@ -107,7 +107,7 @@ consts = pysetuptxt.get_consts(setupfile, isprint=True)
 gbxs = pygbxsdat.get_gridboxes(grid_filename, consts["COORD0"], isprint=True)
 
 time = pyzarr.get_time(dataset)
-sddata = pyzarr.get_supers(dataset, consts)
+superdrops = pyzarr.get_supers(dataset, consts)
 maxnsupers = pyzarr.get_totnsupers(dataset)
 
 # 4. plot results
@@ -117,7 +117,7 @@ pltmoms.plot_totnsupers(time, maxnsupers, savename=savename)
 nsample = 500
 savename = savefigpath / "df2d_motion2d_validation.png"
 pltsds.plot_randomsample_superdrops_2dmotion(
-    sddata, config["maxnsupers"], nsample, savename=savename, arrows=False
+    superdrops, config["maxnsupers"], nsample, savename=savename, arrows=False
 )
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###

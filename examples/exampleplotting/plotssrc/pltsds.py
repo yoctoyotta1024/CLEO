@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 21st March 2025
+Last Modified: Tuesday 3rd June 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -18,14 +18,11 @@ File Description:
 examples for plotting individual superdroplets
 """
 
-import sys
+import awkward as ak
 import numpy as np
 import matplotlib.pyplot as plt
 import random
 from matplotlib.markers import MarkerStyle
-
-sys.path.append("../../../")  # for imports from pySD package
-from pySD.sdmout_src import sdtracing
 
 
 def maxmin_radii_label(r, allradii):
@@ -49,9 +46,10 @@ def individ_radiusgrowths_figure(time, radii, savename=""):
 
     fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(10, 8))
 
-    for i in range(radii.shape[1]):
-        label = maxmin_radii_label(radii[0, i], radii[0, :])
-        ax.plot(time, radii[:, i], linewidth=0.8, label=label)
+    radii0 = [r[0] for r in radii]
+    for i in range(len(radii)):
+        label = maxmin_radii_label(radii[i][0], radii0)
+        ax.plot(time, radii[i], linewidth=0.8, label=label)
 
     ax.set_xlabel("time /s")
     ax.set_yscale("log")
@@ -70,37 +68,50 @@ def individ_radiusgrowths_figure(time, radii, savename=""):
     return fig, ax
 
 
-def plot_randomsample_superdrops(time, sddata, totnsupers, nsample, savename=""):
+def plot_randomsample_superdrops(time, superdrops, totnsupers, nsample, savename=""):
     """plot timeseries of the attributes of a
     random sample of superdroplets"""
 
     fig, axs = plt.subplots(nrows=2, ncols=3, figsize=(10, 6))
     fig.suptitle("Time Evolution of a Random Sample of Superdroplets")
 
-    minid, maxid = 0, int(totnsupers)  # largest value of ids to sample
-    ids2plot = random.sample(list(range(minid, maxid, 1)), nsample)
+    superdrops.attach_time(time.mins, "min", do_reshape=True, var4reshape="sdId")
 
-    attrs = ["radius", "xi", "msol"]
-    for a, attr in enumerate(attrs):
+    sample_population = list(np.unique(ak.flatten(superdrops.sdId())))
+    ids2plot = random.sample(sample_population, nsample)
+    attrs = ["time", "radius", "xi", "msol", "coord3", "coord1", "coord2"]
+    sample = superdrops.sample("sdId", sample_values=ids2plot, variables2sample=attrs)
+
+    for a, attr in enumerate(["radius", "xi", "msol"]):
         try:
-            data = sdtracing.attribute_for_superdroplets_sample(
-                sddata, attr, ids=ids2plot
-            )
-            axs[0, a].plot(time.mins, data, linewidth=0.8)
+            t, data = sample.time(), sample[attr]
         except IndexError:
             print("WARNING: didn't plot " + attr)
+        try:
+            axs[0, a].plot(np.array(t), np.array(data), linewidth=0.8)
+        except (
+            ValueError
+        ):  # data not converible to numpy array (diff lengths of time for SDs)?
+            for i in range(len(data)):
+                axs[0, a].plot(t[i], data[i], linewidth=0.8)  # plot each SD seperately
 
     mks = MarkerStyle("o", fillstyle="full")
-    coords = ["coord3", "coord1", "coord2"]
-    for a, coord in enumerate(coords):
+    for a, coord in enumerate(["coord3", "coord1", "coord2"]):
         try:
-            data = sdtracing.attribute_for_superdroplets_sample(
-                sddata, coord, ids=ids2plot
-            )
-            data = data / 1000  # [km]
-            axs[1, a].plot(time.mins, data, linestyle="", marker=mks, markersize=0.2)
+            t, data = sample.time(), sample[coord]
         except IndexError:
             print("WARNING: didn't plot " + coord)
+        try:
+            d = np.array(data) / 1000  # [km]
+            axs[1, a].plot(np.array(t), d, linestyle="", marker=mks, markersize=0.2)
+        except (
+            ValueError
+        ):  # data not converible to numpy array (diff lengths of time for SDs)?
+            for i in range(len(data)):
+                d = data[i] / 1000  # [km]
+                axs[1, a].plot(
+                    t[i], d, linestyle="", marker=mks, markersize=0.2
+                )  # plot each SD seperately
 
     axs[0, 0].set_yscale("log")
     axs[0, 0].set_ylabel("radius, r /\u03BCm")
@@ -124,7 +135,7 @@ def plot_randomsample_superdrops(time, sddata, totnsupers, nsample, savename="")
 
 
 def plot_randomsample_superdrops_2dmotion(
-    sddata,
+    superdrops,
     totnsupers,
     nsample,
     savename="",
@@ -141,21 +152,20 @@ def plot_randomsample_superdrops_2dmotion(
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(6, 6))
 
     if ids2plot is None:
-        minid, maxid = 0, int(totnsupers)  # largest value of ids to sample
         if israndom:
-            ids2plot = random.sample(list(range(minid, maxid, 1)), nsample)
+            sample_population = list(np.unique(ak.flatten(superdrops.sdId())))
+            ids2plot = random.sample(sample_population, nsample)
         else:
-            ids2plot = np.linspace(0, maxid - 1, nsample, dtype=int)
+            minid = ak.min(superdrops.sdId())
+            maxid = ak.max(superdrops.sdId())
+            ids2plot = list(np.linspace(minid, maxid, nsample, dtype=int))
 
     mks = MarkerStyle("o", fillstyle="full")
-    coordz = (
-        sdtracing.attribute_for_superdroplets_sample(sddata, "coord3", ids=ids2plot)
-        / 1000
-    )  # [km]
-    coordx = (
-        sdtracing.attribute_for_superdroplets_sample(sddata, "coord1", ids=ids2plot)
-        / 1000
-    )  # [km]
+    sample = superdrops.sample(
+        "sdId", sample_values=ids2plot, variables2sample=["coord3", "coord1"]
+    )
+    coordz = np.array(sample.coord3()).T / 1000  # [km]
+    coordx = np.array(sample.coord1()).T / 1000  # [km]
 
     if colors is not None:
         ax.scatter(coordx, coordz, marker=mks, s=0.4, cmap=colors[0], c=colors[1])
@@ -202,7 +212,7 @@ def plot_randomsample_superdrops_2dmotion(
 
 
 def plot_superdrops_2dmotion(
-    sddata,
+    superdrops,
     ids2plot,
     savename="",
     colors=None,
@@ -211,7 +221,7 @@ def plot_superdrops_2dmotion(
     ax=None,
 ):
     fig, ax = plot_randomsample_superdrops_2dmotion(
-        sddata,
+        superdrops,
         np.nan,
         np.nan,
         savename=savename,

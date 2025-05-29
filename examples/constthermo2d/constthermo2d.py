@@ -208,7 +208,7 @@ consts = pysetuptxt.get_consts(setupfile, isprint=True)
 gbxs = pygbxsdat.get_gridboxes(grid_filename, consts["COORD0"], isprint=True)
 
 time = pyzarr.get_time(dataset)
-sddata = pyzarr.get_supers(dataset, consts)
+superdrops = pyzarr.get_supers(dataset, consts)
 totnsupers = pyzarr.get_totnsupers(dataset)
 massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
 
@@ -222,12 +222,12 @@ pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
 nsample = 500
 savename = savefigpath / "const2d_randomsample.png"
 pltsds.plot_randomsample_superdrops(
-    time, sddata, config["maxnsupers"], nsample, savename=savename
+    time, superdrops, config["maxnsupers"], nsample, savename=savename
 )
 
 savename = savefigpath / "const2d_motion2d.png"
 pltsds.plot_randomsample_superdrops_2dmotion(
-    sddata, config["maxnsupers"], nsample, savename=savename, arrows=False
+    superdrops, config["maxnsupers"], nsample, savename=savename, arrows=False
 )
 
 

@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 3rd May 2024
+Last Modified: Thursday 29th May 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -42,7 +42,7 @@ sys.path.append(
 
 from plotssrc import pltsds, as2017fig
 from pySD import geninitconds
-from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat, sdtracing
+from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
 from pySD.initsuperdropsbinary_src import rgens, dryrgens, probdists, attrsgen
 
 
@@ -159,32 +159,33 @@ gbxs = pygbxsdat.get_gridboxes(grid_filename, consts["COORD0"], isprint=True)
 thermo = pyzarr.get_thermodata(dataset, config["ntime"], gbxs["ndims"], consts)
 supersat = thermo.supersaturation()
 time = pyzarr.get_time(dataset).secs
-sddata = pyzarr.get_supers(dataset, consts)
+superdrops = pyzarr.get_supers(dataset, consts)
 zprof = displacement(time, config["W_avg"], config["TAU_half"])
 
 ### plot results
 # sample drops to plot from whole range of SD ids
-sample = [0, int(config["maxnsupers"])]
-radii = sdtracing.attribute_for_superdroplets_sample(
-    sddata, "radius", minid=sample[0], maxid=sample[1]
-)
+radii = superdrops.sample(
+    "sdId", sample_values="all", variables2sample="radius"
+).radius()
 savename = savefigpath / "cuspbifurc_SDgrowth.png"
 pltsds.individ_radiusgrowths_figure(time, radii, savename=savename)
 
 attrs = ["radius", "xi", "msol"]
-sd0 = sdtracing.attributes_for1superdroplet(sddata, 0, attrs)
-numconc = np.sum(sddata["xi"][0]) / gbxs["domainvol"] / 1e6  # [/cm^3]
+sd0 = superdrops.sample("sdId", sample_values=0, variables2sample=attrs)
+radius = np.array(sd0["radius"])  # convert list of awkward arrays to numpy
+msol = np.array(sd0["msol"])  # convert list of awkward arrays to numpy
+numconc = np.sum(superdrops["xi"][0]) / gbxs["domainvol"] / 1e6  # [/cm^3]
 
 savename2 = savefigpath / "cuspbifurc_validation.png"
 as2017fig.arabas_shima_2017_fig(
     time,
     zprof,
-    sd0["radius"],
-    sd0["msol"],
+    radius,
+    msol,
     thermo.temp[:, 0, 0, 0],
     supersat[:, 0, 0, 0],
-    sddata.IONIC,
-    sddata.MR_SOL,
+    superdrops.IONIC(),
+    superdrops.MR_SOL(),
     config["W_avg"],
     numconc,
     savename2,

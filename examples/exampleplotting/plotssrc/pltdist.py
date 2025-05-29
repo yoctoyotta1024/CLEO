@@ -6,7 +6,7 @@ Created Date: Thursday 23rd October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Sunday 26th November 2023
+Last Modified: Tuesday 3rd June 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -19,12 +19,8 @@ mass, number concentration etc. plots against
 radius in evenly spaced ln(radius) bins
 """
 
-import sys
 import numpy as np
 import matplotlib.pyplot as plt
-
-sys.path.append("../../../")  # for imports from pySD package
-from pySD.sdmout_src import sdtracing
 
 
 def gaussian_kernel_smoothing(hist, hcens, sig):
@@ -101,9 +97,7 @@ def numconc_distrib(radius, xi, mass, vol, rspan, nbins, perlogR, smooth):
 def plot_dists(
     ax,
     distribcalc,
-    timesecs,
-    data2plt,
-    t2plts,
+    superdroplet_timeslice,
     vol,
     rspan,
     nbins,
@@ -112,15 +106,14 @@ def plot_dists(
     perlogR=True,
     ylog=False,
 ):
-    for t, tplt in enumerate(t2plts):
-        ind = np.argmin(abs(timesecs - tplt))
-        tlab = "t = {:.2f}s".format(timesecs[ind])
+    for t in range(len(superdroplet_timeslice.time())):
+        tlab = "t = {:.2f}s".format(superdroplet_timeslice.time()[t])
         c = "C" + str(t)
 
-        radius = data2plt["radius"][t]
-        xi = data2plt["xi"][t]
+        radius = superdroplet_timeslice["radius"][t]
+        xi = superdroplet_timeslice["xi"][t]
         if masscalc:
-            msol = data2plt["msol"][t]
+            msol = superdroplet_timeslice["msol"][t]
             mass = masscalc(radius, msol)
         else:
             mass = None
@@ -143,8 +136,8 @@ def plot_dists(
 
 
 def plot_domainmass_distribs(
-    timesecs,
-    sddata,
+    time,
+    superdrops,
     t2plts,
     domainvol,
     rspan,
@@ -156,19 +149,19 @@ def plot_domainmass_distribs(
 ):
     fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
 
-    attrs2sel = ["radius", "xi", "msol"]
-    data2plt = sdtracing.attributes_at_times(sddata, timesecs, t2plts, attrs2sel)
+    variables2slice = ["time", "radius", "xi", "msol"]
+    superdrops_timeslice = superdrops.time_slice(
+        t2plts, variables2slice, attach_time=True, time=time.secs, time_units="s"
+    )
 
     plot_dists(
         ax,
         massdens_distrib,
-        timesecs,
-        data2plt,
-        t2plts,
+        superdrops_timeslice,
         domainvol,
         rspan,
         nbins,
-        sddata.mass,
+        masscalc=superdrops.mass(),
         smoothsig=smoothsig,
         perlogR=perlogR,
         ylog=ylog,
@@ -191,8 +184,8 @@ def plot_domainmass_distribs(
 
 
 def plot_domainnsupers_distribs(
-    timesecs,
-    sddata,
+    time,
+    superdrops,
     t2plts,
     domainvol,
     rspan,
@@ -204,19 +197,18 @@ def plot_domainnsupers_distribs(
 ):
     fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
 
-    attrs2sel = ["radius", "xi", "msol"]
-    data2plt = sdtracing.attributes_at_times(sddata, timesecs, t2plts, attrs2sel)
+    variables2slice = ["time", "radius", "xi", "msol"]
+    superdrops_timeslice = superdrops.time_slice(
+        t2plts, variables2slice, attach_time=True, time=time.secs, time_units="s"
+    )
 
     plot_dists(
         ax,
         nsupers_distrib,
-        timesecs,
-        data2plt,
-        t2plts,
+        superdrops_timeslice,
         domainvol,
         rspan,
         nbins,
-        None,
         smoothsig=smoothsig,
         perlogR=perlogR,
         ylog=ylog,
@@ -239,8 +231,8 @@ def plot_domainnsupers_distribs(
 
 
 def plot_domainnumconc_distribs(
-    timesecs,
-    sddata,
+    time,
+    superdrops,
     t2plts,
     domainvol,
     rspan,
@@ -252,19 +244,18 @@ def plot_domainnumconc_distribs(
 ):
     fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
 
-    attrs2sel = ["radius", "xi", "msol"]
-    data2plt = sdtracing.attributes_at_times(sddata, timesecs, t2plts, attrs2sel)
+    variables2slice = ["time", "radius", "xi", "msol"]
+    superdrops_timeslice = superdrops.time_slice(
+        t2plts, variables2slice, attach_time=True, time=time.secs, time_units="s"
+    )
 
     plot_dists(
         ax,
         numconc_distrib,
-        timesecs,
-        data2plt,
-        t2plts,
+        superdrops_timeslice,
         domainvol,
         rspan,
         nbins,
-        None,
         smoothsig=smoothsig,
         perlogR=perlogR,
         ylog=ylog,

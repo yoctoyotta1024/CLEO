@@ -9,7 +9,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Sunday 16th June 2024
+Last Modified: Thursday 29th May 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -212,8 +212,8 @@ def plot_results(
     consts = pysetuptxt.get_consts(setupfile, isprint=True)
     gbxs = pygbxsdat.get_gridboxes(grid_filename, consts["COORD0"], isprint=True)
 
-    time = pyzarr.get_time(dataset).secs
-    sddata = pyzarr.get_supers(dataset, consts)
+    time = pyzarr.get_time(dataset)
+    superdrops = pyzarr.get_supers(dataset, consts)
 
     # make and save plot
     savename = savefigpath / savename
@@ -223,7 +223,7 @@ def plot_results(
     fig, ax = shima2009fig.plot_validation_figure(
         plotwitherr,
         time,
-        sddata,
+        superdrops,
         t2plts,
         gbxs["domainvol"],
         numconc,

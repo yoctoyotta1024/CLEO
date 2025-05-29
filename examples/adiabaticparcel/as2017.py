@@ -43,7 +43,7 @@ sys.path.append(
 from plotssrc import as2017fig
 from pySD import editconfigfile, geninitconds
 from pySD.initsuperdropsbinary_src import rgens, dryrgens, probdists, attrsgen
-from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat, sdtracing
+from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
 
 ############### INPUTS ##################
 # path and filenames for creating SD initial conditions and for running model
@@ -199,17 +199,19 @@ for i in range(len(monors)):
         thermo = pyzarr.get_thermodata(dataset, config["ntime"], gbxs["ndims"], consts)
         supersat = thermo.supersaturation()
         time = pyzarr.get_time(dataset).secs
-        sddata = pyzarr.get_supers(dataset, consts)
+        superdrops = pyzarr.get_supers(dataset, consts)
         zprof = displacement(time, config["W_avg"], config["TAU_half"])
 
         attrs = ["radius", "xi", "msol"]
-        sd0 = sdtracing.attributes_for1superdroplet(sddata, 0, attrs)
-        numconc = np.sum(sddata["xi"][0]) / gbxs["domainvol"] / 1e6  # [/cm^3]
+        sd0 = superdrops.sample("sdId", sample_values=0, variables2sample=attrs)
+        radius = sd0["radius"][0]
+        msol_initial = sd0["msol"][0][0]
+        numconc = np.sum(superdrops["xi"][0]) / gbxs["domainvol"] / 1e6  # [/cm^3]
 
         ### plot results
         wlab = "<w> = {:.1f}".format(config["W_avg"] * 100) + "cm s$^{-1}$"
         as2017fig.condensation_validation_subplots(
-            axs, time, sd0["radius"], supersat[:, 0, 0, 0], zprof, lwdth=lwdth, lab=wlab
+            axs, time, radius, supersat[:, 0, 0, 0], zprof, lwdth=lwdth, lab=wlab
         )
 
         runnum += 1
@@ -217,11 +219,11 @@ for i in range(len(monors)):
     ### save figure
     as2017fig.plot_kohlercurve_with_criticalpoints(
         axs[1],
-        sd0["radius"],
-        sd0["msol"][0],
+        radius,
+        msol_initial,
         thermo.temp[0, 0, 0, 0],
-        sddata.IONIC,
-        sddata.MR_SOL,
+        superdrops.IONIC(),
+        superdrops.MR_SOL(),
     )
 
     textlab = (
@@ -229,7 +231,7 @@ for i in range(len(monors)):
         + str(numconc)
         + "cm$^{-3}$\n"
         + "r$_{dry}$ = "
-        + "{:.2g}\u03BCm\n".format(sd0["radius"][0])
+        + "{:.2g}\u03BCm\n".format(radius[0])
     )
     axs[0].legend(loc="lower right", fontsize=10)
     axs[1].legend(loc="upper left")

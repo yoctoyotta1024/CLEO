@@ -9,7 +9,7 @@ Created Date: Thursday 30th January 2025
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Thursday 30th January 2025
+Last Modified: Thursday 29th May 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -45,7 +45,7 @@ def main(
     gbxs = pygbxsdat.get_gridboxes(grid_filename, consts["COORD0"], isprint=True)
 
     time = pyzarr.get_time(dataset)
-    sddata = pyzarr.get_supers(dataset, consts)
+    superdrops = pyzarr.get_supers(dataset, consts)
     maxnsupers = pyzarr.get_totnsupers(dataset)
     thermo, winds = pyzarr.get_thermodata(
         dataset, config["ntime"], gbxs["ndims"], consts, getwinds=True
@@ -58,7 +58,7 @@ def main(
     nsample = 1000
     savename = savefigpath / "fromfile_motion2d_validation.png"
     pltsds.plot_randomsample_superdrops_2dmotion(
-        sddata,
+        superdrops,
         config["maxnsupers"],
         nsample,
         savename=savename,
