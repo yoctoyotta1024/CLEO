@@ -1,32 +1,33 @@
 """
-Copyright (c) 2024 MPI-M, Clara Bayley
+Copyright (c) 2025 MPI-M, Clara Bayley
 
 
 ----- CLEO -----
 File: ensembzarr.py
-Project: sdmout_src
+Project: plotssrc
 Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 7th May 2024
+Last Modified: Thursday 29th May 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
-functions to write a new zarr dataset and
-setuptxt file for an ensemble of datasets
+File Description:
+functions to write a new zarr dataset and setuptxt file for an ensemble of datasets
 """
+
 
 import shutil
 import sys
 import numpy as np
 import zarr
 
-from . import pyzarr
-from .. import editconfigfile
+from ....pySD.sdmout_src import pyzarr
+from ....pySD import editconfigfile
 
 
 def write_ensemble_info(ensembsetupfile, setupfile, datasets):
