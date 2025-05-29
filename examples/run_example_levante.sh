@@ -83,6 +83,10 @@ eval ${cmd}
 export CLEO_PATH2CLEO=${path2CLEO}
 export CLEO_BUILDTYPE=${buildtype}
 export CLEO_ENABLEYAC=${enableyac}
+if [ "${CLEO_ENABLEYAC}" == "true" ]
+then
+  export CLEO_YACYAXTROOT=${yacyaxtroot}
+fi
 source ${path2CLEO}/scripts/levante/bash/src/runtime_settings.sh ${stacksize_limit}
 
 # TODO(all): split python scripts away from running executable
