@@ -21,10 +21,11 @@ Non-compatible update on supersdata and sdtracing modules
 """
 
 
-import numpy as np
-import xarray as xr
 import awkward as ak
+import numpy as np
+import random
 import warnings
+import xarray as xr
 
 from pathlib import Path
 
@@ -54,17 +55,25 @@ class SuperdropProperties:
         if is_print:
             self.print_properties()
 
-    def RHO_L(self):
-        return self._props["RHO_L"], self._props["RHO_L_units"]
+    def get_props(self, var: str, units: bool):
+        if not units:
+            return self._props[var]
+        else:
+            return self._props[var], self._props[var + "_units"]
 
-    def RHO_SOL(self):
-        return self._props["RHO_SOL"], self._props["RHO_SOL_units"]
+    def RHO_L(self, units=False):
+        return self.get_props("RHO_L", units=units)
 
-    def MR_SOL(self):
-        return self._props["MR_SOL"], self._props["MR_SOL_units"]
+    def RHO_SOL(self, units=False):
+        return self.get_props("RHO_SOL", units=units)
 
-    def IONIC(self):
-        return self._props["IONIC"]
+    def MR_SOL(self, units=False):
+        return self.get_props("MR_SOL", units=units)
+
+    def IONIC(self, units=False):
+        if units:
+            print("degree ionic dissociation (van't Hoff factor) has no units")
+        return self.get_props("IONIC", units=False)
 
     def __getitem__(self, key):
         return self._props[key]
@@ -134,7 +143,9 @@ class Superdrops(SuperdropProperties):
     def __init__(self, dataset, consts=None, is_print=False):
         if isinstance(dataset, Superdrops):
             SuperdropProperties.__init__(self, dataset._props, is_print=is_print)
+            self._variables = dataset._variables
             self._raw_data = dataset._raw_data
+            self._units = dataset._units
 
         elif (
             isinstance(dataset, xr.Dataset)
@@ -150,15 +161,20 @@ class Superdrops(SuperdropProperties):
 
             ds = self.tryopen_dataset(dataset)
             raggedcount = ds["raggedcount"]  # ragged count variable
+            self._variables = (
+                "sdId",
+                "sdgbxindex",
+                "xi",
+                "radius",
+                "msol",
+                "coord3",
+                "coord1",
+                "coord2",
+            )
             self._raw_data = {
-                "sdId": self.tryvar(ds, raggedcount, "sdId"),
-                "sdgbxindex": self.tryvar(ds, raggedcount, "sdgbxindex"),
-                "xi": self.tryvar(ds, raggedcount, "xi"),
-                "radius": self.tryvar(ds, raggedcount, "radius"),
-                "msol": self.tryvar(ds, raggedcount, "msol"),
-                "coord3": self.tryvar(ds, raggedcount, "coord3"),
-                "coord1": self.tryvar(ds, raggedcount, "coord1"),
-                "coord2": self.tryvar(ds, raggedcount, "coord2"),
+                var: self.tryvar(ds, raggedcount, var) for var in self._variables
+            }
+            self._units = {
                 "radius_units": self.tryunits(ds, "radius"),  # probably microns
                 "msol_units": self.tryunits(ds, "msol"),  # probably gramms
                 "coord3_units": self.tryunits(ds, "coord3"),  # probably meters
@@ -194,7 +210,7 @@ class Superdrops(SuperdropProperties):
             return ""
 
     def get_units(self, var: str):
-        return self._raw_data[var + "_units"]
+        return self._units[var + "_units"]
 
     def get_variable(self, var: str, units: bool):
         if not units:
@@ -271,3 +287,50 @@ class Superdrops(SuperdropProperties):
         else:
             err = "no known return provided for " + key + " key"
             raise ValueError(err)
+
+    def sample(self, sample_var: str, sample_values="all", variables2sample="all"):
+        if isinstance(sample_var, str):
+            sample_var = self._raw_data[sample_var]
+
+        if isinstance(sample_values, str) and sample_values == "all":
+            sample_values = list(np.unique(ak.flatten(sample_var)))
+        elif not isinstance(sample_values, list):
+            sample_values = [sample_values]
+
+        if isinstance(variables2sample, str) and variables2sample == "all":
+            variables2sample = self._variables
+        elif not isinstance(variables2sample, list):
+            variables2sample = [variables2sample]
+
+        raw_data = {var: [] for var in variables2sample}
+        for value in sample_values:
+            mask = ak.Array(sample_var == value)
+            for var in variables2sample:
+                var_for_sample_value = ak.flatten(
+                    ak.drop_none(self._raw_data[var].mask[mask])
+                )
+                raw_data[var].append(var_for_sample_value)
+
+        superdrops_sample = Superdrops(self)
+        superdrops_sample._variables = raw_data.keys()
+        superdrops_sample._raw_data = raw_data
+
+        return superdrops_sample
+
+    def random_sample(
+        self,
+        sample_var: str,
+        ndrops2sample: int,
+        sample_population="all",
+        variables2sample="all",
+    ):
+        if isinstance(sample_var, str):
+            sample_var = self._raw_data[sample_var]
+
+        if sample_population == "all":
+            sample_population = list(np.unique(ak.flatten(sample_var)))
+
+        sample_values = random.sample(sample_population, ndrops2sample)
+        return self.sample(
+            sample_var, sample_values=sample_values, variables2sample=variables2sample
+        )
