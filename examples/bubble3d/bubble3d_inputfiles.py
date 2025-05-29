@@ -9,7 +9,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 9th July 2024
+Last Modified: Wednesday 28th May 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -21,7 +21,6 @@ thermodynamics read from ICON output of bubble test case by YAC
 """
 
 import sys
-from pathlib import Path
 
 
 def get_zgrid(icon_grid_file, num_vertical_levels):
@@ -38,17 +37,31 @@ def get_zgrid(icon_grid_file, num_vertical_levels):
     return zgrid  # [m]
 
 
+def copy_icon_files(path2build, orginal_icon_grid_file, orginal_icon_data_file):
+    import shutil
+
+    icon_grid_file = path2build / "share" / orginal_icon_grid_file.name
+    shutil.copyfile(orginal_icon_grid_file, icon_grid_file)
+
+    icon_data_file = path2build / "share" / orginal_icon_data_file.name
+    shutil.copyfile(orginal_icon_data_file, icon_data_file)
+
+    return icon_grid_file, icon_data_file
+
+
 def main(
     path2CLEO,
     path2build,
     config_filename,
     grid_filename,
     initsupers_filename,
-    icon_grid_file,
     SDgbxs2plt,
 ):
-    sys.path.append(str(path2CLEO))  # for imports from pySD package
+    import sys
+    from pathlib import Path
+    from ruamel.yaml import YAML
 
+    sys.path.append(str(path2CLEO))  # for imports from pySD package
     from pySD import geninitconds
     from pySD.initsuperdropsbinary_src import (
         crdgens,
@@ -58,20 +71,32 @@ def main(
         attrsgen,
     )
 
+    ### --- Load the config YAML file --- ###
+    yaml = YAML()
+    with open(config_filename, "r") as file:
+        config = yaml.load(file)
+
+    ### --- copy ICON files into build directory for safe-keeping --- ###
+    icon_yac_config = config["icon_yac_config"]
+    orginal_icon_grid_file = Path(icon_yac_config["orginal_icon_grid_file"])
+    orginal_icon_data_file = Path(icon_yac_config["orginal_icon_data_file"])
+    icon_grid_file, icon_data_file = copy_icon_files(
+        Path(path2build), orginal_icon_grid_file, orginal_icon_data_file
+    )
+
     ### ---------------------------------------------------------------- ###
     ### ----------------------- INPUT PARAMETERS ----------------------- ###
     ### ---------------------------------------------------------------- ###
     ### --- essential paths and filenames --- ###
     # path and filenames for creating initial SD conditions
     constants_filename = path2CLEO / Path("libs/cleoconstants.hpp")
-
     ### --- plotting initialisation figures --- ###
     # booleans for [making, saving] initialisation figures
     isfigures = [True, True]  # TODO(CB): move into args
-    savefigpath = path2build / Path("bin")  # binpath # TODO(CB): move into args
+    savefigpath = Path(path2build) / "bin"  # binpath # TODO(CB): move into args
 
     ### --- settings for 3-D gridbox boundaries --- ###
-    num_vertical_levels = 24  # TODO(CB): move to config file (?)
+    num_vertical_levels = icon_yac_config["num_vertical_levels"]
     zgrid = get_zgrid(icon_grid_file, num_vertical_levels)  # [m]
     xgrid = [
         0,
@@ -145,4 +170,4 @@ def main(
 
 if __name__ == "__main__":
     ### args = path2CLEO, path2build, config_filename, grid_filename, initsupers_file, icon_grid_file, SDgbxs2plt
-    main(*sys.argv[1:])
+    main(*sys.argv[1:])  # TODO(CB): read in better with argparse

@@ -17,11 +17,7 @@ action=$1
 path2CLEO=${2:-${HOME}/CLEO}
 path2yac=${3:-/work/bm1183/m300950/yacyaxt}
 path2build=${4:-${HOME}/CLEO/build_bubble3d}
-
-icon_grid_file=/work/bm1183/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc
-icon_data_file=/work/bm1183/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc
-icon_grid_file_copy=${path2build}/share/icon_grid_file_aes_bubble_atm_cgrid_ml.nc
-icon_data_file_copy=${path2build}/share/icon_data_file_aes_bubble_atm_3d_ml_20080801T000000Z.nc
+python=${5:-/work/bm1183/m300950/bin/envs/cleoenv/bin/python}
 
 if [ "${action}" == "build" ]
 then
@@ -35,52 +31,35 @@ then
   spack load openblas@0.3.18%gcc@=11.2.0
   module load ${gcc} ${openmpi} ${netcdf}
 
-  CLEO_YAC_FLAGS="-D"${cleo_yac_module_path}" -DC -DCLEO_YAC_ROOT=${CLEO_YACYAXTROOT}/yac"
   cmake -S ${path2CLEO} -B ${path2build} -DCLEO_COUPLED_DYNAMICS="yac" \
     -DCLEO_YAC_MODULE_PATH="${path2CLEO}/libs/coupldyn_yac/cmake" \
     -DCLEO_YAXT_ROOT=${path2yac}/yaxt -DCLEO_YAC_ROOT=${path2yac}/yac
 
 elif [ "${action}" == "compile" ]
 then
-  cd ${path2build}
-
   module purge
   spack unload --all
   module load openmpi/4.1.2-gcc-11.2.0
-  module load netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0
-  spack load openblas@0.3.18%gcc@=11.2.0
 
-  ${path2CLEO}/scripts/levante/bash/compile_cleo.sh openmp ${path2build} bubble3d
+  cd ${path2build}
+  make -j 128 bubble3d
 
 elif [ "${action}" == "inputfiles" ]
 then
-  cp ${icon_grid_file} ${icon_grid_file_copy}
-  cp ${icon_data_file} ${icon_data_file_copy}
-
-  cleoenv=/work/bm1183/m300950/bin/envs/cleoenv
-  python=${cleoenv}/bin/python3
   ${python} ${path2CLEO}/examples/bubble3d/bubble3d_inputfiles.py \
    ${path2CLEO} \
    ${path2build} \
    ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
    ${path2build}/share/bubble3d_dimlessGBxboundaries.dat \
    ${path2build}/share/bubble3d_dimlessSDsinit.dat \
-   ${icon_grid_file_copy} \
    0
 
 elif [ "${action}" == "run" ]
 then
-  cd ${path2build}
-
   module purge
   spack unload --all
-  # note version of python must match the YAC python bindings (e.g. module load python3/2022.01-gcc-11.2.0)
+  # note version of python must match the YAC python bindings (e.g. spack load python@3.9.9%gcc@=11.2.0/fwv)
   module load openmpi/4.1.2-gcc-11.2.0 # same mpi as loaded for the build
-  ### ----------------- load Python ------------------------ ###
-  spack load python@3.9.9%gcc@=11.2.0/fwv
-  spack load py-cython@0.29.33%gcc@=11.2.0/j7b4fa
-  spack load py-mpi4py@3.1.2%gcc@=11.2.0/hdi5yl6
-  ### ------------------------------------------------------ ###
 
   export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/sw/spack-levante/libfyaml-0.7.12-fvbhgo/lib
   export PYTHONPATH=${PYTHONPATH}:${path2yac}/yac/python # path to python bindings
@@ -88,16 +67,18 @@ then
   export OMP_PROC_BIND=spread
   export OMP_PLACES=threads
 
-  icon_grid_name="icon_atmos_grid" # must match CLEO (see yac_cartesian_dynamics.cpp)
-  icon_data_timestep=30 # must match ICON data file [seconds]
-  cleo_coupling_timestep=60 # must match CLEO config file [seconds]
-  cleo_t_end=7200 # must match CLEO config file [seconds]
-  cleo_num_vertical_levels=24 # must match CLEO grid_filename
-
+  cd ${path2build}
   mpiexec -n 1 ${path2build}/examples/bubble3d/src/bubble3d \
     ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
-    : -n 1 python \
+    : -n 1 ${python} \
     ${path2CLEO}/examples/bubble3d/yac_bubble_data_reader.py \
-    ${icon_grid_file_copy} ${icon_data_file_copy} ${icon_grid_name} ${icon_data_timestep} \
-    ${cleo_coupling_timestep} ${cleo_t_end} ${cleo_num_vertical_levels}
+    ${path2build} \
+    ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml
+
+elif [ "${action}" == "plot" ]
+then
+  ${python} ${path2CLEO}/examples/bubble3d/bubble3d_plotting.py \
+    ${path2CLEO} \
+    ${path2build} \
+    ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml
 fi
