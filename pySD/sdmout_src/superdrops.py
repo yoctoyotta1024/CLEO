@@ -1,0 +1,273 @@
+"""
+Copyright (c) 2025 MPI-M, Clara Bayley
+
+
+----- CLEO -----
+File: superdrops.py
+Project: sdmout_src
+Created Date: Thursday 29th May 2025
+Author: Clara Bayley (CB)
+Additional Contributors:
+-----
+Last Modified: Thursday 29th May 2025
+Modified By: CB
+-----
+License: BSD 3-Clause "New" or "Revised" License
+https://opensource.org/licenses/BSD-3-Clause
+-----
+File Description:
+python class(es) to handle superdroplet attributes data from SDM zarr store in ragged array format.
+Non-compatible update on supersdata and sdtracing modules
+"""
+
+
+import numpy as np
+import xarray as xr
+import awkward as ak
+import warnings
+
+from pathlib import Path
+
+
+class SuperdropProperties:
+    """Contains attributes common to all superdroplets and functions
+    for calculating derived ones"""
+
+    def __init__(self, consts: dict, is_print=False):
+        """Common attributes shared by superdroplets:
+        RHO_L = density of liquid in droplets (=density of water at 300K) [Kg/m^3]
+        RHO_SOL = density of (dry) solute [Kg/m^3]
+        MR_SOL = Mr of solute [g/mol]
+        IONIC = degree ionic dissociation (van't Hoff factor)
+        """
+        # properties: value
+        self._props = {
+            "RHO_L": consts["RHO_L"],
+            "RHO_SOL": consts["RHO_SOL"],
+            "MR_SOL": consts["MR_SOL"],
+            "IONIC": consts["IONIC"],
+            "RHO_L_units": "Kg m^{-3}",
+            "RHO_SOL_units": "Kg m^{-3}",
+            "MR_SOL_units": "g mol^{-1}",
+        }
+
+        if is_print:
+            self.print_properties()
+
+    def RHO_L(self):
+        return self._props["RHO_L"], self._props["RHO_L_units"]
+
+    def RHO_SOL(self):
+        return self._props["RHO_SOL"], self._props["RHO_SOL_units"]
+
+    def MR_SOL(self):
+        return self._props["MR_SOL"], self._props["MR_SOL_units"]
+
+    def IONIC(self):
+        return self._props["IONIC"]
+
+    def __getitem__(self, key):
+        return self._props[key]
+
+    def print_properties(self):
+        print("---- Superdrop Properties -----")
+        print("RHO_L =", self.RHO_L())
+        print("RHO_SOL =", self.RHO_SOL())
+        print("MR_SOL =", self.MR_SOL())
+        print("IONIC =", self.IONIC())
+        print("-------------------------------")
+
+    def rhoeff(self, r, msol):
+        """calculates effective density [g m^-3] of
+        droplet such that mass_droplet, m = 4/3*pi*r^3 * rhoeff
+        taking into account mass of liquid and mass of
+        solute assuming solute occupies volume it
+        would given its (dry) density, RHO_SOL."""
+
+        msol = msol / 1000  # convert from grams to Kg
+        r = r / 1e6  # convert microns to m
+
+        solfactor = 3 * msol / (4.0 * np.pi * (r**3))
+        rhoeff = self._props["RHO_L"] + solfactor * (
+            1 - self._props["RHO_L"] / self._props["RHO_SOL"]
+        )
+
+        return rhoeff * 1000  # [g/m^3]
+
+    def vol(self, r):
+        """volume of droplet [m^3]"""
+
+        r = r / 1e6  # convert microns to m
+
+        return 4.0 / 3.0 * np.pi * r**3
+
+    def mass(self, r, msol):
+        """
+        total mass of droplet (water + (dry) areosol) [g],
+        m =  4/3*pi*rho_l**3 + msol(1-rho_l/rho_sol)
+        ie. m = 4/3*pi*rhoeff*R**3
+        """
+
+        msol = msol / 1000  # convert from grams to Kg
+        r = r / 1e6  # convert microns to m
+
+        msoleff = msol * (
+            1 - self._props["RHO_L"] / self._props["RHO_SOL"]
+        )  # effect of solute on mass
+        m = msoleff + 4 / 3.0 * np.pi * (r**3) * self._props["RHO_L"]
+
+        return m * 1000  # [g]
+
+    def m_water(self, r, msol):
+        """mass of only water in droplet [g]"""
+
+        msol = msol / 1000  # convert msol from grams to Kg
+        r = r / 1e6  # convert microns to m
+
+        v_sol = msol / self._props["RHO_SOL"]
+        v_w = 4 / 3.0 * np.pi * (r**3) - v_sol
+
+        return self._props["RHO_L"] * v_w * 1000  # [g]
+
+
+class Superdrops(SuperdropProperties):
+    def __init__(self, dataset, consts=None, is_print=False):
+        if isinstance(dataset, Superdrops):
+            SuperdropProperties.__init__(self, dataset._props, is_print=is_print)
+            self._raw_data = dataset._raw_data
+
+        elif (
+            isinstance(dataset, xr.Dataset)
+            or isinstance(dataset, str)
+            or isinstance(dataset, Path)
+        ):
+            if consts is not None:
+                SuperdropProperties.__init__(self, consts, is_print=is_print)
+            else:
+                warnings.warn(
+                    "No superdroplet properties attached to superdroplet dataset"
+                )
+
+            ds = self.tryopen_dataset(dataset)
+            raggedcount = ds["raggedcount"]  # ragged count variable
+            self._raw_data = {
+                "sdId": self.tryvar(ds, raggedcount, "sdId"),
+                "sdgbxindex": self.tryvar(ds, raggedcount, "sdgbxindex"),
+                "xi": self.tryvar(ds, raggedcount, "xi"),
+                "radius": self.tryvar(ds, raggedcount, "radius"),
+                "msol": self.tryvar(ds, raggedcount, "msol"),
+                "coord3": self.tryvar(ds, raggedcount, "coord3"),
+                "coord1": self.tryvar(ds, raggedcount, "coord1"),
+                "coord2": self.tryvar(ds, raggedcount, "coord2"),
+                "radius_units": self.tryunits(ds, "radius"),  # probably microns
+                "msol_units": self.tryunits(ds, "msol"),  # probably gramms
+                "coord3_units": self.tryunits(ds, "coord3"),  # probably meters
+                "coord1_units": self.tryunits(ds, "coord1"),  # probably meters
+                "coord2_units": self.tryunits(ds, "coord2"),  # probably meters
+            }
+        else:
+            raise ValueError("unknow type of dataset to make superdroplets from")
+
+    def tryopen_dataset(self, dataset: Path):
+        if isinstance(dataset, str) or isinstance(dataset, Path):
+            print("supers dataset: ", dataset)
+            return xr.open_dataset(dataset, engine="zarr", consolidated=False)
+        else:
+            return dataset
+
+    def tryvar(self, ds: xr.Dataset, raggedcount: xr.DataArray, var: str):
+        """attempts to return variable in form of ragged array
+        (ak.Array) with dims [time, raggedcount]
+        for a variable "var" in xarray dataset 'ds'.
+        If attempt fails, returns empty array instead"""
+        try:
+            return ak.unflatten(ds[var].values, raggedcount.values)
+        except KeyError:
+            return ak.Array([])
+
+    def tryunits(self, ds: xr.Dataset, var: str):
+        """attempts to return the units of a variable
+        in xarray dataset 'ds'. If attempt fails, returns null"""
+        try:
+            return ds[var].units
+        except KeyError:
+            return ""
+
+    def get_units(self, var: str):
+        return self._raw_data[var + "_units"]
+
+    def get_variable(self, var: str, units: bool):
+        if not units:
+            return self._raw_data[var]
+        else:
+            return self._raw_data[var], self.get_units(var)
+
+    def sdId(self, units=False):
+        return self.get_variable("sdId", units)
+
+    def sdgbxindex(self, units=False):
+        return self.get_variable("sdgbxindex", units)
+
+    def xi(self, units=False):
+        return self.get_variable("xi", units)
+
+    def radius(self, units=False):
+        return self.get_variable("radius", units)
+
+    def msol(self, units=False):
+        return self.get_variable("msol", units)
+
+    def coord3(self, units=False):
+        return self.get_variable("coord3", units)
+
+    def coord1(self, units=False):
+        return self.get_variable("coord1", units)
+
+    def coord2(self, units=False):
+        return self.get_variable("coord2", units)
+
+    def radius_units(self):
+        return self.get_units("radius")
+
+    def msol_units(self):
+        return self.get_units("msol")
+
+    def coord3_units(self):
+        return self.get_units("coord3")
+
+    def coord1_units(self):
+        return self.get_units("coord1")
+
+    def coord2_units(self):
+        return self.get_units("coord2")
+
+    def __getitem__(self, key):
+        if key == "sdId":
+            return self.sdId()
+        elif key == "sdgbxindex":
+            return self.sdgbxindex()
+        elif key == "xi":
+            return self.xi()
+        elif key == "radius":
+            return self.radius()
+        elif key == "msol":
+            return self.msol()
+        elif key == "coord3":
+            return self.coord3()
+        elif key == "coord1":
+            return self.coord1()
+        elif key == "coord2":
+            return self.coord2()
+        elif key == "radius_units":
+            return self.radius_units()
+        elif key == "msol_units":
+            return self.msol_units()
+        elif key == "coord3_units":
+            return self.coord3_units()
+        elif key == "coord1_units":
+            return self.coord1_units()
+        elif key == "coord2_units":
+            return self.coord2_units()
+        else:
+            err = "no known return provided for " + key + " key"
+            raise ValueError(err)
