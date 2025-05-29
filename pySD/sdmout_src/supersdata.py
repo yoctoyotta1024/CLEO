@@ -9,13 +9,14 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 27th May 2025
+Last Modified: Thursday 29th May 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
+!!!NOTE!!! DEPRECIATED SINCE V0.40.0, REPLACED BY SUPERDROPS MODULE !!!!!!
 python class to handle superdroplet attributes data from SDM zarr store in ragged array format
 """
 
@@ -26,6 +27,10 @@ import awkward as ak
 import warnings
 from pathlib import Path
 from typing import Optional
+
+warnings.warn(
+    "supersdata module is depreciated since CLEO v0.40.0,\nreplaced by superdrops"
+)
 
 
 class SuperdropProperties:
