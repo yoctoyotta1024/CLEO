@@ -9,7 +9,7 @@ Created Date: Thursday 29th May 2025
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Thursday 29th May 2025
+Last Modified: Friday 30th May 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -242,6 +242,12 @@ class Superdrops(SuperdropProperties):
     def coord2(self, units=False):
         return self.get_variable("coord2", units)
 
+    def time(self, units=False):
+        if "time" in self._variables:
+            return self.get_variable("time", units)
+        print("time is not attached to superdrops")
+        return None
+
     def radius_units(self):
         return self.get_units("radius")
 
@@ -256,6 +262,12 @@ class Superdrops(SuperdropProperties):
 
     def coord2_units(self):
         return self.get_units("coord2")
+
+    def time_units(self):
+        if "time" in self._variables:
+            return self.get_units("time")
+        print("time is not attached to superdrops")
+        return None
 
     def __getitem__(self, key):
         if key == "sdId":
@@ -274,6 +286,8 @@ class Superdrops(SuperdropProperties):
             return self.coord1()
         elif key == "coord2":
             return self.coord2()
+        elif key == "time":
+            return self.time()
         elif key == "radius_units":
             return self.radius_units()
         elif key == "msol_units":
@@ -284,9 +298,24 @@ class Superdrops(SuperdropProperties):
             return self.coord1_units()
         elif key == "coord2_units":
             return self.coord2_units()
+        elif key == "time_units":
+            return self.time_units()
         else:
             err = "no known return provided for " + key + " key"
             raise ValueError(err)
+
+    def attach_time(
+        self, time: np.ndarray, time_units: str, do_reshape=False, var4reshape="sdId"
+    ):
+        if "time" not in self._raw_data:
+            if do_reshape:
+                # e.g. use sdId array to make 1-D time array have matching (ragged) dimension
+                time = ak.broadcast_arrays(self._raw_data[var4reshape], time)[1]
+            self._variables = tuple(list(self._variables) + ["time"])
+            self._raw_data["time"] = ak.Array(time)
+            self._units["time_units"] = time_units
+        else:
+            print("time already attached to superdrops")
 
     def sample(self, sample_var: str, sample_values="all", variables2sample="all"):
         if isinstance(sample_var, str):
