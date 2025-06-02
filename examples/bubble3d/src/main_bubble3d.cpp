@@ -189,7 +189,7 @@ int main(int argc, char *argv[]) {
   const auto ttot = double{kokkostimer.seconds()};
   std::cout << "-----\n Total Program Duration: " << ttot << "s \n-----\n";
 
-  MPI_Finalize();
+  init_comm.~init_communicator();
 
   return 0;
 }
