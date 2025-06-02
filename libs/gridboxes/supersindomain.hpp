@@ -39,7 +39,7 @@ struct SupersInDomain {
   viewd_supers totsupers;   /**< view of all superdrops (both in and out of bounds of domain) */
   kkpair_size_t domainrefs; /**< position in view of (first, last) superdrop that occupies domain */
   SortSupersBySdgbxindex sort_by_sdgbxindex; /**< method to sort view of superdrops by sdgbxindex */
-  MPI_Comm comm; /**< (YAC compatible) communicator for MPI domain decomposition */
+  // MPI_Comm comm; /**< (YAC compatible) communicator for MPI domain decomposition */
 
   /* Assign superdroplets view used to store superdroplets in the domain and update the domainrefs
   for identifying the subview which contains in-domain superdroplets. Gridbox indexes are assumed
@@ -61,7 +61,7 @@ struct SupersInDomain {
         sort_by_sdgbxindex(SortSupersBySdgbxindex(gbxindex_range.second, totsupers.extent(0))) {
     auto sorted_supers = sort_by_sdgbxindex(totsupers_);
     set_totsupers_domainrefs(sorted_supers);
-    comm = init_communicator::get_communicator();
+    // comm = init_communicator::get_communicator();
   }
 
   viewd_supers get_totsupers() const {

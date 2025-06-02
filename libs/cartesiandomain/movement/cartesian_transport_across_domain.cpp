@@ -26,9 +26,7 @@ SupersInDomain CartesianTransportAcrossDomain::operator()(const CartesianMaps &g
                                                           const viewd_gbx d_gbxs,
                                                           SupersInDomain &allsupers) const {
   int comm_size;
-  MPI_Comm comm;
-  comm = init_communicator::get_communicator();
-  MPI_Comm_size(comm, &comm_size);
+  comm_size = init_communicator::get_comm_size();
 
   // TODO(ALL): remove guard once domain decomposition is GPU compatible
   if (comm_size > 1) {
