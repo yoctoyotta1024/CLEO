@@ -38,8 +38,6 @@
 
 class CartesianDecomposition {
  private:
-  MPI_Comm comm;
-  // (YAC compatible) communicator for MPI domain decomposition
   int my_rank;
   // Number of dimensions of the global domain
   std::vector<size_t> ndims;
