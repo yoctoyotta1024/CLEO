@@ -68,9 +68,8 @@ class CollectiveDataset {
    * @param dim A pair with the dimension name and local size
    */
   void collect_distributed_dim_size(const std::pair<std::string, size_t> &dim) {
-    MPI_Comm_size(comm, &comm_size);
-    MPI_Comm_rank(comm, &my_rank);
-
+    my_rank = init_communicator::get_comm_rank();
+    comm_size = init_communicator::get_comm_size();
     std::vector<size_t> distributed_sizes(comm_size);
 
     MPI_Gather(&(dim.second), 1, MPI_UNSIGNED_LONG, distributed_sizes.data(), 1, MPI_UNSIGNED_LONG,
