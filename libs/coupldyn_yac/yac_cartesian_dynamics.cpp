@@ -189,7 +189,7 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   // std::string component_name = "cleo";
   // int component_id = -1;
   // yac_cdef_comp(component_name.c_str(), &component_id);
-  int component_id = init_communicator::yac_comp_id;
+  int component_id = init_communicator::get_yac_comp_id();
   std::cout << "yac comp id in cart_dyn:" << component_id << std::endl;
 
   // --- Grid definition ---

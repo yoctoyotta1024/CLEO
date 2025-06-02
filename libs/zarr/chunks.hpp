@@ -123,7 +123,7 @@ class Chunks {
     // Since only process 0 writes the data, only it should check the sizes
     int my_rank;
     comm = init_communicator::get_communicator();
-    MPI_Comm_rank(comm, &my_rank);
+    my_rank = init_communicator::get_comm_rank();
 
     if (my_rank == 0)
       assert((reduced_arrayshape.size() == chunkshape.size() - 1) &&
