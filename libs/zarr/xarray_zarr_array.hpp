@@ -165,8 +165,7 @@ class XarrayZarrArray {
     assert((chunkshape.size() == dimnames.size()) &&
            "number of named dimensions of array must match number dimensions of chunks");
     int my_rank;
-    comm = init_communicator::get_communicator();
-    MPI_Comm_rank(comm, &my_rank);
+    my_rank = init_communicator::get_comm_rank();
 
     if (my_rank == 0) {
       write_arrayshape(datasetdims);
@@ -198,9 +197,7 @@ class XarrayZarrArray {
     assert((chunkshape.size() == dimnames.size()) &&
            "number of named dimensions of array must match number dimensions of chunks");
     int my_rank;
-    comm = init_communicator::get_communicator();
-    MPI_Comm_rank(comm, &my_rank);
-
+    my_rank = init_communicator::get_comm_rank();
     if (my_rank == 0) {
       write_zattrs_json(store, name,
                         xarray_metadata<T>(units, scale_factor, dimnames, sampledimname));
@@ -209,8 +206,7 @@ class XarrayZarrArray {
 
   ~XarrayZarrArray() {
     int my_rank;
-    MPI_Comm_rank(comm, &my_rank);
-
+    my_rank = init_communicator::get_comm_rank();
     if (my_rank == 0) zarr.write_arrayshape(arrayshape);
   }
 
