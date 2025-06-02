@@ -32,12 +32,18 @@
 #include "configuration/config.hpp"
 
 class init_communicator {
- public:
   static int yac_comp_id;
   static MPI_Comm comm;
   bool yac_present;
+  static int comm_size;
+  static int my_rank;
+ public:
   explicit init_communicator(const Config &config);
+  ~init_communicator();
   static MPI_Comm get_communicator();
+  static int get_yac_comp_id();
+  static int get_comm_size();
+  static int get_comm_rank();
 };
 
 #endif  // LIBS_CONFIGURATION_COMMUNICATOR_HPP_
