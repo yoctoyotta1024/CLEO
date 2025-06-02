@@ -72,7 +72,7 @@ class Chunks {
   std::vector<size_t> chunkshape; /**< Shape of chunks along each dimension (constant) */
   std::vector<size_t> reducedarray_nchunks;
   /**< Number chunks of array along all but outermost dimension of array (constant) */
-  MPI_Comm comm; /**< (YAC compatible) communicator for MPI domain decomposition */
+  // MPI_Comm comm; /**< (YAC compatible) communicator for MPI domain decomposition */
 
   /**
    * @brief Create label for a chunk given current number of chunks written to array.
@@ -122,7 +122,6 @@ class Chunks {
 
     // Since only process 0 writes the data, only it should check the sizes
     int my_rank;
-    comm = init_communicator::get_communicator();
     my_rank = init_communicator::get_comm_rank();
 
     if (my_rank == 0)

@@ -27,7 +27,6 @@
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
-#include "configuration/communicator.hpp"
 #include "gridboxes/boundary_conditions.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
