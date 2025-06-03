@@ -363,3 +363,59 @@ class Superdrops(SuperdropProperties):
         return self.sample(
             sample_var, sample_values=sample_values, variables2sample=variables2sample
         )
+
+    def indexes_of_time_slices(self, time, times2select):
+        if isinstance(time, list):
+            time_indexes = []
+            for i in range(len(time)):
+                time_indexes.append(self.indexes_of_time_slices(time[i], times2select))
+            return time_indexes
+
+        if len(time) == ak.count(time):  # time is 1-D array
+            time_indexes = []
+            for t in times2select:
+                idx = ak.argmin(abs((time - t)))
+                time_indexes.append(idx)
+        else:  # time assumed to be ragged array like superdrops data
+            time_indexes = []
+            for t in times2select:
+                idx = ak.nanargmin(abs((time - t)), axis=0)[0]
+                time_indexes.append(idx)
+
+        return time_indexes
+
+    def time_slice(
+        self,
+        times2select,
+        variables2slice="all",
+        attach_time=False,
+        time=None,
+        time_units=None,
+    ):
+        if attach_time:
+            self.attach_time(time, time_units, do_reshape=False)
+
+        if isinstance(variables2slice, str) and variables2slice == "all":
+            variables2slice = self._variables
+        elif not isinstance(variables2slice, list):
+            variables2slice = [variables2slice]
+
+        time_indexes = self.indexes_of_time_slices(self.time(), times2select)
+
+        raw_data = {var: [] for var in variables2slice}
+        for var in variables2slice:
+            if isinstance(
+                self._raw_data[var], list
+            ):  # superdrops sample is being sliced
+                time_slice_var = []
+                for i in range(len(self._raw_data[var])):
+                    time_slice_var.append(self._raw_data[var][i][time_indexes[i]])
+            else:
+                time_slice_var = self._raw_data[var][time_indexes]
+            raw_data[var] = time_slice_var
+
+        superdrops_timeslice = Superdrops(self)
+        superdrops_timeslice._variables = raw_data.keys()
+        superdrops_timeslice._raw_data = raw_data
+
+        return superdrops_timeslice
