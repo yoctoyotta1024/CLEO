@@ -1,4 +1,4 @@
-'''
+"""
 Copyright (c) 2025 MPI-M, Clara Bayley
 
 
@@ -17,7 +17,7 @@ https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
 python class to handle superdroplet attributes data from SDM zarr store in ragged array format
-'''
+"""
 
 
 import numpy as np
@@ -26,6 +26,7 @@ import awkward as ak
 import warnings
 from pathlib import Path
 from typing import Optional
+
 
 class SuperdropProperties:
     """Contains attributes common to all superdroplets and functions
@@ -104,12 +105,13 @@ class SuperdropProperties:
 
         return self.RHO_L * v_w * 1000  # [g]
 
+
 class SupersData(SuperdropProperties):
-    def __init__(self, dataset: Path, consts: Optional[dict]=None):
+    def __init__(self, dataset: Path, consts: Optional[dict] = None):
         if consts is not None:
-          SuperdropProperties.__init__(self, consts)
+            SuperdropProperties.__init__(self, consts)
         else:
-          warnings.warn("No superdroplet properties attached to superdroplet dataset")
+            warnings.warn("No superdroplet properties attached to superdroplet dataset")
 
         ds = self.tryopen_dataset(dataset)
         raggedcount = ds["raggedcount"]  # ragged count variable
