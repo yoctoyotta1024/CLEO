@@ -23,4 +23,3 @@ post-processing and plotting output data from CLEO SDM.
    sdtracing
    massmoms
    thermoeqns
-   ensembzarr

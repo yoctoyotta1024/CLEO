@@ -30,9 +30,9 @@ kokkos_settings:
 
 ### SDM Runtime Parameters ###
 domain:
-  nspacedims : 0                                       # no. of spatial dimensions to model
-  ngbxs : 1                                            # total number of Gbxs
-  maxnsupers: 8192                                     # maximum number of SDs
+  nspacedims : 3                                       # no. of spatial dimensions to model
+  ngbxs : 4                                            # total number of Gbxs
+  maxnsupers: 32768                                    # maximum number of SDs
 
 timesteps:
   CONDTSTEP : 1                                        # time between SD condensation [s]
@@ -50,7 +50,7 @@ inputfiles:
 initsupers:
   type: frombinary                                     # type of initialisation of super-droplets
   initsupers_filename : ./share/dimlessSDsinit.dat     # binary filename for initialisation of SDs
-  initnsupers: 8192                                    # initial no. of super-droplets to initialise
+  initnsupers: 32768                                   # initial no. of super-droplets to initialise
 
 ### Output Parameters ###
 outputdata:
