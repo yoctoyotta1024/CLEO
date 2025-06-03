@@ -22,6 +22,7 @@ import awkward as ak
 import numpy as np
 import matplotlib.pyplot as plt
 import random
+import warnings
 from matplotlib.markers import MarkerStyle
 
 
@@ -81,37 +82,46 @@ def plot_randomsample_superdrops(time, superdrops, totnsupers, nsample, savename
     ids2plot = random.sample(sample_population, nsample)
     attrs = ["time", "radius", "xi", "msol", "coord3", "coord1", "coord2"]
     sample = superdrops.sample("sdId", sample_values=ids2plot, variables2sample=attrs)
+    sample_time = sample.time()
 
     for a, attr in enumerate(["radius", "xi", "msol"]):
+        data = sample[attr]
+        if len(ak.flatten(data)) == 0:
+            warnings.warn(f"no data for {attr} found. Not plotting {attr}")
+            continue
+
         try:
-            t, data = sample.time(), sample[attr]
-        except IndexError:
-            print("WARNING: didn't plot " + attr)
-        try:
-            axs[0, a].plot(np.array(t), np.array(data), linewidth=0.8)
-        except (
-            ValueError
-        ):  # data not converible to numpy array (diff lengths of time for SDs)?
+            t = np.array(
+                sample_time
+            )  # will fail if time is different for different superdroplets
+            d = np.array(data)
+            axs[0, a].plot(t, d, linewidth=0.8)
+        except ValueError:  # data not converible to numpy array (diff lengths of time for each superdroplet)?
             for i in range(len(data)):
-                axs[0, a].plot(t[i], data[i], linewidth=0.8)  # plot each SD seperately
+                t = sample_time[i]
+                d = data[i]
+                axs[0, a].plot(t, d, linewidth=0.8)  # plot each SD seperately
 
     mks = MarkerStyle("o", fillstyle="full")
     for a, coord in enumerate(["coord3", "coord1", "coord2"]):
+        data = sample[coord]
+        if len(ak.flatten(data)) == 0:
+            warnings.warn(f"no data for {coord} found. Not plotting {coord}")
+            continue
+
         try:
-            t, data = sample.time(), sample[coord]
-        except IndexError:
-            print("WARNING: didn't plot " + coord)
-        try:
+            t = np.array(sample_time)
             d = np.array(data) / 1000  # [km]
-            axs[1, a].plot(np.array(t), d, linestyle="", marker=mks, markersize=0.2)
+            axs[1, a].plot(t, d, linestyle="", marker=mks, markersize=0.2)
         except (
             ValueError
         ):  # data not converible to numpy array (diff lengths of time for SDs)?
-            for i in range(len(data)):
+            for i in range(len(data)):  # plot each SD seperately
+                t = sample_time[i]
                 d = data[i] / 1000  # [km]
-                axs[1, a].plot(
-                    t[i], d, linestyle="", marker=mks, markersize=0.2
-                )  # plot each SD seperately
+                if coord == "coord2":
+                    print(data.flatten())
+                axs[1, a].plot(t, d, linestyle="", marker=mks, markersize=0.2)
 
     axs[0, 0].set_yscale("log")
     axs[0, 0].set_ylabel("radius, r /\u03BCm")
