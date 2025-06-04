@@ -6,7 +6,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 15th April 2024
+Last Modified: Thursday 29th May 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -15,14 +15,20 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-functions to extract attribute data for
-specifc superdroplets based on the sdIds
+!!!NOTE!!! DEPRECIATED SINCE V0.40.0, REPLACED BY SUPERDROPS MODULE !!!!!!
+functions to extract attribute data for specifc superdroplets based on the sdIds
 e.g. for tracing their trajectories
 """
+
 
 import numpy as np
 import awkward as ak
 import random
+import warnings
+
+warnings.warn(
+    "sdtracing module is depreciated since CLEO v0.40.0,\nreplaced by superdrops"
+)
 
 
 def attr_for_superdroplet(sddata, Id, attr):
