@@ -68,11 +68,11 @@ ds = pyzarr.get_rawdataset(dataset)
 
 time = pyzarr.get_time(ds)
 superdrops = pyzarr.get_supers(ds, consts)
+savename = ""
 ### ---------------------------------------------------------------- ###
 
 # %%
 ### ----------------- plot individual superdroplets ---------------- ###
-savename = ""
 if savefig:
     savename = savefigpath / "randomsample_attrs.png"
 pltsds.plot_randomsample_superdrops(time, superdrops, nsample, savename=savename)
@@ -81,6 +81,7 @@ if savefig:
 pltsds.plot_randomsample_superdrops_2dmotion(
     superdrops, nsample, savename=savename, arrows=False
 )
+superdrops.detach_time()
 ### ---------------------------------------------------------------- ###
 
 # %%

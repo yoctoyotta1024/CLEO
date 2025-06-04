@@ -161,7 +161,7 @@ def plot_domainmass_distribs(
         domainvol,
         rspan,
         nbins,
-        masscalc=superdrops.mass(),
+        masscalc=superdrops.mass,
         smoothsig=smoothsig,
         perlogR=perlogR,
         ylog=ylog,

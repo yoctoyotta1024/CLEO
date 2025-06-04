@@ -226,7 +226,7 @@ pltsds.plot_randomsample_superdrops(time, superdrops, nsample, savename=savename
 savename = savefigpath / "const2d_motion2d.png"
 superdrops.attach_time(time.secs, "s", do_reshape=True, var4reshape="sdId")
 pltsds.plot_randomsample_superdrops_2dmotion(
-    superdrops, nsample, savename=savename, arrows=False, cmap_var=["cividis", "time"]
+    superdrops, nsample, savename=savename, arrows=False, cmap_var=["viridis", "time"]
 )
 
 
