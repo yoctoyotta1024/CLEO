@@ -2,6 +2,22 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.41.0](https://github.com/yoctoyotta1024/CLEO/compare/1bc7564218e7da23f6fee626c839d1893aabc1e1..v0.41.0) - 2025-06-04
+#### Features
+- new superdrops module for handing ragged superdroplet arrays - ([9f0b2c8](https://github.com/yoctoyotta1024/CLEO/commit/9f0b2c8ebe5571e5abd8ba3653244931daae7b1b)) - clara.bayley
+#### Miscellaneous Chores
+- formatting - ([edb0e4d](https://github.com/yoctoyotta1024/CLEO/commit/edb0e4d92f3a0bda4e1ee6ad061450db6c68e51b)) - clara.bayley
+#### Refactoring
+- add function for selecting specific times of superdrop data - ([6882963](https://github.com/yoctoyotta1024/CLEO/commit/688296384651d72815566c965c0f8d3b716644a3)) - clara.bayley
+- add option to attach time to superdroplets - ([f49d1f5](https://github.com/yoctoyotta1024/CLEO/commit/f49d1f5c39d49e29a5d54ffda04d027d1db736b7)) - clara.bayley
+- add superdrop sampling functions - ([d1cabd2](https://github.com/yoctoyotta1024/CLEO/commit/d1cabd23f93aae313f1bce5d239c67b669483d77)) - clara.bayley
+- add depreciation warnings - ([289e3fe](https://github.com/yoctoyotta1024/CLEO/commit/289e3feba2263b43b3ae28cc89b7b5f0da9f6e8d)) - clara.bayley
+- move ensembzarr out of pySD into examples - ([7efb7c4](https://github.com/yoctoyotta1024/CLEO/commit/7efb7c417a237eb7d688a19dd42de02ce14637f6)) - clara.bayley
+- better expression of supersdata class - ([a92d079](https://github.com/yoctoyotta1024/CLEO/commit/a92d0790ca14ea0c94c7a92f374cf88003f44227)) - clara.bayley
+- a test setup with all superdrop observers - ([1bc7564](https://github.com/yoctoyotta1024/CLEO/commit/1bc7564218e7da23f6fee626c839d1893aabc1e1)) - clara.bayley
+
+- - -
+
 ## [v0.40.0](https://github.com/yoctoyotta1024/CLEO/compare/29a1591c5c7142307475c5587b028c240e5c86dc..v0.40.0) - 2025-05-29
 #### Bug Fixes
 - fix superdroplet plotting when domain is smaller than 100km - ([0d11ffe](https://github.com/yoctoyotta1024/CLEO/commit/0d11ffe90d643e7a3d4f38168f2c4e61e86242a2)) - clara.bayley
