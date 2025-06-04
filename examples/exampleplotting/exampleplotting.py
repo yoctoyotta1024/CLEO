@@ -9,7 +9,7 @@ Created Date: Sunday 26th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 7th May 2024
+Last Modified: Wednesday 4th June 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -18,6 +18,7 @@ https://opensource.org/licenses/BSD-3-Clause
 File Description:
 """
 
+# %%
 import os
 import sys
 import awkward as ak
@@ -28,6 +29,7 @@ sys.path.append(path2pySD)
 from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
 from plotssrc import pltsds, pltdist
 
+# %%
 ### ---------------------- input parameters ------------------------ ###
 ### paths to data for plotting
 dataset = Path("/home/m/m300950/CLEO/build/bin/SDMdata.zarr")
@@ -57,6 +59,7 @@ perlogR_num = False
 ylog_num = True
 ### ---------------------------------------------------------------- ###
 
+# %%
 ### ------------------------- load data ---------------------------- ###
 config = pysetuptxt.get_config(setuptxt, nattrs=3, isprint=True)
 consts = pysetuptxt.get_consts(setuptxt, isprint=True)
@@ -67,20 +70,20 @@ time = pyzarr.get_time(ds)
 superdrops = pyzarr.get_supers(ds, consts)
 ### ---------------------------------------------------------------- ###
 
+# %%
 ### ----------------- plot individual superdroplets ---------------- ###
 savename = ""
 if savefig:
     savename = savefigpath / "randomsample_attrs.png"
-pltsds.plot_randomsample_superdrops(
-    time, superdrops, config["maxnsupers"], nsample, savename=savename
-)
+pltsds.plot_randomsample_superdrops(time, superdrops, nsample, savename=savename)
 if savefig:
     savename = savefigpath / "randomsample_2dmotion.png"
 pltsds.plot_randomsample_superdrops_2dmotion(
-    superdrops, config["maxnsupers"], nsample, arrows=False
+    superdrops, nsample, savename=savename, arrows=False
 )
 ### ---------------------------------------------------------------- ###
 
+# %%
 ### ------------------ plot droplet distributions ------------------ ###
 if rspan == ["min", "max"]:
     non_nanradius = ak.nan_to_none(superdrops["radius"])

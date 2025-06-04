@@ -6,7 +6,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 3rd June 2025
+Last Modified: Wednesday 4th June 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -69,7 +69,7 @@ def individ_radiusgrowths_figure(time, radii, savename=""):
     return fig, ax
 
 
-def plot_randomsample_superdrops(time, superdrops, totnsupers, nsample, savename=""):
+def plot_randomsample_superdrops(time, superdrops, nsample, savename=""):
     """plot timeseries of the attributes of a
     random sample of superdroplets"""
 
@@ -119,8 +119,6 @@ def plot_randomsample_superdrops(time, superdrops, totnsupers, nsample, savename
             for i in range(len(data)):  # plot each SD seperately
                 t = sample_time[i]
                 d = data[i] / 1000  # [km]
-                if coord == "coord2":
-                    print(data.flatten())
                 axs[1, a].plot(t, d, linestyle="", marker=mks, markersize=0.2)
 
     axs[0, 0].set_yscale("log")
@@ -146,13 +144,12 @@ def plot_randomsample_superdrops(time, superdrops, totnsupers, nsample, savename
 
 def plot_randomsample_superdrops_2dmotion(
     superdrops,
-    totnsupers,
     nsample,
     savename="",
-    colors=None,
     arrows=False,
     ids2plot=None,
     israndom=True,
+    cmap_var=[None, None],
     fig=None,
     ax=None,
 ):
@@ -172,15 +169,21 @@ def plot_randomsample_superdrops_2dmotion(
 
     mks = MarkerStyle("o", fillstyle="full")
     sample = superdrops.sample(
-        "sdId", sample_values=ids2plot, variables2sample=["coord3", "coord1"]
+        "sdId", sample_values=ids2plot, variables2sample=["coord3", "coord1", "sdId"]
     )
-    coordz = np.array(sample.coord3()).T / 1000  # [km]
-    coordx = np.array(sample.coord1()).T / 1000  # [km]
+    coordz = ak.flatten(sample.coord3()) / 1000  # [km]
+    coordx = ak.flatten(sample.coord1()) / 1000  # [km]
 
-    if colors is not None:
-        ax.scatter(coordx, coordz, marker=mks, s=0.4, cmap=colors[0], c=colors[1])
+    if all([c is None for c in cmap_var]):
+        cmap = "gist_earth"
+        c = ak.flatten(sample.sdId())
     else:
-        ax.plot(coordx, coordz, linestyle="", marker=mks, markersize=0.4)
+        cmap = cmap_var[0]
+        c = superdrops.sample(
+            "sdId", sample_values=ids2plot, variables2sample=cmap_var[1]
+        )
+        c = ak.flatten(c[cmap_var[1]])
+    ax.scatter(coordx, coordz, marker=mks, s=0.4, cmap=cmap, c=c)
 
     if arrows:
         n2plt = min(300, coordx.shape[1])
@@ -217,30 +220,5 @@ def plot_randomsample_superdrops_2dmotion(
         print("Figure .png saved as: " + str(savename))
 
     plt.show()
-
-    return fig, ax
-
-
-def plot_superdrops_2dmotion(
-    superdrops,
-    ids2plot,
-    savename="",
-    colors=None,
-    arrows=False,
-    fig=None,
-    ax=None,
-):
-    fig, ax = plot_randomsample_superdrops_2dmotion(
-        superdrops,
-        np.nan,
-        np.nan,
-        savename=savename,
-        colors=colors,
-        arrows=arrows,
-        ids2plot=ids2plot,
-        israndom=False,
-        fig=fig,
-        ax=ax,
-    )
 
     return fig, ax

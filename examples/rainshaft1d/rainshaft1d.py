@@ -222,9 +222,7 @@ pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
 
 nsample = 500
 savename = savefigpath / "rain1d_randomsample.png"
-pltsds.plot_randomsample_superdrops(
-    time, superdrops, config["maxnsupers"], nsample, savename=savename
-)
+pltsds.plot_randomsample_superdrops(time, superdrops, nsample, savename=savename)
 
 ### ----- plot 1-D .gif animations ----- ###
 nframes = len(time.mins)

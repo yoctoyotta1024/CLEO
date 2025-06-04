@@ -9,7 +9,7 @@ Created Date: Thursday 30th January 2025
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Thursday 29th May 2025
+Last Modified: Wednesday 4th June 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -59,7 +59,6 @@ def main(
     savename = savefigpath / "fromfile_motion2d_validation.png"
     pltsds.plot_randomsample_superdrops_2dmotion(
         superdrops,
-        config["maxnsupers"],
         nsample,
         savename=savename,
         arrows=False,

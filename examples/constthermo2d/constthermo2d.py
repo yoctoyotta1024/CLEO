@@ -9,7 +9,7 @@ Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 11th September 2024
+Last Modified: Wednesday 4th June 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -221,13 +221,12 @@ pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
 
 nsample = 500
 savename = savefigpath / "const2d_randomsample.png"
-pltsds.plot_randomsample_superdrops(
-    time, superdrops, config["maxnsupers"], nsample, savename=savename
-)
+pltsds.plot_randomsample_superdrops(time, superdrops, nsample, savename=savename)
 
 savename = savefigpath / "const2d_motion2d.png"
+superdrops.attach_time(time.secs, "s", do_reshape=True, var4reshape="sdId")
 pltsds.plot_randomsample_superdrops_2dmotion(
-    superdrops, config["maxnsupers"], nsample, savename=savename, arrows=False
+    superdrops, nsample, savename=savename, arrows=False, cmap_var=["cividis", "time"]
 )
 
 
