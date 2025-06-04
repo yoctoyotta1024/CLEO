@@ -158,11 +158,16 @@ def arabas_shima_2017_fig(
 
     fig, axs = plt.subplots(nrows=1, ncols=3, figsize=(12, 5))
 
-    plot_kohlercurve_with_criticalpoints(
-        axs[1], radius, msol[0], temp[0], IONIC, MR_SOL
-    )
+    for i in range(len(radius)):
+        plot_kohlercurve_with_criticalpoints(
+            axs[1], radius[i], msol[i][0], temp[0], IONIC, MR_SOL
+        )
 
-    condensation_validation_subplots(axs, time, radius, supersat, zprof)
+        condensation_validation_subplots(axs, time, radius[i], supersat, zprof)
+
+        rlab = "r$_{dry}$ = " + "{:.2g}\u03BCm\n".format(
+            radius[i][0]
+        )  # should be same for all i
 
     axs[0].legend(loc="lower right")
     axs[1].legend(loc="upper left")
@@ -171,8 +176,7 @@ def arabas_shima_2017_fig(
         "N = "
         + str(numconc)
         + "cm$^{-3}$\n"
-        + "r$_{dry}$ = "
-        + "{:.2g}\u03BCm\n".format(radius[0])
+        + rlab
         + "<w> = {:.1f}".format(W_avg * 100)
         + "cm s$^{-1}$"
     )

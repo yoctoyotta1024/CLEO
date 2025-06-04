@@ -317,6 +317,16 @@ class Superdrops(SuperdropProperties):
         else:
             print("time already attached to superdrops")
 
+    def detach_time(self):
+        if "time" not in self._raw_data:
+            print("time is not attached to superdrops")
+        else:
+            variables = list(self._variables)
+            variables.remove("time")
+            self._variables = tuple(variables)
+            del self._raw_data["time"]
+            del self._units["time_units"]
+
     def sample(self, sample_var: str, sample_values="all", variables2sample="all"):
         if isinstance(sample_var, str):
             sample_var = self._raw_data[sample_var]

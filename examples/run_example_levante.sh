@@ -39,7 +39,7 @@ make_clean=false
 yacyaxtroot=/work/bm1183/m300950/yacyaxt
 stacksize_limit=204800 # ulimit -s [stacksize_limit] (kB)
 
-if [ ["${buildtype}" == "cuda" || "${enableyac}" == "true"]]
+if [[ "${buildtype}" == "cuda" || "${enableyac}" == "true" ]]
 then
   compilername=gcc
 else

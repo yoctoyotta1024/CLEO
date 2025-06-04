@@ -1,5 +1,5 @@
 """
-Copyright (c) 2024 MPI-M, Clara Bayley
+Copyright (c) 2025 MPI-M, Clara Bayley
 
 
 ----- CLEO -----
@@ -9,7 +9,7 @@ Created Date: Tuesday 24th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 7th May 2024
+Last Modified: Thursday 29th May 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -20,13 +20,14 @@ functions to return zarr data in useful formats for plotting e.g. for handling r
 of superdroplet attributes
 """
 
+
 import numpy as np
 import xarray as xr
 import awkward as ak
 from pathlib import Path
 
 from . import thermodata
-from . import supersdata
+from . import superdrops
 from . import massmoms
 from . import timedata
 
@@ -87,12 +88,8 @@ def get_thermodata(dataset, ntime, ndims, consts, getwinds=False):
         return thermo
 
 
-def get_supers(dataset, consts):
-    return supersdata.SupersData(dataset, consts)
-
-
-def get_rainsupers(dataset, consts):
-    return supersdata.RainSupers(dataset, consts)
+def get_supers(dataset, consts, is_print=False):
+    return superdrops.Superdrops(dataset, consts, is_print=is_print)
 
 
 def get_time(dataset):

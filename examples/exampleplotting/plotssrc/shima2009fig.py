@@ -26,15 +26,14 @@ import matplotlib.pyplot as plt
 from scipy.special import iv
 
 sys.path.append("../../../")  # for imports from pySD package
-from pySD.sdmout_src import sdtracing
 from .pltdist import logr_distribution
 
 
 def plot_validation_figure(
     witherr,
     time,
-    sddata,
-    tplt,
+    superdrops,
+    t2plts,
     domainvol,
     n_a,
     r_a,
@@ -43,30 +42,32 @@ def plot_validation_figure(
     savename="",
     withgol=False,
 ):
-    attrs2sel = ["radius", "xi"]
-    selsddata = sdtracing.attributes_at_times(sddata, time, tplt, attrs2sel)
+    variables2slice = ["time", "radius", "xi"]
+    superdrops_timeslice = superdrops.time_slice(
+        t2plts, variables2slice, attach_time=True, time=time.secs, time_units="s"
+    )
 
     nbins = 500
-    non_nanradius = ak.nan_to_none(sddata["radius"])
+    non_nanradius = ak.nan_to_none(superdrops["radius"])
     rspan = [ak.min(non_nanradius), ak.max(non_nanradius)]
 
     fig, ax, ax_err = setup_validation_figure(witherr, xlims)
 
-    for n in range(len(tplt)):
-        ind = np.argmin(abs(time - tplt[n]))
-        tlab = "t = {:.2f}s".format(time[ind])
+    for n in range(len(superdrops_timeslice.time())):
+        t = superdrops_timeslice.time()[n]
+        tlab = "t = {:.2f}".format(t) + superdrops_timeslice.time_units()
         c = "C" + str(n)
 
         if withgol:
             golsol, hcens = golovin_analytical(
-                rspan, time[ind], nbins, n_a, r_a, sddata.RHO_L
+                rspan, t, nbins, n_a, r_a, superdrops.RHO_L()
             )
             plot_golovin_analytical_solution(ax, hcens, golsol, n, c)
 
-        radius = selsddata["radius"][n]
-        xi = selsddata["xi"][n]
+        radius = superdrops_timeslice["radius"][n]
+        xi = superdrops_timeslice["xi"][n]
         hist, hcens = calc_massdens_distrib(
-            rspan, nbins, domainvol, xi, radius, sddata, smoothsig
+            rspan, nbins, domainvol, xi, radius, superdrops, smoothsig
         )
 
         if smoothsig:
@@ -76,7 +77,7 @@ def plot_validation_figure(
 
         if witherr:
             golsol, hcens = golovin_analytical(
-                rspan, time[ind], nbins, n_a, r_a, sddata.RHO_L
+                rspan, t, nbins, n_a, r_a, superdrops.RHO_L()
             )
             diff = hist - golsol
             ax_err.plot(hcens, diff, c=c)
@@ -167,8 +168,10 @@ def plot_golovin_analytical_solution(ax, hcens, golsol, n, c):
     return ax
 
 
-def calc_massdens_distrib(rspan, nbins, domainvol, xi, radius, sddata, smoothsig):
-    m_asif_water = sddata.vol(radius) * sddata.RHO_L  # superdrops mass as if water [g]
+def calc_massdens_distrib(rspan, nbins, domainvol, xi, radius, superdrops, smoothsig):
+    m_asif_water = (
+        superdrops.vol(radius) * superdrops.RHO_L()
+    )  # superdrops mass as if water [g]
     weights = xi * m_asif_water * 1000 / domainvol  # real droplets [g/m^3]
 
     hist, hedges, hcens = logr_distribution(

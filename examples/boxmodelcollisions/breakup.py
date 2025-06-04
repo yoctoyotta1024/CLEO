@@ -9,7 +9,7 @@ Created Date: Friday 14th June 2024
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Monday 17th June 2024
+Last Modified: Thursday 29th May 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -43,7 +43,7 @@ sys.path.append(
 
 from plotssrc import shima2009fig
 from pySD import editconfigfile, geninitconds
-from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat, sdtracing
+from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
 from pySD.initsuperdropsbinary_src import rgens, probdists, attrsgen
 from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 
@@ -186,7 +186,7 @@ def run_exectuable(path2build, kernel, config_filename):
 
 
 def get_kernel_results(path2build, kernel):
-    """read in time, sddata and setup for given kernel"""
+    """read in time, superdrops and setup for given kernel"""
     params = get_params(path2build, kernel)
     setupfile = params["setup_filename"]
     dataset = params["zarrbasedir"]
@@ -196,10 +196,10 @@ def get_kernel_results(path2build, kernel):
     consts = pysetuptxt.get_consts(setupfile, isprint=True)
 
     # read in seom data from dataset
-    time = pyzarr.get_time(dataset).secs
-    sddata = pyzarr.get_supers(dataset, consts)
+    time = pyzarr.get_time(dataset)
+    superdrops = pyzarr.get_supers(dataset, consts)
 
-    return config, consts, time, sddata
+    return config, consts, time, superdrops
 
 
 def plot_onekernel_results(
@@ -213,7 +213,7 @@ def plot_onekernel_results(
     savename,
 ):
     # read in data
-    config, consts, time, sddata = get_kernel_results(path2build, kernel)
+    config, consts, time, superdrops = get_kernel_results(path2build, kernel)
     gbxs = pygbxsdat.get_gridboxes(grid_filename, consts["COORD0"], isprint=True)
 
     # make and save plot
@@ -226,7 +226,7 @@ def plot_onekernel_results(
     fig, ax = shima2009fig.plot_validation_figure(
         plotwitherr,
         time,
-        sddata,
+        superdrops,
         t2plts,
         gbxs["domainvol"],
         numconc,
@@ -264,7 +264,7 @@ def plot_allkernels_results(
     ax2 = ax.twinx()
     for kernel in kernels:
         # read in data
-        config, consts, time, sddata = get_kernel_results(path2build, kernel)
+        config, consts, time, superdrops = get_kernel_results(path2build, kernel)
         domainvol = pygbxsdat.get_gridboxes(
             grid_filename, consts["COORD0"], isprint=True
         )["domainvol"]
@@ -272,22 +272,24 @@ def plot_allkernels_results(
             config["maxnsupers"] ** (-1 / 5)
         )  # = ~0.2 for guassian smoothing
 
-        attrs2sel = ["radius", "xi"]
-        selsddata = sdtracing.attributes_at_times(sddata, time, t2plts, attrs2sel)
+        variables2slice = ["time", "radius", "xi"]
+        superdrops_timeslice = superdrops.time_slice(
+            t2plts, variables2slice, attach_time=True, time=time.secs, time_units="s"
+        )
 
         nbins = 500
-        non_nanradius = ak.nan_to_none(sddata["radius"])
+        non_nanradius = ak.nan_to_none(superdrops["radius"])
         rspan = [ak.min(non_nanradius), ak.max(non_nanradius)]
 
         for n in range(len(t2plts)):
-            radius = selsddata["radius"][n]
-            xi = selsddata["xi"][n]
+            radius = superdrops_timeslice["radius"][n]
+            xi = superdrops_timeslice["xi"][n]
             hist, hcens = shima2009fig.calc_massdens_distrib(
-                rspan, nbins, domainvol, xi, radius, sddata, smoothsig
+                rspan, nbins, domainvol, xi, radius, superdrops, smoothsig
             )
             if kernel == "long":
-                ind = np.argmin(abs(time - t2plts[n]))
-                tlab = "t = {:.2f}s".format(time[ind])
+                t = superdrops_timeslice.time()[n]
+                tlab = "t = {:.2f}".format(t) + superdrops_timeslice.time_units()
                 ax2.plot(
                     hcens,
                     hist,
