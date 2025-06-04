@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.41.1](https://github.com/yoctoyotta1024/CLEO/compare/5afbfe2fba4c4d031642e7608d40021bf61a274d..v0.41.1) - 2025-06-04
+#### Bug Fixes
+- plotting of 2d motion - ([3cb3537](https://github.com/yoctoyotta1024/CLEO/commit/3cb353765acda16faeb60ae300546b6ef2470c5b)) - clara.bayley
+- plotting of ragged data when data not available - ([b89f674](https://github.com/yoctoyotta1024/CLEO/commit/b89f67456cc6bf980c146718342c5fce31c0773e)) - clara.bayley
+#### Refactoring
+- add option to detach time from superdroplets - ([e6d2d67](https://github.com/yoctoyotta1024/CLEO/commit/e6d2d67194319ea8a50c18afe1fc64603308065b)) - clara.bayley
+- make examples compatible with new api - ([5afbfe2](https://github.com/yoctoyotta1024/CLEO/commit/5afbfe2fba4c4d031642e7608d40021bf61a274d)) - clara.bayley
+
+- - -
+
 ## [v0.41.0](https://github.com/yoctoyotta1024/CLEO/compare/1bc7564218e7da23f6fee626c839d1893aabc1e1..v0.41.0) - 2025-06-04
 #### Features
 - new superdrops module for handing ragged superdroplet arrays - ([9f0b2c8](https://github.com/yoctoyotta1024/CLEO/commit/9f0b2c8ebe5571e5abd8ba3653244931daae7b1b)) - clara.bayley
