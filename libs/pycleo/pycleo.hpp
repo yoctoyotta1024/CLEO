@@ -26,7 +26,11 @@
 
 #include <iostream>
 
-#include "./py_sdmmethods.hpp"
+#include "./py_observers.hpp"
+#include "./py_runcleo.hpp"
+// #include "./py_cartesiandomain.cpp" #WIP
+// #include "./py_gridboxes.cpp" #WIP
+// #include "./py_superdrops.cpp" #WIP
 
 namespace py = pybind11;
 
@@ -38,6 +42,28 @@ PYBIND11_MODULE(pycleo, m) {
   m.def("test_python_bindings", &test_python_bindings, "test function for CLEO example",
         py::arg("i"), py::arg("j"));
 
+  /* maps */
+  // pyCartesianMaps(m); #WIP (or funciton that returns obj/pointer?)
+
+  /* microphyiscs */
+  // pyMicrophysicalProcess_null(m); #WIP
+
+  /* motion */
+  // pyMotion_null(m); #WIP
+
+  /* boundary conditions */
+  // pyBoundaryConditions_null(m); #WIP
+
+  /* transport */
+  // pyTransportAcrossDomain_cartesian(m); #WIP
+
+  /* movement */
+  // pyMoveSupersInDomain_cartesian_null(m); #WIP
+
+  /* observers */
+  pyObservers_null(m);
+
+  /* sdmmethods */
   pySDMMethods_cartesian_null(m);
 }
 
