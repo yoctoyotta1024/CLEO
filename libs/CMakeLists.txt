@@ -48,3 +48,10 @@ else()
   set(errmsg "Invalid CLEO_DOMAIN '${CLEO_DOMAIN}', please choose from: ${valid_domain}")
   message(FATAL_ERROR "${errmsg}")
 endif()
+
+# optionally make CLEO's python bindings
+if(CLEO_NO_PYBINDINGS)
+  message(STATUS "CLEO excluding python bindings CLEO_NO_PYBINDINGS=${CLEO_NO_PYBINDINGS}")
+else()
+  add_subdirectory(pycleo EXCLUDE_FROM_ALL)
+endif()

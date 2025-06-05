@@ -21,7 +21,7 @@ compilername=intel
 buildtype="openmp"
 path2CLEO=${PROJECT}/bayley1/CLEO/
 path2build=${PROJECT}/bayley1/CLEO/build_divfree2d/
-build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian"
+build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian -DCLEO_NO_PYBINDINGS=true"
 executables="divfree2d"
 
 cleoenv=/p/project1/exaww/bayley1/micromamba/envs/cleoenv

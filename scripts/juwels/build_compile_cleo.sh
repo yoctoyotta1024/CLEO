@@ -23,7 +23,7 @@ buildtype=$1                                   # "serial", "threads", "openmp" o
 compilername=${2:-intel}                       # "intel" or "gcc"
 path2CLEO=${3:-${PROJECT}/bayley1/CLEO}        # must be absolute path
 path2build=${4:-${path2CLEO}/build}            # should be absolute path
-build_flags=${5:-"-DCLEO_COUPLED_DYNAMICS="""} # CLEO_BUILD_FLAGS
+build_flags=${5:-"-DCLEO_COUPLED_DYNAMICS="" -DCLEO_NO_PYBINDINGS=true"} # CLEO_BUILD_FLAGS
 executables=${6:-"cleocoupledsdm"}             # list of executables to compile or "NONE"
 enabledebug=${7:-false}                        # == "true" or otherwise false
 enableyac=${8:-false}                          # == "true" or otherwise false

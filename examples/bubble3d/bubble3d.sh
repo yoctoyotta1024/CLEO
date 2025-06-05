@@ -23,7 +23,8 @@
 buildtype="openmp"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_bubble3d/
-build_flags="-DCLEO_COUPLED_DYNAMICS=yac -DCLEO_DOMAIN=cartesian -DCLEO_NO_ROUGHPAPER=true"
+build_flags="-DCLEO_COUPLED_DYNAMICS=yac -DCLEO_DOMAIN=cartesian \
+  -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
 enableyac=true
 executables="bubble3d"
 
