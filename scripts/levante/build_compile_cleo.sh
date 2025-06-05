@@ -42,7 +42,8 @@ then
   exit 1
 fi
 source ${path2CLEO}/scripts/levante/bash/src/check_inputs.sh
-check_args_not_empty "${buildtype}" "${compilername}" "${enabledebug}" "${path2CLEO}" "${path2build}" "${enableyac}"
+check_args_not_empty "${buildtype}" "${path2CLEO}" "${path2build}"
+check_args_not_empty "${compilername}" "${enabledebug}" "${enableyac}"
 ### ---------------------------------------------------- ###
 
 ### ----------------- export inputs -------------------- ###
