@@ -35,6 +35,10 @@ message(STATUS "pybind11 installation in: ${CMAKE_CURRENT_BINARY_DIR}")
 
 # Add executables and create library target
 set(SOURCES
+# "py_superdrops.cpp" #WIP: NullMicrophysicalProcess, NullMotion
+# "py_gridboxes.cpp" #WIP: NullBoundaryConditions, MoveSupersInDomain
+# "py_cartesiandomain.cpp" #WIP: CartesianMaps, CartesianTransportAcrossDomain
+"py_observers.cpp"
 "py_runcleo.cpp"
 "pycleo.cpp"
 )
