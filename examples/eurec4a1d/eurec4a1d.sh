@@ -23,7 +23,8 @@
 buildtype="cuda"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_eurec4a1d/
-build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian -DCLEO_NO_ROUGHPAPER=true"
+build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
+  -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
 enableyac=false
 executables="eurec4a1d"
 
