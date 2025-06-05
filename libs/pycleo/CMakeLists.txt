@@ -35,6 +35,7 @@ message(STATUS "pybind11 installation in: ${CMAKE_CURRENT_BINARY_DIR}")
 
 # Add executables and create library target
 set(SOURCES
+"py_runcleo.cpp"
 "pycleo.cpp"
 )
 pybind11_add_module(${LIBNAME} MODULE ${SOURCES})
@@ -44,7 +45,7 @@ pybind11_add_module(${LIBNAME} MODULE ${SOURCES})
 target_include_directories(${LIBNAME} PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
 
 # Link libraries to target library
-set(LINKLIBS gridboxes superdrops runcleo)
+set(LINKLIBS initialise gridboxes observers superdrops zarr runcleo cartesiandomain)
 target_link_libraries(${LIBNAME} PUBLIC "${LINKLIBS}")
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 

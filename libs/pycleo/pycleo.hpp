@@ -16,7 +16,7 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Entry point for creating CLEO's python bindngs
+ * Entry point for creating CLEO's python bindngs module
  */
 
 #ifndef LIBS_PYCLEO_PYCLEO_HPP_
@@ -24,12 +24,11 @@
 
 #include <pybind11/pybind11.h>
 
-#include <Kokkos_Core.hpp>
 #include <iostream>
 
-namespace py = pybind11;
+#include "./py_sdmmethods.hpp"
 
-#include "runcleo/sdmmethods.hpp"
+namespace py = pybind11;
 
 int test_python_bindings(const int i, const int j);
 
@@ -38,6 +37,8 @@ PYBIND11_MODULE(pycleo, m) {
 
   m.def("test_python_bindings", &test_python_bindings, "test function for CLEO example",
         py::arg("i"), py::arg("j"));
+
+  pySDMMethods_cartesian_null(m);
 }
 
 #endif  // LIBS_PYCLEO_PYCLEO_HPP_
