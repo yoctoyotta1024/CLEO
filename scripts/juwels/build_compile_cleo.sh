@@ -23,7 +23,7 @@ buildtype=$1                                   # "serial", "threads", "openmp" o
 compilername=${2:-intel}                       # "intel" or "gcc"
 path2CLEO=${3:-${PROJECT}/bayley1/CLEO}        # must be absolute path
 path2build=${4:-${path2CLEO}/build}            # should be absolute path
-build_flags=${5:-"-DCLEO_COUPLED_DYNAMICS="""} # CLEO_BUILD_FLAGS
+build_flags=${5:-"-DCLEO_COUPLED_DYNAMICS="" -DCLEO_NO_PYBINDINGS=true"} # CLEO_BUILD_FLAGS
 executables=${6:-"cleocoupledsdm"}             # list of executables to compile or "NONE"
 enabledebug=${7:-false}                        # == "true" or otherwise false
 enableyac=${8:-false}                          # == "true" or otherwise false
@@ -38,7 +38,8 @@ then
   exit 1
 fi
 source ${path2CLEO}/scripts/juwels/bash/src/check_inputs.sh
-check_args_not_empty "${buildtype}" "${compilername}" "${enabledebug}" "${path2CLEO}" "${path2build}" "${enableyac}"
+check_args_not_empty "${buildtype}" "${path2CLEO}" "${path2build}"
+check_args_not_empty "${compilername}" "${enabledebug}" "${enableyac}"
 ### ---------------------------------------------------- ###
 
 ### ----------------- export inputs -------------------- ###

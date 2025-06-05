@@ -1,18 +1,16 @@
 #!/bin/bash
-#SBATCH --job-name=bubble3d
+#SBATCH --job-name=pythonbindings
 #SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=256
+#SBATCH --cpus-per-task=128
 #SBATCH --mem=10G
-#SBATCH --time=00:05:00
+#SBATCH --time=00:02:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=bm1183
-#SBATCH --output=./bubble3d_out.%j.out
-#SBATCH --error=./bubble3d_err.%j.out
-
-# TODO(all): complete python script(s) for example (and fix MPI linker error?)
+#SBATCH --output=./pythonbindings_out.%j.out
+#SBATCH --error=./pythonbindings_err.%j.out
 
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
@@ -20,17 +18,16 @@
 ### ---- build type, directories, the executable(s) ---- ###
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
-buildtype="openmp"
+buildtype="threads"
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_bubble3d/
-build_flags="-DCLEO_COUPLED_DYNAMICS=yac -DCLEO_DOMAIN=cartesian \
-  -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
-enableyac=true
-executables="bubble3d"
+path2build=${HOME}/CLEO/build_python_bindings/
+build_flags="-DCLEO_COUPLED_DYNAMICS=null -DCLEO_DOMAIN=cartesian \
+  -DCLEO_NO_ROUGHPAPER=true -DCLEO_PYTHON=/work/bm1183/m300950/bin/envs/cleoenv/bin/python"
+enableyac=false
+executables="pycleo"
 
-pythonscript=${path2CLEO}/examples/bubble3d/bubble3d.py
-configfile=${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml
-script_args="${configfile}"
+pythonscript=${path2CLEO}/examples/python_bindings/python_bindings.py
+script_args=""
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

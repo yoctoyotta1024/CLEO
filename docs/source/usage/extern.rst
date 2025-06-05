@@ -46,3 +46,12 @@ CLEO's ``coupldyn_cvode`` library requires the SUNDIALS CVODE package. You can f
 about it from `its webpage: <https://computing.llnl.gov/projects/sundials/cvode>`_.
 
 The CVODE libraries for CLEO are automatically built using CMAKE and compiled if required.
+
+pybind11
+--------
+CLEO's ``pycleo`` library requires pybind11 to create python binding for selected parts of CLEO's
+libraries. You can find more information about it from `its repository: <https://github.com/pybind/pybind11>`_.
+
+The pybind11 library for CLEO is automatically built using CMAKE and compiled if required. Note you
+can avoid making CLEO's python bindings, and thereby avoid the pybind11 dependency on your build,
+by passing a non-empty "CLEO_NO_PYBINDINGS" flag to cmake. E.g. ``cmake [...] -DCLEO_NO_PYBINDINGS=true``

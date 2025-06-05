@@ -21,7 +21,8 @@
 buildtype="openmp"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_colls0d/${buildtype}/
-build_flags="-DCLEO_COUPLED_DYNAMICS=null -DCLEO_DOMAIN=cartesian -DCLEO_NO_ROUGHPAPER=true"
+build_flags="-DCLEO_COUPLED_DYNAMICS=null -DCLEO_DOMAIN=cartesian \
+  -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
 enableyac=false
 executables="longcolls lowlistcolls szakallurbichcolls testikstraubcolls"
 
