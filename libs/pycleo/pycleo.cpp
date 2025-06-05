@@ -16,7 +16,7 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Functionality for creating CLEO's python bindngs
+ * Functionality for creating CLEO's python bindngs module
  */
 
 #include "./pycleo.hpp"
