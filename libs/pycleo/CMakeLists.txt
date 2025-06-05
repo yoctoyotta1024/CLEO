@@ -10,8 +10,15 @@ message(STATUS "CLEO using ${LIBNAME} with LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_S
 # explicitly set library executables path to /lib in top level of build tree
 set(LIB_BINARY_DIR ${CLEO_BINARY_DIR}/pycleo)
 
+# Find Python package (executable and library paths)
+set(Python_EXECUTABLE ${CLEO_PYTHON})
+find_package(Python REQUIRED) # if CLEO_PYTHON not specified python found is default
+message(STATUS "CLEO python interpreter: ${Python_EXECUTABLE} (v${Python_VERSION})")
+message(STATUS "CLEO python libraries: ${Python_STDLIB}")
+
 # fetch and make pybind11 library available
 include(FetchContent)
+set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
 FetchContent_Declare(
   pybind11
   DOWNLOAD_EXTRACT_TIMESTAMP TRUE
