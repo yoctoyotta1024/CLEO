@@ -46,12 +46,12 @@ pybind11_add_module(${LIBNAME} MODULE ${SOURCES})
 
 # Add directories for target library
 #target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
-target_include_directories(${LIBNAME} PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
+target_include_directories(${LIBNAME} PRIVATE "${CLEO_SOURCE_DIR}/libs" ${MPI_INCLUDE_PATH})
 
 # Link libraries to target library
 set(LINKLIBS initialise gridboxes observers superdrops zarr runcleo cartesiandomain)
 target_link_libraries(${LIBNAME} PUBLIC "${LINKLIBS}")
-target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
+target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos MPI::MPI_CXX)
 
 # set specific C++ compiler options for target (optional)
 #target_compile_options(${LIBNAME} PRIVATE)
