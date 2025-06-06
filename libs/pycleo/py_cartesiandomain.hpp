@@ -37,6 +37,6 @@ void pyCartesianMaps(py::module &m);
 
 void pycreate_cartesian_maps(py::module &m);
 
-void pyTransportAcrossDomain_cartesian(py::module &m);
+void pyCartesianTransportAcrossDomain(py::module &m);
 
 #endif  // LIBS_PYCLEO_PY_CARTESIANDOMAIN_HPP_

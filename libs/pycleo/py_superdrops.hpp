@@ -31,8 +31,8 @@
 namespace py = pybind11;
 namespace pyca = pycleo_aliases;
 
-void pyMicrophysicalProcess_null(py::module &m);
+void pyNullMicrophysicalProcess(py::module &m);
 
-void pyMotion_null(py::module &m);
+void pyNullMotion(py::module &m);
 
 #endif  // LIBS_PYCLEO_PY_SUPERDROPS_HPP_

@@ -60,8 +60,7 @@ using move_cart_null = MoveSupersInDomain<map_cart, mo_null, trans_cart, bcs_nul
 
 using obs_null = NullObserver;
 
-using CartesianNullSDMMethods =
-    SDMMethods<map_cart, micro_null, mo_null, trans_cart, bcs_null, obs_null>;
+using sdm_cart_null = SDMMethods<map_cart, micro_null, mo_null, trans_cart, bcs_null, obs_null>;
 }  // namespace pycleo_aliases
 
 #endif  // LIBS_PYCLEO_PYCLEO_ALIASES_HPP_

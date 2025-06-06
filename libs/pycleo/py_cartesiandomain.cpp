@@ -22,16 +22,14 @@
 #include "./py_cartesiandomain.hpp"
 
 void pyCartesianMaps(py::module &m) {
-  py::class_<pyca::map_cart>(m, "CartesianMaps")
-      .def(py::init());
+  py::class_<pyca::map_cart>(m, "CartesianMaps").def(py::init());
 }
 
 void pycreate_cartesian_maps(py::module &m) {
-    m.def("create_cartesian_maps", &create_cartesian_maps, "returns CartesianMaps instance",
-    py::arg("ngbxs"), py::arg("nspacedims"), py::arg("grid_filename"));
+  m.def("create_cartesian_maps", &create_cartesian_maps, "returns CartesianMaps instance",
+        py::arg("ngbxs"), py::arg("nspacedims"), py::arg("grid_filename"));
 }
 
-void pyTransportAcrossDomain_cartesian(py::module &m) {
-  py::class_<pyca::trans_cart>(m, "CartesianTransportAcrossDomain")
-      .def(py::init());
+void pyCartesianTransportAcrossDomain(py::module &m) {
+  py::class_<pyca::trans_cart>(m, "CartesianTransportAcrossDomain").def(py::init());
 }

@@ -22,9 +22,9 @@
 
 #include "./py_runcleo.hpp"
 
-void pySDMMethods_cartesian_null(py::module &m) {
-  py::class_<pyca::CartesianNullSDMMethods>(m, "CartesianNullSDMMethods")
+void pyCartesianNullSDMMethods(py::module &m) {
+  py::class_<pyca::sdm_cart_null>(m, "CartesianNullSDMMethods")
       .def(py::init<const unsigned int, pyca::map_cart, pyca::micro_null, pyca::move_cart_null,
                     pyca::obs_null>())
-      .def("get_couplstep", &pyca::CartesianNullSDMMethods::get_couplstep);
+      .def("get_couplstep", &pyca::sdm_cart_null::get_couplstep);
 }

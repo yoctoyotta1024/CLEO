@@ -31,8 +31,8 @@
 namespace py = pybind11;
 namespace pyca = pycleo_aliases;
 
-void pyBoundaryConditions_null(py::module &m);
+void pyNullBoundaryConditions(py::module &m);
 
-void pyMoveSupersInDomain_cartesian_null(py::module &m);
+void pyCartesianNullMoveSupersInDomain(py::module &m);
 
 #endif  // LIBS_PYCLEO_PY_GRIDBOXES_HPP_
