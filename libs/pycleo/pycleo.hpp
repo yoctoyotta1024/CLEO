@@ -30,7 +30,7 @@
 #include "./py_cartesiandomain.hpp"
 #include "./py_observers.hpp"
 #include "./py_runcleo.hpp"
-// #include "./py_gridboxes.hpp" #WIP
+#include "./py_gridboxes.hpp"
 #include "./py_superdrops.hpp"
 
 namespace py = pybind11;
@@ -66,13 +66,13 @@ PYBIND11_MODULE(pycleo, m) {
   pyMotion_null(m);
 
   /* boundary conditions */
-  // pyBoundaryConditions_null(m); #WIP
+  pyBoundaryConditions_null(m);
 
   /* transport */
   pyTransportAcrossDomain_cartesian(m);
 
   /* movement */
-  // pyMoveSupersInDomain_cartesian_null(m); #WIP
+  pyMoveSupersInDomain_cartesian_null(m);
 
   /* observers */
   pyObservers_null(m);

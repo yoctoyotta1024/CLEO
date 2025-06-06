@@ -32,7 +32,7 @@ message(STATUS "pybind11 installation in: ${CMAKE_CURRENT_BINARY_DIR}")
 # Add executables and create library target
 set(SOURCES
 "py_superdrops.cpp"
-# "py_gridboxes.cpp" #WIP: NullBoundaryConditions, MoveSupersInDomain
+"py_gridboxes.cpp"
 "py_cartesiandomain.cpp"
 "py_observers.cpp"
 "py_runcleo.cpp"
