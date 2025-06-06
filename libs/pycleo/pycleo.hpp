@@ -22,25 +22,38 @@
 #ifndef LIBS_PYCLEO_PYCLEO_HPP_
 #define LIBS_PYCLEO_PYCLEO_HPP_
 
+#include <mpi.h>
 #include <pybind11/pybind11.h>
 
 #include <iostream>
 
+#include "./py_cartesiandomain.hpp"
 #include "./py_observers.hpp"
 #include "./py_runcleo.hpp"
-#include "./py_cartesiandomain.hpp"
 // #include "./py_gridboxes.hpp" #WIP
 // #include "./py_superdrops.hpp" #WIP
 
 namespace py = pybind11;
 
 int test_python_bindings(const int i, const int j);
+void pycleo_initialize();
+
+void inline pycleo_finalize() {
+  Kokkos::finalize();
+  // MPI_Finalize();
+}
 
 PYBIND11_MODULE(pycleo, m) {
   m.doc() = "Python bindings for selected parts of CLEO's libraries";
 
   m.def("test_python_bindings", &test_python_bindings, "test function for CLEO example",
         py::arg("i"), py::arg("j"));
+
+  m.def("pycleo_initialize", &pycleo_initialize,
+        "necessary initialisation before running CLEO via python ");
+
+  m.def("pycleo_finalize", &pycleo_finalize,
+        "necessary finalisation after running CLEO via python ");
 
   /* maps */
   pyCartesianMaps(m);
