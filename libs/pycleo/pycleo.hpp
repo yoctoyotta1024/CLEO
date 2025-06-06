@@ -69,7 +69,7 @@ PYBIND11_MODULE(pycleo, m) {
   // pyBoundaryConditions_null(m); #WIP
 
   /* transport */
-  // pyTransportAcrossDomain_cartesian(m); #WIP
+  pyTransportAcrossDomain_cartesian(m);
 
   /* movement */
   // pyMoveSupersInDomain_cartesian_null(m); #WIP

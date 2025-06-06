@@ -28,6 +28,7 @@
 #include "./pycleo_aliases.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
+#include "cartesiandomain/movement/cartesian_transport_across_domain.hpp"
 
 namespace py = pybind11;
 namespace pyca = pycleo_aliases;
@@ -35,5 +36,7 @@ namespace pyca = pycleo_aliases;
 void pyCartesianMaps(py::module &m);
 
 void pycreate_cartesian_maps(py::module &m);
+
+void pyTransportAcrossDomain_cartesian(py::module &m);
 
 #endif  // LIBS_PYCLEO_PY_CARTESIANDOMAIN_HPP_

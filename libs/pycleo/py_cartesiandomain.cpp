@@ -30,3 +30,8 @@ void pycreate_cartesian_maps(py::module &m) {
     m.def("create_cartesian_maps", &create_cartesian_maps, "returns CartesianMaps instance",
     py::arg("ngbxs"), py::arg("nspacedims"), py::arg("grid_filename"));
 }
+
+void pyTransportAcrossDomain_cartesian(py::module &m) {
+  py::class_<pyca::trans_cart>(m, "CartesianTransportAcrossDomain")
+      .def(py::init());
+}

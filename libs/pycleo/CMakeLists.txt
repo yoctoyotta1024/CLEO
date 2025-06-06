@@ -27,17 +27,13 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(pybind11)
 
-# # Include pybind11's CMake
-# message(STATUS "pybind source dir: ${pybind11_SOURCE_DIR}")
-# include(${pybind11_SOURCE_DIR}/CMake/pybind11.cmake)
-
 message(STATUS "pybind11 installation in: ${CMAKE_CURRENT_BINARY_DIR}")
 
 # Add executables and create library target
 set(SOURCES
 "py_superdrops.cpp"
 # "py_gridboxes.cpp" #WIP: NullBoundaryConditions, MoveSupersInDomain
-"py_cartesiandomain.cpp" #WIP: CartesianTransportAcrossDomain
+"py_cartesiandomain.cpp"
 "py_observers.cpp"
 "py_runcleo.cpp"
 "pycleo.cpp"
