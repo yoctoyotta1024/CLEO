@@ -30,7 +30,7 @@ void pyConfig(py::module &m) {
 
 void pyTimesteps(py::module &m) {
   py::class_<Timesteps>(m, "Timesteps")
-      .def(py::init<const RequiredConfigParams::TimestepsParams>())
+      .def(py::init<const RequiredConfigParams::TimestepsParams &>())
       .def("get_condstep", &Timesteps::get_condstep)
       .def("get_collstep", &Timesteps::get_collstep)
       .def("get_motionstep", &Timesteps::get_motionstep)
@@ -47,9 +47,14 @@ void pycreate_timesteps(py::module &m) {
 
 void pyInitSupersFromBinary(py::module &m) {
   py::class_<InitSupersFromBinary>(m, "InitSupersFromBinary")
-  .def(py::init<const OptionalConfigParams::InitSupersFromBinaryParams, const CartesianMaps>());
+      .def(py::init<const OptionalConfigParams::InitSupersFromBinaryParams &,
+                    const CartesianMaps &>());
 }
 
 void pyInitSupersFromBinaryParams(py::module &m) {
   py::class_<OptionalConfigParams::InitSupersFromBinaryParams>(m, "InitSupersFromBinaryParams");
+}
+
+void pyInitGbxsNull(py::module &m) {
+  py::class_<InitGbxsNull>(m, "InitGbxsNull").def(py::init<const size_t>());
 }

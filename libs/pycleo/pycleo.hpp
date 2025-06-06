@@ -62,10 +62,14 @@ PYBIND11_MODULE(pycleo, m) {
   pycreate_timesteps(m);
   pyInitSupersFromBinary(m);
   pyInitSupersFromBinaryParams(m);
+  pyInitGbxsNull(m);
 
   /* superdroplets */
   pySupersInDomain(m);
-  pycreate_supers(m);
+  pycreate_supers_from_binary(m);
+
+  /* Gridboxes */
+  pycreate_gbxs_cartesian_null(m);
 
   /* maps */
   pyCartesianMaps(m);

@@ -29,3 +29,8 @@ void pyCartesianNullMoveSupersInDomain(py::module &m) {
   py::class_<pyca::move_cart_null>(m, "CartesianNullMoveSupersInDomain")
       .def(py::init<pyca::mo_null, pyca::trans_cart, pyca::bcs_null>());
 }
+
+void pySupersInDomain(py::module &m) {
+  py::class_<SupersInDomain>(m, "SupersInDomain")
+      .def(py::init<const viewd_supers, const unsigned int>());
+}

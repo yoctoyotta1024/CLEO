@@ -29,3 +29,14 @@ void pyCartesianNullSDMMethods(py::module &m) {
       .def("get_couplstep", &pyca::sdm_cart_null::get_couplstep)
       .def_readonly("gbxmaps", &pyca::sdm_cart_null::gbxmaps);
 }
+
+void pycreate_supers_from_binary(py::module &m) {
+  m.def("create_supers_from_binary", &create_supers<InitSupersFromBinary>,
+        "returns SupersInDomain instance", py::arg("sdic"), py::arg("gbxindex_max"));
+}
+
+void pycreate_gbxs_cartesian_null(py::module &m) {
+  m.def("create_gbxs_cartesian_null", &create_gbxs<pyca::map_cart, InitGbxsNull>,
+        "returns dualview of Gridboxes instance", py::arg("gbxmaps"), py::arg("gbxic"),
+        py::arg("allsupers"));
+}
