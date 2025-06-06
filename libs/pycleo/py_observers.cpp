@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 5th June 2025
+ * Last Modified: Friday 6th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -21,7 +21,6 @@
 
 #include "./py_observers.hpp"
 
-void pyObservers_null(py::module &m) {
-  py::class_<pyca::obs_null>(m, "NullObserver")
-      .def(py::init());
+void pyNullObserver(py::module &m) {
+  py::class_<pyca::obs_null>(m, "NullObserver").def(py::init());
 }

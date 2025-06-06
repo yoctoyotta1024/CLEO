@@ -21,12 +21,12 @@
 
 #include "./py_superdrops.hpp"
 
-void pyMicrophysicalProcess_null(py::module &m) {
+void pyNullMicrophysicalProcess(py::module &m) {
   py::class_<pyca::micro_null>(m, "NullMicrophysicalProcess")
       .def(py::init());
 }
 
-void pyMotion_null(py::module &m) {
+void pyNullMotion(py::module &m) {
   py::class_<pyca::mo_null>(m, "NullMotion")
       .def(py::init());
 }

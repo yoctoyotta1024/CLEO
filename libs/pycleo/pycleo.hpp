@@ -60,25 +60,25 @@ PYBIND11_MODULE(pycleo, m) {
   pycreate_cartesian_maps(m);
 
   /* microphyiscs */
-  pyMicrophysicalProcess_null(m);
+  pyNullMicrophysicalProcess(m);
 
   /* motion */
-  pyMotion_null(m);
+  pyNullMotion(m);
 
   /* boundary conditions */
-  pyBoundaryConditions_null(m);
+  pyNullBoundaryConditions(m);
 
   /* transport */
-  pyTransportAcrossDomain_cartesian(m);
+  pyCartesianTransportAcrossDomain(m);
 
   /* movement */
-  pyMoveSupersInDomain_cartesian_null(m);
+  pyCartesianNullMoveSupersInDomain(m);
 
   /* observers */
-  pyObservers_null(m);
+  pyNullObserver(m);
 
   /* sdmmethods */
-  pySDMMethods_cartesian_null(m);
+  pyCartesianNullSDMMethods(m);
 }
 
 #endif  // LIBS_PYCLEO_PYCLEO_HPP_

@@ -30,6 +30,6 @@
 namespace py = pybind11;
 namespace pyca = pycleo_aliases;
 
-void pyObservers_null(py::module &m);
+void pyNullObserver(py::module &m);
 
 #endif  // LIBS_PYCLEO_PY_OBSERVERS_HPP_
