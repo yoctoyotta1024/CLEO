@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 5th June 2025
+ * Last Modified: Friday 6th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,9 +28,9 @@
 
 #include "./py_observers.hpp"
 #include "./py_runcleo.hpp"
-// #include "./py_cartesiandomain.cpp" #WIP
-// #include "./py_gridboxes.cpp" #WIP
-// #include "./py_superdrops.cpp" #WIP
+#include "./py_cartesiandomain.hpp"
+// #include "./py_gridboxes.hpp" #WIP
+// #include "./py_superdrops.hpp" #WIP
 
 namespace py = pybind11;
 
@@ -43,7 +43,8 @@ PYBIND11_MODULE(pycleo, m) {
         py::arg("i"), py::arg("j"));
 
   /* maps */
-  // pyCartesianMaps(m); #WIP (or funciton that returns obj/pointer?)
+  pyCartesianMaps(m);
+  pycreate_cartesian_maps(m);
 
   /* microphyiscs */
   // pyMicrophysicalProcess_null(m); #WIP
