@@ -55,6 +55,10 @@ PYBIND11_MODULE(pycleo, m) {
   m.def("pycleo_finalize", &pycleo_finalize,
         "necessary finalisation after running CLEO via python ");
 
+  /* superdroplets */
+  pySupersInDomain(m);
+  pycreate_supers(m);
+
   /* maps */
   pyCartesianMaps(m);
   pycreate_cartesian_maps(m);

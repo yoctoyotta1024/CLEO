@@ -31,7 +31,9 @@
 #include "gridboxes/boundary_conditions.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/movesupersindomain.hpp"
+#include "initialise/init_supers_from_binary.hpp"
 #include "observers/observers.hpp"
+#include "runcleo/createsupers.hpp"
 #include "runcleo/sdmmethods.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
@@ -40,5 +42,7 @@ namespace py = pybind11;
 namespace pyca = pycleo_aliases;
 
 void pyCartesianNullSDMMethods(py::module &m);
+
+void pycreate_supers(py::module &m);
 
 #endif  // LIBS_PYCLEO_PY_RUNCLEO_HPP_

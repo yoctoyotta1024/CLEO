@@ -28,3 +28,8 @@ void pyCartesianNullSDMMethods(py::module &m) {
                     pyca::obs_null>())
       .def("get_couplstep", &pyca::sdm_cart_null::get_couplstep);
 }
+
+void pycreate_supers(py::module &m) {
+  m.def("create_supers", &create_supers<InitSupersFromBinary>, "returns SupersInDomain instance",
+        py::arg("sdic"), py::arg("gbxindex_max"));
+}

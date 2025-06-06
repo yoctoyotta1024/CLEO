@@ -24,9 +24,11 @@
 
 #include <pybind11/pybind11.h>
 
+#include "../kokkosaliases.hpp"
 #include "./pycleo_aliases.hpp"
 #include "gridboxes/boundary_conditions.hpp"
 #include "gridboxes/movesupersindomain.hpp"
+#include "gridboxes/supersindomain.hpp"
 
 namespace py = pybind11;
 namespace pyca = pycleo_aliases;
@@ -34,5 +36,7 @@ namespace pyca = pycleo_aliases;
 void pyNullBoundaryConditions(py::module &m);
 
 void pyCartesianNullMoveSupersInDomain(py::module &m);
+
+void pySupersInDomain(py::module &m);
 
 #endif  // LIBS_PYCLEO_PY_GRIDBOXES_HPP_
