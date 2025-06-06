@@ -28,9 +28,10 @@
 #include <iostream>
 
 #include "./py_cartesiandomain.hpp"
+#include "./py_gridboxes.hpp"
+#include "./py_initialise.hpp"
 #include "./py_observers.hpp"
 #include "./py_runcleo.hpp"
-#include "./py_gridboxes.hpp"
 #include "./py_superdrops.hpp"
 
 namespace py = pybind11;
@@ -54,6 +55,11 @@ PYBIND11_MODULE(pycleo, m) {
 
   m.def("pycleo_finalize", &pycleo_finalize,
         "necessary finalisation after running CLEO via python ");
+
+  /* initialisation/configuration*/
+  pyConfig(m);
+  pyTimesteps(m);
+  pycreate_timesteps(m);
 
   /* superdroplets */
   pySupersInDomain(m);
