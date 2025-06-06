@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 6th June 2025
+ * Last Modified: Tuesday 10th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,9 +28,10 @@
 #include <iostream>
 
 #include "./py_cartesiandomain.hpp"
+#include "./py_gridboxes.hpp"
+#include "./py_initialise.hpp"
 #include "./py_observers.hpp"
 #include "./py_runcleo.hpp"
-#include "./py_gridboxes.hpp"
 #include "./py_superdrops.hpp"
 
 namespace py = pybind11;
@@ -54,6 +55,17 @@ PYBIND11_MODULE(pycleo, m) {
 
   m.def("pycleo_finalize", &pycleo_finalize,
         "necessary finalisation after running CLEO via python ");
+
+  /* initialisation/configuration*/
+  pyConfig(m);
+  pyTimesteps(m);
+  pycreate_timesteps(m);
+  pyInitSupersFromBinary(m);
+  pyInitSupersFromBinaryParams(m);
+
+  /* superdroplets */
+  pySupersInDomain(m);
+  pycreate_supers(m);
 
   /* maps */
   pyCartesianMaps(m);

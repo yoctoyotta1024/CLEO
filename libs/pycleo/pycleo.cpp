@@ -36,7 +36,8 @@ void pycleo_initialize() {
     MPI_Abort(MPI_COMM_WORLD, 1);
   }
 
-  // Kokkos::initialize(config.get_kokkos_initialization_settings()); #WIP
+  // Kokkos::initialize(config.get_kokkos_initialization_settings()); # pyWIP(pybind): bindings to
+  // config
   Kokkos::initialize();
   Kokkos::print_configuration(std::cout);
 }
