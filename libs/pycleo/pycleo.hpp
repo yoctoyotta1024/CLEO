@@ -31,7 +31,7 @@
 #include "./py_observers.hpp"
 #include "./py_runcleo.hpp"
 // #include "./py_gridboxes.hpp" #WIP
-// #include "./py_superdrops.hpp" #WIP
+#include "./py_superdrops.hpp"
 
 namespace py = pybind11;
 
@@ -60,10 +60,10 @@ PYBIND11_MODULE(pycleo, m) {
   pycreate_cartesian_maps(m);
 
   /* microphyiscs */
-  // pyMicrophysicalProcess_null(m); #WIP
+  pyMicrophysicalProcess_null(m);
 
   /* motion */
-  // pyMotion_null(m); #WIP
+  pyMotion_null(m);
 
   /* boundary conditions */
   // pyBoundaryConditions_null(m); #WIP
