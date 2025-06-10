@@ -49,10 +49,10 @@ std::array<size_t, 3> CartesianDecomposition::get_local_partition_size() const {
   return partition_sizes[my_rank];
 };
 
-void CartesianDecomposition::set_gridbox_size(double z_size, double y_size, double x_size) {
+void CartesianDecomposition::set_gridbox_size(double z_size, double x_size, double y_size) {
   gridbox_size[0] = z_size;
-  gridbox_size[1] = y_size;
-  gridbox_size[2] = x_size;
+  gridbox_size[1] = x_size;
+  gridbox_size[2] = y_size;
 };
 
 // Defines if a dimension is periodic or finite
