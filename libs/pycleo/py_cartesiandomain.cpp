@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 6th June 2025
+ * Last Modified: Tuesday 10th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,7 +22,9 @@
 #include "./py_cartesiandomain.hpp"
 
 void pyCartesianMaps(py::module &m) {
-  py::class_<pyca::map_cart>(m, "CartesianMaps").def(py::init());
+  py::class_<pyca::map_cart>(m, "CartesianMaps")
+      .def(py::init())
+      .def("get_local_ngridboxes_hostcopy", &pyca::map_cart::get_local_ngridboxes_hostcopy);
 }
 
 void pycreate_cartesian_maps(py::module &m) {
