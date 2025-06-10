@@ -41,7 +41,7 @@ class CartesianDecomposition {
   std::array<double, 3> partition_begin_coordinates;
   std::array<double, 3> partition_end_coordinates;
 
-  // Sizes of a gridbox
+  // Sizes of a gridbox [z, x, y]
   std::array<double, 3> gridbox_size;
 
   // Behavior of each dimension, being either periodic or finite
