@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 6th June 2025
+ * Last Modified: Tuesday 10th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,5 +26,6 @@ void pyCartesianNullSDMMethods(py::module &m) {
   py::class_<pyca::sdm_cart_null>(m, "CartesianNullSDMMethods")
       .def(py::init<const unsigned int, pyca::map_cart, pyca::micro_null, pyca::move_cart_null,
                     pyca::obs_null>())
-      .def("get_couplstep", &pyca::sdm_cart_null::get_couplstep);
+      .def("get_couplstep", &pyca::sdm_cart_null::get_couplstep)
+      .def_readonly("gbxmaps", &pyca::sdm_cart_null::gbxmaps);
 }
