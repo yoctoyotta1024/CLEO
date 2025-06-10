@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.41.2](https://github.com/yoctoyotta1024/CLEO/compare/33b8848188cdacccfb958aac4a40b00e594cc5f2..v0.41.2) - 2025-06-10
+#### Bug Fixes
+- fix order of gridbox sizes set in cartesian decompositon - ([33b8848](https://github.com/yoctoyotta1024/CLEO/commit/33b8848188cdacccfb958aac4a40b00e594cc5f2)) - clara.bayley
+
+- - -
+
 ## [v0.41.1](https://github.com/yoctoyotta1024/CLEO/compare/5afbfe2fba4c4d031642e7608d40021bf61a274d..v0.41.1) - 2025-06-04
 #### Bug Fixes
 - plotting of 2d motion - ([3cb3537](https://github.com/yoctoyotta1024/CLEO/commit/3cb353765acda16faeb60ae300546b6ef2470c5b)) - clara.bayley
