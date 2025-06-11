@@ -27,7 +27,9 @@ void pyCartesianNullSDMMethods(py::module &m) {
       .def(py::init<const unsigned int, pyca::map_cart, pyca::micro_null, pyca::move_cart_null,
                     pyca::obs_null>())
       .def_readonly("gbxmaps", &pyca::sdm_cart_null::gbxmaps)
+      .def_readonly("obs", &pyca::sdm_cart_null::obs)
       .def("get_couplstep", &pyca::sdm_cart_null::get_couplstep)
+      .def("next_couplstep", &pyca::sdm_cart_null::next_couplstep, py::arg("t_mdl"))
       .def(
           "prepare_to_timestep",
           [](const pyca::sdm_cart_null &self, const dualview_gbx gbxs) {
