@@ -61,8 +61,8 @@ def main(
     ]  # gbxindex of SDs to plot (nb. "all" can be very slow) # TODO(CB): move into args
 
     ### --- settings for 2-D gridbox boundaries --- ###
-    zgrid = [0, 1500, 50]  # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
-    xgrid = [0, 1500, 50]  # evenly spaced xhalf coords [m]
+    zgrid = [0, 1500, 500]  # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
+    xgrid = [0, 1500, 500]  # evenly spaced xhalf coords [m]
     ygrid = np.array([0, 20])  # array of yhalf coords [m]
 
     ### --- settings for initial superdroplets --- ###

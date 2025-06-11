@@ -38,8 +38,8 @@ kokkos_settings:
 ### SDM Runtime Parameters ###
 domain:
   nspacedims : 2                                          # no. of spatial dimensions to model
-  ngbxs : 900                                             # total number of Gbxs
-  maxnsupers: 3600                                        # maximum number of SDs
+  ngbxs : 9                                               # total number of Gbxs
+  maxnsupers: 36                                          # maximum number of SDs
 
 timesteps:
   CONDTSTEP : 3                                           # time between SD condensation [s]
@@ -57,6 +57,7 @@ inputfiles:
 initsupers:
   type: frombinary                                        # type of initialisation of super-droplets
   initsupers_filename : /home/m/m300950/CLEO/build_pybind/share/pybind_dimlessSDsinit.dat   # binary filename for initialisation of SDs
+  initnsupers: 24
 
 ### Output Parameters ###
 outputdata:
