@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Monday 24th March 2025
+ * Last Modified: Wednesday 11th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -188,10 +188,7 @@ class RunCLEO {
    *
    * @details
    * The size of the next timestep is determined by finding the smaller out of the
-   * step to the next coupling time and the next observation time. The next coupling
-   * time is calculated after receiving the size of the coupling timestep (a constant)
-   * using the `sdm.get_couplstep()` function. The time of the next observation
-   * is obtained from the `sdm.obs.next_obs()` function.
+   * step to the next coupling time and the next observation time.
    *
    * The size of the next timestep is then calculated as `t_next - t_mdl`,
    * where `t_next` is the time closer to `t_mdl` out of `next_coupl`
@@ -201,13 +198,8 @@ class RunCLEO {
    * @see SDMMethods::get_couplstep()
    */
   unsigned int get_next_step(const unsigned int t_mdl) const {
-    const auto next_couplstep = [=, *this]() {
-      const auto interval = (unsigned int)sdm.get_couplstep();
-      return ((t_mdl / interval) + 1) * interval;
-    };
-
     /* t_next is sooner out of time for next coupl or obs */
-    const auto next_coupl = (unsigned int)next_couplstep();
+    const auto next_coupl = (unsigned int)sdm.next_couplstep(t_mdl);
     const auto next_obs = (unsigned int)sdm.obs.next_obs(t_mdl);
     const auto t_next = Kokkos::min(next_coupl, next_obs);
 

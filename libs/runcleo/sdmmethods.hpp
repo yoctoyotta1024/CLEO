@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Monday 24th March 2025
+ * Last Modified: Wednesday 11th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -223,6 +223,18 @@ class SDMMethods {
    */
   KOKKOS_INLINE_FUNCTION
   auto get_couplstep() const { return couplstep; }
+
+  /**
+   * @brief Given current timestep return time of next coupling event.
+   *
+   * This function returns the time of the next coupling event.
+   *
+   * @return The next coupling timestep.
+   */
+  KOKKOS_INLINE_FUNCTION
+  unsigned int next_couplstep(const unsigned int t_mdl) const {
+    return ((t_mdl / couplstep) + 1) * couplstep;
+  }
 
   /**
    * @brief Prepare CLEO SDM for timestepping.
