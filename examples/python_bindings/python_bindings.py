@@ -27,6 +27,7 @@ from pathlib import Path
 from ruamel.yaml import YAML
 
 import python_bindings_inputfiles
+from cleo_sdm import CleoSDM
 from thermodynamics import Thermodynamics
 
 parser = argparse.ArgumentParser()
@@ -77,6 +78,7 @@ if args.do_plot_results == "FALSE":
 
 sys.path.append(str(path2build / "pycleo"))
 import pycleo
+from pycleo import coupldyn_numpy
 
 yaml = YAML()
 with open(src_config_filename, "r") as file:
@@ -153,92 +155,43 @@ def create_thermodynamics(python_config):
     return Thermodynamics(temp, rho, press, qvap, qcond, qice, qrain, qsnow, qgrau)
 
 
-def create_sdm(cleo_config, tsteps):
-    print("PYCLEO STATUS: creating GridboxMaps")
-    gbxmaps = pycleo.create_cartesian_maps(
-        cleo_config.get_ngbxs(),
-        cleo_config.get_nspacedims(),
-        cleo_config.get_grid_filename(),
+def timestep_example(t_mdl, t_end, timestep, thermo, cleo_sdm):
+    print(
+        f"PYCLEO STATUS: timestepping SDM from {t_mdl}s to {t_end}s (timestep = {timestep}s)"
     )
-
-    print("PYCLEO STATUS: creating Observer")
-    obs = pycleo.NullObserver()
-
-    print("PYCLEO STATUS: creating MicrophysicalProcess")
-    micro = pycleo.NullMicrophysicalProcess()
-
-    print("PYCLEO STATUS: creating Superdroplet Movement")
-    motion = pycleo.NullMotion()
-    transport = pycleo.CartesianTransportAcrossDomain()
-    boundary_conditions = pycleo.NullBoundaryConditions()
-    move = pycleo.CartesianNullMoveSupersInDomain(
-        motion, transport, boundary_conditions
-    )
-
-    print("PYCLEO STATUS: creating SDM Methods")
-    sdm = pycleo.CartesianNullSDMMethods(
-        tsteps.get_couplstep(), gbxmaps, micro, move, obs
-    )
-
-    print(f"PYCLEO STATUS: SDM created with couplstep = {sdm.get_couplstep()}")
-    return sdm
-
-
-def prepare_to_timestep_sdm(cleo_config, sdm):
-    print("PYCLEO STATUS: creating superdroplets")
-    initsupers = pycleo.InitSupersFromBinary(
-        cleo_config.get_initsupersfrombinary(), sdm.gbxmaps
-    )
-    allsupers = pycleo.create_supers_from_binary(
-        initsupers, sdm.gbxmaps.get_local_ngridboxes_hostcopy()
-    )
-
-    print("PYCLEO STATUS: creating gridboxes")
-    initgbxs = pycleo.InitGbxsNull(sdm.gbxmaps.get_local_ngridboxes_hostcopy())
-    gbxs = pycleo.create_gbxs_cartesian_null(sdm.gbxmaps, initgbxs, allsupers)
-
-    print("PYCLEO STATUS: preparing sdm")
-    sdm.prepare_to_timestep(gbxs)
-
-    print("PYCLEO STATUS: preparation complete")
-    return sdm, gbxs, allsupers
-
-
-def timestep_example(thermo, tsteps, sdm, gbxs, allsupers):
-    t_mdl, t_end = 0, tsteps.get_t_end()
 
     print("\n--- PYCLEO STATUS: THERMO INFORMATION ---")
     thermo.print_state()
     print("\n-----------------------------------------")
 
-    print(f"PYCLEO STATUS: timestepping SDM from {t_mdl} to {t_end} [model timesteps]")
     while t_mdl <= t_end:
-        print(f"PYCLEO STATUS: t = {t_mdl}")
-        t_mdl_next = min(sdm.next_couplstep(t_mdl), sdm.obs.next_obs(t_mdl))
+        print(f"PYCLEO STATUS: t = {t_mdl}s")
 
-        # dynamics -> SDM: if (t_mdl % sdm.get_couplstep() == 0):
-        # ``comms.receive_dynamics(sdm.gbxmaps, coupldyn, gbxs.view_host());``
+        thermo.temp[0] += 10  # mock example of changing dynamics
 
-        sdm.at_start_step(t_mdl, gbxs, allsupers)
+        thermo = cleo_sdm.do_step(timestep, thermo)
+        print("temp[0:2]:", thermo.temp[0:2])
 
-        # here would be ``dynamics.run_step();``
-
-        sdm.run_step(t_mdl, t_mdl_next, gbxs, allsupers)
-
-        # SDM -> dynamics: if (t_mdl % sdm.get_couplstep() == 0):
-        # ``comms.send_dynamics(sdm.gbxmaps, gbxs.view_host(), coupldyn);``
-
-        t_mdl = t_mdl_next
+        t_mdl += timestep
 
 
 def cleo_sdm_example(python_config, cleo_config):
-    tsteps = pycleo.pycreate_timesteps(cleo_config)
-    sdm = create_sdm(cleo_config, tsteps)
-    sdm, gbxs, allsupers = prepare_to_timestep_sdm(cleo_config, sdm)
+    t_mdl, t_end = 0, python_config["timesteps"]["T_END"]  # [s]
+    timestep = python_config["timesteps"]["COUPLTSTEP"]  # [s]
 
     thermo = create_thermodynamics(python_config)
+    cleo_sdm = CleoSDM(
+        pycleo,
+        cleo_config,
+        t_mdl,
+        timestep,
+        thermo.press,
+        thermo.temp,
+        thermo.massmix_ratios[0],
+        thermo.massmix_ratios[1],
+    )
 
-    timestep_example(thermo, tsteps, sdm, gbxs, allsupers)
+    timestep_example(t_mdl, t_end, timestep, thermo, cleo_sdm)
 
 
 def run_exec(python_config, config_filename):
@@ -249,7 +202,8 @@ def run_exec(python_config, config_filename):
 
 
 if do_run_executable:
-    print(f"PYCLEO STATUS: i+j={pycleo.test_python_bindings(i=1, j=2)}")
+    print(f"PYCLEO STATUS: 2+3={pycleo.test_pycleo(i=3, j=2)}")
+    print(f"COUPLDYN_NUMPY STATUS: 2*3={coupldyn_numpy.test_coupldyn_numpy(i=3, j=2)}")
 
     mpi_info(MPI.COMM_WORLD)
     run_exec(python_config, config_filename)
