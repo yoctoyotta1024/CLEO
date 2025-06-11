@@ -19,14 +19,15 @@ File Description:
 """
 
 import argparse
+import numpy as np
 import shutil
 import sys
 from mpi4py import MPI
-
 from pathlib import Path
 from ruamel.yaml import YAML
 
 import python_bindings_inputfiles
+from thermodynamics import Thermodynamics
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -133,7 +134,23 @@ def mpi_info(comm):
     print(f"Processor name: {MPI.Get_processor_name()}")
     print(f"Total processes: {comm.Get_size()}")
     print(f"Process rank: {comm.Get_rank()}")
-    print("-----------------------")
+    print("--------------------------------------")
+
+
+def create_thermodynamics(python_config):
+    ngbxs = python_config["domain"]["ngbxs"]
+
+    temp = np.repeat(288.15, ngbxs)
+    rho = np.repeat(1.225, ngbxs)
+    press = np.repeat(101325, ngbxs)
+    qvap = np.repeat(0.01, ngbxs)
+    qcond = np.repeat(0.002, ngbxs)
+    qice = np.repeat(0.003, ngbxs)
+    qrain = np.repeat(0.004, ngbxs)
+    qsnow = np.repeat(0.005, ngbxs)
+    qgrau = np.repeat(0.006, ngbxs)
+
+    return Thermodynamics(temp, rho, press, qvap, qcond, qice, qrain, qsnow, qgrau)
 
 
 def create_sdm(cleo_config, tsteps):
@@ -187,8 +204,12 @@ def prepare_to_timestep_sdm(cleo_config, sdm):
     return sdm, gbxs, allsupers
 
 
-def timestep_sdm(tsteps, sdm, gbxs, allsupers):
+def timestep_example(thermo, tsteps, sdm, gbxs, allsupers):
     t_mdl, t_end = 0, tsteps.get_t_end()
+
+    print("\n--- PYCLEO STATUS: THERMO INFORMATION ---")
+    thermo.print_state()
+    print("\n-----------------------------------------")
 
     print(f"PYCLEO STATUS: timestepping SDM from {t_mdl} to {t_end} [model timesteps]")
     while t_mdl <= t_end:
@@ -215,7 +236,9 @@ def cleo_sdm_example(python_config, cleo_config):
     sdm = create_sdm(cleo_config, tsteps)
     sdm, gbxs, allsupers = prepare_to_timestep_sdm(cleo_config, sdm)
 
-    timestep_sdm(tsteps, sdm, gbxs, allsupers)
+    thermo = create_thermodynamics(python_config)
+
+    timestep_example(thermo, tsteps, sdm, gbxs, allsupers)
 
 
 def run_exec(python_config, config_filename):
