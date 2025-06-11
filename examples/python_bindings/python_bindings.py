@@ -79,9 +79,10 @@ import pycleo
 
 yaml = YAML()
 with open(src_config_filename, "r") as file:
-    config = yaml.load(file)
+    python_config = yaml.load(file)
 config_filename = (
-    Path(config["python_initconds"]["paths"]["tmppath"]) / src_config_filename.name
+    Path(python_config["python_initconds"]["paths"]["tmppath"])
+    / src_config_filename.name
 )
 
 ### ---------------------------------------------------------------- ###
@@ -89,14 +90,14 @@ config_filename = (
 ### ---------------------------------------------------------------- ###
 if do_inputfiles:
     ### --- ensure build, share and bin directories exist --- ###
-    pyconfig = config["python_initconds"]
-    tmppath = Path(pyconfig["paths"]["tmppath"])
-    sharepath = Path(pyconfig["paths"]["sharepath"])
-    binpath = Path(pyconfig["paths"]["binpath"])
-    savefigpath = Path(pyconfig["paths"]["savefigpath"])
-    grid_filename = Path(config["inputfiles"]["grid_filename"])
-    initsupers_filename = Path(config["initsupers"]["initsupers_filename"])
-    thermofiles = Path(pyconfig["thermo"]["thermofiles"])
+    pyinit = python_config["python_initconds"]
+    tmppath = Path(pyinit["paths"]["tmppath"])
+    sharepath = Path(pyinit["paths"]["sharepath"])
+    binpath = Path(pyinit["paths"]["binpath"])
+    savefigpath = Path(pyinit["paths"]["savefigpath"])
+    grid_filename = Path(python_config["inputfiles"]["grid_filename"])
+    initsupers_filename = Path(python_config["initsupers"]["initsupers_filename"])
+    thermofiles = Path(pyinit["thermo"]["thermofiles"])
 
     if path2CLEO == path2build:
         raise ValueError("build directory cannot be CLEO")
@@ -215,24 +216,26 @@ def timestep_sdm(tsteps, sdm, gbxs, allsupers):
         t_mdl = t_mdl_next
 
 
-def run_cleo_sdm(cleo_config):
+def cleo_sdm_example(python_config, cleo_config):
     tsteps = pycleo.pycreate_timesteps(cleo_config)
     sdm = create_sdm(cleo_config, tsteps)
     sdm, gbxs, allsupers = prepare_to_timestep_sdm(cleo_config, sdm)
+
     timestep_sdm(tsteps, sdm, gbxs, allsupers)
 
 
-def run_exec(config_filename):
-    mpi_info(MPI.COMM_WORLD)
+def run_exec(python_config, config_filename):
     cleo_config = pycleo.Config(config_filename)
     pycleo.pycleo_initialize(cleo_config)
-    run_cleo_sdm(cleo_config)
+    cleo_sdm_example(python_config, cleo_config)
     pycleo.pycleo_finalize()
 
 
 if do_run_executable:
     print(f"PYCLEO STATUS: i+j={pycleo.test_python_bindings(i=1, j=2)}")
-    run_exec(config_filename)
+
+    mpi_info(MPI.COMM_WORLD)
+    run_exec(python_config, config_filename)
 
 
 ### ---------------------------------------------------------------- ###
