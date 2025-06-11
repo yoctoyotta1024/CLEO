@@ -2,6 +2,23 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.42.0](https://github.com/yoctoyotta1024/CLEO/compare/17ffe2acf119fde7ac55ed2f87132a0429c34a37..v0.42.0) - 2025-06-11
+#### Bug Fixes
+- add archive library destination to libs targets - ([0b07ff4](https://github.com/yoctoyotta1024/CLEO/commit/0b07ff4bbcb52007242f60d7b70905a3fc913b3a)) - clara.bayley
+#### Documentation
+- add pybind11 dependency description - ([34514d0](https://github.com/yoctoyotta1024/CLEO/commit/34514d0c154b8d9533447fec2f56af3eabf5acb0)) - clara.bayley
+#### Features
+- add new example for testing python bindings - ([bfce784](https://github.com/yoctoyotta1024/CLEO/commit/bfce78478f1819f0f95d822f4623b74dd62c2ebc)) - clara.bayley
+- new flag to not build python bindings - ([b8f3ea7](https://github.com/yoctoyotta1024/CLEO/commit/b8f3ea7f237339ad1388e4aa9dffc1bd43f25498)) - clara.bayley
+- new library for CLEO's python bindings - ([732c77c](https://github.com/yoctoyotta1024/CLEO/commit/732c77cd83e543bc3e28ef77176a6966a0c83511)) - clara.bayley
+#### Performance Improvements
+- split long lines over multiple - ([2142890](https://github.com/yoctoyotta1024/CLEO/commit/21428902ea59b72a83cef8d9e33f4cb601be2fe9)) - clara.bayley
+#### Refactoring
+- add option to specify python version for python bindings via cmake - ([4223ea0](https://github.com/yoctoyotta1024/CLEO/commit/4223ea075c8ad9cbd40e5820fd8276985b5547e5)) - clara.bayley
+- move next_couplstep function into sdmmethods - ([17ffe2a](https://github.com/yoctoyotta1024/CLEO/commit/17ffe2acf119fde7ac55ed2f87132a0429c34a37)) - clara.bayley
+
+- - -
+
 ## [v0.41.2](https://github.com/yoctoyotta1024/CLEO/compare/33b8848188cdacccfb958aac4a40b00e594cc5f2..v0.41.2) - 2025-06-10
 #### Bug Fixes
 - fix order of gridbox sizes set in cartesian decompositon - ([33b8848](https://github.com/yoctoyotta1024/CLEO/commit/33b8848188cdacccfb958aac4a40b00e594cc5f2)) - clara.bayley
