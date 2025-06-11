@@ -141,10 +141,12 @@ def mpi_info(comm):
     print("-----------------------")
 
 
-def create_sdm(config, tsteps):
+def create_sdm(cleo_config, tsteps):
     print("PYCLEO STATUS: creating GridboxMaps")
     gbxmaps = pycleo.create_cartesian_maps(
-        ngbxs=ngbxs, nspacedims=nspacedims, grid_filename=grid_filename
+        cleo_config.get_ngbxs(),
+        cleo_config.get_nspacedims(),
+        cleo_config.get_grid_filename(),
     )
 
     print("PYCLEO STATUS: creating Observer")
@@ -170,10 +172,10 @@ def create_sdm(config, tsteps):
     return sdm
 
 
-def prepare_to_timestep_sdm(config, sdm):
+def prepare_to_timestep_sdm(cleo_config, sdm):
     print("PYCLEO STATUS: creating superdroplets")
     initsupers = pycleo.InitSupersFromBinary(
-        config.get_initsupersfrombinary(), sdm.gbxmaps
+        cleo_config.get_initsupersfrombinary(), sdm.gbxmaps
     )
     allsupers = pycleo.create_supers_from_binary(
         initsupers, sdm.gbxmaps.get_local_ngridboxes_hostcopy()
@@ -213,29 +215,24 @@ def timestep_sdm(tsteps, sdm, gbxs, allsupers):
         t_mdl = t_mdl_next
 
 
-def run_cleo_sdm(config):
-    tsteps = pycleo.pycreate_timesteps(config)
-    sdm = create_sdm(config, tsteps)
-    sdm, gbxs, allsupers = prepare_to_timestep_sdm(config, sdm)
+def run_cleo_sdm(cleo_config):
+    tsteps = pycleo.pycreate_timesteps(cleo_config)
+    sdm = create_sdm(cleo_config, tsteps)
+    sdm, gbxs, allsupers = prepare_to_timestep_sdm(cleo_config, sdm)
     timestep_sdm(tsteps, sdm, gbxs, allsupers)
 
 
-def run_exec():
+def run_exec(config_filename):
     mpi_info(MPI.COMM_WORLD)
-    config = pycleo.Config(config_filename)
-    pycleo.pycleo_initialize(config)
-    run_cleo_sdm(config)
+    cleo_config = pycleo.Config(config_filename)
+    pycleo.pycleo_initialize(cleo_config)
+    run_cleo_sdm(cleo_config)
     pycleo.pycleo_finalize()
 
 
 if do_run_executable:
-    nspacedims = config["domain"]["nspacedims"]
-    ngbxs = config["domain"]["ngbxs"]
-    grid_filename = Path(config["inputfiles"]["grid_filename"])
-
     print(f"PYCLEO STATUS: i+j={pycleo.test_python_bindings(i=1, j=2)}")
-
-    run_exec()
+    run_exec(config_filename)
 
 
 ### ---------------------------------------------------------------- ###
