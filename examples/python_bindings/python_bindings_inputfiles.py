@@ -9,7 +9,7 @@ Created Date: Friday 6th June 2025
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 6th June 2025
+Last Modified: Wednesday 11th June 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -30,7 +30,6 @@ def main(
     config_filename,
     grid_filename,
     initsupers_filename,
-    thermofiles,
     isfigures=[True, True],
 ):
     import numpy as np
@@ -45,7 +44,6 @@ def main(
         probdists,
         attrsgen,
     )
-    from pySD.thermobinary_src import thermogen, windsgen, thermodyngen
 
     ### ---------------------------------------------------------------- ###
     ### ----------------------- INPUT PARAMETERS ----------------------- ###
@@ -81,18 +79,6 @@ def main(
     geosigs = [1.4, 1.6]
     scalefacs = [6e6, 4e6]
     numconc = np.sum(scalefacs)
-
-    ### --- settings for 2D Thermodynamics --- ###
-    PRESS = 100000  # [Pa]
-    THETA = 298.15  # [K]
-    qcond = 0.0  # [Kg/Kg]
-    WMAX = 0.6  # [m/s]
-    VVEL = None  # [m/s]
-    Zlength = 1500  # [m]
-    Xlength = 1500  # [m]
-    qvapmethod = "sratio"
-    Zbase = 750  # [m]
-    sratios = [1.0, 1.0]  # s_ratio [below, above] Zbase
     ### ---------------------------------------------------------------- ###
     ### ---------------------------------------------------------------- ###
 
@@ -109,31 +95,6 @@ def main(
         xgrid,
         ygrid,
         constants_filename,
-        isfigures=isfigures,
-        savefigpath=savefigpath,
-    )
-
-    ### ----- write thermodynamics binaries ----- ###
-    thermog = thermogen.Simple2TierRelativeHumidity(
-        config_filename,
-        constants_filename,
-        PRESS,
-        THETA,
-        qvapmethod,
-        sratios,
-        Zbase,
-        qcond,
-    )
-    windsg = windsgen.Simple2DFlowField(
-        config_filename, constants_filename, WMAX, Zlength, Xlength, VVEL
-    )
-    thermodyngen = thermodyngen.ThermodynamicsGenerator(thermog, windsg)
-    geninitconds.generate_thermodynamics_conditions_fromfile(
-        thermofiles,
-        thermodyngen,
-        config_filename,
-        constants_filename,
-        grid_filename,
         isfigures=isfigures,
         savefigpath=savefigpath,
     )
@@ -169,5 +130,5 @@ def main(
 
 
 if __name__ == "__main__":
-    ### args = path2CLEO, path2build, config_filename, grid_filename, initsupers_filename, thermofiles
+    ### args = path2CLEO, path2build, config_filename, grid_filename, initsupers_filename
     main(*sys.argv[1:])

@@ -9,7 +9,7 @@ Created Date: Thursday 5th June 2025
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 10th June 2025
+Last Modified: Wednesday 11th June 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -97,7 +97,6 @@ if do_inputfiles:
     savefigpath = Path(pyinit["paths"]["savefigpath"])
     grid_filename = Path(python_config["inputfiles"]["grid_filename"])
     initsupers_filename = Path(python_config["initsupers"]["initsupers_filename"])
-    thermofiles = Path(pyinit["thermo"]["thermofiles"])
 
     if path2CLEO == path2build:
         raise ValueError("build directory cannot be CLEO")
@@ -112,10 +111,6 @@ if do_inputfiles:
         ### --- delete any existing initial conditions --- ###
         shutil.rmtree(grid_filename, ignore_errors=True)
         shutil.rmtree(initsupers_filename, ignore_errors=True)
-        all_thermofiles = thermofiles.parent / Path(
-            f"{thermofiles.stem}*{thermofiles.suffix}"
-        )
-        shutil.rmtree(all_thermofiles, ignore_errors=True)
 
         python_bindings_inputfiles.main(
             path2CLEO,
@@ -123,7 +118,6 @@ if do_inputfiles:
             config_filename,
             grid_filename,
             initsupers_filename,
-            thermofiles,
             isfigures=isfigures,
         )
 ### ---------------------------------------------------------------- ###
