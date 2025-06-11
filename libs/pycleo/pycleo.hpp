@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 10th June 2025
+ * Last Modified: Wednesday 11th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -70,6 +70,7 @@ PYBIND11_MODULE(pycleo, m) {
 
   /* Gridboxes */
   pycreate_gbxs_cartesian_null(m);
+  pyGridboxesDualView(m);
 
   /* maps */
   pyCartesianMaps(m);
