@@ -418,6 +418,14 @@ can find more information about it from <a class="reference external" href="http
 about it from <a class="reference external" href="https://computing.llnl.gov/projects/sundials/cvode">its webpage:</a>.</p>
 <p>The CVODE libraries for CLEO are automatically built using CMAKE and compiled if required.</p>
 </section>
+<section id="pybind11">
+<h2>pybind11<a class="headerlink" href="#pybind11" title="Link to this heading">¶</a></h2>
+<p>CLEO’s <code class="docutils literal notranslate"><span class="pre">pycleo</span></code> library requires pybind11 to create python binding for selected parts of CLEO’s
+libraries. You can find more information about it from <a class="reference external" href="https://github.com/pybind/pybind11">its repository:</a>.</p>
+<p>The pybind11 library for CLEO is automatically built using CMAKE and compiled if required. Note you
+can avoid making CLEO’s python bindings, and thereby avoid the pybind11 dependency on your build,
+by passing a non-empty “CLEO_NO_PYBINDINGS” flag to cmake. E.g. <code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">[...]</span> <span class="pre">-DCLEO_NO_PYBINDINGS=true</span></code></p>
+</section>
 </section>
 
         </article>
@@ -484,6 +492,7 @@ about it from <a class="reference external" href="https://computing.llnl.gov/pro
 </li>
 <li><a class="reference internal" href="#yaml-cpp">yaml-cpp</a></li>
 <li><a class="reference internal" href="#cvode">CVODE</a></li>
+<li><a class="reference internal" href="#pybind11">pybind11</a></li>
 </ul>
 </li>
 </ul>
