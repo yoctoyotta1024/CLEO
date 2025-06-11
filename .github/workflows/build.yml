@@ -62,7 +62,8 @@ jobs:
     strategy:
       matrix:
         target: [all, adia0d, golcolls, longcolls, lowlistcolls, szakallurbichcolls,
-                testikstraubcolls, const2d, divfree2d, eurec4a1d, rshaft1d, spdtest]
+                testikstraubcolls, const2d, divfree2d, eurec4a1d, rshaft1d, spdtest,
+                pycleo]
     steps:
       - name: Checkout
         uses: actions/checkout@v4

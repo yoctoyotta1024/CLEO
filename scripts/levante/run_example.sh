@@ -27,6 +27,10 @@ else
     then
     ${sbatch} ${examplesdir}/boxmodelcollisions/breakup.sh
 
+  elif  [ "${example}" == "bubble3d" ]
+    then
+      ${sbatch} ${examplesdir}/bubble3d/bubble3d.sh # WIP
+
   elif  [ "${example}" == "constthermo2d" ]
     then
     ${sbatch} ${examplesdir}/constthermo2d/constthermo2d.sh
@@ -39,6 +43,10 @@ else
   then
     ${sbatch} ${examplesdir}/eurec4a1d/eurec4a1d.sh
 
+  elif  [ "${example}" == "python_bindings" ]
+    then
+      ${sbatch} ${examplesdir}/python_bindings/python_bindings.sh
+
   elif  [ "${example}" == "rainshaft1d" ]
   then
     ${sbatch} ${examplesdir}/rainshaft1d/rainshaft1d.sh
@@ -46,10 +54,6 @@ else
   elif  [ "${example}" == "speedtest" ]
   then
     ${sbatch} ${examplesdir}/speedtest/speedtest.sh
-
-  elif  [ "${example}" == "bubble3d" ]
-  then
-    ${sbatch} ${examplesdir}/bubble3d/bubble3d.sh # WIP
 
   else
     echo "'${example}' is not an example"

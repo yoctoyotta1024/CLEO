@@ -21,7 +21,8 @@
 buildtype="serial"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_adia0d/${buildtype}/
-build_flags="-DCLEO_COUPLED_DYNAMICS=cvode -DCLEO_DOMAIN=cartesian -DCLEO_NO_ROUGHPAPER=true"
+build_flags="-DCLEO_COUPLED_DYNAMICS=cvode -DCLEO_DOMAIN=cartesian \
+  -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
 enableyac=false
 executables="adia0d"
 
