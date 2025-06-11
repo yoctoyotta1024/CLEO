@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 10th June 2025
+ * Last Modified: Wednesday 11th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -25,6 +25,7 @@
 
 #include <pybind11/pybind11.h>
 
+#include "../kokkosaliases.hpp"
 #include "./pycleo_aliases.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/movement/cartesian_transport_across_domain.hpp"
