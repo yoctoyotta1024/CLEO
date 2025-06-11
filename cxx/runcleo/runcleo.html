@@ -512,7 +512,7 @@
 <dd><p>Get the size of the next timestep. </p>
 <p>This function calculates and returns the next step size to take based on the current model time, <code class="docutils literal notranslate"><span class="pre">t_mdl</span></code> and the coupling and obs times obtained from the <code class="docutils literal notranslate"><span class="pre">sdm</span></code> object; <code class="docutils literal notranslate"><span class="pre">t_coupl</span></code> and <code class="docutils literal notranslate"><span class="pre">t_obs</span></code> respectively.</p>
 <p>
-The size of the next timestep is determined by finding the smaller out of the step to the next coupling time and the next observation time. The next coupling time is calculated after receiving the size of the coupling timestep (a constant) using the <code class="docutils literal notranslate"><span class="pre">sdm.get_couplstep()</span></code> function. The time of the next observation is obtained from the <code class="docutils literal notranslate"><span class="pre">sdm.obs.next_obs()</span></code> function.</p>
+The size of the next timestep is determined by finding the smaller out of the step to the next coupling time and the next observation time.</p>
 <p>The size of the next timestep is then calculated as <code class="docutils literal notranslate"><span class="pre">t_next</span> <span class="pre">-</span> <span class="pre">t_mdl</span></code>, where <code class="docutils literal notranslate"><span class="pre">t_next</span></code> is the time closer to <code class="docutils literal notranslate"><span class="pre">t_mdl</span></code> out of <code class="docutils literal notranslate"><span class="pre">next_coupl</span></code> and <code class="docutils literal notranslate"><span class="pre">next_obs</span></code>. The function uses Kokkos’ version of C++ standard library’s <code class="docutils literal notranslate"><span class="pre">std::min</span></code> to find <code class="docutils literal notranslate"><span class="pre">t_next</span></code> (also GPU compatible).</p>
 <p><div class="admonition seealso">
 <p class="admonition-title">See also</p>
@@ -642,7 +642,7 @@ The size of the next timestep is determined by finding the smaller out of the st
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 10 June 2025</div>
+              Last updated on 11 June 2025</div>
           </div>
           <div class="right-details">
             
