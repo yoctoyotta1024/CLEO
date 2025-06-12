@@ -31,6 +31,7 @@ message(STATUS "pybind11 installation in: ${CMAKE_CURRENT_BINARY_DIR}")
 
 # Add executables and create library target
 set(SOURCES
+"py_configuration.cpp"
 "py_initialise.cpp"
 "py_superdrops.cpp"
 "py_gridboxes.cpp"
@@ -49,7 +50,7 @@ target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 target_include_directories(${LIBNAME} PRIVATE "${CLEO_SOURCE_DIR}/libs" ${MPI_INCLUDE_PATH})
 
 # Link libraries to target library
-set(LINKLIBS initialise gridboxes observers superdrops zarr runcleo cartesiandomain)
+set(LINKLIBS configuration initialise gridboxes observers superdrops zarr runcleo cartesiandomain)
 target_link_libraries(${LIBNAME} PUBLIC "${LINKLIBS}")
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos MPI::MPI_CXX)
 
