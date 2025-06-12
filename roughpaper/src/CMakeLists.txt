@@ -8,7 +8,7 @@ project("roughpaper_src_cleocoupledsdm")
 message(STATUS "CLEO including ${PROJECT_NAME} with PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 # Set libraries from CLEO to link with executable
-set(CLEOLIBS gridboxes initialise observers runcleo superdrops zarr)
+set(CLEOLIBS configuration gridboxes initialise observers runcleo superdrops zarr)
 
 # create primary executable "cleocoupledsdm" for cleo sdm coupled to dynamics solver
 add_executable(cleocoupledsdm main.cpp)

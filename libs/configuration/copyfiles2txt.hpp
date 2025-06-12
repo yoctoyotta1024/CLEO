@@ -4,12 +4,12 @@
  *
  * ----- CLEO -----
  * File: copyfiles2txt.hpp
- * Project: initialise
+ * Project: configuration
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Wednesday 28th May 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,8 +22,8 @@
  * e.g. configuration files and values of constants
  */
 
-#ifndef LIBS_INITIALISE_COPYFILES2TXT_HPP_
-#define LIBS_INITIALISE_COPYFILES2TXT_HPP_
+#ifndef LIBS_CONFIGURATION_COPYFILES2TXT_HPP_
+#define LIBS_CONFIGURATION_COPYFILES2TXT_HPP_
 
 #include <filesystem>
 #include <fstream>
@@ -36,4 +36,4 @@ of files listed in files2copy vector one by one */
 void copyfiles2txt(const std::filesystem::path setup_filename,
                    const std::vector<std::filesystem::path> &files2copy);
 
-#endif  // LIBS_INITIALISE_COPYFILES2TXT_HPP_
+#endif  // LIBS_CONFIGURATION_COPYFILES2TXT_HPP_
