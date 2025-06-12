@@ -28,11 +28,13 @@
 #include <iostream>
 
 #include "./py_cartesiandomain.hpp"
+#include "./py_configuration.hpp"
 #include "./py_gridboxes.hpp"
 #include "./py_initialise.hpp"
 #include "./py_observers.hpp"
 #include "./py_runcleo.hpp"
 #include "./py_superdrops.hpp"
+#include "configuration/config.hpp"
 #include "coupldyn_numpy/pycoupldyn_numpy.hpp"
 
 namespace py = pybind11;
