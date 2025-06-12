@@ -17,19 +17,10 @@
  * -----
  * File Description:
  * Functionality for creating python bindings to various different CLEO
- * initialisation/configuration functions and structures
+ * initialisation functions and structures
  */
 
 #include "./py_initialise.hpp"
-
-void pyConfig(py::module &m) {
-  py::class_<Config>(m, "Config")
-      .def(py::init<const std::filesystem::path>(), py::arg("config_filename"))
-      .def("get_ngbxs", &Config::get_ngbxs)
-      .def("get_nspacedims", &Config::get_nspacedims)
-      .def("get_grid_filename", &Config::get_grid_filename)
-      .def("get_initsupersfrombinary", &Config::get_initsupersfrombinary);
-}
 
 void pyTimesteps(py::module &m) {
   py::class_<Timesteps>(m, "Timesteps")
@@ -58,10 +49,6 @@ void pyInitSupersFromBinary(py::module &m) {
   py::class_<InitSupersFromBinary>(m, "InitSupersFromBinary")
       .def(py::init<const OptionalConfigParams::InitSupersFromBinaryParams &,
                     const CartesianMaps &>());
-}
-
-void pyInitSupersFromBinaryParams(py::module &m) {
-  py::class_<OptionalConfigParams::InitSupersFromBinaryParams>(m, "InitSupersFromBinaryParams");
 }
 
 void pyInitGbxsNull(py::module &m) {
