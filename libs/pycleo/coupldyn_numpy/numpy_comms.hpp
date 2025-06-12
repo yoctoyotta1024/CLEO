@@ -40,8 +40,8 @@ struct NumpyComms {
 
   /* send information from Gridboxes' states to NumpyDynamics */
   template <typename GbxMaps, typename CD = NumpyComms>
-  KOKKOS_INLINE_FUNCTION void send_dynamics(const GbxMaps &gbxmaps, const viewh_constgbx h_gbxs,
-                                            NumpyDynamics &numpydyn) const;
+  KOKKOS_FUNCTION void send_dynamics(const GbxMaps &gbxmaps, const viewh_constgbx h_gbxs,
+                                     NumpyDynamics &numpydyn) const;
 };
 
 #endif  // LIBS_PYCLEO_COUPLDYN_NUMPY_NUMPY_COMMS_HPP_
