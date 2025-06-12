@@ -29,17 +29,17 @@ KOKKOS_FUNCTION void NumpyComms::receive_dynamics(const GbxMaps &gbxmaps,
                                                   const viewh_gbx h_gbxs) const {
   const size_t ngbxs(h_gbxs.extent(0));
 
-  // Kokkos::parallel_for("receive_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
-  //                      [=](const size_t ii) {}); # pyWIP
-  for (size_t ii = 0; ii < ngbxs; ++ii) {
-    const auto idx = gbxmaps.local_to_global_gridbox_index(ii);
-    State &state(h_gbxs(ii).state);
+  Kokkos::parallel_for("receive_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
+                       [=](const size_t ii) {
+                         // for (size_t ii = 0; ii < ngbxs; ++ii) {
+                         const auto idx = gbxmaps.local_to_global_gridbox_index(ii);
+                         State &state(h_gbxs(ii).state);
 
-    state.press = numpydyn.get_press(idx);
-    state.temp = numpydyn.get_temp(idx);
-    state.qvap = numpydyn.get_qvap(idx);
-    state.qcond = numpydyn.get_qcond(idx);
-  }
+                         state.press = numpydyn.get_press(idx);
+                         state.temp = numpydyn.get_temp(idx);
+                         state.qvap = numpydyn.get_qvap(idx);
+                         state.qcond = numpydyn.get_qcond(idx);
+                       });
 }
 
 /* send information from Gridboxes' states to NumpyDynamics */
@@ -48,17 +48,16 @@ KOKKOS_FUNCTION void NumpyComms::send_dynamics(const GbxMaps &gbxmaps, const vie
                                                NumpyDynamics &numpydyn) const {
   const size_t ngbxs(h_gbxs.extent(0));
 
-  // Kokkos::parallel_for("send_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
-  //                      [=](const size_t ii) {}); # pyWIP
-  for (size_t ii = 0; ii < ngbxs; ++ii) {
-    const auto idx = gbxmaps.local_to_global_gridbox_index(ii);
-    State &state(h_gbxs(ii).state);
+  Kokkos::parallel_for("send_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
+                       [=, &numpydyn](const size_t ii) {
+                         const auto idx = gbxmaps.local_to_global_gridbox_index(ii);
+                         State &state(h_gbxs(ii).state);
 
-    numpydyn.set_press(idx, state.press);
-    numpydyn.set_temp(idx, state.temp);
-    numpydyn.set_qvap(idx, state.qvap);
-    numpydyn.set_qcond(idx, state.qcond);
-  }
+                         numpydyn.set_press(idx, state.press);
+                         numpydyn.set_temp(idx, state.temp);
+                         numpydyn.set_qvap(idx, state.qvap);
+                         numpydyn.set_qcond(idx, state.qcond);
+                       });
 }
 
 template void NumpyComms::receive_dynamics<CartesianMaps, NumpyComms>(const CartesianMaps &,
