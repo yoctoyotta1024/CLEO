@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 11th June 2025
+ * Last Modified: Thursday 12th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -60,6 +60,7 @@ PYBIND11_MODULE(pycleo, m) {
   pyConfig(m);
   pyTimesteps(m);
   pycreate_timesteps(m);
+  pyrealtime2step(m);
   pyInitSupersFromBinary(m);
   pyInitSupersFromBinaryParams(m);
   pyInitGbxsNull(m);
