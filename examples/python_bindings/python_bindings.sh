@@ -21,7 +21,7 @@
 buildtype="threads"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_pybind/
-build_flags="-DCLEO_COUPLED_DYNAMICS=null -DCLEO_DOMAIN=cartesian \
+build_flags="-DCLEO_COUPLED_DYNAMICS=numpy -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_PYTHON=/work/bm1183/m300950/bin/envs/cleoenv/bin/python"
 enableyac=false
 executables="pycleo"

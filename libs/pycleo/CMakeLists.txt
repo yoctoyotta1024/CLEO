@@ -38,11 +38,14 @@ set(SOURCES
 "py_observers.cpp"
 "py_runcleo.cpp"
 "pycleo.cpp"
+"coupldyn_numpy/numpy_dynamics.cpp"
+"coupldyn_numpy/numpy_comms.cpp"
+"coupldyn_numpy/pycoupldyn_numpy.cpp"
 )
 pybind11_add_module(${LIBNAME} MODULE ${SOURCES})
 
 # Add directories for target library
-#target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
+target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 target_include_directories(${LIBNAME} PRIVATE "${CLEO_SOURCE_DIR}/libs" ${MPI_INCLUDE_PATH})
 
 # Link libraries to target library

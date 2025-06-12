@@ -9,7 +9,7 @@ Created Date: Thursday 5th June 2025
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 10th June 2025
+Last Modified: Wednesday 11th June 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -19,14 +19,16 @@ File Description:
 """
 
 import argparse
+import numpy as np
 import shutil
 import sys
 from mpi4py import MPI
-
 from pathlib import Path
 from ruamel.yaml import YAML
 
 import python_bindings_inputfiles
+from cleo_sdm import CleoSDM
+from thermodynamics import Thermodynamics
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -76,12 +78,14 @@ if args.do_plot_results == "FALSE":
 
 sys.path.append(str(path2build / "pycleo"))
 import pycleo
+from pycleo import coupldyn_numpy
 
 yaml = YAML()
 with open(src_config_filename, "r") as file:
-    config = yaml.load(file)
+    python_config = yaml.load(file)
 config_filename = (
-    Path(config["python_initconds"]["paths"]["tmppath"]) / src_config_filename.name
+    Path(python_config["python_initconds"]["paths"]["tmppath"])
+    / src_config_filename.name
 )
 
 ### ---------------------------------------------------------------- ###
@@ -89,14 +93,13 @@ config_filename = (
 ### ---------------------------------------------------------------- ###
 if do_inputfiles:
     ### --- ensure build, share and bin directories exist --- ###
-    pyconfig = config["python_initconds"]
-    tmppath = Path(pyconfig["paths"]["tmppath"])
-    sharepath = Path(pyconfig["paths"]["sharepath"])
-    binpath = Path(pyconfig["paths"]["binpath"])
-    savefigpath = Path(pyconfig["paths"]["savefigpath"])
-    grid_filename = Path(config["inputfiles"]["grid_filename"])
-    initsupers_filename = Path(config["initsupers"]["initsupers_filename"])
-    thermofiles = Path(pyconfig["thermo"]["thermofiles"])
+    pyinit = python_config["python_initconds"]
+    tmppath = Path(pyinit["paths"]["tmppath"])
+    sharepath = Path(pyinit["paths"]["sharepath"])
+    binpath = Path(pyinit["paths"]["binpath"])
+    savefigpath = Path(pyinit["paths"]["savefigpath"])
+    grid_filename = Path(python_config["inputfiles"]["grid_filename"])
+    initsupers_filename = Path(python_config["initsupers"]["initsupers_filename"])
 
     if path2CLEO == path2build:
         raise ValueError("build directory cannot be CLEO")
@@ -111,10 +114,6 @@ if do_inputfiles:
         ### --- delete any existing initial conditions --- ###
         shutil.rmtree(grid_filename, ignore_errors=True)
         shutil.rmtree(initsupers_filename, ignore_errors=True)
-        all_thermofiles = thermofiles.parent / Path(
-            f"{thermofiles.stem}*{thermofiles.suffix}"
-        )
-        shutil.rmtree(all_thermofiles, ignore_errors=True)
 
         python_bindings_inputfiles.main(
             path2CLEO,
@@ -122,7 +121,6 @@ if do_inputfiles:
             config_filename,
             grid_filename,
             initsupers_filename,
-            thermofiles,
             isfigures=isfigures,
         )
 ### ---------------------------------------------------------------- ###
@@ -138,104 +136,77 @@ def mpi_info(comm):
     print(f"Processor name: {MPI.Get_processor_name()}")
     print(f"Total processes: {comm.Get_size()}")
     print(f"Process rank: {comm.Get_rank()}")
-    print("-----------------------")
+    print("--------------------------------------")
 
 
-def create_sdm(config, tsteps):
-    print("PYCLEO STATUS: creating GridboxMaps")
-    gbxmaps = pycleo.create_cartesian_maps(
-        ngbxs=ngbxs, nspacedims=nspacedims, grid_filename=grid_filename
+def create_thermodynamics(python_config):
+    ngbxs = python_config["domain"]["ngbxs"]
+
+    temp = np.repeat(288.15, ngbxs)
+    rho = np.repeat(1.225, ngbxs)
+    press = np.repeat(101325, ngbxs)
+    qvap = np.repeat(0.01, ngbxs)
+    qcond = np.repeat(0.002, ngbxs)
+    qice = np.repeat(0.003, ngbxs)
+    qrain = np.repeat(0.004, ngbxs)
+    qsnow = np.repeat(0.005, ngbxs)
+    qgrau = np.repeat(0.006, ngbxs)
+
+    return Thermodynamics(temp, rho, press, qvap, qcond, qice, qrain, qsnow, qgrau)
+
+
+def timestep_example(t_mdl, t_end, timestep, thermo, cleo_sdm):
+    print(
+        f"PYCLEO STATUS: timestepping SDM from {t_mdl}s to {t_end}s (timestep = {timestep}s)"
     )
 
-    print("PYCLEO STATUS: creating Observer")
-    obs = pycleo.NullObserver()
+    print("\n--- PYCLEO STATUS: THERMO INFORMATION ---")
+    thermo.print_state()
+    print("\n-----------------------------------------")
 
-    print("PYCLEO STATUS: creating MicrophysicalProcess")
-    micro = pycleo.NullMicrophysicalProcess()
-
-    print("PYCLEO STATUS: creating Superdroplet Movement")
-    motion = pycleo.NullMotion()
-    transport = pycleo.CartesianTransportAcrossDomain()
-    boundary_conditions = pycleo.NullBoundaryConditions()
-    move = pycleo.CartesianNullMoveSupersInDomain(
-        motion, transport, boundary_conditions
-    )
-
-    print("PYCLEO STATUS: creating SDM Methods")
-    sdm = pycleo.CartesianNullSDMMethods(
-        tsteps.get_couplstep(), gbxmaps, micro, move, obs
-    )
-
-    print(f"PYCLEO STATUS: SDM created with couplstep = {sdm.get_couplstep()}")
-    return sdm
-
-
-def prepare_to_timestep_sdm(config, sdm):
-    print("PYCLEO STATUS: creating superdroplets")
-    initsupers = pycleo.InitSupersFromBinary(
-        config.get_initsupersfrombinary(), sdm.gbxmaps
-    )
-    allsupers = pycleo.create_supers_from_binary(
-        initsupers, sdm.gbxmaps.get_local_ngridboxes_hostcopy()
-    )
-
-    print("PYCLEO STATUS: creating gridboxes")
-    initgbxs = pycleo.InitGbxsNull(sdm.gbxmaps.get_local_ngridboxes_hostcopy())
-    gbxs = pycleo.create_gbxs_cartesian_null(sdm.gbxmaps, initgbxs, allsupers)
-
-    print("PYCLEO STATUS: preparing sdm")
-    sdm.prepare_to_timestep(gbxs)
-
-    print("PYCLEO STATUS: preparation complete")
-    return sdm, gbxs, allsupers
-
-
-def timestep_sdm(tsteps, sdm, gbxs, allsupers):
-    t_mdl, t_end = 0, tsteps.get_t_end()
-
-    print(f"PYCLEO STATUS: timestepping SDM from {t_mdl} to {t_end} [model timesteps]")
     while t_mdl <= t_end:
-        print(f"PYCLEO STATUS: t = {t_mdl}")
-        t_mdl_next = min(sdm.next_couplstep(t_mdl), sdm.obs.next_obs(t_mdl))
+        print(f"PYCLEO STATUS: t = {t_mdl}s")
 
-        # dynamics -> SDM: if (t_mdl % sdm.get_couplstep() == 0):
-        # ``comms.receive_dynamics(sdm.gbxmaps, coupldyn, gbxs.view_host());``
+        thermo.temp[0] += 10  # mock example of changing dynamics
 
-        sdm.at_start_step(t_mdl, gbxs, allsupers)
+        thermo = cleo_sdm.do_step(timestep, thermo)
+        print("temp[0:2]:", thermo.temp[0:2])
 
-        # here would be ``dynamics.run_step();``
-
-        sdm.run_step(t_mdl, t_mdl_next, gbxs, allsupers)
-
-        # SDM -> dynamics: if (t_mdl % sdm.get_couplstep() == 0):
-        # ``comms.send_dynamics(sdm.gbxmaps, gbxs.view_host(), coupldyn);``
-
-        t_mdl = t_mdl_next
+        t_mdl += timestep
 
 
-def run_cleo_sdm(config):
-    tsteps = pycleo.pycreate_timesteps(config)
-    sdm = create_sdm(config, tsteps)
-    sdm, gbxs, allsupers = prepare_to_timestep_sdm(config, sdm)
-    timestep_sdm(tsteps, sdm, gbxs, allsupers)
+def cleo_sdm_example(python_config, cleo_config):
+    t_mdl, t_end = 0, python_config["timesteps"]["T_END"]  # [s]
+    timestep = python_config["timesteps"]["COUPLTSTEP"]  # [s]
+
+    thermo = create_thermodynamics(python_config)
+    cleo_sdm = CleoSDM(
+        pycleo,
+        cleo_config,
+        t_mdl,
+        timestep,
+        thermo.press,
+        thermo.temp,
+        thermo.massmix_ratios[0],
+        thermo.massmix_ratios[1],
+    )
+
+    timestep_example(t_mdl, t_end, timestep, thermo, cleo_sdm)
 
 
-def run_exec():
-    mpi_info(MPI.COMM_WORLD)
-    config = pycleo.Config(config_filename)
-    pycleo.pycleo_initialize(config)
-    run_cleo_sdm(config)
+def run_exec(python_config, config_filename):
+    cleo_config = pycleo.Config(config_filename)
+    pycleo.pycleo_initialize(cleo_config)
+    cleo_sdm_example(python_config, cleo_config)
     pycleo.pycleo_finalize()
 
 
 if do_run_executable:
-    nspacedims = config["domain"]["nspacedims"]
-    ngbxs = config["domain"]["ngbxs"]
-    grid_filename = Path(config["inputfiles"]["grid_filename"])
+    print(f"PYCLEO STATUS: 2+3={pycleo.test_pycleo(i=3, j=2)}")
+    print(f"COUPLDYN_NUMPY STATUS: 2*3={coupldyn_numpy.test_coupldyn_numpy(i=3, j=2)}")
 
-    print(f"PYCLEO STATUS: i+j={pycleo.test_python_bindings(i=1, j=2)}")
-
-    run_exec()
+    mpi_info(MPI.COMM_WORLD)
+    run_exec(python_config, config_filename)
 
 
 ### ---------------------------------------------------------------- ###

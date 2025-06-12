@@ -6,7 +6,7 @@
 # Author: Clara Bayley (CB)
 # Additional Contributors:
 # -----
-# Last Modified: Friday 6th June 2025
+# Last Modified: Wednesday 11th June 2025
 # Modified By: CB
 # -----
 # License: BSD 3-Clause "New" or "Revised" License
@@ -18,8 +18,7 @@
 # Configuration file for example of using CLEO's python bindings.
 # Note: The initial superdroplets data read from file "initsupers_filename" can be made with
 # CLEO's pySD module (see Python script "create_initsuperdropsbinary_script.py" for usage).
-# Likewise the "grid_filename" can be made using pySD (see "create_gbxboundariesbinary_script.py"),
-# and so can the thermodynamics files when using coupled thermodynamics "fromfile".
+# Likewise the "grid_filename" can be made using pySD (see "create_gbxboundariesbinary_script.py").
 #
 
 ### Initial Conditions Parameters for Python Script ###
@@ -29,8 +28,6 @@ python_initconds:
     binpath: /home/m/m300950/CLEO/build_pybind/bin # absolute path to bin directory
     sharepath: /home/m/m300950/CLEO/build_pybind/share # absolute path to share directory
     savefigpath: /home/m/m300950/CLEO/build_pybind/bin # absolute path to save figures in
-  thermo:
-    thermofiles: /home/m/m300950/CLEO/build_pybind/share/pybind_dimlessthermo.dat # see coupled_dynamics below, names of thermofiles = thermofiles+"_[variable].dat"
 
 ### Kokkos Initialization Parameters ###
 kokkos_settings:
@@ -41,8 +38,8 @@ kokkos_settings:
 ### SDM Runtime Parameters ###
 domain:
   nspacedims : 2                                          # no. of spatial dimensions to model
-  ngbxs : 900                                             # total number of Gbxs
-  maxnsupers: 3600                                        # maximum number of SDs
+  ngbxs : 9                                               # total number of Gbxs
+  maxnsupers: 36                                          # maximum number of SDs
 
 timesteps:
   CONDTSTEP : 3                                           # time between SD condensation [s]
@@ -60,19 +57,10 @@ inputfiles:
 initsupers:
   type: frombinary                                        # type of initialisation of super-droplets
   initsupers_filename : /home/m/m300950/CLEO/build_pybind/share/pybind_dimlessSDsinit.dat   # binary filename for initialisation of SDs
+  initnsupers: 24
 
 ### Output Parameters ###
 outputdata:
   setup_filename : /home/m/m300950/CLEO/build_pybind/bin/pybind_setup.txt                   # .txt filename to copy configuration to
   zarrbasedir : /home/m/m300950/CLEO/build_pybind/bin/pybind_sol.zarr                       # zarr store base directory
   maxchunk : 2500000                                      # maximum no. of elements in chunks of zarr store array
-
-### Coupled Dynamics Parameters ###
-coupled_dynamics:
-  type : fromfile                                         # type of coupled dynamics to configure
-  press : /home/m/m300950/CLEO/build_pybind/share/pybind_dimlessthermo_press.dat            # binary filename for pressure
-  temp : /home/m/m300950/CLEO/build_pybind/share/pybind_dimlessthermo_temp.dat              # binary filename for temperature
-  qvap : /home/m/m300950/CLEO/build_pybind/share/pybind_dimlessthermo_qvap.dat              # binary filename for vapour mixing ratio
-  qcond : /home/m/m300950/CLEO/build_pybind/share/pybind_dimlessthermo_qcond.dat            # binary filename for liquid mixing ratio
-  wvel : /home/m/m300950/CLEO/build_pybind/share/pybind_dimlessthermo_wvel.dat              # binary filename for vertical (coord3) velocity
-  uvel : /home/m/m300950/CLEO/build_pybind/share/pybind_dimlessthermo_uvel.dat              # binary filename for eastwards (coord1) velocity

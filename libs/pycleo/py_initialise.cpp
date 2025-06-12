@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 10th June 2025
+ * Last Modified: Thursday 12th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -25,6 +25,9 @@
 void pyConfig(py::module &m) {
   py::class_<Config>(m, "Config")
       .def(py::init<const std::filesystem::path>(), py::arg("config_filename"))
+      .def("get_ngbxs", &Config::get_ngbxs)
+      .def("get_nspacedims", &Config::get_nspacedims)
+      .def("get_grid_filename", &Config::get_grid_filename)
       .def("get_initsupersfrombinary", &Config::get_initsupersfrombinary);
 }
 
@@ -43,6 +46,12 @@ void pycreate_timesteps(py::module &m) {
   m.def(
       "pycreate_timesteps", [](const Config &config) { return Timesteps(config.get_timesteps()); },
       "returns Timesteps instance", py::arg("config"));
+}
+
+void pyrealtime2step(py::module &m) {
+  m.def(
+      "realtime2step", [](const double TSTEP) { return realtime2step(TSTEP); },
+      "converts time [s] into SDM model timestep", py::arg("TSTEP"));
 }
 
 void pyInitSupersFromBinary(py::module &m) {

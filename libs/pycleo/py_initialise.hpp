@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 10th June 2025
+ * Last Modified: Thursday 12th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -37,6 +37,7 @@ void pyConfig(py::module &m);
 
 void pyTimesteps(py::module &m);
 void pycreate_timesteps(py::module &m);
+void pyrealtime2step(py::module &m);
 
 void pyInitSupersFromBinary(py::module &m);
 void pyInitSupersFromBinaryParams(py::module &m);

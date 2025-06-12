@@ -1,0 +1,92 @@
+/*
+ * Copyright (c) 2025 MPI-M, Clara Bayley
+ *
+ *
+ * ----- CLEO -----
+ * File: numpy_dynamics.hpp
+ * Project: coupldyn_numpy
+ * Created Date: Wednesday 11th June 2025
+ * Author: Clara Bayley (CB)
+ * Additional Contributors:
+ * -----
+ * Last Modified: Thursday 12th June 2025
+ * Modified By: CB
+ * -----
+ * License: BSD 3-Clause "New" or "Revised" License
+ * https://opensource.org/licenses/BSD-3-Clause
+ * -----
+ * File Description:
+ * struct obeying coupleddynamics concept for dynamics solver in CLEO for
+ * coupling betaween numpy arrays and SDM
+ */
+
+#ifndef LIBS_PYCLEO_COUPLDYN_NUMPY_NUMPY_DYNAMICS_HPP_
+#define LIBS_PYCLEO_COUPLDYN_NUMPY_NUMPY_DYNAMICS_HPP_
+
+#include <pybind11/numpy.h>
+#include <pybind11/pybind11.h>
+
+#include <iostream>
+
+namespace py = pybind11;
+
+void pyNumpyDynamics(py::module &m);
+
+struct NumpyDynamics {
+ private:
+  const unsigned int interval;
+  void print_dynamics(const unsigned int t_mdl) const;
+
+ public:
+  py::array_t<double> press;
+  py::array_t<double> temp;
+  py::array_t<double> qvap;
+  py::array_t<double> qcond;
+
+  explicit NumpyDynamics(const unsigned int couplstep, py::array_t<double> _press,
+                         py::array_t<double> _temp, py::array_t<double> _qvap,
+                         py::array_t<double> _qcond)
+      : interval(couplstep), press(_press), temp(_temp), qvap(_qvap), qcond(_qcond) {}
+
+  void prepare_to_timestep() const {}
+
+  unsigned int get_couplstep() const { return interval; }
+
+  bool on_step(const unsigned int t_mdl) const { return t_mdl % interval == 0; }
+
+  void run_step(const unsigned int t_mdl, const unsigned int t_next) const {
+    if (on_step(t_mdl)) {
+      // print_dynamics(t_mdl);  // useful for debugging
+    }
+  }
+
+  double get_press(const size_t ii) const { return press.data()[ii]; }
+
+  double get_temp(const size_t ii) const { return temp.data()[ii]; }
+
+  double get_qvap(const size_t ii) const { return qvap.data()[ii]; }
+
+  double get_qcond(const size_t ii) const { return qcond.data()[ii]; }
+
+  void set_press(const size_t ii, const double _press) {
+    auto r = press.mutable_unchecked<1>();
+    r(ii) = _press;
+  }
+
+  void set_temp(const size_t ii, const double _temp) {
+    auto r = temp.mutable_unchecked<1>();
+    r(ii) = _temp;
+  }
+
+  void set_qvap(const size_t ii, const double _qvap) {
+    auto r = qvap.mutable_unchecked<1>();
+    r(ii) = _qvap;
+  }
+
+  void set_qcond(const size_t ii, const double _qcond) {
+    auto r = qcond.mutable_unchecked<1>();
+    r(ii) = _qcond;
+  }
+};
+
+#endif  // LIBS_PYCLEO_COUPLDYN_NUMPY_NUMPY_DYNAMICS_HPP_
