@@ -2,6 +2,31 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.43.0](https://github.com/yoctoyotta1024/CLEO/compare/0a032e280dcee5934cfa2430884569131fa27875..v0.43.0) - 2025-06-12
+#### Features
+- first bindings for gridboxes - ([6480b59](https://github.com/yoctoyotta1024/CLEO/commit/6480b591fe6dac629b2df42cf4dd00ef1d30a27e)) - clara.bayley
+- first bindings for superdroplets - ([085d86c](https://github.com/yoctoyotta1024/CLEO/commit/085d86c956a9d82142b3698c769ae252961a886a)) - clara.bayley
+- new python bindings for initialisation/configuration - ([90bd3fc](https://github.com/yoctoyotta1024/CLEO/commit/90bd3fcf17463d2ada5180f13fb2de92a6f24188)) - clara.bayley
+- first bindings for boundary conditions and movesupersindomain - ([21b595a](https://github.com/yoctoyotta1024/CLEO/commit/21b595ad739d398ab20a761e4f84344df7b183e5)) - clara.bayley
+- first bindings for cartesian transport - ([59ce95c](https://github.com/yoctoyotta1024/CLEO/commit/59ce95cb12df1a017d30dd86f99788b1a1c569e6)) - clara.bayley
+- create first bindings for motion and microphysics - ([9eb782a](https://github.com/yoctoyotta1024/CLEO/commit/9eb782a496c48c8e10d06f1b8c4c578708a2bb36)) - clara.bayley
+- create first binding for cartesian maps - ([be74b04](https://github.com/yoctoyotta1024/CLEO/commit/be74b04b42c3613c1121412d6a4041adfc16b9c6)) - clara.bayley
+- create first bindings for observers - ([57cdc4e](https://github.com/yoctoyotta1024/CLEO/commit/57cdc4ebb248d028ce41c63aae08869640e40fdc)) - clara.bayley
+- create first bindings for SDMMethods - ([0a032e2](https://github.com/yoctoyotta1024/CLEO/commit/0a032e280dcee5934cfa2430884569131fa27875)) - clara.bayley
+#### Miscellaneous Chores
+- renaming and formatting - ([b9a81c5](https://github.com/yoctoyotta1024/CLEO/commit/b9a81c5bb6d8520a617fe6b885050ccdd9aa9956)) - clara.bayley
+- add placeholder notes on rest of objects to create - ([0dfff04](https://github.com/yoctoyotta1024/CLEO/commit/0dfff0498f1a9ceaf39cd9d11dfd1953174674b4)) - clara.bayley
+#### Refactoring
+- create SDMMethods in python bindings example - ([85c2a42](https://github.com/yoctoyotta1024/CLEO/commit/85c2a42ecf6628cfe5eff64dcd014bf98a05826a)) - clara.bayley
+- add bindings to timestep functions called by timestep_cleo - ([223ab55](https://github.com/yoctoyotta1024/CLEO/commit/223ab554f3d865f15f99006ca84fb128b33e8707)) - clara.bayley
+- add sdm timestepping routines to sdmmethods bindings - ([2ed1589](https://github.com/yoctoyotta1024/CLEO/commit/2ed158993c5a7c102d51f8b90e6263fdd3f21bde)) - clara.bayley
+- add access to gbxmaps from SDMMethods - ([c3a4fd8](https://github.com/yoctoyotta1024/CLEO/commit/c3a4fd8db086e5cf173c98822af5114f0731d04a)) - clara.bayley
+- add function signature to cartesian maps - ([85375e5](https://github.com/yoctoyotta1024/CLEO/commit/85375e51d527ca2a325d9add554653c594d033c7)) - clara.bayley
+- kokkos init takes config - ([8792764](https://github.com/yoctoyotta1024/CLEO/commit/87927643ac889caac8577053755ae33053f5a9c4)) - clara.bayley
+- kokkos init and finalise via pycleo - ([03279f6](https://github.com/yoctoyotta1024/CLEO/commit/03279f657ffc90dfa3a1002f78104749dbba36b5)) - clara.bayley
+
+- - -
+
 ## [v0.42.0](https://github.com/yoctoyotta1024/CLEO/compare/17ffe2acf119fde7ac55ed2f87132a0429c34a37..v0.42.0) - 2025-06-11
 #### Bug Fixes
 - add archive library destination to libs targets - ([0b07ff4](https://github.com/yoctoyotta1024/CLEO/commit/0b07ff4bbcb52007242f60d7b70905a3fc913b3a)) - clara.bayley
