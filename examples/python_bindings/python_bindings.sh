@@ -24,7 +24,7 @@ path2build=${HOME}/CLEO/build_pybind/
 build_flags="-DCLEO_COUPLED_DYNAMICS=numpy -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_PYTHON=/work/bm1183/m300950/bin/envs/cleoenv/bin/python"
 enableyac=false
-executables="pycleo coupldyn_numpy"
+executables="pycleo"
 
 pythonscript=${path2CLEO}/examples/python_bindings/python_bindings.py
 configfile=${path2CLEO}/examples/python_bindings/src/config/python_bindings_config.yaml

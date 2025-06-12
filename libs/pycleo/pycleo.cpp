@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 10th June 2025
+ * Last Modified: Thursday 12th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -21,7 +21,7 @@
 
 #include "./pycleo.hpp"
 
-int test_python_bindings(const int i, const int j) {
+int test_pycleo(const int i, const int j) {
   std::cout << "Hello World\n";
   return i + j;
 }

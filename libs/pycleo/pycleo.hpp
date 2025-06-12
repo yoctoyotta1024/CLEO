@@ -33,10 +33,12 @@
 #include "./py_observers.hpp"
 #include "./py_runcleo.hpp"
 #include "./py_superdrops.hpp"
+#include "coupldyn_numpy/pycoupldyn_numpy.hpp"
 
 namespace py = pybind11;
 
-int test_python_bindings(const int i, const int j);
+int test_pycleo(const int i, const int j);
+
 void pycleo_initialize(const Config &config);
 
 void inline pycleo_finalize() {
@@ -47,14 +49,16 @@ void inline pycleo_finalize() {
 PYBIND11_MODULE(pycleo, m) {
   m.doc() = "Python bindings for selected parts of CLEO's libraries";
 
-  m.def("test_python_bindings", &test_python_bindings, "test function for CLEO example",
-        py::arg("i"), py::arg("j"));
+  m.def("test_pycleo", &test_pycleo, "test function for CLEO example", py::arg("i"), py::arg("j"));
 
   m.def("pycleo_initialize", &pycleo_initialize,
         "necessary initialisation before running CLEO via python ");
 
   m.def("pycleo_finalize", &pycleo_finalize,
         "necessary finalisation after running CLEO via python ");
+
+  /* coupldyn_numpy submodule */
+  include_coupldyn_numpy_submodule(m);
 
   /* initialisation/configuration*/
   pyConfig(m);

@@ -9,14 +9,14 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 11th June 2025
+ * Last Modified: Thursday 12th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Entry point for CLEO's python bindngs module for the coupldyn_numpy library
+ * Entry point for CLEO's python bindngs for the coupldyn_numpy library sub-module of pycleo
  */
 
 #ifndef LIBS_PYCLEO_COUPLDYN_NUMPY_PYCOUPLDYN_NUMPY_HPP_
@@ -32,19 +32,8 @@
 
 namespace py = pybind11;
 
-int test_python_bindings(const int i, const int j);
+int test_coupldyn_numpy(const int i, const int j);
 
-PYBIND11_MODULE(coupldyn_numpy, m) {
-  m.doc() = "Python bindings for selected parts of CLEO's coupldyn_numpy library";
-
-  m.def("test_python_bindings", &test_python_bindings, "test function for coupldyn_numpy module",
-        py::arg("i"), py::arg("j"));
-
-  /* dynamics */
-  pyNumpyDynamics(m);
-
-  /* coupling */
-  pyNumpyComms(m);
-}
+void include_coupldyn_numpy_submodule(py::module &m);
 
 #endif  // LIBS_PYCLEO_COUPLDYN_NUMPY_PYCOUPLDYN_NUMPY_HPP_
