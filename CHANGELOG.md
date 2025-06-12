@@ -2,6 +2,28 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.44.0](https://github.com/yoctoyotta1024/CLEO/compare/3b38b2c1c6665568cb10eb08d48130a06796d2d6..v0.44.0) - 2025-06-12
+#### Bug Fixes
+- coupldyn_numpy is submodule of pycleo - ([a0c42bb](https://github.com/yoctoyotta1024/CLEO/commit/a0c42bb4f85597b6342132367d72e55455882bc8)) - clara.bayley
+#### Features
+- python class for thermodynamics of example - ([9dc56f3](https://github.com/yoctoyotta1024/CLEO/commit/9dc56f3ded58362a2fec8d22b30933332e1ca869)) - clara.bayley
+- new library for numpy arrays coupled dynamics - ([439289e](https://github.com/yoctoyotta1024/CLEO/commit/439289e2c1b727d26e2a534296b32a5ed8242384)) - clara.bayley
+#### Miscellaneous Chores
+- renaming config conflicting variables - ([42d4cff](https://github.com/yoctoyotta1024/CLEO/commit/42d4cff787356cf4b1706c18f2d8a2fe3a19b155)) - clara.bayley
+#### Performance Improvements
+- no inline in macro - ([cc7ae0d](https://github.com/yoctoyotta1024/CLEO/commit/cc7ae0d0d8d9a4f6d25403a33a66704c001a487b)) - clara.bayley
+#### Refactoring
+- use coupldyn_numpy submodule in python_bindings example - ([de975a9](https://github.com/yoctoyotta1024/CLEO/commit/de975a95d5224b9bf3c7a2d081cd0fa6aad0f48c)) - clara.bayley
+- use thermodynamics in python bindings example - ([91e12e5](https://github.com/yoctoyotta1024/CLEO/commit/91e12e599f94057e3314d5c0096f90840e9c3557)) - clara.bayley
+- parallelise numpy comms send/receive - ([bfeff8e](https://github.com/yoctoyotta1024/CLEO/commit/bfeff8ead50997d83862a805ba26c88b3bf7f1ca)) - clara.bayley
+- bindings for time to model timestep conversion - ([01ca4f2](https://github.com/yoctoyotta1024/CLEO/commit/01ca4f28ba70ce6aefe93b6daf14c75b955e97ff)) - clara.bayley
+- reduce number of gridboxes - ([038f858](https://github.com/yoctoyotta1024/CLEO/commit/038f858a1e502341873a3cb674aa050f9084377c)) - clara.bayley
+- delete unused thermofiles coupled dynamics - ([0751f80](https://github.com/yoctoyotta1024/CLEO/commit/0751f80a546d217b4f27028604939ecdcfacf940)) - clara.bayley
+- use cleo config struct in intialisation of cleo not python config - ([b7fdde4](https://github.com/yoctoyotta1024/CLEO/commit/b7fdde49ee44e2bddbb9dd93808111cceae8dd5b)) - clara.bayley
+- include more getters in config bindings - ([3b38b2c](https://github.com/yoctoyotta1024/CLEO/commit/3b38b2c1c6665568cb10eb08d48130a06796d2d6)) - clara.bayley
+
+- - -
+
 ## [v0.43.0](https://github.com/yoctoyotta1024/CLEO/compare/0a032e280dcee5934cfa2430884569131fa27875..v0.43.0) - 2025-06-12
 #### Features
 - first bindings for gridboxes - ([6480b59](https://github.com/yoctoyotta1024/CLEO/commit/6480b591fe6dac629b2df42cf4dd00ef1d30a27e)) - clara.bayley
