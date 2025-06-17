@@ -58,11 +58,7 @@ CartesianMaps create_cartesian_maps(const size_t ngbxs, const unsigned int nspac
 
   auto gbxmaps = CartesianMaps();
 
-  gbxmaps.create_decomposition(
-      gfb.ndims, gfb.get_coord3gbxbounds(0).second - gfb.get_coord3gbxbounds(0).first,
-      gfb.get_coord1gbxbounds(0).second - gfb.get_coord1gbxbounds(0).first,
-      gfb.get_coord2gbxbounds(0).second - gfb.get_coord2gbxbounds(0).first);
-
+  gbxmaps.create_decomposition(gfb.ndims, gfb);
   set_cartesian_maps(nspacedims, gfb, gbxmaps);
 
   set_maps_ndims(gfb.ndims, gbxmaps);
