@@ -35,6 +35,7 @@
 #include "../cleoconstants.hpp"
 #include "cartesiandomain/domainboundaries.hpp"
 #include "configuration/communicator.hpp"
+#include "initialise/gbx_bounds_from_binary.hpp"
 
 class CartesianDecomposition {
  private:
@@ -50,8 +51,13 @@ class CartesianDecomposition {
   std::array<double, 3> partition_begin_coordinates;
   std::array<double, 3> partition_end_coordinates;
 
-  // Sizes of a gridbox [z, x, y]
-  std::array<double, 3> gridbox_size;
+
+  // Sizes of a gridbox
+  std::vector<std::vector<double>> gridbox_upperbounds;
+
+  // std::vector<double> gridbox_size_vertical; // z-dimension (coord3)
+  // std::vector<double> gridbox_size_eastward; // x-dimension (coord1)
+  // std::vector<double> gridbox_size_northward; // y-dimension (coord2)
 
   // Behavior of each dimension, being either periodic or finite
   std::array<size_t, 3> dimension_bound_behavior;
@@ -77,8 +83,7 @@ class CartesianDecomposition {
   ~CartesianDecomposition();
 
   // Creates the decomposition
-  bool create(std::vector<size_t> ndims, double gridbox_z_size, double gridbox_x_size,
-              double gridbox_y_size);
+  bool create(std::vector<size_t> ndims, GbxBoundsFromBinary gfb);
 
   // Local and global amount of gridboxes
   size_t get_total_local_gridboxes() const;
@@ -99,8 +104,8 @@ class CartesianDecomposition {
   int global_to_local_gridbox_index(size_t global_gridbox_index) const;
   int get_gridbox_owner_process(size_t global_gridbox_index) const;
   unsigned int get_local_bounding_gridbox(std::array<double, 3> &coordinates) const;
-  void set_gridbox_size(double z_size, double x_size, double y_size);
-
+  // void set_gridbox_size(double z_size, double x_size, double y_size);
+  void set_gridbox_upperbounds(GbxBoundsFromBinary gfb);
   // Sets the behavior of all dimensions
   void set_dimensions_bound_behavior(std::array<size_t, 3> behaviors);
 };

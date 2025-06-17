@@ -32,6 +32,7 @@
 #include "../kokkosaliases.hpp"
 #include "cartesiandomain/cartesian_decomposition.hpp"
 #include "cartesiandomain/doubly_periodic_domain.hpp"
+#include "initialise/gbx_bounds_from_binary.hpp"
 
 namespace dlc = dimless_constants;
 
@@ -264,9 +265,8 @@ struct CartesianMaps {
     return to_forward_coord2nghbr.value_at(i);  // value returned by map at index i
   }
 
-  void create_decomposition(std::vector<size_t> global_ndims, double gridbox_z_size,
-                            double gridbox_x_size, double gridbox_y_size) {
-    domain_decomposition.create(global_ndims, gridbox_z_size, gridbox_x_size, gridbox_y_size);
+  void create_decomposition(std::vector<size_t> global_ndims, GbxBoundsFromBinary gfb ) {
+    domain_decomposition.create(global_ndims, gfb);
     if (domain_decomposition.get_total_local_gridboxes() <
         domain_decomposition.get_total_global_gridboxes()) {
       is_decomp = true;
