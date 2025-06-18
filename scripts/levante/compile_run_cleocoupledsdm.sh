@@ -26,8 +26,8 @@ buildtype=$1                                                     # "serial", "th
 compilername=${2:-intel}                                         # "intel" or "gcc"
 path2CLEO=${3:-${HOME}/CLEO}                                     # must be absolute path
 path2build=${4:-${path2CLEO}/build}                              # should be absolute path
-enableyac=${5:-false}                                            # == "true" or otherwise false
-yacyaxtroot=${6:-/work/bm1183/m300950/yacyaxt} # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
+yacyaxtroot=${5:-/work/bm1183/m300950/yacyaxt/intel} # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
+enableyacpython=${6:-false}                                     # == "true" or otherwise false
 executables=${7:-"cleocoupledsdm"}                               # executable(s) to compile or "NONE"
 executable2run=${8:-${path2build}/roughpaper/src/${executables}} # path to executable to run
 configfile=${9:-${path2CLEO}/roughpaper/src/config/config.yaml}  # configuration to run
@@ -35,8 +35,8 @@ stacksize_limit=${10:-204800}                                    # ulimit -s [st
 ### ---------------------------------------------------- ###
 
 ### -------------------- check inputs ------------------ ###
-if [[ "${buildtype}" == "" || "${compilername}" == "" || "${enableyac}" == "" ||
-      "${path2CLEO}" == "" || "${path2build}" == ""  ]]
+if [[ "${buildtype}" == "" || "${compilername}" == "" || "${enableyacpython}" == "" ||
+      "${path2CLEO}" == "" || "${path2build}" == "" ]]
 then
   echo "Bad inputs, please check all the required inputs have been specified"
   exit 1
@@ -63,12 +63,7 @@ export CLEO_BUILDTYPE=${buildtype}
 export CLEO_COMPILERNAME=${compilername}
 export CLEO_PATH2CLEO=${path2CLEO}
 export CLEO_PATH2BUILD=${path2build}
-export CLEO_ENABLEYAC=${enableyac}
-
-if [ ${CLEO_ENABLEYAC} == "true" ]
-then
-  export CLEO_YACYAXTROOT=${yacyaxtroot}
-fi
+export CLEO_YACYAXTROOT=${yacyaxtroot}
 ### ---------------------------------------------------- ###
 
 ### --------------- print compiling inputs ------------- ###
@@ -76,7 +71,6 @@ echo "### --------------- User Inputs -------------- ###"
 echo "CLEO_BUILDTYPE = ${CLEO_BUILDTYPE}"
 echo "CLEO_COMPILERNAME = ${CLEO_COMPILERNAME}"
 echo "CLEO_PATH2BUILD = ${CLEO_PATH2BUILD}"
-echo "CLEO_ENABLEYAC = ${CLEO_ENABLEYAC}"
 echo "CLEO_YACYAXTROOT = ${CLEO_YACYAXTROOT}"
 echo "### ------------------------------------------- ###"
 ### ---------------------------------------------------- ###
@@ -91,6 +85,8 @@ eval ${compilecmd}
 
 ### -------------- print running inputs ---------------- ###
 echo "### --------------- User Inputs -------------- ###"
+echo "CLEO_COMPILERNAME = ${CLEO_COMPILERNAME}"
+echo "CLEO_YACYAXTROOT = ${CLEO_YACYAXTROOT}"
 echo "executable = ${executable2run}"
 echo "config file for executable = ${configfile}"
 echo "### ------------------------------------------- ###"

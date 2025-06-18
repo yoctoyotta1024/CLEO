@@ -28,7 +28,8 @@ bashsrc=${SCRIPT_DIR}/src
 
 ### -------------------- check inputs ------------------ ###
 source ${bashsrc}/check_inputs.sh
-check_args_not_empty "${executable2run}" "${configfile}" "${CLEO_ENABLEYAC}"
+check_args_not_empty "${executable2run}" "${configfile}"
+check_args_not_empty "${CLEO_COMPILERNAME}" "${CLEO_YACYAXTROOT}"
 ### ---------------------------------------------------- ###
 
 ### ----------------- run executable --------------- ###
