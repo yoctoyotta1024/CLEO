@@ -23,7 +23,7 @@ path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_fromfile_irreg/
 build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
-enableyac=false
+enableyacpython=false
 executables="fromfile_irreg"
 
 pythonscript=${path2CLEO}/examples/fromfile_irreg/fromfile_irreg.py
@@ -35,6 +35,6 @@ script_args="${configfile}"
 
 ### ---------- build, compile and run example ---------- ###
 ${path2CLEO}/examples/run_example_levante.sh \
-  ${buildtype} ${path2CLEO} ${path2build} "${build_flags}" ${enableyac} \
+  ${buildtype} ${path2CLEO} ${path2build} "${build_flags}" ${enableyacpython} \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###
