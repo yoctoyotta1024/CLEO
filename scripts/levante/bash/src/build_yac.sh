@@ -8,13 +8,7 @@ cleo_yac_module_path="${CLEO_PATH2CLEO}/libs/coupldyn_yac/cmake"
 
 ### -------------------- check inputs ------------------ ###
 source ${bashsrc}/check_inputs.sh
-check_args_not_empty "${CLEO_PATH2CLEO}" "${CLEO_COMPILERNAME}" "${CLEO_CXX_COMPILER}" "${CLEO_ENABLEYAC}"
-
-if [[ "${CLEO_ENABLEYAC}" != "true" || "${CLEO_YACYAXTROOT}" == "" ]]
-then
-  echo "Bad inputs, YAC must be enabled and yacyaxtroot directory must be specified for YAC build"
-  exit 1
-fi
+check_args_not_empty "${CLEO_PATH2CLEO}" "${CLEO_COMPILERNAME}" "${CLEO_CXX_COMPILER}" "${CLEO_YACYAXTROOT}"
 
 if  [[ "${CLEO_COMPILERNAME}" == "gcc" &&
        "${CLEO_CXX_COMPILER}" != "/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpic++" ]]

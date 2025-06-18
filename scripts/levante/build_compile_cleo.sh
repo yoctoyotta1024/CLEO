@@ -26,13 +26,12 @@ buildtype=$1                                   # "serial", "threads", "openmp" o
 compilername=${2:-intel}                       # "intel" or "gcc"
 path2CLEO=${3:-${HOME}/CLEO}                   # must be absolute path
 path2build=${4:-${path2CLEO}/build}            # should be absolute path
-build_flags=${5:-"-DCLEO_COUPLED_DYNAMICS="" \
+yacyaxtroot=${5:-/work/bm1183/m300950/yacyaxt/intel} # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
+build_flags=${6:-"-DCLEO_COUPLED_DYNAMICS="" \
   -DCLEO_PYTHON=/work/bm1183/m300950/bin/envs/cleoenv/bin/python"} # CLEO_BUILD_FLAGS
-executables=${6:-"cleocoupledsdm"}             # list of executables to compile or "NONE"
-enabledebug=${7:-false}                        # == "true" or otherwise false
-enableyac=${8:-false}                          # == "true" or otherwise false
-yacyaxtroot=${9:-/work/bm1183/m300950/yacyaxt} # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
-make_clean=${10:-true}                         # == "true" or otherwise false
+executables=${7:-"cleocoupledsdm"}             # list of executables to compile or "NONE"
+enabledebug=${8:-false}                        # == "true" or otherwise false
+make_clean=${9:-true}                         # == "true" or otherwise false
 ### ---------------------------------------------------- ###
 
 ### ------------------ check arguments ----------------- ###
@@ -43,7 +42,7 @@ then
 fi
 source ${path2CLEO}/scripts/levante/bash/src/check_inputs.sh
 check_args_not_empty "${buildtype}" "${path2CLEO}" "${path2build}"
-check_args_not_empty "${compilername}" "${enabledebug}" "${enableyac}"
+check_args_not_empty "${compilername}" "${yacyaxtroot}" "${enabledebug}"
 ### ---------------------------------------------------- ###
 
 ### ----------------- export inputs -------------------- ###
@@ -52,13 +51,8 @@ export CLEO_COMPILERNAME=${compilername}
 export CLEO_PATH2CLEO=${path2CLEO}
 export CLEO_PATH2BUILD=${path2build}
 export CLEO_BUILD_FLAGS=${build_flags}
+export CLEO_YACYAXTROOT=${yacyaxtroot}
 export CLEO_ENABLEDEBUG=${enabledebug}
-export CLEO_ENABLEYAC=${enableyac}
-
-if [ ${CLEO_ENABLEYAC} == "true" ]
-then
-  export CLEO_YACYAXTROOT=${yacyaxtroot}
-fi
 ### ---------------------------------------------------- ###
 
 ### -------------------- check inputs ------------------ ###
@@ -75,9 +69,8 @@ echo "CLEO_COMPILERNAME = ${CLEO_COMPILERNAME}"
 echo "CLEO_PATH2CLEO = ${CLEO_PATH2CLEO}"
 echo "CLEO_PATH2BUILD = ${CLEO_PATH2BUILD}"
 echo "CLEO_BUILD_FLAGS = ${CLEO_BUILD_FLAGS}"
-echo "CLEO_ENABLEDEBUG = ${CLEO_ENABLEDEBUG}"
-echo "CLEO_ENABLEYAC = ${CLEO_ENABLEYAC}"
 echo "CLEO_YACYAXTROOT = ${CLEO_YACYAXTROOT}"
+echo "CLEO_ENABLEDEBUG = ${CLEO_ENABLEDEBUG}"
 echo "executables = ${executables}"
 echo "### ------------------------------------------- ###"
 ### ---------------------------------------------------- ###
