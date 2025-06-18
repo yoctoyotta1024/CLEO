@@ -82,11 +82,8 @@ eval ${cmd}
 ### --------- run model through Python script ---------- ###
 export CLEO_PATH2CLEO=${path2CLEO}
 export CLEO_BUILDTYPE=${buildtype}
-export CLEO_ENABLEYACPYTHON=${enableyacpython}
-if [ "${CLEO_ENABLEYACPYTHON}" == "true" ]
-then
-  export CLEO_YACYAXTROOT=${yacyaxtroot}
-fi
+export CLEO_COMPILERNAME=${compilername}
+export CLEO_YACYAXTROOT=${yacyaxtroot}
 source ${path2CLEO}/scripts/levante/bash/src/runtime_settings.sh ${stacksize_limit}
 
 # TODO(all): split python scripts away from running executable

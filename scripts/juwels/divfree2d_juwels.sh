@@ -30,8 +30,8 @@ pythonscript=${path2CLEO}/examples/divfreemotion/divfree2d.py
 configfile=${path2CLEO}/examples/divfreemotion/src/config/divfree2d_config.yaml
 script_args="${configfile}"
 
-enableyac=false
 yacyaxtroot=NA
+enableyacpython=false
 enabledebug=false
 make_clean=false
 stacksize_limit=204800 # ulimit -s [stacksize_limit] (kB)
@@ -45,7 +45,8 @@ echo "buildtype = ${buildtype}"
 echo "compilername = ${compilername}"
 echo "path2CLEO = ${path2CLEO}"
 echo "path2build = ${path2build}"
-echo "enableyac = ${enableyac}"
+echo "yacyaxtroot = ${yacyaxtroot}"
+echo "enableyacpython = ${enableyacpython}"
 echo "executables = ${executables}"
 echo "pythonscript = ${pythonscript}"
 echo "script_args = ${script_args}"
@@ -58,11 +59,10 @@ cmd="${path2CLEO}/scripts/juwels/build_compile_cleo.sh \
   ${compilername}
   ${path2CLEO}
   ${path2build}
+  ${yacyaxtroot}
   "\"${build_flags}\""
   "\"${executables}\""
   ${enabledebug}
-  ${enableyac}
-  ${yacyaxtroot}
   ${make_clean}"
 echo ${cmd}
 eval ${cmd}
@@ -90,7 +90,8 @@ fi
 ### --------- run model through Python script ---------- ###
 export CLEO_PATH2CLEO=${path2CLEO}
 export CLEO_BUILDTYPE=${buildtype}
-export CLEO_ENABLEYAC=${enableyac}
+export CLEO_COMPILERNAME=${compilername}
+export CLEO_YACYAXTROOT=${yacyaxtroot}
 source ${path2CLEO}/scripts/juwels/bash/src/runtime_settings.sh ${stacksize_limit}
 
 # TODO(all): split python scripts away from running executable

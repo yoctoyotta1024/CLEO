@@ -8,20 +8,26 @@ stacksize_limit=${1} # kB
 
 ### -------------------- check inputs ------------------ ###
 source ${bashsrc}/check_inputs.sh
-check_args_not_empty "${stacksize_limit}" "${CLEO_BUILDTYPE}" "${CLEO_ENABLEYAC}"
+check_args_not_empty "${stacksize_limit}" "${CLEO_BUILDTYPE}"
+check_args_not_empty "${CLEO_COMPILERNAME}" "${CLEO_YACYAXTROOT}"
 ### ---------------------------------------------------- ###
 
 ### --------------- YAC runtime settings --------------- ###
-if [ "${CLEO_ENABLEYAC}" == "true" ]
+source ${bashsrc}/levante_packages.sh
+if [ "${CLEO_COMPILERNAME}" == "gcc" ]
 then
-  check_args_not_empty "${CLEO_YACYAXTROOT}"
-  source ${bashsrc}/levante_packages.sh
-
   spack load ${levante_gcc_openmpi}
-
-  export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${levante_gcc_fyamllib}
-  export PYTHONPATH=${PYTHONPATH}:${CLEO_YACYAXTROOT}/yac/python # path to YAC python bindings
+  fyamllib=${levante_gcc_fyamllib}
+elif [ "${CLEO_COMPILERNAME}" == "intel" ]
+then
+  spack load ${levante_intel_openmpi}
+  fyamllib=${levante_intel_fyamllib}
+else
+  echo "Bad inputs, YAC only compatible with "intel" or "gcc" compiler names"
+  exit 1
 fi
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${fyamllib}
+export PYTHONPATH=${PYTHONPATH}:${CLEO_YACYAXTROOT}/yac/python # path to YAC python bindings
 ### ---------------------------------------------------- ###
 
 
