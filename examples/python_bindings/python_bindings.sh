@@ -23,7 +23,7 @@ path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_pybind/
 build_flags="-DCLEO_COUPLED_DYNAMICS=numpy -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_PYTHON=/work/bm1183/m300950/bin/envs/cleoenv/bin/python"
-enableyac=false
+enableyacpython=false
 executables="pycleo"
 
 pythonscript=${path2CLEO}/examples/python_bindings/python_bindings.py
@@ -35,6 +35,6 @@ script_args="${configfile} --do_inputfiles=TRUE --do_run_executable=TRUE --do_pl
 
 ### ---------- build, compile and run example ---------- ###
 ${path2CLEO}/examples/run_example_levante.sh \
-  ${buildtype} ${path2CLEO} ${path2build} "${build_flags}" ${enableyac} \
+  ${buildtype} ${path2CLEO} ${path2build} "${build_flags}" ${enableyacpython} \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###

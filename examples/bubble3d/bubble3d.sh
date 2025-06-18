@@ -25,7 +25,7 @@ path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_bubble3d/
 build_flags="-DCLEO_COUPLED_DYNAMICS=yac -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
-enableyac=true
+enableyacpython=true
 executables="bubble3d"
 
 pythonscript=${path2CLEO}/examples/bubble3d/bubble3d.py
@@ -37,6 +37,6 @@ script_args="${configfile}"
 
 ### ---------- build, compile and run example ---------- ###
 ${path2CLEO}/examples/run_example_levante.sh \
-  ${buildtype} ${path2CLEO} ${path2build} "${build_flags}" ${enableyac} \
+  ${buildtype} ${path2CLEO} ${path2build} "${build_flags}" ${enableyacpython} \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###
