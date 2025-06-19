@@ -45,13 +45,7 @@ init_communicator::init_communicator(const Config &config) {
     std::cout << "yac is not present" << yac_present;
     MPI_Init(NULL, NULL);
     comm = MPI_COMM_WORLD;
-    int comm_size;
     MPI_Comm_size(comm, &comm_size);
-    if (comm_size > 1) {
-      std::cout << "ERROR: The current example is not prepared"
-                << " to be run with more than one MPI process" << std::endl;
-      MPI_Abort(comm, 1);
-    }
     yac_present = false;
   }
 };
@@ -66,7 +60,7 @@ init_communicator::~init_communicator() {
 };
 
 MPI_Comm init_communicator::get_communicator() {
-  if ( init_communicator::comm == MPI_COMM_NULL ) {
+  if (init_communicator::comm == MPI_COMM_NULL) {
     // call MPI_Abort and print msg
   }
   return comm;
@@ -79,10 +73,6 @@ int init_communicator::get_yac_comp_id() {
   return init_communicator::yac_comp_id;
 };
 
-int init_communicator::get_comm_size() {
-  return init_communicator::comm_size;
-};
+int init_communicator::get_comm_size() { return init_communicator::comm_size; };
 
-int init_communicator::get_comm_rank() {
-  return my_rank;
-};
+int init_communicator::get_comm_rank() { return my_rank; };
