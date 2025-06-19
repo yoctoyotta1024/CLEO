@@ -12,13 +12,10 @@ set(LIB_BINARY_DIR ${CMAKE_BINARY_DIR}/lib)
 
 # Add executables and create library target
 set(SOURCES
-"copyfiles2txt.cpp"
 "gbx_bounds_from_binary.cpp"
 "init_all_supers_from_binary.cpp"
 "init_supers_from_binary.cpp"
-"optional_config_params.cpp"
 "readbinary.cpp"
-"required_config_params.cpp"
 "timesteps.cpp"
 )
 # must use STATIC (not(!) SHARED) lib for linking to executable if build is CUDA enabled with Kokkos
@@ -29,7 +26,9 @@ add_library("${LIBNAME}" STATIC ${SOURCES})
 target_include_directories(${LIBNAME} PRIVATE "${CLEO_SOURCE_DIR}/libs" ${MPI_INCLUDE_PATH}) # CLEO libs directory
 
 # Link libraries to target library
-target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos yaml-cpp::yaml-cpp MPI::MPI_CXX)
+set(LINKLIBS configuration)
+target_link_libraries(${LIBNAME} PUBLIC ${LINKLIBS})
+target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos MPI::MPI_CXX)
 
 # set specific C++ compiler options for target (optional)
 #target_compile_options(${LIBNAME} PRIVATE)
