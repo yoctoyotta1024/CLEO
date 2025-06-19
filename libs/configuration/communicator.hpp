@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: communicator.hpp
- * Project: initialise
+ * Project: configuration
  * Created Date: Tuesday 06 May 2025
  * Author: Lakshmi Aparna Devulapalli (LAD)
  * Additional Contributors: Clara Bayley (CB)
@@ -20,8 +20,8 @@
  * parameters read from a config file.
  */
 
-#ifndef LIBS_INITIALISE_COMMUNICATOR_HPP_
-#define LIBS_INITIALISE_COMMUNICATOR_HPP_
+#ifndef LIBS_CONFIGURATION_COMMUNICATOR_HPP_
+#define LIBS_CONFIGURATION_COMMUNICATOR_HPP_
 
 #include <mpi.h>
 
@@ -31,7 +31,7 @@
 #include <string>
 #include <vector>
 
-#include "initialise/config.hpp"
+#include "configuration/config.hpp"
 
 class init_communicator {
  private:
@@ -46,4 +46,4 @@ class init_communicator {
   explicit init_communicator(const Config &config);
 };
 
-#endif  // LIBS_INITIALISE_COMMUNICATOR_HPP_
+#endif  // LIBS_CONFIGURATION_COMMUNICATOR_HPP_
