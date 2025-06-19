@@ -20,17 +20,17 @@ set(SOURCES
 add_library("${LIBNAME}" STATIC ${SOURCES})
 
 # Add directories for target library
-#target_include_directories("${LIBNAME}"" PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
-target_include_directories("${LIBNAME}" PRIVATE "${CLEO_SOURCE_DIR}/libs" ${MPI_INCLUDE_PATH})
+#target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
+target_include_directories(${LIBNAME} PRIVATE "${CLEO_SOURCE_DIR}/libs" ${MPI_INCLUDE_PATH}) # CLEO libs directory
 
 # Link libraries to target library
-target_link_libraries("${LIBNAME}" PUBLIC Kokkos::kokkos yaml-cpp::yaml-cpp MPI::MPI_CXX)
+target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos yaml-cpp::yaml-cpp MPI::MPI_CXX)
 
 # set specific C++ compiler options for target (optional)
-#target_compile_options("${LIBNAME}" PRIVATE)
+#target_compile_options(${LIBNAME} PRIVATE)
 
 # set C++ properties for target
-set_target_properties("${LIBNAME}" PROPERTIES
+set_target_properties(${LIBNAME} PROPERTIES
   LIBRARY_OUTPUT_DIRECTORY ${LIB_BINARY_DIR}
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
