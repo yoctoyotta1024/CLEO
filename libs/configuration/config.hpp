@@ -4,12 +4,12 @@
  *
  * ----- CLEO -----
  * File: config.hpp
- * Project: initialise
+ * Project: configuration
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Wednesday 28th May 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -20,17 +20,17 @@
  * in reading values from config files
  */
 
-#ifndef LIBS_INITIALISE_CONFIG_HPP_
-#define LIBS_INITIALISE_CONFIG_HPP_
+#ifndef LIBS_CONFIGURATION_CONFIG_HPP_
+#define LIBS_CONFIGURATION_CONFIG_HPP_
 
 #include <filesystem>
 #include <iostream>
 #include <string>
 #include <vector>
 
-#include "initialise/copyfiles2txt.hpp"
-#include "initialise/optional_config_params.hpp"
-#include "initialise/required_config_params.hpp"
+#include "configuration/copyfiles2txt.hpp"
+#include "configuration/optional_config_params.hpp"
+#include "configuration/required_config_params.hpp"
 
 /**
  * @brief Struct storing configuration parameters read from a YAML file.
@@ -107,4 +107,4 @@ struct Config {
   }
 };
 
-#endif  // LIBS_INITIALISE_CONFIG_HPP_
+#endif  // LIBS_CONFIGURATION_CONFIG_HPP_
