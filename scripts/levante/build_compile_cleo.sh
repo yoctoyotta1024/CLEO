@@ -23,13 +23,13 @@ spack unload --all
 ### ----- your build configuration and executables ----- ###
 ### ---------------------------------------------------- ###
 buildtype=$1                                   # "serial", "threads", "openmp" or "cuda"
-compilername=${2:-intel}                       # "intel" or "gcc"
+compilername=${2:-gcc}                       # "intel" or "gcc"
 path2CLEO=${3:-${HOME}/CLEO}                   # must be absolute path
 path2build=${4:-${path2CLEO}/build}            # should be absolute path
 yacyaxtroot=${5:-/work/bm1183/m300950/yacyaxt/intel} # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
-build_flags=${6:-"-DCLEO_COUPLED_DYNAMICS="" \
+build_flags=${6:-"-DCLEO_COUPLED_DYNAMICS="yac" \
   -DCLEO_PYTHON=/work/bm1183/m300950/bin/envs/cleoenv/bin/python"} # CLEO_BUILD_FLAGS
-executables=${7:-"cleocoupledsdm"}             # list of executables to compile or "NONE"
+executables=${7:-"bubble3d"}             # list of executables to compile or "NONE"
 enabledebug=${8:-false}                        # == "true" or otherwise false
 make_clean=${9:-true}                         # == "true" or otherwise false
 ### ---------------------------------------------------- ###
