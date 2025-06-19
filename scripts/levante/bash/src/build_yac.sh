@@ -15,19 +15,25 @@ if  [[ "${CLEO_COMPILERNAME}" == "gcc" &&
 then
   echo "YAC currently requires gcc/11.2.0-gcc-11.2.0 compilers"
   exit 1
-elif  [ "${CLEO_COMPILERNAME}" == "intel" ]
+elif  [[ "${CLEO_COMPILERNAME}" == "intel" &&
+       "${CLEO_CXX_COMPILER}" != "/sw/spack-levante/openmpi-4.1.2-yfwe6t/bin/mpic++" ]]
 then
-  echo "YAC build currently not compatible with intel compiler" # TODO(CB): fix this incompatibility
+  echo "YAC currently requires intel-oneapi-compilers/2023.2.1-gcc-11.2.0 compilers"
   exit 1
 fi
-
-
 ### ---------------------------------------------------- ###
 
 ### ------------------ choose YAC build ---------------- ###
 source ${bashsrc}/levante_packages.sh
-module load ${levante_gcc_netcdf_yac}
-spack load ${levante_gcc_openblas_yac}
+if  [ "${CLEO_COMPILERNAME}" == "gcc" ]
+then
+  module load ${levante_gcc_netcdf_yac}
+  spack load ${levante_gcc_openblas_yac}
+elif  [ "${CLEO_COMPILERNAME}" == "intel" ]
+then
+  module load ${levante_intel_netcdf_yac}
+  spack load ${levante_intel_openblas_yac}
+fi
 export CLEO_YAC_FLAGS="-DCLEO_YAC_MODULE_PATH="${cleo_yac_module_path}" \
   -DCLEO_YAXT_ROOT=${CLEO_YACYAXTROOT}/yaxt \
   -DCLEO_YAC_ROOT=${CLEO_YACYAXTROOT}/yac"
