@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Wilton Jaciel Loch
  * -----
- * Last Modified: Wednesday 28th May 2025
+ * Last Modified: Thursday 19th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -42,7 +42,6 @@
 #include <utility>
 #include <vector>
 
-#include "cartesiandomain/cartesian_decomposition.hpp"  // TODO(CB): remove dependency on cartesiandomain (also in zarr's CMakeLists)
 #include "configuration/communicator.hpp"
 #include "zarr/xarray_zarr_array.hpp"
 #include "zarr/zarr_group.hpp"
@@ -56,15 +55,16 @@
  * compatible with Xarray and NetCDF.
  *
  * @tparam Store The type of the store object used by the dataset.
+ * @tparam Decomposition The type handling CLEO's MPI domain decomposition.
  */
-template <typename Store>
+template <typename Store, typename Decomposition>
 class Dataset {
  private:
   /**< Reference to the zarr group object. */
   ZarrGroup<Store> group;
   /**< map from name of each dimension in dataset to their size */
   std::unordered_map<std::string, size_t> datasetdims;
-  CartesianDecomposition decomposition;
+  Decomposition decomposition;
   std::shared_ptr<std::vector<unsigned int>> global_superdroplet_ordering;
 
   /**< map from name of each dimension in dataset to their size */
@@ -271,11 +271,9 @@ class Dataset {
   /**
    * @brief Sets the decomposition maps for correctly writing data out
    *
-   * @param decomposition A CartesianDecomposition instance with the domain decomposition
+   * @param decomposition A Decomposition instance for CLEO's domain decomposition
    */
-  void set_decomposition(CartesianDecomposition decomposition) {
-    this->decomposition = decomposition;
-  }
+  void set_decomposition(Decomposition decomposition) { this->decomposition = decomposition; }
 
   /**
    * @brief Sets the maximum number of superdroplets for data allocation, comes from the config file
