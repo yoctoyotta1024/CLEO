@@ -31,7 +31,6 @@ configfile=${path2CLEO}/examples/divfreemotion/src/config/divfree2d_config.yaml
 script_args="${configfile}"
 
 yacyaxtroot=NA
-enableyacpython=false
 enabledebug=false
 make_clean=false
 stacksize_limit=204800 # ulimit -s [stacksize_limit] (kB)
@@ -46,7 +45,6 @@ echo "compilername = ${compilername}"
 echo "path2CLEO = ${path2CLEO}"
 echo "path2build = ${path2build}"
 echo "yacyaxtroot = ${yacyaxtroot}"
-echo "enableyacpython = ${enableyacpython}"
 echo "executables = ${executables}"
 echo "pythonscript = ${pythonscript}"
 echo "script_args = ${script_args}"

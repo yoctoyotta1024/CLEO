@@ -23,7 +23,6 @@ path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_colls0d/${buildtype}/
 build_flags="-DCLEO_COUPLED_DYNAMICS=null -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
-enableyacpython=false
 executables="longcolls lowlistcolls szakallurbichcolls testikstraubcolls"
 
 pythonscript=${path2CLEO}/examples/boxmodelcollisions/breakup.py
@@ -35,6 +34,6 @@ script_args="${configfile} long lowlist szakallurbich testikstraub"
 
 ### ---------- build, compile and run example ---------- ###
 ${path2CLEO}/examples/run_example_levante.sh \
-  ${buildtype} ${path2CLEO} ${path2build} "${build_flags}" ${enableyacpython} \
+  ${buildtype} ${path2CLEO} ${path2build} "${build_flags}" \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###
