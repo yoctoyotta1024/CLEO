@@ -46,10 +46,10 @@ target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos yaml-cpp::yaml-cpp MPI::M
 target_link_libraries(${LIBNAME} PRIVATE YAC::YAC)
 
 # set specific C++ compiler options for target (optional)
-#target_compile_options(${LIBNAME} PRIVATE)
+#target_compile_options("${LIBNAME}" PRIVATE)
 
 # set C++ properties for target
-set_target_properties(${LIBNAME} PROPERTIES
+set_target_properties("${LIBNAME}" PROPERTIES
   LIBRARY_OUTPUT_DIRECTORY ${LIB_BINARY_DIR}
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
