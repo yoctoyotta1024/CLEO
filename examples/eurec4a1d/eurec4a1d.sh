@@ -25,7 +25,6 @@ path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_eurec4a1d/
 build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
-enableyacpython=false
 executables="eurec4a1d"
 
 configfile=${path2CLEO}/examples/eurec4a1d/src/config/eurec4a1d_config.yaml
@@ -37,6 +36,6 @@ script_args=""
 
 ### ---------- build, compile and run example ---------- ###
 ${path2CLEO}/examples/run_example_levante.sh \
-  ${buildtype} ${path2CLEO} ${path2build} "${build_flags}" ${enableyacpython} \
+  ${buildtype} ${path2CLEO} ${path2build} "${build_flags}" \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###
