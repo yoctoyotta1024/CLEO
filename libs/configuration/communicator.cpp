@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: communicator.cpp
- * Project: initialise
+ * Project: configuration
  * Created Date: Tuesday 06 May 2025
  * Author: Lakshmi Aparna Devulapalli (LAD)
  * Additional Contributors: Clara Bayley (CB)
@@ -20,7 +20,7 @@
  * parameters read from a config file.
  */
 
-#include "initialise/communicator.hpp"
+#include "configuration/communicator.hpp"
 
 init_communicator::init_communicator(const Config &config) {
   yac_present = std::isnan(config.get_yac_dynamics().lower_longitude);
