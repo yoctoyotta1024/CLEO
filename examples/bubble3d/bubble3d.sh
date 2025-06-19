@@ -2,7 +2,7 @@
 #SBATCH --job-name=bubble3d
 #SBATCH --partition=compute
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
+#SBATCH --ntasks-per-node=2
 #SBATCH --cpus-per-task=256
 #SBATCH --mem=10G
 #SBATCH --time=00:05:00
