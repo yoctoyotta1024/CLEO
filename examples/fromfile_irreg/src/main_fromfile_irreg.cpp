@@ -152,7 +152,7 @@ int main(int argc, char *argv[]) {
   const Config config(config_filename);
 
   /* Initialize Communicator here */
-  init_communicator init_comm(config);
+  init_communicator init_comm(argc, argv, config);
 
   /* Initialise Kokkos parallel environment */
   Kokkos::initialize(config.get_kokkos_initialization_settings());
