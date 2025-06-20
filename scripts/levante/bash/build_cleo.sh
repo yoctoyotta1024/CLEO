@@ -25,7 +25,7 @@ bashsrc=${SCRIPT_DIR}/src
 ### -------------------- check inputs ------------------ ###
 source ${bashsrc}/check_inputs.sh
 check_args_not_empty "${CLEO_BUILDTYPE}" "${CLEO_COMPILERNAME}" "${CLEO_ENABLEDEBUG}" \
-  "${CLEO_PATH2CLEO}" "${CLEO_PATH2BUILD}" "${CLEO_ENABLEYAC}"
+  "${CLEO_PATH2CLEO}" "${CLEO_PATH2BUILD}" "${CLEO_YACYAXTROOT}"
 
 check_source_and_build_paths
 check_buildtype
@@ -35,6 +35,7 @@ check_yac
 
 ### -------------- prepare to build CLEO --------------- ###
 source ${bashsrc}/build_basic.sh
+source ${bashsrc}/build_yac.sh
 
 if [[ "${CLEO_BUILDTYPE}" == "openmp" ]];
 then
@@ -46,13 +47,6 @@ elif [[ "${CLEO_BUILDTYPE}" == "cuda" ]];
 then
   source ${bashsrc}/build_openmp.sh
   source ${bashsrc}/build_cuda.sh
-fi
-
-if [ ${CLEO_ENABLEYAC} == "true" ]
-then
-  source ${bashsrc}/build_yac.sh
-else
-  export CLEO_YAC_FLAGS=""
 fi
 ### ---------------------------------------------------- ###
 
@@ -72,8 +66,6 @@ echo "CLEO_KOKKOS_HOST_FLAGS: ${CLEO_KOKKOS_HOST_FLAGS}"
 echo "CLEO_KOKKOS_DEVICE_FLAGS: ${CLEO_KOKKOS_DEVICE_FLAGS}"
 
 echo "CLEO_BUILD_FLAGS: ${CLEO_BUILD_FLAGS}"
-
-echo "CLEO_ENABLEYAC: ${CLEO_ENABLEYAC}"
 echo "CLEO_YACYAXTROOT: ${CLEO_YACYAXTROOT}"
 echo "CLEO_YAC_FLAGS: ${CLEO_YAC_FLAGS}"
 echo "### ------------------------------------------- ###"

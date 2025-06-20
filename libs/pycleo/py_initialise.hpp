@@ -16,7 +16,7 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Python bindings to various different CLEO initialisation/configuration functions and structures
+ * Python bindings to various different CLEO initialisation functions and structures
  */
 
 #ifndef LIBS_PYCLEO_PY_INITIALISE_HPP_
@@ -25,22 +25,18 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl/filesystem.h>
 
-#include "initialise/config.hpp"
+#include "configuration/config.hpp"
 #include "initialise/init_supers_from_binary.hpp"
 #include "initialise/initgbxsnull.hpp"
-#include "initialise/optional_config_params.hpp"
 #include "initialise/timesteps.hpp"
 
 namespace py = pybind11;
-
-void pyConfig(py::module &m);
 
 void pyTimesteps(py::module &m);
 void pycreate_timesteps(py::module &m);
 void pyrealtime2step(py::module &m);
 
 void pyInitSupersFromBinary(py::module &m);
-void pyInitSupersFromBinaryParams(py::module &m);
 
 void pyInitGbxsNull(py::module &m);
 

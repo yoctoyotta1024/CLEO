@@ -22,7 +22,7 @@ bashsrc=${SCRIPT_DIR}/src
 ### -------------------- check inputs ------------------ ###
 source ${bashsrc}/check_inputs.sh
 check_args_not_empty "${CLEO_BUILDTYPE}" "${CLEO_COMPILERNAME}" "${CLEO_ENABLEDEBUG}" \
-  "${CLEO_PATH2CLEO}" "${CLEO_PATH2BUILD}" "${CLEO_ENABLEYAC}"
+  "${CLEO_PATH2CLEO}" "${CLEO_PATH2BUILD}" "${CLEO_YACYAXTROOT}"
 
 check_source_and_build_paths
 check_buildtype
@@ -45,13 +45,9 @@ then
   exit 1
 fi
 
-if [ ${CLEO_ENABLEYAC} == "true" ]
-then
-  echo "Bad inputs, YAC build enabled but building CLEO with YAC on JUWELS is not currently supported"
-  exit 1
-else
-  export CLEO_YAC_FLAGS=""
-fi
+echo "ERROR: CLEO requires YAC build but no working "${bashsrc}/build_yac.sh" found for build on JUWELS"
+exit 1
+source ${bashsrc}/build_yac.sh  # TODO(ALL): make build_yac.sh script for juwels
 ### ---------------------------------------------------- ###
 
 ### ---------------- build CLEO with cmake ------------- ###
@@ -71,7 +67,6 @@ echo "CLEO_KOKKOS_DEVICE_FLAGS: ${CLEO_KOKKOS_DEVICE_FLAGS}"
 
 echo "CLEO_BUILD_FLAGS: ${CLEO_BUILD_FLAGS}"
 
-echo "CLEO_ENABLEYAC: ${CLEO_ENABLEYAC}"
 echo "CLEO_YACYAXTROOT: ${CLEO_YACYAXTROOT}"
 echo "CLEO_YAC_FLAGS: ${CLEO_YAC_FLAGS}"
 echo "### ------------------------------------------- ###"

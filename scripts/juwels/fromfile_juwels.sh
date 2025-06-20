@@ -30,7 +30,6 @@ pythonscript=${path2CLEO}/examples/fromfile/fromfile.py
 configfile=${path2CLEO}/examples/fromfile/src/config/fromfile_config.yaml
 script_args="${configfile} --do_inputfiles=TRUE --do_run_executable=TRUE --do_plot_results=TRUE --ntasks=4"
 
-enableyac=false
 yacyaxtroot=NA
 enabledebug=false
 make_clean=false
@@ -45,7 +44,7 @@ echo "buildtype = ${buildtype}"
 echo "compilername = ${compilername}"
 echo "path2CLEO = ${path2CLEO}"
 echo "path2build = ${path2build}"
-echo "enableyac = ${enableyac}"
+echo "yacyaxtroot = ${yacyaxtroot}"
 echo "executables = ${executables}"
 echo "pythonscript = ${pythonscript}"
 echo "script_args = ${script_args}"
@@ -58,11 +57,10 @@ cmd="${path2CLEO}/scripts/juwels/build_compile_cleo.sh \
   ${compilername}
   ${path2CLEO}
   ${path2build}
+  ${yacyaxtroot}
   "\"${build_flags}\""
   "\"${executables}\""
   ${enabledebug}
-  ${enableyac}
-  ${yacyaxtroot}
   ${make_clean}"
 echo ${cmd}
 eval ${cmd}
@@ -92,7 +90,8 @@ module load GSL netCDF/4.9.2
 
 export CLEO_PATH2CLEO=${path2CLEO}
 export CLEO_BUILDTYPE=${buildtype}
-export CLEO_ENABLEYAC=${enableyac}
+export CLEO_COMPILERNAME=${compilername}
+export CLEO_YACYAXTROOT=${yacyaxtroot}
 source ${path2CLEO}/scripts/juwels/bash/src/runtime_settings.sh ${stacksize_limit}
 
 # TODO(all): split python scripts away from running executable

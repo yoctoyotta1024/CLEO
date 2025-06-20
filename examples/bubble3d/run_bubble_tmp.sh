@@ -15,7 +15,7 @@ source /etc/profile
 
 action=$1
 path2CLEO=${2:-${HOME}/CLEO}
-path2yac=${3:-/work/bm1183/m300950/yacyaxt}
+path2yac=${3:-/work/bm1183/m300950/yacyaxt/gcc}
 path2build=${4:-${HOME}/CLEO/build_bubble3d}
 python=${5:-/work/bm1183/m300950/bin/envs/cleoenv/bin/python}
 

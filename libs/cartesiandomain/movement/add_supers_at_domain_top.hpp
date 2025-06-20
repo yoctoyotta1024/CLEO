@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 24th Febuary 2025
+ * Last Modified: Wednesday 28th May 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -40,8 +40,8 @@
 #include "../../kokkosaliases.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/domainboundaries.hpp"
+#include "configuration/optional_config_params.hpp"
 #include "gridboxes/supersindomain.hpp"
-#include "initialise/optional_config_params.hpp"
 #include "superdrops/superdrop.hpp"
 
 namespace KCS = KokkosCleoSettings;

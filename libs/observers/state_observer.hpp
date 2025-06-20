@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -38,7 +38,6 @@
 #include "observers/thermo_observer.hpp"
 #include "observers/windvel_observer.hpp"
 #include "observers/write_to_dataset_observer.hpp"
-#include "zarr/collective_dataset.hpp"
 
 /**
  * @brief Constructs an observer which writes the state of a gridbox (thermodynamics and
@@ -48,20 +47,20 @@
  * This function collects thermodynamic properties and wind velocities from the dataset and combines
  * them into a single collection of state data.
  *
- * @tparam Store Type of store for dataset.
+ * @tparam Dataset Type of dataset
  * @param interval Observation timestep.
  * @param dataset Dataset to write time data to.
  * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
  * @param ngbxs The number of gridboxes.
  * @return Observer An observer instance for writing the state data.
  */
-template <typename Store>
-inline Observer auto StateObserver(const unsigned int interval, const Dataset<Store> &dataset,
+template <typename Dataset>
+inline Observer auto StateObserver(const unsigned int interval, const Dataset &dataset,
                                    const size_t maxchunk, const size_t ngbxs) {
-  const CollectDataForDataset<Store> auto thermo = CollectThermo(dataset, maxchunk, ngbxs);
-  const CollectDataForDataset<Store> auto windvel = CollectWindVel(dataset, maxchunk, ngbxs);
+  const CollectDataForDataset<Dataset> auto thermo = CollectThermo(dataset, maxchunk, ngbxs);
+  const CollectDataForDataset<Dataset> auto windvel = CollectWindVel(dataset, maxchunk, ngbxs);
 
-  const CollectDataForDataset<Store> auto collect_data = windvel >> thermo;
+  const CollectDataForDataset<Dataset> auto collect_data = windvel >> thermo;
 
   return WriteToDatasetObserver(interval, dataset, collect_data);
 }

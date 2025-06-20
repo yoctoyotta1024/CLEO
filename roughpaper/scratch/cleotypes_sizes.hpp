@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -65,7 +65,7 @@ struct SuperdropAttrs2 {
 };
 
 void print_type_sizes(int argc, char *argv[]) {
-  Kokkos::initialize(config.get_kokkos_initialization_settings());
+  Kokkos::initialize();
   {
     std::cout << "GBx: " << sizeof(Gridbox) << "\n";
     std::cout << "re-ordered GBx: " << sizeof(Gridbox2) << "\n";
