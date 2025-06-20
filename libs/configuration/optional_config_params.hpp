@@ -4,12 +4,12 @@
  *
  * ----- CLEO -----
  * File: optional_config_params.hpp
- * Project: initialise
+ * Project: configuration
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 18th June 2024
+ * Last Modified: Wednesday 28th May 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -20,8 +20,8 @@
  * parameters read from a config file.
  */
 
-#ifndef LIBS_INITIALISE_OPTIONAL_CONFIG_PARAMS_HPP_
-#define LIBS_INITIALISE_OPTIONAL_CONFIG_PARAMS_HPP_
+#ifndef LIBS_CONFIGURATION_OPTIONAL_CONFIG_PARAMS_HPP_
+#define LIBS_CONFIGURATION_OPTIONAL_CONFIG_PARAMS_HPP_
 
 #include <yaml-cpp/yaml.h>
 
@@ -155,4 +155,4 @@ struct OptionalConfigParams {
   } addsupersatdomaintop;
 };
 
-#endif  // LIBS_INITIALISE_OPTIONAL_CONFIG_PARAMS_HPP_
+#endif  // LIBS_CONFIGURATION_OPTIONAL_CONFIG_PARAMS_HPP_

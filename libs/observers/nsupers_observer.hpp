@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -37,7 +37,6 @@
 #include "observers/collect_data_for_dataset.hpp"
 #include "observers/generic_collect_data.hpp"
 #include "observers/write_to_dataset_observer.hpp"
-#include "zarr/collective_dataset.hpp"
 
 /**
  * @brief Functor operator to perform a copy of the number of superdroplets in each gridbox
@@ -63,19 +62,21 @@ struct NsupersFunc {
 };
 
 /**
- * @brief Constructs type sastifying the CollectDataForDataset concept for a given Store (using an
+ * @brief Constructs type sastifying the CollectDataForDataset concept for a given Dataset (using an
  * instance of the GenericCollectData class) which writes the number of superdroplets in each
  * gridbox "nsupers" during the functor call.
  *
+ * @tparam Dataset Type of dataset
  * @param dataset The dataset to write nsupers to.
  * @param maxchunk The maximum chunk size (number of elements).
  * @param ngbxs The number of gridboxes.
- * @return CollectDataForDataset<Store> An instance satisfying the CollectDataForDataset concept for
- * collecting the number of superdroplets in each gridbox.
+ * @return CollectDataForDataset<Dataset> An instance satisfying the CollectDataForDataset concept
+ * for collecting the number of superdroplets in each gridbox.
  */
-template <typename Store>
-inline CollectDataForDataset<Store> auto CollectNsupers(const Dataset<Store> &dataset,
-                                                        const size_t maxchunk, const size_t ngbxs) {
+template <typename Dataset>
+inline CollectDataForDataset<Dataset> auto CollectNsupers(const Dataset &dataset,
+                                                          const size_t maxchunk,
+                                                          const size_t ngbxs) {
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
   const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
   const auto xzarr =
@@ -88,15 +89,14 @@ inline CollectDataForDataset<Store> auto CollectNsupers(const Dataset<Store> &da
  * at start of each observation timestep to an array with a constant observation timestep
  * "interval".
  *
- * @tparam Store Type of store for dataset.
  * @param interval Observation timestep.
  * @param dataset Dataset to write time data to.
  * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
  * @param ngbxs The number of gridboxes.
  * @return Observer An observer instance for writing the number of superdroplets.
  */
-template <typename Store>
-inline Observer auto NsupersObserver(const unsigned int interval, const Dataset<Store> &dataset,
+template <typename Dataset>
+inline Observer auto NsupersObserver(const unsigned int interval, const Dataset &dataset,
                                      const size_t maxchunk, const size_t ngbxs) {
   return WriteToDatasetObserver(interval, dataset, CollectNsupers(dataset, maxchunk, ngbxs));
 }

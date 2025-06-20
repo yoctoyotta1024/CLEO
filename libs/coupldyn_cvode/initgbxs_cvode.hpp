@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Wednesday 28th May 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,8 +28,8 @@
 #include <vector>
 
 #include "../cleoconstants.hpp"
+#include "configuration/optional_config_params.hpp"
 #include "coupldyn_cvode/differentialfuncs.hpp"
-#include "initialise/optional_config_params.hpp"
 
 namespace dlc = dimless_constants;
 

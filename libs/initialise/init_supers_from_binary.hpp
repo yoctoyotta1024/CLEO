@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Wednesday 28th May 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -32,9 +32,9 @@
 
 #include "../cleoconstants.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
+#include "configuration/optional_config_params.hpp"
 #include "initialise/init_all_supers_from_binary.hpp"
 #include "initialise/initialconditions.hpp"
-#include "initialise/optional_config_params.hpp"
 #include "initialise/readbinary.hpp"
 #include "superdrops/superdrop.hpp"
 

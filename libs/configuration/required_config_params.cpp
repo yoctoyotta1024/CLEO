@@ -4,12 +4,12 @@
  *
  * ----- CLEO -----
  * File: required_config_params.cpp
- * Project: initialise
+ * Project: configuration
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 19th April 2024
+ * Last Modified: Wednesday 28th May 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,7 +19,7 @@
  * Functions involved in reading required configuration parameters from a config file.
  */
 
-#include "initialise/required_config_params.hpp"
+#include "configuration/required_config_params.hpp"
 
 /* read configuration file given by config_filename to set members of required configuration */
 RequiredConfigParams::RequiredConfigParams(const std::filesystem::path config_filename) {

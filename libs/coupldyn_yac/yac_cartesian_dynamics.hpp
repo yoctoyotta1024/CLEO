@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 24th August 2024
+ * Last Modified: Wednesday 28th May 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -34,7 +34,7 @@
 #include <utility>
 #include <vector>
 
-#include "initialise/config.hpp"
+#include "configuration/config.hpp"
 
 /* contains 1-D vector for each (thermo)dynamic
 variable which is ordered by gridbox at every timestep

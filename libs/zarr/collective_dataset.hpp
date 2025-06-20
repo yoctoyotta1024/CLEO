@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Wilton Jaciel Loch
  * -----
- * Last Modified: Friday 02nd August 2024
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,12 +24,6 @@
 #ifndef LIBS_ZARR_COLLECTIVE_DATASET_HPP_
 #define LIBS_ZARR_COLLECTIVE_DATASET_HPP_
 
-// This should be only a temporary solution so that not all of the examples must
-// be changed to use MPI-enabled functionality
-// For this to work dataset.hpp must be included before any other hpp that uses
-// collective_dataset.hpp
-#ifndef LIBS_ZARR_DATASET_HPP_
-
 #include <mpi.h>
 
 #include <Kokkos_Core.hpp>
@@ -42,7 +36,6 @@
 #include <utility>
 #include <vector>
 
-#include "cartesiandomain/cartesian_decomposition.hpp"
 #include "zarr/xarray_zarr_array.hpp"
 #include "zarr/zarr_group.hpp"
 
@@ -56,14 +49,14 @@
  *
  * @tparam Store The type of the store object used by the dataset.
  */
-template <typename Store>
-class Dataset {
+template <typename Store, typename Decomposition>
+class CollectiveDataset {
  private:
   /**< Reference to the zarr group object. */
   ZarrGroup<Store> group;
   /**< map from name of each dimension in dataset to their size */
   std::unordered_map<std::string, size_t> datasetdims;
-  CartesianDecomposition decomposition;
+  Decomposition decomposition;
   std::shared_ptr<std::vector<unsigned int>> global_superdroplet_ordering;
 
   /**< map from name of each dimension in dataset to their size */
@@ -231,7 +224,7 @@ class Dataset {
    *
    * @param store The store object associated with the Dataset.
    */
-  explicit Dataset(Store &store) : group(store), datasetdims() {
+  explicit CollectiveDataset(Store &store) : group(store), datasetdims() {
     store[".zattrs"] =
         "{\n"
         "  \"creator\": \"Clara Bayley\",\n"
@@ -269,11 +262,9 @@ class Dataset {
   /**
    * @brief Sets the decomposition maps for correctly writing data out
    *
-   * @param decomposition A CartesianDecomposition instance with the domain decomposition
+   * @param decomposition A Decomposition instance for CLEO's domain decomposition
    */
-  void set_decomposition(CartesianDecomposition decomposition) {
-    this->decomposition = decomposition;
-  }
+  void set_decomposition(Decomposition decomposition) { this->decomposition = decomposition; }
 
   /**
    * @brief Sets the maximum number of superdroplets for data allocation, comes from the config file
@@ -532,7 +523,5 @@ class Dataset {
     }
   }
 };
-
-#endif
 
 #endif  // LIBS_ZARR_COLLECTIVE_DATASET_HPP_

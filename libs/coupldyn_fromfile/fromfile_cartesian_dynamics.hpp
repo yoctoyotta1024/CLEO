@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Wednesday 28th May 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -35,7 +35,7 @@
 #include <utility>
 #include <vector>
 
-#include "initialise/optional_config_params.hpp"
+#include "configuration/optional_config_params.hpp"
 #include "initialise/readbinary.hpp"
 
 /* contains 1-D vector for each (thermo)dynamic
