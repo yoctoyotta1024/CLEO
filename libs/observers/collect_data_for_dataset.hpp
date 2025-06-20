@@ -28,8 +28,8 @@
 #include <concepts>
 
 #include "../kokkosaliases.hpp"
+#include "zarr/collective_dataset.hpp"
 #include "zarr/fsstore.hpp"
-// #include "zarr/collective_dataset.hpp" # WIP to >> operator for colective dataset
 #include "zarr/simple_dataset.hpp"
 
 /**
@@ -51,15 +51,18 @@ concept CollectDataForDataset = requires(CDD cdd, const Dataset &ds, const viewd
 };
 
 /**
- * @brief struct is a new CollectDataForDataset formed from the combination of two structs that
- * also satisfy the CollectDataForDataset concept given the same Dataset type. Struct that does the
- * actions of the original structs in sequence.
+ * @brief struct is a new type satirfying CollectDataForDataset formed from the combination of
+ * two structs that also satisfy the CollectDataForDataset concept (given the same Dataset type).
+ * This new type does the actions of the original structs in sequence.
  *
- * @tparam CollectData1 The type of the first CollectDataForDataset.
- * @tparam CollectData2 The type of the second CollectDataForDataset.
+ * Note the contrains of the CollectDataForDataset<Dataset> are not applied directly on the incoming
+ * two types (CollectData1 and CollectData2) that are combined. They should each nevertheless
+ * obey the contraints of the CollectDataForDataset<Dataset> concept given the same Dataset type.
+ *
+ * @tparam CollectData1 The type of the first CollectDataForDataset<Dataset>.
+ * @tparam CollectData2 The type of the second CollectDataForDataset<Dataset>.
  */
-template <typename Dataset, CollectDataForDataset<Dataset> CollectData1,
-          CollectDataForDataset<Dataset> CollectData2>
+template <typename CollectData1, typename CollectData2>
 struct CombinedCollectDataForDataset {
  private:
   CollectData1 a; /**< The first instance of type of CollectDataForDataset. */
@@ -101,26 +104,26 @@ struct CombinedCollectDataForDataset {
     return Functor(a, b, d_gbxs, d_supers);
   }
 
-  template <typename D = Dataset>
-  void write_to_arrays(const D &dataset) const {
+  template <typename Dataset>
+  void write_to_arrays(const Dataset &dataset) const {
     a.write_to_arrays(dataset);
     b.write_to_arrays(dataset);
   }
 
-  template <typename D = Dataset>
-  void write_to_ragged_arrays(const D &dataset) const {
+  template <typename Dataset>
+  void write_to_ragged_arrays(const Dataset &dataset) const {
     a.write_to_ragged_arrays(dataset);
     b.write_to_ragged_arrays(dataset);
   }
 
-  template <typename D = Dataset>
-  void write_arrayshapes(const D &dataset) const {
+  template <typename Dataset>
+  void write_arrayshapes(const Dataset &dataset) const {
     a.write_arrayshapes(dataset);
     b.write_arrayshapes(dataset);
   }
 
-  template <typename D = Dataset>
-  void write_ragged_arrayshapes(const D &dataset) const {
+  template <typename Dataset>
+  void write_ragged_arrayshapes(const Dataset &dataset) const {
     a.write_ragged_arrayshapes(dataset);
     b.write_ragged_arrayshapes(dataset);
   }
@@ -138,10 +141,9 @@ struct CombinedCollectDataForDataset {
  * @param b Second CollectDataForDataset with Dataset=SimpleDataset<FSStore>.
  * @return CombinedCollectDataForDataset<Obs1, Obs2> Combined CollectDataForDataset.
  */
-template <CollectDataForDataset<SimpleDataset<FSStore>> CollectData1,
-          CollectDataForDataset<SimpleDataset<FSStore>> CollectData2>
+template <typename CollectData1, typename CollectData2>
 auto operator>>(const CollectData1 a, const CollectData2 b) {
-  return CombinedCollectDataForDataset<SimpleDataset<FSStore>, CollectData1, CollectData2>(a, b);
+  return CombinedCollectDataForDataset<CollectData1, CollectData2>(a, b);
 }
 
 /* struct satifying CollectDataForDataset and does nothing */
