@@ -14,8 +14,8 @@ Header file: ``<libs/observers/write_to_dataset_observer.hpp>``
 .. doxygenfunction:: WriteToDatasetObserver(const unsigned int interval, ParallelWriteData parallel_write)
    :project: observers
 
-.. doxygenfunction:: WriteToDatasetObserver(const unsigned int interval, const SimpleDataset<Store> &dataset, CollectData collect_data)
+.. doxygenfunction:: WriteToDatasetObserver(const unsigned int interval, const Dataset &dataset, CollectData collect_data)
    :project: observers
 
-.. doxygenfunction:: WriteToDatasetObserver(const unsigned int interval, const SimpleDataset<Store> &dataset, CollectData collect_data, RaggedCount ragged_count)
+.. doxygenfunction:: WriteToDatasetObserver(const unsigned int interval, const Dataset &dataset, CollectData collect_data, RaggedCount ragged_count)
    :project: observers

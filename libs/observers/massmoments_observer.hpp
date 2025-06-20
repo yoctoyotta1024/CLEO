@@ -37,7 +37,6 @@
 #include "observers/observers.hpp"
 #include "observers/write_to_dataset_observer.hpp"
 #include "superdrops/superdrop.hpp"
-#include "zarr/collective_dataset.hpp"
 
 /**
  * @brief Performs calculation of 0th, 1st, and 2nd moments of the (real)
@@ -204,13 +203,14 @@ struct CollectMassMoments {
    * @brief Deep copies data from a device view to the host and then writes the host data to an
    * array in the dataset.
    *
+   * @tparam Dataset The dataset type.
    * @tparam T The data type.
    * @param ptr A pointer to a struct with the data views to be copied and the Xarray to write to.
    * @param dataset The dataset for the Xarray.
    */
-  template <typename T>
+  template <typename Dataset, typename T>
   void write_one_array(std::shared_ptr<XarrayAndViews<Store, T>> ptr,
-                       const SimpleDataset<Store> &dataset) const {
+                       const Dataset &dataset) const {
     Kokkos::deep_copy(ptr->h_data, ptr->d_data);
     dataset.write_to_array(ptr->xzarr, ptr->h_data);
   }
@@ -218,13 +218,14 @@ struct CollectMassMoments {
   /**
    * @brief Calls a function to write the shape of the array according to the dataset.
    *
+   * @tparam Dataset The dataset type.
    * @tparam T The data type.
    * @param ptr A pointer to struct with the Xarray whose shape must be written.
    * @param dataset The dataset to write array shape to.
    */
-  template <typename T>
+  template <typename Dataset, typename T>
   void write_one_arrayshape(std::shared_ptr<XarrayAndViews<Store, T>> ptr,
-                            const SimpleDataset<Store> &dataset) const {
+                            const Dataset &dataset) const {
     dataset.write_arrayshape(ptr->xzarr);
   }
 
@@ -312,7 +313,8 @@ struct CollectMassMoments {
    *
    * @param dataset The dataset to write data to.
    */
-  void write_to_arrays(const SimpleDataset<Store> &dataset) const {
+  template <typename Dataset>
+  void write_to_arrays(const Dataset &dataset) const {
     write_one_array(mom0_ptr, dataset);
     write_one_array(mom1_ptr, dataset);
     write_one_array(mom2_ptr, dataset);
@@ -323,7 +325,8 @@ struct CollectMassMoments {
    *
    * @param dataset The dataset to write data to.
    */
-  void write_arrayshapes(const SimpleDataset<Store> &dataset) const {
+  template <typename Dataset>
+  void write_arrayshapes(const Dataset &dataset) const {
     write_one_arrayshape(mom0_ptr, dataset);
     write_one_arrayshape(mom1_ptr, dataset);
     write_one_arrayshape(mom2_ptr, dataset);
@@ -334,14 +337,16 @@ struct CollectMassMoments {
    *
    * @param dataset The dataset to write data to.
    */
-  void write_to_ragged_arrays(const SimpleDataset<Store> &dataset) const {}
+  template <typename Dataset>
+  void write_to_ragged_arrays(const Dataset &dataset) const {}
 
   /**
    * @brief Null function to satisfy CollectDataForDataset concept.
    *
    * @param dataset The dataset to write data to.
    */
-  void write_ragged_arrayshapes(const SimpleDataset<Store> &dataset) const {}
+  template <typename Dataset>
+  void write_ragged_arrayshapes(const Dataset &dataset) const {}
 
   /**
    * @brief Null function to satisfy CollectDataForDataset concept.
@@ -355,25 +360,26 @@ struct CollectMassMoments {
  * @brief Constructs an observer which writes mass moments of droplet distribution at start of
  * each observation timestep to an array with a constant observation timestep "interval".
  *
- * @tparam Store Type of store for dataset.
+ * @tparam Dataset The type of dataset.
+ * @tparam Store The type of data store in the dataset.
  * @param interval Observation timestep.
  * @param dataset Dataset to write time data to.
+ * @param store The store the dataset writes to.
  * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
  * @param ngbxs The number of gridboxes.
  * @return Constructed type for writing mass moments of droplet distribution satisfying the
  * observer concept.
  */
-template <typename Store>
-inline Observer auto MassMomentsObserver(const unsigned int interval,
-                                         const SimpleDataset<Store> &dataset, const size_t maxchunk,
-                                         const size_t ngbxs) {
-  const auto xzarr_mom0 = create_massmom0_xarray(dataset, "massmom0", maxchunk, ngbxs);
-  const auto xzarr_mom1 = create_massmom1_xarray(dataset, "massmom1", maxchunk, ngbxs);
-  const auto xzarr_mom2 = create_massmom2_xarray(dataset, "massmom2", maxchunk, ngbxs);
+template <typename Dataset, typename Store>
+inline Observer auto MassMomentsObserver(const unsigned int interval, const Dataset &dataset,
+                                         Store &store, const size_t maxchunk, const size_t ngbxs) {
+  const auto xzarr_mom0 = create_massmom0_xarray(dataset, store, "massmom0", maxchunk, ngbxs);
+  const auto xzarr_mom1 = create_massmom1_xarray(dataset, store, "massmom1", maxchunk, ngbxs);
+  const auto xzarr_mom2 = create_massmom2_xarray(dataset, store, "massmom2", maxchunk, ngbxs);
 
   const auto ffunc = MassMomentsFunc{};
 
-  const CollectDataForDataset<Store> auto massmoments =
+  const CollectDataForDataset<Dataset> auto massmoments =
       CollectMassMoments(ffunc, xzarr_mom0, xzarr_mom1, xzarr_mom2, ngbxs);
   const auto parallel_write =
       ParallelWriteGridboxes(ParallelGridboxesTeamPolicyFunc{}, dataset, massmoments);
@@ -384,25 +390,30 @@ inline Observer auto MassMomentsObserver(const unsigned int interval,
  * @brief Constructs an observer which writes mass moments of rain-droplet distribution at start
  * of each observation timestep to an array with a constant observation timestep "interval".
  *
- * @tparam Store Type of store for dataset.
+ * @tparam Dataset The type of dataset.
+ * @tparam Store The type of data store in the dataset.
  * @param interval Observation timestep.
  * @param dataset Dataset to write time data to.
+ * @param store The store the dataset writes to.
  * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
  * @param ngbxs The number of gridboxes.
  * @return Constructed type for writing mass moments of rain-droplet distribution satisfying the
  * observer concept.
  */
-template <typename Store>
+template <typename Dataset, typename Store>
 inline Observer auto MassMomentsRaindropsObserver(const unsigned int interval,
-                                                  const SimpleDataset<Store> &dataset,
+                                                  const Dataset &dataset, Store &store,
                                                   const size_t maxchunk, const size_t ngbxs) {
-  const auto xzarr_mom0 = create_massmom0_xarray(dataset, "massmom0_raindrops", maxchunk, ngbxs);
-  const auto xzarr_mom1 = create_massmom1_xarray(dataset, "massmom1_raindrops", maxchunk, ngbxs);
-  const auto xzarr_mom2 = create_massmom2_xarray(dataset, "massmom2_raindrops", maxchunk, ngbxs);
+  const auto xzarr_mom0 =
+      create_massmom0_xarray(dataset, store, "massmom0_raindrops", maxchunk, ngbxs);
+  const auto xzarr_mom1 =
+      create_massmom1_xarray(dataset, store, "massmom1_raindrops", maxchunk, ngbxs);
+  const auto xzarr_mom2 =
+      create_massmom2_xarray(dataset, store, "massmom2_raindrops", maxchunk, ngbxs);
 
   const auto ffunc = RaindropsMassMomentsFunc{};
 
-  const CollectDataForDataset<Store> auto massmoments_raindrops =
+  const CollectDataForDataset<Dataset> auto massmoments_raindrops =
       CollectMassMoments(ffunc, xzarr_mom0, xzarr_mom1, xzarr_mom2, ngbxs);
   const auto parallel_write =
       ParallelWriteGridboxes(ParallelGridboxesTeamPolicyFunc{}, dataset, massmoments_raindrops);

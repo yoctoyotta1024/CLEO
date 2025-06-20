@@ -94,10 +94,10 @@ struct MonitorCondensation {
  * @param ngbxs The number of gridboxes.
  * @return Constructed type satisfying observer concept.
  */
-template <typename Store>
-inline Observer auto MonitorCondensationObserver(const unsigned int interval,
-                                                 SimpleDataset<Store>& dataset,
-                                                 const size_t maxchunk, const size_t ngbxs) {
+template <typename Dataset, typename Store>
+inline Observer auto MonitorCondensationObserver(const unsigned int interval, Dataset& dataset,
+                                                 Store& store, const size_t maxchunk,
+                                                 const size_t ngbxs) {
   using Mo = MonitorCondensation;
   const auto name = std::string_view("massdelta_cond");
   const auto units = std::string_view("g");
@@ -107,7 +107,8 @@ inline Observer auto MonitorCondensationObserver(const unsigned int interval,
   const auto xzarr_ptr = std::make_shared<XarrayZarrArray<Store, Mo::datatype>>(
       dataset.template create_array<Mo::datatype>(name, units, scale_factor, chunkshape, dimnames));
 
-  const auto do_obs = DoSDMMonitorObs<Store, Mo, Mo::datatype>(dataset, xzarr_ptr, Mo(ngbxs));
+  const auto do_obs =
+      DoSDMMonitorObs<Dataset, Store, Mo, Mo::datatype>(dataset, store, xzarr_ptr, Mo(ngbxs));
   return ConstTstepObserver(interval, do_obs);
 }
 

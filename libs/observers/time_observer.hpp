@@ -36,19 +36,19 @@
 #include "observers/consttstep_observer.hpp"
 #include "observers/observers.hpp"
 #include "superdrops/sdmmonitor.hpp"
-#include "zarr/collective_dataset.hpp"
 #include "zarr/xarray_zarr_array.hpp"
 
 /**
  * @class DoTimeObs
  * @brief Template class for functionality to observe time at the start of each timestep and write
  * it to a Zarr array as a coordinate of an Xarray dataset.
- * @tparam Store Type of store for dataset.
+ * @tparam Dataset Type of dataset.
+ * @tparam Store Type of store which dataset writes to.
  */
-template <typename Store>
+template <typename Dataset, typename Store>
 class DoTimeObs {
  private:
-  SimpleDataset<Store> &dataset; /**< Dataset to write time data to. */
+  Dataset &dataset; /**< Dataset to write time data to. */
   std::shared_ptr<XarrayZarrArray<Store, float>>
       xzarr_ptr; /**< Pointer to time array in dataset. */
   std::function<double(unsigned int)>
@@ -76,10 +76,11 @@ class DoTimeObs {
   /**
    * @brief Constructor for DoTimeObs.
    * @param dataset Dataset to write time data to.
+   * @param store Store which dataset writes to.
    * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
    * @param step2dimlesstime Function to convert model timesteps to a real time [assumed seconds].
    */
-  DoTimeObs(SimpleDataset<Store> &dataset, const size_t maxchunk,
+  DoTimeObs(Dataset &dataset, Store &store, const size_t maxchunk,
             const std::function<double(unsigned int)> step2dimlesstime)
       : dataset(dataset),
         xzarr_ptr(std::make_shared<XarrayZarrArray<Store, float>>(
@@ -131,17 +132,19 @@ class DoTimeObs {
  * 1-D array with a constant observation timestep "interval".
  *
  * @tparam Store Type of store for dataset.
+ * @tparam Dataset Type of dataset
  * @param interval Observation timestep.
  * @param dataset Dataset to write time data to.
+ * @param store Store which dataset writes to.
  * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
  * @param step2dimlesstime Function to convert model timesteps to real time (assumed seconds).
  * @return Constructed type satisfying observer concept.
  */
-template <typename Store>
-inline Observer auto TimeObserver(const unsigned int interval, SimpleDataset<Store> &dataset,
+template <typename Dataset, typename Store>
+inline Observer auto TimeObserver(const unsigned int interval, Dataset &dataset, Store &store,
                                   const size_t maxchunk,
                                   const std::function<double(unsigned int)> step2dimlesstime) {
-  return ConstTstepObserver(interval, DoTimeObs(dataset, maxchunk, step2dimlesstime));
+  return ConstTstepObserver(interval, DoTimeObs(dataset, store, maxchunk, step2dimlesstime));
 }
 
 #endif  // LIBS_OBSERVERS_TIME_OBSERVER_HPP_

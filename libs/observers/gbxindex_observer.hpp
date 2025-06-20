@@ -33,7 +33,6 @@
 #include "observers/observers.hpp"
 #include "superdrops/sdmmonitor.hpp"
 #include "zarr/buffer.hpp"
-#include "zarr/collective_dataset.hpp"
 #include "zarr/xarray_zarr_array.hpp"
 
 /**
@@ -65,12 +64,13 @@ struct GbxIndexFunctor {
 
 /* @class GbxindexObserver
  * @brief Observer to output gridbox indexes to a 1-D array as coordinate of an xarray dataset.
+ * @tparam Dataset Type of dataset.
  * @tparam Store Type of store for the dataset.
  */
-template <typename Store>
+template <typename Dataset, typename Store>
 class GbxindexObserver {
  private:
-  SimpleDataset<Store> &dataset; /**< Dataset to write gridbox index data to. */
+  Dataset &dataset; /**< Dataset to write gridbox index data to. */
   std::shared_ptr<XarrayZarrArray<Store, uint32_t>>
       xzarr_ptr; /**< Pointer to gridbox index array in dataset. */
 
@@ -94,10 +94,11 @@ class GbxindexObserver {
   /**
    * @brief Constructor for GbxindexObserver.
    * @param dataset Dataset to write gridbox index data to.
+   * @param store Store which dataset writes to.
    * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
    * @param ngbxs Number of gridboxes in final array.
    */
-  GbxindexObserver(SimpleDataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs)
+  GbxindexObserver(Dataset &dataset, Store &store, const size_t maxchunk, const size_t ngbxs)
       : dataset(dataset),
         xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
             dataset.template create_coordinate_array<uint32_t>("gbxindex", "", 1, maxchunk,
