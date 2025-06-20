@@ -166,7 +166,7 @@ int main(int argc, char *argv[]) {
 
     /* Create Xarray dataset wit Zarr backend for writing output data to a store */
     auto store = FSStore(config.get_zarrbasedir());
-    auto dataset = CollectiveDataset(store);
+    auto dataset = CollectiveDataset<FSStore, CartesianDecomposition>(store);
 
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
     const SDMMethods sdm = create_sdm(config, tsteps, dataset, store);
