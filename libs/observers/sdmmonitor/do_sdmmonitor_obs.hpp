@@ -31,7 +31,6 @@
 #include "../../kokkosaliases.hpp"
 #include "superdrops/sdmmonitor.hpp"
 #include "zarr/buffer.hpp"
-#include "zarr/simple_dataset.hpp"
 #include "zarr/xarray_zarr_array.hpp"
 
 /**
@@ -40,11 +39,11 @@
  * start of each timestep and write it to a Zarr array in an Xarray dataset.
  * @tparam Store Type of store for dataset.
  */
-template <typename Store, SDMMonitor SDMMo, typename T>
+template <typename Dataset, typename Store, SDMMonitor SDMMo, typename T>
 class DoSDMMonitorObs {
  private:
   using viewh_buffer = Buffer<T>::viewh_buffer;
-  SimpleDataset<Store> &dataset;                              /**< Dataset to write time data to. */
+  Dataset &dataset;                                     /**< Dataset to write time data to. */
   std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr; /**< Pointer to array in dataset. */
   SDMMo monitor;
 
@@ -66,7 +65,7 @@ class DoSDMMonitorObs {
    * @param xzarr_ptr Pointer to zarr array in xarray dataset.
    * @param monitor SDMMonitor to use.
    */
-  DoSDMMonitorObs(SimpleDataset<Store> &dataset,
+  DoSDMMonitorObs(Dataset &dataset, Store &store,
                   const std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr, const SDMMo monitor)
       : dataset(dataset), xzarr_ptr(xzarr_ptr), monitor(monitor) {}
 

@@ -35,19 +35,19 @@
 #include "observers/observers.hpp"
 #include "superdrops/sdmmonitor.hpp"
 #include "zarr/buffer.hpp"
-#include "zarr/collective_dataset.hpp"
 #include "zarr/xarray_zarr_array.hpp"
 
 /**
  * @class DoTotNsupersObs
  * @brief Template class for functionality to observe the total number of superdroplets at the start
  * of each timestep and write it to a Zarr array in an Xarray dataset.
- * @tparam Store Type of store for dataset.
+ * @tparam Dataset Type of dataset.
+ * @tparam Store Type of store which dataset writes to.
  */
-template <typename Store>
+template <typename Dataset, typename Store>
 class DoTotNsupersObs {
  private:
-  SimpleDataset<Store> &dataset; /**< dataset to write totnsupers data to */
+  Dataset &dataset; /**< dataset to write totnsupers data to */
   std::shared_ptr<XarrayZarrArray<Store, uint32_t>> xzarr_ptr; /**< pointer to totnsupers array */
 
   /**
@@ -69,9 +69,10 @@ class DoTotNsupersObs {
   /**
    * @brief Constructor for DoTotNsupersObs.
    * @param dataset Dataset to write totnsupers data to.
+   * @param store Store which dataset writes to.
    * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
    */
-  DoTotNsupersObs(SimpleDataset<Store> &dataset, const size_t maxchunk)
+  DoTotNsupersObs(Dataset &dataset, Store &store, const size_t maxchunk)
       : dataset(dataset),
         xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
             dataset.template create_array<uint32_t>("totnsupers", "", 1, {maxchunk}, {"time"}))) {}
@@ -121,15 +122,17 @@ class DoTotNsupersObs {
  * observation timestep to a 1-D array with a constant observation timestep "interval".
  *
  * @tparam Store Type of store for dataset.
+ * @tparam Dataset Type of dataset
  * @param interval Observation timestep.
  * @param dataset Dataset to write time data to.
+ * @param store Store which dataset writes to.
  * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
  * @return Constructed type satisfying observer concept.
  */
-template <typename Store>
-inline Observer auto TotNsupersObserver(const unsigned int interval, SimpleDataset<Store> &dataset,
+template <typename Dataset, typename Store>
+inline Observer auto TotNsupersObserver(const unsigned int interval, Dataset &dataset, Store &store,
                                         const size_t maxchunk) {
-  return ConstTstepObserver(interval, DoTotNsupersObs(dataset, maxchunk));
+  return ConstTstepObserver(interval, DoTotNsupersObs(dataset, store, maxchunk));
 }
 
 #endif  // LIBS_OBSERVERS_TOTNSUPERS_OBSERVER_HPP_

@@ -36,7 +36,7 @@
 #include <utility>
 #include <vector>
 
-#include "cartesiandomain/cartesian_decomposition.hpp"  // TODO(CB): remove dependency on cartesiandomain (also in zarr's CMakeLists)
+#include "cartesiandomain/cartesian_decomposition.hpp"  // TODO(CB): remove dependency on cartesiandomain (also in zarr's CMakeLists) WIP
 #include "zarr/xarray_zarr_array.hpp"
 #include "zarr/zarr_group.hpp"
 

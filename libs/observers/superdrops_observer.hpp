@@ -38,7 +38,6 @@
 #include "observers/generic_collect_data.hpp"
 #include "observers/write_to_dataset_observer.hpp"
 #include "superdrops/superdrop.hpp"
-#include "zarr/collective_dataset.hpp"
 
 /**
  * @brief A struct for collecting ragged count data.
@@ -46,9 +45,10 @@
  * This struct is responsible for collecting ragged count data, which represents the count of the
  * number of super-droplets written during a write of a ragged array of superdroplet data.
  *
- * @tparam Store The type of the dataset store.
+ * @tparam Dataset Type of dataset.
+ * @tparam Store Type of store for dataset.
  */
-template <typename Store>
+template <typename Dataset, typename Store>
 struct RaggedCount {
  private:
   std::shared_ptr<XarrayZarrArray<Store, uint32_t>> xzarr_ptr; /**< pointer to raggedcount Xarray */
@@ -60,9 +60,10 @@ struct RaggedCount {
    * Constructs a RaggedCount object with the specified dataset and maximum chunk size.
    *
    * @param dataset The dataset to collect data from.
+   * @param store The store the dataset writes to.
    * @param maxchunk The maximum chunk size (number of elements).
    */
-  RaggedCount(const SimpleDataset<Store> &dataset, const size_t maxchunk)
+  RaggedCount(const Dataset &dataset, Store &store, const size_t maxchunk)
       : xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
             dataset.template create_raggedcount_array<uint32_t>("raggedcount", "", 1, {maxchunk},
                                                                 {"time"}, "superdroplets"))) {}
@@ -76,8 +77,7 @@ struct RaggedCount {
    * @param dataset The dataset to write data to.
    * @param d_supers The view of total super-droplets.
    */
-  void write_to_array(const SimpleDataset<Store> &dataset,
-                      const subviewd_constsupers d_supers) const {
+  void write_to_array(const Dataset &dataset, const subviewd_constsupers d_supers) const {
     const auto totnsupers = static_cast<uint32_t>(d_supers.extent(0));
     dataset.write_to_array(xzarr_ptr, totnsupers);
   }
@@ -89,13 +89,11 @@ struct RaggedCount {
    *
    * @param dataset The dataset to write data to.
    */
-  void write_arrayshape(const SimpleDataset<Store> &dataset) const {
-    dataset.write_arrayshape(xzarr_ptr);
-  }
+  void write_arrayshape(const Dataset &dataset) const { dataset.write_arrayshape(xzarr_ptr); }
 };
 
 /**
- * @brief Constructs type sastifying the CollectDataForDataset concept for a given Store (using an
+ * @brief Constructs type sastifying the CollectDataForDataset concept for a given Dataset (using an
  * instance of the GenericCollectData class) which writes a superdroplet variable to a ragged Xarray
  * in a dataset.
  *
@@ -103,7 +101,7 @@ struct RaggedCount {
  * type by collecting data according to the given FunctorFunc from within a
  * Kokkos::parallel_for loop over superdroplets with a range policy.
  *
- * @tparam Store The type of the dataset store.
+ * @tparam Dataset The type of the dataset.
  * @tparam T The type of the superdroplet variable data.
  * @tparam FunctorFunc The type of the functor function.
  * @param dataset The dataset to collect data from.
@@ -112,12 +110,12 @@ struct RaggedCount {
  * @param units The units of the variable.
  * @param scale_factor The scale factor of the variable.
  * @param maxchunk The maximum chunk size.
- * @return CollectDataForDataset<Store> An instance of CollectDataForDataset for collecting
+ * @return CollectDataForDataset<Dataset> An instance of CollectDataForDataset for collecting
  * superdroplet variable data.
  */
-template <typename Store, typename T, typename FunctorFunc>
-CollectDataForDataset<Store> auto CollectSuperdropVariable(
-    const SimpleDataset<Store> &dataset, const FunctorFunc ffunc, const std::string_view name,
+template <typename Dataset, typename T, typename FunctorFunc>
+CollectDataForDataset<Dataset> auto CollectSuperdropVariable(
+    const Dataset &dataset, const FunctorFunc ffunc, const std::string_view name,
     const std::string_view units, const double scale_factor, const size_t maxchunk) {
   const auto chunkshape = std::vector<size_t>{maxchunk};
   const auto dimnames = std::vector<std::string>{"superdroplets"};
@@ -159,17 +157,17 @@ struct SdgbxindexFunc {
  * superdroplet's gridbox index "sdgbxindex" as a 4 byte unsigned integer and write it to a ragged
  * array in a dataset.
  *
- * @tparam Store The type of the dataset store.
+ * @tparam Dataset The type of the dataset.
  * @param dataset The dataset to collect data from.
  * @param maxchunk The maximum chunk size (number of elements).
- * @return CollectDataForDataset<Store> An instance of CollectDataForDataset for collecting
+ * @return CollectDataForDataset<Dataset> An instance of CollectDataForDataset for collecting
  * sdgbxindex data.
  */
-template <typename Store>
-CollectDataForDataset<Store> auto CollectSdgbxindex(const SimpleDataset<Store> &dataset,
-                                                    const size_t maxchunk) {
-  return CollectSuperdropVariable<Store, uint32_t, SdgbxindexFunc>(dataset, SdgbxindexFunc{},
-                                                                   "sdgbxindex", "", 1, maxchunk);
+template <typename Dataset>
+CollectDataForDataset<Dataset> auto CollectSdgbxindex(const Dataset &dataset,
+                                                      const size_t maxchunk) {
+  return CollectSuperdropVariable<Dataset, uint32_t, SdgbxindexFunc>(dataset, SdgbxindexFunc{},
+                                                                     "sdgbxindex", "", 1, maxchunk);
 }
 
 /**
@@ -203,17 +201,16 @@ struct SdIdFunc {
  * superdroplet's identity "sdId" as a 4 byte unsigned integer and write it to a ragged
  * array in a dataset.
  *
- * @tparam Store The type of the dataset store.
+ * @tparam Dataset The type of the dataset.
  * @param dataset The dataset to collect data from.
  * @param maxchunk The maximum chunk size (number of elements).
- * @return CollectDataForDataset<Store> An instance of CollectDataForDataset for collecting
+ * @return CollectDataForDataset<Dataset> An instance of CollectDataForDataset for collecting
  * sdId data.
  */
-template <typename Store>
-CollectDataForDataset<Store> auto CollectSdId(const SimpleDataset<Store> &dataset,
-                                              const size_t maxchunk) {
-  return CollectSuperdropVariable<Store, uint32_t, SdIdFunc>(dataset, SdIdFunc{}, "sdId", "", 1,
-                                                             maxchunk);
+template <typename Dataset>
+CollectDataForDataset<Dataset> auto CollectSdId(const Dataset &dataset, const size_t maxchunk) {
+  return CollectSuperdropVariable<Dataset, uint32_t, SdIdFunc>(dataset, SdIdFunc{}, "sdId", "", 1,
+                                                               maxchunk);
 }
 
 /**
@@ -249,16 +246,16 @@ struct XiFunc {
  * superdroplet's multiplicity "xi" as a 8 byte unsigned integer and write it to a ragged
  * array in a dataset.
  *
- * @tparam Store The type of the dataset store.
+ * @tparam Dataset The type of the dataset.
  * @param dataset The dataset to collect data from.
  * @param maxchunk The maximum chunk size (number of elements).
- * @return CollectDataForDataset<Store> An instance of CollectDataForDataset for collecting xi data.
+ * @return CollectDataForDataset<Dataset> An instance of CollectDataForDataset for collecting xi
+ * data.
  */
-template <typename Store>
-CollectDataForDataset<Store> auto CollectXi(const SimpleDataset<Store> &dataset,
-                                            const size_t maxchunk) {
-  return CollectSuperdropVariable<Store, uint64_t, XiFunc>(dataset, XiFunc{}, "xi", "", 1,
-                                                           maxchunk);
+template <typename Dataset>
+CollectDataForDataset<Dataset> auto CollectXi(const Dataset &dataset, const size_t maxchunk) {
+  return CollectSuperdropVariable<Dataset, uint64_t, XiFunc>(dataset, XiFunc{}, "xi", "", 1,
+                                                             maxchunk);
 }
 
 /**
@@ -291,16 +288,16 @@ struct RadiusFunc {
  * superdroplet's radius as a 4 byte floating point value and write it to a ragged
  * array in a dataset.
  *
- * @tparam Store The type of the dataset store.
+ * @tparam Dataset The type of the dataset.
  * @param dataset The dataset to collect data from.
  * @param maxchunk The maximum chunk size (number of elements).
- * @return CollectDataForDataset<Store> An instance of CollectDataForDataset for collecting radius.
+ * @return CollectDataForDataset<Dataset> An instance of CollectDataForDataset for collecting
+ * radius.
  */
-template <typename Store>
-CollectDataForDataset<Store> auto CollectRadius(const SimpleDataset<Store> &dataset,
-                                                const size_t maxchunk) {
-  return CollectSuperdropVariable<Store, float, RadiusFunc>(dataset, RadiusFunc{}, "radius",
-                                                            "micro-m", dlc::R0 * 1e6, maxchunk);
+template <typename Dataset>
+CollectDataForDataset<Dataset> auto CollectRadius(const Dataset &dataset, const size_t maxchunk) {
+  return CollectSuperdropVariable<Dataset, float, RadiusFunc>(dataset, RadiusFunc{}, "radius",
+                                                              "micro-m", dlc::R0 * 1e6, maxchunk);
 }
 
 /**
@@ -333,16 +330,15 @@ struct MsolFunc {
  * superdroplet's solute mass "msol" as a 4 byte floating point value and write it to a ragged
  * array in a dataset.
  *
- * @tparam Store The type of the dataset store.
+ * @tparam Dataset The type of the dataset.
  * @param dataset The dataset to collect data from.
  * @param maxchunk The maximum chunk size (number of elements).
- * @return CollectDataForDataset<Store> An instance of CollectDataForDataset for collecting msol.
+ * @return CollectDataForDataset<Dataset> An instance of CollectDataForDataset for collecting msol.
  */
-template <typename Store>
-CollectDataForDataset<Store> auto CollectMsol(const SimpleDataset<Store> &dataset,
-                                              const size_t maxchunk) {
-  return CollectSuperdropVariable<Store, float, MsolFunc>(dataset, MsolFunc{}, "msol", "g",
-                                                          dlc::MASS0grams, maxchunk);
+template <typename Dataset>
+CollectDataForDataset<Dataset> auto CollectMsol(const Dataset &dataset, const size_t maxchunk) {
+  return CollectSuperdropVariable<Dataset, float, MsolFunc>(dataset, MsolFunc{}, "msol", "g",
+                                                            dlc::MASS0grams, maxchunk);
 }
 
 /**
@@ -375,16 +371,16 @@ struct Coord3Func {
  * superdroplet's coord3 as a 4 byte floating point value and write it to a ragged
  * array in a dataset.
  *
- * @tparam Store The type of the dataset store.
+ * @tparam Dataset The type of the dataset.
  * @param dataset The dataset to collect data from.
  * @param maxchunk The maximum chunk size (number of elements).
- * @return CollectDataForDataset<Store> An instance of CollectDataForDataset for collecting coord3.
+ * @return CollectDataForDataset<Dataset> An instance of CollectDataForDataset for collecting
+ * coord3.
  */
-template <typename Store>
-CollectDataForDataset<Store> auto CollectCoord3(const SimpleDataset<Store> &dataset,
-                                                const size_t maxchunk) {
-  return CollectSuperdropVariable<Store, float, Coord3Func>(dataset, Coord3Func{}, "coord3", "m",
-                                                            dlc::COORD0, maxchunk);
+template <typename Dataset>
+CollectDataForDataset<Dataset> auto CollectCoord3(const Dataset &dataset, const size_t maxchunk) {
+  return CollectSuperdropVariable<Dataset, float, Coord3Func>(dataset, Coord3Func{}, "coord3", "m",
+                                                              dlc::COORD0, maxchunk);
 }
 
 /**
@@ -417,16 +413,16 @@ struct Coord1Func {
  * superdroplet's coord1 as a 4 byte floating point value and write it to a ragged
  * array in a dataset.
  *
- * @tparam Store The type of the dataset store.
+ * @tparam Dataset The type of the dataset.
  * @param dataset The dataset to collect data from.
  * @param maxchunk The maximum chunk size (number of elements).
- * @return CollectDataForDataset<Store> An instance of CollectDataForDataset for collecting coord1.
+ * @return CollectDataForDataset<Dataset> An instance of CollectDataForDataset for collecting
+ * coord1.
  */
-template <typename Store>
-CollectDataForDataset<Store> auto CollectCoord1(const SimpleDataset<Store> &dataset,
-                                                const size_t maxchunk) {
-  return CollectSuperdropVariable<Store, float, Coord1Func>(dataset, Coord1Func{}, "coord1", "m",
-                                                            dlc::COORD0, maxchunk);
+template <typename Dataset>
+CollectDataForDataset<Dataset> auto CollectCoord1(const Dataset &dataset, const size_t maxchunk) {
+  return CollectSuperdropVariable<Dataset, float, Coord1Func>(dataset, Coord1Func{}, "coord1", "m",
+                                                              dlc::COORD0, maxchunk);
 }
 
 /**
@@ -459,16 +455,16 @@ struct Coord2Func {
  * superdroplet's coord2 as a 4 byte floating point value and write it to a ragged
  * array in a dataset.
  *
- * @tparam Store The type of the dataset store.
+ * @tparam Dataset The type of the dataset.
  * @param dataset The dataset to collect data from.
  * @param maxchunk The maximum chunk size (number of elements).
- * @return CollectDataForDataset<Store> An instance of CollectDataForDataset for collecting coord2.
+ * @return CollectDataForDataset<Dataset> An instance of CollectDataForDataset for collecting
+ * coord2.
  */
-template <typename Store>
-CollectDataForDataset<Store> auto CollectCoord2(const SimpleDataset<Store> &dataset,
-                                                const size_t maxchunk) {
-  return CollectSuperdropVariable<Store, float, Coord2Func>(dataset, Coord2Func{}, "coord2", "m",
-                                                            dlc::COORD0, maxchunk);
+template <typename Dataset>
+CollectDataForDataset<Dataset> auto CollectCoord2(const Dataset &dataset, const size_t maxchunk) {
+  return CollectSuperdropVariable<Dataset, float, Coord2Func>(dataset, Coord2Func{}, "coord2", "m",
+                                                              dlc::COORD0, maxchunk);
 }
 
 /**
@@ -476,19 +472,21 @@ CollectDataForDataset<Store> auto CollectCoord2(const SimpleDataset<Store> &data
  * each superdroplet at start of each observation timestep to a ragged arrays with a constant
  * observation timestep "interval".
  *
+ * @tparam Dataset Type of dataset.
  * @tparam Store Type of store for dataset.
  * @param interval Observation timestep.
  * @param dataset Dataset to write time data to.
+ * @param store The store the dataset writes to.
  * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
  * @param collect_data Object satisfying CollectDataForDataset for given Store to write superdroplet
  * data, such as their attributes, to ragged arrays.
  * @return Observer An observer instance for writing thermodynamic variables from each gridbox.
  */
-template <typename Store>
-inline Observer auto SuperdropsObserver(const unsigned int interval,
-                                        const SimpleDataset<Store> &dataset, const size_t maxchunk,
-                                        CollectDataForDataset<Store> auto collect_data) {
-  const CollectRaggedCount<Store> auto ragged_count = RaggedCount(dataset, maxchunk);
+template <typename Dataset, typename Store>
+inline Observer auto SuperdropsObserver(const unsigned int interval, const Dataset &dataset,
+                                        Store &store, const size_t maxchunk,
+                                        CollectDataForDataset<Dataset> auto collect_data) {
+  const CollectRaggedCount<Dataset> auto ragged_count = RaggedCount(dataset, store, maxchunk);
   return WriteToDatasetObserver(interval, dataset, collect_data, ragged_count);
 }
 

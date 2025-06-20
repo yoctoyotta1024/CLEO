@@ -24,7 +24,6 @@
 #include <concepts>
 #include <iostream>
 
-#include "zarr/simple_dataset.hpp"
 #include "./cleotypes_sizes.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
@@ -56,38 +55,39 @@
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "zarr/fsstore.hpp"
+#include "zarr/simple_dataset.hpp"
 
-template <typename Store>
+template <typename Dataset, typename Store>
 inline Observer auto create_superdrops_observer(const Config &config, const Timesteps &tsteps,
-                                                SimpleDataset<Store> &dataset) {
+                                                Dataset &dataset, Store &store) {
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
 
-  CollectDataForDataset<Store> auto sdid = CollectSdId(dataset, maxchunk);
-  CollectDataForDataset<Store> auto sdgbxindex = CollectSdgbxindex(dataset, maxchunk);
-  CollectDataForDataset<Store> auto xi = CollectXi(dataset, maxchunk);
-  CollectDataForDataset<Store> auto radius = CollectRadius(dataset, maxchunk);
-  CollectDataForDataset<Store> auto msol = CollectMsol(dataset, maxchunk);
-  CollectDataForDataset<Store> auto coord3 = CollectCoord3(dataset, maxchunk);
-  CollectDataForDataset<Store> auto coord1 = CollectCoord1(dataset, maxchunk);
-  CollectDataForDataset<Store> auto coord2 = CollectCoord2(dataset, maxchunk);
+  CollectDataForDataset<Dataset> auto sdid = CollectSdId(dataset, maxchunk);
+  CollectDataForDataset<Dataset> auto sdgbxindex = CollectSdgbxindex(dataset, maxchunk);
+  CollectDataForDataset<Dataset> auto xi = CollectXi(dataset, maxchunk);
+  CollectDataForDataset<Dataset> auto radius = CollectRadius(dataset, maxchunk);
+  CollectDataForDataset<Dataset> auto msol = CollectMsol(dataset, maxchunk);
+  CollectDataForDataset<Dataset> auto coord3 = CollectCoord3(dataset, maxchunk);
+  CollectDataForDataset<Dataset> auto coord1 = CollectCoord1(dataset, maxchunk);
+  CollectDataForDataset<Dataset> auto coord2 = CollectCoord2(dataset, maxchunk);
 
   const auto collect_data =
       coord1 >> coord2 >> coord3 >> msol >> radius >> xi >> sdgbxindex >> sdid;
-  return SuperdropsObserver(obsstep, dataset, maxchunk, collect_data);
+  return SuperdropsObserver(obsstep, dataset, store, maxchunk, collect_data);
 }
 
-template <typename Store>
+template <typename Dataset>
 inline Observer auto create_gridbox_observer(const Config &config, const Timesteps &tsteps,
-                                             SimpleDataset<Store> &dataset) {
+                                             Dataset &dataset) {
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
   const auto ngbxs = config.get_ngbxs();
 
-  const CollectDataForDataset<Store> auto thermo = CollectThermo(dataset, maxchunk, ngbxs);
-  const CollectDataForDataset<Store> auto windvel = CollectWindVel(dataset, maxchunk, ngbxs);
-  const CollectDataForDataset<Store> auto nsupers = CollectNsupers(dataset, maxchunk, ngbxs);
-  const CollectDataForDataset<Store> auto collect_data = nsupers >> windvel >> thermo;
+  const CollectDataForDataset<Dataset> auto thermo = CollectThermo(dataset, maxchunk, ngbxs);
+  const CollectDataForDataset<Dataset> auto windvel = CollectWindVel(dataset, maxchunk, ngbxs);
+  const CollectDataForDataset<Dataset> auto nsupers = CollectNsupers(dataset, maxchunk, ngbxs);
+  const CollectDataForDataset<Dataset> auto collect_data = nsupers >> windvel >> thermo;
   return WriteToDatasetObserver(obsstep, dataset, collect_data);
 
   // const Observer auto obst = ThermoObserver(obsstep, dataset, maxchunk, ngbxs);
@@ -101,20 +101,20 @@ inline Observer auto create_gridbox_observer(const Config &config, const Timeste
   // return obsn;
 }
 
-template <typename Store>
+template <typename Dataset, typename Store>
 inline Observer auto create_observer2(const Config &config, const Timesteps &tsteps,
-                                      SimpleDataset<Store> &dataset) {
+                                      Dataset &dataset, Store &store) {
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
   const auto ngbxs = config.get_ngbxs();
 
-  const Observer auto obs0 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
-  const Observer auto obs1 = GbxindexObserver(dataset, maxchunk, ngbxs);
-  const Observer auto obs2 = MassMomentsObserver(obsstep, dataset, maxchunk, ngbxs);
-  const Observer auto obs3 = MassMomentsRaindropsObserver(obsstep, dataset, maxchunk, ngbxs);
-  const Observer auto obs4 = TotNsupersObserver(obsstep, dataset, maxchunk);
+  const Observer auto obs0 = TimeObserver(obsstep, dataset, store, maxchunk, &step2dimlesstime);
+  const Observer auto obs1 = GbxindexObserver(dataset, store, maxchunk, ngbxs);
+  const Observer auto obs2 = MassMomentsObserver(obsstep, dataset, store, maxchunk, ngbxs);
+  const Observer auto obs3 = MassMomentsRaindropsObserver(obsstep, dataset, store, maxchunk, ngbxs);
+  const Observer auto obs4 = TotNsupersObserver(obsstep, dataset, store, maxchunk);
   const Observer auto obsx = create_gridbox_observer(config, tsteps, dataset);
-  const Observer auto obssd = create_superdrops_observer(config, tsteps, dataset);
+  const Observer auto obssd = create_superdrops_observer(config, tsteps, dataset, store);
 
   return obssd >> obsx >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
 }
@@ -122,14 +122,14 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
 /* ---------------------------------------------------------------------------------------------- */
 /* ---------------------------------------------------------------------------------------------- */
 
-template <typename Store>
+template <typename Dataset, typename Store>
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
-                                     SimpleDataset<Store> &dataset) {
+                                     Dataset &dataset, Store &store) {
   const auto obsstep = tsteps.get_obsstep();
 
   const Observer auto obs0 = StreamOutObserver(obsstep, &step2realtime);
 
-  const Observer auto obs1 = create_observer2(config, tsteps, dataset);
+  const Observer auto obs1 = create_observer2(config, tsteps, dataset, store);
 
   return obs0 >> obs1;
 }
@@ -160,15 +160,15 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
   return FromFileDynamics(config.get_fromfiledynamics(), couplstep, ndims, nsteps);
 }
 
-template <typename Store>
-inline auto create_sdm(const Config &config, const Timesteps &tsteps,
-                       SimpleDataset<Store> &dataset) {
+template <typename Dataset, typename Store>
+inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset &dataset,
+                       Store &store) {
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps = create_cartesian_maps(
       config.get_ngbxs(), config.get_nspacedims(), config.get_grid_filename());
   const MicrophysicalProcess auto microphys = NullMicrophysicalProcess{};
   const MoveSupersInDomain movesupers(create_movement(gbxmaps));
-  const Observer auto obs = create_observer(config, tsteps, dataset);
+  const Observer auto obs = create_observer(config, tsteps, dataset, store);
   return SDMMethods(couplstep, gbxmaps, microphys, movesupers, obs);
 }
 
@@ -202,7 +202,7 @@ int main(int argc, char *argv[]) {
     auto dataset = SimpleDataset(store);
 
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-    const SDMMethods sdm(create_sdm(config, tsteps, dataset));
+    const SDMMethods sdm(create_sdm(config, tsteps, dataset, store));
 
     /* Solver of dynamics coupled to CLEO SDM */
     CoupledDynamics auto coupldyn(
