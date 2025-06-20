@@ -30,7 +30,6 @@
 #include <stdexcept>
 #include <string_view>
 
-#include "zarr/simple_dataset.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
 #include "cartesiandomain/movement/cartesian_movement.hpp"
@@ -61,6 +60,7 @@
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "zarr/fsstore.hpp"
+#include "zarr/simple_dataset.hpp"
 
 template <GridboxMaps GbxMaps>
 inline InitialConditions auto create_initconds(const Config &config, const GbxMaps &gbxmaps) {
@@ -93,41 +93,41 @@ inline MicrophysicalProcess auto create_microphysics(const Config &config,
   return colls;
 }
 
-template <typename Store>
-inline Observer auto create_superdrops_observer(const unsigned int interval,
-                                                SimpleDataset<Store> &dataset, const int maxchunk) {
-  CollectDataForDataset<Store> auto sdid = CollectSdId(dataset, maxchunk);
-  CollectDataForDataset<Store> auto xi = CollectXi(dataset, maxchunk);
-  CollectDataForDataset<Store> auto radius = CollectRadius(dataset, maxchunk);
-  CollectDataForDataset<Store> auto msol = CollectMsol(dataset, maxchunk);
+template <typename Dataset, typename Store>
+inline Observer auto create_superdrops_observer(const unsigned int interval, Dataset &dataset,
+                                                Store &store, const int maxchunk) {
+  CollectDataForDataset<Dataset> auto sdid = CollectSdId(dataset, maxchunk);
+  CollectDataForDataset<Dataset> auto xi = CollectXi(dataset, maxchunk);
+  CollectDataForDataset<Dataset> auto radius = CollectRadius(dataset, maxchunk);
+  CollectDataForDataset<Dataset> auto msol = CollectMsol(dataset, maxchunk);
 
   const auto collect_sddata = msol >> radius >> xi >> sdid;
-  return SuperdropsObserver(interval, dataset, maxchunk, collect_sddata);
+  return SuperdropsObserver(interval, dataset, store, maxchunk, collect_sddata);
 }
 
-template <typename Store>
+template <typename Dataset, typename Store>
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
-                                     SimpleDataset<Store> &dataset) {
+                                     Dataset &dataset, Store &store) {
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
 
   const Observer auto obs0 = StreamOutObserver(obsstep, &step2realtime);
 
-  const Observer auto obs1 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
+  const Observer auto obs1 = TimeObserver(obsstep, dataset, store, maxchunk, &step2dimlesstime);
 
-  const Observer auto obssd = create_superdrops_observer(obsstep, dataset, maxchunk);
+  const Observer auto obssd = create_superdrops_observer(obsstep, dataset, store, maxchunk);
 
   return obssd >> obs1 >> obs0;
 }
 
-template <typename Store>
-inline auto create_sdm(const Config &config, const Timesteps &tsteps,
-                       SimpleDataset<Store> &dataset) {
+template <typename Dataset, typename Store>
+inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset &dataset,
+                       Store &store) {
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
   const MoveSupersInDomain movesupers(create_movement(gbxmaps));
-  const Observer auto obs(create_observer(config, tsteps, dataset));
+  const Observer auto obs = create_observer(config, tsteps, dataset, store);
 
   return SDMMethods(couplstep, gbxmaps, microphys, movesupers, obs);
 }
@@ -166,7 +166,7 @@ int main(int argc, char *argv[]) {
     auto dataset = SimpleDataset(store);
 
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-    const SDMMethods sdm(create_sdm(config, tsteps, dataset));
+    const SDMMethods sdm = create_sdm(config, tsteps, dataset, store);
 
     /* Create coupldyn solver and coupling between coupldyn and SDM */
     const CoupledDynamics auto coupldyn = NullDynamics(tsteps.get_couplstep());

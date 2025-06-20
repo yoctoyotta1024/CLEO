@@ -68,9 +68,9 @@ where for example the SDM is set-up as:
 
 .. code-block:: c++
 
-  template <typename Store>
+  template <typename Dataset, typename Store>
   inline auto create_sdm(const Config &config, const Timesteps &tsteps,
-                       SimpleDataset<Store> &dataset) {
+                         Dataset &dataset, Store &store) {
     const auto couplstep = (unsigned int)tsteps.get_couplstep();
     const GridboxMaps auto gbxmaps = create_gbxmaps(config);
     const MicrophysicalProcess auto microphys = create_microphysics(config, tsteps);
