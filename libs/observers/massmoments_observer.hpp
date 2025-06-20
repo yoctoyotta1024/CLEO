@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 24th March 2025
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -210,7 +210,7 @@ struct CollectMassMoments {
    */
   template <typename T>
   void write_one_array(std::shared_ptr<XarrayAndViews<Store, T>> ptr,
-                       const Dataset<Store> &dataset) const {
+                       const SimpleDataset<Store> &dataset) const {
     Kokkos::deep_copy(ptr->h_data, ptr->d_data);
     dataset.write_to_array(ptr->xzarr, ptr->h_data);
   }
@@ -224,7 +224,7 @@ struct CollectMassMoments {
    */
   template <typename T>
   void write_one_arrayshape(std::shared_ptr<XarrayAndViews<Store, T>> ptr,
-                            const Dataset<Store> &dataset) const {
+                            const SimpleDataset<Store> &dataset) const {
     dataset.write_arrayshape(ptr->xzarr);
   }
 
@@ -312,7 +312,7 @@ struct CollectMassMoments {
    *
    * @param dataset The dataset to write data to.
    */
-  void write_to_arrays(const Dataset<Store> &dataset) const {
+  void write_to_arrays(const SimpleDataset<Store> &dataset) const {
     write_one_array(mom0_ptr, dataset);
     write_one_array(mom1_ptr, dataset);
     write_one_array(mom2_ptr, dataset);
@@ -323,7 +323,7 @@ struct CollectMassMoments {
    *
    * @param dataset The dataset to write data to.
    */
-  void write_arrayshapes(const Dataset<Store> &dataset) const {
+  void write_arrayshapes(const SimpleDataset<Store> &dataset) const {
     write_one_arrayshape(mom0_ptr, dataset);
     write_one_arrayshape(mom1_ptr, dataset);
     write_one_arrayshape(mom2_ptr, dataset);
@@ -334,14 +334,14 @@ struct CollectMassMoments {
    *
    * @param dataset The dataset to write data to.
    */
-  void write_to_ragged_arrays(const Dataset<Store> &dataset) const {}
+  void write_to_ragged_arrays(const SimpleDataset<Store> &dataset) const {}
 
   /**
    * @brief Null function to satisfy CollectDataForDataset concept.
    *
    * @param dataset The dataset to write data to.
    */
-  void write_ragged_arrayshapes(const Dataset<Store> &dataset) const {}
+  void write_ragged_arrayshapes(const SimpleDataset<Store> &dataset) const {}
 
   /**
    * @brief Null function to satisfy CollectDataForDataset concept.
@@ -364,8 +364,9 @@ struct CollectMassMoments {
  * observer concept.
  */
 template <typename Store>
-inline Observer auto MassMomentsObserver(const unsigned int interval, const Dataset<Store> &dataset,
-                                         const size_t maxchunk, const size_t ngbxs) {
+inline Observer auto MassMomentsObserver(const unsigned int interval,
+                                         const SimpleDataset<Store> &dataset, const size_t maxchunk,
+                                         const size_t ngbxs) {
   const auto xzarr_mom0 = create_massmom0_xarray(dataset, "massmom0", maxchunk, ngbxs);
   const auto xzarr_mom1 = create_massmom1_xarray(dataset, "massmom1", maxchunk, ngbxs);
   const auto xzarr_mom2 = create_massmom2_xarray(dataset, "massmom2", maxchunk, ngbxs);
@@ -393,7 +394,7 @@ inline Observer auto MassMomentsObserver(const unsigned int interval, const Data
  */
 template <typename Store>
 inline Observer auto MassMomentsRaindropsObserver(const unsigned int interval,
-                                                  const Dataset<Store> &dataset,
+                                                  const SimpleDataset<Store> &dataset,
                                                   const size_t maxchunk, const size_t ngbxs) {
   const auto xzarr_mom0 = create_massmom0_xarray(dataset, "massmom0_raindrops", maxchunk, ngbxs);
   const auto xzarr_mom1 = create_massmom1_xarray(dataset, "massmom1_raindrops", maxchunk, ngbxs);

@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 21st May 2024
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -40,7 +40,7 @@
  */
 template <typename CDD, typename Store>
 concept CollectDataForDataset =
-    requires(CDD cdd, const Dataset<Store> &ds, const viewd_constgbx d_gbxs,
+    requires(CDD cdd, const SimpleDataset<Store> &ds, const viewd_constgbx d_gbxs,
              const subviewd_constsupers d_supers, const size_t sz) {
       { cdd.get_functor(d_gbxs, d_supers) };
       { cdd.reallocate_views(sz) } -> std::same_as<void>;
@@ -101,22 +101,22 @@ struct CombinedCollectDataForDataset {
     return Functor(a, b, d_gbxs, d_supers);
   }
 
-  void write_to_arrays(const Dataset<Store> &dataset) const {
+  void write_to_arrays(const SimpleDataset<Store> &dataset) const {
     a.write_to_arrays(dataset);
     b.write_to_arrays(dataset);
   }
 
-  void write_to_ragged_arrays(const Dataset<Store> &dataset) const {
+  void write_to_ragged_arrays(const SimpleDataset<Store> &dataset) const {
     a.write_to_ragged_arrays(dataset);
     b.write_to_ragged_arrays(dataset);
   }
 
-  void write_arrayshapes(const Dataset<Store> &dataset) const {
+  void write_arrayshapes(const SimpleDataset<Store> &dataset) const {
     a.write_arrayshapes(dataset);
     b.write_arrayshapes(dataset);
   }
 
-  void write_ragged_arrayshapes(const Dataset<Store> &dataset) const {
+  void write_ragged_arrayshapes(const SimpleDataset<Store> &dataset) const {
     a.write_ragged_arrayshapes(dataset);
     b.write_ragged_arrayshapes(dataset);
   }
@@ -156,13 +156,13 @@ struct NullCollectDataForDataset {
     return Functor{};
   }
 
-  void write_to_arrays(const Dataset<Store> &dataset) const {}
+  void write_to_arrays(const SimpleDataset<Store> &dataset) const {}
 
-  void write_to_ragged_arrays(const Dataset<Store> &dataset) const {}
+  void write_to_ragged_arrays(const SimpleDataset<Store> &dataset) const {}
 
-  void write_arrayshapes(const Dataset<Store> &dataset) const {}
+  void write_arrayshapes(const SimpleDataset<Store> &dataset) const {}
 
-  void write_ragged_arrayshapes(const Dataset<Store> &dataset) const {}
+  void write_ragged_arrayshapes(const SimpleDataset<Store> &dataset) const {}
 
   void reallocate_views(const size_t sz) const {}
 };

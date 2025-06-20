@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Wilton Jaciel Loch
  * -----
- * Last Modified: Wednesday 28th May 2025
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,7 +28,7 @@
 // be changed to use MPI-enabled functionality
 // For this to work dataset.hpp must be included before any other hpp that uses
 // collective_dataset.hpp
-#ifndef LIBS_ZARR_DATASET_HPP_
+#ifndef LIBS_ZARR_SIMPLE_DATASET_HPP_
 
 #include <mpi.h>
 
@@ -57,7 +57,7 @@
  * @tparam Store The type of the store object used by the dataset.
  */
 template <typename Store>
-class Dataset {
+class CollectiveDataset {
  private:
   /**< Reference to the zarr group object. */
   ZarrGroup<Store> group;
@@ -231,7 +231,7 @@ class Dataset {
    *
    * @param store The store object associated with the Dataset.
    */
-  explicit Dataset(Store &store) : group(store), datasetdims() {
+  explicit CollectiveDataset(Store &store) : group(store), datasetdims() {
     store[".zattrs"] =
         "{\n"
         "  \"creator\": \"Clara Bayley\",\n"
