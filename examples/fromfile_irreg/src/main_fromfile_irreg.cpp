@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 28th May 2025
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,7 +28,7 @@
 #include <stdexcept>
 #include <string_view>
 
-#include "zarr/dataset.hpp"
+#include "zarr/simple_dataset.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
 #include "cartesiandomain/movement/cartesian_motion.hpp"
@@ -98,7 +98,7 @@ inline auto create_movement(const unsigned int motionstep, const CartesianMaps &
 
 template <typename Store>
 inline Observer auto create_superdrops_observer(const unsigned int interval,
-                                                Dataset<Store> &dataset, const int maxchunk) {
+                                                SimpleDataset<Store> &dataset, const int maxchunk) {
   CollectDataForDataset<Store> auto sdid = CollectSdId(dataset, maxchunk);
   CollectDataForDataset<Store> auto coord3 = CollectCoord3(dataset, maxchunk);
   CollectDataForDataset<Store> auto coord1 = CollectCoord1(dataset, maxchunk);
@@ -110,7 +110,7 @@ inline Observer auto create_superdrops_observer(const unsigned int interval,
 
 template <typename Store>
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
-                                     Dataset<Store> &dataset) {
+                                     SimpleDataset<Store> &dataset) {
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
   const auto ngbxs = config.get_ngbxs();
@@ -129,7 +129,8 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
 }
 
 template <typename Store>
-inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset<Store> &dataset) {
+inline auto create_sdm(const Config &config, const Timesteps &tsteps,
+                       SimpleDataset<Store> &dataset) {
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
@@ -170,7 +171,7 @@ int main(int argc, char *argv[]) {
 
     /* Create Xarray dataset wit Zarr backend for writing output data to a store */
     auto store = FSStore(config.get_zarrbasedir());
-    auto dataset = Dataset(store);
+    auto dataset = SimpleDataset(store);
 
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
     const SDMMethods sdm(create_sdm(config, tsteps, dataset));

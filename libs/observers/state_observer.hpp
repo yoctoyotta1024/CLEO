@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -56,7 +56,7 @@
  * @return Observer An observer instance for writing the state data.
  */
 template <typename Store>
-inline Observer auto StateObserver(const unsigned int interval, const Dataset<Store> &dataset,
+inline Observer auto StateObserver(const unsigned int interval, const SimpleDataset<Store> &dataset,
                                    const size_t maxchunk, const size_t ngbxs) {
   const CollectDataForDataset<Store> auto thermo = CollectThermo(dataset, maxchunk, ngbxs);
   const CollectDataForDataset<Store> auto windvel = CollectWindVel(dataset, maxchunk, ngbxs);

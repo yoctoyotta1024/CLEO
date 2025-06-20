@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 3rd June 2025
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -30,7 +30,7 @@
 #include <stdexcept>
 #include <string_view>
 
-#include "zarr/dataset.hpp"
+#include "zarr/simple_dataset.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
 #include "cartesiandomain/movement/add_supers_at_domain_top.hpp"
@@ -177,7 +177,8 @@ inline MicrophysicalProcess auto create_microphysics(const Config &config,
 
 template <typename Store>
 inline Observer auto create_superdrops_observer(const unsigned int interval,
-                                                Dataset<Store> &dataset, const size_t maxchunk) {
+                                                SimpleDataset<Store> &dataset,
+                                                const size_t maxchunk) {
   CollectDataForDataset<Store> auto sdid = CollectSdId(dataset, maxchunk);
   CollectDataForDataset<Store> auto sdgbxindex = CollectSdgbxindex(dataset, maxchunk);
   CollectDataForDataset<Store> auto xi = CollectXi(dataset, maxchunk);
@@ -193,8 +194,9 @@ inline Observer auto create_superdrops_observer(const unsigned int interval,
 }
 
 template <typename Store>
-inline Observer auto create_gridboxes_observer(const unsigned int interval, Dataset<Store> &dataset,
-                                               const size_t maxchunk, const size_t ngbxs) {
+inline Observer auto create_gridboxes_observer(const unsigned int interval,
+                                               SimpleDataset<Store> &dataset, const size_t maxchunk,
+                                               const size_t ngbxs) {
   const CollectDataForDataset<Store> auto thermo = CollectThermo(dataset, maxchunk, ngbxs);
   const CollectDataForDataset<Store> auto windvel = CollectWindVel(dataset, maxchunk, ngbxs);
   const CollectDataForDataset<Store> auto nsupers = CollectNsupers(dataset, maxchunk, ngbxs);
@@ -205,8 +207,8 @@ inline Observer auto create_gridboxes_observer(const unsigned int interval, Data
 
 template <typename Store>
 inline Observer auto create_sdmmonitor_observer(const unsigned int interval,
-                                                Dataset<Store> &dataset, const size_t maxchunk,
-                                                const size_t ngbxs) {
+                                                SimpleDataset<Store> &dataset,
+                                                const size_t maxchunk, const size_t ngbxs) {
   const Observer auto obs_cond = MonitorCondensationObserver(interval, dataset, maxchunk, ngbxs);
   const Observer auto obs_massmoms = MonitorMassMomentsObserver(interval, dataset, maxchunk, ngbxs);
   const Observer auto obs_rainmassmoms =
@@ -217,7 +219,7 @@ inline Observer auto create_sdmmonitor_observer(const unsigned int interval,
 
 template <typename Store>
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
-                                     Dataset<Store> &dataset) {
+                                     SimpleDataset<Store> &dataset) {
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
   const auto ngbxs = config.get_ngbxs();
@@ -244,7 +246,8 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
 }
 
 template <typename Store>
-inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset<Store> &dataset) {
+inline auto create_sdm(const Config &config, const Timesteps &tsteps,
+                       SimpleDataset<Store> &dataset) {
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));

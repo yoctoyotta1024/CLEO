@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -70,7 +70,7 @@ struct GbxIndexFunctor {
 template <typename Store>
 class GbxindexObserver {
  private:
-  Dataset<Store> &dataset; /**< Dataset to write gridbox index data to. */
+  SimpleDataset<Store> &dataset; /**< Dataset to write gridbox index data to. */
   std::shared_ptr<XarrayZarrArray<Store, uint32_t>>
       xzarr_ptr; /**< Pointer to gridbox index array in dataset. */
 
@@ -97,7 +97,7 @@ class GbxindexObserver {
    * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
    * @param ngbxs Number of gridboxes in final array.
    */
-  GbxindexObserver(Dataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs)
+  GbxindexObserver(SimpleDataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs)
       : dataset(dataset),
         xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
             dataset.template create_coordinate_array<uint32_t>("gbxindex", "", 1, maxchunk,

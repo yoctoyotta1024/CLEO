@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 15th June 2024
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -31,7 +31,7 @@
 #include "../../kokkosaliases.hpp"
 #include "superdrops/sdmmonitor.hpp"
 #include "zarr/buffer.hpp"
-#include "zarr/dataset.hpp"
+#include "zarr/simple_dataset.hpp"
 #include "zarr/xarray_zarr_array.hpp"
 
 /**
@@ -44,7 +44,7 @@ template <typename Store, SDMMonitor SDMMo, typename T>
 class DoSDMMonitorObs {
  private:
   using viewh_buffer = Buffer<T>::viewh_buffer;
-  Dataset<Store> &dataset;                              /**< Dataset to write time data to. */
+  SimpleDataset<Store> &dataset;                              /**< Dataset to write time data to. */
   std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr; /**< Pointer to array in dataset. */
   SDMMo monitor;
 
@@ -66,7 +66,7 @@ class DoSDMMonitorObs {
    * @param xzarr_ptr Pointer to zarr array in xarray dataset.
    * @param monitor SDMMonitor to use.
    */
-  DoSDMMonitorObs(Dataset<Store> &dataset,
+  DoSDMMonitorObs(SimpleDataset<Store> &dataset,
                   const std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr, const SDMMo monitor)
       : dataset(dataset), xzarr_ptr(xzarr_ptr), monitor(monitor) {}
 

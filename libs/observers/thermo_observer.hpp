@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -59,7 +59,7 @@
  * collecting a 2-D floating point variable (e.g. a thermodynamic variable) from each gridbox.
  */
 template <typename Store, typename FunctorFunc>
-CollectDataForDataset<Store> auto CollectThermoVariable(const Dataset<Store> &dataset,
+CollectDataForDataset<Store> auto CollectThermoVariable(const SimpleDataset<Store> &dataset,
                                                         const FunctorFunc ffunc,
                                                         const std::string_view name,
                                                         const std::string_view units,
@@ -175,7 +175,7 @@ struct QcondFunc {
  * thermodynamics from the state of each gridbox.
  */
 template <typename Store>
-inline CollectDataForDataset<Store> auto CollectThermo(const Dataset<Store> &dataset,
+inline CollectDataForDataset<Store> auto CollectThermo(const SimpleDataset<Store> &dataset,
                                                        const size_t maxchunk, const size_t ngbxs) {
   const CollectDataForDataset<Store> auto press = CollectThermoVariable<Store, PressFunc>(
       dataset, PressFunc{}, "press", "hPa", dlc::P0 / 100, maxchunk, ngbxs);
@@ -205,8 +205,9 @@ inline CollectDataForDataset<Store> auto CollectThermo(const Dataset<Store> &dat
  * @return Observer An observer instance for writing thermodynamic variables from each gridbox.
  */
 template <typename Store>
-inline Observer auto ThermoObserver(const unsigned int interval, const Dataset<Store> &dataset,
-                                    const size_t maxchunk, const size_t ngbxs) {
+inline Observer auto ThermoObserver(const unsigned int interval,
+                                    const SimpleDataset<Store> &dataset, const size_t maxchunk,
+                                    const size_t ngbxs) {
   const CollectDataForDataset<Store> auto thermo = CollectThermo(dataset, maxchunk, ngbxs);
   return WriteToDatasetObserver(interval, dataset, thermo);
 }

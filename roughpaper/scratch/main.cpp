@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 28th May 2025
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,7 +24,7 @@
 #include <concepts>
 #include <iostream>
 
-#include "zarr/dataset.hpp"
+#include "zarr/simple_dataset.hpp"
 #include "./cleotypes_sizes.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
@@ -59,7 +59,7 @@
 
 template <typename Store>
 inline Observer auto create_superdrops_observer(const Config &config, const Timesteps &tsteps,
-                                                Dataset<Store> &dataset) {
+                                                SimpleDataset<Store> &dataset) {
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
 
@@ -79,7 +79,7 @@ inline Observer auto create_superdrops_observer(const Config &config, const Time
 
 template <typename Store>
 inline Observer auto create_gridbox_observer(const Config &config, const Timesteps &tsteps,
-                                             Dataset<Store> &dataset) {
+                                             SimpleDataset<Store> &dataset) {
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
   const auto ngbxs = config.get_ngbxs();
@@ -103,7 +103,7 @@ inline Observer auto create_gridbox_observer(const Config &config, const Timeste
 
 template <typename Store>
 inline Observer auto create_observer2(const Config &config, const Timesteps &tsteps,
-                                      Dataset<Store> &dataset) {
+                                      SimpleDataset<Store> &dataset) {
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
   const auto ngbxs = config.get_ngbxs();
@@ -124,7 +124,7 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
 
 template <typename Store>
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
-                                     Dataset<Store> &dataset) {
+                                     SimpleDataset<Store> &dataset) {
   const auto obsstep = tsteps.get_obsstep();
 
   const Observer auto obs0 = StreamOutObserver(obsstep, &step2realtime);
@@ -161,7 +161,8 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
 }
 
 template <typename Store>
-inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset<Store> &dataset) {
+inline auto create_sdm(const Config &config, const Timesteps &tsteps,
+                       SimpleDataset<Store> &dataset) {
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps = create_cartesian_maps(
       config.get_ngbxs(), config.get_nspacedims(), config.get_grid_filename());
@@ -198,7 +199,7 @@ int main(int argc, char *argv[]) {
 
     /* Create zarr store for writing output to storage */
     auto store = FSStore(config.get_zarrbasedir());
-    auto dataset = Dataset(store);
+    auto dataset = SimpleDataset(store);
 
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
     const SDMMethods sdm(create_sdm(config, tsteps, dataset));

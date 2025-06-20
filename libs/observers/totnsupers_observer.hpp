@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -47,7 +47,7 @@
 template <typename Store>
 class DoTotNsupersObs {
  private:
-  Dataset<Store> &dataset; /**< dataset to write totnsupers data to */
+  SimpleDataset<Store> &dataset; /**< dataset to write totnsupers data to */
   std::shared_ptr<XarrayZarrArray<Store, uint32_t>> xzarr_ptr; /**< pointer to totnsupers array */
 
   /**
@@ -71,7 +71,7 @@ class DoTotNsupersObs {
    * @param dataset Dataset to write totnsupers data to.
    * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
    */
-  DoTotNsupersObs(Dataset<Store> &dataset, const size_t maxchunk)
+  DoTotNsupersObs(SimpleDataset<Store> &dataset, const size_t maxchunk)
       : dataset(dataset),
         xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
             dataset.template create_array<uint32_t>("totnsupers", "", 1, {maxchunk}, {"time"}))) {}
@@ -127,7 +127,7 @@ class DoTotNsupersObs {
  * @return Constructed type satisfying observer concept.
  */
 template <typename Store>
-inline Observer auto TotNsupersObserver(const unsigned int interval, Dataset<Store> &dataset,
+inline Observer auto TotNsupersObserver(const unsigned int interval, SimpleDataset<Store> &dataset,
                                         const size_t maxchunk) {
   return ConstTstepObserver(interval, DoTotNsupersObs(dataset, maxchunk));
 }

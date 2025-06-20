@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -113,7 +113,7 @@ inline Observer auto WriteToDatasetObserver(const unsigned int interval,
  */
 template <typename Store, CollectDataForDataset<Store> CollectData>
 inline Observer auto WriteToDatasetObserver(const unsigned int interval,
-                                            const Dataset<Store> &dataset,
+                                            const SimpleDataset<Store> &dataset,
                                             CollectData collect_data) {
   const auto parallel_write =
       ParallelWriteGridboxes(ParallelGridboxesRangePolicyFunc{}, dataset, collect_data);
@@ -135,8 +135,8 @@ inline Observer auto WriteToDatasetObserver(const unsigned int interval,
 template <typename Store, CollectDataForDataset<Store> CollectData,
           CollectRaggedCount<Store> RaggedCount>
 inline Observer auto WriteToDatasetObserver(const unsigned int interval,
-                                            const Dataset<Store> &dataset, CollectData collect_data,
-                                            RaggedCount ragged_count) {
+                                            const SimpleDataset<Store> &dataset,
+                                            CollectData collect_data, RaggedCount ragged_count) {
   const auto parallel_write = ParallelWriteSupers(dataset, collect_data, ragged_count);
   return ConstTstepObserver(interval, DoWriteToDataset(parallel_write));
 }

@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -74,7 +74,7 @@ struct NsupersFunc {
  * collecting the number of superdroplets in each gridbox.
  */
 template <typename Store>
-inline CollectDataForDataset<Store> auto CollectNsupers(const Dataset<Store> &dataset,
+inline CollectDataForDataset<Store> auto CollectNsupers(const SimpleDataset<Store> &dataset,
                                                         const size_t maxchunk, const size_t ngbxs) {
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
   const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
@@ -96,8 +96,9 @@ inline CollectDataForDataset<Store> auto CollectNsupers(const Dataset<Store> &da
  * @return Observer An observer instance for writing the number of superdroplets.
  */
 template <typename Store>
-inline Observer auto NsupersObserver(const unsigned int interval, const Dataset<Store> &dataset,
-                                     const size_t maxchunk, const size_t ngbxs) {
+inline Observer auto NsupersObserver(const unsigned int interval,
+                                     const SimpleDataset<Store> &dataset, const size_t maxchunk,
+                                     const size_t ngbxs) {
   return WriteToDatasetObserver(interval, dataset, CollectNsupers(dataset, maxchunk, ngbxs));
 }
 

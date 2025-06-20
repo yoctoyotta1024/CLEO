@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Monday 24th March 2025
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -96,8 +96,8 @@ struct MonitorCondensation {
  */
 template <typename Store>
 inline Observer auto MonitorCondensationObserver(const unsigned int interval,
-                                                 Dataset<Store>& dataset, const size_t maxchunk,
-                                                 const size_t ngbxs) {
+                                                 SimpleDataset<Store>& dataset,
+                                                 const size_t maxchunk, const size_t ngbxs) {
   using Mo = MonitorCondensation;
   const auto name = std::string_view("massdelta_cond");
   const auto units = std::string_view("g");

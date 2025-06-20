@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -48,7 +48,7 @@
 template <typename Store>
 class DoTimeObs {
  private:
-  Dataset<Store> &dataset; /**< Dataset to write time data to. */
+  SimpleDataset<Store> &dataset; /**< Dataset to write time data to. */
   std::shared_ptr<XarrayZarrArray<Store, float>>
       xzarr_ptr; /**< Pointer to time array in dataset. */
   std::function<double(unsigned int)>
@@ -79,7 +79,7 @@ class DoTimeObs {
    * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
    * @param step2dimlesstime Function to convert model timesteps to a real time [assumed seconds].
    */
-  DoTimeObs(Dataset<Store> &dataset, const size_t maxchunk,
+  DoTimeObs(SimpleDataset<Store> &dataset, const size_t maxchunk,
             const std::function<double(unsigned int)> step2dimlesstime)
       : dataset(dataset),
         xzarr_ptr(std::make_shared<XarrayZarrArray<Store, float>>(
@@ -138,7 +138,7 @@ class DoTimeObs {
  * @return Constructed type satisfying observer concept.
  */
 template <typename Store>
-inline Observer auto TimeObserver(const unsigned int interval, Dataset<Store> &dataset,
+inline Observer auto TimeObserver(const unsigned int interval, SimpleDataset<Store> &dataset,
                                   const size_t maxchunk,
                                   const std::function<double(unsigned int)> step2dimlesstime) {
   return ConstTstepObserver(interval, DoTimeObs(dataset, maxchunk, step2dimlesstime));
