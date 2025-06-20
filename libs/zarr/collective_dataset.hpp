@@ -55,10 +55,10 @@ class CollectiveDataset {
   /**< map from name of each dimension in dataset to their size */
   std::unordered_map<std::string, size_t> datasetdims;
   Decomposition decomposition;
-  std::shared_ptr<std::vector<unsigned int> > global_superdroplet_ordering;
+  std::shared_ptr<std::vector<unsigned int>> global_superdroplet_ordering;
 
   /**< map from name of each dimension in dataset to their size */
-  std::unordered_map<std::string, std::vector<size_t> > distributed_datasetdims;
+  std::unordered_map<std::string, std::vector<size_t>> distributed_datasetdims;
   int my_rank, comm_size;
   MPI_Comm comm; /**< (YAC compatible) communicator for MPI domain decomposition */
 
@@ -228,7 +228,7 @@ class CollectiveDataset {
         "  \"creator\": \"Clara Bayley\",\n"
         "  \"title\": \"Dataset from CLEO is Xarray and NetCDF compatible Zarr Group of Arrays\""
         "\n}";
-    global_superdroplet_ordering = std::make_shared<std::vector<unsigned int> >();
+    global_superdroplet_ordering = std::make_shared<std::vector<unsigned int>>();
     comm = init_communicator::get_communicator();
   }
 
@@ -382,7 +382,7 @@ class CollectiveDataset {
    * @param xzarr_ptr A shared pointer to the instance of XarrayZarrArray representing the array.
    */
   template <typename T>
-  void write_arrayshape(const std::shared_ptr<XarrayZarrArray<Store, T> > xzarr_ptr) const {
+  void write_arrayshape(const std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr) const {
     if (my_rank == 0) xzarr_ptr->write_arrayshape(datasetdims);
   }
 
@@ -432,7 +432,7 @@ class CollectiveDataset {
    * @param h_data The data to be written to the array.
    */
   template <typename T>
-  void write_to_array(const std::shared_ptr<XarrayZarrArray<Store, T> > xzarr_ptr,
+  void write_to_array(const std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr,
                       const typename Buffer<T>::viewh_buffer h_data) const {
     auto global_data = collect_global_data(h_data, xzarr_ptr->get_dimnames());
     if (my_rank == 0) {
@@ -454,7 +454,7 @@ class CollectiveDataset {
    * @param data The data element to be written to the array.
    */
   template <typename T>
-  void write_to_array(const std::shared_ptr<XarrayZarrArray<Store, T> > xzarr_ptr,
+  void write_to_array(const std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr,
                       const T data) const {
     T recv_data = data;
     if (std::same_as<T, unsigned int>) {
