@@ -38,7 +38,7 @@ the end of your ``main.cpp`` contains a main function that looks something like 
 
       /* Create Xarray dataset wit Zarr backend for writing output data to a store */
       auto store = FSStore(config.get_zarrbasedir());
-      auto dataset = Dataset(store);
+      auto dataset = SimpleDataset(store);
 
       /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
       const SDMMethods sdm = create_sdm(config, tsteps, dataset);
@@ -68,8 +68,9 @@ where for example the SDM is set-up as:
 
 .. code-block:: c++
 
-  template <typename Store>
-  inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset<Store> &dataset) {
+  template <typename Dataset, typename Store>
+  inline auto create_sdm(const Config &config, const Timesteps &tsteps,
+                         Dataset &dataset, Store &store) {
     const auto couplstep = (unsigned int)tsteps.get_couplstep();
     const GridboxMaps auto gbxmaps = create_gbxmaps(config);
     const MicrophysicalProcess auto microphys = create_microphysics(config, tsteps);

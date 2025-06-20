@@ -19,20 +19,8 @@
 
 #include "cartesian_decomposition.hpp"
 
-#include <mpi.h>
+CartesianDecomposition::CartesianDecomposition() { comm = init_communicator::get_communicator(); }
 
-#include <algorithm>
-#include <array>
-#include <cassert>
-#include <cmath>
-#include <iostream>
-#include <limits>
-#include <vector>
-
-#include "cartesiandomain/domainboundaries.hpp"
-#include "domainboundaries.hpp"
-
-CartesianDecomposition::CartesianDecomposition() {}
 CartesianDecomposition::~CartesianDecomposition() {}
 
 size_t CartesianDecomposition::get_total_global_gridboxes() const {
@@ -231,8 +219,8 @@ bool CartesianDecomposition::create(std::vector<size_t> ndims, double gridbox_z_
   int comm_size, decomposition_index;
   std::vector<std::vector<size_t>> factorizations;
 
-  MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
-  MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+  MPI_Comm_size(comm, &comm_size);
+  MPI_Comm_rank(comm, &my_rank);
 
   // If the comm_size is equal to 1 there will be no suitable factorization,
   // so treat it as a special case
@@ -331,7 +319,7 @@ void CartesianDecomposition::calculate_partition_coordinates() {
   auto partition_origin = get_local_partition_origin();
   auto partition_size = get_local_partition_size();
 
-  MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+  MPI_Comm_rank(comm, &my_rank);
 
   for (int dimension = 0; dimension < 3; dimension++) {
     int multiplications = get_multiplications_to_turn_int(gridbox_size[dimension]);
@@ -386,7 +374,9 @@ int find_best_decomposition(std::vector<std::vector<size_t>> &factors,
   int comm_size, best_factorization = -1;
   double vertical_split_penalization = 1.0;
 
-  MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
+  MPI_Comm comm;
+  comm = init_communicator::get_communicator();
+  MPI_Comm_size(comm, &comm_size);
 
   // Calculates the ideal (most even possible) division and initializes the minimum error
   double ideal_division =

@@ -9,7 +9,7 @@ project("boxmodelcollisions_golovin")
 message(STATUS "CLEO including ${PROJECT_NAME} with PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 # Set libraries from CLEO to link with executable
-set(CLEOLIBS gridboxes initialise observers runcleo superdrops zarr)
+set(CLEOLIBS configuration gridboxes initialise observers runcleo superdrops zarr)
 
 # create primary executable for CLEO uncoupled model golovin kernel box model setup
 add_executable(golcolls EXCLUDE_FROM_ALL "main_golcolls.cpp")

@@ -3,13 +3,13 @@
  *
  *
  * ----- CLEO -----
- * File: dataset.hpp
+ * File: simple_dataset.hpp
  * Project: zarr
  * Created Date: Monday 18th March 2024
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -19,8 +19,8 @@
  * Structure to create a ZarrGroup which is xarray and netCDF compatible.
  */
 
-#ifndef LIBS_ZARR_DATASET_HPP_
-#define LIBS_ZARR_DATASET_HPP_
+#ifndef LIBS_ZARR_SIMPLE_DATASET_HPP_
+#define LIBS_ZARR_SIMPLE_DATASET_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <memory>
@@ -44,7 +44,7 @@
  * @tparam Store The type of the store object used by the dataset.
  */
 template <typename Store>
-class Dataset {
+class SimpleDataset {
  private:
   ZarrGroup<Store> group; /**< Reference to the zarr group object. */
   std::unordered_map<std::string, size_t>
@@ -68,7 +68,7 @@ class Dataset {
    *
    * @param store The store object associated with the Dataset.
    */
-  explicit Dataset(Store &store) : group(store), datasetdims() {
+  explicit SimpleDataset(Store &store) : group(store), datasetdims() {
     store[".zattrs"] =
         "{\n"
         "  \"creator\": \"Clara Bayley\",\n"
@@ -292,4 +292,4 @@ class Dataset {
   }
 };
 
-#endif  // LIBS_ZARR_DATASET_HPP_
+#endif  // LIBS_ZARR_SIMPLE_DATASET_HPP_
