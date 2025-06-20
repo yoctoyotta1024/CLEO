@@ -527,6 +527,4 @@ class CollectiveDataset {
   }
 };
 
-#endif
-
 #endif  // LIBS_ZARR_COLLECTIVE_DATASET_HPP_
