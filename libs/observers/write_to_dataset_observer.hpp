@@ -33,7 +33,6 @@
 #include "observers/observers.hpp"
 #include "observers/parallel_write_data.hpp"
 #include "superdrops/sdmmonitor.hpp"
-#include "zarr/collective_dataset.hpp"
 
 /**
  * @class DoWriteToDataset
@@ -104,16 +103,14 @@ inline Observer auto WriteToDatasetObserver(const unsigned int interval,
 /**
  * @brief Constructs an observer to write data from gridboxes to arrays in a dataset at a
  * constant time interval using a range policy parallelism over the gridboxes.
- * @tparam Store Type of store for dataset.
  * @tparam CollectData Type of collect data function.
  * @param interval Constant timestep interval.
  * @param dataset Dataset to write data to.
  * @param collect_data Function to collect data from gridboxes.
  * @return Constructed observer.
  */
-template <typename Store, CollectDataForDataset<Store> CollectData>
-inline Observer auto WriteToDatasetObserver(const unsigned int interval,
-                                            const SimpleDataset<Store> &dataset,
+template <typename Dataset, CollectDataForDataset<Dataset> CollectData>
+inline Observer auto WriteToDatasetObserver(const unsigned int interval, const Dataset &dataset,
                                             CollectData collect_data) {
   const auto parallel_write =
       ParallelWriteGridboxes(ParallelGridboxesRangePolicyFunc{}, dataset, collect_data);
@@ -123,7 +120,6 @@ inline Observer auto WriteToDatasetObserver(const unsigned int interval,
 /**
  * @brief Constructs an observer to write data from superdroplets to ragged arrays in a dataset
  * at a constant time interval.
- * @tparam Store Type of store for dataset.
  * @tparam CollectData Type of collect data function.
  * @tparam RaggedCount Type of collect ragged count function.
  * @param interval Constant timestep interval.
@@ -132,10 +128,9 @@ inline Observer auto WriteToDatasetObserver(const unsigned int interval,
  * @param ragged_count Function to collect ragged count for superdroplet data arrays(s).
  * @return Constructed observer.
  */
-template <typename Store, CollectDataForDataset<Store> CollectData,
-          CollectRaggedCount<Store> RaggedCount>
-inline Observer auto WriteToDatasetObserver(const unsigned int interval,
-                                            const SimpleDataset<Store> &dataset,
+template <typename Dataset, CollectDataForDataset<Dataset> CollectData,
+          CollectRaggedCount<Dataset> RaggedCount>
+inline Observer auto WriteToDatasetObserver(const unsigned int interval, const Dataset &dataset,
                                             CollectData collect_data, RaggedCount ragged_count) {
   const auto parallel_write = ParallelWriteSupers(dataset, collect_data, ragged_count);
   return ConstTstepObserver(interval, DoWriteToDataset(parallel_write));

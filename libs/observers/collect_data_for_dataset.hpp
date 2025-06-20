@@ -28,8 +28,9 @@
 #include <concepts>
 
 #include "../kokkosaliases.hpp"
-#include "zarr/collective_dataset.hpp"
 #include "zarr/fsstore.hpp"
+// #include "zarr/collective_dataset.hpp" # WIP to >> operator for colective dataset
+#include "zarr/simple_dataset.hpp"
 
 /**
  * @brief Concept for CollectDataForDataset is all types that have functions for creating a functor
@@ -38,28 +39,27 @@
  *
  * @tparam CDD The type that satisfies the CollectDataForDataset concept.
  */
-template <typename CDD, typename Store>
-concept CollectDataForDataset =
-    requires(CDD cdd, const SimpleDataset<Store> &ds, const viewd_constgbx d_gbxs,
-             const subviewd_constsupers d_supers, const size_t sz) {
-      { cdd.get_functor(d_gbxs, d_supers) };
-      { cdd.reallocate_views(sz) } -> std::same_as<void>;
-      { cdd.write_to_arrays(ds) } -> std::same_as<void>;
-      { cdd.write_to_ragged_arrays(ds) } -> std::same_as<void>;
-      { cdd.write_arrayshapes(ds) } -> std::same_as<void>;
-      { cdd.write_ragged_arrayshapes(ds) } -> std::same_as<void>;
-    };
+template <typename CDD, typename Dataset>
+concept CollectDataForDataset = requires(CDD cdd, const Dataset &ds, const viewd_constgbx d_gbxs,
+                                         const subviewd_constsupers d_supers, const size_t sz) {
+  { cdd.get_functor(d_gbxs, d_supers) };
+  { cdd.reallocate_views(sz) } -> std::same_as<void>;
+  { cdd.template write_to_arrays<Dataset>(ds) } -> std::same_as<void>;
+  { cdd.template write_to_ragged_arrays<Dataset>(ds) } -> std::same_as<void>;
+  { cdd.template write_arrayshapes<Dataset>(ds) } -> std::same_as<void>;
+  { cdd.template write_ragged_arrayshapes<Dataset>(ds) } -> std::same_as<void>;
+};
 
 /**
  * @brief struct is a new CollectDataForDataset formed from the combination of two structs that
- * also satisfy the CollectDataForDataset concept given the same Store type. Struct that does the
+ * also satisfy the CollectDataForDataset concept given the same Dataset type. Struct that does the
  * actions of the original structs in sequence.
  *
  * @tparam CollectData1 The type of the first CollectDataForDataset.
  * @tparam CollectData2 The type of the second CollectDataForDataset.
  */
-template <typename Store, CollectDataForDataset<Store> CollectData1,
-          CollectDataForDataset<Store> CollectData2>
+template <typename Dataset, CollectDataForDataset<Dataset> CollectData1,
+          CollectDataForDataset<Dataset> CollectData2>
 struct CombinedCollectDataForDataset {
  private:
   CollectData1 a; /**< The first instance of type of CollectDataForDataset. */
@@ -101,22 +101,26 @@ struct CombinedCollectDataForDataset {
     return Functor(a, b, d_gbxs, d_supers);
   }
 
-  void write_to_arrays(const SimpleDataset<Store> &dataset) const {
+  template <typename D = Dataset>
+  void write_to_arrays(const D &dataset) const {
     a.write_to_arrays(dataset);
     b.write_to_arrays(dataset);
   }
 
-  void write_to_ragged_arrays(const SimpleDataset<Store> &dataset) const {
+  template <typename D = Dataset>
+  void write_to_ragged_arrays(const D &dataset) const {
     a.write_to_ragged_arrays(dataset);
     b.write_to_ragged_arrays(dataset);
   }
 
-  void write_arrayshapes(const SimpleDataset<Store> &dataset) const {
+  template <typename D = Dataset>
+  void write_arrayshapes(const D &dataset) const {
     a.write_arrayshapes(dataset);
     b.write_arrayshapes(dataset);
   }
 
-  void write_ragged_arrayshapes(const SimpleDataset<Store> &dataset) const {
+  template <typename D = Dataset>
+  void write_ragged_arrayshapes(const D &dataset) const {
     a.write_ragged_arrayshapes(dataset);
     b.write_ragged_arrayshapes(dataset);
   }
@@ -130,18 +134,17 @@ struct CombinedCollectDataForDataset {
 /**
  * @brief Overloaded operator >> to combine two CollectDataForDataset instances into a new one.
  *
- * @param a First CollectDataForDataset with Store=FSStore.
- * @param b Second CollectDataForDataset with Store=FSStore.
+ * @param a First CollectDataForDataset with Dataset=SimpleDataset<FSStore>.
+ * @param b Second CollectDataForDataset with Dataset=SimpleDataset<FSStore>.
  * @return CombinedCollectDataForDataset<Obs1, Obs2> Combined CollectDataForDataset.
  */
-
-template <CollectDataForDataset<FSStore> CollectData1, CollectDataForDataset<FSStore> CollectData2>
+template <CollectDataForDataset<SimpleDataset<FSStore>> CollectData1,
+          CollectDataForDataset<SimpleDataset<FSStore>> CollectData2>
 auto operator>>(const CollectData1 a, const CollectData2 b) {
-  return CombinedCollectDataForDataset<FSStore, CollectData1, CollectData2>(a, b);
+  return CombinedCollectDataForDataset<SimpleDataset<FSStore>, CollectData1, CollectData2>(a, b);
 }
 
 /* struct satifying CollectDataForDataset and does nothing */
-template <typename Store>
 struct NullCollectDataForDataset {
  public:
   struct Functor {
@@ -156,13 +159,17 @@ struct NullCollectDataForDataset {
     return Functor{};
   }
 
-  void write_to_arrays(const SimpleDataset<Store> &dataset) const {}
+  template <typename Dataset>
+  void write_to_arrays(const Dataset &dataset) const {}
 
-  void write_to_ragged_arrays(const SimpleDataset<Store> &dataset) const {}
+  template <typename Dataset>
+  void write_to_ragged_arrays(const Dataset &dataset) const {}
 
-  void write_arrayshapes(const SimpleDataset<Store> &dataset) const {}
+  template <typename Dataset>
+  void write_arrayshapes(const Dataset &dataset) const {}
 
-  void write_ragged_arrayshapes(const SimpleDataset<Store> &dataset) const {}
+  template <typename Dataset>
+  void write_ragged_arrayshapes(const Dataset &dataset) const {}
 
   void reallocate_views(const size_t sz) const {}
 };

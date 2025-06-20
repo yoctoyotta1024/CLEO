@@ -36,10 +36,9 @@
 #include "observers/sdmmonitor/monitor_massmoments.hpp"
 #include "superdrops/sdmmonitor.hpp"
 #include "zarr/buffer.hpp"
-#include "zarr/simple_dataset.hpp"
 #include "zarr/xarray_zarr_array.hpp"
 
-template <typename Store>
+template <typename Dataset, typename Store>
 struct MonitorMassMomentXarrays {
   XarrayZarrArray<Store, uint64_t> mom0_microphys; /**< 0th mass moment from microphysics Xarray */
   XarrayZarrArray<Store, float> mom1_microphys;    /**< 1st mass moment from microphysics Xarray */
@@ -48,17 +47,20 @@ struct MonitorMassMomentXarrays {
   XarrayZarrArray<Store, float> mom1_motion;       /**< 1st mass moment from motion Xarray */
   XarrayZarrArray<Store, float> mom2_motion;       /**< 2nd mass moment from motion Xarray */
 
-  MonitorMassMomentXarrays(const SimpleDataset<Store> &dataset, const size_t maxchunk,
+  MonitorMassMomentXarrays(const Dataset &dataset, Store &store, const size_t maxchunk,
                            const size_t ngbxs)
-      : mom0_microphys(create_massmom0_xarray(dataset, "massmom0_microphys", maxchunk, ngbxs)),
-        mom1_microphys(create_massmom1_xarray(dataset, "massmom1_microphys", maxchunk, ngbxs)),
-        mom2_microphys(create_massmom2_xarray(dataset, "massmom2_microphys", maxchunk, ngbxs)),
-        mom0_motion(create_massmom0_xarray(dataset, "massmom0_motion", maxchunk, ngbxs)),
-        mom1_motion(create_massmom1_xarray(dataset, "massmom1_motion", maxchunk, ngbxs)),
-        mom2_motion(create_massmom2_xarray(dataset, "massmom2_motion", maxchunk, ngbxs)) {}
+      : mom0_microphys(
+            create_massmom0_xarray(dataset, store, "massmom0_microphys", maxchunk, ngbxs)),
+        mom1_microphys(
+            create_massmom1_xarray(dataset, store, "massmom1_microphys", maxchunk, ngbxs)),
+        mom2_microphys(
+            create_massmom2_xarray(dataset, store, "massmom2_microphys", maxchunk, ngbxs)),
+        mom0_motion(create_massmom0_xarray(dataset, store, "massmom0_motion", maxchunk, ngbxs)),
+        mom1_motion(create_massmom1_xarray(dataset, store, "massmom1_motion", maxchunk, ngbxs)),
+        mom2_motion(create_massmom2_xarray(dataset, store, "massmom2_motion", maxchunk, ngbxs)) {}
 };
 
-template <typename Store>
+template <typename Dataset, typename Store>
 struct MonitorRainMassMomentXarrays {
   XarrayZarrArray<Store, uint64_t> mom0_microphys; /**< 0th mass moment from microphysics Xarray */
   XarrayZarrArray<Store, float> mom1_microphys;    /**< 1st mass moment from microphysics Xarray */
@@ -67,18 +69,20 @@ struct MonitorRainMassMomentXarrays {
   XarrayZarrArray<Store, float> mom1_motion;       /**< 1st mass moment from motion Xarray */
   XarrayZarrArray<Store, float> mom2_motion;       /**< 2nd mass moment from motion Xarray */
 
-  MonitorRainMassMomentXarrays(const SimpleDataset<Store> &dataset, const size_t maxchunk,
+  MonitorRainMassMomentXarrays(const Dataset &dataset, Store &store, const size_t maxchunk,
                                const size_t ngbxs)
-      : mom0_microphys(
-            create_massmom0_xarray(dataset, "massmom0_raindrops_microphys", maxchunk, ngbxs)),
-        mom1_microphys(
-            create_massmom1_xarray(dataset, "massmom1_raindrops_microphys", maxchunk, ngbxs)),
-        mom2_microphys(
-            create_massmom2_xarray(dataset, "massmom2_raindrops_microphys", maxchunk, ngbxs)),
-        mom0_motion(create_massmom0_xarray(dataset, "massmom0_raindrops_motion", maxchunk, ngbxs)),
-        mom1_motion(create_massmom1_xarray(dataset, "massmom1_raindrops_motion", maxchunk, ngbxs)),
-        mom2_motion(create_massmom2_xarray(dataset, "massmom2_raindrops_motion", maxchunk, ngbxs)) {
-  }
+      : mom0_microphys(create_massmom0_xarray(dataset, store, "massmom0_raindrops_microphys",
+                                              maxchunk, ngbxs)),
+        mom1_microphys(create_massmom1_xarray(dataset, store, "massmom1_raindrops_microphys",
+                                              maxchunk, ngbxs)),
+        mom2_microphys(create_massmom2_xarray(dataset, store, "massmom2_raindrops_microphys",
+                                              maxchunk, ngbxs)),
+        mom0_motion(
+            create_massmom0_xarray(dataset, store, "massmom0_raindrops_motion", maxchunk, ngbxs)),
+        mom1_motion(
+            create_massmom1_xarray(dataset, store, "massmom1_raindrops_motion", maxchunk, ngbxs)),
+        mom2_motion(
+            create_massmom2_xarray(dataset, store, "massmom2_raindrops_motion", maxchunk, ngbxs)) {}
 };
 
 /**
@@ -89,10 +93,10 @@ struct MonitorRainMassMomentXarrays {
  * @tparam MonitorXarraysType Type for xarrays for mass moments in dataset.
  * @tparam MonitorViewsType Type for views which calculate mass moments for xarrays.
  */
-template <typename Store, typename MonitorXarraysType, typename MonitorViewsType>
+template <typename Dataset, typename Store, typename MonitorXarraysType, typename MonitorViewsType>
 class DoMonitorMassMomentsObs {
  private:
-  SimpleDataset<Store> &dataset;                  /**< Dataset to write time data to. */
+  Dataset &dataset;                               /**< Dataset to write time data to. */
   std::shared_ptr<MonitorXarraysType> xzarrs_ptr; /**< Pointer to arrays in dataset. */
   MonitorMassMoments<MonitorViewsType> monitor;
 
@@ -128,12 +132,13 @@ class DoMonitorMassMomentsObs {
   /**
    * @brief Constructor for DoMonitorMassMomentsObs.
    * @param dataset Dataset to write monitored data to.
+   * &param store Store dataset writes into.
    * @param maxchunk The maximum chunk size (number of elements) for Xarrays.
    * @param ngbxs The number of gridboxes.
    */
-  DoMonitorMassMomentsObs(SimpleDataset<Store> &dataset, const size_t maxchunk, const size_t ngbxs)
+  DoMonitorMassMomentsObs(Dataset &dataset, Store &store, const size_t maxchunk, const size_t ngbxs)
       : dataset(dataset),
-        xzarrs_ptr(std::make_shared<MonitorXarraysType>(dataset, maxchunk, ngbxs)),
+        xzarrs_ptr(std::make_shared<MonitorXarraysType>(dataset, store, maxchunk, ngbxs)),
         monitor(ngbxs) {}
 
   /**
@@ -190,17 +195,18 @@ class DoMonitorMassMomentsObs {
  * @tparam Store Type of store for dataset.
  * @param interval Observation timestep.
  * @param dataset Dataset to write time data to.
+ * @param store Store which dataset writes to
  * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
  * @param ngbxs The number of gridboxes.
  * @return Constructed type satisfying observer concept.
  */
-template <typename Store>
-inline Observer auto MonitorMassMomentsObserver(const unsigned int interval,
-                                                SimpleDataset<Store> &dataset,
-                                                const size_t maxchunk, const size_t ngbxs) {
+template <typename Dataset, typename Store>
+inline Observer auto MonitorMassMomentsObserver(const unsigned int interval, Dataset &dataset,
+                                                Store &store, const size_t maxchunk,
+                                                const size_t ngbxs) {
   const auto do_obs =
-      DoMonitorMassMomentsObs<Store, MonitorMassMomentXarrays<Store>, MonitorMassMomentViews>(
-          dataset, maxchunk, ngbxs);
+      DoMonitorMassMomentsObs<Dataset, Store, MonitorMassMomentXarrays<Dataset, Store>,
+                              MonitorMassMomentViews>(dataset, store, maxchunk, ngbxs);
   return ConstTstepObserver(interval, do_obs);
 }
 
@@ -212,16 +218,18 @@ inline Observer auto MonitorMassMomentsObserver(const unsigned int interval,
  * @tparam Store Type of store for dataset.
  * @param interval Observation timestep.
  * @param dataset Dataset to write time data to.
+ * @param store Store which dataset writes to
  * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
  * @param ngbxs The number of gridboxes.
  * @return Constructed type satisfying observer concept.
  */
-template <typename Store>
-inline Observer auto MonitorRainMassMomentsObserver(const unsigned int interval,
-                                                    SimpleDataset<Store> &dataset,
-                                                    const size_t maxchunk, const size_t ngbxs) {
-  const auto do_obs = DoMonitorMassMomentsObs<Store, MonitorRainMassMomentXarrays<Store>,
-                                              MonitorRainMassMomentViews>(dataset, maxchunk, ngbxs);
+template <typename Dataset, typename Store>
+inline Observer auto MonitorRainMassMomentsObserver(const unsigned int interval, Dataset &dataset,
+                                                    Store &store, const size_t maxchunk,
+                                                    const size_t ngbxs) {
+  const auto do_obs =
+      DoMonitorMassMomentsObs<Dataset, Store, MonitorRainMassMomentXarrays<Dataset, Store>,
+                              MonitorRainMassMomentViews>(dataset, store, maxchunk, ngbxs);
   return ConstTstepObserver(interval, do_obs);
 }
 
