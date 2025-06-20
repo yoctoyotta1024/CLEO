@@ -38,7 +38,7 @@ class init_communicator {
   static int comm_size;
   static int my_rank;
  public:
-  explicit init_communicator(const Config &config);
+  explicit init_communicator(int argc, char *argv[], const Config &config);
   ~init_communicator();
   static MPI_Comm get_communicator();
   static int get_yac_comp_id();
