@@ -2,6 +2,37 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.44.1](https://github.com/yoctoyotta1024/CLEO/compare/636db598409bf012ff1c50b506efc8dd221e7a2e..v0.44.1) - 2025-06-23
+#### Bug Fixes
+- zarr library does not depend on cartesian decomposition - ([a6eb12a](https://github.com/yoctoyotta1024/CLEO/commit/a6eb12ac1ee0ce4ff32587c32f5ae8b066d1374f)) - clara.bayley
+- zarr lib depends on cartesiandomain - ([dc18395](https://github.com/yoctoyotta1024/CLEO/commit/dc18395f9a38f6097242390169b12fc1fcde5126)) - clara.bayley
+- use gcc compiler in run examples - ([3499eb9](https://github.com/yoctoyotta1024/CLEO/commit/3499eb9e35c37c86a698f0549807823c1562485a)) - clara.bayley
+- bubble requires two mpi tasks in SLURM - ([f702f7f](https://github.com/yoctoyotta1024/CLEO/commit/f702f7f77cae03300495f7de0b3c8476768b4e33)) - clara.bayley
+- Fixed a compiler warning related error (fallthrough error) - ([636db59](https://github.com/yoctoyotta1024/CLEO/commit/636db598409bf012ff1c50b506efc8dd221e7a2e)) - clara.bayley
+#### Continuous Integration
+- all examples not need yaxt/yac in build - ([284af75](https://github.com/yoctoyotta1024/CLEO/commit/284af7520cc30f07343ffcd569c8f67030037ccd)) - clara.bayley
+#### Miscellaneous Chores
+- rename Dataset -> Simple or Collective Dataset - ([cac0dbf](https://github.com/yoctoyotta1024/CLEO/commit/cac0dbf323c7e38128c2d9cb3a31dc190dbe3ca3)) - clara.bayley
+- add todo - ([feb4b49](https://github.com/yoctoyotta1024/CLEO/commit/feb4b49d34f50218748e2dc2a7ba24409df3922a)) - clara.bayley
+#### Performance Improvements
+- remove unwanted comment - ([bc00384](https://github.com/yoctoyotta1024/CLEO/commit/bc00384b73e8eb22b36c65b9772349ece71a82a3)) - clara.bayley
+#### Refactoring
+- generalise operator to combine two CollectDataForDataset types - ([e80fde8](https://github.com/yoctoyotta1024/CLEO/commit/e80fde842154fb3212e22f3e3d7ec50ca9ca978b)) - clara.bayley
+- make examples compatible with templated dataset - ([ec19973](https://github.com/yoctoyotta1024/CLEO/commit/ec19973dde412b08d5bdbd0ca424d0087b692bdf)) - clara.bayley
+- template over dataset - ([4bc7cdd](https://github.com/yoctoyotta1024/CLEO/commit/4bc7cdde00fd59386293130f74f0f569209f3f29)) - clara.bayley
+- remove guard on collective dataset - ([69c70f3](https://github.com/yoctoyotta1024/CLEO/commit/69c70f353d646e698cc50c93c496e0c422513d40)) - clara.bayley
+- fix sbatch tasks and nthreads for bubble test case - ([ee350a4](https://github.com/yoctoyotta1024/CLEO/commit/ee350a4113865d3d3acc2a8a7e9b5e9527fa8282)) - clara.bayley
+- make pycleo compatible with new configuration library - ([a343c3f](https://github.com/yoctoyotta1024/CLEO/commit/a343c3f751c18d20d9d9f98d68d40cf562141c28)) - clara.bayley
+- move configuration related files into seperate library from initialisation - ([c663c30](https://github.com/yoctoyotta1024/CLEO/commit/c663c30bd1eba2819148e497fbec45d14b7e8713)) - clara.bayley
+- change order of cmake building - ([2dbca64](https://github.com/yoctoyotta1024/CLEO/commit/2dbca64753fc9324a53831bfe20b44bded688f61)) - clara.bayley
+- generalise yac installation to allow intel compiler on Levante - ([711714c](https://github.com/yoctoyotta1024/CLEO/commit/711714c8bc72fa4f8365b0b8fdb1b4ed4bd88211)) - clara.bayley
+- delete redundant enableyacpython flag - ([72e4577](https://github.com/yoctoyotta1024/CLEO/commit/72e4577034a2d3c8614549a791a97797f05bd86d)) - clara.bayley
+- make building yac an essential requirement of CLEO build scripts - ([b61c1bb](https://github.com/yoctoyotta1024/CLEO/commit/b61c1bb19e3060ff083178358d2fbf87b70e437a)) - clara.bayley
+- enableyac -> enable_yacpython flag renaming - ([8883c60](https://github.com/yoctoyotta1024/CLEO/commit/8883c6085e06b46b71f14e4d158051c90f98a487)) - clara.bayley
+- long time for python bindings example - ([dbbfc71](https://github.com/yoctoyotta1024/CLEO/commit/dbbfc71d9447fa9ba2849c51b9a5fdc7158a4524)) - clara.bayley
+
+- - -
+
 ## [v0.44.0](https://github.com/yoctoyotta1024/CLEO/compare/3b38b2c1c6665568cb10eb08d48130a06796d2d6..v0.44.0) - 2025-06-12
 #### Bug Fixes
 - coupldyn_numpy is submodule of pycleo - ([a0c42bb](https://github.com/yoctoyotta1024/CLEO/commit/a0c42bb4f85597b6342132367d72e55455882bc8)) - clara.bayley
