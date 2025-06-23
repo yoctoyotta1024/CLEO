@@ -24,15 +24,14 @@ At the time of writing this is gcc 11.2.0, e.g.
 
 .. code-block:: console
 
-  $ module load gcc/11.2.0-gcc-11.2.0
-  $ spack load openmpi/4.1.2-gcc-11.2.0
+  $ module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0
 
 To compile with C++ and CUDA, use Levante's nvhpc compilers too, e.g.
 
 .. code-block:: console
 
-  $ module load gcc/11.2.0-gcc-11.2.0
-  $ spack load openmpi/4.1.2-gcc-11.2.0 cuda@12.2.0%gcc@=11.2.0
+  $ module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0
+  $ spack load cuda@12.2.0%gcc@=11.2.0
 
 (Note you still need to use the gcc openmpi library as opposed to the cuda (nvhpc)
 ones because CLEO uses gcc not nvhpc where this is relevant).
@@ -83,8 +82,8 @@ compiler which you can load on Levante via:
 
 .. code-block:: console
 
-  $ module load gcc/11.2.0-gcc-11.2.0 netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0
-  $ spack load openmpi@4.1.2%gcc@11.2.0 openblas@0.3.18%gcc@=11.2.0
+  $ module load gcc/11.2.0-gcc-11.2.0 openmpi@4.1.2%gcc@11.2.0 netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0
+  $ spack load openblas@0.3.18%gcc@=11.2.0
 
 When you want to run CLEO with YAC, you will also need to export some additional paths:
 

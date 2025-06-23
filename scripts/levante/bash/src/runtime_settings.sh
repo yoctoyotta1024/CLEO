@@ -16,11 +16,11 @@ check_args_not_empty "${CLEO_COMPILERNAME}" "${CLEO_YACYAXTROOT}"
 source ${bashsrc}/levante_packages.sh
 if [ "${CLEO_COMPILERNAME}" == "gcc" ]
 then
-  spack load ${levante_gcc_openmpi}
+  module load ${levante_gcc_openmpi}
   fyamllib=${levante_gcc_fyamllib}
 elif [ "${CLEO_COMPILERNAME}" == "intel" ]
 then
-  spack load ${levante_intel_openmpi}
+  module load ${levante_intel_openmpi}
   fyamllib=${levante_intel_fyamllib}
 else
   echo "Bad inputs, YAC only compatible with "intel" or "gcc" compiler names"

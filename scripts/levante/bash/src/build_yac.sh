@@ -13,12 +13,13 @@ check_args_not_empty "${CLEO_PATH2CLEO}" "${CLEO_COMPILERNAME}" "${CLEO_CXX_COMP
 if  [[ "${CLEO_COMPILERNAME}" == "gcc" &&
        "${CLEO_CXX_COMPILER}" != "/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpic++" ]]
 then
-  echo "YAC currently requires gcc/11.2.0-gcc-11.2.0 compilers"
+  echo "YAC currently requires gcc/11.2.0-gcc-11.2.0 with openmpi/4.1.2-gcc-11.2.0 compilers"
   exit 1
 elif  [[ "${CLEO_COMPILERNAME}" == "intel" &&
-       "${CLEO_CXX_COMPILER}" != "/sw/spack-levante/openmpi-4.1.2-yfwe6t/bin/mpic++" ]]
+       "${CLEO_CXX_COMPILER}" != "/sw/spack-levante/openmpi-4.1.6-ux3zoj/bin/mpic++" ]]
 then
-  echo "YAC currently requires intel-oneapi-compilers/2023.2.1-gcc-11.2.0 compilers"
+  echo "YAC currently requires intel-oneapi-compilers/2024.2.1-gcc-13.3.0 with\
+  openmpi/4.1.6-oneapi-2024.2.1 compilers"
   exit 1
 fi
 ### ---------------------------------------------------- ###

@@ -17,8 +17,7 @@ source ${bashsrc}/levante_packages.sh
 
 if [ "${CLEO_COMPILERNAME}" == "intel" ]
 then
-  module load ${levante_intel}
-  spack load ${levante_intel_openmpi}
+  module load ${levante_intel} ${levante_intel_openmpi}
   spack load ${levante_intel_cmake}
   export CLEO_CXX_COMPILER=${levante_icpc_compiler}
   export CLEO_CC_COMPILER=${levante_icc_compiler}
@@ -35,8 +34,7 @@ then
   fi
 elif [ "${CLEO_COMPILERNAME}" == "gcc" ]
 then
-  module load ${levante_gcc}
-  spack load ${levante_gcc_openmpi}
+  module load ${levante_gcc} ${levante_gcc_openmpi}
   spack load ${levante_gcc_cmake}
   export CLEO_CXX_COMPILER=${levante_gxx_compiler}
   export CLEO_CC_COMPILER=${levante_gcc_compiler}
