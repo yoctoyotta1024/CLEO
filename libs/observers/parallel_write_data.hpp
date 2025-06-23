@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 11th April 2024
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -27,7 +27,6 @@
 #include <concepts>
 
 #include "../kokkosaliases.hpp"
-#include "zarr/collective_dataset.hpp"
 
 namespace KCS = KokkosCleoSettings;
 
@@ -94,7 +93,7 @@ struct ParallelGridboxesTeamPolicyFunc {
  * that data to arrays in a dataset.
  *
  * This struct is responsible for collecting data from gridboxes and writing it to arrays in a
- * dataset with a given store.
+ * dataset.
  *
  * The ParallelGridboxesFunc type is a function-like object responsible for looping over
  * gridboxes in parallel (see ParallelGridboxesRangePolicyFunc or ParallelGridboxesTeamPolicyFunc).
@@ -102,17 +101,18 @@ struct ParallelGridboxesTeamPolicyFunc {
  * operator of the type it returns from its get_functor() call should be compatible with the
  * signature of the functor required by the ParallelGridboxesFunc type.
  *
- * @tparam Store The type of the data store in the dataset.
+ * @tparam Dataset The type dataset used to write data to a store.
  * @tparam ParallelGridboxesFunc Function-like object for call to loop over gridboxes.
  * @tparam CollectData Object satisfying the CollectDataForDataset concept for the given
- * store.
+ * dataset.
  */
-template <typename Store, typename ParallelGridboxesFunc, CollectDataForDataset<Store> CollectData>
+template <typename Dataset, typename ParallelGridboxesFunc,
+          CollectDataForDataset<Dataset> CollectData>
 class ParallelWriteGridboxes {
  private:
   ParallelGridboxesFunc
-      parallel_gridboxes_func;   /**< Function-like object for call to loop over gridboxes.*/
-  const Dataset<Store> &dataset; /**< Dataset to write data to. */
+      parallel_gridboxes_func; /**< Function-like object for call to loop over gridboxes.*/
+  const Dataset &dataset;      /**< Dataset to write data to. */
   CollectData collect_data; /**< CollectData Object satisfying the CollectDataForDataset concept. */
 
  public:
@@ -123,8 +123,8 @@ class ParallelWriteGridboxes {
    * @param dataset The dataset to write data to.
    * @param collect_data The object satisfying the CollectDataForDataset concept to collect data.
    */
-  ParallelWriteGridboxes(ParallelGridboxesFunc parallel_gridboxes_func,
-                         const Dataset<Store> &dataset, CollectData collect_data)
+  ParallelWriteGridboxes(ParallelGridboxesFunc parallel_gridboxes_func, const Dataset &dataset,
+                         CollectData collect_data)
       : parallel_gridboxes_func(parallel_gridboxes_func),
         dataset(dataset),
         collect_data(collect_data) {}
@@ -160,9 +160,9 @@ class ParallelWriteGridboxes {
  *
  * @tparam CRC The type that satisfies the CollectRaggedCount concept.
  */
-template <typename CRC, typename Store>
+template <typename CRC, typename Dataset>
 concept CollectRaggedCount =
-    requires(CRC crc, const Dataset<Store> &ds, const subviewd_constsupers d_supers) {
+    requires(CRC crc, const Dataset &ds, const subviewd_constsupers d_supers) {
       { crc.write_to_array(ds, d_supers) } -> std::same_as<void>;
       { crc.write_arrayshape(ds) } -> std::same_as<void>;
     };
@@ -178,16 +178,16 @@ concept CollectRaggedCount =
  * the operator of the type it returns from its get_functor() call should be compatible with the
  * signature of the functor required by the Kokkos::parallel_for loop over superdroplets.
  *
- * @tparam Store The type of data store in the dataset.
+ * @tparam Dataset The type dataset used to write data to a store.
  * @tparam CollectData The object for collecting data satsifying the CollectDataForDataset concept.
  * @tparam RaggedCount The type of the function object for writing the ragged count variable in the
  * dataset satisfying the CollectRaggedCount concept.
  */
-template <typename Store, CollectDataForDataset<Store> CollectData,
-          CollectRaggedCount<Store> RaggedCount>
+template <typename Dataset, CollectDataForDataset<Dataset> CollectData,
+          CollectRaggedCount<Dataset> RaggedCount>
 class ParallelWriteSupers {
  private:
-  const Dataset<Store> &dataset; /**< dataset to write data to */
+  const Dataset &dataset; /**< dataset to write data to */
   CollectData collect_data;
   /**< functions to collect data within loop over superdroplets and write to ragged array(s) */
   RaggedCount ragged_count; /**< functions to write ragged count variable to a dataset */
@@ -220,8 +220,7 @@ class ParallelWriteSupers {
    * @param ragged_count Object for writing the ragged count variable in the dataset satisfying the
    * CollectRaggedCount concept.
    */
-  ParallelWriteSupers(const Dataset<Store> &dataset, CollectData collect_data,
-                      RaggedCount ragged_count)
+  ParallelWriteSupers(const Dataset &dataset, CollectData collect_data, RaggedCount ragged_count)
       : dataset(dataset), collect_data(collect_data), ragged_count(ragged_count) {}
 
   /**

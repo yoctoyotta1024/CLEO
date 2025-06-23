@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 11th April 2024
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,7 +28,6 @@
 
 #include "../kokkosaliases.hpp"
 #include "zarr/buffer.hpp"
-#include "zarr/collective_dataset.hpp"
 #include "zarr/xarray_zarr_array.hpp"
 
 /**
@@ -160,7 +159,8 @@ class GenericCollectData {
    *
    * @param dataset The dataset to write data to.
    */
-  void write_to_arrays(const Dataset<Store> &dataset) const {
+  template <typename Dataset>
+  void write_to_arrays(const Dataset &dataset) const {
     Kokkos::deep_copy(ptr->h_data, ptr->d_data);
     dataset.write_to_array(ptr->xzarr, ptr->h_data);
   }
@@ -171,7 +171,8 @@ class GenericCollectData {
    *
    * @param dataset The dataset to write data to.
    */
-  void write_to_ragged_arrays(const Dataset<Store> &dataset) const {
+  template <typename Dataset>
+  void write_to_ragged_arrays(const Dataset &dataset) const {
     Kokkos::deep_copy(ptr->h_data, ptr->d_data);
     dataset.write_to_ragged_array(ptr->xzarr, ptr->h_data);
   }
@@ -181,7 +182,8 @@ class GenericCollectData {
    *
    * @param dataset The dataset to write array shape to.
    */
-  void write_arrayshapes(const Dataset<Store> &dataset) const {
+  template <typename Dataset>
+  void write_arrayshapes(const Dataset &dataset) const {
     dataset.write_arrayshape(ptr->xzarr);
   }
 
@@ -190,7 +192,8 @@ class GenericCollectData {
    *
    * @param dataset The dataset to write array shape to.
    */
-  void write_ragged_arrayshapes(const Dataset<Store> &dataset) const {
+  template <typename Dataset>
+  void write_ragged_arrayshapes(const Dataset &dataset) const {
     dataset.write_ragged_arrayshape(ptr->xzarr);
   }
 };

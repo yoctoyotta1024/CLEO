@@ -23,7 +23,6 @@ path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_fromfile/
 build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
-enableyac=false
 executables="fromfile"
 
 pythonscript=${path2CLEO}/examples/fromfile/fromfile.py
@@ -35,6 +34,6 @@ script_args="${configfile} --do_inputfiles=TRUE --do_run_executable=TRUE --do_pl
 
 ### ---------- build, compile and run example ---------- ###
 ${path2CLEO}/examples/run_example_levante.sh \
-  ${buildtype} ${path2CLEO} ${path2build} "${build_flags}" ${enableyac} \
+  ${buildtype} ${path2CLEO} ${path2build} "${build_flags}" \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###

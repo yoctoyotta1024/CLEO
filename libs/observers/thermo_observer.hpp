@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -36,10 +36,9 @@
 #include "observers/collect_data_for_dataset.hpp"
 #include "observers/generic_collect_data.hpp"
 #include "observers/write_to_dataset_observer.hpp"
-#include "zarr/collective_dataset.hpp"
 
 /**
- * @brief Constructs type sastifying the CollectDataForDataset concept for a given Store (using an
+ * @brief Constructs type sastifying the CollectDataForDataset concept for a given Dataset (using an
  * instance of the GenericCollectData class) which writes a thermodynamic variable to an Xarray in a
  * dataset.
  *
@@ -55,16 +54,14 @@
  * @param scale_factor The scale factor of the coordinate data.
  * @param maxchunk The maximum chunk size (number of elements).
  * @param ngbxs The number of gridboxes.
- * @return CollectDataForDataset<Store> An instance satisfying the CollectDataForDataset concept for
- * collecting a 2-D floating point variable (e.g. a thermodynamic variable) from each gridbox.
+ * @return CollectDataForDataset<Dataset> An instance satisfying the CollectDataForDataset concept
+ * for collecting a 2-D floating point variable (e.g. a thermodynamic variable) from each gridbox.
  */
-template <typename Store, typename FunctorFunc>
-CollectDataForDataset<Store> auto CollectThermoVariable(const Dataset<Store> &dataset,
-                                                        const FunctorFunc ffunc,
-                                                        const std::string_view name,
-                                                        const std::string_view units,
-                                                        const double scale_factor,
-                                                        const size_t maxchunk, const size_t ngbxs) {
+template <typename Dataset, typename FunctorFunc>
+CollectDataForDataset<Dataset> auto CollectThermoVariable(
+    const Dataset &dataset, const FunctorFunc ffunc, const std::string_view name,
+    const std::string_view units, const double scale_factor, const size_t maxchunk,
+    const size_t ngbxs) {
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
   const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
   const auto xzarr =
@@ -167,26 +164,27 @@ struct QcondFunc {
  * This function combines CollectDataForDataset types for many thermodynamic variables from each
  * gridbox (e.g. press, temp, qvap, qcond, etc.) using instances of the GenericCollectData class.
  *
- * @tparam Store The type of the dataset store.
+ * @tparam Dataset The type of dataset.
  * @param dataset The dataset to write the wind velocity components to.
  * @param maxchunk The maximum chunk size (number of elements).
  * @param ngbxs The number of gridboxes.
- * @return CollectDataForDataset<Store> An instance of CollectDataForDataset for collecting
+ * @return CollectDataForDataset<Dataset> An instance of CollectDataForDataset for collecting
  * thermodynamics from the state of each gridbox.
  */
-template <typename Store>
-inline CollectDataForDataset<Store> auto CollectThermo(const Dataset<Store> &dataset,
-                                                       const size_t maxchunk, const size_t ngbxs) {
-  const CollectDataForDataset<Store> auto press = CollectThermoVariable<Store, PressFunc>(
+template <typename Dataset>
+inline CollectDataForDataset<Dataset> auto CollectThermo(const Dataset &dataset,
+                                                         const size_t maxchunk,
+                                                         const size_t ngbxs) {
+  const CollectDataForDataset<Dataset> auto press = CollectThermoVariable<Dataset, PressFunc>(
       dataset, PressFunc{}, "press", "hPa", dlc::P0 / 100, maxchunk, ngbxs);
 
-  const CollectDataForDataset<Store> auto temp = CollectThermoVariable<Store, TempFunc>(
+  const CollectDataForDataset<Dataset> auto temp = CollectThermoVariable<Dataset, TempFunc>(
       dataset, TempFunc{}, "temp", "K", dlc::TEMP0, maxchunk, ngbxs);
 
-  const CollectDataForDataset<Store> auto qvap = CollectThermoVariable<Store, QvapFunc>(
+  const CollectDataForDataset<Dataset> auto qvap = CollectThermoVariable<Dataset, QvapFunc>(
       dataset, QvapFunc{}, "qvap", "g/Kg", 1000.0, maxchunk, ngbxs);
 
-  const CollectDataForDataset<Store> auto qcond = CollectThermoVariable<Store, QcondFunc>(
+  const CollectDataForDataset<Dataset> auto qcond = CollectThermoVariable<Dataset, QcondFunc>(
       dataset, QcondFunc{}, "qcond", "g/Kg", 1000.0, maxchunk, ngbxs);
 
   return press >> temp >> qvap >> qcond;
@@ -197,17 +195,17 @@ inline CollectDataForDataset<Store> auto CollectThermo(const Dataset<Store> &dat
  * qvap, etc.) at start of each observation timestep to a arrays with a constant
  * observation timestep "interval".
  *
- * @tparam Store Type of store for dataset.
+ * @tparam Dataset Type of dataset.
  * @param interval Observation timestep.
  * @param dataset Dataset to write time data to.
  * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
  * @param ngbxs The number of gridboxes.
  * @return Observer An observer instance for writing thermodynamic variables from each gridbox.
  */
-template <typename Store>
-inline Observer auto ThermoObserver(const unsigned int interval, const Dataset<Store> &dataset,
+template <typename Dataset>
+inline Observer auto ThermoObserver(const unsigned int interval, const Dataset &dataset,
                                     const size_t maxchunk, const size_t ngbxs) {
-  const CollectDataForDataset<Store> auto thermo = CollectThermo(dataset, maxchunk, ngbxs);
+  const CollectDataForDataset<Dataset> auto thermo = CollectThermo(dataset, maxchunk, ngbxs);
   return WriteToDatasetObserver(interval, dataset, thermo);
 }
 

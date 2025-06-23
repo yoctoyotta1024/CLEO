@@ -2,8 +2,8 @@
 #SBATCH --job-name=bubble3d
 #SBATCH --partition=compute
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=256
+#SBATCH --ntasks-per-node=2
+#SBATCH --cpus-per-task=32
 #SBATCH --mem=10G
 #SBATCH --time=00:05:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
@@ -25,7 +25,6 @@ path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_bubble3d/
 build_flags="-DCLEO_COUPLED_DYNAMICS=yac -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
-enableyac=true
 executables="bubble3d"
 
 pythonscript=${path2CLEO}/examples/bubble3d/bubble3d.py
@@ -37,6 +36,6 @@ script_args="${configfile}"
 
 ### ---------- build, compile and run example ---------- ###
 ${path2CLEO}/examples/run_example_levante.sh \
-  ${buildtype} ${path2CLEO} ${path2build} "${build_flags}" ${enableyac} \
+  ${buildtype} ${path2CLEO} ${path2build} "${build_flags}" \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###

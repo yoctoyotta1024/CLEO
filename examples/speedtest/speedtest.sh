@@ -23,7 +23,6 @@ path2build=${HOME}/CLEO/build_spdtest/
 build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
 path2kokkostools=/work/bm1183/m300950/kokkos_tools_lib/lib64/
-enableyac=false
 executables="spdtest"
 
 pythonscript=${path2CLEO}/examples/speedtest/speedtest.py
@@ -51,7 +50,7 @@ do
 
   ### ---------- build, compile and run example ---------- ###
   ${path2CLEO}/examples/run_example_levante.sh \
-    ${buildtype} ${path2CLEO} ${path2build_test} "${build_flags}" ${enableyac} \
+    ${buildtype} ${path2CLEO} ${path2build_test} "${build_flags}" \
     "${executables}" ${pythonscript} "${script_args}"
   ### ---------------------------------------------------- ###
 done

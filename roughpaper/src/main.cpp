@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -54,10 +54,10 @@ int main(int argc, char *argv[]) {
 
     /* Create Xarray dataset wit Zarr backend for writing output data to a store */
     auto store = FSStore(config.get_zarrbasedir());
-    auto dataset = Dataset(store);
+    auto dataset = SimpleDataset(store);
 
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-    const SDMMethods sdm(create_sdm(config, tsteps, dataset));
+    const SDMMethods sdm(create_sdm(config, tsteps, dataset, store));
 
     /* Solver of dynamics coupled to CLEO SDM */
     CoupledDynamics auto coupldyn(

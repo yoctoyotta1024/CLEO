@@ -4,12 +4,12 @@
  *
  * ----- CLEO -----
  * File: copyfiles2txt.cpp
- * Project: initialise
+ * Project: configuration
  * Created Date: Friday 13th October 2023
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 17th April 2024
+ * Last Modified: Wednesday 28th May 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -22,7 +22,7 @@
  * e.g. configuration files and values of constants
  */
 
-#include "initialise/copyfiles2txt.hpp"
+#include "configuration/copyfiles2txt.hpp"
 
 /* open a file called filename and copy
 text line by line into wfile */

@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th July 2024
+ * Last Modified: Friday 20th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -33,11 +33,11 @@
 #include "cartesiandomain/createcartesianmaps.hpp"
 #include "cartesiandomain/movement/cartesian_motion.hpp"
 #include "cartesiandomain/movement/cartesian_movement.hpp"
+#include "configuration/config.hpp"
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
 #include "coupldyn_fromfile/fromfilecomms.hpp"
 #include "gridboxes/boundary_conditions.hpp"
 #include "gridboxes/gridboxmaps.hpp"
-#include "initialise/config.hpp"
 #include "initialise/init_supers_from_binary.hpp"
 #include "initialise/initgbxsnull.hpp"
 #include "initialise/initialconditions.hpp"
@@ -98,46 +98,47 @@ inline auto create_movement(const unsigned int motionstep, const CartesianMaps &
   return cartesian_movement(gbxmaps, motion, boundary_conditions);
 }
 
-template <typename Store>
-inline Observer auto create_superdrops_observer(const unsigned int interval,
-                                                Dataset<Store> &dataset, const int maxchunk) {
-  CollectDataForDataset<Store> auto sdid = CollectSdId(dataset, maxchunk);
-  CollectDataForDataset<Store> auto coord3 = CollectCoord3(dataset, maxchunk);
-  CollectDataForDataset<Store> auto coord1 = CollectCoord1(dataset, maxchunk);
-  CollectDataForDataset<Store> auto coord2 = CollectCoord2(dataset, maxchunk);
+template <typename Dataset, typename Store>
+inline Observer auto create_superdrops_observer(const unsigned int interval, Dataset &dataset,
+                                                Store &store, const int maxchunk) {
+  CollectDataForDataset<Dataset> auto sdid = CollectSdId(dataset, maxchunk);
+  CollectDataForDataset<Dataset> auto coord3 = CollectCoord3(dataset, maxchunk);
+  CollectDataForDataset<Dataset> auto coord1 = CollectCoord1(dataset, maxchunk);
+  CollectDataForDataset<Dataset> auto coord2 = CollectCoord2(dataset, maxchunk);
 
-  const auto collect_data = sdid >> coord3 >> coord1 >> coord2;
-  return SuperdropsObserver(interval, dataset, maxchunk, collect_data);
+  const auto collect_sddata = sdid >> coord3 >> coord1 >> coord2;
+  return SuperdropsObserver(interval, dataset, store, maxchunk, collect_sddata);
 }
 
-template <typename Store>
+template <typename Dataset, typename Store>
 inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
-                                     Dataset<Store> &dataset, const CartesianMaps &gbxmaps) {
+                                     Dataset &dataset, Store &store, const CartesianMaps &gbxmaps) {
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
   const auto ngbxs = gbxmaps.get_local_ngridboxes();
 
   const Observer auto obs0 = StreamOutObserver(obsstep, &step2realtime);
 
-  const Observer auto obs1 = TimeObserver(obsstep, dataset, maxchunk, &step2dimlesstime);
+  const Observer auto obs1 = TimeObserver(obsstep, dataset, store, maxchunk, &step2dimlesstime);
 
-  const Observer auto obs2 = GbxindexObserver(dataset, maxchunk, ngbxs);
+  const Observer auto obs2 = GbxindexObserver(dataset, store, maxchunk, ngbxs);
 
   const Observer auto obs3 =
       StateObserver(obsstep, dataset, maxchunk, gbxmaps.get_total_global_ngridboxes());
 
-  const Observer auto obssd = create_superdrops_observer(obsstep, dataset, maxchunk);
+  const Observer auto obssd = create_superdrops_observer(obsstep, dataset, store, maxchunk);
 
   return obssd >> obs3 >> obs2 >> obs1 >> obs0;
 }
 
-template <typename Store>
-inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset<Store> &dataset) {
+template <typename Dataset, typename Store>
+inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset &dataset,
+                       Store &store) {
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps(create_gbxmaps(config));
   const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
   const MoveSupersInDomain movesupers(create_movement(tsteps.get_motionstep(), gbxmaps));
-  const Observer auto obs(create_observer(config, tsteps, dataset, gbxmaps));
+  const Observer auto obs = create_observer(config, tsteps, dataset, store, gbxmaps);
 
   return SDMMethods(couplstep, gbxmaps, microphys, movesupers, obs);
 }
@@ -165,10 +166,10 @@ int main(int argc, char *argv[]) {
 
     /* Create Xarray dataset wit Zarr backend for writing output data to a store */
     auto store = FSStore(config.get_zarrbasedir());
-    auto dataset = Dataset(store);
+    auto dataset = CollectiveDataset<FSStore, CartesianDecomposition>(store);
 
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-    const SDMMethods sdm(create_sdm(config, tsteps, dataset));
+    const SDMMethods sdm = create_sdm(config, tsteps, dataset, store);
 
     /* Adjust dataset given domain decomposition */
     dataset.set_decomposition(sdm.gbxmaps.get_domain_decomposition());

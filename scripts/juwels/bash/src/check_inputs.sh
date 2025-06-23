@@ -36,7 +36,7 @@ check_compilername() {
 }
 
 check_yac() {
-  if [[ ${CLEO_ENABLEYAC} == "true" && ${CLEO_YACYAXTROOT} == "" ]]
+  if [[ ${CLEO_YACYAXTROOT} == "" ]]
   then
     echo "Bad inputs: yacyaxtroot directory must be specified if YAC is enabled"
     exit 1

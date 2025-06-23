@@ -9,7 +9,7 @@ project("rainshaft1d")
 message(STATUS "CLEO including ${PROJECT_NAME} with PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 # Set libraries from CLEO to link with executable
-set(CLEOLIBS gridboxes initialise observers runcleo superdrops zarr)
+set(CLEOLIBS configuration gridboxes initialise observers runcleo superdrops zarr)
 
 # create primary executable for CLEO in 1-D coupled to thermodynamics from file setup
 add_executable(rshaft1d EXCLUDE_FROM_ALL "main_rshaft1d.cpp")
