@@ -41,7 +41,7 @@ if [[ "${buildtype}" == "cuda" ]]
 then
   compilername=gcc
 else
-  compilername=gcc  # TODO(ALL): use intel (first fix yac installation to higher intel version)
+  compilername=intel
 fi
 
 if [[ "${compilername}" == "gcc" ]]

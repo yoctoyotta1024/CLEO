@@ -48,8 +48,6 @@ then
   netcdf=${levante_gcc_netcdf_yac}
   netcdf_root=${levante_gcc_netcdf_root}
   fyaml_root=${levante_gcc_fyaml_root}
-  CC=${levante_gcc_compiler}
-  FC=${levante_gcc_f90_compiler}
 elif [ "${compilername}" == "intel" ]
 then
   compiler=${levante_intel}
@@ -57,8 +55,6 @@ then
   netcdf=${levante_intel_netcdf_yac}
   netcdf_root=${levante_intel_netcdf_root}
   fyaml_root=${levante_intel_fyaml_root}
-  CC=${levante_icc_compiler}
-  FC=${levante_intel_ifort_compiler}
 else
   echo "Bad input, unrecognised compiler name"
   exit 1
@@ -69,8 +65,10 @@ then
   echo "Bad input, please specify absolute path for where you want to install YAC and python to use to make bindings"
 else
   mkdir ${root4YAC}
-  module load ${compiler} ${netcdf}
-  spack load ${openmpi}
+  module load ${compiler} ${openmpi} ${netcdf}
+
+  CC="$(command -v mpicc)"
+  FC="$(command -v mpifort)"
 
   ### --------------------- install YAXT ------------------- ###
   mkdir ${root4YAC}/${yaxt_version}

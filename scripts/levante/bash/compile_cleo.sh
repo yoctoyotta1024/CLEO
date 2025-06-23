@@ -39,13 +39,11 @@ source ${bashsrc}/levante_packages.sh
 
 if [ "${CLEO_COMPILERNAME}" == "intel" ]
 then
-  module load ${levante_intel}
-  spack load ${levante_intel_openmpi}
+  module load ${levante_intel} ${levante_intel_openmpi}
   spack load ${levante_intel_cmake}
 elif [ "${CLEO_COMPILERNAME}" == "gcc" ]
 then
-  module load ${levante_gcc}
-  spack load ${levante_gcc_openmpi}
+  module load ${levante_gcc} ${levante_gcc_openmpi}
   spack load ${levante_gcc_cmake}
   if [ "${CLEO_BUILDTYPE}" == "cuda" ]
   then
