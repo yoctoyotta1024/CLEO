@@ -17,10 +17,10 @@ and similarly for JUWELS in our
 
 Compilers
 ---------
-A C++ compiler with the C++20 standard library is the absolute minimum.
+A C++ compiler with the C++20 standard library and MPI is the absolute minimum.
 
-On Levante you can use the latest MPI compiler wrappers for the gcc compilers.
-At the time of writing this is gcc 11.2.0, e.g.
+On Levante you can use the latest MPI compiler wrappers for the gcc or intel compilers.
+At the time of writing for gcc 11.2.0, these are:
 
 .. code-block:: console
 
@@ -40,12 +40,39 @@ CMake
 -----
 CMake minimum version 3.18.0.
 
-On Levante it's best to use version 3.26.3 which can be loaded
-e.g. for the gcc compiler via the command
+On Levante it's best to use version 3.26.3 which can be loaded e.g. for gcc 11.2.0 via:
 
 .. code-block:: console
 
   $ cmake@3.26.3%gcc@=11.2.0/fuvwuhz
+
+
+YAC
+---
+
+YAC is one of the :doc:`external libraries<extern>` which CLEO requires for its configuration
+library (for MPI domain decomposition with/without YAC) and in order to couple to dynamics via YAC.
+
+YAC (and its YAXT dependency) need to be installed manually before you can build CLEO with them.
+Please refer to the instructions on how to do install YAC (and YAXT) in our
+:doc:`external libraries<extern>` page.
+
+YAC also requires some additional MPI, NetCDF and yaml libraries alongside the compatible gcc/intel
+compiler. For example for gcc 11.2.0, you can load these on Levante via:
+
+.. code-block:: console
+
+  $ module load gcc/11.2.0-gcc-11.2.0 openmpi@4.1.2%gcc@11.2.0 netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0
+  $ spack load openblas@0.3.18%gcc@=11.2.0
+
+When you want to run CLEO, you will also need to export the fyaml library and python bindings paths,
+e.g.
+
+.. code-block:: console
+
+  $ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/sw/spack-levante/libfyaml-0.7.12-fvbhgo/lib
+  $ export PYTHONPATH=${PYTHONPATH}:/your/path/to/yac/python/
+
 
 Python
 ------
@@ -66,29 +93,3 @@ You can install Python packages to an existing Conda (or Micromamba) environment
 
   $ micromamba activate [your environment]
   $ python -m pip install [package name(s)]
-
-YAC
----
-
-YAC is one of the :doc:`external libraries<extern>` which CLEO may require in order to
-couple to dynamics and/or have MPI domain decomposition.
-
-Note that YAC (and its YAXT dependency) need to be installed manually before you can build
-CLEO with them. You can find instructions on how to do install YAC (and YAXT) in the
-external libraries section.
-
-YAC also requires some additional MPI, NetCDF and yaml libraries alongside the compatible gcc
-compiler which you can load on Levante via:
-
-.. code-block:: console
-
-  $ module load gcc/11.2.0-gcc-11.2.0 openmpi@4.1.2%gcc@11.2.0 netcdf-c/4.8.1-openmpi-4.1.2-gcc-11.2.0
-  $ spack load openblas@0.3.18%gcc@=11.2.0
-
-When you want to run CLEO with YAC, you will also need to export some additional paths:
-
-.. code-block:: console
-
-  $ export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/sw/spack-levante/libfyaml-0.7.12-fvbhgo/lib
-  $ export PYTHONPATH=${PYTHONPATH}:/your/path/to/yac/python/
-  $ spack load python@3.9.9%gcc@=11.2.0/fwv py-cython@0.29.33%gcc@=11.2.0/j7b4fa py-mpi4py@3.1.2%gcc@=11.2.0/hdi5yl6

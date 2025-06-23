@@ -19,15 +19,23 @@ find more information about it from `its documentation: <https://dkrz-sw.gitlab-
 To build CLEO with dependency on YAC, you will first need to install YAXT and YAC manually.
 (YAXT is a dependency of YAC.)
 
-.. note::
-  The installation of YAC for CLEO is currently in active development and so may not be exactly as written here.
-
 How to Install YAC (and YAXT)
 #############################
 
 The easiest way (on Levante) to install YAXT and YAC is to run the ``install_yac.sh`` bash script found in
 ``scripts/levante/bash/``. Note you will need to provide the path to the directory where you want
-to put the installations.
+to put the installations, as well as the compiler type (``intel`` or ``gcc``), and the python
+interpreter you want to use for YAC's python bindings. E.g.
+
+.. code-block:: console
+
+  $ scripts/levante/bash/install_yac.sh /work/bm1183/m300950/yacyaxt/intel/ intel /work/bm1183/m300950/bin/envs/cleoenv/bin/python
+
+or
+
+.. code-block:: console
+
+  $ scripts/levante/bash/install_yac.sh /work/bm1183/m300950/yacyaxt/gcc/ gcc /work/bm1183/m300950/bin/envs/cleoenv/bin/python
 
 Alternatively you can download `YAXT <https://swprojects.dkrz.de/redmine/>`_ and
 `YAC <https://gitlab.dkrz.de/dkrz-sw/yac/>`_ as compressed files and then configure and compile
