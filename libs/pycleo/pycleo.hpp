@@ -104,7 +104,7 @@ PYBIND11_MODULE(pycleo, m) {
 
   /* sdmmethods */
   pyCartesianNullSDMMethods(m);
-  pyCartesianCondSDMMethods(m);
+  pyCartesianSDMMethods(m);
 }
 
 #endif  // LIBS_PYCLEO_PYCLEO_HPP_

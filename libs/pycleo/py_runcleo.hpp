@@ -50,6 +50,6 @@ void pycreate_supers_from_binary(py::module &m);
 void pycreate_gbxs_cartesian_null(py::module &m);
 
 void pyCartesianNullSDMMethods(py::module &m);
-void pyCartesianCondSDMMethods(py::module &m);
+void pyCartesianSDMMethods(py::module &m);
 
 #endif  // LIBS_PYCLEO_PY_RUNCLEO_HPP_

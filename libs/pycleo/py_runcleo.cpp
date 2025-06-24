@@ -58,9 +58,9 @@ void pyCartesianNullSDMMethods(py::module &m) {
           py::arg("t_mdl"), py::arg("t_mdl_next"), py::arg("gbxs"), py::arg("allsupers"));
 }
 
-void pyCartesianCondSDMMethods(py::module &m) {
-  py::class_<pyca::sdm_cart_cond>(m, "CartesianCondSDMMethods")
-      .def(py::init<const unsigned int, pyca::map_cart, pyca::micro_cond, pyca::move_cart_null,
+void pyCartesianSDMMethods(py::module &m) {
+  py::class_<pyca::sdm_cart_cond>(m, "CartesianSDMMethods")
+      .def(py::init<const unsigned int, pyca::map_cart, pyca::micro_all, pyca::move_cart_null,
                     pyca::obs_null>())
       .def_readonly("gbxmaps", &pyca::sdm_cart_cond::gbxmaps)
       .def_readonly("obs", &pyca::sdm_cart_cond::obs)
