@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 6th June 2025
+ * Last Modified: Tuesday 24th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -32,6 +32,7 @@
 #include "gridboxes/movesupersindomain.hpp"
 #include "observers/observers.hpp"
 #include "runcleo/sdmmethods.hpp"
+#include "superdrops/condensation.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 
@@ -52,6 +53,8 @@ namespace pycleo_aliases {
 using map_cart = CartesianMaps;
 
 using micro_null = NullMicrophysicalProcess;
+using micro_all =
+    CombinedMicrophysicalProcess<NullMicrophysicalProcess, ConstTstepMicrophysics<DoCondensation>>;
 
 using mo_null = NullMotion;
 using bcs_null = NullBoundaryConditions;
@@ -61,6 +64,7 @@ using move_cart_null = MoveSupersInDomain<map_cart, mo_null, trans_cart, bcs_nul
 using obs_null = NullObserver;
 
 using sdm_cart_null = SDMMethods<map_cart, micro_null, mo_null, trans_cart, bcs_null, obs_null>;
+using sdm_cart_cond = SDMMethods<map_cart, micro_all, mo_null, trans_cart, bcs_null, obs_null>;
 }  // namespace pycleo_aliases
 
 #endif  // LIBS_PYCLEO_PYCLEO_ALIASES_HPP_

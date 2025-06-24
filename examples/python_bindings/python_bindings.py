@@ -9,7 +9,7 @@ Created Date: Thursday 5th June 2025
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 11th June 2025
+Last Modified: Tuesday 24th June 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -171,6 +171,7 @@ def timestep_example(t_mdl, t_end, timestep, thermo, cleo_sdm):
 
         thermo = cleo_sdm.do_step(timestep, thermo)
         print("temp[0:2]:", thermo.temp[0:2])
+        print("qvap[0:2]:", thermo.massmix_ratios[0][0:2])
 
         t_mdl += timestep
 
