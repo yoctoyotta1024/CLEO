@@ -9,7 +9,7 @@ Created Date: Thursday 12th June 2025
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Thursday 12th June 2025
+Last Modified: Tuesday 24th June 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -32,7 +32,10 @@ def create_sdm(pycleo, cleo_config, tsteps):
     obs = pycleo.NullObserver()
 
     print("PYCLEO STATUS: creating MicrophysicalProcess")
-    micro = pycleo.NullMicrophysicalProcess()
+    # micro = pycleo.NullMicrophysicalProcess() # no microphysics
+    micro = pycleo.pycreate_microphysical_process(
+        cleo_config, tsteps
+    )  # config gives microphysics
 
     print("PYCLEO STATUS: creating Superdroplet Movement")
     motion = pycleo.NullMotion()
@@ -43,9 +46,12 @@ def create_sdm(pycleo, cleo_config, tsteps):
     )
 
     print("PYCLEO STATUS: creating SDM Methods")
-    sdm = pycleo.CartesianNullSDMMethods(
+    # sdm = pycleo.CartesianNullSDMMethods(
+    #     tsteps.get_couplstep(), gbxmaps, micro, move, obs
+    # ) # no microphysics
+    sdm = pycleo.CartesianSDMMethods(
         tsteps.get_couplstep(), gbxmaps, micro, move, obs
-    )
+    )  # microphysics determined by settings for microphysics given in config
 
     print(f"PYCLEO STATUS: SDM created with couplstep = {sdm.get_couplstep()}")
     return sdm
