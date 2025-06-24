@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 12th June 2025
+ * Last Modified: Tuesday 24th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -36,6 +36,8 @@ void pycleo_initialize(const Config &config) {
     MPI_Abort(MPI_COMM_WORLD, 1);
   }
 
-  Kokkos::initialize(config.get_kokkos_initialization_settings());
+  if (!Kokkos::is_initialized()) {
+    Kokkos::initialize(config.get_kokkos_initialization_settings());
+  }
   Kokkos::print_configuration(std::cout);
 }
