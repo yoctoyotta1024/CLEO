@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 12th June 2025
+ * Last Modified: Tuesday 24th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -103,6 +103,7 @@ PYBIND11_MODULE(pycleo, m) {
 
   /* sdmmethods */
   pyCartesianNullSDMMethods(m);
+  pyCartesianCondSDMMethods(m);
 }
 
 #endif  // LIBS_PYCLEO_PYCLEO_HPP_
