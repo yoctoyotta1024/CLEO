@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 6th June 2025
+ * Last Modified: Tuesday 24th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -24,7 +24,13 @@
 
 #include <pybind11/pybind11.h>
 
+#include <iostream>
+#include <limits>
+
 #include "./pycleo_aliases.hpp"
+#include "configuration/config.hpp"
+#include "initialise/timesteps.hpp"
+#include "superdrops/condensation.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 
@@ -32,6 +38,7 @@ namespace py = pybind11;
 namespace pyca = pycleo_aliases;
 
 void pyNullMicrophysicalProcess(py::module &m);
+void pycreate_microphysical_process(py::module &m);
 
 void pyNullMotion(py::module &m);
 
