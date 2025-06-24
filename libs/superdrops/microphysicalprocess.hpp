@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Tuesday 24th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -202,6 +202,8 @@ concept MicrophysicsFunc = requires(F f, const TeamMember &tm, const unsigned in
  * and has a constant time step interval. It can be used to create microphysical processes with
  * constant time steps between action of microphysics determined by the MicrophysicsFunc type 'F'.
  *
+ * Special case: If interval is largest possible unsigned integer, on_step never returns true.
+ *
  * @tparam F The type of the microphysics function.
  */
 template <MicrophysicsFunc F>
@@ -239,7 +241,9 @@ struct ConstTstepMicrophysics {
    * @return True if the current time step is a multiple of the interval.
    */
   KOKKOS_INLINE_FUNCTION
-  bool on_step(const unsigned int subt) const { return subt % interval == 0; }
+  bool on_step(const unsigned int subt) const {
+    return (subt % interval == 0) && (interval != LIMITVALUES::uintmax);
+  }
 
   /**
    * @brief Runs microphysics with the constant time step.
