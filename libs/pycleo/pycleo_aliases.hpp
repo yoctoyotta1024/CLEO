@@ -54,9 +54,9 @@ using map_cart = CartesianMaps;
 
 using micro_null = NullMicrophysicalProcess;
 using micro_all =
-    CombinedMicrophysicalProcess<NullMicrophysicalProcess, ConstTstepMicrophysics<DoCondensation>>
+    CombinedMicrophysicalProcess<NullMicrophysicalProcess, ConstTstepMicrophysics<DoCondensation>>;
 
-    using mo_null = NullMotion;
+using mo_null = NullMotion;
 using bcs_null = NullBoundaryConditions;
 using trans_cart = CartesianTransportAcrossDomain;
 using move_cart_null = MoveSupersInDomain<map_cart, mo_null, trans_cart, bcs_null>;

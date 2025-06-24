@@ -28,6 +28,11 @@ void pyNullMicrophysicalProcess(py::module &m) {
   py::class_<pyca::micro_null>(m, "NullMicrophysicalProcess").def(py::init());
 }
 
+void pyAllMicrophysicalProcess(py::module &m) {
+  py::class_<pyca::micro_all>(m, "AllMicrophysicalProcess")
+      .def(py::init<NullMicrophysicalProcess, ConstTstepMicrophysics<DoCondensation>>());
+}
+
 void pycreate_microphysical_process(py::module &m) {
   m.def("pycreate_microphysical_process", &create_microphysical_process,
         "returns type of Microphysical Process", py::arg("config"), py::arg("timesteps"));
@@ -45,13 +50,11 @@ create_microphysical_process(const Config &config, const Timesteps &tsteps) {
   (i.e. maxniters is not a NaNVals::sizet()), the an actual active condensation/evaporation
   process is initialised according to this configuration.
   */
-  std::cout << "Creating initial null microphysical process\n";
   MicrophysicalProcess auto microphys = NullMicrophysicalProcess{};
+  std::cout << "Null microphysical process initialised\n";
 
-  const MicrophysicsFunc auto no_cond = DoCondensation(
-      false, std::numeric_limits<double>::max(), 0, 0.0, 0.0, std::numeric_limits<double>::max());
-  MicrophysicalProcess auto cond =
-      ConstTstepMicrophysics(std::numeric_limits<unsigned int>::max(), no_cond);
+  const MicrophysicsFunc auto no_cond = DoCondensation(false, 0.0, 0, 0.0, 0.0, 0.0);
+  MicrophysicalProcess auto cond = ConstTstepMicrophysics(LIMITVALUES::uintmax, no_cond);
 
   const auto c = config.get_condensation();
   if (c.maxniters != NaNVals::sizet()) {

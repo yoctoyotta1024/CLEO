@@ -85,6 +85,7 @@ PYBIND11_MODULE(pycleo, m) {
 
   /* microphyiscs */
   pyNullMicrophysicalProcess(m);
+  pyAllMicrophysicalProcess(m);
   pycreate_microphysical_process(m);
 
   /* motion */
