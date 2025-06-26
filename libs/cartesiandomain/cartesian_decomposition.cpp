@@ -38,25 +38,25 @@ std::array<size_t, 3> CartesianDecomposition::get_local_partition_size() const {
 };
 
 // Aparna working here
-void CartesianDecomposition::set_gridbox_upperbounds(GbxBoundsFromBinary gfb) {
-  gridbox_upperbounds.push_back({gfb.get_coord3gbxbounds(0).first});
-  gridbox_upperbounds.push_back({gfb.get_coord1gbxbounds(0).first});
-  gridbox_upperbounds.push_back({gfb.get_coord2gbxbounds(0).first});
+void CartesianDecomposition::set_gridbox_bounds(GbxBoundsFromBinary gfb) {
+  gridbox_bounds.push_back({gfb.get_coord3gbxbounds(0).first});
+  gridbox_bounds.push_back({gfb.get_coord1gbxbounds(0).first});
+  gridbox_bounds.push_back({gfb.get_coord2gbxbounds(0).first});
 
   for (auto dimension : {0, 1, 2}) {
     auto ngbxs_dim = static_cast<int>(gfb.ndims[dimension]);
     for (auto i = 0; i!= ngbxs_dim; i++) {
       // when dimension is 0
       if (dimension == 0) {
-        gridbox_upperbounds[dimension].push_back(gfb.get_coord3gbxbounds(i).second);
+        gridbox_bounds[dimension].push_back(gfb.get_coord3gbxbounds(i).second);
       }
       // when dimension is 1
       if (dimension == 1) {
-        gridbox_upperbounds[dimension].push_back(gfb.get_coord1gbxbounds(i).second);
+        gridbox_bounds[dimension].push_back(gfb.get_coord1gbxbounds(i).second);
       }
       // when dimension is 2
       if (dimension == 2) {
-        gridbox_upperbounds[dimension].push_back(gfb.get_coord2gbxbounds(i).second);
+        gridbox_bounds[dimension].push_back(gfb.get_coord2gbxbounds(i).second);
       }
     }
   }
@@ -116,7 +116,7 @@ unsigned int CartesianDecomposition::get_local_bounding_gridbox(
       // If the dimension behavior is finite and the coordinate is larger than
       // the end of the domain return the out_of_bounds value
       if (dimension_bound_behavior[dimension] == 0 &&
-          coordinates[dimension] > gridbox_upperbounds[dimension].back())
+          coordinates[dimension] > gridbox_bounds[dimension].back())
         return LIMITVALUES::oob_gbxindex;
 
       // The coordinate is inside of the domain but outside of the partition in that dimension
@@ -128,12 +128,12 @@ unsigned int CartesianDecomposition::get_local_bounding_gridbox(
       //
     } else if (local_coordinate) {
       // Aparna to replace this with binary search algorithm
-      gbx_size[dimension] = gridbox_upperbounds[dimension].size();
+      gbx_size[dimension] = gridbox_bounds[dimension].size();
       // Starting with index 1 because the gridbox_upperbounds contains coordinates of the lower
       // bound of the first gridbox as a first element
-      for (int i=1 ; i < gbx_size[dimension] ; i++) {
-        if ( coordinates[dimension] <= gridbox_upperbounds[dimension][i] ) {
-          bounding_gridbox_coordinates[dimension] = gridbox_upperbounds[dimension][i-1];
+      for (int i=0 ; i < gbx_size[dimension] ; i++) {
+        if ( coordinates[dimension] <= gridbox_bounds[dimension][i+1] ) {
+          bounding_gridbox_coordinates[dimension] = i;
           break;
         }
       }
@@ -156,12 +156,12 @@ unsigned int CartesianDecomposition::get_local_bounding_gridbox(
       // if the coordinate is outside of the domain for a dimension correct it to go around
       if (coordinates[dimension] < 0) {
         coordinates[dimension] +=
-          (gridbox_upperbounds[dimension].back() - gridbox_upperbounds[dimension].front());
+          (gridbox_bounds[dimension].back() - gridbox_bounds[dimension].front());
         corrected = true;
       } else if (coordinates[dimension] >
-          (gridbox_upperbounds[dimension].back() - gridbox_upperbounds[dimension].front())) {
+          (gridbox_bounds[dimension].back() - gridbox_bounds[dimension].front())) {
         coordinates[dimension] -=
-          (gridbox_upperbounds[dimension].back() - gridbox_upperbounds[dimension].front());
+          (gridbox_bounds[dimension].back() - gridbox_bounds[dimension].front());
         corrected = true;
       }
     }
@@ -237,7 +237,7 @@ bool CartesianDecomposition::create(std::vector<size_t> ndims, GbxBoundsFromBina
   std::vector<std::vector<size_t>> factorizations;
   comm_size = init_communicator::get_comm_size();
   my_rank = init_communicator::get_comm_rank();
-  set_gridbox_upperbounds(gfb);
+  set_gridbox_bounds(gfb);
   // If the comm_size is equal to 1 there will be no suitable factorization,
   // so treat it as a special case
   if (comm_size == 1) {
@@ -332,8 +332,8 @@ void CartesianDecomposition::calculate_neighboring_processes() {
 // Calculates the geometrical coordinates of the beginning and end of the local partition
 void CartesianDecomposition::calculate_partition_coordinates() {
   for (auto dimension : {0, 1, 2}) {
-    partition_begin_coordinates[dimension] = gridbox_upperbounds[dimension].front();
-    partition_end_coordinates[dimension] = gridbox_upperbounds[dimension].back();
+    partition_begin_coordinates[dimension] = gridbox_bounds[dimension].front();
+    partition_end_coordinates[dimension] = gridbox_bounds[dimension].back();
   }
 }
 
