@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 24th June 2025
+ * Last Modified: Thursday 26th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -38,6 +38,11 @@ void pycleo_initialize(const Config &config) {
 
   if (!Kokkos::is_initialized()) {
     Kokkos::initialize(config.get_kokkos_initialization_settings());
+    Kokkos::print_configuration(std::cout);
+    const auto err = std::atexit(pycleo_finalize);
+    if (err) {
+      std::cerr << "Failed atexit(pycloe_finalize) in pycleo_initialize()\n";
+      return;
+    }
   }
-  Kokkos::print_configuration(std::cout);
 }
