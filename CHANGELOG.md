@@ -2,6 +2,23 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.44.2](https://github.com/yoctoyotta1024/CLEO/compare/c1ab081fb2a53556b85a0389de8af438c2250161..v0.44.2) - 2025-06-26
+#### Bug Fixes
+- prevent multiple kokkos init/finalize in python bindings with at exit call - ([34ac7af](https://github.com/yoctoyotta1024/CLEO/commit/34ac7af6f26a25d11b35c09b8a47b58545cfdff3)) - clara.bayley
+#### Documentation
+- update YAC requirements information - ([a64cda0](https://github.com/yoctoyotta1024/CLEO/commit/a64cda0cac4420e1d12acb4bbf4bc7e779eab069)) - clara.bayley
+#### Refactoring
+- python bindings example uses new generalised SDMMethods - ([e5ac1dc](https://github.com/yoctoyotta1024/CLEO/commit/e5ac1dcc5323861fe145ca7f8fb6245e0c27955e)) - clara.bayley
+- binding for combined null and condensation microphysical process - ([363ed08](https://github.com/yoctoyotta1024/CLEO/commit/363ed084f9533d25f390952de82bf912ccdca1ca)) - clara.bayley
+- generalise sdm methods bindings - ([bf82ca3](https://github.com/yoctoyotta1024/CLEO/commit/bf82ca344dcf17c66e770e251f53b02a46863c2e)) - clara.bayley
+- python bound function to return a combination of null and condensation microphysics - ([f3474dd](https://github.com/yoctoyotta1024/CLEO/commit/f3474dd9a9621eaf505734fb54f029d5bfa53a8a)) - clara.bayley
+- add sdm methods bindings for condensation-only - ([8890be0](https://github.com/yoctoyotta1024/CLEO/commit/8890be0fc6b8baf049a2fe35823518cfea7d0552)) - clara.bayley
+- special case for maximum interval of microphysics - ([753b32e](https://github.com/yoctoyotta1024/CLEO/commit/753b32eb0373b52ff56ccf57f23f6a39c250b40c)) - clara.bayley
+- add guard on kokkos initialise - ([9753575](https://github.com/yoctoyotta1024/CLEO/commit/97535751ffdf14bffa032545d4ec41da25c39851)) - clara.bayley
+- module not spack to load openmpi and use newer intel compiler - ([c1ab081](https://github.com/yoctoyotta1024/CLEO/commit/c1ab081fb2a53556b85a0389de8af438c2250161)) - clara.bayley
+
+- - -
+
 ## [v0.44.1](https://github.com/yoctoyotta1024/CLEO/compare/636db598409bf012ff1c50b506efc8dd221e7a2e..v0.44.1) - 2025-06-23
 #### Bug Fixes
 - zarr library does not depend on cartesian decomposition - ([a6eb12a](https://github.com/yoctoyotta1024/CLEO/commit/a6eb12ac1ee0ce4ff32587c32f5ae8b066d1374f)) - clara.bayley
