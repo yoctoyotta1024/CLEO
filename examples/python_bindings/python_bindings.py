@@ -199,7 +199,6 @@ def run_exec(python_config, config_filename):
     cleo_config = pycleo.Config(config_filename)
     pycleo.pycleo_initialize(cleo_config)
     cleo_sdm_example(python_config, cleo_config)
-    pycleo.pycleo_finalize()
 
 
 if do_run_executable:

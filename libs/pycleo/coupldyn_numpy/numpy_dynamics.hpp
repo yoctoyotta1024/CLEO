@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 12th June 2025
+ * Last Modified: Friday 27th June 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -43,10 +43,10 @@ struct NumpyDynamics {
   py::array_t<double> qvap;
   py::array_t<double> qcond;
 
-  explicit NumpyDynamics(const unsigned int couplstep, py::array_t<double> _press,
-                         py::array_t<double> _temp, py::array_t<double> _qvap,
-                         py::array_t<double> _qcond)
-      : interval(couplstep), press(_press), temp(_temp), qvap(_qvap), qcond(_qcond) {}
+  explicit NumpyDynamics(const unsigned int couplstep, py::array_t<double> press,
+                         py::array_t<double> temp, py::array_t<double> qvap,
+                         py::array_t<double> qcond)
+      : interval(couplstep), press(press), temp(temp), qvap(qvap), qcond(qcond) {}
 
   void prepare_to_timestep() const {}
 
@@ -68,24 +68,24 @@ struct NumpyDynamics {
 
   double get_qcond(const size_t ii) const { return qcond.data()[ii]; }
 
-  void set_press(const size_t ii, const double _press) {
+  void set_press(const size_t ii, const double p) {
     auto r = press.mutable_unchecked<1>();
-    r(ii) = _press;
+    r(ii) = p;
   }
 
-  void set_temp(const size_t ii, const double _temp) {
+  void set_temp(const size_t ii, const double t) {
     auto r = temp.mutable_unchecked<1>();
-    r(ii) = _temp;
+    r(ii) = t;
   }
 
-  void set_qvap(const size_t ii, const double _qvap) {
+  void set_qvap(const size_t ii, const double qv) {
     auto r = qvap.mutable_unchecked<1>();
-    r(ii) = _qvap;
+    r(ii) = qv;
   }
 
-  void set_qcond(const size_t ii, const double _qcond) {
+  void set_qcond(const size_t ii, const double qc) {
     auto r = qcond.mutable_unchecked<1>();
-    r(ii) = _qcond;
+    r(ii) = qc;
   }
 };
 
