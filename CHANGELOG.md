@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.44.3](https://github.com/yoctoyotta1024/CLEO/compare/88166164197cf06f0cda37ea463dfe49cf0385e1..v0.44.3) - 2025-06-27
+#### Bug Fixes
+- no longer need finalize in example - ([77a5029](https://github.com/yoctoyotta1024/CLEO/commit/77a5029fa44b1751316d0a7fe49a9d932f2076af)) - clara.bayley
+- construct arrays by reference not copy - ([8816616](https://github.com/yoctoyotta1024/CLEO/commit/88166164197cf06f0cda37ea463dfe49cf0385e1)) - clara.bayley
+
+- - -
+
 ## [v0.44.2](https://github.com/yoctoyotta1024/CLEO/compare/c1ab081fb2a53556b85a0389de8af438c2250161..v0.44.2) - 2025-06-26
 #### Bug Fixes
 - prevent multiple kokkos init/finalize in python bindings with at exit call - ([34ac7af](https://github.com/yoctoyotta1024/CLEO/commit/34ac7af6f26a25d11b35c09b8a47b58545cfdff3)) - clara.bayley
