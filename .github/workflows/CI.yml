@@ -10,33 +10,39 @@ jobs:
         shell: bash -l {0}
     steps:
       - uses: actions/checkout@v4
-      - uses: conda-incubator/setup-miniconda@v3
+
+      - name: Initialise Mamba
+        uses: conda-incubator/setup-miniconda@v3
         with:
           activate-environment: cienv
-          environment-file: ci_environment.yaml
           auto-activate-base: false
-      - run: |
-          conda info
-          conda list
-      - name: Activate Conda Environment
+          use-mamba: true
+          miniforge-version: 'latest'
+          conda-remove-defaults: true
+
+      - name: Update Mamba Environment
         run: |
-          conda init
-          source /home/runner/.bashrc
-          conda activate /usr/share/miniconda/envs/cienv
-          conda info --envs
-      - name: Install Doxygen
-        run: /usr/share/miniconda/envs/cienv/bin/doxygen --version
-        shell: bash
+          mamba env update -n cienv -f ci_environment.yaml
+
+      - name: Environment Info
+        run: |
+          mamba info
+          mamba list
+          which doxygen && doxygen --version
+          which python && python --version
+
       - name: Test with pytest
         run: pytest .
+
       - name: Generate Doxygen Documentation
         run: cd docs &&
           mkdir -p build/doxygen &&
-          /usr/share/miniconda/envs/cienv/bin/doxygen doxygen/doxygen.dox
-        shell: bash
+          doxygen doxygen/doxygen.dox
+
       - name: Build docs
         run: |
           cd docs && make html
+
       - name: Archive build artifacts (i.e. documentation)
         uses: actions/upload-artifact@v4
         with:
