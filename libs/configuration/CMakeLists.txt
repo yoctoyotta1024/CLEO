@@ -10,6 +10,9 @@ message(STATUS "CLEO using ${LIBNAME} with LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_S
 # explicitly set library executables path to /lib in top level of build tree
 set(LIB_BINARY_DIR ${CMAKE_BINARY_DIR}/lib)
 
+# require MPI explicitly for this library
+find_package(MPI REQUIRED COMPONENTS C)
+
 # Add executables and create library target
 set(SOURCES
 "copyfiles2txt.cpp"
@@ -24,7 +27,7 @@ add_library("${LIBNAME}" STATIC ${SOURCES})
 target_include_directories("${LIBNAME}" PRIVATE "${CLEO_SOURCE_DIR}/libs" ${MPI_INCLUDE_PATH})
 
 # Link libraries to target library
-target_link_libraries("${LIBNAME}" PUBLIC Kokkos::kokkos yaml-cpp::yaml-cpp MPI::MPI_CXX)
+target_link_libraries("${LIBNAME}" PUBLIC Kokkos::kokkos yaml-cpp::yaml-cpp MPI::MPI_C)
 
 # set specific C++ compiler options for target (optional)
 #target_compile_options("${LIBNAME}" PRIVATE)

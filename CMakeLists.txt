@@ -7,12 +7,12 @@ cmake_minimum_required(VERSION 3.18.0)
 # cmake_minimum_required(VERSION 3.21.1) ### if using Kokkos with nvc++ compiler on Levante
 
 project(CLEO
-  LANGUAGES CXX
+  LANGUAGES CXX C
   DESCRIPTION "CLEO by Clara Bayley and other developers"
   VERSION 0.38.0
 )
 
-find_package(MPI REQUIRED)
+find_package(MPI REQUIRED COMPONENTS C)
 
 message(STATUS "CLEO source from CLEO_SOURCE_DIR: ${CLEO_SOURCE_DIR}")
 message(STATUS "CLEO build in CLEO_BINARY_DIR: ${CLEO_BINARY_DIR}")
