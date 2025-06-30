@@ -21,7 +21,7 @@ set(YAC_ROOT ${CLEO_YAC_ROOT})
 set(YAXT_ROOT ${CLEO_YAXT_ROOT})
 
 # require MPI and YAC explicitly for this library
-find_package(MPI REQUIRED)
+find_package(MPI REQUIRED COMPONENTS C)
 find_package(YAC REQUIRED)
 
 # Add executables and create library target
@@ -40,7 +40,7 @@ target_include_directories(${LIBNAME} PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO 
 # Link libraries to target library
 set(LINKLIBS configuration gridboxes superdrops)
 target_link_libraries("${LIBNAME}" PUBLIC ${LINKLIBS})
-target_link_libraries("${LIBNAME}" PRIVATE YAC::YAC MPI::MPI_CXX)
+target_link_libraries("${LIBNAME}" PRIVATE YAC::YAC MPI::MPI_C)
 
 # set specific C++ compiler options for target (optional)
 #target_compile_options(${LIBNAME} PRIVATE)

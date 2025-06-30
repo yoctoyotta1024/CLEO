@@ -12,7 +12,7 @@ project(CLEO
   VERSION 0.38.0
 )
 
-find_package(MPI REQUIRED)
+find_package(MPI REQUIRED COMPONENTS C)
 
 message(STATUS "CLEO source from CLEO_SOURCE_DIR: ${CLEO_SOURCE_DIR}")
 message(STATUS "CLEO build in CLEO_BINARY_DIR: ${CLEO_BINARY_DIR}")

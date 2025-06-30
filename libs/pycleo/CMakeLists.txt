@@ -11,7 +11,7 @@ message(STATUS "CLEO using ${LIBNAME} with LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_S
 set(LIB_BINARY_DIR ${CLEO_BINARY_DIR}/pycleo)
 
 # require MPI and YAC explicitly for this library
-find_package(MPI REQUIRED)
+find_package(MPI REQUIRED COMPONENTS C)
 
 # Find Python package (executable and library paths)
 set(Python_EXECUTABLE ${CLEO_PYTHON})
@@ -55,7 +55,7 @@ target_include_directories(${LIBNAME} PRIVATE "${CLEO_SOURCE_DIR}/libs" ${MPI_IN
 # Link libraries to target library
 set(LINKLIBS configuration initialise gridboxes observers superdrops zarr runcleo cartesiandomain)
 target_link_libraries(${LIBNAME} PUBLIC "${LINKLIBS}")
-target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos MPI::MPI_CXX)
+target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos MPI::MPI_C)
 
 # set specific C++ compiler options for target (optional)
 #target_compile_options(${LIBNAME} PRIVATE)
