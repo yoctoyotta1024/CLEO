@@ -1,8 +1,8 @@
 name: cienv
+channels:
+    - conda-forge
 dependencies:
     - python>=3.9
-    - pytest
-    - sphinx
     - conda-forge::doxygen>=1.10.0
     - pip
     - pip:
