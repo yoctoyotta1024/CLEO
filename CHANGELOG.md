@@ -2,6 +2,18 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.44.4](https://github.com/yoctoyotta1024/CLEO/compare/a804686c5fe7d1a83303158107544693054aa432..v0.44.4) - 2025-06-30
+#### Bug Fixes
+- missing MPI_INCLUDE_PATH - ([bfbd9a1](https://github.com/yoctoyotta1024/CLEO/commit/bfbd9a15c4e71d26dae74acb18fd978fc2729a1a)) - clara.bayley
+- only use C part of MPI - ([b918c51](https://github.com/yoctoyotta1024/CLEO/commit/b918c517ef0036bb7a529d4b3119e5f559229b18)) - clara.bayley
+#### Refactoring
+- C is also language of cleo (due to MPI) - ([5e61d2b](https://github.com/yoctoyotta1024/CLEO/commit/5e61d2b1cd25af91185e2500ef7815525a20fd89)) - clara.bayley
+- make MPI requirement more explicit - ([b9e5ffa](https://github.com/yoctoyotta1024/CLEO/commit/b9e5ffa58b4a8498b154d5238d5fe133b2176317)) - clara.bayley
+- package list after apt-get for debugging - ([37205a5](https://github.com/yoctoyotta1024/CLEO/commit/37205a5da9dbe57d94997d96a9f0b1882eaa4e09)) - clara.bayley
+- update pre-commit - ([a804686](https://github.com/yoctoyotta1024/CLEO/commit/a804686c5fe7d1a83303158107544693054aa432)) - clara.bayley
+
+- - -
+
 ## [v0.44.3](https://github.com/yoctoyotta1024/CLEO/compare/88166164197cf06f0cda37ea463dfe49cf0385e1..v0.44.3) - 2025-06-27
 #### Bug Fixes
 - no longer need finalize in example - ([77a5029](https://github.com/yoctoyotta1024/CLEO/commit/77a5029fa44b1751316d0a7fe49a9d932f2076af)) - clara.bayley
