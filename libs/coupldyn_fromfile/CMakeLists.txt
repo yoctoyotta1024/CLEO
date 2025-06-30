@@ -10,6 +10,9 @@ message(STATUS "CLEO using ${LIBNAME} with LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_S
 # explicitly set library executables path to /lib in top level of build tree
 set(LIB_BINARY_DIR ${CLEO_BINARY_DIR}/lib)
 
+# require MPI and YAC explicitly for this library
+find_package(MPI REQUIRED)
+
 # Add executables and create library target
 set(SOURCES
 "fromfilecomms.cpp"

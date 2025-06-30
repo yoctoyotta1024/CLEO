@@ -20,6 +20,7 @@ message(STATUS "Using YAXT pre-installed in: ${CLEO_YAXT_ROOT}")
 set(YAC_ROOT ${CLEO_YAC_ROOT})
 set(YAXT_ROOT ${CLEO_YAXT_ROOT})
 
+# require MPI and YAC explicitly for this library
 find_package(MPI REQUIRED)
 find_package(YAC REQUIRED)
 

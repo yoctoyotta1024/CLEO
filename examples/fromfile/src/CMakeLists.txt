@@ -8,6 +8,9 @@ endif()
 project("fromfile")
 message(STATUS "CLEO including ${PROJECT_NAME} with PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
+# require MPI and YAC explicitly for this library
+find_package(MPI REQUIRED)
+
 # Set libraries from CLEO to link with executable
 set(CLEOLIBS configuration gridboxes initialise observers runcleo superdrops zarr)
 
