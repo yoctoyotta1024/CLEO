@@ -60,7 +60,7 @@ void pyCartesianNullSDMMethods(py::module &m) {
 
 void pyCartesianSDMMethods(py::module &m) {
   py::class_<pyca::sdm_cart_all>(m, "CartesianSDMMethods")
-      .def(py::init<const unsigned int, pyca::map_cart, pyca::micro_all, pyca::move_cart_null,
+      .def(py::init<const unsigned int, pyca::map_cart, pyca::micro_all, pyca::move_cart,
                     pyca::obs_null>())
       .def_readonly("gbxmaps", &pyca::sdm_cart_all::gbxmaps)
       .def_readonly("obs", &pyca::sdm_cart_all::obs)

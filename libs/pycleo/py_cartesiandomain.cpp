@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 10th June 2025
+ * Last Modified: Tuesday 1st July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -34,4 +34,24 @@ void pycreate_cartesian_maps(py::module &m) {
 
 void pyCartesianTransportAcrossDomain(py::module &m) {
   py::class_<pyca::trans_cart>(m, "CartesianTransportAcrossDomain").def(py::init());
+}
+
+void pyCartesianPredCorrMotion(py::module &m) {
+  py::class_<pyca::mo_cart_predcorr>(m, "CartesianPredCorrMoveSupersInDomain")
+      .def(py::init<unsigned int, std::function<double(unsigned int)>, RogersGKTerminalVelocity,
+                    CartesianCheckBounds>());
+}
+
+void pycreate_cartesian_predcorr_motion(py::module &m) {
+  m.def(
+      "create_cartesian_predcorr_motion",
+      [](const unsigned int motionstep) {
+        return CartesianMotion(motionstep, &step2dimlesstime, RogersGKTerminalVelocity{});
+      },
+      "returns CartesianPredCorrMotion instance", py::arg("motionstep"));
+}
+
+void pyCartesianMoveSupersInDomain(py::module &m) {
+  py::class_<pyca::move_cart>(m, "CartesianMoveSupersInDomain")
+      .def(py::init<pyca::mo_cart_predcorr, pyca::trans_cart, pyca::bcs_null>());
 }
