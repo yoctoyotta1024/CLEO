@@ -9,7 +9,7 @@ Created Date: Thursday 5th June 2025
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 24th June 2025
+Last Modified: Tuesday 1st July 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -190,6 +190,7 @@ def cleo_sdm_example(python_config, cleo_config):
         thermo.temp,
         thermo.massmix_ratios[0],
         thermo.massmix_ratios[1],
+        is_sdm_null=False,
     )
 
     timestep_example(t_mdl, t_end, timestep, thermo, cleo_sdm)

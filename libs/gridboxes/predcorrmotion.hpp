@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 9th July 2024
+ * Last Modified: Tuesday 1st July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -29,14 +29,18 @@
 #include <cassert>
 #include <functional>
 
+#include "../cleoconstants.hpp"
 #include "gridboxes/predcorr.hpp"
 #include "superdrops/superdrop.hpp"
 #include "superdrops/terminalvelocity.hpp"
 
-/* satisfies motion concept for motion of a superdroplet
-using a predictor-corrector method to update a superdroplet's
-coordinates and then updating it's sdgbxindex using
-the appropriate templated type */
+/*
+satisfies motion concept for motion of a superdroplet using a predictor-corrector method with
+a constant timestep ("interval") to update a superdroplet's coordinates and then updating it's
+sdgbxindex using the appropriate templated type
+
+Special case: If timestep interval is largest possible unsigned integer, on_step never returns true.
+*/
 template <GridboxMaps GbxMaps, VelocityFormula TV, typename CheckBounds>
 struct PredCorrMotion {
   const unsigned int interval;  // integer timestep for movement
@@ -54,8 +58,18 @@ struct PredCorrMotion {
     return ((t_sdm / interval) + 1) * interval;
   }
 
+  /**
+   * @brief Returns true if motion should perform an on-step action.
+   *
+   * Special case: If interval is largest possible unsigned integer, on_step never returns true.
+   *
+   * @param t_sdm The current time step.
+   * @return True if the current time step is a multiple of the interval.
+   */
   KOKKOS_INLINE_FUNCTION
-  bool on_step(const unsigned int t_sdm) const { return t_sdm % interval == 0; }
+  bool on_step(const unsigned int t_sdm) const {
+    return (t_sdm % interval == 0) && (interval != LIMITVALUES::uintmax);
+  }
 
   /* function satisfies requirements of the "superdrop_coords" function in the motion
   concept. Operator uses predictor-corrector method to obtain the change in the coordinates

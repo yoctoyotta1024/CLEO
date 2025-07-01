@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 26th June 2025
+ * Last Modified: Tuesday 1st July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -91,6 +91,8 @@ PYBIND11_MODULE(pycleo, m) {
 
   /* motion */
   pyNullMotion(m);
+  pyCartesianPredCorrMotion(m);
+  pycreate_cartesian_predcorr_motion(m);
 
   /* boundary conditions */
   pyNullBoundaryConditions(m);
@@ -100,6 +102,7 @@ PYBIND11_MODULE(pycleo, m) {
 
   /* movement */
   pyCartesianNullMoveSupersInDomain(m);
+  pyCartesianMoveSupersInDomain(m);
 
   /* observers */
   pyNullObserver(m);

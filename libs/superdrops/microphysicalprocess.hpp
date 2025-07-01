@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Tuesday 24th June 2025
+ * Last Modified: Tuesday 1st July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -236,6 +236,8 @@ struct ConstTstepMicrophysics {
 
   /**
    * @brief Checks if the constant time step microphysics should perform an on-step action.
+   *
+   * Special case: If interval is largest possible unsigned integer, on_step never returns true.
    *
    * @param subt The current time step.
    * @return True if the current time step is a multiple of the interval.

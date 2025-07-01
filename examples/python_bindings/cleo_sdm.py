@@ -9,7 +9,7 @@ Created Date: Thursday 12th June 2025
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 24th June 2025
+Last Modified: Tuesday 1st July 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -20,7 +20,27 @@ class and functions for handing setup and running of CLEO via python bindings
 """
 
 
-def create_sdm(pycleo, cleo_config, tsteps):
+def create_null_sdm(pycleo, tsteps, gbxmaps, obs):
+    print("PYCLEO STATUS: creating Null Microphysical Process")
+    micro = pycleo.NullMicrophysicalProcess()  # no microphysics
+
+    print("PYCLEO STATUS: creating Null Superdroplet Movement")
+    motion = pycleo.NullMotion()
+    transport = pycleo.CartesianTransportAcrossDomain()
+    boundary_conditions = pycleo.NullBoundaryConditions()
+    move = pycleo.CartesianNullMoveSupersInDomain(
+        motion, transport, boundary_conditions
+    )
+
+    print("PYCLEO STATUS: creating Null SDM Methods")
+    sdm = pycleo.CartesianNullSDMMethods(
+        tsteps.get_couplstep(), gbxmaps, micro, move, obs
+    )  # no microphysics
+
+    return sdm
+
+
+def create_sdm(pycleo, cleo_config, tsteps, is_sdm_null):
     print("PYCLEO STATUS: creating GridboxMaps")
     gbxmaps = pycleo.create_cartesian_maps(
         cleo_config.get_ngbxs(),
@@ -31,27 +51,27 @@ def create_sdm(pycleo, cleo_config, tsteps):
     print("PYCLEO STATUS: creating Observer")
     obs = pycleo.NullObserver()
 
-    print("PYCLEO STATUS: creating MicrophysicalProcess")
-    # micro = pycleo.NullMicrophysicalProcess() # no microphysics
-    micro = pycleo.pycreate_microphysical_process(
-        cleo_config, tsteps
-    )  # config gives microphysics
+    if is_sdm_null:
+        sdm = create_null_sdm(pycleo, tsteps, gbxmaps, obs)
+    else:
+        print("PYCLEO STATUS: creating Microphysical Process")
+        micro = pycleo.pycreate_microphysical_process(
+            cleo_config, tsteps
+        )  # config gives microphysics
 
-    print("PYCLEO STATUS: creating Superdroplet Movement")
-    motion = pycleo.NullMotion()
-    transport = pycleo.CartesianTransportAcrossDomain()
-    boundary_conditions = pycleo.NullBoundaryConditions()
-    move = pycleo.CartesianNullMoveSupersInDomain(
-        motion, transport, boundary_conditions
-    )
+        print("PYCLEO STATUS: creating Superdroplet Movement")
+        motion = pycleo.create_cartesian_predcorr_motion(tsteps.get_motionstep())
+        # motion = pycleo.create_cartesian_predcorr_motion(False)
+        transport = pycleo.CartesianTransportAcrossDomain()
+        boundary_conditions = pycleo.NullBoundaryConditions()
+        move = pycleo.CartesianMoveSupersInDomain(
+            motion, transport, boundary_conditions
+        )
 
-    print("PYCLEO STATUS: creating SDM Methods")
-    # sdm = pycleo.CartesianNullSDMMethods(
-    #     tsteps.get_couplstep(), gbxmaps, micro, move, obs
-    # ) # no microphysics
-    sdm = pycleo.CartesianSDMMethods(
-        tsteps.get_couplstep(), gbxmaps, micro, move, obs
-    )  # microphysics determined by settings for microphysics given in config
+        print("PYCLEO STATUS: creating SDM Methods")
+        sdm = pycleo.CartesianSDMMethods(
+            tsteps.get_couplstep(), gbxmaps, micro, move, obs
+        )  # microphysics determined by settings for microphysics given in config
 
     print(f"PYCLEO STATUS: SDM created with couplstep = {sdm.get_couplstep()}")
     return sdm
@@ -88,6 +108,7 @@ class CleoSDM:
         temp,
         qvap,
         qcond,
+        is_sdm_null=False,
     ):
         self.pycleo = pycleo
 
@@ -109,7 +130,7 @@ class CleoSDM:
         )
         self.comms = pycleo.coupldyn_numpy.NumpyComms()
 
-        self.sdm = create_sdm(pycleo, cleo_config, tsteps)
+        self.sdm = create_sdm(pycleo, cleo_config, tsteps, is_sdm_null)
         self.sdm, self.gbxs, self.allsupers = prepare_to_timestep_sdm(
             pycleo, cleo_config, self.sdm
         )
