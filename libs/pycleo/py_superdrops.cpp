@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 24th June 2025
+ * Last Modified: Tuesday 1st July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -63,5 +63,6 @@ create_microphysical_process(const Config &config, const Timesteps &tsteps) {
                         c.rtol, c.atol, c.MINSUBTSTEP, &realtime2dimless);
   }
 
+  std::cout << "microphysical processes combined\n";
   return microphys >> cond;
 }
