@@ -42,10 +42,16 @@ void pyCartesianPredCorrMotion(py::module &m) {
                     CartesianCheckBounds>());
 }
 
+/* NOTE: special case if motionstep given to this function is false (or 0), the returned
+CartestianMotion struct has a motionstep set to largest possible unsigned integer, so that
+motion never occurs in runtime. */
 void pycreate_cartesian_predcorr_motion(py::module &m) {
   m.def(
       "create_cartesian_predcorr_motion",
-      [](const unsigned int motionstep) {
+      [](unsigned int motionstep) {
+        if (!motionstep) {
+          motionstep = LIMITVALUES::uintmax;
+        }
         return CartesianMotion(motionstep, &step2dimlesstime, RogersGKTerminalVelocity{});
       },
       "returns CartesianPredCorrMotion instance", py::arg("motionstep"));
