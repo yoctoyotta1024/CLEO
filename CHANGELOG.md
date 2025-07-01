@@ -2,6 +2,26 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.45.0](https://github.com/yoctoyotta1024/CLEO/compare/e7eae4a5db23a7a818820d3f72c637ec30ea41b6..v0.45.0) - 2025-07-01
+#### Bug Fixes
+- make example compatible with new sdmmethods python bindings - ([6509350](https://github.com/yoctoyotta1024/CLEO/commit/65093503be51f915df8db688a39c7d1722404bcc)) - clara.bayley
+#### Continuous Integration
+- clean up mamba environment - ([e7eae4a](https://github.com/yoctoyotta1024/CLEO/commit/e7eae4a5db23a7a818820d3f72c637ec30ea41b6)) - clara.bayley
+#### Features
+- add superdroplet motion to SDMMethods bindings - ([6633e64](https://github.com/yoctoyotta1024/CLEO/commit/6633e6447837a84b59c3ac10725acf6aa72b909a)) - clara.bayley
+#### Miscellaneous Chores
+- renaming - ([f7b7995](https://github.com/yoctoyotta1024/CLEO/commit/f7b799550563b4243d9e390c1a945e4d7775bc15)) - clara.bayley
+#### Performance Improvements
+- note in function description - ([984274b](https://github.com/yoctoyotta1024/CLEO/commit/984274be803312910b32a0484145049ef8a78e9d)) - clara.bayley
+#### Refactoring
+- show option of not using motion in SDM bindings example - ([b416e6a](https://github.com/yoctoyotta1024/CLEO/commit/b416e6af07ff3014eb0167ab29e9855dbdfc3106)) - clara.bayley
+- add callout at end of creating microphysics bindings - ([079184b](https://github.com/yoctoyotta1024/CLEO/commit/079184b74153617b6383820149dac3c64f9a16f5)) - clara.bayley
+- special case for maximum interval or predcorr motion - ([970c5fb](https://github.com/yoctoyotta1024/CLEO/commit/970c5fbcdc9775a5b85f894c5da7bf6ce85dd422)) - clara.bayley
+- add option to turn off motion in predcorr motion bindings - ([490d337](https://github.com/yoctoyotta1024/CLEO/commit/490d3373cd6c7d7223079fde9fdc0096ffaf5743)) - clara.bayley
+- add patches to gitignore - ([538abc4](https://github.com/yoctoyotta1024/CLEO/commit/538abc4f53b1236c622ab396c17438526888f27e)) - clara.bayley
+
+- - -
+
 ## [v0.44.4](https://github.com/yoctoyotta1024/CLEO/compare/a804686c5fe7d1a83303158107544693054aa432..v0.44.4) - 2025-06-30
 #### Bug Fixes
 - missing MPI_INCLUDE_PATH - ([bfbd9a1](https://github.com/yoctoyotta1024/CLEO/commit/bfbd9a15c4e71d26dae74acb18fd978fc2729a1a)) - clara.bayley
