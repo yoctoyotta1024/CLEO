@@ -5,6 +5,7 @@
 *.ipynb
 *.gif
 *.tar.gz
+*.patch
 
 .vscode
 .ipynb_checkpoints
