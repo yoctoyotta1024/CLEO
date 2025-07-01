@@ -627,6 +627,7 @@
 <dt class="sig sig-object cpp" id="_CPPv4NK22ConstTstepMicrophysics7on_stepEKj">
 <span id="_CPPv3NK22ConstTstepMicrophysics7on_stepEKj"></span><span id="_CPPv2NK22ConstTstepMicrophysics7on_stepEKj"></span><span id="ConstTstepMicrophysics::on_step__unsigned-iCC"></span><span class="target" id="structConstTstepMicrophysics_1ac51997f03b1b09b1ce274b81dda30f7d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">on_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">subt</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK22ConstTstepMicrophysics7on_stepEKj" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Checks if the constant time step microphysics should perform an on-step action. </p>
+<p>Special case: If interval is largest possible unsigned integer, on_step never returns true.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>subt</strong> – The current time step. </p>
@@ -712,7 +713,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 30 June 2025</div>
+              Last updated on 01 July 2025</div>
           </div>
           <div class="right-details">
             
