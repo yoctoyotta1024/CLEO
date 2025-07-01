@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 24th June 2025
+ * Last Modified: Tuesday 1st July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -59,24 +59,24 @@ void pyCartesianNullSDMMethods(py::module &m) {
 }
 
 void pyCartesianSDMMethods(py::module &m) {
-  py::class_<pyca::sdm_cart_cond>(m, "CartesianSDMMethods")
+  py::class_<pyca::sdm_cart_all>(m, "CartesianSDMMethods")
       .def(py::init<const unsigned int, pyca::map_cart, pyca::micro_all, pyca::move_cart_null,
                     pyca::obs_null>())
-      .def_readonly("gbxmaps", &pyca::sdm_cart_cond::gbxmaps)
-      .def_readonly("obs", &pyca::sdm_cart_cond::obs)
-      .def("get_couplstep", &pyca::sdm_cart_cond::get_couplstep)
-      .def("next_couplstep", &pyca::sdm_cart_cond::next_couplstep, py::arg("t_mdl"))
+      .def_readonly("gbxmaps", &pyca::sdm_cart_all::gbxmaps)
+      .def_readonly("obs", &pyca::sdm_cart_all::obs)
+      .def("get_couplstep", &pyca::sdm_cart_all::get_couplstep)
+      .def("next_couplstep", &pyca::sdm_cart_all::next_couplstep, py::arg("t_mdl"))
       .def(
           "prepare_to_timestep",
-          [](const pyca::sdm_cart_cond &self, const dualview_gbx gbxs) {
+          [](const pyca::sdm_cart_all &self, const dualview_gbx gbxs) {
             self.prepare_to_timestep(gbxs.view_device());
           },
           py::arg("gbxs"))
-      .def("at_start_step", &pyca::sdm_cart_cond::at_start_step, py::arg("t_mdl"), py::arg("gbxs"),
+      .def("at_start_step", &pyca::sdm_cart_all::at_start_step, py::arg("t_mdl"), py::arg("gbxs"),
            py::arg("allsupers"))
       .def(
           "run_step",
-          [](const pyca::sdm_cart_cond &self, const unsigned int t_mdl,
+          [](const pyca::sdm_cart_all &self, const unsigned int t_mdl,
              const unsigned int t_mdl_next, const dualview_gbx gbxs, SupersInDomain &allsupers) {
             self.run_step(t_mdl, t_mdl_next, gbxs.view_device(), allsupers);
           },

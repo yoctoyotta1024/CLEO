@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 24th June 2025
+ * Last Modified: Tuesday 1st July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -48,6 +48,7 @@
  *      - obs = observer
  * - More specialised abbreviations:
  *      - cart = cartesian
+ *      - all = combination of all microphysics and superdroplet motion (null observer)
  */
 namespace pycleo_aliases {
 using map_cart = CartesianMaps;
@@ -64,7 +65,7 @@ using move_cart_null = MoveSupersInDomain<map_cart, mo_null, trans_cart, bcs_nul
 using obs_null = NullObserver;
 
 using sdm_cart_null = SDMMethods<map_cart, micro_null, mo_null, trans_cart, bcs_null, obs_null>;
-using sdm_cart_cond = SDMMethods<map_cart, micro_all, mo_null, trans_cart, bcs_null, obs_null>;
+using sdm_cart_all = SDMMethods<map_cart, micro_all, mo_null, trans_cart, bcs_null, obs_null>;
 }  // namespace pycleo_aliases
 
 #endif  // LIBS_PYCLEO_PYCLEO_ALIASES_HPP_
