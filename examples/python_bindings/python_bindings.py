@@ -9,7 +9,7 @@ Created Date: Thursday 5th June 2025
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 1st July 2025
+Last Modified: Thursday 10th July 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -155,6 +155,18 @@ def create_thermodynamics(python_config):
     return Thermodynamics(temp, rho, press, qvap, qcond, qice, qrain, qsnow, qgrau)
 
 
+def create_winds(python_config):
+    nfaces = (
+        2 * python_config["domain"]["ngbxs"]
+    )  # each gridbox has 2 faces in each direction
+
+    wvel = np.repeat(1.0, nfaces)
+    uvel = np.repeat(0.0, nfaces)
+    vvel = np.repeat(0.0, nfaces)
+
+    return wvel, uvel, vvel
+
+
 def timestep_example(t_mdl, t_end, timestep, thermo, cleo_sdm):
     print(
         f"PYCLEO STATUS: timestepping SDM from {t_mdl}s to {t_end}s (timestep = {timestep}s)"
@@ -181,6 +193,7 @@ def cleo_sdm_example(python_config, cleo_config):
     timestep = python_config["timesteps"]["COUPLTSTEP"]  # [s]
 
     thermo = create_thermodynamics(python_config)
+    wvel, uvel, vvel = create_winds(python_config)
     cleo_sdm = CleoSDM(
         pycleo,
         cleo_config,
@@ -190,6 +203,9 @@ def cleo_sdm_example(python_config, cleo_config):
         thermo.temp,
         thermo.massmix_ratios[0],
         thermo.massmix_ratios[1],
+        wvel,
+        uvel,
+        vvel,
         is_sdm_null=False,
     )
 

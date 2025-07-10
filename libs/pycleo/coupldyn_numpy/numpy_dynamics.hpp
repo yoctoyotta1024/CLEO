@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 27th June 2025
+ * Last Modified: Thursday 10th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -27,6 +27,7 @@
 #include <pybind11/pybind11.h>
 
 #include <iostream>
+#include <utility>
 
 namespace py = pybind11;
 
@@ -42,11 +43,22 @@ struct NumpyDynamics {
   py::array_t<double> temp;
   py::array_t<double> qvap;
   py::array_t<double> qcond;
+  py::array_t<double> wvel;
+  py::array_t<double> uvel;
+  py::array_t<double> vvel;
 
   explicit NumpyDynamics(const unsigned int couplstep, py::array_t<double> press,
                          py::array_t<double> temp, py::array_t<double> qvap,
-                         py::array_t<double> qcond)
-      : interval(couplstep), press(press), temp(temp), qvap(qvap), qcond(qcond) {}
+                         py::array_t<double> qcond, py::array_t<double> wvel,
+                         py::array_t<double> uvel, py::array_t<double> vvel)
+      : interval(couplstep),
+        press(press),
+        temp(temp),
+        qvap(qvap),
+        qcond(qcond),
+        wvel(wvel),
+        uvel(uvel),
+        vvel(vvel) {}
 
   void prepare_to_timestep() const {}
 
@@ -67,6 +79,18 @@ struct NumpyDynamics {
   double get_qvap(const size_t ii) const { return qvap.data()[ii]; }
 
   double get_qcond(const size_t ii) const { return qcond.data()[ii]; }
+
+  std::pair<double, double> get_wvel(const size_t ii) const {
+    return std::make_pair(wvel.data()[2 * ii], wvel.data()[2 * ii + 1]);
+  }
+
+  std::pair<double, double> get_uvel(const size_t ii) const {
+    return std::make_pair(uvel.data()[2 * ii], uvel.data()[2 * ii + 1]);
+  }
+
+  std::pair<double, double> get_vvel(const size_t ii) const {
+    return std::make_pair(vvel.data()[2 * ii], vvel.data()[2 * ii + 1]);
+  }
 
   void set_press(const size_t ii, const double p) {
     auto r = press.mutable_unchecked<1>();
