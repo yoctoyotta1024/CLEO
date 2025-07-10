@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.47.0](https://github.com/yoctoyotta1024/CLEO/compare/18cac2f50cfbd54c447138ec36f13fb742474182..v0.47.0) - 2025-07-10
+#### Bug Fixes
+- after superdroplet motion condensate in each state must be recalculated - ([b572440](https://github.com/yoctoyotta1024/CLEO/commit/b572440c016636dbbdb9cb0bb8ecdab5504273c0)) - clara.bayley
+#### Features
+- new functions to get superdroplet mass without solute - ([18cac2f](https://github.com/yoctoyotta1024/CLEO/commit/18cac2f50cfbd54c447138ec36f13fb742474182)) - clara.bayley
+
+- - -
+
 ## [v0.46.0](https://github.com/yoctoyotta1024/CLEO/compare/e315c7e0ee53b2681bdeb7fd6529b25b6aab688e..v0.46.0) - 2025-07-10
 #### Features
 - numpy dynamics provides winds fields - ([e315c7e](https://github.com/yoctoyotta1024/CLEO/commit/e315c7e0ee53b2681bdeb7fd6529b25b6aab688e)) - clara.bayley
