@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.46.0](https://github.com/yoctoyotta1024/CLEO/compare/e315c7e0ee53b2681bdeb7fd6529b25b6aab688e..v0.46.0) - 2025-07-10
+#### Features
+- numpy dynamics provides winds fields - ([e315c7e](https://github.com/yoctoyotta1024/CLEO/commit/e315c7e0ee53b2681bdeb7fd6529b25b6aab688e)) - clara.bayley
+
+- - -
+
 ## [v0.45.0](https://github.com/yoctoyotta1024/CLEO/compare/e7eae4a5db23a7a818820d3f72c637ec30ea41b6..v0.45.0) - 2025-07-01
 #### Bug Fixes
 - make example compatible with new sdmmethods python bindings - ([6509350](https://github.com/yoctoyotta1024/CLEO/commit/65093503be51f915df8db688a39c7d1722404bcc)) - clara.bayley
