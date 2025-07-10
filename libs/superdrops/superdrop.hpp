@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Thursday 10th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -173,6 +173,13 @@ class Superdrop {
    * @return mass of the super-droplet.
    */
   KOKKOS_INLINE_FUNCTION double mass() const { return attrs.mass(); }
+
+  /**
+   * @brief Get the mass of the super-droplet excluding its solute.
+   *
+   * @return mass of the super-droplet - mass of solute
+   */
+  KOKKOS_INLINE_FUNCTION double condensate_mass() const { return attrs.condensate_mass(); }
 
   /**
    * @brief Get the volume of the super-droplet.

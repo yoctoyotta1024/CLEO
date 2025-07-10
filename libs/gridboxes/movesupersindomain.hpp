@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Thursday 10th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -39,6 +39,7 @@
 #include "superdrops/motion.hpp"
 #include "superdrops/sdmmonitor.hpp"
 
+namespace dlc = dimless_constants;
 namespace KCS = KokkosCleoSettings;
 
 /*
@@ -87,6 +88,48 @@ struct MoveSupersInGridboxesFunctor {
     const auto ii = team_member.league_rank();
     auto &gbx = d_gbxs(ii);
     move_supers_in_gbx(team_member, gbx.get_gbxindex(), gbx.state, gbx.supersingbx(domainsupers));
+  }
+};
+
+struct EffectOnHydrometeorStatesFunctor {
+  const viewd_gbx d_gbxs; /** view of gridboxes on device. */
+  const subviewd_constsupers
+      domainsupers; /**view on device of all superdroplets in all gridboxes. */
+
+  struct EffectOnQcondFunctor {
+    const double mass_cond; /**< liquid mass in parcel volume 'dm' */
+
+    /*
+     * operator for functor in effect_on_hydrometeor_states function called in
+     * parallel (Single PerTeam Policy) in order to change qcond of state
+     */
+    KOKKOS_INLINE_FUNCTION void operator()(State &state) const {
+      constexpr double R0cubed_VOL0 = dlc::R0 * dlc::R0 * dlc::R0 / dlc::VOL0;
+      const auto rho_cond = mass_cond / state.get_volume() * R0cubed_VOL0;  // rho_condensed
+      state.qcond = rho_cond / dlc::Rho_dry;
+    }
+  };
+
+  /*
+   * operator for functor in effect_on_hydrometeor_states function called in
+   * parallel loop over gridboxes in order to change hydrometeor mass(es) of each state
+   */
+  KOKKOS_INLINE_FUNCTION void operator()(const TeamMember &team_member) const {
+    const auto ii = team_member.league_rank();
+    const auto supers = d_gbxs(ii).supersingbx.readonly(domainsupers);
+    const size_t nsupers(supers.extent(0));
+
+    auto mass_cond = double{0.0};  // total condensate mass in parcel volume 'dm'
+    Kokkos::parallel_reduce(
+        Kokkos::TeamThreadRange(team_member, nsupers),
+        KOKKOS_LAMBDA(const size_t kk, double &mc) {
+          const auto &drop = supers(kk);
+          mc += drop.condensate_mass() * drop.get_xi();
+        },
+        mass_cond);
+
+    const auto functor = EffectOnQcondFunctor{mass_cond};
+    Kokkos::single(Kokkos::PerTeam(team_member), functor, d_gbxs(ii).state);
   }
 };
 
@@ -201,6 +244,24 @@ class MoveSupersInDomain {
     return allsupers;
   }
 
+  /**
+   * @brief Applies the effect of superdroplet motion on the States of all the gridboxes
+   * in the domain.
+   *
+   * Superdroplets moving between gridboxes affects the sum of the mass of hydrometeors
+   * in the state of each gridbox (hence qcond). Function loops over gridboxes to
+   * sum mass of hydrometeors in each one and uses this result to update each gridbox's state.
+   */
+  void effect_on_hydrometeor_states(const viewd_gbx d_gbxs,
+                                    const subviewd_constsupers domainsupers) const {
+    Kokkos::Profiling::ScopedRegion region("sdm_movement_effect_on_hydrometeor_states");
+
+    const size_t ngbxs(d_gbxs.extent(0));
+    const auto functor = EffectOnHydrometeorStatesFunctor{d_gbxs, domainsupers};
+    Kokkos::parallel_for("effect_on_hydrometeor_states", TeamPolicy(ngbxs, KCS::team_size),
+                         functor);
+  }
+
  public:
   MoveSupersInDomain(const M i_sdmotion, const T i_transport_across_domain,
                      const BCs i_boundary_conditions)
@@ -228,6 +289,7 @@ class MoveSupersInDomain {
                           SupersInDomain &allsupers, const SDMMonitor auto mo) const {
     if (sdmotion.on_step(t_sdm)) {
       allsupers = move_superdrops_in_domain(t_sdm, gbxmaps, d_gbxs, allsupers);
+      effect_on_hydrometeor_states(d_gbxs, allsupers.domain_supers_readonly());
       mo.monitor_motion(d_gbxs, allsupers.domain_supers_readonly());
     }
 
