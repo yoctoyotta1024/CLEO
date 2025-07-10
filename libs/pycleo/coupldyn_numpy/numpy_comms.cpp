@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 12th June 2025
+ * Last Modified: Thursday 10th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -39,6 +39,10 @@ KOKKOS_FUNCTION void NumpyComms::receive_dynamics(const GbxMaps &gbxmaps,
                          state.temp = numpydyn.get_temp(idx);
                          state.qvap = numpydyn.get_qvap(idx);
                          state.qcond = numpydyn.get_qcond(idx);
+
+                         state.wvel = numpydyn.get_wvel(ii);
+                         state.uvel = numpydyn.get_uvel(ii);
+                         state.vvel = numpydyn.get_vvel(ii);
                        });
 }
 

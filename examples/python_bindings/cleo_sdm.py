@@ -9,7 +9,7 @@ Created Date: Thursday 12th June 2025
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Tuesday 1st July 2025
+Last Modified: Thursday 10th July 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -108,6 +108,9 @@ class CleoSDM:
         temp,
         qvap,
         qcond,
+        wvel,
+        uvel,
+        vvel,
         is_sdm_null=False,
     ):
         self.pycleo = pycleo
@@ -127,6 +130,9 @@ class CleoSDM:
             temp,
             qvap,
             qcond,
+            wvel,
+            uvel,
+            vvel,
         )
         self.comms = pycleo.coupldyn_numpy.NumpyComms()
 

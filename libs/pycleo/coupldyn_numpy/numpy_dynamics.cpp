@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Thursday 12th June 2025
+ * Last Modified: Thursday 10th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -32,10 +32,14 @@ void NumpyDynamics::print_dynamics(const unsigned int t_mdl) const {
 void pyNumpyDynamics(py::module &m) {
   py::class_<NumpyDynamics>(m, "NumpyDynamics")
       .def(py::init<const unsigned int, py::array_t<double>, py::array_t<double>,
+                    py::array_t<double>, py::array_t<double>, py::array_t<double>,
                     py::array_t<double>, py::array_t<double>>())
       .def_readwrite("press", &NumpyDynamics::press)
       .def_readwrite("temp", &NumpyDynamics::temp)
       .def_readwrite("qvap", &NumpyDynamics::qvap)
       .def_readwrite("qcond", &NumpyDynamics::qcond)
+      .def_readwrite("wvel", &NumpyDynamics::wvel)
+      .def_readwrite("uvel", &NumpyDynamics::uvel)
+      .def_readwrite("vvel", &NumpyDynamics::vvel)
       .def("run_step", &NumpyDynamics::run_step, py::arg("t_mdl"), py::arg("t_next"));
 }
