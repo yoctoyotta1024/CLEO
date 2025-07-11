@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 28th May 2025
+ * Last Modified: Friday 11th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -44,6 +44,10 @@ OptionalConfigParams::OptionalConfigParams(const std::filesystem::path config_fi
 
   if (config["boundary_conditions"]) {
     set_boundary_conditions(config);
+  }
+
+  if (config["pycleo"]) {
+    set_pycleo(config);
   }
 }
 
@@ -135,6 +139,13 @@ void OptionalConfigParams::set_boundary_conditions(const YAML::Node &config) {
   } else {
     throw std::invalid_argument("unknown boundary_conditions 'type': " + type);
   }
+}
+
+void OptionalConfigParams::set_pycleo(const YAML::Node &config) {
+  const YAML::Node node = config["pycleo"];
+
+  pycleo.set_params(config);
+  pycleo.print_params();
 }
 
 void OptionalConfigParams::CondensationParams::set_params(const YAML::Node &config) {
@@ -292,5 +303,38 @@ void OptionalConfigParams::AddSupersAtDomainTopParams::print_params() const {
             << "\nNUMCONC_a: " << NUMCONC_a << "\nGEOMEAN_a: " << GEOMEAN_a
             << "\ngeosigma_a: " << geosigma_a << "\nNUMCONC_b: " << NUMCONC_b
             << "\nGEOMEAN_b: " << GEOMEAN_b << "\ngeosigma_b: " << geosigma_b
+            << "\n---------------------------------------------------------\n";
+}
+
+void OptionalConfigParams::PycleoParams::set_params(const YAML::Node &config) {
+  const YAML::Node node = config["pycleo"];
+  const YAML::Node mphys_node = config["microphysics"];
+
+  if (node["enable_terminal_velocity"]) {
+    enable_terminal_velocity = node["enable_terminal_velocity"].as<bool>();
+  }
+  if (node["enable_condensation"]) {
+    enable_condensation = node["enable_condensation"].as<bool>();
+
+    if (enable_condensation && !mphys_node) {
+      throw std::invalid_argument("condensation enabled but condensation parameters not set");
+    } else if (enable_condensation && !mphys_node["condensation"]) {
+      throw std::invalid_argument("condensation enabled but condensation parameters not set");
+    } else if (!(enable_condensation) && mphys_node) {
+      if (mphys_node["condensation"]) {
+        throw std::invalid_argument("condensation parameters set but condensation not enabled");
+      }
+    }
+  }
+  if (node["enable_collisions"]) {
+    enable_collisions = node["enable_collisions"].as<bool>();
+  }
+}
+
+void OptionalConfigParams::PycleoParams::print_params() const {
+  std::cout << "\n-------- Pycleo Configuration Parameters --------------"
+            << "\nenable_terminal_velocity: " << enable_terminal_velocity
+            << "\nenable_condensation: " << enable_condensation
+            << "\nenable_collisions: " << enable_collisions
             << "\n---------------------------------------------------------\n";
 }

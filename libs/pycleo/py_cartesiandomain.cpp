@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 1st July 2025
+ * Last Modified: Friday 11th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -38,7 +38,7 @@ void pyCartesianTransportAcrossDomain(py::module &m) {
 
 void pyCartesianPredCorrMotion(py::module &m) {
   py::class_<pyca::mo_cart_predcorr>(m, "CartesianPredCorrMoveSupersInDomain")
-      .def(py::init<unsigned int, std::function<double(unsigned int)>, RogersGKTerminalVelocity,
+      .def(py::init<unsigned int, std::function<double(unsigned int)>, OptionalTerminalVelocity,
                     CartesianCheckBounds>());
 }
 
@@ -48,13 +48,15 @@ motion never occurs in runtime. */
 void pycreate_cartesian_predcorr_motion(py::module &m) {
   m.def(
       "create_cartesian_predcorr_motion",
-      [](unsigned int motionstep) {
+      [](const Config &config, unsigned int motionstep) {
         if (!motionstep) {
           motionstep = LIMITVALUES::uintmax;
         }
-        return CartesianMotion(motionstep, &step2dimlesstime, RogersGKTerminalVelocity{});
+        const auto pycleo_config = config.get_pycleo();
+        const auto terminalv = OptionalTerminalVelocity(pycleo_config.enable_terminal_velocity);
+        return CartesianMotion(motionstep, &step2dimlesstime, terminalv);
       },
-      "returns CartesianPredCorrMotion instance", py::arg("motionstep"));
+      "returns CartesianPredCorrMotion instance", py::arg("config"), py::arg("motionstep"));
 }
 
 void pyCartesianMoveSupersInDomain(py::module &m) {

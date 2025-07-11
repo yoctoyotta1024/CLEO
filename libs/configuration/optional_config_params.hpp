@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 28th May 2025
+ * Last Modified: Friday 11th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -60,6 +60,8 @@ struct OptionalConfigParams {
   void set_coupled_dynamics(const YAML::Node& config);
 
   void set_boundary_conditions(const YAML::Node& config);
+
+  void set_pycleo(const YAML::Node& config);
 
   /*** Kokkos Initialization Parameters ***/
   struct KokkosSettings {
@@ -153,6 +155,16 @@ struct OptionalConfigParams {
     double GEOMEAN_b = NaNVals::dbl();  /**< geometric mean radius of 2nd lognormal dist [m] */
     double geosigma_b = NaNVals::dbl(); /**< geometric standard deviation of 2nd lognormal dist */
   } addsupersatdomaintop;
+
+  /** Pycleo (Python Bindings) Parameters */
+  struct PycleoParams {
+    void set_params(const YAML::Node& config);
+    void print_params() const;
+    bool enable_terminal_velocity =
+        false;                        /**< true enables terminal velocity in superdroplet motion */
+    bool enable_condensation = false; /**< true enables condensation in microphysics */
+    bool enable_collisions = false;   /**< true enables collisions in microphysics */
+  } pycleo;
 };
 
 #endif  // LIBS_CONFIGURATION_OPTIONAL_CONFIG_PARAMS_HPP_

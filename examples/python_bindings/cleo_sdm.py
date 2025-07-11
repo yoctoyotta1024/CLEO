@@ -9,7 +9,7 @@ Created Date: Thursday 12th June 2025
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Thursday 10th July 2025
+Last Modified: Friday 11th July 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -60,8 +60,10 @@ def create_sdm(pycleo, cleo_config, tsteps, is_sdm_null):
         )  # config gives microphysics
 
         print("PYCLEO STATUS: creating Superdroplet Movement")
-        motion = pycleo.create_cartesian_predcorr_motion(tsteps.get_motionstep())
-        # motion = pycleo.create_cartesian_predcorr_motion(False)
+        motion = pycleo.create_cartesian_predcorr_motion(
+            cleo_config, tsteps.get_motionstep()
+        )
+        # motion = pycleo.create_cartesian_predcorr_motion(cleo_config, False)
         transport = pycleo.CartesianTransportAcrossDomain()
         boundary_conditions = pycleo.NullBoundaryConditions()
         move = pycleo.CartesianMoveSupersInDomain(

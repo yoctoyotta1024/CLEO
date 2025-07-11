@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 1st July 2025
+ * Last Modified: Friday 11th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -26,16 +26,17 @@
 #include <pybind11/stl/filesystem.h>
 
 #include "../cleoconstants.hpp"
+#include "./optional_terminal_velocity.hpp"
 #include "./pycleo_aliases.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
 #include "cartesiandomain/movement/cartesian_motion.hpp"
 #include "cartesiandomain/movement/cartesian_transport_across_domain.hpp"
+#include "configuration/config.hpp"
 #include "gridboxes/boundary_conditions.hpp"
 #include "gridboxes/movesupersindomain.hpp"
 #include "gridboxes/predcorrmotion.hpp"
 #include "initialise/timesteps.hpp"
-#include "superdrops/terminalvelocity.hpp"
 
 namespace py = pybind11;
 namespace pyca = pycleo_aliases;
