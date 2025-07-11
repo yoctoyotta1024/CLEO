@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 1st July 2025
+ * Last Modified: Friday 11th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -25,6 +25,7 @@
 
 #include <pybind11/pybind11.h>
 
+#include "./optional_terminal_velocity.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/movement/cartesian_motion.hpp"
 #include "cartesiandomain/movement/cartesian_transport_across_domain.hpp"
@@ -37,7 +38,6 @@
 #include "superdrops/condensation.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
-#include "superdrops/terminalvelocity.hpp"
 
 /*
  * aliases as abbreviations of types, to make long template instantiations readable.
@@ -63,7 +63,7 @@ using micro_all =
 
 using mo_null = NullMotion;
 using mo_cart_predcorr =
-    PredCorrMotion<CartesianMaps, RogersGKTerminalVelocity, CartesianCheckBounds>;
+    PredCorrMotion<CartesianMaps, OptionalTerminalVelocity, CartesianCheckBounds>;
 using bcs_null = NullBoundaryConditions;
 using trans_cart = CartesianTransportAcrossDomain;
 using move_cart_null = MoveSupersInDomain<map_cart, mo_null, trans_cart, bcs_null>;
