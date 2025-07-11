@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.49.0](https://github.com/yoctoyotta1024/CLEO/compare/263e95a14b654d898927645e71b2f0acfb837843..v0.49.0) - 2025-07-11
+#### Features
+- add collisions to python bindings of SDM - ([53513ff](https://github.com/yoctoyotta1024/CLEO/commit/53513ff174c66b39cec71824bba15e428ae38c33)) - clara.bayley
+#### Refactoring
+- delete unwanted consts - ([263e95a](https://github.com/yoctoyotta1024/CLEO/commit/263e95a14b654d898927645e71b2f0acfb837843)) - clara.bayley
+
+- - -
+
 ## [v0.48.0](https://github.com/yoctoyotta1024/CLEO/compare/54f23fbf192aa5ac2d2cbccc92128737f2f2ab78..v0.48.0) - 2025-07-11
 #### Features
 - optional parameters for setting pycleo python binding options in config - ([07dc993](https://github.com/yoctoyotta1024/CLEO/commit/07dc993a118a42cc31171a617bef81d01edcf56e)) - clara.bayley
