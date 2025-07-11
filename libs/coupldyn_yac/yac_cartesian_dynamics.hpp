@@ -34,6 +34,7 @@
 #include <utility>
 #include <vector>
 
+#include "configuration/communicator.hpp"
 #include "configuration/config.hpp"
 
 /* contains 1-D vector for each (thermo)dynamic
