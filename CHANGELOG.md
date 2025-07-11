@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.48.0](https://github.com/yoctoyotta1024/CLEO/compare/54f23fbf192aa5ac2d2cbccc92128737f2f2ab78..v0.48.0) - 2025-07-11
+#### Features
+- optional parameters for setting pycleo python binding options in config - ([07dc993](https://github.com/yoctoyotta1024/CLEO/commit/07dc993a118a42cc31171a617bef81d01edcf56e)) - clara.bayley
+#### Refactoring
+- make terminal velocity in python bindings to superdroplet motion - ([54f23fb](https://github.com/yoctoyotta1024/CLEO/commit/54f23fbf192aa5ac2d2cbccc92128737f2f2ab78)) - clara.bayley
+
+- - -
+
 ## [v0.47.0](https://github.com/yoctoyotta1024/CLEO/compare/18cac2f50cfbd54c447138ec36f13fb742474182..v0.47.0) - 2025-07-10
 #### Bug Fixes
 - after superdroplet motion condensate in each state must be recalculated - ([b572440](https://github.com/yoctoyotta1024/CLEO/commit/b572440c016636dbbdb9cb0bb8ecdab5504273c0)) - clara.bayley
