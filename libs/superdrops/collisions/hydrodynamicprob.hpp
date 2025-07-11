@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Friday 11th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -34,8 +34,8 @@ namespace dlc = dimless_constants;
 template <VelocityFormula TerminalVelocity>
 struct HydrodynamicProb {
  private:
-  const double prob_jk_const;
-  const TerminalVelocity terminalv;
+  double prob_jk_const;
+  TerminalVelocity terminalv;
 
  public:
   explicit HydrodynamicProb(TerminalVelocity tv)

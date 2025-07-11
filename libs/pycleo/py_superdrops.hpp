@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 24th June 2025
+ * Last Modified: Friday 11th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -31,6 +31,9 @@
 #include "./pycleo_aliases.hpp"
 #include "configuration/config.hpp"
 #include "initialise/timesteps.hpp"
+#include "superdrops/collisions/coalescence.hpp"
+#include "superdrops/collisions/collisions.hpp"
+#include "superdrops/collisions/longhydroprob.hpp"
 #include "superdrops/condensation.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"

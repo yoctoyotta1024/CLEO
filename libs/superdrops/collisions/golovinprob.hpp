@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Friday 11th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -37,7 +37,7 @@ a pair of droplets according to Golovin 1963
 (see e.g. Shima et al. 2009) */
 struct GolovinProb {
  private:
-  const double prob_jk_const;
+  double prob_jk_const;
 
  public:
   GolovinProb() : prob_jk_const(1.5e3 * dlc::R0 * dlc::R0 * dlc::R0) {}

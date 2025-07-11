@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Friday 11th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -176,10 +176,10 @@ struct CollideSupersFunctor {
 template <PairProbability Probability, PairEnactX EnactCollision>
 struct DoCollisions {
  private:
-  const double DELT; /**< time interval [s] over which probability of collision is calculated. */
-  const Probability probability; /**< Probability object for calculating collision probabilities. */
-  const EnactCollision enact_collision; /**< Enactment object for enacting collision events. */
-  const GenRandomPool genpool;          /**< Kokkos thread-safe random number generator pool.*/
+  double DELT; /**< time interval [s] over which probability of collision is calculated. */
+  Probability probability; /**< Probability object for calculating collision probabilities. */
+  EnactCollision enact_collision; /**< Enactment object for enacting collision events. */
+  GenRandomPool genpool;          /**< Kokkos thread-safe random number generator pool.*/
 
   /**
    * @brief Performs collisions between super-droplets in supers view.

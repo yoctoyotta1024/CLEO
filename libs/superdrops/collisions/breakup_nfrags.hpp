@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Friday 11th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -42,7 +42,7 @@ number of fragments 'nfrags'. Struct
 obeys NFragments concept  */
 struct ConstNFrags {
  private:
-  const double nfrags;
+  double nfrags;
 
  public:
   explicit ConstNFrags(const double nfrags) : nfrags(nfrags) {}

@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Friday 11th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -40,8 +40,8 @@ namespace dlc = dimless_constants;
 */
 struct LongHydroProb {
  private:
-  const HydrodynamicProb<SimmelTerminalVelocity> hydroprob;
-  const double coaleff;
+  HydrodynamicProb<SimmelTerminalVelocity> hydroprob;
+  double coaleff;
 
   /* returns the efficiency of collision-coalescence, eff, according to
   equations 12 and 13 of Simmel et al. 2002). eff = eff(R,r) where R>r.
