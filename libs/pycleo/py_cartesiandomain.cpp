@@ -48,15 +48,15 @@ motion never occurs in runtime. */
 void pycreate_cartesian_predcorr_motion(py::module &m) {
   m.def(
       "create_cartesian_predcorr_motion",
-      [](unsigned int motionstep) {
+      [](const Config &config, unsigned int motionstep) {
         if (!motionstep) {
           motionstep = LIMITVALUES::uintmax;
         }
-        const int enable_terminal_velocity = 1;
-        return CartesianMotion(motionstep, &step2dimlesstime,
-                               OptionalTerminalVelocity(enable_terminal_velocity));
+        const auto pycleo_config = config.get_pycleo();
+        const auto terminalv = OptionalTerminalVelocity(pycleo_config.enable_terminal_velocity);
+        return CartesianMotion(motionstep, &step2dimlesstime, terminalv);
       },
-      "returns CartesianPredCorrMotion instance", py::arg("motionstep"));
+      "returns CartesianPredCorrMotion instance", py::arg("config"), py::arg("motionstep"));
 }
 
 void pyCartesianMoveSupersInDomain(py::module &m) {

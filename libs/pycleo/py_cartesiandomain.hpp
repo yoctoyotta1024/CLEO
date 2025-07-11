@@ -32,6 +32,7 @@
 #include "cartesiandomain/createcartesianmaps.hpp"
 #include "cartesiandomain/movement/cartesian_motion.hpp"
 #include "cartesiandomain/movement/cartesian_transport_across_domain.hpp"
+#include "configuration/config.hpp"
 #include "gridboxes/boundary_conditions.hpp"
 #include "gridboxes/movesupersindomain.hpp"
 #include "gridboxes/predcorrmotion.hpp"

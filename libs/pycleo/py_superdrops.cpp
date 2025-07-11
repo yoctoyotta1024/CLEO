@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 1st July 2025
+ * Last Modified: Friday 11th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -56,9 +56,10 @@ create_microphysical_process(const Config &config, const Timesteps &tsteps) {
   const MicrophysicsFunc auto no_cond = DoCondensation(false, 0.0, 0, 0.0, 0.0, 0.0);
   MicrophysicalProcess auto cond = ConstTstepMicrophysics(LIMITVALUES::uintmax, no_cond);
 
-  const auto c = config.get_condensation();
-  if (c.maxniters != NaNVals::sizet()) {
+  const auto pycleo_config = config.get_pycleo();
+  if (pycleo_config.enable_condensation) {
     std::cout << "Adding condensation/evaporation to microphysical process\n";
+    const auto c = config.get_condensation();
     cond = Condensation(tsteps.get_condstep(), &step2dimlesstime, c.do_alter_thermo, c.maxniters,
                         c.rtol, c.atol, c.MINSUBTSTEP, &realtime2dimless);
   }
