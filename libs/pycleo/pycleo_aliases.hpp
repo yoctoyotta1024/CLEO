@@ -35,6 +35,9 @@
 #include "gridboxes/predcorrmotion.hpp"
 #include "observers/observers.hpp"
 #include "runcleo/sdmmethods.hpp"
+#include "superdrops/collisions/coalescence.hpp"
+#include "superdrops/collisions/collisions.hpp"
+#include "superdrops/collisions/longhydroprob.hpp"
 #include "superdrops/condensation.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
@@ -58,8 +61,10 @@ namespace pycleo_aliases {
 using map_cart = CartesianMaps;
 
 using micro_null = NullMicrophysicalProcess;
+using micro_cond = ConstTstepMicrophysics<DoCondensation>;
+using micro_colls = ConstTstepMicrophysics<DoCollisions<LongHydroProb, DoCoalescence>>;
 using micro_all =
-    CombinedMicrophysicalProcess<NullMicrophysicalProcess, ConstTstepMicrophysics<DoCondensation>>;
+    CombinedMicrophysicalProcess<CombinedMicrophysicalProcess<micro_null, micro_cond>, micro_colls>;
 
 using mo_null = NullMotion;
 using mo_cart_predcorr =
