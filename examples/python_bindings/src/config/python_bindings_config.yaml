@@ -76,3 +76,4 @@ pycleo:
     totnsupers : true
     massmoms : true
     rainmassmoms : true
+    gridboxes : true
