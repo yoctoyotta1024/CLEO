@@ -352,6 +352,9 @@ void OptionalConfigParams::PycleoParams::set_params(const YAML::Node &config) {
     if (obs_node["gridboxes"]) {
       enable_observers.gridboxes = obs_node["gridboxes"].as<bool>();
     }
+    if (obs_node["superdrops"]) {
+      enable_observers.superdrops = obs_node["superdrops"].as<bool>();
+    }
   }
 }
 
@@ -366,5 +369,6 @@ void OptionalConfigParams::PycleoParams::print_params() const {
             << "\nenable_observers.massmoms: " << enable_observers.massmoms
             << "\nenable_observers.rainmassmoms: " << enable_observers.rainmassmoms
             << "\nenable_observers.gridboxes: " << enable_observers.gridboxes
+            << "\nenable_observers.superdrops: " << enable_observers.superdrops
             << "\n---------------------------------------------------------\n";
 }

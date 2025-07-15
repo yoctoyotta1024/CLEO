@@ -77,3 +77,4 @@ pycleo:
     massmoms : true
     rainmassmoms : true
     gridboxes : true
+    superdrops : true
