@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 28th May 2025
+ * Last Modified: Tuesday 15th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -97,4 +97,4 @@ struct InitSupersFromBinary {
   }
 };
 
-#endif  //  LIBS_INITIALISE_INIT_SUPERS_FROM_BINARY_HPP_
+#endif  // LIBS_INITIALISE_INIT_SUPERS_FROM_BINARY_HPP_

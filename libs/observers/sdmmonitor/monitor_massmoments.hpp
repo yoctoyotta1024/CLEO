@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 19th July 2024
+ * Last Modified: Tuesday 15th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -191,4 +191,4 @@ struct MonitorMassMoments {
   }
 };
 
-#endif  //  LIBS_OBSERVERS_SDMMONITOR_MONITOR_MASSMOMENTS_HPP_
+#endif  // LIBS_OBSERVERS_SDMMONITOR_MONITOR_MASSMOMENTS_HPP_
