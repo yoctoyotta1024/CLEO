@@ -72,7 +72,7 @@ using gridboxes = ConstTstepObserver<DoWriteToDataset<ParallelWriteGridboxes<
     SimpleDataset<FSStore>, ParallelGridboxesRangePolicyFunc,
     CombinedCollectDataForDataset<
         CombinedCollectDataForDataset<
-            GenericCollectData<FSStore, unsigned int, NsupersFunc>,
+            GenericCollectData<FSStore, uint32_t, NsupersFunc>,
             CombinedCollectDataForDataset<
                 CombinedCollectDataForDataset<GenericCollectData<FSStore, float, VvelFunc>,
                                               GenericCollectData<FSStore, float, UvelFunc>>,
