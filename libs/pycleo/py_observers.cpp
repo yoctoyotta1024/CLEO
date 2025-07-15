@@ -27,6 +27,11 @@ pyobserver::obs create_observer(const Config &config, const Timesteps &tsteps,
 pyobserver::gridboxes create_gridboxes_observer(const unsigned int interval,
                                                 SimpleDataset<FSStore> &dataset,
                                                 const size_t maxchunk, const size_t ngbxs);
+
+pyobserver::superdrops create_superdrops_observer(const unsigned int interval,
+                                                  SimpleDataset<FSStore> &dataset, FSStore &store,
+                                                  const size_t maxchunk);
+
 void pyNullObserver(py::module &m) {
   py::class_<pyca::obs_null>(m, "NullObserver")
       .def(py::init())
@@ -35,7 +40,7 @@ void pyNullObserver(py::module &m) {
 
 void pyObserver(py::module &m) {
   py::class_<pyobserver::obs>(m, "Observer")
-      .def(py::init<pyobserver::obs01234, pyobserver::gridboxes, pyobserver::mo012345>())
+      .def(py::init<pyobserver::obs012345, pyobserver::obs6, pyobserver::mo0123456>())
       .def("next_obs", &pyobserver::obs::next_obs, py::arg("t_mdl"));
 }
 
@@ -91,7 +96,14 @@ pyobserver::obs create_observer(const Config &config, const Timesteps &tsteps,
   const Observer auto obs5 =
       create_gridboxes_observer(gridboxes_interval, dataset, maxchunk, ngbxs);
 
-  return obs0 >> obs1 >> obs2 >> obs3 >> obs4 >> obs5;
+  auto superdrops_interval = LIMITVALUES::uintmax;
+  if (enable_observers.superdrops) {
+    superdrops_interval = obsstep;
+  }
+  const Observer auto obs6 =
+      create_superdrops_observer(superdrops_interval, dataset, store, maxchunk);
+
+  return obs0 >> obs1 >> obs2 >> obs3 >> obs4 >> obs5 >> obs6;
 }
 
 pyobserver::gridboxes create_gridboxes_observer(const unsigned int interval,
@@ -107,4 +119,22 @@ pyobserver::gridboxes create_gridboxes_observer(const unsigned int interval,
   const CollectDataForDataset<SimpleDataset<FSStore>> auto collect_gbxdata =
       nsupers >> windvel >> thermo;
   return WriteToDatasetObserver(interval, dataset, collect_gbxdata);
+}
+
+pyobserver::superdrops create_superdrops_observer(const unsigned int interval,
+                                                  SimpleDataset<FSStore> &dataset, FSStore &store,
+                                                  const size_t maxchunk) {
+  CollectDataForDataset<SimpleDataset<FSStore>> auto sdid = CollectSdId(dataset, maxchunk);
+  CollectDataForDataset<SimpleDataset<FSStore>> auto sdgbxindex =
+      CollectSdgbxindex(dataset, maxchunk);
+  CollectDataForDataset<SimpleDataset<FSStore>> auto xi = CollectXi(dataset, maxchunk);
+  CollectDataForDataset<SimpleDataset<FSStore>> auto radius = CollectRadius(dataset, maxchunk);
+  CollectDataForDataset<SimpleDataset<FSStore>> auto msol = CollectMsol(dataset, maxchunk);
+  CollectDataForDataset<SimpleDataset<FSStore>> auto coord3 = CollectCoord3(dataset, maxchunk);
+  CollectDataForDataset<SimpleDataset<FSStore>> auto coord1 = CollectCoord1(dataset, maxchunk);
+  CollectDataForDataset<SimpleDataset<FSStore>> auto coord2 = CollectCoord2(dataset, maxchunk);
+
+  const auto collect_sddata =
+      coord1 >> coord2 >> coord3 >> msol >> radius >> xi >> sdgbxindex >> sdid;
+  return SuperdropsObserver(interval, dataset, store, maxchunk, collect_sddata);
 }

@@ -40,6 +40,7 @@
 #include "observers/nsupers_observer.hpp"
 #include "observers/observers.hpp"
 #include "observers/state_observer.hpp"
+#include "observers/superdrops_observer.hpp"
 #include "observers/time_observer.hpp"
 #include "observers/totnsupers_observer.hpp"
 #include "runcleo/sdmmethods.hpp"
@@ -82,18 +83,39 @@ using gridboxes = ConstTstepObserver<DoWriteToDataset<ParallelWriteGridboxes<
             CombinedCollectDataForDataset<GenericCollectData<FSStore, float, QvapFunc>,
                                           GenericCollectData<FSStore, float, QcondFunc>>>>>>>;
 
+using superdrops = ConstTstepObserver<DoWriteToDataset<
+    ParallelWriteSupers<SimpleDataset<FSStore>,
+                        CombinedCollectDataForDataset<
+                            CombinedCollectDataForDataset<
+                                CombinedCollectDataForDataset<
+                                    CombinedCollectDataForDataset<
+                                        CombinedCollectDataForDataset<
+                                            CombinedCollectDataForDataset<
+                                                CombinedCollectDataForDataset<
+                                                    GenericCollectData<FSStore, float, Coord1Func>,
+                                                    GenericCollectData<FSStore, float, Coord2Func>>,
+                                                GenericCollectData<FSStore, float, Coord3Func>>,
+                                            GenericCollectData<FSStore, float, MsolFunc>>,
+                                        GenericCollectData<FSStore, float, RadiusFunc>>,
+                                    GenericCollectData<FSStore, uint64_t, XiFunc>>,
+                                GenericCollectData<FSStore, uint32_t, SdgbxindexFunc>>,
+                            GenericCollectData<FSStore, uint32_t, SdIdFunc>>,
+                        RaggedCount<SimpleDataset<FSStore>, FSStore>>>>;
+
 using mo01 = CombinedSDMMonitor<nullmo, nullmo>;
 using mo012 = CombinedSDMMonitor<mo01, nullmo>;
 using mo0123 = CombinedSDMMonitor<mo012, nullmo>;
 using mo01234 = CombinedSDMMonitor<mo0123, nullmo>;
 using mo012345 = CombinedSDMMonitor<mo01234, nullmo>;
+using mo0123456 = CombinedSDMMonitor<mo012345, nullmo>;
 
 using obs01 = CombinedObserver<gbxindex, time, mo01>;
 using obs012 = CombinedObserver<obs01, totnsupers, mo012>;
 using obs0123 = CombinedObserver<obs012, massmoms, mo0123>;
 using obs01234 = CombinedObserver<obs0123, rainmassmoms, mo01234>;
 using obs012345 = CombinedObserver<obs01234, gridboxes, mo012345>;
-using obs = obs012345;
+using obs6 = superdrops;
+using obs = CombinedObserver<obs012345, obs6, mo0123456>;
 }  // namespace pyobserver
 
 /*

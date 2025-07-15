@@ -41,6 +41,7 @@
 #include "observers/nsupers_observer.hpp"
 #include "observers/observers.hpp"
 #include "observers/state_observer.hpp"
+#include "observers/superdrops_observer.hpp"
 #include "observers/time_observer.hpp"
 #include "observers/totnsupers_observer.hpp"
 #include "runcleo/creategbxs.hpp"
