@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.50.1](https://github.com/yoctoyotta1024/CLEO/compare/7368a80d9a4ae666e76720357d415cf792375fe1..v0.50.1) - 2025-07-15
+#### Bug Fixes
+- make operator for combining CollectDataForDataset types more specific - ([3d786a5](https://github.com/yoctoyotta1024/CLEO/commit/3d786a55dbd62724b04183edc4374eff19a55e10)) - clara.bayley
+#### Refactoring
+- make examples compatible with more specific operator - ([0d65eca](https://github.com/yoctoyotta1024/CLEO/commit/0d65ecadc2ee2975cfc29786590291d665d1826f)) - clara.bayley
+- add totnsupers observer to bindings - ([05f7585](https://github.com/yoctoyotta1024/CLEO/commit/05f7585175572beb359bda70d14ef53d35bb5ef4)) - clara.bayley
+- add more options for observers to config - ([7368a80](https://github.com/yoctoyotta1024/CLEO/commit/7368a80d9a4ae666e76720357d415cf792375fe1)) - clara.bayley
+
+- - -
+
 ## [v0.50.0](https://github.com/yoctoyotta1024/CLEO/compare/ab34a927b4c7d3b73cde11f17262cfd3589206f3..v0.50.0) - 2025-07-15
 #### Features
 - config params to enable/disable different observers - ([5739351](https://github.com/yoctoyotta1024/CLEO/commit/573935151145b57f2d68e41003e74e5bb636ce83)) - clara.bayley
