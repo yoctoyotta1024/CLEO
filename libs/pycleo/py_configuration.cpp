@@ -28,7 +28,8 @@ void pyConfig(py::module &m) {
       .def("get_ngbxs", &Config::get_ngbxs)
       .def("get_nspacedims", &Config::get_nspacedims)
       .def("get_grid_filename", &Config::get_grid_filename)
-      .def("get_initsupersfrombinary", &Config::get_initsupersfrombinary);
+      .def("get_initsupersfrombinary", &Config::get_initsupersfrombinary)
+      .def("get_zarrbasedir", &Config::get_zarrbasedir);
 }
 
 void pyInitSupersFromBinaryParams(py::module &m) {
