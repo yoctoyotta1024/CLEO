@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
+ * Last Modified: Tuesday 15th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -124,4 +124,4 @@ struct NullSDMMonitor {
   void monitor_motion(const auto d_gbxs, const auto domainsupers) const {}
 };
 
-#endif  //  LIBS_SUPERDROPS_SDMMONITOR_HPP_
+#endif  // LIBS_SUPERDROPS_SDMMONITOR_HPP_
