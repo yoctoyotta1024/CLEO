@@ -32,7 +32,7 @@
 #include "initialise/timesteps.hpp"
 #include "observers/consttstep_observer.hpp"
 #include "observers/gbxindex_observer.hpp"
-// #include "observers/massmoments_observer.hpp"
+#include "observers/massmoments_observer.hpp"
 #include "observers/observers.hpp"
 #include "observers/time_observer.hpp"
 #include "observers/totnsupers_observer.hpp"

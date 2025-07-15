@@ -32,7 +32,7 @@ void pyNullObserver(py::module &m) {
 
 void pyObserver(py::module &m) {
   py::class_<pyobserver::obs>(m, "Observer")
-      .def(py::init<pyobserver::obs01, pyobserver::totnsupers, pyobserver::mo>())
+      .def(py::init<pyobserver::obs012, pyobserver::massmoms, pyobserver::mo0123>())
       .def("next_obs", &pyobserver::obs::next_obs, py::arg("t_mdl"));
 }
 
@@ -67,5 +67,12 @@ pyobserver::obs create_observer(const Config &config, const Timesteps &tsteps,
   }
   const Observer auto obs2 = TotNsupersObserver(totnsupers_interval, dataset, store, maxchunk);
 
-  return obs0 >> obs1 >> obs2;
+  auto massmoms_interval = LIMITVALUES::uintmax;
+  if (enable_observers.massmoms) {
+    massmoms_interval = obsstep;
+  }
+  const Observer auto obs3 =
+      MassMomentsObserver(massmoms_interval, dataset, store, maxchunk, ngbxs);
+
+  return obs0 >> obs1 >> obs2 >> obs3;
 }

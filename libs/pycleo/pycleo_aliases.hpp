@@ -35,7 +35,7 @@
 #include "gridboxes/predcorrmotion.hpp"
 #include "observers/consttstep_observer.hpp"
 #include "observers/gbxindex_observer.hpp"
-// #include "observers/massmoments_observer.hpp"
+#include "observers/massmoments_observer.hpp"
 #include "observers/observers.hpp"
 #include "observers/time_observer.hpp"
 #include "observers/totnsupers_observer.hpp"
@@ -58,12 +58,18 @@ using nullmo = NullSDMMonitor;
 using gbx = GbxindexObserver<SimpleDataset<FSStore>, FSStore>;
 using time = ConstTstepObserver<DoTimeObs<SimpleDataset<FSStore>, FSStore>>;
 using totnsupers = ConstTstepObserver<DoTotNsupersObs<SimpleDataset<FSStore>, FSStore>>;
+using massmoms = ConstTstepObserver<
+    DoWriteToDataset<ParallelWriteGridboxes<SimpleDataset<FSStore>, ParallelGridboxesTeamPolicyFunc,
+                                            CollectMassMoments<FSStore, MassMomentsFunc>>>>;
 
 using mo01 = CombinedSDMMonitor<nullmo, nullmo>;
-using mo = CombinedSDMMonitor<mo01, nullmo>;
+using mo012 = CombinedSDMMonitor<mo01, nullmo>;
+using mo0123 = CombinedSDMMonitor<mo012, nullmo>;
 
 using obs01 = CombinedObserver<gbx, time, mo01>;
-using obs = CombinedObserver<obs01, totnsupers, mo>;
+using obs012 = CombinedObserver<obs01, totnsupers, mo012>;
+using obs0123 = CombinedObserver<obs012, massmoms, mo0123>;
+using obs = obs0123;
 }  // namespace pyobserver
 
 /*
