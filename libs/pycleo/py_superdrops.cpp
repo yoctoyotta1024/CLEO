@@ -21,9 +21,7 @@
 
 #include "./py_superdrops.hpp"
 
-CombinedMicrophysicalProcess<CombinedMicrophysicalProcess<pyca::micro_null, pyca::micro_cond>,
-                             pyca::micro_colls>
-create_microphysical_process(const Config &config, const Timesteps &tsteps);
+pyca::micro_all create_microphysical_process(const Config &config, const Timesteps &tsteps);
 
 void pyNullMicrophysicalProcess(py::module &m) {
   py::class_<pyca::micro_null>(m, "NullMicrophysicalProcess").def(py::init());
@@ -42,9 +40,7 @@ void pycreate_microphysical_process(py::module &m) {
 
 void pyNullMotion(py::module &m) { py::class_<pyca::mo_null>(m, "NullMotion").def(py::init()); }
 
-CombinedMicrophysicalProcess<CombinedMicrophysicalProcess<pyca::micro_null, pyca::micro_cond>,
-                             pyca::micro_colls>
-create_microphysical_process(const Config &config, const Timesteps &tsteps) {
+pyca::micro_all create_microphysical_process(const Config &config, const Timesteps &tsteps) {
   /* Returns combined microphysical process which behaves like a null process unless
   settings for other processes are defined in config.
 
