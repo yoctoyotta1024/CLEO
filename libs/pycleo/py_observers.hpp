@@ -26,6 +26,7 @@
 
 #include <stdexcept>
 
+#include "../cleoconstants.hpp"
 #include "./pycleo_aliases.hpp"
 #include "configuration/config.hpp"
 #include "initialise/timesteps.hpp"

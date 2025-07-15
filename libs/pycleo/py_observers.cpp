@@ -49,7 +49,7 @@ pyobserver::obs create_observer(const Config &config, const Timesteps &tsteps,
   const auto maxchunk = config.get_maxchunk();
   const auto ngbxs = config.get_ngbxs();
 
-  auto time_interval = 0;
+  auto time_interval = LIMITVALUES::uintmax;
   if (enable_observers.time) {
     time_interval = obsstep;
   }
