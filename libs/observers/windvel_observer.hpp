@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th June 2025
+ * Last Modified: Tuesday 15th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -161,7 +161,7 @@ inline CollectDataForDataset<Dataset> auto CollectWindVel(const Dataset &dataset
   const CollectDataForDataset<Dataset> auto vvel =
       CollectWindVariable<Dataset, VvelFunc>(dataset, VvelFunc{}, "vvel", maxchunk, ngbxs);
 
-  return vvel >> uvel >> wvel;
+  return CombinedCollectDataForDataset(CombinedCollectDataForDataset(vvel, uvel), wvel);
 }
 
 /**

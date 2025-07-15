@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th June 2025
+ * Last Modified: Tuesday 15th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -60,7 +60,8 @@ inline Observer auto StateObserver(const unsigned int interval, const Dataset &d
   const CollectDataForDataset<Dataset> auto thermo = CollectThermo(dataset, maxchunk, ngbxs);
   const CollectDataForDataset<Dataset> auto windvel = CollectWindVel(dataset, maxchunk, ngbxs);
 
-  const CollectDataForDataset<Dataset> auto collect_data = windvel >> thermo;
+  const CollectDataForDataset<Dataset> auto collect_data =
+      CombinedCollectDataForDataset(windvel, thermo);
 
   return WriteToDatasetObserver(interval, dataset, collect_data);
 }

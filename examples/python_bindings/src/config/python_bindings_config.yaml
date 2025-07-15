@@ -73,3 +73,6 @@ pycleo:
   enable_observers:                                                 # true for the following set enables various observers
     time : true
     gbxindex : true                                                 # currently only true is allowed for gbxindex observer
+    totnsupers : true
+    massmoms : true
+    rainmassmoms : true

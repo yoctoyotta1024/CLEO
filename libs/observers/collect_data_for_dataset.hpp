@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th June 2025
+ * Last Modified: Tuesday 15th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -28,9 +28,6 @@
 #include <concepts>
 
 #include "../kokkosaliases.hpp"
-#include "zarr/collective_dataset.hpp"
-#include "zarr/fsstore.hpp"
-#include "zarr/simple_dataset.hpp"
 
 /**
  * @brief Concept for CollectDataForDataset is all types that have functions for creating a functor
@@ -133,18 +130,6 @@ struct CombinedCollectDataForDataset {
     b.reallocate_views(sz);
   }
 };
-
-/**
- * @brief Overloaded operator >> to combine two CollectDataForDataset instances into a new one.
- *
- * @param a First CollectDataForDataset with Dataset=SimpleDataset<FSStore>.
- * @param b Second CollectDataForDataset with Dataset=SimpleDataset<FSStore>.
- * @return CombinedCollectDataForDataset<Obs1, Obs2> Combined CollectDataForDataset.
- */
-template <typename CollectData1, typename CollectData2>
-auto operator>>(const CollectData1 a, const CollectData2 b) {
-  return CombinedCollectDataForDataset<CollectData1, CollectData2>(a, b);
-}
 
 /* struct satifying CollectDataForDataset and does nothing */
 struct NullCollectDataForDataset {

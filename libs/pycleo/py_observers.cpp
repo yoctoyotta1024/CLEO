@@ -32,7 +32,7 @@ void pyNullObserver(py::module &m) {
 
 void pyObserver(py::module &m) {
   py::class_<pyobserver::obs>(m, "Observer")
-      .def(py::init<pyobserver::gbx, pyobserver::time, pyobserver::mo>())
+      .def(py::init<pyobserver::obs01, pyobserver::totnsupers, pyobserver::mo>())
       .def("next_obs", &pyobserver::obs::next_obs, py::arg("t_mdl"));
 }
 
@@ -49,17 +49,23 @@ pyobserver::obs create_observer(const Config &config, const Timesteps &tsteps,
   const auto maxchunk = config.get_maxchunk();
   const auto ngbxs = config.get_ngbxs();
 
+  if (!enable_observers.gbxindex) {
+    throw std::invalid_argument("gbxindex observer cannot be turned off");
+  }
+  const Observer auto obs0 = GbxindexObserver(dataset, store, maxchunk, ngbxs);
+
   auto time_interval = LIMITVALUES::uintmax;
   if (enable_observers.time) {
     time_interval = obsstep;
   }
-  if (!enable_observers.gbxindex) {
-    throw std::invalid_argument("gbxindex observer cannot be turned off");
-  }
-
   const Observer auto obs1 =
       TimeObserver(time_interval, dataset, store, maxchunk, &step2dimlesstime);
-  const Observer auto obs2 = GbxindexObserver(dataset, store, maxchunk, ngbxs);
 
-  return obs2 >> obs1;
+  auto totnsupers_interval = LIMITVALUES::uintmax;
+  if (enable_observers.totnsupers) {
+    totnsupers_interval = obsstep;
+  }
+  const Observer auto obs2 = TotNsupersObserver(totnsupers_interval, dataset, store, maxchunk);
+
+  return obs0 >> obs1 >> obs2;
 }
