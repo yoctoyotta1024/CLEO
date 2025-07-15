@@ -61,15 +61,20 @@ using totnsupers = ConstTstepObserver<DoTotNsupersObs<SimpleDataset<FSStore>, FS
 using massmoms = ConstTstepObserver<
     DoWriteToDataset<ParallelWriteGridboxes<SimpleDataset<FSStore>, ParallelGridboxesTeamPolicyFunc,
                                             CollectMassMoments<FSStore, MassMomentsFunc>>>>;
+using rainmassmoms = ConstTstepObserver<DoWriteToDataset<
+    ParallelWriteGridboxes<SimpleDataset<FSStore>, ParallelGridboxesTeamPolicyFunc,
+                           CollectMassMoments<FSStore, RaindropsMassMomentsFunc>>>>;
 
 using mo01 = CombinedSDMMonitor<nullmo, nullmo>;
 using mo012 = CombinedSDMMonitor<mo01, nullmo>;
 using mo0123 = CombinedSDMMonitor<mo012, nullmo>;
+using mo01234 = CombinedSDMMonitor<mo0123, nullmo>;
 
 using obs01 = CombinedObserver<gbx, time, mo01>;
 using obs012 = CombinedObserver<obs01, totnsupers, mo012>;
 using obs0123 = CombinedObserver<obs012, massmoms, mo0123>;
-using obs = obs0123;
+using obs01234 = CombinedObserver<obs0123, rainmassmoms, mo01234>;
+using obs = obs01234;
 }  // namespace pyobserver
 
 /*
