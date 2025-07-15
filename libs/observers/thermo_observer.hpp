@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th June 2025
+ * Last Modified: Tuesday 15th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -187,7 +187,9 @@ inline CollectDataForDataset<Dataset> auto CollectThermo(const Dataset &dataset,
   const CollectDataForDataset<Dataset> auto qcond = CollectThermoVariable<Dataset, QcondFunc>(
       dataset, QcondFunc{}, "qcond", "g/Kg", 1000.0, maxchunk, ngbxs);
 
-  return press >> temp >> qvap >> qcond;
+  const CollectDataForDataset<Dataset> auto a = CombinedCollectDataForDataset(press, temp);
+  const CollectDataForDataset<Dataset> auto b = CombinedCollectDataForDataset(qvap, qcond);
+  return CombinedCollectDataForDataset(a, b);
 }
 
 /**

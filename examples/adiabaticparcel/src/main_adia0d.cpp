@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 20th June 2025
+ * Last Modified: Tuesday 15th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -38,6 +38,7 @@
 #include "initialise/init_all_supers_from_binary.hpp"
 #include "initialise/initialconditions.hpp"
 #include "initialise/timesteps.hpp"
+#include "observers/collect_data_for_simple_dataset.hpp"
 #include "observers/gbxindex_observer.hpp"
 #include "observers/observers.hpp"
 #include "observers/state_observer.hpp"
