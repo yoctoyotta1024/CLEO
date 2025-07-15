@@ -54,7 +54,7 @@ class CartesianDecomposition {
 
   // Sizes of a gridbox
   std::vector<std::vector<double>> gridbox_bounds;
-
+  std::array<double, 3> domain_bounds;
   // std::vector<double> gridbox_size_vertical; // z-dimension (coord3)
   // std::vector<double> gridbox_size_eastward; // x-dimension (coord1)
   // std::vector<double> gridbox_size_northward; // y-dimension (coord2)
