@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 11th July 2025
+ * Last Modified: Tuesday 15th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -313,6 +313,7 @@ void OptionalConfigParams::PycleoParams::set_params(const YAML::Node &config) {
   if (node["enable_terminal_velocity"]) {
     enable_terminal_velocity = node["enable_terminal_velocity"].as<bool>();
   }
+
   if (node["enable_condensation"]) {
     enable_condensation = node["enable_condensation"].as<bool>();
 
@@ -326,8 +327,19 @@ void OptionalConfigParams::PycleoParams::set_params(const YAML::Node &config) {
       }
     }
   }
+
   if (node["enable_collisions"]) {
     enable_collisions = node["enable_collisions"].as<bool>();
+  }
+
+  if (node["enable_observers"]) {
+    const YAML::Node obs_node = node["enable_observers"];
+    if (obs_node["time"]) {
+      enable_observers.time = obs_node["time"].as<bool>();
+    }
+    if (obs_node["gbxindex"]) {
+      enable_observers.gbxindex = obs_node["gbxindex"].as<bool>();
+    }
   }
 }
 
@@ -336,5 +348,7 @@ void OptionalConfigParams::PycleoParams::print_params() const {
             << "\nenable_terminal_velocity: " << enable_terminal_velocity
             << "\nenable_condensation: " << enable_condensation
             << "\nenable_collisions: " << enable_collisions
+            << "\nenable_observers.time: " << enable_observers.time
+            << "\nenable_observers.gbxindex: " << enable_observers.gbxindex
             << "\n---------------------------------------------------------\n";
 }

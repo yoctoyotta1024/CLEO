@@ -9,7 +9,7 @@ Created Date: Thursday 12th June 2025
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Friday 11th July 2025
+Last Modified: Tuesday 15th July 2025
 Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
@@ -20,7 +20,10 @@ class and functions for handing setup and running of CLEO via python bindings
 """
 
 
-def create_null_sdm(pycleo, tsteps, gbxmaps, obs):
+def create_null_sdm(pycleo, tsteps, gbxmaps):
+    print("PYCLEO STATUS: creating Null Observer")
+    obs = pycleo.NullObserver()
+
     print("PYCLEO STATUS: creating Null Microphysical Process")
     micro = pycleo.NullMicrophysicalProcess()  # no microphysics
 
@@ -48,12 +51,15 @@ def create_sdm(pycleo, cleo_config, tsteps, is_sdm_null):
         cleo_config.get_grid_filename(),
     )
 
-    print("PYCLEO STATUS: creating Observer")
-    obs = pycleo.NullObserver()
-
     if is_sdm_null:
-        sdm = create_null_sdm(pycleo, tsteps, gbxmaps, obs)
+        sdm = create_null_sdm(pycleo, tsteps, gbxmaps)
+        store, dataset = None, None
     else:
+        print("PYCLEO STATUS: creating Observer")
+        store = pycleo.FSStore(cleo_config.get_zarrbasedir())
+        dataset = pycleo.SimpleDataset(store)
+        obs = pycleo.pycreate_observer(cleo_config, tsteps, dataset, store)
+
         print("PYCLEO STATUS: creating Microphysical Process")
         micro = pycleo.pycreate_microphysical_process(
             cleo_config, tsteps
@@ -76,7 +82,7 @@ def create_sdm(pycleo, cleo_config, tsteps, is_sdm_null):
         )  # microphysics determined by settings for microphysics given in config
 
     print(f"PYCLEO STATUS: SDM created with couplstep = {sdm.get_couplstep()}")
-    return sdm
+    return sdm, dataset, store
 
 
 def prepare_to_timestep_sdm(pycleo, cleo_config, sdm):
@@ -138,7 +144,9 @@ class CleoSDM:
         )
         self.comms = pycleo.coupldyn_numpy.NumpyComms()
 
-        self.sdm = create_sdm(pycleo, cleo_config, tsteps, is_sdm_null)
+        self.sdm, self.dataset, self.store = create_sdm(
+            pycleo, cleo_config, tsteps, is_sdm_null
+        )
         self.sdm, self.gbxs, self.allsupers = prepare_to_timestep_sdm(
             pycleo, cleo_config, self.sdm
         )

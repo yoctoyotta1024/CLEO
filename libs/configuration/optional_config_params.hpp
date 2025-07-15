@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 11th July 2025
+ * Last Modified: Tuesday 15th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -164,6 +164,10 @@ struct OptionalConfigParams {
         false;                        /**< true enables terminal velocity in superdroplet motion */
     bool enable_condensation = false; /**< true enables condensation in microphysics */
     bool enable_collisions = false;   /**< true enables collisions in microphysics */
+    struct Observers {
+      bool time = false;
+      bool gbxindex = true;
+    } enable_observers; /**< true for set of booleans in struct enables various observers */
   } pycleo;
 };
 

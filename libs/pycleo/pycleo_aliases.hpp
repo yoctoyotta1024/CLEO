@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 11th July 2025
+ * Last Modified: Tuesday 15th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -33,7 +33,10 @@
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/movesupersindomain.hpp"
 #include "gridboxes/predcorrmotion.hpp"
+#include "observers/consttstep_observer.hpp"
+#include "observers/gbxindex_observer.hpp"
 #include "observers/observers.hpp"
+#include "observers/time_observer.hpp"
 #include "runcleo/sdmmethods.hpp"
 #include "superdrops/collisions/coalescence.hpp"
 #include "superdrops/collisions/collisions.hpp"
@@ -41,6 +44,20 @@
 #include "superdrops/condensation.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
+#include "zarr/fsstore.hpp"
+#include "zarr/simple_dataset.hpp"
+
+/*
+ * aliases as abbreviations of observer types, to make long template of combined observers managable
+ */
+namespace pyobserver {
+using time = ConstTstepObserver<DoTimeObs<SimpleDataset<FSStore>, FSStore>>;
+using gbx = GbxindexObserver<SimpleDataset<FSStore>, FSStore>;
+using nullmo = NullSDMMonitor;
+
+using mo = CombinedSDMMonitor<nullmo, nullmo>;
+using obs = CombinedObserver<gbx, time, mo>;
+}  // namespace pyobserver
 
 /*
  * aliases as abbreviations of types, to make long template instantiations readable.
@@ -78,7 +95,7 @@ using obs_null = NullObserver;
 
 using sdm_cart_null = SDMMethods<map_cart, micro_null, mo_null, trans_cart, bcs_null, obs_null>;
 using sdm_cart_all =
-    SDMMethods<map_cart, micro_all, mo_cart_predcorr, trans_cart, bcs_null, obs_null>;
+    SDMMethods<map_cart, micro_all, mo_cart_predcorr, trans_cart, bcs_null, pyobserver::obs>;
 }  // namespace pycleo_aliases
 
 #endif  // LIBS_PYCLEO_PYCLEO_ALIASES_HPP_

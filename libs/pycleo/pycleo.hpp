@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Tuesday 1st July 2025
+ * Last Modified: Tuesday 15th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -35,6 +35,7 @@
 #include "./py_observers.hpp"
 #include "./py_runcleo.hpp"
 #include "./py_superdrops.hpp"
+#include "./py_zarr.hpp"
 #include "configuration/config.hpp"
 #include "coupldyn_numpy/pycoupldyn_numpy.hpp"
 
@@ -105,7 +106,11 @@ PYBIND11_MODULE(pycleo, m) {
   pyCartesianMoveSupersInDomain(m);
 
   /* observers */
+  pyFSStore(m);
+  pySimpleDataset(m);
   pyNullObserver(m);
+  pyObserver(m);
+  pycreate_observer(m);
 
   /* sdmmethods */
   pyCartesianNullSDMMethods(m);
