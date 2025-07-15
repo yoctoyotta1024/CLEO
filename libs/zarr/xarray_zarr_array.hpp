@@ -34,6 +34,7 @@
 #include <unordered_map>
 #include <vector>
 
+#include "configuration/communicator.hpp"
 #include "zarr/xarray_metadata.hpp"
 #include "zarr/zarr_array.hpp"
 
@@ -99,6 +100,7 @@ class XarrayZarrArray {
   std::vector<std::string> dimnames; /**< ordered list of names of each dimenion of array */
   std::vector<size_t> arrayshape;    /**< current size of the array along each of its dimensions */
   size_t last_totnchunks;            /**< Number of chunks of array since arrayshape last written */
+  MPI_Comm comm; /**< (YAC compatible) communicator for MPI domain decomposition */
 
   /**
    * @brief Sets shape of array along each dimension to be the same size as each of its dimensions
@@ -163,7 +165,7 @@ class XarrayZarrArray {
     assert((chunkshape.size() == dimnames.size()) &&
            "number of named dimensions of array must match number dimensions of chunks");
     int my_rank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    my_rank = init_communicator::get_comm_rank();
 
     if (my_rank == 0) {
       write_arrayshape(datasetdims);
@@ -195,8 +197,7 @@ class XarrayZarrArray {
     assert((chunkshape.size() == dimnames.size()) &&
            "number of named dimensions of array must match number dimensions of chunks");
     int my_rank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
-
+    my_rank = init_communicator::get_comm_rank();
     if (my_rank == 0) {
       write_zattrs_json(store, name,
                         xarray_metadata<T>(units, scale_factor, dimnames, sampledimname));
@@ -205,8 +206,7 @@ class XarrayZarrArray {
 
   ~XarrayZarrArray() {
     int my_rank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
-
+    my_rank = init_communicator::get_comm_rank();
     if (my_rank == 0) zarr.write_arrayshape(arrayshape);
   }
 
