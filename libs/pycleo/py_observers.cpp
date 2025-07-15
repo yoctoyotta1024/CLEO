@@ -44,11 +44,21 @@ void pycreate_observer(py::module &m) {
 
 pyobserver::obs create_observer(const Config &config, const Timesteps &tsteps,
                                 SimpleDataset<FSStore> &dataset, FSStore &store) {
+  const auto enable_observers = config.get_pycleo().enable_observers;
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
   const auto ngbxs = config.get_ngbxs();
 
-  const Observer auto obs1 = TimeObserver(obsstep, dataset, store, maxchunk, &step2dimlesstime);
+  auto time_interval = 0;
+  if (enable_observers.time) {
+    time_interval = obsstep;
+  }
+  if (!enable_observers.gbxindex) {
+    throw std::invalid_argument("gbxindex observer cannot be turned off");
+  }
+
+  const Observer auto obs1 =
+      TimeObserver(time_interval, dataset, store, maxchunk, &step2dimlesstime);
   const Observer auto obs2 = GbxindexObserver(dataset, store, maxchunk, ngbxs);
 
   return obs2 >> obs1;

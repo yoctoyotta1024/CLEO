@@ -24,6 +24,8 @@
 
 #include <pybind11/pybind11.h>
 
+#include <stdexcept>
+
 #include "./pycleo_aliases.hpp"
 #include "configuration/config.hpp"
 #include "initialise/timesteps.hpp"
