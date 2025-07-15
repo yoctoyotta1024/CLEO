@@ -35,8 +35,10 @@
 #include "gridboxes/predcorrmotion.hpp"
 #include "observers/consttstep_observer.hpp"
 #include "observers/gbxindex_observer.hpp"
+// #include "observers/massmoments_observer.hpp"
 #include "observers/observers.hpp"
 #include "observers/time_observer.hpp"
+#include "observers/totnsupers_observer.hpp"
 #include "runcleo/sdmmethods.hpp"
 #include "superdrops/collisions/coalescence.hpp"
 #include "superdrops/collisions/collisions.hpp"
@@ -51,12 +53,17 @@
  * aliases as abbreviations of observer types, to make long template of combined observers managable
  */
 namespace pyobserver {
-using time = ConstTstepObserver<DoTimeObs<SimpleDataset<FSStore>, FSStore>>;
-using gbx = GbxindexObserver<SimpleDataset<FSStore>, FSStore>;
 using nullmo = NullSDMMonitor;
 
-using mo = CombinedSDMMonitor<nullmo, nullmo>;
-using obs = CombinedObserver<gbx, time, mo>;
+using gbx = GbxindexObserver<SimpleDataset<FSStore>, FSStore>;
+using time = ConstTstepObserver<DoTimeObs<SimpleDataset<FSStore>, FSStore>>;
+using totnsupers = ConstTstepObserver<DoTotNsupersObs<SimpleDataset<FSStore>, FSStore>>;
+
+using mo01 = CombinedSDMMonitor<nullmo, nullmo>;
+using mo = CombinedSDMMonitor<mo01, nullmo>;
+
+using obs01 = CombinedObserver<gbx, time, mo01>;
+using obs = CombinedObserver<obs01, totnsupers, mo>;
 }  // namespace pyobserver
 
 /*
