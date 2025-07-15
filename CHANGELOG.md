@@ -2,6 +2,25 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.51.0](https://github.com/yoctoyotta1024/CLEO/compare/c789c12287ca2d6ae792ef45981cbe628b0c5c6f..v0.51.0) - 2025-07-15
+#### Bug Fixes
+- missing includes - ([141a5bf](https://github.com/yoctoyotta1024/CLEO/commit/141a5bf9773994d1a6ee96577168d74e4015c4fc)) - clara.bayley
+- typo - ([c789c12](https://github.com/yoctoyotta1024/CLEO/commit/c789c12287ca2d6ae792ef45981cbe628b0c5c6f)) - clara.bayley
+#### Features
+- add superdrops observer to python bindings for observer - ([c7174ee](https://github.com/yoctoyotta1024/CLEO/commit/c7174ee89ddb9185d90f2c9d71ad723c2893ce15)) - clara.bayley
+- add gridbox observer to python bindings for observer - ([43cd315](https://github.com/yoctoyotta1024/CLEO/commit/43cd3150dadc7fd2f0f1f5c7bc961b8005b04566)) - clara.bayley
+- add rain mass moments observer to python bindings for observer - ([002ac75](https://github.com/yoctoyotta1024/CLEO/commit/002ac7566da0df0bd77a8a3bfd62047fde0a6477)) - clara.bayley
+- add mass moments observer to python bindings for observer - ([b697a32](https://github.com/yoctoyotta1024/CLEO/commit/b697a321742bf0fffb4db510ef498b5eed2d72c4)) - clara.bayley
+#### Miscellaneous Chores
+- formatting - ([802ad0c](https://github.com/yoctoyotta1024/CLEO/commit/802ad0c40b8653faad5b3a4c4270fd5dca0fe9c8)) - clara.bayley
+#### Performance Improvements
+- use nicer type - ([f61b3a9](https://github.com/yoctoyotta1024/CLEO/commit/f61b3a95b4627de8755c4db357fb2578263729e8)) - clara.bayley
+#### Refactoring
+- add superdrops observer to option in python binding params - ([9eae6b4](https://github.com/yoctoyotta1024/CLEO/commit/9eae6b407650921ed3e71363c9b6d202aa3a81aa)) - clara.bayley
+- add gridboxes observer to option in python binding params - ([79d627a](https://github.com/yoctoyotta1024/CLEO/commit/79d627a363d5d6e0ab3fbe0abe0dec7300c9dc00)) - clara.bayley
+
+- - -
+
 ## [v0.50.1](https://github.com/yoctoyotta1024/CLEO/compare/7368a80d9a4ae666e76720357d415cf792375fe1..v0.50.1) - 2025-07-15
 #### Bug Fixes
 - make operator for combining CollectDataForDataset types more specific - ([3d786a5](https://github.com/yoctoyotta1024/CLEO/commit/3d786a55dbd62724b04183edc4374eff19a55e10)) - clara.bayley
