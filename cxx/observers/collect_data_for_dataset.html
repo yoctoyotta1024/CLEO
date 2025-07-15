@@ -506,23 +506,18 @@
 
 </dd></dl>
 
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4I00ErsDaK12CollectData1K12CollectData2">
-<span id="_CPPv3I00ErsK12CollectData1K12CollectData2"></span><span id="_CPPv2I00ErsK12CollectData1K12CollectData2"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CollectData1</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CollectData2</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="collect__data__for__dataset_8hpp_1a936f8d05278da53a54df7d7ff382c36f"></span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">&gt;&gt;</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00ErsDaK12CollectData1K12CollectData2" title="operator&gt;&gt;::CollectData1"><span class="n"><span class="pre">CollectData1</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">a</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00ErsDaK12CollectData1K12CollectData2" title="operator&gt;&gt;::CollectData2"><span class="n"><span class="pre">CollectData2</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">b</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00ErsDaK12CollectData1K12CollectData2" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Overloaded operator &gt;&gt; to combine two <a class="reference internal" href="#conceptCollectDataForDataset"><span class="std std-ref">CollectDataForDataset</span></a> instances into a new one. </p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>a</strong> – First <a class="reference internal" href="#conceptCollectDataForDataset"><span class="std std-ref">CollectDataForDataset</span></a> with Dataset=SimpleDataset&lt;FSStore&gt;. </p></li>
-<li><p><strong>b</strong> – Second <a class="reference internal" href="#conceptCollectDataForDataset"><span class="std std-ref">CollectDataForDataset</span></a> with Dataset=SimpleDataset&lt;FSStore&gt;. </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="#structCombinedCollectDataForDataset"><span class="std std-ref">CombinedCollectDataForDataset&lt;Obs1, Obs2&gt;</span></a> Combined <a class="reference internal" href="#conceptCollectDataForDataset"><span class="std std-ref">CollectDataForDataset</span></a>. </p>
-</dd>
-</dl>
-</dd></dl>
-
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenfunction: Unable to resolve function “operator&gt;&gt;” with arguments (const CollectData1, const CollectData2) in doxygen xml output for project “libs” from directory: ../build/doxygen/xml/.
+Potential matches:
+</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">auto</span> <span class="n">operator</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">const</span> <span class="n">MicrophysicalProcess</span> <span class="n">auto</span> <span class="n">a</span><span class="p">,</span> <span class="n">const</span> <span class="n">MicrophysicalProcess</span> <span class="n">auto</span> <span class="n">b</span><span class="p">)</span>
+<span class="o">-</span> <span class="n">auto</span> <span class="n">operator</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">const</span> <span class="n">Observer</span> <span class="n">auto</span> <span class="n">obs1</span><span class="p">,</span> <span class="n">const</span> <span class="n">Observer</span> <span class="n">auto</span> <span class="n">obs2</span><span class="p">)</span>
+<span class="o">-</span> <span class="n">template</span><span class="o">&lt;</span><span class="n">CollectDataForDataset</span><span class="o">&lt;</span><span class="n">CollectiveDataset</span><span class="o">&lt;</span><span class="n">FSStore</span><span class="p">,</span> <span class="n">CartesianDecomposition</span><span class="o">&gt;&gt;</span> <span class="n">CollectData1</span><span class="p">,</span> <span class="n">CollectDataForDataset</span><span class="o">&lt;</span><span class="n">CollectiveDataset</span><span class="o">&lt;</span><span class="n">FSStore</span><span class="p">,</span> <span class="n">CartesianDecomposition</span><span class="o">&gt;&gt;</span> <span class="n">CollectData2</span><span class="o">&gt;</span> <span class="n">auto</span> <span class="n">operator</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">const</span> <span class="n">CollectData1</span> <span class="n">a</span><span class="p">,</span> <span class="n">const</span> <span class="n">CollectData2</span> <span class="n">b</span><span class="p">)</span>
+<span class="o">-</span> <span class="n">template</span><span class="o">&lt;</span><span class="n">CollectDataForDataset</span><span class="o">&lt;</span><span class="n">SimpleDataset</span><span class="o">&lt;</span><span class="n">FSStore</span><span class="o">&gt;&gt;</span> <span class="n">CollectData1</span><span class="p">,</span> <span class="n">CollectDataForDataset</span><span class="o">&lt;</span><span class="n">SimpleDataset</span><span class="o">&lt;</span><span class="n">FSStore</span><span class="o">&gt;&gt;</span> <span class="n">CollectData2</span><span class="o">&gt;</span> <span class="n">auto</span> <span class="n">operator</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">const</span> <span class="n">CollectData1</span> <span class="n">a</span><span class="p">,</span> <span class="n">const</span> <span class="n">CollectData2</span> <span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv425NullCollectDataForDataset">
 <span id="_CPPv325NullCollectDataForDataset"></span><span id="_CPPv225NullCollectDataForDataset"></span><span id="NullCollectDataForDataset"></span><span class="target" id="structNullCollectDataForDataset"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NullCollectDataForDataset</span></span></span><a class="headerlink" href="#_CPPv425NullCollectDataForDataset" title="Link to this definition">¶</a><br /></dt>
@@ -659,7 +654,6 @@
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#_CPPv4I00ErsDaK12CollectData1K12CollectData2"><code class="docutils literal notranslate"><span class="pre">operator&gt;&gt;()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv425NullCollectDataForDataset"><code class="docutils literal notranslate"><span class="pre">NullCollectDataForDataset</span></code></a><ul>
 <li><a class="reference internal" href="#_CPPv4NK25NullCollectDataForDataset11get_functorEK14viewd_constgbxK20subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">get_functor()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I0ENK25NullCollectDataForDataset15write_to_arraysEvRK7Dataset"><code class="docutils literal notranslate"><span class="pre">write_to_arrays()</span></code></a></li>
