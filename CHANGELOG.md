@@ -2,6 +2,22 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.50.0](https://github.com/yoctoyotta1024/CLEO/compare/ab34a927b4c7d3b73cde11f17262cfd3589206f3..v0.50.0) - 2025-07-15
+#### Features
+- config params to enable/disable different observers - ([5739351](https://github.com/yoctoyotta1024/CLEO/commit/573935151145b57f2d68e41003e74e5bb636ce83)) - clara.bayley
+- SDMMethods uses observer - ([d617a18](https://github.com/yoctoyotta1024/CLEO/commit/d617a18850dbc2037ff66364e397790b4d844695)) - clara.bayley
+- new bindings for zarr lib - ([e5e7117](https://github.com/yoctoyotta1024/CLEO/commit/e5e7117f3f0340f2587967cf1666421d7776f395)) - clara.bayley
+#### Miscellaneous Chores
+- formatting - ([ab34a92](https://github.com/yoctoyotta1024/CLEO/commit/ab34a927b4c7d3b73cde11f17262cfd3589206f3)) - clara.bayley
+#### Refactoring
+- option to turn off time observer in python bindings - ([6d00cb4](https://github.com/yoctoyotta1024/CLEO/commit/6d00cb47b8712e5679c291b10bd5896d982675b9)) - clara.bayley
+- add option to turn off consttstep observations - ([eb4aa84](https://github.com/yoctoyotta1024/CLEO/commit/eb4aa84802357137b18b3352bd250db4a9b4e0ea)) - clara.bayley
+- make python bindings example compatible with new observer - ([9688392](https://github.com/yoctoyotta1024/CLEO/commit/9688392024f0f532610ef022dc9e810c6c64d3dd)) - clara.bayley
+- get_zarrbasedir accessible from python - ([706ad19](https://github.com/yoctoyotta1024/CLEO/commit/706ad1960577c973c7f0253605cc78858bd87016)) - clara.bayley
+- use alias for pymicrophysical process - ([31d3e0c](https://github.com/yoctoyotta1024/CLEO/commit/31d3e0cb12c33d0be048a447b11f5b34228e2891)) - clara.bayley
+
+- - -
+
 ## [v0.49.0](https://github.com/yoctoyotta1024/CLEO/compare/263e95a14b654d898927645e71b2f0acfb837843..v0.49.0) - 2025-07-11
 #### Features
 - add collisions to python bindings of SDM - ([53513ff](https://github.com/yoctoyotta1024/CLEO/commit/53513ff174c66b39cec71824bba15e428ae38c33)) - clara.bayley
