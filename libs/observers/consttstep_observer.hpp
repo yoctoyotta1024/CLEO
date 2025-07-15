@@ -8,7 +8,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Saturday 25th May 2024
+ * Last Modified: Tuesday 15th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -49,6 +49,8 @@ concept ObsFuncs = requires(OFs ofs, unsigned int t, const viewd_constgbx d_gbxs
 /**
  * @brief Structure ConstTstepObserver represents a type that satisfies the concept of an
  * observer with a constant timestep interval between observations at the start of each timestep.
+ *
+ * Special case: If interval is largest possible unsigned integer, on_step never returns true.
  *
  * Struct can be used to create an observer with a constant timestep and with observation
  * functionality as determined by the 'do_obs' instance of the ObsFuncs type 'O'.
@@ -102,14 +104,16 @@ struct ConstTstepObserver {
   }
 
   /**
-   * @brief Check if observer is "on step".
+   * @brief Returns true if the current model time is on an observation timestep.
    *
-   * Checks if the current model time is on an observation timestep.
+   * Special case: If interval is largest possible unsigned integer, on_step never returns true.
    *
    * @param t_mdl The unsigned int parameter representing the current model timestep.
    * @return True if the current timestep is an observation timestep, false otherwise.
    */
-  bool on_step(const unsigned int t_mdl) const { return t_mdl % interval == 0; }
+  bool on_step(const unsigned int t_mdl) const {
+    return (t_mdl % interval == 0) && (interval != LIMITVALUES::uintmax);
+  }
 
   /**
    * @brief Perform operation at the start of a step if at appropriate interval.
