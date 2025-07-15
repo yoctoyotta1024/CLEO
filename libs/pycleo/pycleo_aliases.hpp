@@ -33,10 +33,13 @@
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/movesupersindomain.hpp"
 #include "gridboxes/predcorrmotion.hpp"
+#include "observers/collect_data_for_simple_dataset.hpp"
 #include "observers/consttstep_observer.hpp"
 #include "observers/gbxindex_observer.hpp"
 #include "observers/massmoments_observer.hpp"
+#include "observers/nsupers_observer.hpp"
 #include "observers/observers.hpp"
+#include "observers/state_observer.hpp"
 #include "observers/time_observer.hpp"
 #include "observers/totnsupers_observer.hpp"
 #include "runcleo/sdmmethods.hpp"
@@ -55,7 +58,7 @@
 namespace pyobserver {
 using nullmo = NullSDMMonitor;
 
-using gbx = GbxindexObserver<SimpleDataset<FSStore>, FSStore>;
+using gbxindex = GbxindexObserver<SimpleDataset<FSStore>, FSStore>;
 using time = ConstTstepObserver<DoTimeObs<SimpleDataset<FSStore>, FSStore>>;
 using totnsupers = ConstTstepObserver<DoTotNsupersObs<SimpleDataset<FSStore>, FSStore>>;
 using massmoms = ConstTstepObserver<
@@ -64,17 +67,33 @@ using massmoms = ConstTstepObserver<
 using rainmassmoms = ConstTstepObserver<DoWriteToDataset<
     ParallelWriteGridboxes<SimpleDataset<FSStore>, ParallelGridboxesTeamPolicyFunc,
                            CollectMassMoments<FSStore, RaindropsMassMomentsFunc>>>>;
+using gridboxes = ConstTstepObserver<DoWriteToDataset<ParallelWriteGridboxes<
+    SimpleDataset<FSStore>, ParallelGridboxesRangePolicyFunc,
+    CombinedCollectDataForDataset<
+        CombinedCollectDataForDataset<
+            GenericCollectData<FSStore, unsigned int, NsupersFunc>,
+            CombinedCollectDataForDataset<
+                CombinedCollectDataForDataset<GenericCollectData<FSStore, float, VvelFunc>,
+                                              GenericCollectData<FSStore, float, UvelFunc>>,
+                GenericCollectData<FSStore, float, WvelFunc>>>,
+        CombinedCollectDataForDataset<
+            CombinedCollectDataForDataset<GenericCollectData<FSStore, float, PressFunc>,
+                                          GenericCollectData<FSStore, float, TempFunc>>,
+            CombinedCollectDataForDataset<GenericCollectData<FSStore, float, QvapFunc>,
+                                          GenericCollectData<FSStore, float, QcondFunc>>>>>>>;
 
 using mo01 = CombinedSDMMonitor<nullmo, nullmo>;
 using mo012 = CombinedSDMMonitor<mo01, nullmo>;
 using mo0123 = CombinedSDMMonitor<mo012, nullmo>;
 using mo01234 = CombinedSDMMonitor<mo0123, nullmo>;
+using mo012345 = CombinedSDMMonitor<mo01234, nullmo>;
 
-using obs01 = CombinedObserver<gbx, time, mo01>;
+using obs01 = CombinedObserver<gbxindex, time, mo01>;
 using obs012 = CombinedObserver<obs01, totnsupers, mo012>;
 using obs0123 = CombinedObserver<obs012, massmoms, mo0123>;
 using obs01234 = CombinedObserver<obs0123, rainmassmoms, mo01234>;
-using obs = obs01234;
+using obs012345 = CombinedObserver<obs01234, gridboxes, mo012345>;
+using obs = obs012345;
 }  // namespace pyobserver
 
 /*

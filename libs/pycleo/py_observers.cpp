@@ -24,6 +24,9 @@
 pyobserver::obs create_observer(const Config &config, const Timesteps &tsteps,
                                 SimpleDataset<FSStore> &dataset, FSStore &store);
 
+pyobserver::gridboxes create_gridboxes_observer(const unsigned int interval,
+                                                SimpleDataset<FSStore> &dataset,
+                                                const size_t maxchunk, const size_t ngbxs);
 void pyNullObserver(py::module &m) {
   py::class_<pyca::obs_null>(m, "NullObserver")
       .def(py::init())
@@ -32,7 +35,7 @@ void pyNullObserver(py::module &m) {
 
 void pyObserver(py::module &m) {
   py::class_<pyobserver::obs>(m, "Observer")
-      .def(py::init<pyobserver::obs0123, pyobserver::rainmassmoms, pyobserver::mo01234>())
+      .def(py::init<pyobserver::obs01234, pyobserver::gridboxes, pyobserver::mo012345>())
       .def("next_obs", &pyobserver::obs::next_obs, py::arg("t_mdl"));
 }
 
@@ -81,5 +84,27 @@ pyobserver::obs create_observer(const Config &config, const Timesteps &tsteps,
   const Observer auto obs4 =
       MassMomentsRaindropsObserver(rainmassmoms_interval, dataset, store, maxchunk, ngbxs);
 
-  return obs0 >> obs1 >> obs2 >> obs3 >> obs4;
+  auto gridboxes_interval = LIMITVALUES::uintmax;
+  if (enable_observers.gridboxes) {
+    gridboxes_interval = obsstep;
+  }
+  const Observer auto obs5 =
+      create_gridboxes_observer(gridboxes_interval, dataset, maxchunk, ngbxs);
+
+  return obs0 >> obs1 >> obs2 >> obs3 >> obs4 >> obs5;
+}
+
+pyobserver::gridboxes create_gridboxes_observer(const unsigned int interval,
+                                                SimpleDataset<FSStore> &dataset,
+                                                const size_t maxchunk, const size_t ngbxs) {
+  const CollectDataForDataset<SimpleDataset<FSStore>> auto thermo =
+      CollectThermo(dataset, maxchunk, ngbxs);
+  const CollectDataForDataset<SimpleDataset<FSStore>> auto windvel =
+      CollectWindVel(dataset, maxchunk, ngbxs);
+  const CollectDataForDataset<SimpleDataset<FSStore>> auto nsupers =
+      CollectNsupers(dataset, maxchunk, ngbxs);
+
+  const CollectDataForDataset<SimpleDataset<FSStore>> auto collect_gbxdata =
+      nsupers >> windvel >> thermo;
+  return WriteToDatasetObserver(interval, dataset, collect_gbxdata);
 }
