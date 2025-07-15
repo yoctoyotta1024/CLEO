@@ -384,6 +384,7 @@
 <dt class="sig sig-object cpp" id="_CPPv4I_8ObsFuncsE18ConstTstepObserver">
 <span id="_CPPv3I_8ObsFuncsE18ConstTstepObserver"></span><span id="_CPPv2I_8ObsFuncsE18ConstTstepObserver"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="observers.html#_CPPv4I0E8ObsFuncs" title="ObsFuncs"><span class="n"><span class="pre">ObsFuncs</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">O</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structConstTstepObserver"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ConstTstepObserver</span></span></span><a class="headerlink" href="#_CPPv4I_8ObsFuncsE18ConstTstepObserver" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Structure <a class="reference internal" href="#structConstTstepObserver"><span class="std std-ref">ConstTstepObserver</span></a> represents a type that satisfies the concept of an observer with a constant timestep interval between observations at the start of each timestep. </p>
+<p>Special case: If interval is largest possible unsigned integer, on_step never returns true.</p>
 <p>Struct can be used to create an observer with a constant timestep and with observation functionality as determined by the ‘do_obs’ instance of the <a class="reference internal" href="observers.html#conceptObsFuncs"><span class="std std-ref">ObsFuncs</span></a> type ‘O’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
@@ -443,8 +444,8 @@
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK18ConstTstepObserver7on_stepEKj">
 <span id="_CPPv3NK18ConstTstepObserver7on_stepEKj"></span><span id="_CPPv2NK18ConstTstepObserver7on_stepEKj"></span><span id="ConstTstepObserver::on_step__unsigned-iCC"></span><span class="target" id="structConstTstepObserver_1a1c0076ce6b9fecd3d47b4126719d7c3e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">on_step</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">t_mdl</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK18ConstTstepObserver7on_stepEKj" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Check if observer is “on step”. </p>
-<p>Checks if the current model time is on an observation timestep.</p>
+<dd><p>Returns true if the current model time is on an observation timestep. </p>
+<p>Special case: If interval is largest possible unsigned integer, on_step never returns true.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>t_mdl</strong> – The unsigned int parameter representing the current model timestep. </p>
@@ -537,7 +538,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 11 July 2025</div>
+              Last updated on 15 July 2025</div>
           </div>
           <div class="right-details">
             
