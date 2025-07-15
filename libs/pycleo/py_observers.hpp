@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 6th June 2025
+ * Last Modified: Tuesday 15th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -25,11 +25,20 @@
 #include <pybind11/pybind11.h>
 
 #include "./pycleo_aliases.hpp"
+#include "configuration/config.hpp"
+#include "initialise/timesteps.hpp"
+#include "observers/consttstep_observer.hpp"
+#include "observers/gbxindex_observer.hpp"
 #include "observers/observers.hpp"
+#include "observers/time_observer.hpp"
+#include "zarr/fsstore.hpp"
+#include "zarr/simple_dataset.hpp"
 
 namespace py = pybind11;
 namespace pyca = pycleo_aliases;
 
 void pyNullObserver(py::module &m);
+void pyObserver(py::module &m);
+void pycreate_observer(py::module &m);
 
 #endif  // LIBS_PYCLEO_PY_OBSERVERS_HPP_

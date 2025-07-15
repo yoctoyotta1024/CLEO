@@ -109,6 +109,8 @@ PYBIND11_MODULE(pycleo, m) {
   pyFSStore(m);
   pySimpleDataset(m);
   pyNullObserver(m);
+  pyObserver(m);
+  pycreate_observer(m);
 
   /* sdmmethods */
   pyCartesianNullSDMMethods(m);

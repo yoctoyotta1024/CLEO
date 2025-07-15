@@ -9,7 +9,7 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Wednesday 11th June 2025
+ * Last Modified: Tuesday 15th July 2025
  * Modified By: CB
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
@@ -21,8 +21,35 @@
 
 #include "./py_observers.hpp"
 
+pyobserver::obs create_observer(const Config &config, const Timesteps &tsteps,
+                                SimpleDataset<FSStore> &dataset, FSStore &store);
+
 void pyNullObserver(py::module &m) {
   py::class_<pyca::obs_null>(m, "NullObserver")
       .def(py::init())
       .def("next_obs", &pyca::obs_null::next_obs, py::arg("t_mdl"));
+}
+
+void pyObserver(py::module &m) {
+  py::class_<pyobserver::obs>(m, "Observer")
+      .def(py::init<pyobserver::gbx, pyobserver::time, pyobserver::mo>())
+      .def("next_obs", &pyobserver::obs::next_obs, py::arg("t_mdl"));
+}
+
+void pycreate_observer(py::module &m) {
+  m.def("pycreate_observer", &create_observer,
+        "returns type of Observer suitable for KiD test case", py::arg("config"), py::arg("tsteps"),
+        py::arg("dataset"), py::arg("store"));
+}
+
+pyobserver::obs create_observer(const Config &config, const Timesteps &tsteps,
+                                SimpleDataset<FSStore> &dataset, FSStore &store) {
+  const auto obsstep = tsteps.get_obsstep();
+  const auto maxchunk = config.get_maxchunk();
+  const auto ngbxs = config.get_ngbxs();
+
+  const Observer auto obs1 = TimeObserver(obsstep, dataset, store, maxchunk, &step2dimlesstime);
+  const Observer auto obs2 = GbxindexObserver(dataset, store, maxchunk, ngbxs);
+
+  return obs2 >> obs1;
 }
