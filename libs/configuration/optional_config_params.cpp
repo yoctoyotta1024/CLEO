@@ -347,7 +347,7 @@ void OptionalConfigParams::PycleoParams::set_params(const YAML::Node &config) {
       enable_observers.massmoms = obs_node["massmoms"].as<bool>();
     }
     if (obs_node["rainmassmoms"]) {
-      enable_observers.massmoms = obs_node["rainmassmoms"].as<bool>();
+      enable_observers.rainmassmoms = obs_node["rainmassmoms"].as<bool>();
     }
   }
 }
