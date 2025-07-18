@@ -86,24 +86,33 @@ class AttrsGenerator:
             )
             raise ValueError(errmsg)
 
-    def check_totalnumconc(self, multiplicities, NUMCONC, samplevol):
+    def check_totalnumconc(
+        self,
+        multiplicities,
+        NUMCONC,
+        samplevol,
+        numconc_tolerance,
+    ):
         """check number concentration of real droplets calculated from
-        multiplicities is same as input value for number conc. Also check
-        total number of real droplets is within 10% of the expected
-        value given the input number conc and sample volume"""
-
+        multiplicities is same as input value for number conc. within fractional difference (error)
+        given by the numconc_tolerance.
+        Also check the total number of real droplets lies within 0.1% or more
+        of the expected value given the input number conc and sample volume"""
         nreals = np.rint(NUMCONC * samplevol)
         calcnreals = np.rint(np.sum(multiplicities))
         calcnumconc = np.rint(calcnreals / samplevol)
 
-        if np.rint(NUMCONC) != calcnumconc:
+        if abs(np.rint(NUMCONC) - calcnumconc) / NUMCONC > numconc_tolerance:
             errmsg = (
                 "total real droplet concentration"
-                + " {:0g} != numconc, {:0g}".format(calcnumconc, NUMCONC)
+                + " {:0g} != numconc, {:0g} within error tolerance".format(
+                    calcnumconc, NUMCONC
+                )
             )
             raise ValueError(errmsg)
 
-        if abs(nreals - calcnreals) > 0.001 * nreals:
+        nreals_tolerance = max(0.001, numconc_tolerance)
+        if abs(nreals - calcnreals) / nreals > nreals_tolerance:
             errmsg = "total no. real droplets, {:0g},".format(
                 calcnreals
             ) + " not consistent with sample volume {:.3g} m^3".format(samplevol)
@@ -136,7 +145,13 @@ class AttrsGenerator:
         print(msg)
 
     def generate_attributes(
-        self, nsupers, RHO_SOL, NUMCONC, gridboxbounds, isprint=False
+        self,
+        nsupers,
+        RHO_SOL,
+        NUMCONC,
+        gridboxbounds,
+        numconc_tolerance=0.0,
+        isprint=False,
     ):
         """generate superdroplets (SDs) attributes that have dimensions
         by calling the appropraite generating functions"""
@@ -151,7 +166,7 @@ class AttrsGenerator:
         multiplicities = self.multiplicities(radii, NUMCONC, gbxvol)
 
         if nsupers > 0:
-            self.check_totalnumconc(multiplicities, NUMCONC, gbxvol)
+            self.check_totalnumconc(multiplicities, NUMCONC, gbxvol, numconc_tolerance)
             if isprint:
                 self.print_totalconc(
                     multiplicities, radii, mass_solutes, RHO_SOL, gbxvol
