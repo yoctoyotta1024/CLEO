@@ -37,7 +37,6 @@ std::array<size_t, 3> CartesianDecomposition::get_local_partition_size() const {
   return partition_sizes[my_rank];
 };
 
-// Aparna working here
 void CartesianDecomposition::set_gridbox_bounds(GbxBoundsFromBinary gfb) {
   unsigned int global_gbx_idx;
   auto partition_size = partition_sizes[my_rank];
@@ -49,15 +48,7 @@ void CartesianDecomposition::set_gridbox_bounds(GbxBoundsFromBinary gfb) {
   gridbox_bounds.push_back({gfb.get_coord1gbxbounds(global_gbx_idx).first});
   gridbox_bounds.push_back({gfb.get_coord2gbxbounds(global_gbx_idx).first});
 
-  std::cout << "--------m----------" << std::endl;
-  std::cout << "Current rank:" << my_rank << std::endl;
-  std::cout << "partition origins z: " << partition_origin[0] << std::endl;
-  std::cout << "partition origins x: " << partition_origin[1] << std::endl;
-  std::cout << "partition origins y: " << partition_origin[2] << std::endl;
-
-  // auto num_local_gridboxes = get_local_partition_size();
   for (auto dimension : {0, 1, 2}) {
-    // auto ngbxs_dim = gfb.ndims[dimension];
     for (unsigned int i = 0; i < partition_size[dimension]; i++) {
       // when dimension is 0
       if (dimension == 0) {
@@ -79,7 +70,6 @@ void CartesianDecomposition::set_gridbox_bounds(GbxBoundsFromBinary gfb) {
       }
     }
   }
-  // std::cout<<"Gridbox bounds for rank:"<<my_rank<<" "<<gridbox_bounds<<std::endl;
 }
 
 // Defines if a dimension is periodic or finite
@@ -117,7 +107,7 @@ unsigned int CartesianDecomposition::get_local_bounding_gridbox(
   std::array<size_t, 3> bounding_gridbox_coordinates;
   std::array<int, 3> external_direction = {0, 0, 0};
   bool local_coordinate = true;
-  std::array<size_t, 3> gbx_size;
+  auto partition_size = partition_sizes[my_rank];
 
 
   for (auto dimension : {0 , 1 , 2}) {
@@ -149,13 +139,8 @@ unsigned int CartesianDecomposition::get_local_bounding_gridbox(
       // If none of the tests above pass then the coordinate is inside of the
       // partition in that dimension
     } else if (local_coordinate) {
-      gbx_size[dimension] = gridbox_bounds[dimension].size() - 1;
-      for (unsigned int i = 0 ; i < gbx_size[dimension] ; i++) {
-        if ( coordinates[dimension] < gridbox_bounds[dimension][i+1] ) {
-          bounding_gridbox_coordinates[dimension] = i;
-          break;
-        }
-      }
+      bounding_gridbox_coordinates[dimension] = binary_search(coordinates, dimension,
+          partition_size, gridbox_bounds);
     }
   }
   // If the coordinate is inside of the partition in all dimensions, returns the
@@ -258,14 +243,9 @@ bool CartesianDecomposition::create(std::vector<size_t> ndims, GbxBoundsFromBina
 
   auto gbx_idx = gfb.gbxidxs.back();
   // int gbx_idx = get_index_from_coordinates(ndims, ndims[0], ndims[1], ndims[2]);
-  // std::cout<<"Gridbox index: "<<gbx_idx<<std::endl;
   domain_bounds[0] = gfb.get_coord3gbxbounds(gbx_idx).second;
   domain_bounds[1] = gfb.get_coord1gbxbounds(gbx_idx).second;
   domain_bounds[2] = gfb.get_coord2gbxbounds(gbx_idx).second;
-  // std::cout<<"Domain bounds z:"<<domain_bounds[0]<<std::endl;
-  // std::cout<<"Domain bounds x:"<<domain_bounds[1]<<std::endl;
-  // std::cout<<"Domain bounds y:"<<domain_bounds[2]<<std::endl;
-
   // If the comm_size is equal to 1 there will be no suitable factorization,
   // so treat it as a special case
 
@@ -518,4 +498,25 @@ void heap_permutation(std::vector<std::vector<size_t>> &results, std::vector<siz
       std::swap(arr[i], arr[size - 1]);
     }
   }
+}
+
+int binary_search(std::array<double, 3> &coordinates,
+  int dimension, std::array<size_t, 3> partition_size,
+  std::vector<std::vector<double>> gridbox_bounds ) {
+  int left = 0;
+  int right = partition_size[dimension] -1;
+  while (left <= right) {
+    int mid = (left + (right - left) / 2);
+        if ( (coordinates[dimension] >= gridbox_bounds[dimension][mid])
+            && (coordinates[dimension] < gridbox_bounds[dimension][mid+1])) {
+            return mid;
+        }
+        if (coordinates[dimension] >= gridbox_bounds[dimension][mid+1]) {
+            left = mid+1;
+        } else if (coordinates[dimension] < gridbox_bounds[dimension][mid]) {
+            right = mid;
+        }
+    }
+    // If target is not found
+    return -1;
 }
