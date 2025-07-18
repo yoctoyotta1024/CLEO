@@ -137,5 +137,7 @@ void factorize_helper(int n, int start, std::vector<size_t> &current,
                       std::vector<std::vector<size_t>> &result);
 void heap_permutation(std::vector<std::vector<size_t>> &results, std::vector<size_t> arr, int size);
 int get_multiplications_to_turn_int(double entry_value);
-
+int binary_search(std::array<double, 3> &coordinates,
+    int dimension, std::array<size_t, 3> partition_size,
+    std::vector<std::vector<double>> gridbox_bounds);
 #endif  // LIBS_CARTESIANDOMAIN_CARTESIAN_DECOMPOSITION_HPP_
