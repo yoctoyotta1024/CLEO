@@ -27,7 +27,8 @@ executables="fromfile_irreg"
 
 pythonscript=${path2CLEO}/examples/fromfile_irreg/fromfile_irreg.py
 configfile=${path2CLEO}/examples/fromfile_irreg/src/config/fromfile_irreg_config.yaml
-script_args="${configfile} --do_inputfiles=TRUE --do_run_executable=TRUE --do_plot_results=TRUE --ntasks=4"
+script_args="${configfile} --do_inputfiles=TRUE --do_run_executable=TRUE \
+  --do_plot_results=TRUE --ntasks=4"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
