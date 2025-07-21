@@ -9,9 +9,6 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Wilton Jaciel Loch
  * -----
- * Last Modified: Friday 20th June 2025
- * Modified By: CB
- * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----

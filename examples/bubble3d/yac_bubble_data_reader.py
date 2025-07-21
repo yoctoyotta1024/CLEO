@@ -9,9 +9,6 @@ Created Date: Friday 19th July 2024
 Author: Wilton Loch (WL)
 Additional Contributors: Clara Bayley (CB)
 -----
-Last Modified: Wednesday 28th May 2025
-Modified By: CB
------
 License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
