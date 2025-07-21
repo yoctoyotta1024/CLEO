@@ -80,7 +80,7 @@ def plot_timeseries_domain_slices(
     """plot 2-D cross-sections along y axis of 3-D data 'data3d' for several timeslices
     given times and meshgrid for centres in x and z, 'xxh' and 'zzh'."""
 
-    fig = plt.figure(figsize=(21, 15))
+    fig = plt.figure(figsize=(16, 9))
     ncols = len(t2plts)
     nrows = data4d.shape[1]
     gs = GridSpec(
@@ -93,6 +93,8 @@ def plot_timeseries_domain_slices(
         fig, gs, nrows, ncols, time, t2plts, xxh, zzh, yfull, data4d, cmap, norm
     )
     plt.colorbar(pcm, cax=cax, orientation="horizontal")
+
+    fig.tight_layout()
 
     if savedir != "":
         savename = savedir / Path(f"timeseries_{key}.png")
