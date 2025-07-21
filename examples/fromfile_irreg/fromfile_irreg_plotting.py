@@ -1,4 +1,4 @@
-'''
+"""
 Copyright (c) 2025 MPI-M, Clara Bayley
 
 
@@ -15,7 +15,7 @@ https://opensource.org/licenses/BSD-3-Clause
 File Description:
 Script plots results of 3D example with time varying thermodynamics
 read from binary files.
-'''
+"""
 
 
 import sys
