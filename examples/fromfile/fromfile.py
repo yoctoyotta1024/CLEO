@@ -110,15 +110,15 @@ if do_inputfiles:
         sharepath.mkdir(exist_ok=True)
         binpath.parent.mkdir(exist_ok=True)
         binpath.mkdir(exist_ok=True)
-        savefigpath.parent.mkdir(exist_ok=True)
         savefigpath.mkdir(exist_ok=True)
 
     ### --- delete any existing initial conditions --- ###
     shutil.rmtree(grid_filename, ignore_errors=True)
     shutil.rmtree(initsupers_filename, ignore_errors=True)
-    shutil.rmtree(
-        str(thermofiles)[:-4] + "*", ignore_errors=True
-    )  # delete any existing dataset
+    all_thermofiles = thermofiles.parent / Path(
+        f"{thermofiles.stem}*{thermofiles.suffix}"
+    )
+    shutil.rmtree(all_thermofiles, ignore_errors=True)
 
     fromfile_inputfiles.main(
         path2CLEO,

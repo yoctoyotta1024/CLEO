@@ -2,8 +2,8 @@
 #SBATCH --job-name=fromfile_irreg
 #SBATCH --partition=compute
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=128
+#SBATCH --ntasks-per-node=4
+#SBATCH --cpus-per-task=16
 #SBATCH --mem=10G
 #SBATCH --time=00:05:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
@@ -27,7 +27,8 @@ executables="fromfile_irreg"
 
 pythonscript=${path2CLEO}/examples/fromfile_irreg/fromfile_irreg.py
 configfile=${path2CLEO}/examples/fromfile_irreg/src/config/fromfile_irreg_config.yaml
-script_args="${configfile}"
+script_args="${configfile} --do_inputfiles=TRUE --do_run_executable=TRUE \
+  --do_plot_results=TRUE --ntasks=4"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

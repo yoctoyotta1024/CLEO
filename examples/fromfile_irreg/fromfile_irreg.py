@@ -21,22 +21,62 @@ Plots output data as .png files for visual checks.
 import os
 import shutil
 import subprocess
-import sys
+import argparse
 from pathlib import Path
 import fromfile_irreg_inputfiles
+import fromfile_irreg_plotting
 
-path2CLEO = Path(sys.argv[1])
-path2build = Path(sys.argv[2])
-config_filename = Path(sys.argv[3])
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "path2CLEO", type=Path, help="Absolute path to CLEO directory (for PySD)"
+)
+parser.add_argument("path2build", type=Path, help="Absolute path to build directory")
+parser.add_argument(
+    "config_filename", type=Path, help="Absolute path to configuration YAML file"
+)
+parser.add_argument(
+    "--ntasks",
+    type=int,
+    default="4",
+    help="Number of MPI processes to run program with",
+)
+parser.add_argument(
+    "--do_inputfiles",
+    type=str,
+    choices=["TRUE", "FALSE"],
+    default="TRUE",
+    help="Generate initial condition binary files",
+)
+parser.add_argument(
+    "--do_run_executable",
+    type=str,
+    choices=["TRUE", "FALSE"],
+    default="TRUE",
+    help="Run fromfile executable",
+)
+parser.add_argument(
+    "--do_plot_results",
+    type=str,
+    choices=["TRUE", "FALSE"],
+    default="TRUE",
+    help="Plot results of fromfile example",
+)
+args = parser.parse_args()
 
-sys.path.append(str(path2CLEO))  # imports from pySD
-sys.path.append(
-    str(path2CLEO / "examples" / "exampleplotting")
-)  # imports from example plots package
+path2CLEO = args.path2CLEO
+path2build = args.path2build
+config_filename = args.config_filename
+ntasks = args.ntasks
 
-from src import plot_output_thermo
-from plotssrc import pltsds, pltmoms
-from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
+do_inputfiles = True
+if args.do_inputfiles == "FALSE":
+    do_inputfiles = False
+do_run_executable = True
+if args.do_run_executable == "FALSE":
+    do_run_executable = False
+do_plot_results = True
+if args.do_plot_results == "FALSE":
+    do_plot_results = False
 
 isfigures = [True, True]  # booleans for [making, saving] initialisation figures
 
@@ -45,12 +85,12 @@ isfigures = [True, True]  # booleans for [making, saving] initialisation figures
 ### ---------------------------------------------------------------- ###
 ### --- essential paths and filenames --- ###
 # path and filenames for creating initial SD conditions
-binpath = path2build / "bin"
+binpath = path2build / "bin" / f"ntasks{ntasks}"
 sharepath = path2build / "share"
 grid_filename = sharepath / "fromfile_irreg_dimlessGBxboundaries.dat"
 initsupers_filename = sharepath / "fromfile_irreg_dimlessSDsinit.dat"
 thermofiles = sharepath / "fromfile_irreg_dimlessthermo.dat"
-savefigpath = path2build / "bin"  # directory for saving figures
+savefigpath = binpath  # directory for saving figures
 
 # path and file names for plotting results
 setupfile = binpath / "fromfile_irreg_setup.txt"
@@ -61,81 +101,62 @@ dataset = binpath / "fromfile_irreg_sol.zarr"
 ### ---------------------------------------------------------------- ###
 ### ------------------- BINARY FILES GENERATION--------------------- ###
 ### ---------------------------------------------------------------- ###
-### --- ensure build, share and bin directories exist --- ###
-if path2CLEO == path2build:
-    raise ValueError("build directory cannot be CLEO")
-else:
-    path2build.mkdir(exist_ok=True)
-    sharepath.mkdir(exist_ok=True)
-    binpath.mkdir(exist_ok=True)
-    savefigpath.mkdir(exist_ok=True)
+if do_inputfiles:
+    ### --- ensure build, share and bin directories exist --- ###
+    if path2CLEO == path2build:
+        raise ValueError("build directory cannot be CLEO")
+    else:
+        path2build.mkdir(exist_ok=True)
+        sharepath.mkdir(exist_ok=True)
+        binpath.parent.mkdir(exist_ok=True)
+        binpath.mkdir(exist_ok=True)
+        savefigpath.mkdir(exist_ok=True)
 
-### --- delete any existing initial conditions --- ###
-shutil.rmtree(grid_filename, ignore_errors=True)
-shutil.rmtree(initsupers_filename, ignore_errors=True)
-all_thermofiles = thermofiles.parent / Path(f"{thermofiles.stem}*{thermofiles.suffix}")
-shutil.rmtree(all_thermofiles, ignore_errors=True)
+    ### --- delete any existing initial conditions --- ###
+    shutil.rmtree(grid_filename, ignore_errors=True)
+    shutil.rmtree(initsupers_filename, ignore_errors=True)
+    all_thermofiles = thermofiles.parent / Path(
+        f"{thermofiles.stem}*{thermofiles.suffix}"
+    )
+    shutil.rmtree(all_thermofiles, ignore_errors=True)
 
-fromfile_irreg_inputfiles.main(
-    path2CLEO,
-    path2build,
-    savefigpath,
-    config_filename,
-    grid_filename,
-    initsupers_filename,
-    thermofiles,
-    isfigures=isfigures,
-)
+    fromfile_irreg_inputfiles.main(
+        path2CLEO,
+        path2build,
+        savefigpath,
+        config_filename,
+        grid_filename,
+        initsupers_filename,
+        thermofiles,
+        isfigures=isfigures,
+    )
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
 
 ### ---------------------------------------------------------------- ###
 ### ---------------------- RUN CLEO EXECUTABLE --------------------- ###
 ### ---------------------------------------------------------------- ###
-os.chdir(path2build)
-subprocess.run(["pwd"])
-shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
-executable = path2build / "examples" / "fromfile_irreg" / "src" / "fromfile_irreg"
-print("Executable: " + str(executable))
-print("Config file: " + str(config_filename))
-subprocess.run([executable, config_filename])
+if do_run_executable:
+    os.chdir(path2build)
+    subprocess.run(["pwd"])
+    shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
+    executable = path2build / "examples" / "fromfile_irreg" / "src" / "fromfile_irreg"
+    print("Executable: " + str(executable))
+    print("Config file: " + str(config_filename))
+    subprocess.run(["srun", f"--ntasks={ntasks}", executable, config_filename])
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
-
 
 ### ---------------------------------------------------------------- ###
 ### ------------------------- PLOT RESULTS ------------------------- ###
 ### ---------------------------------------------------------------- ###
-# read in constants and intial setup from setup .txt file
-config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
-consts = pysetuptxt.get_consts(setupfile, isprint=True)
-gbxs = pygbxsdat.get_gridboxes(grid_filename, consts["COORD0"], isprint=True)
-
-time = pyzarr.get_time(dataset)
-superdrops = pyzarr.get_supers(dataset, consts)
-maxnsupers = pyzarr.get_totnsupers(dataset)
-thermo, winds = pyzarr.get_thermodata(
-    dataset, config["ntime"], gbxs["ndims"], consts, getwinds=True
-)
-
-# plot super-droplet results
-savename = savefigpath / "fromfile_irreg_maxnsupers_validation.png"
-pltmoms.plot_totnsupers(time, maxnsupers, savename=savename)
-
-nsample = 1000
-savename = savefigpath / "fromfile_irreg_motion2d_validation.png"
-pltsds.plot_randomsample_superdrops_2dmotion(
-    superdrops,
-    nsample,
-    savename=savename,
-    arrows=False,
-    israndom=False,
-)
-
-# plot thermodynamics results
-plot_output_thermo.plot_domain_thermodynamics_timeseries(
-    time, gbxs, thermo, winds, savedir=savefigpath
-)
-
+if do_plot_results:
+    fromfile_irreg_plotting.main(
+        path2CLEO,
+        grid_filename,
+        setupfile,
+        dataset,
+        savefigpath,
+    )
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###
