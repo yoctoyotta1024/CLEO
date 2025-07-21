@@ -9,9 +9,6 @@ Created Date: Wednesday 11th September 2024
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
-Last Modified: Wednesday 4th June 2025
-Modified By: CB
------
 License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
@@ -40,6 +37,8 @@ sys.path.append(
 from src import plot_output_thermo
 from plotssrc import pltsds, pltmoms
 from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
+
+isfigures = [True, True]  # booleans for [making, saving] initialisation figures
 
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
@@ -80,10 +79,12 @@ shutil.rmtree(all_thermofiles, ignore_errors=True)
 fromfile_irreg_inputfiles.main(
     path2CLEO,
     path2build,
+    savefigpath,
     config_filename,
     grid_filename,
     initsupers_filename,
     thermofiles,
+    isfigures=isfigures,
 )
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###

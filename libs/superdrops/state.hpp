@@ -9,9 +9,6 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors: Tobias Kölling (TK)
  * -----
- * Last Modified: Friday 1st March 2024
- * Modified By: CB
- * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
@@ -38,10 +35,10 @@ struct State {
   double volume;
 
  public:
-  double press;                       /**< Pressure defined at the center of volume. */
-  double temp;                        /**< Temperature defined at the center of volume. */
-  double qvap;                        /**< Vapor mass mixing ratio at the center of volume. */
-  double qcond;                       /**< Liquid mass mixing ratio at the center of volume. */
+  double press; /**< Pressure defined at the center of volume. */
+  double temp;  /**< Temperature defined at the center of volume. */
+  double qvap;  /**< Vapor mass mixing ratio at the center of volume. */
+  double qcond; /**< Liquid mass mixing ratio at the center of volume. */
   Kokkos::pair<double, double> wvel;
   /**< Vertical velocity (coord3 direction) defined on {lower, upper} coord3 faces of volume. */
   Kokkos::pair<double, double> uvel;

@@ -1,5 +1,5 @@
 """
-Copyright (c) 2024 MPI-M, Clara Bayley
+Copyright (c) 2025 MPI-M, Clara Bayley
 
 
 ----- CLEO -----
@@ -8,9 +8,6 @@ Project: pySD
 Created Date: Wednesday 17th January 2024
 Author: Clara Bayley (CB)
 Additional Contributors:
------
-Last Modified: Thursday 18th April 2024
-Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
