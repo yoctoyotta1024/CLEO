@@ -112,7 +112,14 @@ def is_sdgbxindex_correct(gridboxbounds, coord3, coord1, coord2, gbxindex, sdgbx
 
 
 def dimless_superdropsattrs(
-    nsupers, initattrsgen, inputs, gbxindex, gridboxbounds, NUMCONC, isprint=False
+    nsupers,
+    initattrsgen,
+    inputs,
+    gbxindex,
+    gridboxbounds,
+    NUMCONC,
+    numconc_tolerance=0.0,
+    isprint=False,
 ):
     """use superdroplet attribute generator "initattrsgen"
     and settings from config and consts files to
@@ -121,7 +128,12 @@ def dimless_superdropsattrs(
     # generate attributes
     sdgbxindex = [gbxindex] * nsupers
     xi, radius, msol = initattrsgen.generate_attributes(
-        nsupers, inputs["RHO_SOL"], NUMCONC, gridboxbounds, isprint=isprint
+        nsupers,
+        inputs["RHO_SOL"],
+        NUMCONC,
+        gridboxbounds,
+        numconc_tolerance=numconc_tolerance,
+        isprint=isprint,
     )
     coord3, coord1, coord2 = initattrsgen.generate_coords(
         nsupers, inputs["nspacedims"], gridboxbounds
@@ -142,7 +154,13 @@ def dimless_superdropsattrs(
 
 
 def create_allsuperdropattrs(
-    nsupersdict, initattrsgen, gbxbounds, inputs, NUMCONC, isprint=False
+    nsupersdict,
+    initattrsgen,
+    gbxbounds,
+    inputs,
+    NUMCONC,
+    numconc_tolerance=0.0,
+    isprint=False,
 ):
     """returns lists for attributes of all SDs in domain called attrs"""
 
@@ -157,6 +175,7 @@ def create_allsuperdropattrs(
             gbxindex,
             gridboxbounds,
             NUMCONC,
+            numconc_tolerance=numconc_tolerance,
             isprint=isprint,
         )  # lists of attrs for SDs in gridbox
 
@@ -272,6 +291,7 @@ def write_initsuperdrops_binary(
     grid_filename,
     nsupers,
     NUMCONC,
+    numconc_tolerance=0.0,
     isprint=False,
 ):
     """de-dimensionalise attributes in initattrsgen and then write to
@@ -291,7 +311,13 @@ def write_initsuperdrops_binary(
     nsupersdict = nsupers_pergridboxdict(nsupers, gbxbounds)
 
     attrs = create_allsuperdropattrs(
-        nsupersdict, initattrsgen, gbxbounds, inputs, NUMCONC, isprint=isprint
+        nsupersdict,
+        initattrsgen,
+        gbxbounds,
+        inputs,
+        NUMCONC,
+        numconc_tolerance=numconc_tolerance,
+        isprint=isprint,
     )
 
     ndata = [

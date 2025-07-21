@@ -57,6 +57,7 @@ def generate_initial_superdroplet_conditions(
     grid_filename,
     nsupers,
     numconc,
+    numconc_tolerance=0.0,
     isprintinfo=False,
     isfigures=[False, False],
     savefigpath=False,
@@ -75,6 +76,7 @@ def generate_initial_superdroplet_conditions(
         grid_filename,
         nsupers,
         numconc,
+        numconc_tolerance=numconc_tolerance,
         isprint=isprintinfo,
     )
 
