@@ -49,6 +49,7 @@
 #include "observers/observers.hpp"
 #include "observers/sdmmonitor/monitor_condensation_observer.hpp"
 #include "observers/sdmmonitor/monitor_massmoments_change_observer.hpp"
+#include "observers/sdmmonitor/monitor_precipitation_observer.hpp"
 #include "observers/state_observer.hpp"
 #include "observers/streamout_observer.hpp"
 #include "observers/superdrops_observer.hpp"
@@ -211,8 +212,10 @@ inline Observer auto create_sdmmonitor_observer(const unsigned int interval, Dat
       MonitorMassMomentsChangeObserver(interval, dataset, store, maxchunk, ngbxs);
   const Observer auto obs_rainmassmoms =
       MonitorRainMassMomentsObserver(interval, dataset, store, maxchunk, ngbxs);
+  const Observer auto obs_precip =
+      MonitorPrecipitationObserver(interval, dataset, store, maxchunk, ngbxs);
 
-  return obs_cond >> obs_massmoms >> obs_rainmassmoms;
+  return obs_cond >> obs_massmoms >> obs_rainmassmoms >> obs_precip;
 }
 
 template <typename Dataset, typename Store>
