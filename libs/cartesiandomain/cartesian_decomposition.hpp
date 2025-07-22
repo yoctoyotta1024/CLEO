@@ -103,7 +103,7 @@ class CartesianDecomposition {
   int local_to_global_gridbox_index(size_t local_gridbox_index, int process = -1) const;
   int global_to_local_gridbox_index(size_t global_gridbox_index) const;
   int get_gridbox_owner_process(size_t global_gridbox_index) const;
-  unsigned int get_local_bounding_gridbox(std::array<double, 3> &coordinates) const;
+  unsigned int get_local_bounding_gridbox_index(std::array<double, 3> &coordinates) const;
   // void set_gridbox_size(double z_size, double x_size, double y_size);
   void set_gridbox_bounds(GbxBoundsFromBinary gfb);
   // Sets the behavior of all dimensions
