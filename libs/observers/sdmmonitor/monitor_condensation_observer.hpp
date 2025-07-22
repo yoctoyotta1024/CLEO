@@ -40,6 +40,14 @@ struct MonitorCondensation {
   void reset_monitor() const;
 
   /**
+   * @brief Placeholder function to obey SDMMonitor concept does nothing.
+   *
+   * @param d_gbxs The view of gridboxes in device memory.
+   */
+  KOKKOS_FUNCTION
+  void before_timestepping(const TeamMember& team_member, const viewd_constsupers supers) const {}
+
+  /**
    * @brief Monitor mass of liquid change due to condensation / evaporation
    *
    * Add totmass_condensed to current value for mass condensed since d_data was last reset.
@@ -61,6 +69,15 @@ struct MonitorCondensation {
    */
   KOKKOS_FUNCTION
   void monitor_microphysics(const TeamMember& team_member, const viewd_constsupers supers) const {}
+
+  /**
+   * @brief Placeholder function to obey SDMMonitor concept does nothing.
+   *
+   * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
+   * @param supers (sub)View of all the superdrops in one gridbox during one motion timestep
+   */
+  KOKKOS_FUNCTION
+  void monitor_motion(const TeamMember& team_member, const viewd_constsupers supers) const {}
 
   /**
    * @brief Placeholder function to obey SDMMonitor concept does nothing.

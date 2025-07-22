@@ -195,6 +195,14 @@ struct MonitorMassMomentsChange {
   /**
    * @brief Placeholder function to obey SDMMonitor concept does nothing.
    *
+   * @param d_gbxs The view of gridboxes in device memory.
+   */
+  KOKKOS_FUNCTION
+  void before_timestepping(const TeamMember& team_member, const viewd_constsupers supers) const {}
+
+  /**
+   * @brief Placeholder function to obey SDMMonitor concept does nothing.
+   *
    * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
    * @param totmass_condensed Mass condensed in one gridbox during one microphysical timestep
    */
@@ -219,6 +227,20 @@ struct MonitorMassMomentsChange {
    * @brief Monitor 0th, 1st and 2nd moments of the droplet mass distribution
    *
    * calls fetch_delta_massmoments to monitor the moments of the droplet mass
+   * distribution during SDM motion
+   *
+   * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
+   * @param supers (sub)View of all the superdrops in one gridbox during one microphysical timestep
+   */
+  KOKKOS_FUNCTION
+  void monitor_motion(const TeamMember& team_member, const viewd_constsupers supers) const {
+    motion_moms.fetch_delta_massmoments(team_member, supers);
+  }
+
+  /**
+   * @brief Monitor 0th, 1st and 2nd moments of the droplet mass distribution
+   *
+   * calls fetch_delta_massmoments to monitor the moments of the droplet mass
    * distribution during SDM motion.
    *
    * @param d_gbxs The view of gridboxes in device memory.
@@ -227,11 +249,11 @@ struct MonitorMassMomentsChange {
   void monitor_motion(const viewd_constgbx d_gbxs, const subviewd_constsupers domainsupers) const {
     const size_t ngbxs(d_gbxs.extent(0));
     Kokkos::parallel_for(
-        "monitor_motion", TeamPolicy(ngbxs, KCS::team_size),
+        "monitor_motion_massmoments", TeamPolicy(ngbxs, KCS::team_size),
         KOKKOS_CLASS_LAMBDA(const TeamMember& team_member) {
           const auto ii = team_member.league_rank();
           const auto supers = d_gbxs(ii).supersingbx.readonly(domainsupers);
-          motion_moms.fetch_delta_massmoments(team_member, supers);
+          monitor_motion(team_member, supers);
         });
   }
 

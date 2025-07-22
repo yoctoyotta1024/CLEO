@@ -77,6 +77,15 @@ class DoSDMMonitorObs {
    */
   void before_timestepping(const viewd_constgbx d_gbxs) const {
     std::cout << "observer includes SDM monitor observer\n";
+
+    const size_t ngbxs(d_gbxs.extent(0));
+    Kokkos::parallel_for(
+        "monitor_before_timestepping", TeamPolicy(ngbxs, KCS::team_size),
+        KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
+          const auto ii = team_member.league_rank();
+          const auto supers = d_gbxs(ii).supersingbx.readonly(domainsupers);
+          monitor.before_timestepping(team_member, supers);
+        });
   }
 
   /**

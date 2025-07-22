@@ -35,8 +35,10 @@ template <typename SDMMo>
 concept SDMMonitor =
     requires(SDMMo mo, const TeamMember &tm, const double d, const viewd_constsupers supers) {
       { mo.reset_monitor() } -> std::same_as<void>;
+      { mo.before_timestepping(tm, supers) } -> std::same_as<void>;
       { mo.monitor_condensation(tm, d) } -> std::same_as<void>;
       { mo.monitor_microphysics(tm, supers) } -> std::same_as<void>;
+      { mo.monitor_motion(tm, supers) } -> std::same_as<void>;
     };
 
 /**
@@ -77,6 +79,17 @@ struct CombinedSDMMonitor {
    * Each monitor is run sequentially.
    */
   KOKKOS_FUNCTION
+  void before_timestepping(const TeamMember &tm, const viewd_constsupers supers) const {
+    a.before_timestepping(tm, supers);
+    b.before_timestepping(tm, supers);
+  }
+
+  /**
+   * @brief monitor microphysics for combination of 2 sdm monitors.
+   *
+   * Each monitor is run sequentially.
+   */
+  KOKKOS_FUNCTION
   void monitor_condensation(const TeamMember &tm, const double d) const {
     a.monitor_condensation(tm, d);
     b.monitor_condensation(tm, d);
@@ -91,6 +104,17 @@ struct CombinedSDMMonitor {
   void monitor_microphysics(const TeamMember &tm, const viewd_constsupers supers) const {
     a.monitor_microphysics(tm, supers);
     b.monitor_microphysics(tm, supers);
+  }
+
+  /**
+   * @brief monitor motion for combination of 2 sdm monitors.
+   *
+   * Each monitor is run sequentially.
+   */
+  KOKKOS_FUNCTION
+  void monitor_motion(const TeamMember &tm, const viewd_constsupers supers) const {
+    a.monitor_motion(tm, supers);
+    b.monitor_motion(tm, supers);
   }
 
   /**
@@ -113,10 +137,16 @@ struct NullSDMMonitor {
   void reset_monitor() const {}
 
   KOKKOS_FUNCTION
+  void before_timestepping(const TeamMember &team_member, const viewd_constsupers supers) const {}
+
+  KOKKOS_FUNCTION
   void monitor_condensation(const TeamMember &team_member, const double d) const {}
 
   KOKKOS_FUNCTION
   void monitor_microphysics(const TeamMember &team_member, const viewd_constsupers supers) const {}
+
+  KOKKOS_FUNCTION
+  void monitor_motion(const TeamMember &team_member, const viewd_constsupers supers) const {}
 
   void monitor_motion(const auto d_gbxs, const auto domainsupers) const {}
 };
