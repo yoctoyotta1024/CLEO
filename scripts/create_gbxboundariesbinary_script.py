@@ -42,14 +42,14 @@ grid_filename = (
 )  # note this should match config.yaml
 
 ### input parameters for zcoords of gridbox boundaries
-zmax = 40  # maximum z coord [m]
+zmax = 100  # maximum z coord [m]
 zmin = 0  # minimum z coord [m]
-zdelta = 20  # even spacing
+zdelta = 10  # even spacing
 zgrid = [zmin, zmax, zdelta]
 # zgrid = np.arange(zmin, zmax+zdelta, zdelta)
 
 ### input parameters for x coords of gridbox boundaries
-xgrid = [0, 40, 20]
+xgrid = [0, 20, 20]
 
 ### input parameters for y coords of gridbox boundaries
 ygrid = np.asarray([0, 20])

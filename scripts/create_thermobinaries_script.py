@@ -106,11 +106,11 @@ thermog = thermogen.HydrostaticLapseRates(
 
 ### --- Wind Field (wvel, vvel, uvel) Conditions  --- ###
 
-# ### --- Constant and Uniform --- ###
-# W_INIT = 0.0                           # initial vertical (coord3) velocity [m/s]
-# U_INIT = 0.0                            # initial eastwards (coord1) velocity [m/s]
-# V_INIT = 0.0                            # initial northwards (coord2) velocity [m/s]
-# windsg = windsgen.ConstUniformWinds(W_INIT, U_INIT, V_INIT)
+### --- Constant and Uniform --- ###
+W_INIT = 0.0  # initial vertical (coord3) velocity [m/s]
+U_INIT = 0.0  # initial eastwards (coord1) velocity [m/s]
+V_INIT = 0.0  # initial northwards (coord2) velocity [m/s]
+windsg = windsgen.ConstUniformWinds(W_INIT, U_INIT, V_INIT)
 
 # ### --- 1D Vertical Sinusoid --- ###
 # WMAX = 0.0  # [m/s]
@@ -121,17 +121,17 @@ thermog = thermogen.HydrostaticLapseRates(
 # )
 # windsg = windsgen.SinusoidalUpdraught(WMAX, UVEL, VVEL, Wlength)
 
-### --- 2D Flow Field --- ###
-WMAX = 0.6  # [m/s]
-VVEL = 1.0  # [m/s]
-Zlength = 1500  # [m]
-Xlength = 1500  # [m]
-# windsg = thermog.create_default_windsgen(
-#     WMAX, Zlength, Xlength, VVEL
-# )  # only for DryHydrostaticAdiabatic2TierRelH
-windsg = windsgen.Simple2DFlowField(
-    config_filename, constants_filename, WMAX, Zlength, Xlength, VVEL
-)
+# ### --- 2D Flow Field --- ###
+# WMAX = 0.6  # [m/s]
+# VVEL = 1.0  # [m/s]
+# Zlength = 1500  # [m]
+# Xlength = 1500  # [m]
+# # windsg = thermog.create_default_windsgen(
+# #     WMAX, Zlength, Xlength, VVEL
+# # )  # only for DryHydrostaticAdiabatic2TierRelH
+# windsg = windsgen.Simple2DFlowField(
+#     config_filename, constants_filename, WMAX, Zlength, Xlength, VVEL
+# )
 
 ### --- Thermodynamic + Winds Conditions  --- ###
 thermodyngen = thermodyngen.ThermodynamicsGenerator(thermog, windsg)
