@@ -44,12 +44,13 @@ MoveSupersInGridboxesFunctor struct encapsulates superdroplet motion so that par
 functors only captures motion and not other members of MoveSupersInDomain coincidentally
 (which e.g. may not be GPU compatible).
 */
-template <GridboxMaps GbxMaps, Motion<GbxMaps> M>
+template <GridboxMaps GbxMaps, Motion<GbxMaps> M, SDMMonitor SDMMo>
 struct MoveSupersInGridboxesFunctor {
   const M sdmotion;
   const GbxMaps gbxmaps;
   const viewd_gbx d_gbxs;
   const subviewd_supers domainsupers;
+  const SDMMo mo;
 
   /*
    * enact steps (1) and (2) movement of superdroplets for 1 gridbox:
@@ -66,10 +67,13 @@ struct MoveSupersInGridboxesFunctor {
     const size_t nsupers(supers.extent(0));
     auto &_sdmotion = this->sdmotion;
     auto &_gbxmaps = this->gbxmaps;
+    auto &_mo = this->mo;
     Kokkos::parallel_for(Kokkos::TeamThreadRange(team_member, nsupers),
-                         [=, &_sdmotion, &_gbxmaps](const size_t kk) {
+                         [=, &_sdmotion, &_gbxmaps, &_mo](const size_t kk) {
                            /* step (1) */
                            _sdmotion.superdrop_coords(gbxindex, _gbxmaps, state, supers(kk));
+
+                           _mo.monitor_precipitation(team_member, gbxindex, _gbxmaps, supers(kk));
 
                            /* step (2) */
                            _sdmotion.superdrop_gbx(gbxindex, _gbxmaps, supers(kk));
@@ -178,13 +182,14 @@ class MoveSupersInDomain {
    * for (size_t ii(0); ii < ngbxs; ++ii) {[...]}
    * when in serial
    */
+  template <SDMMonitor SDMMo>
   void move_supers_in_gridboxes(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
-                                const subviewd_supers domainsupers) const {
+                                const subviewd_supers domainsupers, const SDMMo mo) const {
     Kokkos::Profiling::ScopedRegion region("sdm_movement_move_in_gridboxes");
 
     const size_t ngbxs(d_gbxs.extent(0));
-    const auto functor =
-        MoveSupersInGridboxesFunctor<GbxMaps, M>{sdmotion, gbxmaps, d_gbxs, domainsupers};
+    const auto functor = MoveSupersInGridboxesFunctor<GbxMaps, M, SDMMo>{sdmotion, gbxmaps, d_gbxs,
+                                                                         domainsupers, mo};
     Kokkos::parallel_for("move_supers_in_gridboxes", TeamPolicy(ngbxs, KCS::team_size), functor);
   }
 
@@ -223,12 +228,13 @@ class MoveSupersInDomain {
   (4) apply domain boundary conditions (host and/or device)
   */
   SupersInDomain move_superdrops_in_domain(const unsigned int t_sdm, const GbxMaps &gbxmaps,
-                                           viewd_gbx d_gbxs, SupersInDomain &allsupers) const {
+                                           viewd_gbx d_gbxs, SupersInDomain &allsupers,
+                                           const SDMMonitor auto mo) const {
     int my_rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
 
     /* steps (1 - 2) */
-    move_supers_in_gridboxes(gbxmaps, d_gbxs, allsupers.domain_supers());
+    move_supers_in_gridboxes(gbxmaps, d_gbxs, allsupers.domain_supers(), mo);
 
     /* step (3) */
     allsupers = move_supers_between_gridboxes(gbxmaps, d_gbxs, allsupers);
@@ -285,7 +291,7 @@ class MoveSupersInDomain {
   SupersInDomain run_step(const unsigned int t_sdm, const GbxMaps &gbxmaps, viewd_gbx d_gbxs,
                           SupersInDomain &allsupers, const SDMMonitor auto mo) const {
     if (sdmotion.on_step(t_sdm)) {
-      allsupers = move_superdrops_in_domain(t_sdm, gbxmaps, d_gbxs, allsupers);
+      allsupers = move_superdrops_in_domain(t_sdm, gbxmaps, d_gbxs, allsupers, mo);
       effect_on_hydrometeor_states(d_gbxs, allsupers.domain_supers_readonly());
       mo.monitor_motion(d_gbxs, allsupers.domain_supers_readonly());
     }

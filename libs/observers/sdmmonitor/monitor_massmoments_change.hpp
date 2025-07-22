@@ -26,7 +26,10 @@
 #include <memory>
 
 #include "../../kokkosaliases.hpp"
+#include "gridboxes/gridboxmaps.hpp"
 #include "observers/massmoments_observer.hpp"
+#include "superdrops/state.hpp"
+#include "superdrops/superdrop.hpp"
 #include "zarr/buffer.hpp"
 
 namespace KCS = KokkosCleoSettings;
@@ -302,6 +305,18 @@ struct MonitorMassMomentsChange {
           monitor_motion(team_member, supers);
         });
   }
+
+  /**
+   * @brief Placeholder function to obey SDMMonitor concept does nothing.
+   *
+   * @param gbxindex gridbox whose bottom boundary is to be evaluated.
+   * @param gbxmaps The Gridbox Maps.
+   * @param state The State of the volume containing the super-droplets (gridbox matching gbxindex).
+   * @param drop The super-droplet to evaluate.
+   */
+  KOKKOS_FUNCTION
+  void monitor_precipitation(const TeamMember& team_member, const unsigned int gbxindex,
+                             const GridboxMaps auto& gbxmaps, Superdrop& drop) const {}
 
   /**
    * @brief Constructor for MonitorMassMomentsChange

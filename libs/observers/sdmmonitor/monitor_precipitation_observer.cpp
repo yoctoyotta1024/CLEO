@@ -13,7 +13,7 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * functionality to monitor condensation SDM microphysical process
+ * functionality to monitor precipitation during superdroplet motion
  */
 
 #include "./monitor_precipitation_observer.hpp"

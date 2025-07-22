@@ -25,9 +25,12 @@
 #include <memory>
 
 #include "../../kokkosaliases.hpp"
+#include "gridboxes/gridboxmaps.hpp"
 #include "observers/consttstep_observer.hpp"
 #include "observers/observers.hpp"
 #include "observers/sdmmonitor/do_sdmmonitor_obs.hpp"
+#include "superdrops/state.hpp"
+#include "superdrops/superdrop.hpp"
 
 /* struct satisfies SDMMonitor concept for use in do_sdmmonitor_obs to make observer */
 struct MonitorCondensation {
@@ -74,19 +77,22 @@ struct MonitorCondensation {
   /**
    * @brief Placeholder function to obey SDMMonitor concept does nothing.
    *
-   * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
-   * @param supers (sub)View of all the superdrops in one gridbox during one motion timestep
-   */
-  KOKKOS_FUNCTION
-  void monitor_motion(const TeamMember& team_member, const viewd_constsupers supers) const {}
-
-  /**
-   * @brief Placeholder function to obey SDMMonitor concept does nothing.
-   *
    * @param d_gbxs The view of gridboxes in device memory.
    * @param domainsupers The view of superdroplets within the domain in device memory.
    */
   void monitor_motion(const viewd_constgbx d_gbxs, const subviewd_constsupers domainsupers) const {}
+
+  /**
+   * @brief Placeholder function to obey SDMMonitor concept does nothing.
+   *
+   * @param gbxindex gridbox whose bottom boundary is to be evaluated.
+   * @param gbxmaps The Gridbox Maps.
+   * @param state The State of the volume containing the super-droplets (gridbox matching gbxindex).
+   * @param drop The super-droplet to evaluate.
+   */
+  KOKKOS_FUNCTION
+  void monitor_precipitation(const TeamMember& team_member, const unsigned int gbxindex,
+                             const GridboxMaps auto& gbxmaps, Superdrop& drop) const {}
 
   /**
    * @brief Constructor for MonitorCondensation

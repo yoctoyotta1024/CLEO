@@ -22,12 +22,18 @@
 #include <concepts>
 
 #include "kokkosaliases_sd.hpp"
+#include "state.hpp"
+#include "superdrop.hpp"
 
 /**
  * @brief Concept of SDMmonitor to monitor various SDM processes.
  *
  * _Note:_ More exact contraint missing:
  * `{ mo.monitor_motion(d_gbxs, domainsupers) } -> std::same_as<void>;`
+ * to avoid adding constraint over templated argument types.
+ *
+ * _Note:_ More exact contraint missing:
+ * `{ mo.monitor_precipitation(unsigned int, gbxmaps, state, superdrop) } -> std::same_as<void>;`
  * to avoid adding constraint over templated argument types.
  *
  * @tparam SDMMo Type that satisfies the SDMMonitor concept.
@@ -39,7 +45,8 @@ concept SDMMonitor =
       { mo.before_timestepping(tm, supers) } -> std::same_as<void>;
       { mo.monitor_condensation(tm, d) } -> std::same_as<void>;
       { mo.monitor_microphysics(tm, supers) } -> std::same_as<void>;
-      { mo.monitor_motion };
+      // { mo.monitor_motion };
+      // { mo.monitor_precipitation };
     };
 
 /**
@@ -116,6 +123,18 @@ struct CombinedSDMMonitor {
     a.monitor_motion(d_gbxs, domainsupers);
     b.monitor_motion(d_gbxs, domainsupers);
   }
+
+  /**
+   * @brief monitor motion for combination of 2 sdm monitors.
+   *
+   * Each monitor is run sequentially.
+   */
+  KOKKOS_FUNCTION
+  void monitor_precipitation(const TeamMember &team_member, const unsigned int gbxindex,
+                             const auto &gbxmaps, Superdrop &drop) const {
+    a.monitor_precipitation(team_member, gbxindex, gbxmaps, drop);
+    b.monitor_precipitation(team_member, gbxindex, gbxmaps, drop);
+  }
 };
 
 /**
@@ -136,6 +155,10 @@ struct NullSDMMonitor {
   void monitor_microphysics(const TeamMember &team_member, const viewd_constsupers supers) const {}
 
   void monitor_motion(const auto d_gbxs, const auto domainsupers) const {}
+
+  KOKKOS_FUNCTION
+  void monitor_precipitation(const TeamMember &team_member, const unsigned int gbxindex,
+                             const auto &gbxmaps, Superdrop &drop) const {}
 };
 
 #endif  // LIBS_SUPERDROPS_SDMMONITOR_HPP_

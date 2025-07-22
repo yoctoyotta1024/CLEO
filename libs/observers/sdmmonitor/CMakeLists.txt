@@ -23,7 +23,7 @@ add_library("${LIBNAME}" STATIC ${SOURCES})
 target_include_directories(${LIBNAME} PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
 
 # Link libraries to target library
-set(LINKLIBS zarr)
+set(LINKLIBS superdrops gridboxes zarr)
 target_link_libraries(${LIBNAME} PUBLIC "${LINKLIBS}")
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 
