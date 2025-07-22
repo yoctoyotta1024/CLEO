@@ -26,7 +26,8 @@
 /**
  * @brief Concept of SDMmonitor to monitor various SDM processes.
  *
- * _Note:_ Constraints missing `{ mo.monitor_motion(d_gbxs, domainsupers) } -> std::same_as<void>;`
+ * _Note:_ More exact contraint missing:
+ * `{ mo.monitor_motion(d_gbxs, domainsupers) } -> std::same_as<void>;`
  * to avoid adding constraint over templated argument types.
  *
  * @tparam SDMMo Type that satisfies the SDMMonitor concept.
@@ -38,7 +39,7 @@ concept SDMMonitor =
       { mo.before_timestepping(tm, supers) } -> std::same_as<void>;
       { mo.monitor_condensation(tm, d) } -> std::same_as<void>;
       { mo.monitor_microphysics(tm, supers) } -> std::same_as<void>;
-      { mo.monitor_motion(tm, supers) } -> std::same_as<void>;
+      { mo.monitor_motion };
     };
 
 /**
@@ -111,17 +112,6 @@ struct CombinedSDMMonitor {
    *
    * Each monitor is run sequentially.
    */
-  KOKKOS_FUNCTION
-  void monitor_motion(const TeamMember &tm, const viewd_constsupers supers) const {
-    a.monitor_motion(tm, supers);
-    b.monitor_motion(tm, supers);
-  }
-
-  /**
-   * @brief monitor motion for combination of 2 sdm monitors.
-   *
-   * Each monitor is run sequentially.
-   */
   void monitor_motion(const auto d_gbxs, const auto domainsupers) const {
     a.monitor_motion(d_gbxs, domainsupers);
     b.monitor_motion(d_gbxs, domainsupers);
@@ -144,9 +134,6 @@ struct NullSDMMonitor {
 
   KOKKOS_FUNCTION
   void monitor_microphysics(const TeamMember &team_member, const viewd_constsupers supers) const {}
-
-  KOKKOS_FUNCTION
-  void monitor_motion(const TeamMember &team_member, const viewd_constsupers supers) const {}
 
   void monitor_motion(const auto d_gbxs, const auto domainsupers) const {}
 };
