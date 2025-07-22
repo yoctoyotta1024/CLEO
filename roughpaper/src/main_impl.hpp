@@ -48,7 +48,7 @@
 #include "observers/nsupers_observer.hpp"
 #include "observers/observers.hpp"
 #include "observers/sdmmonitor/monitor_condensation_observer.hpp"
-#include "observers/sdmmonitor/monitor_massmoments_observer.hpp"
+#include "observers/sdmmonitor/monitor_massmoments_change_observer.hpp"
 #include "observers/state_observer.hpp"
 #include "observers/streamout_observer.hpp"
 #include "observers/superdrops_observer.hpp"

@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: monitor_massmoments_observer.hpp
+ * File: monitor_massmoments_change_observer.hpp
  * Project: sdmmonitor
  * Created Date: Wednesday 24th January 2024
  * Author: Clara Bayley (CB)
@@ -17,8 +17,8 @@
  * a constant interval at the start of each timestep.
  */
 
-#ifndef LIBS_OBSERVERS_SDMMONITOR_MONITOR_MASSMOMENTS_OBSERVER_HPP_
-#define LIBS_OBSERVERS_SDMMONITOR_MONITOR_MASSMOMENTS_OBSERVER_HPP_
+#ifndef LIBS_OBSERVERS_SDMMONITOR_MONITOR_MASSMOMENTS_CHANGE_OBSERVER_HPP_
+#define LIBS_OBSERVERS_SDMMONITOR_MONITOR_MASSMOMENTS_CHANGE_OBSERVER_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
@@ -30,7 +30,7 @@
 #include "observers/consttstep_observer.hpp"
 #include "observers/create_massmoments_arrays.hpp"
 #include "observers/observers.hpp"
-#include "observers/sdmmonitor/monitor_massmoments.hpp"
+#include "observers/sdmmonitor/monitor_massmoments_change.hpp"
 #include "superdrops/sdmmonitor.hpp"
 #include "zarr/buffer.hpp"
 #include "zarr/xarray_zarr_array.hpp"
@@ -248,4 +248,4 @@ inline Observer auto MonitorRainMassMomentsObserver(const unsigned int interval,
   return ConstTstepObserver(interval, do_obs);
 }
 
-#endif  // LIBS_OBSERVERS_SDMMONITOR_MONITOR_MASSMOMENTS_OBSERVER_HPP_
+#endif  // LIBS_OBSERVERS_SDMMONITOR_MONITOR_MASSMOMENTS_CHANGE_OBSERVER_HPP_

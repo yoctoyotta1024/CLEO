@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: monitor_massmoments.hpp
+ * File: monitor_massmoments_change.hpp
  * Project: sdmmonitor
  * Created Date: Wednesday 8th May 2024
  * Author: Clara Bayley (CB)
@@ -17,8 +17,8 @@
  * (seperately) in each gridbox over a constant interval (output at the start of each timestep).
  */
 
-#ifndef LIBS_OBSERVERS_SDMMONITOR_MONITOR_MASSMOMENTS_HPP_
-#define LIBS_OBSERVERS_SDMMONITOR_MONITOR_MASSMOMENTS_HPP_
+#ifndef LIBS_OBSERVERS_SDMMONITOR_MONITOR_MASSMOMENTS_CHANGE_HPP_
+#define LIBS_OBSERVERS_SDMMONITOR_MONITOR_MASSMOMENTS_CHANGE_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
@@ -244,4 +244,4 @@ struct MonitorMassMomentsChange {
   }
 };
 
-#endif  // LIBS_OBSERVERS_SDMMONITOR_MONITOR_MASSMOMENTS_HPP_
+#endif  // LIBS_OBSERVERS_SDMMONITOR_MONITOR_MASSMOMENTS_CHANGE_HPP_
