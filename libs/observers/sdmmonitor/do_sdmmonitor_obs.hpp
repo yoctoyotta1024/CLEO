@@ -30,6 +30,8 @@
 #include "zarr/buffer.hpp"
 #include "zarr/xarray_zarr_array.hpp"
 
+namespace KCS = KokkosCleoSettings;
+
 /**
  * @class DoSDMMonitorObs
  * @brief Template class for functionality to observe data from a monitor of a SDM process at the
@@ -75,7 +77,8 @@ class DoSDMMonitorObs {
    * @brief Placeholder for before timestepping functionality and to make class satisfy observer
    * concept.
    */
-  void before_timestepping(const viewd_constgbx d_gbxs) const {
+  void before_timestepping(const viewd_constgbx d_gbxs,
+                           const subviewd_constsupers domainsupers) const {
     std::cout << "observer includes SDM monitor observer\n";
 
     const size_t ngbxs(d_gbxs.extent(0));

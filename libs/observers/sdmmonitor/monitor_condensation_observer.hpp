@@ -45,7 +45,8 @@ struct MonitorCondensation {
    * @param d_gbxs The view of gridboxes in device memory.
    */
   KOKKOS_FUNCTION
-  void before_timestepping(const TeamMember& team_member, const viewd_constsupers supers) const {}
+  void before_timestepping(const TeamMember& team_member,
+                           const subviewd_constsupers d_supers) const {}
 
   /**
    * @brief Monitor mass of liquid change due to condensation / evaporation

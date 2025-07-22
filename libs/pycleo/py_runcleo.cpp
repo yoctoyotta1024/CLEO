@@ -38,12 +38,8 @@ void pyCartesianNullSDMMethods(py::module &m) {
       .def_readonly("obs", &pyca::sdm_cart_null::obs)
       .def("get_couplstep", &pyca::sdm_cart_null::get_couplstep)
       .def("next_couplstep", &pyca::sdm_cart_null::next_couplstep, py::arg("t_mdl"))
-      .def(
-          "prepare_to_timestep",
-          [](const pyca::sdm_cart_null &self, const dualview_gbx gbxs) {
-            self.prepare_to_timestep(gbxs.view_device());
-          },
-          py::arg("gbxs"))
+      .def("prepare_to_timestep", &pyca::sdm_cart_null::prepare_to_timestep, py::arg("gbxs"),
+           py::arg("allsupers"))
       .def("at_start_step", &pyca::sdm_cart_null::at_start_step, py::arg("t_mdl"), py::arg("gbxs"),
            py::arg("allsupers"))
       .def(
@@ -63,12 +59,8 @@ void pyCartesianSDMMethods(py::module &m) {
       .def_readonly("obs", &pyca::sdm_cart_all::obs)
       .def("get_couplstep", &pyca::sdm_cart_all::get_couplstep)
       .def("next_couplstep", &pyca::sdm_cart_all::next_couplstep, py::arg("t_mdl"))
-      .def(
-          "prepare_to_timestep",
-          [](const pyca::sdm_cart_all &self, const dualview_gbx gbxs) {
-            self.prepare_to_timestep(gbxs.view_device());
-          },
-          py::arg("gbxs"))
+      .def("prepare_to_timestep", &pyca::sdm_cart_all::prepare_to_timestep, py::arg("gbxs"),
+           py::arg("allsupers"))
       .def("at_start_step", &pyca::sdm_cart_all::at_start_step, py::arg("t_mdl"), py::arg("gbxs"),
            py::arg("allsupers"))
       .def(

@@ -37,7 +37,7 @@
 template <typename OFs>
 concept ObsFuncs = requires(OFs ofs, unsigned int t, const viewd_constgbx d_gbxs,
                             const subviewd_constsupers d_supers) {
-  { ofs.before_timestepping(d_gbxs) } -> std::same_as<void>;
+  { ofs.before_timestepping(d_gbxs, d_supers) } -> std::same_as<void>;
   { ofs.after_timestepping() } -> std::same_as<void>;
   { ofs.at_start_step(t, d_gbxs, d_supers) } -> std::same_as<void>;
   { ofs.get_sdmmonitor() };
@@ -76,8 +76,8 @@ struct ConstTstepObserver {
    *
    * @param d_gbxs The view of gridboxes in device memory.
    */
-  void before_timestepping(const viewd_constgbx d_gbxs) const {
-    do_obs.before_timestepping(d_gbxs);
+  void before_timestepping(const viewd_constgbx d_gbxs, const subviewd_constsupers d_supers) const {
+    do_obs.before_timestepping(d_gbxs, d_supers);
   }
 
   /**

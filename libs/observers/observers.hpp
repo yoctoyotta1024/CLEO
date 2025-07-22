@@ -39,7 +39,7 @@ concept Observer = requires(Obs obs, unsigned int t, const viewd_constgbx d_gbxs
                             const subviewd_constsupers d_supers) {
   { obs.next_obs(t) } -> std::convertible_to<unsigned int>;
   { obs.on_step(t) } -> std::same_as<bool>;
-  { obs.before_timestepping(d_gbxs) } -> std::same_as<void>;
+  { obs.before_timestepping(d_gbxs, d_supers) } -> std::same_as<void>;
   { obs.after_timestepping() } -> std::same_as<void>;
   { obs.at_start_step(t, d_gbxs, d_supers) } -> std::same_as<void>;
   { obs.get_sdmmonitor() };
@@ -77,9 +77,9 @@ struct CombinedObserver {
    *
    * @param d_gbxs The view of gridboxes in device memory.
    */
-  void before_timestepping(const viewd_constgbx d_gbxs) const {
-    a.before_timestepping(d_gbxs);
-    b.before_timestepping(d_gbxs);
+  void before_timestepping(const viewd_constgbx d_gbxs, const subviewd_constsupers d_supers) const {
+    a.before_timestepping(d_gbxs, d_supers);
+    b.before_timestepping(d_gbxs, d_supers);
   }
 
   /**
@@ -176,7 +176,8 @@ struct NullObserver {
    *
    * @param d_gbxs The view of gridboxes in device memory.
    */
-  void before_timestepping(const viewd_constgbx d_gbxs) const {}
+  void before_timestepping(const viewd_constgbx d_gbxs, const subviewd_constsupers d_supers) const {
+  }
 
   /**
    * @brief No perations after timestepping.
