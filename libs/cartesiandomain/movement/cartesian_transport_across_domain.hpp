@@ -212,7 +212,7 @@ viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
                                              totsupers(i).get_coord2()};
     const auto b4 = std::array<double, 3>{drop_coords[0], drop_coords[1], drop_coords[2]};
     const auto gbxindex =
-        (unsigned int)gbxmaps.get_domain_decomposition().get_local_bounding_gridbox(
+        (unsigned int)gbxmaps.get_domain_decomposition().get_local_bounding_gridbox_index(
             drop_coords);  // TODO(ALL): access through gbxmaps (note error in conversions?)
 
     // Since the coordinates have already been corrected in the sending

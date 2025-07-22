@@ -298,7 +298,7 @@ struct CartesianMaps {
    * e.g. if the domain has a cyclic boundary condition and they therefore need to be corrected
    */
   KOKKOS_FUNCTION
-  unsigned int get_local_bounding_gridbox(const unsigned int gbxindex, double& coord3,
+  unsigned int get_local_bounding_gridbox_index(const unsigned int gbxindex, double& coord3,
                                           double& coord1, double& coord2) const;
 };
 

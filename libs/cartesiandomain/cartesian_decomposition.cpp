@@ -38,31 +38,35 @@ std::array<size_t, 3> CartesianDecomposition::get_local_partition_size() const {
 };
 
 void CartesianDecomposition::set_gridbox_bounds(GbxBoundsFromBinary gfb) {
+  // Function to store gridbox bounds in an array
+  // Array contains lower (i) and upper bounds (i+1) of all the local gridboxes
   unsigned int global_gbx_idx;
   auto partition_size = partition_sizes[my_rank];
   auto partition_origin = partition_origins[my_rank];
 
+  // To get global gridbox index provided local gridbox index coordinates
   global_gbx_idx = get_index_from_coordinates(ndims, partition_origin[0],
             partition_origin[1], partition_origin[2]);
+
   gridbox_bounds.push_back({gfb.get_coord3gbxbounds(global_gbx_idx).first});
   gridbox_bounds.push_back({gfb.get_coord1gbxbounds(global_gbx_idx).first});
   gridbox_bounds.push_back({gfb.get_coord2gbxbounds(global_gbx_idx).first});
 
   for (auto dimension : {0, 1, 2}) {
     for (unsigned int i = 0; i < partition_size[dimension]; i++) {
-      // when dimension is 0
+      // z-dimension
       if (dimension == 0) {
         global_gbx_idx = get_index_from_coordinates(ndims, i + partition_origin[0],
             partition_origin[1], partition_origin[2]);
         gridbox_bounds[dimension].push_back(gfb.get_coord3gbxbounds(global_gbx_idx).second);
       }
-      // when dimension is 1
+      // x-dimension
       if (dimension == 1) {
         global_gbx_idx = get_index_from_coordinates(ndims, partition_origin[0],
             i + partition_origin[1], partition_origin[2]);
         gridbox_bounds[dimension].push_back(gfb.get_coord1gbxbounds(global_gbx_idx).second);
       }
-      // when dimension is 2
+      // y-dimension
       if (dimension == 2) {
         global_gbx_idx = get_index_from_coordinates(ndims, partition_origin[0],
             partition_origin[1], i + partition_origin[2]);
@@ -102,9 +106,11 @@ bool CartesianDecomposition::check_indices_inside_partition(std::array<size_t, 3
   return inside;
 }
 
-unsigned int CartesianDecomposition::get_local_bounding_gridbox(
+unsigned int CartesianDecomposition::get_local_bounding_gridbox_index(
   std::array<double, 3> &coordinates) const {
-  std::array<size_t, 3> bounding_gridbox_coordinates;
+  // Spatial index coordinate of gridbox in each dimension given the superdroplet coordinates
+  std::array<size_t, 3> bounding_gridbox_index_coordinates;
+
   std::array<int, 3> external_direction = {0, 0, 0};
   bool local_coordinate = true;
   auto partition_size = partition_sizes[my_rank];
@@ -139,7 +145,7 @@ unsigned int CartesianDecomposition::get_local_bounding_gridbox(
       // If none of the tests above pass then the coordinate is inside of the
       // partition in that dimension
     } else if (local_coordinate) {
-      bounding_gridbox_coordinates[dimension] = binary_search(coordinates, dimension,
+      bounding_gridbox_index_coordinates[dimension] = binary_search(coordinates, dimension,
           partition_size, gridbox_bounds);
     }
   }
@@ -148,9 +154,9 @@ unsigned int CartesianDecomposition::get_local_bounding_gridbox(
   if (local_coordinate) {
     return get_index_from_coordinates({get_local_partition_size()[0], get_local_partition_size()[1],
                                        get_local_partition_size()[2]},
-                                      bounding_gridbox_coordinates[0],
-                                      bounding_gridbox_coordinates[1],
-                                      bounding_gridbox_coordinates[2]);
+                                      bounding_gridbox_index_coordinates[0],
+                                      bounding_gridbox_index_coordinates[1],
+                                      bounding_gridbox_index_coordinates[2]);
 
     // Otherwise, the coordinate is outside of the partition
   } else {
@@ -172,7 +178,7 @@ unsigned int CartesianDecomposition::get_local_bounding_gridbox(
     // If the coordinates have been corrected but the target partition is local
     // then get the local bounding gridbox
     if (corrected && neighboring_processes.at(external_direction) == my_rank)
-      return get_local_bounding_gridbox(coordinates);
+      return get_local_bounding_gridbox_index(coordinates);
 
     // If the coordinate is outside of the local partition, encode in the return
     // value which process contains it
@@ -242,13 +248,14 @@ bool CartesianDecomposition::create(std::vector<size_t> ndims, GbxBoundsFromBina
   my_rank = init_communicator::get_comm_rank();
 
   auto gbx_idx = gfb.gbxidxs.back();
-  // int gbx_idx = get_index_from_coordinates(ndims, ndims[0], ndims[1], ndims[2]);
+
+  // Geometric coordinates of the end of domain in z,x,y directions
   domain_bounds[0] = gfb.get_coord3gbxbounds(gbx_idx).second;
   domain_bounds[1] = gfb.get_coord1gbxbounds(gbx_idx).second;
   domain_bounds[2] = gfb.get_coord2gbxbounds(gbx_idx).second;
+
   // If the comm_size is equal to 1 there will be no suitable factorization,
   // so treat it as a special case
-
   if (comm_size == 1) {
     partition_origins.push_back({0, 0, 0});
     partition_sizes.push_back({ndims[0], ndims[1], ndims[2]});
