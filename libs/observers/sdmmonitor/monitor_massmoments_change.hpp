@@ -60,6 +60,26 @@ struct MonitorMassMomentsChangeViews {
   }
 
   /**
+   * @brief Before timestepping write the 0th, 1st and 2nd moments of the raindroplet mass
+   * distribution to "prev" views.
+   *
+   * Calculates the current mass moments of the raindrop distribution and stores them in the
+   * "prev" views (d_mom0_prev, d_mom1_prev and d_mom2_prev), so the change in the moments can be
+   * calculated by fetch_delta_massmoments during the first timestep (and onwards).
+   *
+   * _Note:_ possible conversion of raindrop mass moments at one timestep from double precision
+   * (8 bytes double) to single precision (4 bytes float) in output.
+   *
+   * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
+   * @param supers (sub)View of all the superdrops in one gridbox
+   */
+  KOKKOS_FUNCTION
+  void before_timestepping(const TeamMember& team_member, const viewd_constsupers supers) const {
+    const auto ii = team_member.league_rank();
+    calculate_massmoments(team_member, supers, d_mom0_prev(ii), d_mom1_prev(ii), d_mom2_prev(ii));
+  }
+
+  /**
    * @brief Write the change in 0th, 1st and 2nd moments of the droplet mass distribution to views.
    *
    * Calculates the current mass moments and writes the change in their values since they were last
@@ -132,7 +152,29 @@ struct MonitorRainMassMomentsChangeViews {
   }
 
   /**
-   * @brief Write the 0th, 1st and 2nd moments of the raindroplet mass distribution to data views.
+   * @brief Before timestepping write the 0th, 1st and 2nd moments of the raindroplet mass
+   * distribution to "prev" views.
+   *
+   * Calculates the current mass moments of the raindrop distribution and stores them in the
+   * "prev" views (d_mom0_prev, d_mom1_prev and d_mom2_prev), so the change in the moments can be
+   * calculated by fetch_delta_massmoments during the first timestep (and onwards).
+   *
+   * _Note:_ possible conversion of raindrop mass moments at one timestep from double precision
+   * (8 bytes double) to single precision (4 bytes float) in output.
+   *
+   * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
+   * @param supers (sub)View of all the superdrops in one gridbox
+   */
+  KOKKOS_FUNCTION
+  void before_timestepping(const TeamMember& team_member, const viewd_constsupers supers) const {
+    const auto ii = team_member.league_rank();
+    calculate_rainmassmoments(team_member, supers, d_mom0_prev(ii), d_mom1_prev(ii),
+                              d_mom2_prev(ii));
+  }
+
+  /**
+   * @brief Write the change in the 0th, 1st and 2nd moments of the raindroplet mass distribution
+   * to data views.
    *
    * Calculates the current mass moments of the raindrop distribution and writes the change in their
    * values since they were last calculated to the mass moment deltas
@@ -199,7 +241,10 @@ struct MonitorMassMomentsChange {
    */
   KOKKOS_FUNCTION
   void before_timestepping(const TeamMember& team_member,
-                           const subviewd_constsupers d_supers) const {}
+                           const subviewd_constsupers d_supers) const {
+    microphysics_moms.before_timestepping(team_member, d_supers);
+    motion_moms.before_timestepping(team_member, d_supers);
+  }
 
   /**
    * @brief Placeholder function to obey SDMMonitor concept does nothing.
