@@ -37,49 +37,64 @@
 
 template <typename Dataset, typename Store>
 struct MonitorMassMomentXarrays {
-  XarrayZarrArray<Store, uint64_t> mom0_microphys; /**< 0th mass moment from microphysics Xarray */
-  XarrayZarrArray<Store, float> mom1_microphys;    /**< 1st mass moment from microphysics Xarray */
-  XarrayZarrArray<Store, float> mom2_microphys;    /**< 2nd mass moment from microphysics Xarray */
-  XarrayZarrArray<Store, uint64_t> mom0_motion;    /**< 0th mass moment from motion Xarray */
-  XarrayZarrArray<Store, float> mom1_motion;       /**< 1st mass moment from motion Xarray */
-  XarrayZarrArray<Store, float> mom2_motion;       /**< 2nd mass moment from motion Xarray */
+  XarrayZarrArray<Store, uint64_t>
+      delta_mom0_microphys; /**< change in 0th mass moment from microphysics Xarray */
+  XarrayZarrArray<Store, float>
+      delta_mom1_microphys; /**< change in 1st mass moment from microphysics Xarray */
+  XarrayZarrArray<Store, float>
+      delta_mom2_microphys; /**< change in 2nd mass moment from microphysics Xarray */
+  XarrayZarrArray<Store, uint64_t>
+      delta_mom0_motion; /**< change in 0th mass moment from motion Xarray */
+  XarrayZarrArray<Store, float>
+      delta_mom1_motion; /**< change in 1st mass moment from motion Xarray */
+  XarrayZarrArray<Store, float>
+      delta_mom2_motion; /**< change in 2nd mass moment from motion Xarray */
 
   MonitorMassMomentXarrays(const Dataset &dataset, Store &store, const size_t maxchunk,
                            const size_t ngbxs)
-      : mom0_microphys(
-            create_massmom0_xarray(dataset, store, "massmom0_microphys", maxchunk, ngbxs)),
-        mom1_microphys(
-            create_massmom1_xarray(dataset, store, "massmom1_microphys", maxchunk, ngbxs)),
-        mom2_microphys(
-            create_massmom2_xarray(dataset, store, "massmom2_microphys", maxchunk, ngbxs)),
-        mom0_motion(create_massmom0_xarray(dataset, store, "massmom0_motion", maxchunk, ngbxs)),
-        mom1_motion(create_massmom1_xarray(dataset, store, "massmom1_motion", maxchunk, ngbxs)),
-        mom2_motion(create_massmom2_xarray(dataset, store, "massmom2_motion", maxchunk, ngbxs)) {}
+      : delta_mom0_microphys(
+            create_massmom0_xarray(dataset, store, "delta_massmom0_microphys", maxchunk, ngbxs)),
+        delta_mom1_microphys(
+            create_massmom1_xarray(dataset, store, "delta_massmom1_microphys", maxchunk, ngbxs)),
+        delta_mom2_microphys(
+            create_massmom2_xarray(dataset, store, "delta_massmom2_microphys", maxchunk, ngbxs)),
+        delta_mom0_motion(
+            create_massmom0_xarray(dataset, store, "delta_massmom0_motion", maxchunk, ngbxs)),
+        delta_mom1_motion(
+            create_massmom1_xarray(dataset, store, "delta_massmom1_motion", maxchunk, ngbxs)),
+        delta_mom2_motion(
+            create_massmom2_xarray(dataset, store, "delta_massmom2_motion", maxchunk, ngbxs)) {}
 };
 
 template <typename Dataset, typename Store>
 struct MonitorRainMassMomentXarrays {
-  XarrayZarrArray<Store, uint64_t> mom0_microphys; /**< 0th mass moment from microphysics Xarray */
-  XarrayZarrArray<Store, float> mom1_microphys;    /**< 1st mass moment from microphysics Xarray */
-  XarrayZarrArray<Store, float> mom2_microphys;    /**< 2nd mass moment from microphysics Xarray */
-  XarrayZarrArray<Store, uint64_t> mom0_motion;    /**< 0th mass moment from motion Xarray */
-  XarrayZarrArray<Store, float> mom1_motion;       /**< 1st mass moment from motion Xarray */
-  XarrayZarrArray<Store, float> mom2_motion;       /**< 2nd mass moment from motion Xarray */
+  XarrayZarrArray<Store, uint64_t>
+      delta_mom0_microphys; /**< change in 0th mass moment from microphysics Xarray */
+  XarrayZarrArray<Store, float>
+      delta_mom1_microphys; /**< change in 1st mass moment from microphysics Xarray */
+  XarrayZarrArray<Store, float>
+      delta_mom2_microphys; /**< change in 2nd mass moment from microphysics Xarray */
+  XarrayZarrArray<Store, uint64_t>
+      delta_mom0_motion; /**< change in 0th mass moment from motion Xarray */
+  XarrayZarrArray<Store, float>
+      delta_mom1_motion; /**< change in 1st mass moment from motion Xarray */
+  XarrayZarrArray<Store, float>
+      delta_mom2_motion; /**< change in 2nd mass moment from motion Xarray */
 
   MonitorRainMassMomentXarrays(const Dataset &dataset, Store &store, const size_t maxchunk,
                                const size_t ngbxs)
-      : mom0_microphys(create_massmom0_xarray(dataset, store, "massmom0_raindrops_microphys",
-                                              maxchunk, ngbxs)),
-        mom1_microphys(create_massmom1_xarray(dataset, store, "massmom1_raindrops_microphys",
-                                              maxchunk, ngbxs)),
-        mom2_microphys(create_massmom2_xarray(dataset, store, "massmom2_raindrops_microphys",
-                                              maxchunk, ngbxs)),
-        mom0_motion(
-            create_massmom0_xarray(dataset, store, "massmom0_raindrops_motion", maxchunk, ngbxs)),
-        mom1_motion(
-            create_massmom1_xarray(dataset, store, "massmom1_raindrops_motion", maxchunk, ngbxs)),
-        mom2_motion(
-            create_massmom2_xarray(dataset, store, "massmom2_raindrops_motion", maxchunk, ngbxs)) {}
+      : delta_mom0_microphys(create_massmom0_xarray(
+            dataset, store, "delta_massmom0_raindrops_microphys", maxchunk, ngbxs)),
+        delta_mom1_microphys(create_massmom1_xarray(
+            dataset, store, "delta_massmom1_raindrops_microphys", maxchunk, ngbxs)),
+        delta_mom2_microphys(create_massmom2_xarray(
+            dataset, store, "delta_massmom2_raindrops_microphys", maxchunk, ngbxs)),
+        delta_mom0_motion(create_massmom0_xarray(dataset, store, "delta_massmom0_raindrops_motion",
+                                                 maxchunk, ngbxs)),
+        delta_mom1_motion(create_massmom1_xarray(dataset, store, "delta_massmom1_raindrops_motion",
+                                                 maxchunk, ngbxs)),
+        delta_mom2_motion(create_massmom2_xarray(dataset, store, "delta_massmom2_raindrops_motion",
+                                                 maxchunk, ngbxs)) {}
 };
 
 /**
@@ -111,16 +126,16 @@ class DoMonitorMassMomentsObs {
   }
 
   /**
-   * @brief Write each mass moment from the monitor's views to the appropriate arrays in the dataset
-   * then reset the monitor.
+   * @brief Write each change in mass moment from the monitor's views to the
+   * appropriate arrays in the dataset then reset the monitor.
    */
   void at_start_step() const {
-    write_to_array(monitor.microphysics_moms.d_mom0, xzarrs_ptr->mom0_microphys);
-    write_to_array(monitor.microphysics_moms.d_mom1, xzarrs_ptr->mom1_microphys);
-    write_to_array(monitor.microphysics_moms.d_mom2, xzarrs_ptr->mom2_microphys);
-    write_to_array(monitor.motion_moms.d_mom0, xzarrs_ptr->mom0_motion);
-    write_to_array(monitor.motion_moms.d_mom1, xzarrs_ptr->mom1_motion);
-    write_to_array(monitor.motion_moms.d_mom2, xzarrs_ptr->mom2_motion);
+    write_to_array(monitor.microphysics_moms.d_delta_mom0, xzarrs_ptr->delta_mom0_microphys);
+    write_to_array(monitor.microphysics_moms.d_delta_mom1, xzarrs_ptr->delta_mom1_microphys);
+    write_to_array(monitor.microphysics_moms.d_delta_mom2, xzarrs_ptr->delta_mom2_microphys);
+    write_to_array(monitor.motion_moms.d_delta_mom0, xzarrs_ptr->delta_mom0_motion);
+    write_to_array(monitor.motion_moms.d_delta_mom1, xzarrs_ptr->delta_mom1_motion);
+    write_to_array(monitor.motion_moms.d_delta_mom2, xzarrs_ptr->delta_mom2_motion);
 
     monitor.reset_monitor();
   }
