@@ -53,15 +53,13 @@
  *
  * @param team_member The Kokkos team member.
  * @param supers The view of super-droplets for a gridbox (on device).
- * @param d_mom0 The view for the 0th mass moment.
- * @param d_mom1 The view for the 1st mass moment.
- * @param d_mom2 The view for the 2nd mass moment.
+ * @param mom0 Reference to where to place value of 0th mass moment.
+ * @param mom1 Reference to where to place value of 1st mass moment.
+ * @param mom2 Reference to where to place value of 2nd mass moment.
  */
 KOKKOS_FUNCTION
 void calculate_massmoments(const TeamMember &team_member, const viewd_constsupers supers,
-                           Buffer<uint64_t>::mirrorviewd_buffer d_mom0,
-                           Buffer<float>::mirrorviewd_buffer d_mom1,
-                           Buffer<float>::mirrorviewd_buffer d_mom2);
+                           uint64_t &mom0, float &mom1, float &mom2);
 
 /**
  * @brief Performs calculation of 0th, 1st, and 2nd moments of the (real) raindroplet mass
@@ -83,15 +81,13 @@ void calculate_massmoments(const TeamMember &team_member, const viewd_constsuper
  *
  * @param team_member The Kokkos team member.
  * @param supers The view of super-droplets for a gridbox (on device).
- * @param d_mom0 The mirror view buffer for the 0th mass moment.
- * @param d_mom1 The mirror view buffer for the 1st mass moment.
- * @param d_mom2 The mirror view buffer for the 2nd mass moment.
+ * @param mom0 Reference to where to place value of 0th mass moment.
+ * @param mom1 Reference to where to place value of 1st mass moment.
+ * @param mom2 Reference to where to place value of 2nd mass moment.
  */
 KOKKOS_FUNCTION
 void calculate_rainmassmoments(const TeamMember &team_member, const viewd_constsupers supers,
-                               Buffer<uint64_t>::mirrorviewd_buffer d_mom0,
-                               Buffer<float>::mirrorviewd_buffer d_mom1,
-                               Buffer<float>::mirrorviewd_buffer d_mom2);
+                               uint64_t &mom0, float &mom1, float &mom2);
 
 /**
  * @brief Functor to perform calculation of 0th, 1st, and 2nd moments of the (real)
@@ -131,7 +127,7 @@ struct MassMomentsFunc {
                   Buffer<float>::mirrorviewd_buffer d_mom2) const {
     const auto ii = team_member.league_rank();
     const auto supers = d_gbxs(ii).supersingbx.readonly(d_supers);
-    calculate_massmoments(team_member, supers, d_mom0, d_mom1, d_mom2);
+    calculate_massmoments(team_member, supers, d_mom0(ii), d_mom1(ii), d_mom2(ii));
   }
 };
 
@@ -176,7 +172,7 @@ struct RaindropsMassMomentsFunc {
                   Buffer<float>::mirrorviewd_buffer d_mom2) const {
     const auto ii = team_member.league_rank();
     const auto supers = d_gbxs(ii).supersingbx.readonly(d_supers);
-    calculate_rainmassmoments(team_member, supers, d_mom0, d_mom1, d_mom2);
+    calculate_rainmassmoments(team_member, supers, d_mom0(ii), d_mom1(ii), d_mom2(ii));
   }
 };
 
