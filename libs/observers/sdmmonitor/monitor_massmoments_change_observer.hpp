@@ -158,12 +158,12 @@ class DoMonitorMassMomentsChangeObs {
    * @brief Destructor for DoMonitorMassMomentsChangeObs.
    */
   ~DoMonitorMassMomentsChangeObs() {
-    dataset.write_arrayshape(xzarrs_ptr->mom0_microphys);
-    dataset.write_arrayshape(xzarrs_ptr->mom1_microphys);
-    dataset.write_arrayshape(xzarrs_ptr->mom2_microphys);
-    dataset.write_arrayshape(xzarrs_ptr->mom0_motion);
-    dataset.write_arrayshape(xzarrs_ptr->mom1_motion);
-    dataset.write_arrayshape(xzarrs_ptr->mom2_motion);
+    dataset.write_arrayshape(xzarrs_ptr->delta_mom0_microphys);
+    dataset.write_arrayshape(xzarrs_ptr->delta_mom1_microphys);
+    dataset.write_arrayshape(xzarrs_ptr->delta_mom2_microphys);
+    dataset.write_arrayshape(xzarrs_ptr->delta_mom0_motion);
+    dataset.write_arrayshape(xzarrs_ptr->delta_mom1_motion);
+    dataset.write_arrayshape(xzarrs_ptr->delta_mom2_motion);
   }
 
   /**

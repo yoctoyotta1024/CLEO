@@ -51,7 +51,7 @@ struct MonitorMassMomentsChangeViews {
    */
   void reset_views() const {
     Kokkos::parallel_for(
-        "reset_views", Kokkos::RangePolicy(0, d_mom0.extent(0)),
+        "reset_views", Kokkos::RangePolicy(0, d_delta_mom0.extent(0)),
         KOKKOS_CLASS_LAMBDA(const size_t jj) {
           d_delta_mom0(jj) = 0;
           d_delta_mom1(jj) = 0.0;
@@ -75,15 +75,16 @@ struct MonitorMassMomentsChangeViews {
   void fetch_delta_massmoments(const TeamMember& team_member,
                                const viewd_constsupers supers) const {
     const auto ii = team_member.league_rank();
-    auto mom0_now = 0;
-    auto mom1_now = 0.0;
-    auto mom2_now = 0.0;
+
+    uint64_t mom0_now = 0;
+    float mom1_now = 0.0;
+    float mom2_now = 0.0;
     calculate_massmoments(team_member, supers, mom0_now, mom1_now, mom2_now);
 
     /* accumulate change in mass moments */
-    d_delta_mom0 += mom0_now - d_mom0_prev(ii);
-    d_delta_mom1 += mom1_now - d_mom1_prev(ii);
-    d_delta_mom2 += mom2_now - d_mom2_prev(ii);
+    d_delta_mom0(ii) += mom0_now - d_mom0_prev(ii);
+    d_delta_mom1(ii) += mom1_now - d_mom1_prev(ii);
+    d_delta_mom2(ii) += mom2_now - d_mom2_prev(ii);
 
     /* store current mass moments as previous one for next accumulation */
     d_mom0_prev(ii) = mom0_now;
@@ -122,7 +123,7 @@ struct MonitorRainMassMomentsChangeViews {
    */
   void reset_views() const {
     Kokkos::parallel_for(
-        "reset_views", Kokkos::RangePolicy(0, d_mom0.extent(0)),
+        "reset_views", Kokkos::RangePolicy(0, d_delta_mom0.extent(0)),
         KOKKOS_CLASS_LAMBDA(const size_t jj) {
           d_delta_mom0(jj) = 0;
           d_delta_mom1(jj) = 0.0;
@@ -133,9 +134,9 @@ struct MonitorRainMassMomentsChangeViews {
   /**
    * @brief Write the 0th, 1st and 2nd moments of the raindroplet mass distribution to data views.
    *
-   * Calculates the current mass moments of the raindrop distribution and overwrites the current
-   * values for the raindrop mass moments (d_mom0, d_mom1 and d_mom2) stored since the data
-   * views were last reset.
+   * Calculates the current mass moments of the raindrop distribution and writes the change in their
+   * values since they were last calculated to the mass moment deltas
+   * (d_delta_mom0, d_delta_mom1 and d_delta_mom2).
    *
    * _Note:_ possible conversion of raindrop mass moments at one timestep from double precision
    * (8 bytes double) to single precision (4 bytes float) in output.
@@ -147,15 +148,16 @@ struct MonitorRainMassMomentsChangeViews {
   void fetch_delta_massmoments(const TeamMember& team_member,
                                const viewd_constsupers supers) const {
     const auto ii = team_member.league_rank();
-    auto mom0_now = 0;
-    auto mom1_now = 0.0;
-    auto mom2_now = 0.0;
+
+    uint64_t mom0_now = 0;
+    float mom1_now = 0.0;
+    float mom2_now = 0.0;
     calculate_rainmassmoments(team_member, supers, mom0_now, mom1_now, mom2_now);
 
     /* accumulate change in mass moments */
-    d_delta_mom0 += mom0_now - d_mom0_prev(ii);
-    d_delta_mom1 += mom1_now - d_mom1_prev(ii);
-    d_delta_mom2 += mom2_now - d_mom2_prev(ii);
+    d_delta_mom0(ii) += mom0_now - d_mom0_prev(ii);
+    d_delta_mom1(ii) += mom1_now - d_mom1_prev(ii);
+    d_delta_mom2(ii) += mom2_now - d_mom2_prev(ii);
 
     /* store current mass moments as previous one for next accumulation */
     d_mom0_prev(ii) = mom0_now;
