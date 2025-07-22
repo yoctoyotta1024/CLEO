@@ -208,7 +208,7 @@ inline Observer auto create_sdmmonitor_observer(const unsigned int interval, Dat
   const Observer auto obs_cond =
       MonitorCondensationObserver(interval, dataset, store, maxchunk, ngbxs);
   const Observer auto obs_massmoms =
-      MonitorMassMomentsObserver(interval, dataset, store, maxchunk, ngbxs);
+      MonitorMassMomentsChangeObserver(interval, dataset, store, maxchunk, ngbxs);
   const Observer auto obs_rainmassmoms =
       MonitorRainMassMomentsObserver(interval, dataset, store, maxchunk, ngbxs);
 

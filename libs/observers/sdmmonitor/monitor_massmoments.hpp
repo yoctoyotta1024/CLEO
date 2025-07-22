@@ -31,7 +31,7 @@
 
 namespace KCS = KokkosCleoSettings;
 
-struct MonitorMassMomentViews {
+struct MonitorMassMomentsChangeViews {
   Buffer<uint64_t>::mirrorviewd_buffer
       d_mom0_prev;  // view on device for storing previous 0th mass moment
   Buffer<float>::mirrorviewd_buffer
@@ -91,7 +91,7 @@ struct MonitorMassMomentViews {
     d_mom2_prev(ii) = mom2_now;
   }
 
-  explicit MonitorMassMomentViews(const size_t ngbxs)
+  explicit MonitorMassMomentsChangeViews(const size_t ngbxs)
       : d_mom0_prev("d_monitor_mom0_prev", ngbxs),
         d_mom1_prev("d_monitor_mom1_prev", ngbxs),
         d_mom2_prev("d_monitor_mom2_prev", ngbxs),
@@ -102,7 +102,7 @@ struct MonitorMassMomentViews {
   }
 };
 
-struct MonitorRainMassMomentViews {
+struct MonitorRainMassMomentsChangeViews {
   Buffer<uint64_t>::mirrorviewd_buffer
       d_mom0_prev;  // view on device for storing previous 0th mass moment
   Buffer<float>::mirrorviewd_buffer
@@ -163,7 +163,7 @@ struct MonitorRainMassMomentViews {
     d_mom2_prev(ii) = mom2_now;
   }
 
-  explicit MonitorRainMassMomentViews(const size_t ngbxs)
+  explicit MonitorRainMassMomentsChangeViews(const size_t ngbxs)
       : d_mom0_prev("d_monitor_rainmom0_prev", ngbxs),
         d_mom1_prev("d_monitor_rainmom1_prev", ngbxs),
         d_mom2_prev("d_monitor_rainmom2_prev", ngbxs),
@@ -178,7 +178,7 @@ struct MonitorRainMassMomentViews {
  * according to the templated MonitorViewsType e.g. 0th, 1st adn 2nd mass moments of the droplet or
  raindroplet distribution after microphysics and/or motion */
 template <typename MonitorViewsType>
-struct MonitorMassMoments {
+struct MonitorMassMomentsChange {
   MonitorViewsType microphysics_moms;  // mass moments monitored during microphysics
   MonitorViewsType motion_moms;        // mass moments monitored during motion
 
@@ -234,11 +234,12 @@ struct MonitorMassMoments {
   }
 
   /**
-   * @brief Constructor for MonitorMassMoments
+   * @brief Constructor for MonitorMassMomentsChange
    *
    * @param ngbxs Number of gridboxes in domain.
    */
-  explicit MonitorMassMoments(const size_t ngbxs) : microphysics_moms(ngbxs), motion_moms(ngbxs) {
+  explicit MonitorMassMomentsChange(const size_t ngbxs)
+      : microphysics_moms(ngbxs), motion_moms(ngbxs) {
     reset_monitor();
   }
 };
