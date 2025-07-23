@@ -36,13 +36,6 @@ namespace KCS = KokkosCleoSettings;
 
 struct MonitorMassMomentsChangeViews {
   Buffer<uint64_t>::mirrorviewd_buffer
-      d_mom0_prev;  // view on device for storing previous 0th mass moment
-  Buffer<float>::mirrorviewd_buffer
-      d_mom1_prev;  // view on device for storing previous 1st mass moment
-  Buffer<float>::mirrorviewd_buffer
-      d_mom2_prev;  // view on device for storing previous 2nd mass moment
-
-  Buffer<uint64_t>::mirrorviewd_buffer
       d_delta_mom0;  // view on device for monitoring change in 0th mass moment
   Buffer<float>::mirrorviewd_buffer
       d_delta_mom1;  // view on device for monitoring change in 1st mass moment
@@ -75,9 +68,15 @@ struct MonitorMassMomentsChangeViews {
    *
    * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
    * @param supers (sub)View of all the superdrops in one gridbox
+   * @param d_mom0_prev View on device of previous 0th mass moment
+   * @param d_mom1_prev View on device of previous 1th mass moment
+   * @param d_mom2_prev View on device of previous 2th mass moment
    */
   KOKKOS_FUNCTION
-  void before_timestepping(const TeamMember& team_member, const viewd_constsupers supers) const {
+  void before_timestepping(const TeamMember& team_member, const viewd_constsupers supers,
+                           Buffer<uint64_t>::mirrorviewd_buffer d_mom0_prev,
+                           Buffer<float>::mirrorviewd_buffer d_mom1_prev,
+                           Buffer<float>::mirrorviewd_buffer d_mom2_prev) const {
     const auto ii = team_member.league_rank();
     calculate_massmoments(team_member, supers, d_mom0_prev(ii), d_mom1_prev(ii), d_mom2_prev(ii));
   }
@@ -93,10 +92,15 @@ struct MonitorMassMomentsChangeViews {
    *
    * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
    * @param supers (sub)View of all the superdrops in one gridbox
+   * @param d_mom0_prev View on device of previous 0th mass moment
+   * @param d_mom1_prev View on device of previous 1th mass moment
+   * @param d_mom2_prev View on device of previous 2th mass moment
    */
   KOKKOS_FUNCTION
-  void fetch_delta_massmoments(const TeamMember& team_member,
-                               const viewd_constsupers supers) const {
+  void fetch_delta_massmoments(const TeamMember& team_member, const viewd_constsupers supers,
+                               Buffer<uint64_t>::mirrorviewd_buffer d_mom0_prev,
+                               Buffer<float>::mirrorviewd_buffer d_mom1_prev,
+                               Buffer<float>::mirrorviewd_buffer d_mom2_prev) const {
     const auto ii = team_member.league_rank();
 
     uint64_t mom0_now = 0;
@@ -116,10 +120,7 @@ struct MonitorMassMomentsChangeViews {
   }
 
   explicit MonitorMassMomentsChangeViews(const size_t ngbxs)
-      : d_mom0_prev("d_monitor_mom0_prev", ngbxs),
-        d_mom1_prev("d_monitor_mom1_prev", ngbxs),
-        d_mom2_prev("d_monitor_mom2_prev", ngbxs),
-        d_delta_mom0("d_monitor_delta_mom0", ngbxs),
+      : d_delta_mom0("d_monitor_delta_mom0", ngbxs),
         d_delta_mom1("d_monitor_delta_mom1", ngbxs),
         d_delta_mom2("d_monitor_delta_mom2", ngbxs) {
     reset_views();
@@ -127,13 +128,6 @@ struct MonitorMassMomentsChangeViews {
 };
 
 struct MonitorRainMassMomentsChangeViews {
-  Buffer<uint64_t>::mirrorviewd_buffer
-      d_mom0_prev;  // view on device for storing previous 0th mass moment
-  Buffer<float>::mirrorviewd_buffer
-      d_mom1_prev;  // view on device for storing previous 1st mass moment
-  Buffer<float>::mirrorviewd_buffer
-      d_mom2_prev;  // view on device for storing previous 2nd mass moment
-
   Buffer<uint64_t>::mirrorviewd_buffer
       d_delta_mom0;  // view on device for monitoring change in 0th mass moment
   Buffer<float>::mirrorviewd_buffer
@@ -167,9 +161,15 @@ struct MonitorRainMassMomentsChangeViews {
    *
    * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
    * @param supers (sub)View of all the superdrops in one gridbox
+   * @param d_mom0_prev View on device of previous 0th mass moment
+   * @param d_mom1_prev View on device of previous 1th mass moment
+   * @param d_mom2_prev View on device of previous 2th mass moment
    */
   KOKKOS_FUNCTION
-  void before_timestepping(const TeamMember& team_member, const viewd_constsupers supers) const {
+  void before_timestepping(const TeamMember& team_member, const viewd_constsupers supers,
+                           Buffer<uint64_t>::mirrorviewd_buffer d_mom0_prev,
+                           Buffer<float>::mirrorviewd_buffer d_mom1_prev,
+                           Buffer<float>::mirrorviewd_buffer d_mom2_prev) const {
     const auto ii = team_member.league_rank();
     calculate_rainmassmoments(team_member, supers, d_mom0_prev(ii), d_mom1_prev(ii),
                               d_mom2_prev(ii));
@@ -188,10 +188,15 @@ struct MonitorRainMassMomentsChangeViews {
    *
    * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
    * @param supers (sub)View of all the superdrops in one gridbox
+   * @param d_mom0_prev View on device of previous 0th mass moment
+   * @param d_mom1_prev View on device of previous 1th mass moment
+   * @param d_mom2_prev View on device of previous 2th mass moment
    */
   KOKKOS_FUNCTION
-  void fetch_delta_massmoments(const TeamMember& team_member,
-                               const viewd_constsupers supers) const {
+  void fetch_delta_massmoments(const TeamMember& team_member, const viewd_constsupers supers,
+                               Buffer<uint64_t>::mirrorviewd_buffer d_mom0_prev,
+                               Buffer<float>::mirrorviewd_buffer d_mom1_prev,
+                               Buffer<float>::mirrorviewd_buffer d_mom2_prev) const {
     const auto ii = team_member.league_rank();
 
     uint64_t mom0_now = 0;
@@ -211,10 +216,7 @@ struct MonitorRainMassMomentsChangeViews {
   }
 
   explicit MonitorRainMassMomentsChangeViews(const size_t ngbxs)
-      : d_mom0_prev("d_monitor_rainmom0_prev", ngbxs),
-        d_mom1_prev("d_monitor_rainmom1_prev", ngbxs),
-        d_mom2_prev("d_monitor_rainmom2_prev", ngbxs),
-        d_delta_mom0("d_monitor_rain_delta_mom0", ngbxs),
+      : d_delta_mom0("d_monitor_rain_delta_mom0", ngbxs),
         d_delta_mom1("d_monitor_rain_delta_mom1", ngbxs),
         d_delta_mom2("d_monitor_rain_delta_mom2", ngbxs) {
     reset_views();
@@ -228,6 +230,12 @@ template <typename MonitorViewsType>
 struct MonitorMassMomentsChange {
   MonitorViewsType microphysics_moms;  // mass moments monitored during microphysics
   MonitorViewsType motion_moms;        // mass moments monitored during motion
+  Buffer<uint64_t>::mirrorviewd_buffer
+      d_mom0_prev;  // view on device for storing previous 0th mass moment
+  Buffer<float>::mirrorviewd_buffer
+      d_mom1_prev;  // view on device for storing previous 1st mass moment
+  Buffer<float>::mirrorviewd_buffer
+      d_mom2_prev;  // view on device for storing previous 2nd mass moment
 
   /**
    * @brief Reset monitors for mass moments from both motion and microphysics.
@@ -245,8 +253,9 @@ struct MonitorMassMomentsChange {
   KOKKOS_FUNCTION
   void before_timestepping(const TeamMember& team_member,
                            const subviewd_constsupers d_supers) const {
-    microphysics_moms.before_timestepping(team_member, d_supers);
-    motion_moms.before_timestepping(team_member, d_supers);
+    motion_moms.before_timestepping(
+        team_member, d_supers, d_mom0_prev, d_mom1_prev,
+        d_mom2_prev);  // same outcome as microphysics_moms.before_timestepping(...);
   }
 
   /**
@@ -269,7 +278,8 @@ struct MonitorMassMomentsChange {
    */
   KOKKOS_FUNCTION
   void monitor_microphysics(const TeamMember& team_member, const viewd_constsupers supers) const {
-    microphysics_moms.fetch_delta_massmoments(team_member, supers);
+    microphysics_moms.fetch_delta_massmoments(team_member, supers, d_mom0_prev, d_mom1_prev,
+                                              d_mom2_prev);
   }
 
   /**
@@ -283,7 +293,7 @@ struct MonitorMassMomentsChange {
    */
   KOKKOS_FUNCTION
   void monitor_motion(const TeamMember& team_member, const viewd_constsupers supers) const {
-    motion_moms.fetch_delta_massmoments(team_member, supers);
+    motion_moms.fetch_delta_massmoments(team_member, supers, d_mom0_prev, d_mom1_prev, d_mom2_prev);
   }
 
   /**
@@ -324,7 +334,11 @@ struct MonitorMassMomentsChange {
    * @param ngbxs Number of gridboxes in domain.
    */
   explicit MonitorMassMomentsChange(const size_t ngbxs)
-      : microphysics_moms(ngbxs), motion_moms(ngbxs) {
+      : microphysics_moms(ngbxs),
+        motion_moms(ngbxs),
+        d_mom0_prev("d_monitor_mom0_prev", ngbxs),
+        d_mom1_prev("d_monitor_mom1_prev", ngbxs),
+        d_mom2_prev("d_monitor_mom2_prev", ngbxs) {
     reset_monitor();
   }
 };
