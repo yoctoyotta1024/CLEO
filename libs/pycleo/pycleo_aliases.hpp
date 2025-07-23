@@ -36,6 +36,8 @@
 #include "observers/massmoments_observer.hpp"
 #include "observers/nsupers_observer.hpp"
 #include "observers/observers.hpp"
+#include "observers/sdmmonitor/do_sdmmonitor_obs.hpp"
+#include "observers/sdmmonitor/monitor_precipitation_observer.hpp"
 #include "observers/state_observer.hpp"
 #include "observers/superdrops_observer.hpp"
 #include "observers/time_observer.hpp"
@@ -55,6 +57,7 @@
  */
 namespace pyobserver {
 using nullmo = NullSDMMonitor;
+using precipmo = MonitorPrecipitation;
 
 using gbxindex = GbxindexObserver<SimpleDataset<FSStore>, FSStore>;
 using time = ConstTstepObserver<DoTimeObs<SimpleDataset<FSStore>, FSStore>>;
@@ -99,20 +102,25 @@ using superdrops = ConstTstepObserver<DoWriteToDataset<
                             GenericCollectData<FSStore, uint32_t, SdIdFunc>>,
                         RaggedCount<SimpleDataset<FSStore>, FSStore>>>>;
 
+using precip = ConstTstepObserver<
+    DoSDMMonitorObs<SimpleDataset<FSStore>, FSStore, MonitorPrecipitation, double>>;
+
 using mo01 = CombinedSDMMonitor<nullmo, nullmo>;
 using mo012 = CombinedSDMMonitor<mo01, nullmo>;
 using mo0123 = CombinedSDMMonitor<mo012, nullmo>;
 using mo01234 = CombinedSDMMonitor<mo0123, nullmo>;
 using mo012345 = CombinedSDMMonitor<mo01234, nullmo>;
 using mo0123456 = CombinedSDMMonitor<mo012345, nullmo>;
+using mo01234567 = CombinedSDMMonitor<mo0123456, precipmo>;
 
 using obs01 = CombinedObserver<gbxindex, time, mo01>;
 using obs012 = CombinedObserver<obs01, totnsupers, mo012>;
 using obs0123 = CombinedObserver<obs012, massmoms, mo0123>;
 using obs01234 = CombinedObserver<obs0123, rainmassmoms, mo01234>;
 using obs012345 = CombinedObserver<obs01234, gridboxes, mo012345>;
-using obs6 = superdrops;
-using obs = CombinedObserver<obs012345, obs6, mo0123456>;
+using obs0123456 = CombinedObserver<obs012345, superdrops, mo0123456>;
+using obs7 = precip;
+using obs = CombinedObserver<obs0123456, obs7, mo01234567>;
 }  // namespace pyobserver
 
 /*

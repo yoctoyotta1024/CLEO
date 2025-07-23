@@ -33,6 +33,8 @@
 #include "observers/massmoments_observer.hpp"
 #include "observers/nsupers_observer.hpp"
 #include "observers/observers.hpp"
+#include "observers/sdmmonitor/do_sdmmonitor_obs.hpp"
+#include "observers/sdmmonitor/monitor_precipitation_observer.hpp"
 #include "observers/state_observer.hpp"
 #include "observers/superdrops_observer.hpp"
 #include "observers/time_observer.hpp"
