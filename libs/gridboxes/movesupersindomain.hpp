@@ -98,7 +98,7 @@ struct EffectOnHydrometeorStatesFunctor {
       domainsupers; /**view on device of all superdroplets in all gridboxes. */
 
   struct EffectOnQcondFunctor {
-    const double mass_cond; /**< liquid mass in parcel volume 'dm' */
+    const double totmass_cond; /**< liquid mass in parcel volume 'dm' */
 
     /*
      * operator for functor in effect_on_hydrometeor_states function called in
@@ -106,7 +106,7 @@ struct EffectOnHydrometeorStatesFunctor {
      */
     KOKKOS_INLINE_FUNCTION void operator()(State &state) const {
       constexpr double R0cubed_VOL0 = dlc::R0 * dlc::R0 * dlc::R0 / dlc::VOL0;
-      const auto rho_cond = mass_cond / state.get_volume() * R0cubed_VOL0;  // rho_condensed
+      const auto rho_cond = totmass_cond / state.get_volume() * R0cubed_VOL0;  // rho_condensed
       state.qcond = rho_cond / dlc::Rho_dry;
     }
   };
@@ -120,16 +120,16 @@ struct EffectOnHydrometeorStatesFunctor {
     const auto supers = d_gbxs(ii).supersingbx.readonly(domainsupers);
     const size_t nsupers(supers.extent(0));
 
-    auto mass_cond = double{0.0};  // total condensate mass in parcel volume 'dm'
+    auto totmass_cond = double{0.0};  // total condensate mass in parcel volume 'dm'
     Kokkos::parallel_reduce(
         Kokkos::TeamThreadRange(team_member, nsupers),
-        KOKKOS_LAMBDA(const size_t kk, double &mc) {
+        KOKKOS_LAMBDA(const size_t kk, double &m_cond) {
           const auto &drop = supers(kk);
-          mc += drop.condensate_mass() * drop.get_xi();
+          m_cond += drop.condensate_mass() * drop.get_xi();
         },
-        mass_cond);
+        totmass_cond);
 
-    const auto functor = EffectOnQcondFunctor{mass_cond};
+    const auto functor = EffectOnQcondFunctor{totmass_cond};
     Kokkos::single(Kokkos::PerTeam(team_member), functor, d_gbxs(ii).state);
   }
 };
