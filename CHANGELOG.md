@@ -2,6 +2,45 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.52.0](https://github.com/yoctoyotta1024/CLEO/compare/601db8338386377196e9dab747c47310c9012284..v0.52.0) - 2025-07-23
+#### Bug Fixes
+- compilers for levante cuda build fail type deduction - ([c3daa3c](https://github.com/yoctoyotta1024/CLEO/commit/c3daa3c997245064d9ae6af69bf5f82df9b97034)) - clara.bayley
+- add tolerance to mass check - ([2c34db4](https://github.com/yoctoyotta1024/CLEO/commit/2c34db4d04947ad189c59186c7207bd771af03b9)) - clara.bayley
+- error in calculation of condensed mass during condensation - ([93da4c9](https://github.com/yoctoyotta1024/CLEO/commit/93da4c9fd8fddee35fe0c8590f320224f6527e19)) - clara.bayley
+- order of variable declaration - ([47c70b6](https://github.com/yoctoyotta1024/CLEO/commit/47c70b6e3596c81b1edc3f78b62714092c8a6406)) - clara.bayley
+- change mass moms calculates change from previous call to monitor - ([6343802](https://github.com/yoctoyotta1024/CLEO/commit/63438020ff67eea4c07123d6a86dc2b00714ad38)) - clara.bayley
+- combined distrib missing arg - ([990b6e0](https://github.com/yoctoyotta1024/CLEO/commit/990b6e050663a62597634ebe0b38446b9c451b7e)) - clara.bayley
+- correct view typo in name and comment - ([664fb54](https://github.com/yoctoyotta1024/CLEO/commit/664fb54cf2575e2f9e1a6a20c48fbc27b91e56b7)) - clara.bayley
+#### Features
+- new monitor for precipitation - ([b89fda2](https://github.com/yoctoyotta1024/CLEO/commit/b89fda2a9bb19bea195e1993dbcd231097fb937e)) - clara.bayley
+#### Miscellaneous Chores
+- rename variable - ([91438d6](https://github.com/yoctoyotta1024/CLEO/commit/91438d61f9962d4a515d685cf71ef803f35ae22d)) - clara.bayley
+- rename files - ([9cb2e0f](https://github.com/yoctoyotta1024/CLEO/commit/9cb2e0fcbc2b662eb3e7359bc8b0e92c7a29d32f)) - clara.bayley
+- renaming variables - ([97163ec](https://github.com/yoctoyotta1024/CLEO/commit/97163ec8fbb434d7d75072aada3202414124725c)) - clara.bayley
+- formatting - ([45aacbd](https://github.com/yoctoyotta1024/CLEO/commit/45aacbd44dee02ef0f4d34b080c1d8fff495999c)) - clara.bayley
+- carry over new line - ([baca646](https://github.com/yoctoyotta1024/CLEO/commit/baca646d281a649cf554159e0986794bc8901baf)) - clara.bayley
+- delete last modified - ([1e7b925](https://github.com/yoctoyotta1024/CLEO/commit/1e7b925aee390ce343a357a46b86e49d85959a47)) - clara.bayley
+#### Refactoring
+- add precip observer to python bindings - ([1e0586e](https://github.com/yoctoyotta1024/CLEO/commit/1e0586e6272aacf7a0ee945db9086c63a562d694)) - clara.bayley
+- don't allow m_cond return < 0.0 - ([e8dc639](https://github.com/yoctoyotta1024/CLEO/commit/e8dc639aec2c6efbd48d02e168a071a643f78246)) - clara.bayley
+- use compiler name for yacyaxtroot - ([ed368a5](https://github.com/yoctoyotta1024/CLEO/commit/ed368a5751087eb86907beb99e7835ab39f66ebd)) - clara.bayley
+- add functionality for precipitation monitor - ([f4203d2](https://github.com/yoctoyotta1024/CLEO/commit/f4203d28390d5a00ce1ee8c0cb935441db24f62f)) - clara.bayley
+- assert mass > 0.0 - ([d9470f4](https://github.com/yoctoyotta1024/CLEO/commit/d9470f434fe6070c55d66cbd09d72abe95d745d8)) - clara.bayley
+- loosen constraint on motion monitor - ([7eebb0d](https://github.com/yoctoyotta1024/CLEO/commit/7eebb0d83f707bab2e1b4d627af704a23b0361ca)) - clara.bayley
+- some initial conditions for testing - ([9d28b05](https://github.com/yoctoyotta1024/CLEO/commit/9d28b05be3635e8bf3054462aedc9defa6218ed6)) - clara.bayley
+- calculate mass moments in monitor before timestepping - ([743d568](https://github.com/yoctoyotta1024/CLEO/commit/743d5685aa0602301dad191d405b1d21c6014ab4)) - clara.bayley
+- before timestepping of observations has domainsupers - ([711a987](https://github.com/yoctoyotta1024/CLEO/commit/711a9870d31d4c8d04731bf45461efb813d304d2)) - clara.bayley
+- monitors have before timestepping function - ([db966aa](https://github.com/yoctoyotta1024/CLEO/commit/db966aa1d68df663fe428829946ed1e320e8dcfa)) - clara.bayley
+- massmoment monitors monitor cumulative change - ([2bcb37d](https://github.com/yoctoyotta1024/CLEO/commit/2bcb37db9638181268e3c5e531b5fc0701ef1b81)) - clara.bayley
+- pass values not entire views for calculating mass moments - ([eb10195](https://github.com/yoctoyotta1024/CLEO/commit/eb1019597164c11d559e7c2f3a9dfc388c1c5dc0)) - clara.bayley
+- allow optional tolerance to error on numconc check - ([e3e89c7](https://github.com/yoctoyotta1024/CLEO/commit/e3e89c75839a403d0c42a465cab95dc06e8e7774)) - clara.bayley
+- use mpi domain decomposition in fromfile irreg - ([6a8a025](https://github.com/yoctoyotta1024/CLEO/commit/6a8a02546b125cd891d8360e2ecdcb14b299a565)) - clara.bayley
+- options to run fromfile_irreg with more than one task - ([e03a200](https://github.com/yoctoyotta1024/CLEO/commit/e03a200b4e638dbbba2cffbea0b20f9c529cf33f)) - clara.bayley
+- better making/deleting of files - ([f33d043](https://github.com/yoctoyotta1024/CLEO/commit/f33d043f2b717241ea964ab11f2404c95a1b5b11)) - clara.bayley
+- more figure plotting params into input file args - ([601db83](https://github.com/yoctoyotta1024/CLEO/commit/601db8338386377196e9dab747c47310c9012284)) - clara.bayley
+
+- - -
+
 ## [v0.51.0](https://github.com/yoctoyotta1024/CLEO/compare/c789c12287ca2d6ae792ef45981cbe628b0c5c6f..v0.51.0) - 2025-07-15
 #### Bug Fixes
 - missing includes - ([141a5bf](https://github.com/yoctoyotta1024/CLEO/commit/141a5bf9773994d1a6ee96577168d74e4015c4fc)) - clara.bayley
