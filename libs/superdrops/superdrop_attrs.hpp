@@ -189,10 +189,13 @@ struct SuperdropAttrs {
    * @return mass of the super-droplet - mass of solute
    */
   KOKKOS_INLINE_FUNCTION double condensate_mass() const {
-    const auto mass_w = mass() - msol;
-    assert((mass_w > -0.0001 * msol) &&
+    auto m_cond = mass() - msol;
+    assert((m_cond > -0.0001 * msol) &&
            "condensate mass cannot be less than 0.0 (within 0.0001 of dry mass tolerance)");
-    return mass_w;
+
+    m_cond = Kokkos::fmax(0.0, m_cond);  // Kokkos version of std::max() for floats (gpu compatible)
+
+    return m_cond;
   }
 
   /**
