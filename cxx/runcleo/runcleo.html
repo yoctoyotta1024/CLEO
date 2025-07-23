@@ -446,8 +446,8 @@
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-functions">Private Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK7RunCLEO19prepare_to_timestepEK17dualview_constgbx">
-<span id="_CPPv3NK7RunCLEO19prepare_to_timestepEK17dualview_constgbx"></span><span id="_CPPv2NK7RunCLEO19prepare_to_timestepEK17dualview_constgbx"></span><span id="RunCLEO::prepare_to_timestep__dualview_constgbxCC"></span><span class="target" id="classRunCLEO_1a6b7d69377874836a7cbd47945569b13f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">prepare_to_timestep</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv417dualview_constgbx" title="dualview_constgbx"><span class="n"><span class="pre">dualview_constgbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">gbxs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7RunCLEO19prepare_to_timestepEK17dualview_constgbx" title="Link to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK7RunCLEO19prepare_to_timestepEK12dualview_gbxRK14SupersInDomain">
+<span id="_CPPv3NK7RunCLEO19prepare_to_timestepEK12dualview_gbxRK14SupersInDomain"></span><span id="_CPPv2NK7RunCLEO19prepare_to_timestepEK12dualview_gbxRK14SupersInDomain"></span><span id="RunCLEO::prepare_to_timestep__dualview_gbxC.SupersInDomainCRC"></span><span class="target" id="classRunCLEO_1ae3b2a9982c2a0a2f679a21014e32c9ee"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">prepare_to_timestep</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv412dualview_gbx" title="dualview_gbx"><span class="n"><span class="pre">dualview_gbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">gbxs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">SupersInDomain</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">allsupers</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK7RunCLEO19prepare_to_timestepEK12dualview_gbxRK14SupersInDomain" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Prepare SDM and Coupled Dynamics for timestepping. </p>
 <p>This function prepares the SDM and Coupled Dynamics for timestepping. It calls the <code class="docutils literal notranslate"><span class="pre">prepare_to_timestep</span></code> function of both the Coupled Dynamics and <a class="reference internal" href="sdmmethods.html#classSDMMethods"><span class="std std-ref">SDMMethods</span></a> objects.</p>
 <dl class="field-list simple">
@@ -641,7 +641,7 @@ The size of the next timestep is determined by finding the smaller out of the st
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 21 July 2025</div>
+              Last updated on 23 July 2025</div>
           </div>
           <div class="right-details">
             
@@ -667,7 +667,7 @@ The size of the next timestep is determined by finding the smaller out of the st
 <li><a class="reference internal" href="#_CPPv4N7RunCLEO7RunCLEOERK10SDMMethodsI7GbxMaps9Microphys1M1T3BCs3ObsER2CDRK5Comms"><code class="docutils literal notranslate"><span class="pre">RunCLEO()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N7RunCLEOD0Ev"><code class="docutils literal notranslate"><span class="pre">~RunCLEO()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK7RunCLEOclERK17InitialConditionsKj"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK7RunCLEO19prepare_to_timestepEK17dualview_constgbx"><code class="docutils literal notranslate"><span class="pre">prepare_to_timestep()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK7RunCLEO19prepare_to_timestepEK12dualview_gbxRK14SupersInDomain"><code class="docutils literal notranslate"><span class="pre">prepare_to_timestep()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK7RunCLEO14check_couplingEv"><code class="docutils literal notranslate"><span class="pre">check_coupling()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK7RunCLEO13timestep_cleoEKjK12dualview_gbxR14SupersInDomain"><code class="docutils literal notranslate"><span class="pre">timestep_cleo()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK7RunCLEO10start_stepEKj12dualview_gbxRK14SupersInDomain"><code class="docutils literal notranslate"><span class="pre">start_step()</span></code></a></li>
