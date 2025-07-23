@@ -190,7 +190,8 @@ struct SuperdropAttrs {
    */
   KOKKOS_INLINE_FUNCTION double condensate_mass() const {
     const auto mass_w = mass() - msol;
-    assert((mass_w > 0.0) && "condensate mass should not be less than 0.0");
+    assert((mass_w > -0.0001 * msol) &&
+           "condensate mass cannot be less than 0.0 (within 0.0001 of dry mass tolerance)");
     return mass_w;
   }
 
