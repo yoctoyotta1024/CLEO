@@ -119,8 +119,9 @@ inline BoundaryConditions<CartesianMaps> auto create_boundary_conditions(const C
 
 template <GridboxMaps GbxMaps>
 inline auto create_movement(const Config &config, const Timesteps &tsteps, const GbxMaps &gbxmaps) {
-  const Motion<GbxMaps> auto motion = create_motion(tsteps.get_motionstep());
-  const BoundaryConditions<GbxMaps> auto boundary_conditions = create_boundary_conditions(config);
+  const Motion<CartesianMaps> auto motion = create_motion(tsteps.get_motionstep());
+  const BoundaryConditions<CartesianMaps> auto boundary_conditions =
+      create_boundary_conditions(config);
   const auto movement = cartesian_movement(gbxmaps, motion, boundary_conditions);
   return movement;
 }
