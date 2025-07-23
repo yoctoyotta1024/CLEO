@@ -99,16 +99,14 @@ KOKKOS_FUNCTION
 double SuperdropletsChangeFunctor::superdrop_mass_change(Superdrop &drop, const double temp,
                                                          const double s_ratio,
                                                          const double ffactor) const {
+  const double old_m_cond = drop.condensate_mass();
+
   /* do not pass r by reference here!! copy value into iterator */
   const auto ab_kohler = kohler_factors(drop, temp);  // pair = {akoh, bkoh}
   const auto newr = impe.solve_condensation(s_ratio, ab_kohler, ffactor,
                                             drop.get_radius());  // timestepping eqn [7.28] forward
-  const auto delta_radius = double{drop.change_radius(newr)};
-
-  constexpr double dmdt_const = 4.0 * Kokkos::numbers::pi * dlc::Rho_l;  // dimensionless
-  const auto rsqrd = double{drop.get_radius() * drop.get_radius()};
-  const auto mass_condensed =
-      double{dmdt_const * rsqrd * drop.get_xi() * delta_radius};  // eqn [7.22] * delta t
+  drop.change_radius(newr);
+  const auto mass_condensed = (drop.condensate_mass() - old_m_cond) * drop.get_xi();
 
   return mass_condensed;  // dimensionless
 }
