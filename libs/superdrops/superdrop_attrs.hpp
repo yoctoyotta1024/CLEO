@@ -188,7 +188,11 @@ struct SuperdropAttrs {
    *
    * @return mass of the super-droplet - mass of solute
    */
-  KOKKOS_INLINE_FUNCTION double condensate_mass() const { return mass() - msol; }
+  KOKKOS_INLINE_FUNCTION double condensate_mass() const {
+    const auto mass_w = mass() - msol;
+    assert((mass_w > 0.0) && "condensate mass should not be less than 0.0");
+    return mass_w;
+  }
 
   /**
    * @brief Get the dry radius of droplet.
