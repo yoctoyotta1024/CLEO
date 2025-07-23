@@ -84,11 +84,11 @@ class RunCLEO {
    * @param gbxs DualView of gridboxes.
    * @return 0 on success.
    */
-  int prepare_to_timestep(const dualview_constgbx gbxs) const {
+  int prepare_to_timestep(const dualview_gbx gbxs, const SupersInDomain &allsupers) const {
     std::cout << "\n--- prepare timestepping ---\n";
 
     coupldyn.prepare_to_timestep();
-    sdm.prepare_to_timestep(gbxs.view_device());
+    sdm.prepare_to_timestep(gbxs, allsupers);
 
     std::cout << "--- prepare timestepping: success ---\n";
     return 0;
@@ -308,7 +308,7 @@ class RunCLEO {
     auto allsupers =
         create_supers(initconds.initsupers, sdm.gbxmaps.get_local_ngridboxes_hostcopy());
     auto gbxs = create_gbxs(sdm.gbxmaps, initconds.initgbxs, allsupers);
-    prepare_to_timestep(gbxs);
+    prepare_to_timestep(gbxs, allsupers);
     Kokkos::Profiling::popRegion();
 
     // do timestepping from t=0 to t=t_end

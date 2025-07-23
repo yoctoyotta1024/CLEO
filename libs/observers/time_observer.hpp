@@ -93,7 +93,7 @@ class DoTimeObs {
    * @brief Placeholder for before timestepping functionality and to make class satisfy observer
    * concept.
    */
-  void before_timestepping(const viewd_constgbx d_gbxs) const {
+  void before_timestepping(const viewd_constgbx d_gbxs, const subviewd_constsupers d_supers) const {
     std::cout << "observer includes time observer\n";
   }
 

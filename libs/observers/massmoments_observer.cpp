@@ -37,16 +37,13 @@
  *
  * @param team_member The Kokkos team member.
  * @param supers The view of super-droplets for a gridbox (on device).
- * @param d_mom0 The view for the 0th mass moment.
- * @param d_mom1 The view for the 1st mass moment.
- * @param d_mom2 The view for the 2nd mass moment.
+ * @param mom0 Reference to where to place value of 0th mass moment.
+ * @param mom1 Reference to where to place value of 1st mass moment.
+ * @param mom2 Reference to where to place value of 2nd mass moment.
  */
 KOKKOS_FUNCTION
 void calculate_massmoments(const TeamMember &team_member, const viewd_constsupers supers,
-                           Buffer<uint64_t>::mirrorviewd_buffer d_mom0,
-                           Buffer<float>::mirrorviewd_buffer d_mom1,
-                           Buffer<float>::mirrorviewd_buffer d_mom2) {
-  const auto ii = team_member.league_rank();
+                           uint64_t &mom0, float &mom1, float &mom2) {
   const size_t nsupers(supers.extent(0));
 
   Kokkos::parallel_reduce(
@@ -63,7 +60,7 @@ void calculate_massmoments(const TeamMember &team_member, const viewd_constsuper
         m1 += static_cast<float>(xi * mass);
         m2 += static_cast<float>(xi * mass * mass);
       },
-      d_mom0(ii), d_mom1(ii), d_mom2(ii));  // {0th, 1st, 2nd} mass moments
+      mom0, mom1, mom2);  // {0th, 1st, 2nd} mass moments
 }
 
 /**
@@ -86,17 +83,14 @@ void calculate_massmoments(const TeamMember &team_member, const viewd_constsuper
  *
  * @param team_member The Kokkos team member.
  * @param supers The view of super-droplets for a gridbox (on device).
- * @param d_mom0 The mirror view buffer for the 0th mass moment.
- * @param d_mom1 The mirror view buffer for the 1st mass moment.
- * @param d_mom2 The mirror view buffer for the 2nd mass moment.
+ * @param mom0 Reference to where to place value of 0th mass moment.
+ * @param mom1 Reference to where to place value of 1st mass moment.
+ * @param mom2 Reference to where to place value of 2nd mass moment.
  */
 KOKKOS_FUNCTION
 void calculate_rainmassmoments(const TeamMember &team_member, const viewd_constsupers supers,
-                               Buffer<uint64_t>::mirrorviewd_buffer d_mom0,
-                               Buffer<float>::mirrorviewd_buffer d_mom1,
-                               Buffer<float>::mirrorviewd_buffer d_mom2) {
+                               uint64_t &mom0, float &mom1, float &mom2) {
   constexpr double rlim(40e-6 / dlc::R0);  // dimless minimum radius of raindrop
-  const auto ii = team_member.league_rank();
 
   const size_t nsupers(supers.extent(0));
   Kokkos::parallel_reduce(
@@ -114,5 +108,5 @@ void calculate_rainmassmoments(const TeamMember &team_member, const viewd_consts
         m1 += static_cast<float>(xi * mass * binary);
         m2 += static_cast<float>(xi * mass * mass * binary);
       },
-      d_mom0(ii), d_mom1(ii), d_mom2(ii));  // {0th, 1st, 2nd} mass moments
+      mom0, mom1, mom2);  // {0th, 1st, 2nd} mass moments
 }

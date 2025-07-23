@@ -15,14 +15,14 @@
 ### ----- You need to edit these lines to set your ----- ###
 ### ----- default compiler and python environment   ---- ###
 ### ----  and paths for CLEO and build directories  ---- ###
+configfile=$1
 path2CLEO=${2:-${HOME}/CLEO}
+path2build=${3:-${path2CLEO}/build}
+
 path2scripts=${path2CLEO}/scripts
 condaenv=/work/bm1183/m300950/bin/envs/cleoenv
 python=${condaenv}/bin/python
 ### ---------------------------------------------------- ###
-
-configfile=$1
-path2build=${3:-${path2CLEO}/build}
 
 if [ "${configfile}" == "" ]
 then

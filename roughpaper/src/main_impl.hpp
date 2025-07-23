@@ -48,7 +48,8 @@
 #include "observers/nsupers_observer.hpp"
 #include "observers/observers.hpp"
 #include "observers/sdmmonitor/monitor_condensation_observer.hpp"
-#include "observers/sdmmonitor/monitor_massmoments_observer.hpp"
+#include "observers/sdmmonitor/monitor_massmoments_change_observer.hpp"
+#include "observers/sdmmonitor/monitor_precipitation_observer.hpp"
 #include "observers/state_observer.hpp"
 #include "observers/streamout_observer.hpp"
 #include "observers/superdrops_observer.hpp"
@@ -118,8 +119,9 @@ inline BoundaryConditions<CartesianMaps> auto create_boundary_conditions(const C
 
 template <GridboxMaps GbxMaps>
 inline auto create_movement(const Config &config, const Timesteps &tsteps, const GbxMaps &gbxmaps) {
-  const Motion<GbxMaps> auto motion = create_motion(tsteps.get_motionstep());
-  const BoundaryConditions<GbxMaps> auto boundary_conditions = create_boundary_conditions(config);
+  const Motion<CartesianMaps> auto motion = create_motion(tsteps.get_motionstep());
+  const BoundaryConditions<CartesianMaps> auto boundary_conditions =
+      create_boundary_conditions(config);
   const auto movement = cartesian_movement(gbxmaps, motion, boundary_conditions);
   return movement;
 }
@@ -208,11 +210,13 @@ inline Observer auto create_sdmmonitor_observer(const unsigned int interval, Dat
   const Observer auto obs_cond =
       MonitorCondensationObserver(interval, dataset, store, maxchunk, ngbxs);
   const Observer auto obs_massmoms =
-      MonitorMassMomentsObserver(interval, dataset, store, maxchunk, ngbxs);
+      MonitorMassMomentsChangeObserver(interval, dataset, store, maxchunk, ngbxs);
   const Observer auto obs_rainmassmoms =
       MonitorRainMassMomentsObserver(interval, dataset, store, maxchunk, ngbxs);
+  const Observer auto obs_precip =
+      MonitorPrecipitationObserver(interval, dataset, store, maxchunk, ngbxs);
 
-  return obs_cond >> obs_massmoms >> obs_rainmassmoms;
+  return obs_cond >> obs_massmoms >> obs_rainmassmoms >> obs_precip;
 }
 
 template <typename Dataset, typename Store>

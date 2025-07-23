@@ -37,7 +37,7 @@ void pyNullObserver(py::module &m) {
 
 void pyObserver(py::module &m) {
   py::class_<pyobserver::obs>(m, "Observer")
-      .def(py::init<pyobserver::obs012345, pyobserver::obs6, pyobserver::mo0123456>())
+      .def(py::init<pyobserver::obs0123456, pyobserver::obs7, pyobserver::mo01234567>())
       .def("next_obs", &pyobserver::obs::next_obs, py::arg("t_mdl"));
 }
 
@@ -100,7 +100,14 @@ pyobserver::obs create_observer(const Config &config, const Timesteps &tsteps,
   const Observer auto obs6 =
       create_superdrops_observer(superdrops_interval, dataset, store, maxchunk);
 
-  return obs0 >> obs1 >> obs2 >> obs3 >> obs4 >> obs5 >> obs6;
+  auto precip_interval = LIMITVALUES::uintmax;
+  if (enable_observers.precip) {
+    precip_interval = obsstep;
+  }
+  const Observer auto obs7 =
+      MonitorPrecipitationObserver(precip_interval, dataset, store, maxchunk, ngbxs);
+
+  return obs0 >> obs1 >> obs2 >> obs3 >> obs4 >> obs5 >> obs6 >> obs7;
 }
 
 pyobserver::gridboxes create_gridboxes_observer(const unsigned int interval,

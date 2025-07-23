@@ -50,15 +50,15 @@ class CombinedRadiiProbDistribs:
             raise ValueError(errmsg)
 
     def __call__(self, radii, totxi):
-        return self._probdistrib(radii)
+        return self._probdistrib(radii, totxi)
 
-    def _probdistrib(self, radii):
+    def _probdistrib(self, radii, totxi):
         """returns distribution for radii given by the
         sum of the distributions in probdistribs list"""
 
         probs = np.zeros(radii.shape)
         for distrib, sf in zip(self.probdistribs, self.scalefacs):
-            probs += sf * distrib(radii)
+            probs += sf * distrib(radii, totxi)
 
         return probs / np.sum(probs)  # normalise so sum(prob) = 1
 

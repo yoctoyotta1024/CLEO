@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: monitor_condensation_observer.hpp
+ * File: monitor_precipitation_observer.hpp
  * Project: sdmmonitor
  * Created Date: Wednesday 8th May 2024
  * Author: Clara Bayley (CB)
@@ -13,17 +13,20 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * struct to create observer which outputs mass change due to condensation monitored from SDM
- * microphysical process in each gridbox a constant interval at the start of each timestep.
+ * struct to create observer which outputs accumulated precipitation over a constant timestep, i.e.
+ * the mean rate of precipitation over a timestep, by monitoring superdroplet motion through
+ * the bottom boundary of each gridbox,
+ * i.e. output = downward mass flux of water / water density * timestep
  */
 
-#ifndef LIBS_OBSERVERS_SDMMONITOR_MONITOR_CONDENSATION_OBSERVER_HPP_
-#define LIBS_OBSERVERS_SDMMONITOR_MONITOR_CONDENSATION_OBSERVER_HPP_
+#ifndef LIBS_OBSERVERS_SDMMONITOR_MONITOR_PRECIPITATION_OBSERVER_HPP_
+#define LIBS_OBSERVERS_SDMMONITOR_MONITOR_PRECIPITATION_OBSERVER_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <concepts>
 #include <memory>
 
+#include "../../cleoconstants.hpp"
 #include "../../kokkosaliases.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "observers/consttstep_observer.hpp"
@@ -32,8 +35,10 @@
 #include "superdrops/state.hpp"
 #include "superdrops/superdrop.hpp"
 
+namespace dlc = dimless_constants;
+
 /* struct satisfies SDMMonitor concept for use in do_sdmmonitor_obs to make observer */
-struct MonitorCondensation {
+struct MonitorPrecipitation {
   using datatype = double;
   Buffer<datatype>::mirrorviewd_buffer d_data;  // view on device copied to host by DoSDMMonitorObs
 
@@ -52,18 +57,13 @@ struct MonitorCondensation {
                            const subviewd_constsupers d_supers) const {}
 
   /**
-   * @brief Monitor mass of liquid change due to condensation / evaporation
-   *
-   * Add totmass_condensed to current value for mass condensed since d_data was last reset.
-   *
-   * _Note:_ possible conversion of mass condensed at one timestep from double precision
-   * (8 bytes double) to single precision (4 bytes float) in output depending on datatype alias.
+   * @brief Placeholder function to obey SDMMonitor concept does nothing.
    *
    * @param team_member Kokkkos team member in TeamPolicy parallel loop over gridboxes
    * @param totmass_condensed Mass condensed in one gridbox during one microphysical timestep
    */
   KOKKOS_FUNCTION
-  void monitor_condensation(const TeamMember& team_member, const double totmass_condensed) const;
+  void monitor_condensation(const TeamMember& team_member, const double totmass_condensed) const {}
 
   /**
    * @brief Placeholder function to obey SDMMonitor concept does nothing.
@@ -83,7 +83,10 @@ struct MonitorCondensation {
   void monitor_motion(const viewd_constgbx d_gbxs, const subviewd_constsupers domainsupers) const {}
 
   /**
-   * @brief Placeholder function to obey SDMMonitor concept does nothing.
+   * @brief calculate accumulated precipitation over a constant timestep, i.e.
+   * the mean rate of precipitation over a timestep, as the droplet motion through
+   * the bottom boundary of each gridbox,
+   * i.e. output = downward mass flux of water / water density * timestep
    *
    * @param gbxindex gridbox whose bottom boundary is to be evaluated.
    * @param gbxmaps The Gridbox Maps.
@@ -92,21 +95,28 @@ struct MonitorCondensation {
    */
   KOKKOS_FUNCTION
   void monitor_precipitation(const TeamMember& team_member, const unsigned int gbxindex,
-                             const GridboxMaps auto& gbxmaps, Superdrop& drop) const {}
+                             const GridboxMaps auto& gbxmaps, Superdrop& drop) const {
+    const auto lowerlim = gbxmaps.coord3bounds(gbxindex).first;
+    if (drop.get_coord3() < lowerlim) {
+      const auto ii = team_member.league_rank();
+      const auto gbxarea = gbxmaps.get_gbxarea(gbxindex);
+      const auto m = drop.condensate_mass() * drop.get_xi() / dlc::Rho_l / gbxarea;
+      Kokkos::atomic_add(&d_data(ii), m);
+    }
+  }
 
   /**
-   * @brief Constructor for MonitorCondensation
+   * @brief Constructor for MonitorPrecipitation
    *
    * @param ngbxs Number of gridboxes in domain.
    */
-  explicit MonitorCondensation(const size_t ngbxs) : d_data("massdelta_cond", ngbxs) {
-    reset_monitor();
-  }
+  explicit MonitorPrecipitation(const size_t ngbxs) : d_data("precip", ngbxs) { reset_monitor(); }
 };
 
 /**
- * @brief Constructs an observer which writes data monitoring condensation microphysics to an
- * array with a constant observation timestep "interval".
+ * @brief Constructs an observer which writes data monitoring precipitaion (i.e. the downward mass
+ * flux of water / water density * timestep) to an array with a constant observation timestep
+ * "interval".
  *
  * @tparam Store Type of store for dataset.
  * @param interval Observation timestep.
@@ -116,13 +126,13 @@ struct MonitorCondensation {
  * @return Constructed type satisfying observer concept.
  */
 template <typename Dataset, typename Store>
-inline Observer auto MonitorCondensationObserver(const unsigned int interval, Dataset& dataset,
-                                                 Store& store, const size_t maxchunk,
-                                                 const size_t ngbxs) {
-  using Mo = MonitorCondensation;
-  const auto name = std::string_view("massdelta_cond");
-  const auto units = std::string_view("g");
-  constexpr auto scale_factor = dlc::MASS0grams;
+inline Observer auto MonitorPrecipitationObserver(const unsigned int interval, Dataset& dataset,
+                                                  Store& store, const size_t maxchunk,
+                                                  const size_t ngbxs) {
+  using Mo = MonitorPrecipitation;
+  const auto name = std::string_view("precip");
+  const auto units = std::string_view("m");
+  constexpr auto scale_factor = dlc::R0 * dlc::R0 * dlc::R0 / dlc::COORD0 / dlc::COORD0;
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
   const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
   const auto xzarr_ptr = std::make_shared<XarrayZarrArray<Store, Mo::datatype>>(
@@ -133,4 +143,4 @@ inline Observer auto MonitorCondensationObserver(const unsigned int interval, Da
   return ConstTstepObserver(interval, do_obs);
 }
 
-#endif  // LIBS_OBSERVERS_SDMMONITOR_MONITOR_CONDENSATION_OBSERVER_HPP_
+#endif  // LIBS_OBSERVERS_SDMMONITOR_MONITOR_PRECIPITATION_OBSERVER_HPP_

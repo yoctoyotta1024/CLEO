@@ -76,7 +76,7 @@ struct StreamOutObserver {
    * @brief Function called before timestepping.
    * @param d_gbxs View of grid boxes.
    */
-  void before_timestepping(const viewd_constgbx d_gbxs) const {
+  void before_timestepping(const viewd_constgbx d_gbxs, const subviewd_constsupers d_supers) const {
     std::cout << "observer includes StreamOutObserver\n";
   }
 
