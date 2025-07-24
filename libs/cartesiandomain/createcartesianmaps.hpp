@@ -36,6 +36,7 @@
 #include "cartesiandomain/cartesian_decomposition.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/doubly_periodic_domain.hpp"
+#include "configuration/communicator.hpp"
 #include "initialise/gbx_bounds_from_binary.hpp"
 
 /* creates cartesian maps instance using gridbox bounds read from

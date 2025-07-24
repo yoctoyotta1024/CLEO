@@ -31,6 +31,7 @@
 #include "../../cleoconstants.hpp"
 #include "../../kokkosaliases.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
+#include "configuration/communicator.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/supersindomain.hpp"
@@ -65,8 +66,8 @@ template <GridboxMaps GbxMaps>
 viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
                              viewd_supers totsupers) {
   int comm_size, my_rank;
-  MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
-  MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+  comm_size = init_communicator::get_comm_size();
+  my_rank = init_communicator::get_comm_rank();
 
   std::vector<MPI_Request> exchange_requests(comm_size * 6, MPI_REQUEST_NULL);
   std::vector<MPI_Status> exchange_statuses(comm_size * 6);

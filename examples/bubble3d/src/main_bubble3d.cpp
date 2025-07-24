@@ -7,7 +7,7 @@
  * Project: src
  * Created Date: Friday 22nd March 2024
  * Author: Clara Bayley (CB)
- * Additional Contributors:
+ * Additional Contributors: Lakshmi Aparna Devulapalli (LAD)
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
@@ -29,6 +29,7 @@
 #include "cartesiandomain/createcartesianmaps.hpp"
 #include "cartesiandomain/movement/cartesian_motion.hpp"
 #include "cartesiandomain/movement/cartesian_movement.hpp"
+#include "configuration/communicator.hpp"
 #include "configuration/config.hpp"
 #include "coupldyn_yac/yac_cartesian_dynamics.hpp"
 #include "coupldyn_yac/yac_comms.hpp"
@@ -148,21 +149,14 @@ int main(int argc, char *argv[]) {
     throw std::invalid_argument("configuration file(s) not specified");
   }
 
-  MPI_Init(&argc, &argv);
-
-  int comm_size;
-  MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
-  if (comm_size > 1) {
-    std::cout << "ERROR: The current example is not prepared"
-              << " to be run with more than one MPI process" << std::endl;
-    MPI_Abort(MPI_COMM_WORLD, 1);
-  }
-
   Kokkos::Timer kokkostimer;
 
   /* Read input parameters from configuration file(s) */
   const std::filesystem::path config_filename(argv[1]);  // path to configuration file
   const Config config(config_filename);
+
+  /* Initialize Communicator here */
+  init_communicator init_comm(argc, argv, config);
 
   /* Initialise Kokkos parallel environment */
   Kokkos::initialize(config.get_kokkos_initialization_settings());
@@ -197,8 +191,6 @@ int main(int argc, char *argv[]) {
 
   const auto ttot = double{kokkostimer.seconds()};
   std::cout << "-----\n Total Program Duration: " << ttot << "s \n-----\n";
-
-  MPI_Finalize();
 
   return 0;
 }

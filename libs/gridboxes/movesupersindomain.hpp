@@ -230,9 +230,6 @@ class MoveSupersInDomain {
   SupersInDomain move_superdrops_in_domain(const unsigned int t_sdm, const GbxMaps &gbxmaps,
                                            viewd_gbx d_gbxs, SupersInDomain &allsupers,
                                            const SDMMonitor auto mo) const {
-    int my_rank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
-
     /* steps (1 - 2) */
     move_supers_in_gridboxes(gbxmaps, d_gbxs, allsupers.domain_supers(), mo);
 
