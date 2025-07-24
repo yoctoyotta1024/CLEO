@@ -228,7 +228,8 @@ class MoveSupersInDomain {
   (4) apply domain boundary conditions (host and/or device)
   */
   SupersInDomain move_superdrops_in_domain(const unsigned int t_sdm, const GbxMaps &gbxmaps,
-                                           viewd_gbx d_gbxs, SupersInDomain &allsupers) const {
+                                           viewd_gbx d_gbxs, SupersInDomain &allsupers,
+                                           const SDMMonitor auto mo) const {
     /* steps (1 - 2) */
     move_supers_in_gridboxes(gbxmaps, d_gbxs, allsupers.domain_supers(), mo);
 
