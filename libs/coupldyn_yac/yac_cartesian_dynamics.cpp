@@ -182,13 +182,7 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
       get_vvel(nullwinds()) {
   std::cout << "\n--- coupled cartesian dynamics from file ---\n";
 
-  // -- YAC initialization and calendar definitions ---
-  // yac_cinit(); // TODO(ALL): init elsewhere (see below too)
-
-  // --- Component definition ---
-  // std::string component_name = "cleo";
-  // int component_id = -1;
-  // yac_cdef_comp(component_name.c_str(), &component_id);
+  // Get YAC Component id from the communicator init class
   int component_id = init_communicator::get_yac_comp_id();
   std::cout << "yac comp id in cart_dyn:" << component_id << std::endl;
 
@@ -200,8 +194,6 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
 
   create_grid_and_points_definitions(config, ndims, grid_name, grid_id, cell_point_id,
                                      edge_point_id);
-
-  // yac_cdef_calendar(YAC_PROLEPTIC_GREGORIAN);
 
   // --- Interpolation stack ---
   int interp_stack_id;
