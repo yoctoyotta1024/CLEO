@@ -51,13 +51,13 @@ class CartesianDecomposition {
   std::array<double, 3> partition_begin_coordinates;
   std::array<double, 3> partition_end_coordinates;
 
-
-  // Sizes of a gridbox
+  // Geometric bounds of a gridbox in z, x, y directions
   std::vector<std::vector<double>> gridbox_bounds;
-  std::array<double, 3> domain_bounds;
-  // std::vector<double> gridbox_size_vertical; // z-dimension (coord3)
-  // std::vector<double> gridbox_size_eastward; // x-dimension (coord1)
-  // std::vector<double> gridbox_size_northward; // y-dimension (coord2)
+
+  // Geometric bounds of the entire domain
+  // First Index 0 : Lower bounds in z, x, y directions
+  // First Index 1 : Upper bounds in z, x, y directions
+  std::array<std::array<double, 3>, 2> domain_bounds;
 
   // Behavior of each dimension, being either periodic or finite
   std::array<size_t, 3> dimension_bound_behavior;

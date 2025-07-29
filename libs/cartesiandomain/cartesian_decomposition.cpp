@@ -122,7 +122,8 @@ unsigned int CartesianDecomposition::get_local_bounding_gridbox_index(
     if (coordinates[dimension] < gridbox_bounds[dimension].front()) {
       // If the dimension behavior is finite and the coordinate is smaller than
       // the beginning of the domain return the out_of_bounds value
-      if (dimension_bound_behavior[dimension] == 0 && coordinates[dimension] < 0) {
+      if (dimension_bound_behavior[dimension] == 0 &&
+          coordinates[dimension] < domain_bounds[0][dimension]) {
         return LIMITVALUES::oob_gbxindex;
       }
       // The coordinate is inside of the domain but outside of the partition in that dimension
@@ -135,7 +136,7 @@ unsigned int CartesianDecomposition::get_local_bounding_gridbox_index(
       // the end of the domain return the out_of_bounds value
 
       if (dimension_bound_behavior[dimension] == 0 &&
-          coordinates[dimension] > domain_bounds[dimension]) {
+          coordinates[dimension] > domain_bounds[1][dimension]) {
         return LIMITVALUES::oob_gbxindex;
       }
 
@@ -164,13 +165,13 @@ unsigned int CartesianDecomposition::get_local_bounding_gridbox_index(
     for (auto dimension : {0, 1, 2}) {
       // Since the finite dimensions have already been checked before,
       // if the coordinate is outside of the domain for a dimension correct it to go around
-      if (coordinates[dimension] < 0) {
+      if (coordinates[dimension] < domain_bounds[0][dimension]) {
         coordinates[dimension] +=
-          domain_bounds[dimension];
+          (domain_bounds[1][dimension] - domain_bounds[0][dimension]);
         corrected = true;
-      } else if (coordinates[dimension] > domain_bounds[dimension]) {
+      } else if (coordinates[dimension] > domain_bounds[1][dimension]) {
         coordinates[dimension] -=
-          domain_bounds[dimension];
+          (domain_bounds[1][dimension] - domain_bounds[0][dimension]);
         corrected = true;
       }
     }
@@ -250,9 +251,14 @@ bool CartesianDecomposition::create(std::vector<size_t> ndims, GbxBoundsFromBina
   auto gbx_idx = gfb.gbxidxs.back();
 
   // Geometric coordinates of the end of domain in z,x,y directions
-  domain_bounds[0] = gfb.get_coord3gbxbounds(gbx_idx).second;
-  domain_bounds[1] = gfb.get_coord1gbxbounds(gbx_idx).second;
-  domain_bounds[2] = gfb.get_coord2gbxbounds(gbx_idx).second;
+  // Beginning of the domain
+  domain_bounds[0][0] = gfb.get_coord3gbxbounds(0).first;
+  domain_bounds[0][1] = gfb.get_coord1gbxbounds(0).first;
+  domain_bounds[0][2] = gfb.get_coord2gbxbounds(0).first;
+  // Ending of the domain
+  domain_bounds[1][0] = gfb.get_coord3gbxbounds(gbx_idx).second;
+  domain_bounds[1][1] = gfb.get_coord1gbxbounds(gbx_idx).second;
+  domain_bounds[1][2] = gfb.get_coord2gbxbounds(gbx_idx).second;
 
   // If the comm_size is equal to 1 there will be no suitable factorization,
   // so treat it as a special case

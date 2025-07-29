@@ -45,14 +45,20 @@ size_t CartesianMaps::maps_size() const {
 // TODO(ALL) make domain_decomp call compatible with GPUs and then remove comm_size guard
 KOKKOS_FUNCTION
 size_t CartesianMaps::get_local_ngridboxes() const {
-  return domain_decomposition.get_total_local_gridboxes();
+  if (is_decomp) {
+    return domain_decomposition.get_total_local_gridboxes();
+  }
+  return global_ndims(0) * global_ndims(1) * global_ndims(2);
 }
 
 // TODO(ALL) make domain_decomp call compatible with GPUs and then remove comm_size guard
 KOKKOS_FUNCTION
 size_t CartesianMaps::local_to_global_gridbox_index(unsigned int local_gridbox_index,
                                                     int process) const {
-  return domain_decomposition.local_to_global_gridbox_index(local_gridbox_index, process);
+  if (is_decomp) {
+    return domain_decomposition.local_to_global_gridbox_index(local_gridbox_index, process);
+  }
+  return local_gridbox_index;
 }
 
 /* given coordinates, associated gxbindex is found. The coords may be updated too,
@@ -62,12 +68,15 @@ size_t CartesianMaps::local_to_global_gridbox_index(unsigned int local_gridbox_i
 KOKKOS_FUNCTION
 unsigned int CartesianMaps::get_local_bounding_gridbox_index(const unsigned int gbxindex,
                             double &coord3, double &coord1, double &coord2) const {
-  auto coordinates = std::array<double, 3>{coord3, coord1, coord2};
-  const auto idx = domain_decomposition.get_local_bounding_gridbox_index(coordinates);
-  coord3 = coordinates[0];
-  coord1 = coordinates[1];
-  coord2 = coordinates[2];
-  return idx;
+  if (is_decomp) {
+    auto coordinates = std::array<double, 3>{coord3, coord1, coord2};
+    const auto idx = domain_decomposition.get_local_bounding_gridbox_index(coordinates);
+    coord3 = coordinates[0];
+    coord1 = coordinates[1];
+    coord2 = coordinates[2];
+    return idx;
+  }
+  return get_no_decomposition_bounding_gridbox(*this, gbxindex, coord3, coord1, coord2);
 }
 
 /* returns flag to keep idx the same (flag = 0) or
