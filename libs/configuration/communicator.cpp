@@ -50,7 +50,7 @@ init_communicator::init_communicator(int argc, char *argv[], const Config &confi
       MPI_Init(&argc, &argv);
       MPI_Initialized(&mpi_initialized);
     }
-    std::cout << "MPI initialized" << mpi_initialized << "\n";
+    std::cout << "MPI initialized " << mpi_initialized << "\n";
 
     comm = MPI_COMM_WORLD;
     MPI_Comm_size(comm, &comm_size);
