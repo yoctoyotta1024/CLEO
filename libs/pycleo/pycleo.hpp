@@ -19,7 +19,6 @@
 #ifndef LIBS_PYCLEO_PYCLEO_HPP_
 #define LIBS_PYCLEO_PYCLEO_HPP_
 
-#include <mpi.h>
 #include <pybind11/pybind11.h>
 
 #include <cstdlib>
@@ -33,6 +32,7 @@
 #include "./py_runcleo.hpp"
 #include "./py_superdrops.hpp"
 #include "./py_zarr.hpp"
+#include "configuration/communicator.hpp"
 #include "configuration/config.hpp"
 #include "coupldyn_numpy/pycoupldyn_numpy.hpp"
 
@@ -42,10 +42,7 @@ int test_pycleo(const int i, const int j);
 
 void pycleo_initialize(const Config &config);
 
-void inline pycleo_finalize() {
-  Kokkos::finalize();
-  // MPI_Finalize();
-}
+void inline pycleo_finalize() { Kokkos::finalize(); }
 
 PYBIND11_MODULE(pycleo, m) {
   m.doc() = "Python bindings for selected parts of CLEO's libraries";
@@ -53,7 +50,7 @@ PYBIND11_MODULE(pycleo, m) {
   m.def("test_pycleo", &test_pycleo, "test function for CLEO example", py::arg("i"), py::arg("j"));
 
   m.def("pycleo_initialize", &pycleo_initialize,
-        "necessary initialisation before running CLEO via python ");
+        "necessary initialisation before running CLEO via python", py::arg("config"));
 
   m.def("pycleo_finalize", &pycleo_finalize,
         "necessary finalisation after running CLEO via python ");
