@@ -62,13 +62,15 @@ init_communicator::~init_communicator() {
 
 MPI_Comm init_communicator::get_communicator() {
   if (init_communicator::comm == MPI_COMM_NULL) {
-    // call MPI_Abort and print msg
+    std::cout<<"Communicator not initialized, calling MPI Abort!"<<std::endl;
+    MPI_Abort(comm, 1);
   }
   return comm;
 };
 
 int init_communicator::get_yac_comp_id() {
   if (!(yac_comp_id > 0)) {
+    std::cout<<"Invalid yac_comp_id, calling MPI Abort!"<<std::endl;
     MPI_Abort(comm, 1);
   }
   return init_communicator::yac_comp_id;
