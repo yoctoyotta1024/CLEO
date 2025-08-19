@@ -110,6 +110,9 @@ jobs:
   parallelisation_execution_test:
     runs-on: ubuntu-latest
     needs: setup
+    strategy:
+      matrix:
+        target: [fromfile, fromfile_irreg]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -149,38 +152,20 @@ jobs:
           -DCLEO_YAC_ROOT=${{ runner.temp }}/yac \
           -DCMAKE_MODULE_PATH=${PWD}/libs/coupldyn_yac/cmake
 
-      - name: Parallelization execution test -- fromfile
+      - name: Parallelization execution test
         run: |
-          cd build && make fromfile
-          curl https://swift.dkrz.de/v1/dkrz_8f1b1e92-f07c-41c5-a4ae-8089ec495d87/CLEO/fromfile_data.tar.gz -o fromfile_data.tar.gz
-          tar -zxvf fromfile_data.tar.gz
+          cd build && make ${{ matrix.target }}
+          curl https://swift.dkrz.de/v1/dkrz_8f1b1e92-f07c-41c5-a4ae-8089ec495d87/CLEO/${{ matrix.target }}_data.tar.gz -o ${{ matrix.target }}_data.tar.gz
+          tar -zxvf ${{ matrix.target }}_data.tar.gz
 
-          mpiexec -n 1 ./examples/fromfile/src/fromfile ../examples/fromfile/src/config/fromfile_config.yaml
+          mpiexec -n 1 ./examples/${{ matrix.target }}/src/${{ matrix.target }} ../examples/${{ matrix.target }}/src/config/${{ matrix.target }}_config.yaml
           ls bin
           mv bin/ntasks4 bin_1
-          mpiexec -n 2 --host localhost:64 ./examples/fromfile/src/fromfile ../examples/fromfile/src/config/fromfile_config.yaml
+          mpiexec -n 2 --host localhost:64 ./examples/${{ matrix.target }}/src/${{ matrix.target }} ../examples/${{ matrix.target }}/src/config/${{ matrix.target }}_config.yaml
           mv bin/ntasks4 bin_2
-          mpiexec -n 4 --host localhost:64 ./examples/fromfile/src/fromfile ../examples/fromfile/src/config/fromfile_config.yaml
+          mpiexec -n 4 --host localhost:64 ./examples/${{ matrix.target }}/src/${{ matrix.target }} ../examples/${{ matrix.target }}/src/config/${{ matrix.target }}_config.yaml
           mv bin/ntasks4 bin_4
-          mpiexec -n 8 --host localhost:64 ./examples/fromfile/src/fromfile ../examples/fromfile/src/config/fromfile_config.yaml
+          mpiexec -n 8 --host localhost:64 ./examples/${{ matrix.target }}/src/${{ matrix.target }} ../examples/${{ matrix.target }}/src/config/${{ matrix.target }}_config.yaml
           mv bin/ntasks4 bin_8
-          bash -l ../.github/compare_parallel_results.sh fromfile_sol.zarr
-          rm -rf bin_*
-
-      - name: Parallelization execution test -- fromfile_irreg
-        run: |
-          cd build && make fromfile_irreg
-          curl https://swift.dkrz.de/v1/dkrz_8f1b1e92-f07c-41c5-a4ae-8089ec495d87/CLEO/fromfile_irreg_data.tar.gz -o fromfile_irreg_data.tar.gz
-          tar -zxvf fromfile_irreg_data.tar.gz
-
-          mpiexec -n 1 ./examples/fromfile_irreg/src/fromfile_irreg ../examples/fromfile_irreg/src/config/fromfile_irreg_config.yaml
-          ls bin
-          mv bin/ntasks4 bin_1
-          mpiexec -n 2 --host localhost:64 ./examples/fromfile_irreg/src/fromfile_irreg ../examples/fromfile_irreg/src/config/fromfile_irreg_config.yaml
-          mv bin/ntasks4 bin_2
-          mpiexec -n 4 --host localhost:64 ./examples/fromfile_irreg/src/fromfile_irreg ../examples/fromfile_irreg/src/config/fromfile_irreg_config.yaml
-          mv bin/ntasks4 bin_4
-          mpiexec -n 8 --host localhost:64 ./examples/fromfile_irreg/src/fromfile_irreg ../examples/fromfile_irreg/src/config/fromfile_irreg_config.yaml
-          mv bin/ntasks4 bin_8
-          bash -l ../.github/compare_parallel_results.sh fromfile_irreg_sol.zarr
+          bash -l ../.github/compare_parallel_results.sh ${{ matrix.target }}_sol.zarr
           rm -rf bin_*
