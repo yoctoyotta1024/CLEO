@@ -25,6 +25,7 @@
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
 #include "cartesiandomain/movement/cartesian_movement.hpp"
+#include "configuration/communicator.hpp"
 #include "configuration/config.hpp"
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
 #include "coupldyn_fromfile/fromfilecomms.hpp"
@@ -173,20 +174,13 @@ inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset &d
 int main(int argc, char *argv[]) {
   // print_type_sizes(argc, argv);
 
-  MPI_Init(&argc, &argv);
-
-  int comm_size;
-  MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
-  if (comm_size > 1) {
-    std::cout << "ERROR: The current example is not prepared"
-              << " to be run with more than one MPI process" << std::endl;
-    MPI_Abort(MPI_COMM_WORLD, 1);
-  }
-
   Kokkos::Timer kokkostimer;
 
   /* Read input parameters from configuration file(s) */
   const Config config("/home/m/m300950/CLEO/roughpaper/scratch/share/config.yaml");
+
+  /* Initialize Communicator here */
+  init_communicator init_comm(argc, argv, config);
 
   Kokkos::initialize(config.get_kokkos_initialization_settings());
   {
@@ -222,8 +216,6 @@ int main(int argc, char *argv[]) {
   std::cout << "-------------------------------\n"
                "Total Program Duration: "
             << ttot << "s \n-------------------------------\n";
-
-  MPI_Finalize();
 
   return 0;
 }
