@@ -66,11 +66,11 @@ size_t CartesianMaps::local_to_global_gridbox_index(unsigned int local_gridbox_i
  */
 // TODO(ALL) make domain_decomp call compatible with GPUs and then remove comm_size guard
 KOKKOS_FUNCTION
-unsigned int CartesianMaps::get_local_bounding_gridbox(const unsigned int gbxindex, double &coord3,
-                                                       double &coord1, double &coord2) const {
+unsigned int CartesianMaps::get_local_bounding_gridbox_index(const unsigned int gbxindex,
+                            double &coord3, double &coord1, double &coord2) const {
   if (is_decomp) {
     auto coordinates = std::array<double, 3>{coord3, coord1, coord2};
-    const auto idx = domain_decomposition.get_local_bounding_gridbox(coordinates);
+    const auto idx = domain_decomposition.get_local_bounding_gridbox_index(coordinates);
     coord3 = coordinates[0];
     coord1 = coordinates[1];
     coord2 = coordinates[2];

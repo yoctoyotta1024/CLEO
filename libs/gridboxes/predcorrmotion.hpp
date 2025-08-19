@@ -88,7 +88,7 @@ struct PredCorrMotion {
     auto coord3 = drop.get_coord3();
     auto coord1 = drop.get_coord1();
     auto coord2 = drop.get_coord2();
-    const auto idx = gbxmaps.get_local_bounding_gridbox(gbxindex, coord3, coord1,
+    const auto idx = gbxmaps.get_local_bounding_gridbox_index(gbxindex, coord3, coord1,
                                                         coord2);  // drop_coords may change(!)
 
     // Sets the updated superdroplet coordinates and gridbox index
