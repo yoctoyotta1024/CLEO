@@ -151,9 +151,13 @@ jobs:
 
       - name: Parallelization execution test
         run: |
-          cd build && make fromfile
-          wget https://nextcloud.dkrz.de/index.php/s/SsTgPSLGjK3929g/download/fromfile_data.tar.gz
-          tar -xvf fromfile_data.tar.gz
+          cd build && make fromfile && make fromfile_irreg
+          curl https://swift.dkrz.de/v1/dkrz_8f1b1e92-f07c-41c5-a4ae-8089ec495d87/CLEO/fromfile_data.tar.gz -o fromfile_data.tar.gz
+          curl https://swift.dkrz.de/v1/dkrz_8f1b1e92-f07c-41c5-a4ae-8089ec495d87/CLEO/fromfile_irreg_data.tar.gz -o fromfile_irreg_data.tar.gz
+
+          tar -xzf fromfile_data.tar.gz
+          tar -xzf fromfile_irreg_data.tar.gz
+
           mpiexec -n 1 ./examples/fromfile/src/fromfile ../examples/fromfile/src/config/fromfile_config.yaml
           ls bin
           mv bin/ntasks4 bin_1
