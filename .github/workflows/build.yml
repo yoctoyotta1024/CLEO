@@ -165,6 +165,7 @@ jobs:
           mpiexec -n 8 --host localhost:64 ./examples/fromfile/src/fromfile ../examples/fromfile/src/config/fromfile_config.yaml
           mv bin/ntasks4 bin_8
           bash -l ../.github/compare_parallel_results.sh fromfile_sol.zarr
+          rm -rf bin_*
 
       - name: Parallelization execution test -- fromfile_irreg
         run: |
@@ -182,3 +183,4 @@ jobs:
           mpiexec -n 8 --host localhost:64 ./examples/fromfile_irreg/src/fromfile_irreg ../examples/fromfile_irreg/src/config/fromfile_irreg_config.yaml
           mv bin/ntasks4 bin_8
           bash -l ../.github/compare_parallel_results.sh fromfile_irreg_sol.zarr
+          rm -rf bin_*
