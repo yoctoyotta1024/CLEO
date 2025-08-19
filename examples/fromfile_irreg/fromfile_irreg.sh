@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=fromfile_irreg
+#SBATCH --job-name=irreg_fromfile_irreg
 #SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=4
