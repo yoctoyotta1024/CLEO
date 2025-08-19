@@ -22,11 +22,12 @@ the end of your ``main.cpp`` contains a main function that looks something like 
       throw std::invalid_argument("configuration file(s) not specified");
     }
 
-    MPI_Init(&argc, &argv);
-
     /* Read input parameters from configuration file(s) */
     const auto config_filename = std::filesystem::path(argv[1]);  // path to configuration file
     const auto config = Config(config_filename);
+
+    /* Initialize Communicator here */
+    init_communicator init_comm(argc, argv, config);
 
     /* Initialise Kokkos parallel environment */
     Kokkos::initialize(config.get_kokkos_initialization_settings());
@@ -58,8 +59,6 @@ the end of your ``main.cpp`` contains a main function that looks something like 
       runcleo(initconds, tsteps.get_t_end());
     }
     Kokkos::finalize();
-
-    MPI_Finalize();
 
     return 0;
   }
