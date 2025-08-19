@@ -19,7 +19,6 @@
 #ifndef LIBS_PYCLEO_COUPLDYN_NUMPY_PYCOUPLDYN_NUMPY_HPP_
 #define LIBS_PYCLEO_COUPLDYN_NUMPY_PYCOUPLDYN_NUMPY_HPP_
 
-#include <mpi.h>
 #include <pybind11/pybind11.h>
 
 #include <iostream>
