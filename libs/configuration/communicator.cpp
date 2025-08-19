@@ -42,8 +42,16 @@ init_communicator::init_communicator(int argc, char *argv[], const Config &confi
     MPI_Comm_rank(comm, &my_rank);
 
   } else {
-    std::cout << "yac is not present" << yac_present;
-    MPI_Init(&argc, &argv);
+    std::cout << "yac is not present " << yac_present << "\n";
+
+    int mpi_initialized;
+    MPI_Initialized(&mpi_initialized);
+    if (!mpi_initialized) {
+      MPI_Init(&argc, &argv);
+      MPI_Initialized(&mpi_initialized);
+    }
+    std::cout << "MPI initialized" << mpi_initialized << "\n";
+
     comm = MPI_COMM_WORLD;
     MPI_Comm_size(comm, &comm_size);
     MPI_Comm_rank(comm, &my_rank);
