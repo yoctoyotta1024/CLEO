@@ -4,8 +4,4 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
 endif()
 
 # subdirectories for specific examples of CLEO
-add_subdirectory(golovin/src EXCLUDE_FROM_ALL)
-add_subdirectory(long/src EXCLUDE_FROM_ALL)
-add_subdirectory(lowlist/src EXCLUDE_FROM_ALL)
-add_subdirectory(szakallurbich/src EXCLUDE_FROM_ALL)
-add_subdirectory(testikstraub/src EXCLUDE_FROM_ALL)
+add_subdirectory(src EXCLUDE_FROM_ALL)

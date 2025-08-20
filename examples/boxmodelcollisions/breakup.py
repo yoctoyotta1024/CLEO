@@ -146,12 +146,7 @@ def get_executable(path2build, kernel):
         "testikstraub": "testikstraubcolls",
     }
     executable = (
-        path2build
-        / "examples"
-        / "boxmodelcollisions"
-        / kernel
-        / "src"
-        / executables[kernel]
+        path2build / "examples" / "boxmodelcollisions" / "src" / executables[kernel]
     )
 
     return executable

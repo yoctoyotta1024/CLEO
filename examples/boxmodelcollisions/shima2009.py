@@ -237,9 +237,7 @@ if "golovin" in kernels:
     ### -------------------- RUN CLEO EXECUTABLE ------------------- ###
     ### ------------------------------------------------------------ ###
     editconfigfile.edit_config_params(config_filename, params_1)
-    executable = (
-        path2build / "examples" / "boxmodelcollisions" / "golovin" / "src" / "golcolls"
-    )
+    executable = path2build / "examples" / "boxmodelcollisions" / "src" / "golcolls"
     run_exectuable(path2build, dataset, executable, config_filename)
     ### ------------------------------------------------------------ ###
     ### ------------------------------------------------------------ ###
@@ -274,9 +272,7 @@ if "long1" in kernels:
     ### -------------------- RUN CLEO EXECUTABLE ------------------- ###
     ### ------------------------------------------------------------ ###
     editconfigfile.edit_config_params(config_filename, params_1)
-    executable = (
-        path2build / "examples" / "boxmodelcollisions" / "long" / "src" / "longcolls"
-    )
+    executable = path2build / "examples" / "boxmodelcollisions" / "src" / "longcolls"
     run_exectuable(path2build, dataset, executable, config_filename)
     ### ------------------------------------------------------------ ###
     ### ------------------------------------------------------------ ###
@@ -311,9 +307,7 @@ if "long2" in kernels:
     ### -------------------- RUN CLEO EXECUTABLE ------------------- ###
     ### ------------------------------------------------------------ ###
     editconfigfile.edit_config_params(config_filename, params_2)
-    executable = (
-        path2build / "examples" / "boxmodelcollisions" / "long" / "src" / "longcolls"
-    )
+    executable = path2build / "examples" / "boxmodelcollisions" / "src" / "longcolls"
     run_exectuable(path2build, dataset, executable, config_filename)
     ### ------------------------------------------------------------ ###
     ### ------------------------------------------------------------ ###
