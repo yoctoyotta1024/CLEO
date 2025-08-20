@@ -12,8 +12,6 @@
 #SBATCH --output=./bubble3d_out.%j.out
 #SBATCH --error=./bubble3d_err.%j.out
 
-# TODO(all): complete python script(s) for example (and fix MPI linker error?)
-
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
 ### ------ You MUST edit these lines to set your ------- ###
@@ -30,7 +28,7 @@ executables="bubble3d"
 
 pythonscript=${path2CLEO}/examples/bubble3d/bubble3d.py
 src_config_filename=${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml
-script_args="${src_config_filename}"
+script_args="${src_config_filename} --do_inputfiles --do_run_executable --do_plot_results"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
