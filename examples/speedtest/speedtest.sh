@@ -36,6 +36,7 @@ mkdir ${path2build}
 mkdir ${path2build}/bin
 
 ### ---- run test for different types of parallelism ---- ###
+compilername="gcc"
 buildtypes=("cuda" "openmp" "threads" "serial")
 for buildtype in "${buildtypes[@]}"
 do
@@ -50,7 +51,7 @@ do
 
   ### ---------- build, compile and run example ---------- ###
   ${path2CLEO}/examples/run_example_levante.sh \
-    ${buildtype} ${path2CLEO} ${path2build_test} "${build_flags}" \
+    ${buildtype} ${compilername} ${path2CLEO} ${path2build_test} "${build_flags}" \
     "${executables}" ${pythonscript} "${script_args}"
   ### ---------------------------------------------------- ###
 done

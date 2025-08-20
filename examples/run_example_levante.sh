@@ -24,12 +24,13 @@
 ### --------------  python script to run. -------------- ###
 ### ---------------------------------------------------- ###
 buildtype=$1
-path2CLEO=$2
-path2build=$3
-build_flags=$4
-executables="$5"
-pythonscript=$6
-script_args="$7"
+compilername=$2
+path2CLEO=$3
+path2build=$4
+build_flags=$5
+executables="$6"
+pythonscript=$7
+script_args="$8"
 
 cleoenv=/work/bm1183/m300950/bin/envs/cleoenv
 python=${cleoenv}/bin/python3
@@ -37,11 +38,11 @@ enabledebug=false
 make_clean=false
 stacksize_limit=204800 # ulimit -s [stacksize_limit] (kB)
 
-if [[ "${buildtype}" == "cuda" ]]
+if [[ "${buildtype}" == "cuda" && "${compilername}" != "gcc" ]];
 then
-  compilername=gcc
-else
-  compilername=intel
+  echo "CUDA build on Levante currently only compatible with gcc compiler"
+  echo "-> please use compilername=gcc"
+  exit 1
 fi
 
 if [[ "${compilername}" == "gcc" ]]

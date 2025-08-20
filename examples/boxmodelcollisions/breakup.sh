@@ -19,6 +19,7 @@
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
 buildtype="openmp"
+compilername="intel"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_colls0d/${buildtype}/
 build_flags="-DCLEO_COUPLED_DYNAMICS=null -DCLEO_DOMAIN=cartesian \
@@ -34,6 +35,6 @@ script_args="${configfile} long lowlist szakallurbich testikstraub"
 
 ### ---------- build, compile and run example ---------- ###
 ${path2CLEO}/examples/run_example_levante.sh \
-  ${buildtype} ${path2CLEO} ${path2build} "${build_flags}" \
+  ${buildtype} ${compilername} ${path2CLEO} ${path2build} "${build_flags}" \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###

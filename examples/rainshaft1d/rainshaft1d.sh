@@ -18,6 +18,7 @@
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
 buildtype="openmp"
+compilername="gcc"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_rshaft1d/
 build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
@@ -33,6 +34,6 @@ script_args="${configfile}"
 
 ### ---------- build, compile and run example ---------- ###
 ${path2CLEO}/examples/run_example_levante.sh \
-  ${buildtype} ${path2CLEO} ${path2build} "${build_flags}" \
+  ${buildtype} ${compilername} ${path2CLEO} ${path2build} "${build_flags}" \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###
