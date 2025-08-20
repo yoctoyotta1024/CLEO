@@ -33,8 +33,6 @@ def plot_totnsupers(time, totnsupers, savename="", fig=None, ax=None):
         fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
         print("Figure .png saved as: " + str(savename))
 
-    plt.show()
-
 
 def plot_domainmassmoments(time, massmoms, savename=""):
     def totmassmom(massmom):
@@ -64,5 +62,3 @@ def plot_domainmassmoments(time, massmoms, savename=""):
     if savename != "":
         fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
         print("Figure .png saved as: " + str(savename))
-
-    plt.show()

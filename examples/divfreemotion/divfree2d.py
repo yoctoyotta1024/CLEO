@@ -21,6 +21,7 @@ import os
 import shutil
 import subprocess
 import sys
+import matplotlib.pyplot as plt
 from pathlib import Path
 import divfree2d_inputfiles
 
@@ -110,11 +111,13 @@ maxnsupers = pyzarr.get_totnsupers(dataset)
 # 4. plot results
 savename = savefigpath / "df2d_maxnsupers_validation.png"
 pltmoms.plot_totnsupers(time, maxnsupers, savename=savename)
+plt.show()
 
 nsample = 500
 savename = savefigpath / "df2d_motion2d_validation.png"
 pltsds.plot_randomsample_superdrops_2dmotion(
     superdrops, nsample, savename=savename, arrows=False
 )
+plt.show()
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###

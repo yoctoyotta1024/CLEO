@@ -25,6 +25,7 @@ import shutil
 import subprocess
 import sys
 import numpy as np
+import matplotlib.pyplot as plt
 from pathlib import Path
 
 path2CLEO = Path(sys.argv[1])
@@ -55,8 +56,8 @@ grid_filename = sharepath / "cuspbifurc_dimlessGBxboundaries.dat"
 setupfile = binpath / "cuspbifurc_setup.txt"
 dataset = binpath / "cuspbifurc_sol.zarr"
 
-# booleans for [making, saving] initialisation figures
-isfigures = [True, True]
+# booleans for [showing, saving] initialisation figures
+isfigures = [False, True]
 savefigpath = binpath
 
 # settings for 0D Model (number of SD and grid coordinates)
@@ -166,6 +167,7 @@ radii = superdrops.sample(
 ).radius()
 savename = savefigpath / "cuspbifurc_SDgrowth.png"
 pltsds.individ_radiusgrowths_figure(time, radii, savename=savename)
+plt.show()
 
 attrs = ["radius", "xi", "msol"]
 sd0 = superdrops.sample("sdId", sample_values=0, variables2sample=attrs)
@@ -187,3 +189,4 @@ as2017fig.arabas_shima_2017_fig(
     numconc,
     savename2,
 )
+plt.show()

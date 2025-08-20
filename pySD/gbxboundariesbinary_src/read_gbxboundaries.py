@@ -197,7 +197,11 @@ def halfcoords_from_gbxbounds(gbxbounds, isprint=True):
 
 
 def plot_gridboxboundaries(
-    constants_filename, grid_filename, savefigpath, savefig, savelabel=""
+    constants_filename,
+    grid_filename,
+    savefig=False,
+    savefigpath=None,
+    savelabel="",
 ):
     plt.rcParams.update({"font.size": 14})
 
@@ -233,6 +237,7 @@ def plot_gridboxboundaries(
         axs[i].legend()
 
     fig.tight_layout()
+
     if savefig:
         savename = savefigpath / Path(f"gridboxboundaries{savelabel}.png")
         fig.savefig(
@@ -243,8 +248,6 @@ def plot_gridboxboundaries(
             format="png",
         )
         print("Figure .png saved as: " + str(savename))
-    plt.show()
-    plt.close()
 
 
 def calc_domainvol(zhalf, xhalf, yhalf):

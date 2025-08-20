@@ -55,8 +55,8 @@ sharepath = path2build / "share"
 initsupers_filename = sharepath / "breakup_dimlessSDsinit.dat"
 grid_filename = sharepath / "breakup_dimlessGBxboundaries.dat"
 
-# booleans for [making, saving] initialisation figures
-isfigures = [True, True]
+# booleans for [showing, saving] initialisation figures
+isfigures = [False, True]
 savefigpath = binpath
 
 ### --- settings for 0-D Model gridbox boundaries --- ###
@@ -215,7 +215,7 @@ def plot_onekernel_results(
     )  # = ~0.2 for guassian smoothing
     plotwitherr = False
     withgol = False
-    fig, ax = shima2009fig.plot_validation_figure(
+    shima2009fig.plot_validation_figure(
         plotwitherr,
         time,
         superdrops,
@@ -228,6 +228,7 @@ def plot_onekernel_results(
         savename=savename,
         withgol=withgol,
     )
+    plt.show()
 
 
 def plot_allkernels_results(

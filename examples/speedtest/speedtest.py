@@ -58,7 +58,7 @@ setupfile = binpath / "spd_setup.txt"
 dataset = binpath / "spd_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
-isfigures = [False, False]  # booleans for [making, saving] initialisation figures
+isfigures = [False, False]  # booleans for [showing, saving] initialisation figures
 savefigpath = outputdir  # directory for saving figures
 SDgbxs2plt = [0]  # gbxindex of SDs to plot (nb. "all" can be very slow)
 

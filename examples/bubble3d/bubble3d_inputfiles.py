@@ -88,8 +88,8 @@ def main(
     # path and filenames for creating initial SD conditions
     constants_filename = path2CLEO / Path("libs/cleoconstants.hpp")
     ### --- plotting initialisation figures --- ###
-    # booleans for [making, saving] initialisation figures
-    isfigures = [True, True]  # TODO(CB): move into args
+    # booleans for [showing, saving] initialisation figures
+    isfigures = [False, True]  # TODO(CB): move into args
     savefigpath = Path(path2build) / "bin"  # binpath # TODO(CB): move into args
 
     ### --- settings for 3-D gridbox boundaries --- ###

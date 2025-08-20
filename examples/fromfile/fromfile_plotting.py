@@ -27,6 +27,8 @@ def main(
     dataset,
     savefigpath,
 ):
+    import matplotlib.pyplot as plt
+
     sys.path.append(str(path2CLEO))  # imports from pySD
     sys.path.append(
         str(path2CLEO / "examples" / "exampleplotting")
@@ -51,6 +53,7 @@ def main(
     # plot super-droplet results
     savename = savefigpath / "fromfile_maxnsupers_validation.png"
     pltmoms.plot_totnsupers(time, maxnsupers, savename=savename)
+    plt.show()
 
     nsample = 1000
     savename = savefigpath / "fromfile_motion2d_validation.png"
@@ -61,10 +64,16 @@ def main(
         arrows=False,
         israndom=False,
     )
+    plt.show()
 
     # plot thermodynamics results
     plot_output_thermo.plot_domain_thermodynamics_timeseries(
-        time, gbxs, thermo, winds, savedir=savefigpath
+        time,
+        gbxs,
+        thermo,
+        winds,
+        savedir=savefigpath,
+        do_show=True,
     )
 
 

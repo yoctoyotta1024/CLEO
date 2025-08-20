@@ -200,8 +200,8 @@ def plot_thermodynamics(
     config_filename,
     grid_filename,
     thermofiles,
-    savefigpath,
-    savefig,
+    savefig=False,
+    savefigpath=None,
     savelabel="",
 ):
     plt.rcParams.update({"font.size": 14})
@@ -252,8 +252,6 @@ def plot_thermodynamics(
             savefig,
             savelabel=savelabel,
         )
-
-    plt.close()
 
 
 def try1dplot(ax, nplots, data, zfull, label):
@@ -323,6 +321,7 @@ def plot_1dprofiles(
         ax.set_ylabel("z /km")
 
     fig.tight_layout()
+
     if savefig:
         savename = savefigpath / Path(f"thermo1dalltimeprofiles{savelabel}.png")
         fig.savefig(
@@ -333,7 +332,6 @@ def plot_1dprofiles(
             format="png",
         )
         print("Figure .png saved as: " + str(savefigpath))
-    plt.show()
 
 
 def plot_2dmean(ax, meanfunc, xxh, zzh, var, label, unit, norm, cmap):
@@ -450,6 +448,7 @@ def plot_2dcolormaps(
         ax.set_xlabel("x /km")
 
     fig.tight_layout()
+
     if savefig:
         savename = savefigpath / Path(f"thermo2dmeanprofiles{savelabel}.png")
         fig.savefig(
@@ -460,7 +459,6 @@ def plot_2dcolormaps(
             format="png",
         )
         print("Figure .png saved as: " + str(savename))
-    plt.show()
 
 
 def plot_2dwindfield(
@@ -487,6 +485,7 @@ def plot_2dwindfield(
         ax.set_aspect("equal")
 
     fig.tight_layout()
+
     if savefig:
         savename = savefigpath / Path(f"thermowindprofiles{savelabel}.png")
         fig.savefig(
@@ -497,4 +496,3 @@ def plot_2dwindfield(
             format="png",
         )
         print("Figure .png saved as: " + str(savename))
-    plt.show()

@@ -194,6 +194,4 @@ def arabas_shima_2017_fig(
         fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
         print("Figure .png saved as: " + str(savename))
 
-    plt.show()
-
     return fig, axs

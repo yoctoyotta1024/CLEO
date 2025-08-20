@@ -28,7 +28,7 @@ def main(
     grid_filename,
     initsupers_filename,
     thermofiles,
-    isfigures=[True, True],  # booleans for [making, saving] initialisation figures
+    isfigures=[True, True],  # booleans for [showing, saving] initialisation figures
 ):
     import numpy as np
 

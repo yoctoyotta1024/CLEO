@@ -17,6 +17,9 @@ Script to help with generating and plotting input files
 """
 
 
+import matplotlib.pyplot as plt
+
+
 def generate_gridbox_boundaries(
     grid_filename,
     zgrid,
@@ -25,10 +28,10 @@ def generate_gridbox_boundaries(
     constants_filename,
     isprintinfo=False,
     isfigures=[False, False],
-    savefigpath=False,
+    savefigpath=None,
     savelabel="",
 ):
-    """write gridbox boundaries binary. [Makes, saves] figures if isfigures = [True, True]"""
+    """write gridbox boundaries binary. [shows, saves] figures if isfigures = [True, True]"""
     from .gbxboundariesbinary_src import create_gbxboundaries as cgrid
     from .gbxboundariesbinary_src import read_gbxboundaries as rgrid
 
@@ -39,14 +42,17 @@ def generate_gridbox_boundaries(
     if isprintinfo:
         rgrid.print_domain_info(constants_filename, grid_filename)
 
-    if isfigures[0]:
+    if any(isfigures):
         rgrid.plot_gridboxboundaries(
             constants_filename,
             grid_filename,
-            savefigpath,
-            isfigures[1],
+            savefig=isfigures[1],
+            savefigpath=savefigpath,
             savelabel=savelabel,
         )
+        if isfigures[0]:
+            plt.show()
+        plt.close("all")
 
 
 def generate_initial_superdroplet_conditions(
@@ -60,11 +66,11 @@ def generate_initial_superdroplet_conditions(
     numconc_tolerance=0.0,
     isprintinfo=False,
     isfigures=[False, False],
-    savefigpath=False,
+    savefigpath=None,
     gbxs2plt=0,
     savelabel="",
 ):
-    """write initial superdroplets binary. [Makes, saves] figures if isfigures = [True, True]"""
+    """write initial superdroplets binary. [shows, saves] figures if isfigures = [True, True]"""
     from .initsuperdropsbinary_src import create_initsuperdrops as csupers
     from .initsuperdropsbinary_src import read_initsuperdrops as rsupers
 
@@ -85,17 +91,20 @@ def generate_initial_superdroplet_conditions(
             initsupers_filename, config_filename, constants_filename, grid_filename
         )
 
-    if isfigures[0]:
+    if any(isfigures):
         rsupers.plot_initGBxs_distribs(
             config_filename,
             constants_filename,
             initsupers_filename,
             grid_filename,
-            savefigpath,
-            isfigures[1],
             gbxs2plt,
+            savefig=isfigures[1],
+            savefigpath=savefigpath,
             savelabel=savelabel,
         )
+        if isfigures[0]:
+            plt.show()
+        plt.close("all")
 
 
 def generate_thermodynamics_conditions_fromfile(
@@ -105,10 +114,10 @@ def generate_thermodynamics_conditions_fromfile(
     constants_filename,
     grid_filename,
     isfigures=[False, False],
-    savefigpath=False,
+    savefigpath=None,
     savelabel="",
 ):
-    """write thermodynamics binaries. [Makes, saves] figures if isfigures = [True, True]"""
+    """write thermodynamics binaries. [shows, saves] figures if isfigures = [True, True]"""
     from .thermobinary_src import create_thermodynamics as cthermo
     from .thermobinary_src import read_thermodynamics as rthermo
 
@@ -120,13 +129,16 @@ def generate_thermodynamics_conditions_fromfile(
         grid_filename,
     )
 
-    if isfigures[0]:
+    if any(isfigures):
         rthermo.plot_thermodynamics(
             constants_filename,
             config_filename,
             grid_filename,
             thermofiles,
-            savefigpath,
-            isfigures[1],
+            savefig=isfigures[1],
+            savefigpath=savefigpath,
             savelabel=savelabel,
         )
+        if isfigures[0]:
+            plt.show()
+        plt.close("all")

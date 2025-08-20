@@ -23,6 +23,7 @@ import subprocess
 import sys
 import numpy as np
 import random
+import matplotlib.pyplot as plt
 from pathlib import Path
 
 path2CLEO = Path(sys.argv[1])
@@ -58,7 +59,7 @@ setupfile = binpath / "rain1d_setup.txt"
 dataset = binpath / "rain1d_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
-isfigures = [True, True]  # booleans for [making, saving] initialisation figures
+isfigures = [False, True]  # booleans for [showing, saving] initialisation figures
 savefigpath = binpath
 SDgbxs2plt = list(range(39, 124))
 SDgbxs2plt = [random.choice(SDgbxs2plt)]  # choose random gbx from list to plot
@@ -213,13 +214,16 @@ massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
 # plot figures
 savename = savefigpath / "rain1d_totnsupers.png"
 pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
+plt.show()
 
 savename = savefigpath / "rain1d_domainmassmoms.png"
 pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
+plt.show()
 
 nsample = 500
 savename = savefigpath / "rain1d_randomsample.png"
 pltsds.plot_randomsample_superdrops(time, superdrops, nsample, savename=savename)
+plt.show()
 
 ### ----- plot 1-D .gif animations ----- ###
 nframes = len(time.mins)

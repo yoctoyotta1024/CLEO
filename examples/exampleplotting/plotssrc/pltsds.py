@@ -61,8 +61,6 @@ def individ_radiusgrowths_figure(time, radii, savename=""):
         fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
         print("Figure .png saved as: " + str(savename))
 
-    plt.show()
-
     return fig, ax
 
 
@@ -133,8 +131,6 @@ def plot_randomsample_superdrops(time, superdrops, nsample, savename=""):
     if savename != "":
         fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
         print("Figure .png saved as: " + str(savename))
-
-    plt.show()
 
     return fig, axs
 
@@ -215,7 +211,5 @@ def plot_randomsample_superdrops_2dmotion(
     if savename != "":
         fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
         print("Figure .png saved as: " + str(savename))
-
-    plt.show()
 
     return fig, ax

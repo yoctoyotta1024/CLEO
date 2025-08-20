@@ -23,6 +23,7 @@ import shutil
 import subprocess
 import sys
 import numpy as np
+import matplotlib.pyplot as plt
 from pathlib import Path
 from matplotlib.colors import LogNorm, Normalize
 
@@ -59,7 +60,7 @@ setupfile = binpath / "const2d_setup.txt"
 dataset = binpath / "const2d_sol.zarr"
 
 ### --- plotting initialisation figures --- ###
-isfigures = [True, True]  # booleans for [making, saving] initialisation figures
+isfigures = [False, True]  # booleans for [showing, saving] initialisation figures
 savefigpath = binpath
 SDgbxs2plt = [0]  # gbxindex of SDs to plot (nb. "all" can be very slow)
 
@@ -212,19 +213,23 @@ massmoms = pyzarr.get_massmoms(dataset, config["ntime"], gbxs["ndims"])
 # plot figures
 savename = savefigpath / "const2d_totnsupers.png"
 pltmoms.plot_totnsupers(time, totnsupers, savename=savename)
+plt.show()
 
 savename = savefigpath / "const2d_domainmassmoms.png"
 pltmoms.plot_domainmassmoments(time, massmoms, savename=savename)
+plt.show()
 
 nsample = 500
 savename = savefigpath / "const2d_randomsample.png"
 pltsds.plot_randomsample_superdrops(time, superdrops, nsample, savename=savename)
+plt.show()
 
 savename = savefigpath / "const2d_motion2d.png"
 superdrops.attach_time(time.secs, "s", do_reshape=True, var4reshape="sdId")
 pltsds.plot_randomsample_superdrops_2dmotion(
     superdrops, nsample, savename=savename, arrows=False, cmap_var=["viridis", "time"]
 )
+plt.show()
 
 
 ### ----- plot 1-D .gif animations ----- ###

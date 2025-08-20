@@ -78,7 +78,7 @@ do_plot_results = True
 if args.do_plot_results == "FALSE":
     do_plot_results = False
 
-isfigures = [True, True]  # booleans for [making, saving] initialisation figures
+isfigures = [False, True]  # booleans for [showing, saving] initialisation figures
 
 ### ---------------------------------------------------------------- ###
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
