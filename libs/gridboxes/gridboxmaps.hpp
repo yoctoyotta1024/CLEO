@@ -50,7 +50,7 @@ concept GridboxMaps = requires(GbxMaps gbxmaps, unsigned int idx, size_t s, doub
 
   { gbxmaps.global_to_local_gbxindex(s) } -> std::convertible_to<unsigned int>;
   { gbxmaps.local_to_global_gridbox_index(idx) } -> std::convertible_to<size_t>;
-  { gbxmaps.get_local_bounding_gridbox(idx, d, d, d) } -> std::convertible_to<unsigned int>;
+  { gbxmaps.get_local_bounding_gridbox_index(idx, d, d, d) } -> std::convertible_to<unsigned int>;
 };
 
 #endif  // LIBS_GRIDBOXES_GRIDBOXMAPS_HPP_

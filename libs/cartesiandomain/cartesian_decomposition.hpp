@@ -20,12 +20,22 @@
 #ifndef LIBS_CARTESIANDOMAIN_CARTESIAN_DECOMPOSITION_HPP_
 #define LIBS_CARTESIANDOMAIN_CARTESIAN_DECOMPOSITION_HPP_
 
+#include <mpi.h>
+
+#include <algorithm>
 #include <array>
+#include <cassert>
+#include <cmath>
 #include <cstddef>
+#include <iostream>
+#include <limits>
 #include <map>
 #include <vector>
 
 #include "../cleoconstants.hpp"
+#include "cartesiandomain/domainboundaries.hpp"
+#include "configuration/communicator.hpp"
+#include "initialise/gbx_bounds_from_binary.hpp"
 
 class CartesianDecomposition {
  private:
@@ -41,8 +51,13 @@ class CartesianDecomposition {
   std::array<double, 3> partition_begin_coordinates;
   std::array<double, 3> partition_end_coordinates;
 
-  // Sizes of a gridbox [z, x, y]
-  std::array<double, 3> gridbox_size;
+  // Geometric bounds of a gridbox in z, x, y directions
+  std::vector<std::vector<double>> gridbox_bounds;
+
+  // Geometric bounds of the entire domain
+  // First Index 0 : Lower bounds in z, x, y directions
+  // First Index 1 : Upper bounds in z, x, y directions
+  std::array<std::array<double, 3>, 2> domain_bounds;
 
   // Behavior of each dimension, being either periodic or finite
   std::array<size_t, 3> dimension_bound_behavior;
@@ -68,8 +83,7 @@ class CartesianDecomposition {
   ~CartesianDecomposition();
 
   // Creates the decomposition
-  bool create(std::vector<size_t> ndims, double gridbox_z_size, double gridbox_x_size,
-              double gridbox_y_size);
+  bool create(std::vector<size_t> ndims, GbxBoundsFromBinary gfb);
 
   // Local and global amount of gridboxes
   size_t get_total_local_gridboxes() const;
@@ -89,9 +103,9 @@ class CartesianDecomposition {
   int local_to_global_gridbox_index(size_t local_gridbox_index, int process = -1) const;
   int global_to_local_gridbox_index(size_t global_gridbox_index) const;
   int get_gridbox_owner_process(size_t global_gridbox_index) const;
-  unsigned int get_local_bounding_gridbox(std::array<double, 3> &coordinates) const;
-  void set_gridbox_size(double z_size, double x_size, double y_size);
-
+  unsigned int get_local_bounding_gridbox_index(std::array<double, 3> &coordinates) const;
+  // void set_gridbox_size(double z_size, double x_size, double y_size);
+  void set_gridbox_bounds(GbxBoundsFromBinary gfb);
   // Sets the behavior of all dimensions
   void set_dimensions_bound_behavior(std::array<size_t, 3> behaviors);
 };
@@ -123,5 +137,7 @@ void factorize_helper(int n, int start, std::vector<size_t> &current,
                       std::vector<std::vector<size_t>> &result);
 void heap_permutation(std::vector<std::vector<size_t>> &results, std::vector<size_t> arr, int size);
 int get_multiplications_to_turn_int(double entry_value);
-
+int binary_search(std::array<double, 3> &coordinates,
+    int dimension, std::array<size_t, 3> partition_size,
+    std::vector<std::vector<double>> gridbox_bounds);
 #endif  // LIBS_CARTESIANDOMAIN_CARTESIAN_DECOMPOSITION_HPP_

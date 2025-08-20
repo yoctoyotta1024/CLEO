@@ -58,11 +58,7 @@ CartesianMaps create_cartesian_maps(const size_t ngbxs, const unsigned int nspac
 
   auto gbxmaps = CartesianMaps();
 
-  gbxmaps.create_decomposition(
-      gfb.ndims, gfb.get_coord3gbxbounds(0).second - gfb.get_coord3gbxbounds(0).first,
-      gfb.get_coord1gbxbounds(0).second - gfb.get_coord1gbxbounds(0).first,
-      gfb.get_coord2gbxbounds(0).second - gfb.get_coord2gbxbounds(0).first);
-
+  gbxmaps.create_decomposition(gfb.ndims, gfb);
   set_cartesian_maps(nspacedims, gfb, gbxmaps);
 
   set_maps_ndims(gfb.ndims, gbxmaps);
@@ -119,7 +115,7 @@ local index by subtracting gridboxes_slice_start
 kkpair_size_t correct_neighbor_indices(kkpair_size_t neighbours, const std::vector<size_t> ndims,
                                        const CartesianDecomposition &domain_decomposition) {
   int my_rank;
-  MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+  my_rank = init_communicator::get_comm_rank();
   std::array<size_t, 3> neighbor_coordinates;
 
   if (neighbours.first != LIMITVALUES::oob_gbxindex) {
@@ -146,9 +142,6 @@ forward neighbours maps assuming periodic or finite boundary conditions in
 cartesian domain */
 void set_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary &gfb,
                         CartesianMaps &gbxmaps) {
-  int my_rank;
-  MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
-
   if (nspacedims > 3) {
     throw std::invalid_argument("only 0 <= nspacedims <= 3 is valid ");
   }
@@ -268,9 +261,6 @@ conditions where neighbour of gridbox in a certain direction is itself). Null di
 */
 void set_null_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary &gfb,
                              CartesianMaps &gbxmaps) {
-  int my_rank;
-  MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
-
   if (nspacedims >= 3) {
     throw std::invalid_argument("null model dimensions only valid for 0 <= nspacedims < 3");
   }

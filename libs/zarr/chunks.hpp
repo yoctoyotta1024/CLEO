@@ -28,6 +28,7 @@
 #include <string_view>
 #include <vector>
 
+#include "configuration/communicator.hpp"
 #include "zarr/buffer.hpp"
 
 /**
@@ -71,6 +72,7 @@ class Chunks {
   std::vector<size_t> chunkshape; /**< Shape of chunks along each dimension (constant) */
   std::vector<size_t> reducedarray_nchunks;
   /**< Number chunks of array along all but outermost dimension of array (constant) */
+  // MPI_Comm comm; /**< (YAC compatible) communicator for MPI domain decomposition */
 
   /**
    * @brief Create label for a chunk given current number of chunks written to array.
@@ -120,7 +122,8 @@ class Chunks {
 
     // Since only process 0 writes the data, only it should check the sizes
     int my_rank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    my_rank = init_communicator::get_comm_rank();
+
     if (my_rank == 0)
       assert((reduced_arrayshape.size() == chunkshape.size() - 1) &&
              "number of dimensions of reduced array must be "

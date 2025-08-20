@@ -31,6 +31,7 @@
 #include "../../cleoconstants.hpp"
 #include "../../kokkosaliases.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
+#include "configuration/communicator.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/gridboxmaps.hpp"
 #include "gridboxes/supersindomain.hpp"
@@ -65,8 +66,8 @@ template <GridboxMaps GbxMaps>
 viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
                              viewd_supers totsupers) {
   int comm_size, my_rank;
-  MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
-  MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+  comm_size = init_communicator::get_comm_size();
+  my_rank = init_communicator::get_comm_rank();
 
   std::vector<MPI_Request> exchange_requests(comm_size * 6, MPI_REQUEST_NULL);
   std::vector<MPI_Status> exchange_statuses(comm_size * 6);
@@ -211,7 +212,7 @@ viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
                                              totsupers(i).get_coord2()};
     const auto b4 = std::array<double, 3>{drop_coords[0], drop_coords[1], drop_coords[2]};
     const auto gbxindex =
-        (unsigned int)gbxmaps.get_domain_decomposition().get_local_bounding_gridbox(
+        (unsigned int)gbxmaps.get_domain_decomposition().get_local_bounding_gridbox_index(
             drop_coords);  // TODO(ALL): access through gbxmaps (note error in conversions?)
 
     // Since the coordinates have already been corrected in the sending
