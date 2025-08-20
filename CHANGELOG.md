@@ -2,6 +2,54 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.53.0](https://github.com/yoctoyotta1024/CLEO/compare/33c3ae5610c4609547827dccbda9ab51297da201..v0.53.0) - 2025-08-20
+#### Bug Fixes
+- missing monitor in function signature - ([9c2567d](https://github.com/yoctoyotta1024/CLEO/commit/9c2567db2935af53b43045cd990b353e46977253)) - clara.bayley
+- Adapted the main files according to the newly modified communicator class - ([4cebe91](https://github.com/yoctoyotta1024/CLEO/commit/4cebe9133cdb8c22ef223b4bb3a9b921dc0520c4)) - dlaparna7
+- Fix the communicator class to make it work with test examples that do not use yac - ([c57a514](https://github.com/yoctoyotta1024/CLEO/commit/c57a5141ccb41e12ff82ffac359c874e555f19e3)) - dlaparna7
+- remove mpi processes > 1 guard from communicator - ([459a12a](https://github.com/yoctoyotta1024/CLEO/commit/459a12a151d6a516b16ead28b0c9ea356454247c)) - clara.bayley
+- fixed minor comm scope related bugs - ([ff63ee8](https://github.com/yoctoyotta1024/CLEO/commit/ff63ee8e8e2628084495b46dc6f92e46fa3bfe4d)) - clara.bayley
+#### Continuous Integration
+- fix parallel execution tests - ([812579f](https://github.com/yoctoyotta1024/CLEO/commit/812579fce962a767e12a617cfb903e210fea5e2d)) - clara.bayley
+#### Documentation
+- use communicator not MPI directly - ([4320339](https://github.com/yoctoyotta1024/CLEO/commit/432033967a0a4119a3fd3dedb6bed5e01cc56959)) - clara.bayley
+#### Features
+- Added MPI abort message in communicator class, removed commented lines in SupersInDomain - ([0afb79e](https://github.com/yoctoyotta1024/CLEO/commit/0afb79ec048c3cc715c38d6c239545b2b12ceb57)) - k202203
+- Modified domain_bounds field to include lower bounds of the domain as well - ([ea47087](https://github.com/yoctoyotta1024/CLEO/commit/ea47087c8e8d951f0f1660a03f7d5c544198b5b1)) - dlaparna7
+- Implemented binary search algorithm. - ([7e89ab0](https://github.com/yoctoyotta1024/CLEO/commit/7e89ab0612e223536340dc8a0be43e7d5577f2bc)) - dlaparna7
+- Variable gridbox implementation: further corrections and compatible with more than 1 process for fromfile experiment - ([c5f4252](https://github.com/yoctoyotta1024/CLEO/commit/c5f425298476519103722a6faef421c7a5a9d9f6)) - dlaparna7
+- First draft of the variable gridbox sizes implementation - ([9e5a573](https://github.com/yoctoyotta1024/CLEO/commit/9e5a5731c2e367f7513deae2f0175e852eb658a1)) - dlaparna7
+- two files lay groundwork for communicator initialization - ([9106da1](https://github.com/yoctoyotta1024/CLEO/commit/9106da1f688d4b4cd53063c611b7e46a4c66375f)) - clara.bayley
+#### Miscellaneous Chores
+- corrected the lint error - ([be162e2](https://github.com/yoctoyotta1024/CLEO/commit/be162e2dfdbe40e44626a1d024939d51943a9eed)) - k202203
+- cleanup, added comments, renamed get_local_bounding_gridbox function - ([e769e80](https://github.com/yoctoyotta1024/CLEO/commit/e769e80c77633b3d90e926ab7c287d35375eeedf)) - dlaparna7
+- formatting - ([93848fa](https://github.com/yoctoyotta1024/CLEO/commit/93848fa1ea69ad7ee8ce1f696708f0865abe86f1)) - clara.bayley
+- make comparable to old branch - ([8cbe450](https://github.com/yoctoyotta1024/CLEO/commit/8cbe4503234ccd9cfae6bb4fdc95d30c01e11383)) - clara.bayley
+- add todos - ([33c3ae5](https://github.com/yoctoyotta1024/CLEO/commit/33c3ae5610c4609547827dccbda9ab51297da201)) - clara.bayley
+#### Performance Improvements
+- delete unnecessary call to destructor - ([2c5693e](https://github.com/yoctoyotta1024/CLEO/commit/2c5693ea06981369d005965a85e80c8199166277)) - clara.bayley
+#### Refactoring
+- make python bindings example compatible with new communicator - ([c2bfda6](https://github.com/yoctoyotta1024/CLEO/commit/c2bfda6ec6aa9a42239c7dba6114d9e1a3d961d8)) - clara.bayley
+- only call MPI_Init if MPI not already initialised - ([2b9585d](https://github.com/yoctoyotta1024/CLEO/commit/2b9585df87c1f9fbc8d0a3173fb2ef8ee0f7d0f1)) - clara.bayley
+- make all examples compatible with new communicator - ([f7fb506](https://github.com/yoctoyotta1024/CLEO/commit/f7fb506e6ba98123421a5a686dd66b6597db523c)) - clara.bayley
+- make adiabatic parcel example compatible with new communicator - ([5d72deb](https://github.com/yoctoyotta1024/CLEO/commit/5d72deb8dd5c118643ec2f8ef7dcb3157572a842)) - clara.bayley
+- Removed the commented out lines - ([1f141e1](https://github.com/yoctoyotta1024/CLEO/commit/1f141e157f7757aa45a1423a238f1a02122786ca)) - dlaparna7
+- Modified the field gridbox_upperbounds to gridbox_bounds for semantic correctness - ([4713b82](https://github.com/yoctoyotta1024/CLEO/commit/4713b828dd69e22238562ac50dc4212f9ab78556)) - dlaparna7
+- fromfile examples use communicator instead of MPI directly - ([aca088f](https://github.com/yoctoyotta1024/CLEO/commit/aca088f5476bf6acd7224952b5d5e59d41ce5fec)) - clara.bayley
+- Adapted further files to use getter function for comm, rank, size from communicator class. - ([520c9c4](https://github.com/yoctoyotta1024/CLEO/commit/520c9c44ab13988cdfe4ffd80d0633d0a4448632)) - dlaparna7
+- Adapted module files to use getter functions for comm, rank, size and yac_comp_id - ([df70f52](https://github.com/yoctoyotta1024/CLEO/commit/df70f529fdbcd853044feb8af5b1d110ab77430f)) - dlaparna7
+- Added destructor and getter functions for rank, size and yac_comp_id in communicator class - ([208d005](https://github.com/yoctoyotta1024/CLEO/commit/208d0058636ff1810e8dda367437812659abf40c)) - dlaparna7
+- use MPI communicator instead of direct MPI calls continued - ([045f697](https://github.com/yoctoyotta1024/CLEO/commit/045f697fdd3e58b1fd1fc9f0668e28ef98abccb5)) - clara.bayley
+- use MPI communicator instead of direct MPI calls continued - ([1a6b542](https://github.com/yoctoyotta1024/CLEO/commit/1a6b54228bb7f3c47a3d03e1db3efd74a1250776)) - clara.bayley
+- updated to communicator including YAC dependency in CMake - ([1110a28](https://github.com/yoctoyotta1024/CLEO/commit/1110a28acb4a0a9362ff699465a2b81f265e74c3)) - clara.bayley
+- move includes to header file - ([c45e31e](https://github.com/yoctoyotta1024/CLEO/commit/c45e31e2729491744ec898c119515bed36ff0028)) - clara.bayley
+- use MPI communicator instead of direct MPI calls - ([f6a4bb1](https://github.com/yoctoyotta1024/CLEO/commit/f6a4bb1c1f2e5a753e4e8b4c668bb1dde0fb1707)) - clara.bayley
+- move communicator into configuration library - ([868ecf4](https://github.com/yoctoyotta1024/CLEO/commit/868ecf4b800e3df326de349e2792a9d287d42efd)) - clara.bayley
+- use communicator in bubble3d - ([985ac6f](https://github.com/yoctoyotta1024/CLEO/commit/985ac6f12f1a1d9c522ea3fef745e7166639f576)) - clara.bayley
+- move configuration related files into seperate library from initialisation - ([d533ee6](https://github.com/yoctoyotta1024/CLEO/commit/d533ee6f5864be05b49e251ef293721e65e5d173)) - clara.bayley
+
+- - -
+
 ## [v0.52.0](https://github.com/yoctoyotta1024/CLEO/compare/601db8338386377196e9dab747c47310c9012284..v0.52.0) - 2025-07-23
 #### Bug Fixes
 - compilers for levante cuda build fail type deduction - ([c3daa3c](https://github.com/yoctoyotta1024/CLEO/commit/c3daa3c997245064d9ae6af69bf5f82df9b97034)) - clara.bayley
