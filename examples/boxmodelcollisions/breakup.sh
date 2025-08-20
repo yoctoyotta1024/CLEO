@@ -27,7 +27,7 @@ build_flags="-DCLEO_COUPLED_DYNAMICS=null -DCLEO_DOMAIN=cartesian \
 executables="longcolls lowlistcolls szakallurbichcolls testikstraubcolls"
 
 pythonscript=${path2CLEO}/examples/boxmodelcollisions/breakup.py
-configfile=${path2CLEO}/examples/boxmodelcollisions/breakup_config.yaml
+configfile=${path2CLEO}/examples/boxmodelcollisions/src/config/breakup_config.yaml
 script_args="${configfile} long lowlist szakallurbich testikstraub"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

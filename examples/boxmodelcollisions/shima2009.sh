@@ -28,7 +28,7 @@ build_flags="-DCLEO_COUPLED_DYNAMICS=null -DCLEO_DOMAIN=cartesian \
 executables="golcolls longcolls"
 
 pythonscript=${path2CLEO}/examples/boxmodelcollisions/shima2009.py
-configfile=${path2CLEO}/examples/boxmodelcollisions/shima2009_config.yaml
+configfile=${path2CLEO}/examples/boxmodelcollisions/src/config/shima2009_config.yaml
 script_args="${configfile} golovin long1 long2"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
