@@ -2,6 +2,40 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.54.0](https://github.com/yoctoyotta1024/CLEO/compare/c4545fd5929862701be345c5c1d3b45612a28aea..v0.54.0) - 2025-08-20
+#### Bug Fixes
+- bubble plotting script works using updated sample of superdrops class - ([f2f775a](https://github.com/yoctoyotta1024/CLEO/commit/f2f775a98e71bd207d821c92de1e4791e603a01e)) - clara.bayley
+#### Continuous Integration
+- use matrix for two parallel execution tests - ([b02208f](https://github.com/yoctoyotta1024/CLEO/commit/b02208fbe7601686c8903d75826346357f36cec6)) - clara.bayley
+- delete bins after tests - ([af314df](https://github.com/yoctoyotta1024/CLEO/commit/af314df52e45cbcfdeaeabf666c2a9fa5f126bb8)) - clara.bayley
+- test fromfile_irreg as well as fromfile - ([4312710](https://github.com/yoctoyotta1024/CLEO/commit/4312710c0e20109c02d18ca9a3f8eb029b222aed)) - clara.bayley
+- download fromfile and fromfile irreg correct solutions from swift source - ([82efb9a](https://github.com/yoctoyotta1024/CLEO/commit/82efb9ad60abbdb001f9a1a31c3f72a73e5169e0)) - clara.bayley
+- use matrix for two parallel execution tests - ([c901719](https://github.com/yoctoyotta1024/CLEO/commit/c901719ee279fb36526a57f0acdee5662c1ec060)) - clara.bayley
+- delete bins after tests - ([52e24d5](https://github.com/yoctoyotta1024/CLEO/commit/52e24d547aebdff778894a1a3551cfa1a4e519d1)) - clara.bayley
+- test fromfile_irreg as well as fromfile - ([e7e7f71](https://github.com/yoctoyotta1024/CLEO/commit/e7e7f71288e9122f0225e06b65c7c950c0edabe2)) - clara.bayley
+- download fromfile and fromfile irreg correct solutions from swift source - ([07c111d](https://github.com/yoctoyotta1024/CLEO/commit/07c111dd4da240c7479f27a6664bb59cccab3998)) - clara.bayley
+#### Documentation
+- use communicator not MPI directly - ([9371d58](https://github.com/yoctoyotta1024/CLEO/commit/9371d582ac58d680fde932a11e73c51ce4b50ebf)) - clara.bayley
+#### Features
+- Added MPI abort message in communicator class, removed commented lines in SupersInDomain - ([c4545fd](https://github.com/yoctoyotta1024/CLEO/commit/c4545fd5929862701be345c5c1d3b45612a28aea)) - k202203
+#### Miscellaneous Chores
+- corrected the lint error - ([ea6f330](https://github.com/yoctoyotta1024/CLEO/commit/ea6f330ae40d07db1ba77a8ed9af345f5b2c2dec)) - k202203
+#### Performance Improvements
+- space before printing bool - ([26783ca](https://github.com/yoctoyotta1024/CLEO/commit/26783ca18f023073895708ac24fdba8498a91016)) - clara.bayley
+- space before printing bool - ([00f1205](https://github.com/yoctoyotta1024/CLEO/commit/00f12057dc14647fc2088f5eaedd600180fac64a)) - clara.bayley
+#### Refactoring
+- larger figsize - ([a6466e7](https://github.com/yoctoyotta1024/CLEO/commit/a6466e7cb7f22c12eb965bc04ccbf41f220b270a)) - clara.bayley
+- run fromfile examples with more coupling and for longer - ([0dba167](https://github.com/yoctoyotta1024/CLEO/commit/0dba1670927f72fd22071d44faaf136c0d1ec641)) - clara.bayley
+- run levante examples requires compilername - ([7babe64](https://github.com/yoctoyotta1024/CLEO/commit/7babe64f9412e883488c086152d7a402d5e8daa6)) - clara.bayley
+- larger figsize - ([edb60fc](https://github.com/yoctoyotta1024/CLEO/commit/edb60fc40c24e8485a5aa4b445502c17a5ead440)) - clara.bayley
+- run fromfile examples with more coupling and for longer - ([641f0ca](https://github.com/yoctoyotta1024/CLEO/commit/641f0ca617dc445be20cf1f925446856f6b43126)) - clara.bayley
+- make python bindings example compatible with new communicator - ([6b5ef56](https://github.com/yoctoyotta1024/CLEO/commit/6b5ef5692594f077609e50eb3f6d246aae069839)) - clara.bayley
+- only call MPI_Init if MPI not already initialised - ([ec2cb15](https://github.com/yoctoyotta1024/CLEO/commit/ec2cb1567f11843acbfcad74111330bce6ea99de)) - clara.bayley
+- make all examples compatible with new communicator - ([cc37b49](https://github.com/yoctoyotta1024/CLEO/commit/cc37b49dfbf25655be7e566054c26b2f2686b336)) - clara.bayley
+- make adiabatic parcel example compatible with new communicator - ([3050deb](https://github.com/yoctoyotta1024/CLEO/commit/3050debfe66a37aef46bdd425ed0c62029b431d4)) - clara.bayley
+
+- - -
+
 ## [v0.53.0](https://github.com/yoctoyotta1024/CLEO/compare/33c3ae5610c4609547827dccbda9ab51297da201..v0.53.0) - 2025-08-20
 #### Bug Fixes
 - missing monitor in function signature - ([9c2567d](https://github.com/yoctoyotta1024/CLEO/commit/9c2567db2935af53b43045cd990b353e46977253)) - clara.bayley
