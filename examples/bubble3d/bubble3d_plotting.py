@@ -19,6 +19,7 @@ for bubble test case output
 
 # %%
 import argparse
+import awkward as ak
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
@@ -73,8 +74,9 @@ gbxindex = pyzarr.get_gbxindex(ds, gbxs["ndims"])
 thermo, winds = pyzarr.get_thermodata(
     ds, config["ntime"], gbxs["ndims"], consts, getwinds=True
 )
-superdrops = pyzarr.get_supers(ds, consts)
 totnsupers = pyzarr.get_totnsupers(ds)
+superdrops = pyzarr.get_supers(ds, consts)
+superdrops.attach_time(time.mins, "min", do_reshape=True, var4reshape="sdId")
 
 xfull_km = (gbxs["xfull"] - (gbxs["xfull"][-1] + gbxs["xfull"][0]) / 2) / 1000
 zfull_km = gbxs["zfull"] / 1000
@@ -136,7 +138,7 @@ for v, var in enumerate(vars):
     print("Figure .png saved as: " + str(savename))
 # %%
 nsample = 1000
-sample_attrs = ["coord3", "coord1", "radius"]
+sample_attrs = ["coord3", "coord1", "radius", "time"]
 sample = superdrops.random_sample("sdId", nsample, variables2sample=sample_attrs)
 
 # %%
@@ -165,17 +167,29 @@ def plot_2d_supers(xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlims, xlims)
     norm = mcolors.Normalize(vmin=vlims[0], vmax=vlims[1])
 
     ## superdroplets scatter plot
-    size = sample["radius"]
+    sample_time = ak.Array(sample["time"])  # dims [superdrop, time(s)]
+    radius = ak.Array(sample["radius"])
+    coord3 = ak.Array(sample["coord3"])
+    coord1 = ak.Array(sample["coord1"])
     shift = xlims[1]
-    coord3_km = sample["coord3"] / 1000
-    coord1_km = sample["coord1"] / 1000 - shift
 
     for m in range(0, nplots):
-        tidx = np.argmin(abs(time.mins - t2plts[m]))
+        t = t2plts[m]  # [mins]
+        tidx = np.argmin(abs(time.mins - t))
         axs[m].contourf(xxh_km, zzh_km, wind_var[tidx, 0, :, :], cmap=cmap, norm=norm)
-        axs[m].scatter(
-            coord1_km[tidx, :], coord3_km[tidx, :], s=size[tidx, :], color="lightblue"
-        )
+
+        delta = 1.0  # [mins]
+        idx = ak.argmin(
+            abs(t - sample_time), axis=1, keepdims=True
+        )  # closest time(s) to t for each superdrop
+        bad_time = (
+            t - sample_time[idx] > delta
+        )  # superdroplet times > delta away from time t
+        size = ak.flatten(ak.where(bad_time, np.nan, radius[idx]))
+        coord3_km = ak.flatten(ak.where(bad_time, np.nan, coord3[idx])) / 1000
+        coord1_km = ak.flatten(ak.where(bad_time, np.nan, coord1[idx])) / 1000 - shift
+        axs[m].scatter(coord1_km, coord3_km, s=size, color="lightblue")
+
         axs[m].set_title(
             "{:.0f} mins".format(time.mins[tidx]), fontsize=fontsize, y=1.025
         )
@@ -223,7 +237,7 @@ print("Figure .png saved as: " + str(savename))
 
 # %%
 nsample = 1000
-sample_attrs = ["coord3", "coord1", "radius"]
+sample_attrs = ["coord3", "coord1", "radius", "time"]
 sample = superdrops.random_sample("sdId", nsample, variables2sample=sample_attrs)
 
 
@@ -257,30 +271,35 @@ def plot_2d_supers_contours(
     norm = mcolors.Normalize(vmin=vlims[0], vmax=vlims[1])
 
     ## superdroplets scatter plot
-    size = sample["radius"] * 5
+    sample_time = ak.Array(sample["time"])  # dims [superdrop, time(s)]
+    radius = ak.Array(sample["radius"])
+    coord3 = ak.Array(sample["coord3"])
+    coord1 = ak.Array(sample["coord1"])
     shift = xlims[1]
-    coord3_km = sample["coord3"] / 1000
-    coord1_km = sample["coord1"] / 1000 - shift
 
     tidx = np.argmin(abs(time.mins - t2plts[-1]))
-    c = np.repeat([time.mins[: tidx + 1]], coord3_km.shape[1], axis=0).T
     sd_norm = mcolors.Normalize(vmin=time.mins[0], vmax=time.mins[tidx + 1])
     sd_cmap = "plasma"
 
     for m in range(0, nplots):
-        tidx = np.argmin(abs(time.mins - t2plts[m]))
+        t = t2plts[m]
+        tidx = np.argmin(abs(time.mins - t))
         axs[m].contourf(xxh_km, zzh_km, wind_var[tidx, 0, :, :], cmap=cmap, norm=norm)
 
-        sd_x = coord1_km[: tidx + 1, :]
-        sd_y = coord3_km[: tidx + 1, :]
+        idxs = sample_time <= t  # closest time(s) to t for each superdrop
+        color = ak.flatten(ak.where(idxs, sample_time, np.nan))
+        size = ak.flatten(ak.where(idxs, radius, np.nan)) * 5
+        sd_y = ak.flatten(ak.where(idxs, coord3, np.nan)) / 1000
+        sd_x = ak.flatten(ak.where(idxs, coord1, np.nan)) / 1000 - shift
         axs[m].scatter(
             sd_x,
             sd_y,
-            s=size[: tidx + 1, :],
-            c=c[: tidx + 1, :],
+            s=size,
+            c=color,
             cmap=sd_cmap,
             norm=sd_norm,
         )
+
         axs[m].set_title(
             "{:.0f} mins".format(time.mins[tidx]), fontsize=fontsize, y=1.025
         )

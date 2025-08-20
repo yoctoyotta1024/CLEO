@@ -21,6 +21,7 @@
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
 buildtype="openmp"
+compilername="gcc"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_bubble3d/
 build_flags="-DCLEO_COUPLED_DYNAMICS=yac -DCLEO_DOMAIN=cartesian \
@@ -34,8 +35,15 @@ script_args="${configfile}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 
+if [[ "${compilername}" != "gcc" ]]
+then
+  echo "bubble3d example currently only working on Levante with gcc compiler"
+  echo "-> please use compilername=gcc"
+  exit 1
+fi
+
 ### ---------- build, compile and run example ---------- ###
 ${path2CLEO}/examples/run_example_levante.sh \
-  ${buildtype} ${path2CLEO} ${path2build} "${build_flags}" \
+  ${buildtype} ${compilername} ${path2CLEO} ${path2build} "${build_flags}" \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###
