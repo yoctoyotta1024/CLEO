@@ -1,18 +1,16 @@
 #!/bin/bash
-#SBATCH --job-name=bubble3d
+#SBATCH --job-name=cuspbifurc
 #SBATCH --partition=compute
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=2
-#SBATCH --cpus-per-task=32
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=1
 #SBATCH --mem=10G
-#SBATCH --time=00:05:00
+#SBATCH --time=00:10:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=bm1183
-#SBATCH --output=./bubble3d_out.%j.out
-#SBATCH --error=./bubble3d_err.%j.out
-
-# TODO(all): complete python script(s) for example (and fix MPI linker error?)
+#SBATCH --output=./cuspbifurc_out.%j.out
+#SBATCH --error=./cuspbifurc_err.%j.out
 
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
@@ -20,30 +18,23 @@
 ### ---- build type, directories, the executable(s) ---- ###
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
-buildtype="openmp"
-compilername="gcc"
+buildtype="serial"
+compilername="intel"
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_bubble3d/
-build_flags="-DCLEO_COUPLED_DYNAMICS=yac -DCLEO_DOMAIN=cartesian \
+path2build=${HOME}/CLEO/build_adia0d/${buildtype}/
+build_flags="-DCLEO_COUPLED_DYNAMICS=cvode -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
-executables="bubble3d"
+executables="adia0d"
 
-pythonscript=${path2CLEO}/examples/bubble3d/bubble3d.py
-configfile=${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml
+pythonscript=${path2CLEO}/examples/adiabaticparcel/cuspbifurc.py
+configfile=${path2CLEO}/examples/adiabaticparcel/src/config/cuspbifurc_config.yaml
 script_args="${configfile}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 
-if [[ "${compilername}" != "gcc" ]]
-then
-  echo "bubble3d example currently only working on Levante with gcc compiler"
-  echo "-> please use compilername=gcc"
-  exit 1
-fi
-
 ### ---------- build, compile and run example ---------- ###
-${path2CLEO}/examples/run_example_levante.sh \
+${path2CLEO}/scripts/levante/examples/build_compile_run_plot.sh \
   ${buildtype} ${compilername} ${path2CLEO} ${path2build} "${build_flags}" \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###

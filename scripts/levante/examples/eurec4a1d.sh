@@ -1,7 +1,8 @@
 #!/bin/bash
-#SBATCH --job-name=const2d
-#SBATCH --partition=compute
+#SBATCH --job-name=eurec4a1d
+#SBATCH --partition=gpu
 #SBATCH --nodes=1
+#SBATCH --gpus=4
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=128
 #SBATCH --mem=10G
@@ -9,32 +10,33 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=bm1183
-#SBATCH --output=./const2d_out.%j.out
-#SBATCH --error=./const2d_err.%j.out
+#SBATCH --output=./eurec4a1d_out.%j.out
+#SBATCH --error=./eurec4a1d_err.%j.out
 
-### ---------------------------------------------------- ###
+# TODO(all): python script(s) for example
+
 ### ------------------ Input Parameters ---------------- ###
 ### ------ You MUST edit these lines to set your ------- ###
 ### ---- build type, directories, the executable(s) ---- ###
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
-buildtype="threads"
-compilername="intel"
+buildtype="cuda"
+compilername="gcc"
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_const2d/
+path2build=${HOME}/CLEO/build_eurec4a1d/
 build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
-executables="const2d"
+executables="eurec4a1d"
 
-pythonscript=${path2CLEO}/examples/constthermo2d/constthermo2d.py
-configfile=${path2CLEO}/examples/constthermo2d/src/config/const2d_config.yaml
-script_args="${configfile}"
+configfile=${path2CLEO}/examples/eurec4a1d/src/config/eurec4a1d_config.yaml
+pythonscript=""
+script_args=""
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 
 ### ---------- build, compile and run example ---------- ###
-${path2CLEO}/examples/run_example_levante.sh \
+${path2CLEO}/scripts/levante/examples/build_compile_run_plot.sh \
   ${buildtype} ${compilername} ${path2CLEO} ${path2build} "${build_flags}" \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###

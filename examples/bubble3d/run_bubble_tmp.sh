@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ### temporary file for testing running of bubble3d example
-### TODO(CB): delete file, (merge with run_example like other examples)
+### TODO(CB): delete file
 
 ### If you did this to your ~/.spack/upstreams.yaml to get py-netcdf from commin's:
 # then python=/sw/spack-levante/python-3.9.9-fwvsvi/bin/python # is the one loaded by py-netcdf4

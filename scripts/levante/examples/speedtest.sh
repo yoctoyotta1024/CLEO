@@ -50,7 +50,7 @@ do
   mkdir ${path2build_test}/share
 
   ### ---------- build, compile and run example ---------- ###
-  ${path2CLEO}/examples/run_example_levante.sh \
+  ${path2CLEO}/scripts/levante/examples/build_compile_run_plot.sh \
     ${buildtype} ${compilername} ${path2CLEO} ${path2build_test} "${build_flags}" \
     "${executables}" ${pythonscript} "${script_args}"
   ### ---------------------------------------------------- ###
