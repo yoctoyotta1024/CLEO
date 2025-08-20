@@ -26,8 +26,8 @@ build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
 executables="rshaft1d"
 
 pythonscript=${path2CLEO}/examples/rainshaft1d/rainshaft1d.py
-configfile=${path2CLEO}/examples/rainshaft1d/src/config/rain1d_config.yaml
-script_args="${configfile}"
+src_config_filename=${path2CLEO}/examples/rainshaft1d/src/config/rain1d_config.yaml
+script_args="${src_config_filename}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

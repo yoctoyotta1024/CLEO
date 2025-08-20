@@ -27,8 +27,8 @@ build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
 executables="fromfile"
 
 pythonscript=${path2CLEO}/examples/fromfile/fromfile.py
-configfile=${path2CLEO}/examples/fromfile/src/config/fromfile_config.yaml
-script_args="${configfile} --do_inputfiles=TRUE --do_run_executable=TRUE \
+src_config_filename=${path2CLEO}/examples/fromfile/src/config/fromfile_config.yaml
+script_args="${src_config_filename} --do_inputfiles=TRUE --do_run_executable=TRUE \
   --do_plot_results=TRUE --ntasks=4"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

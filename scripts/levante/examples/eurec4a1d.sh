@@ -28,9 +28,9 @@ build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
 executables="eurec4a1d"
 
-configfile=${path2CLEO}/examples/eurec4a1d/src/config/eurec4a1d_config.yaml
+src_config_filename=${path2CLEO}/examples/eurec4a1d/src/config/eurec4a1d_config.yaml
 pythonscript=""
-script_args=""
+script_args="${src_config_filename}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

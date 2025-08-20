@@ -27,8 +27,8 @@ build_flags="-DCLEO_COUPLED_DYNAMICS=cvode -DCLEO_DOMAIN=cartesian \
 executables="adia0d"
 
 pythonscript=${path2CLEO}/examples/adiabaticparcel/as2017.py
-configfile=${path2CLEO}/examples/adiabaticparcel/src/config/as2017_config.yaml
-script_args="${configfile}"
+src_config_filename=${path2CLEO}/examples/adiabaticparcel/src/config/as2017_config.yaml
+script_args="${src_config_filename}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

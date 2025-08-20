@@ -27,8 +27,8 @@ build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
 executables="divfree2d"
 
 pythonscript=${path2CLEO}/examples/divfreemotion/divfree2d.py
-configfile=${path2CLEO}/examples/divfreemotion/src/config/divfree2d_config.yaml
-script_args="${configfile}"
+src_config_filename=${path2CLEO}/examples/divfreemotion/src/config/divfree2d_config.yaml
+script_args="${src_config_filename}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

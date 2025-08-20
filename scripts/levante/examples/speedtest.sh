@@ -26,7 +26,7 @@ path2kokkostools=/work/bm1183/m300950/kokkos_tools_lib/lib64/
 executables="spdtest"
 
 pythonscript=${path2CLEO}/examples/speedtest/speedtest.py
-configfile=${path2CLEO}/examples/speedtest/src/config/speedtest_config.yaml
+src_config_filename=${path2CLEO}/examples/speedtest/src/config/speedtest_config.yaml
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
@@ -40,7 +40,7 @@ compilername="gcc"
 buildtypes=("cuda" "openmp" "threads" "serial")
 for buildtype in "${buildtypes[@]}"
 do
-  script_args="${configfile} ${path2build}/bin/ ${path2kokkostools} ${buildtype}"
+  script_args="${src_config_filename} ${path2build}/bin/ ${path2kokkostools} ${buildtype}"
   path2build_test=${path2build}${buildtype}"/"
 
   echo "build type: ${buildtype}"
