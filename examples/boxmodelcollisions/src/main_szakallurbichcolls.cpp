@@ -14,7 +14,7 @@
  * -----
  * File Description:
  * runs the CLEO super-droplet model (SDM) for 0-D box model with coalescence, rebound and
- * breakup with glag decided based on section 2.2 of Szakáll and Urbich 2018.
+ * breakup with flag decided based on section 2.2 of Szakáll and Urbich 2018.
  * After make/compiling, execute for example via:
  * ./src/szakallurbichcolls ../src/config/config.yaml
  */

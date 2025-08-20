@@ -14,8 +14,8 @@
  * -----
  * File Description:
  * runs the CLEO super-droplet model (SDM) for 0-D box model with coalescence, rebound and
- * breakup with glag decided based on section 4 of Testik et al. 2011 (figure 12) as well
- * as coalescence efficiency from Straub et al. 2010.
+ * breakup with flag decided based on section 4 of Testik et al. 2011 (figure 12) as well
+ * as coalescence efficiency from Straub et al. 2010 and Schlottke et al. 2010.
  * After make/compiling, execute for example via:
  * ./src/testikstraubcolls ../src/config/config.yaml
  */
