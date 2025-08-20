@@ -23,22 +23,26 @@ int test_pycleo(const int i, const int j) {
   return i + j;
 }
 
-/* assumes MPI was initialised aleady, e.g. in python with ```from mpi4py import MPI``` */
 void pycleo_initialize(const Config &config) {
-  int comm_size;
-  MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
+  /* Initialize Communicator here */
+  /* NOTE: call to init_communicator constructor assumes MPI was initialised aleady,
+    e.g. in python with ```from mpi4py import MPI``` */
+  init_communicator init_comm(0, NULL, config);
+
+  /* Prevent python bindings from running with more than one MPI process */
+  const auto comm_size = init_communicator::get_comm_size();
   if (comm_size > 1) {
-    std::cout << "ERROR: The current example is not prepared"
-              << " to be run with more than one MPI process" << std::endl;
-    MPI_Abort(MPI_COMM_WORLD, 1);
+    throw std::invalid_argument(
+        "ERROR: The current example is not prepared to be run with more than one MPI process");
   }
 
+  /* Initialize Kokkos if not already initialised here */
   if (!Kokkos::is_initialized()) {
     Kokkos::initialize(config.get_kokkos_initialization_settings());
     Kokkos::print_configuration(std::cout);
     const auto err = std::atexit(pycleo_finalize);
     if (err) {
-      std::cerr << "Failed atexit(pycloe_finalize) in pycleo_initialize()\n";
+      std::cerr << "Failed atexit(pycleo_finalize) in pycleo_initialize()\n";
       return;
     }
   }
