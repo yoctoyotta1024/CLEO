@@ -127,8 +127,14 @@ def main(
     ### --- required CLEO cleoconstants.hpp file --- ###
     constants_filename = Path(config["inputfiles"]["constants_filename"])
 
-    ### --- booleans for [showing, saving] initialisation figures --- ###
-    isfigures = [show_figures, save_figures]
+    ### --- plots of initial conditions --- ###
+    isfigures = [
+        show_figures,
+        save_figures,
+    ]  # booleans for [showing, saving] initialisation figures
+    SDgbxs2plt = [
+        0
+    ]  # gbxindex of initial SDs to plot if any(isfigures) (nb. "all" can be very slow)
 
     ### --- settings for 3-D gridbox boundaries --- ###
     num_vertical_levels = icon_yac_config["num_vertical_levels"]
@@ -154,10 +160,6 @@ def main(
     dryr_sf = 1.0  # scale factor for dry radii [m]
     numconc = 5e8  # total no. conc of real droplets [m^-3]
     randcoord = False  # sample SD spatial coordinates randomly or not
-
-    SDgbxs2plt = [
-        0
-    ]  # gbxindex of initial SDs to plot if any(isfigures) (nb. "all" can be very slow)
 
     ### --------------------- BINARY FILES GENERATION ---------------------- ###
     ### ----- write gridbox boundaries binary ----- ###
