@@ -43,12 +43,12 @@ parser.add_argument(
 parser.add_argument(
     "--do_run_executable",
     action="store_true",  # default is False
-    help="Run fromfile executable",
+    help="Run executable",
 )
 parser.add_argument(
     "--do_plot_results",
     action="store_true",  # default is False
-    help="Plot results of fromfile example",
+    help="Plot results of example",
 )
 args = parser.parse_args()
 
