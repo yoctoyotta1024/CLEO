@@ -19,6 +19,7 @@ File Description:
 import os
 import sys
 import awkward as ak
+import matplotlib.pyplot as plt
 from pathlib import Path
 
 path2pySD = os.path.dirname(os.path.realpath(__file__)) + "/../../"
@@ -73,11 +74,14 @@ savename = ""
 if savefig:
     savename = savefigpath / "randomsample_attrs.png"
 pltsds.plot_randomsample_superdrops(time, superdrops, nsample, savename=savename)
+plt.show()
+
 if savefig:
     savename = savefigpath / "randomsample_2dmotion.png"
 pltsds.plot_randomsample_superdrops_2dmotion(
     superdrops, nsample, savename=savename, arrows=False
 )
+plt.show()
 superdrops.detach_time()
 ### ---------------------------------------------------------------- ###
 
@@ -103,6 +107,7 @@ fig, ax = pltdist.plot_domainmass_distribs(
     ylog=ylog_mass,
     savename=savename,
 )
+plt.show()
 
 if smoothsig_num:
     smoothsig_num = smoothsig_num * (config["maxnsupers"] ** (-1 / 5))
@@ -120,4 +125,5 @@ fig, ax = pltdist.plot_domainnumconc_distribs(
     ylog=ylog_num,
     savename=savename,
 )
+plt.show()
 ### ---------------------------------------------------------------- ###

@@ -18,6 +18,8 @@
 ### ---- build type, directories, the executable(s) ---- ###
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
+do_build="true"
+compilername="gcc"  # must be gcc for buildtype=cuda
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_spdtest/
 build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
@@ -26,7 +28,7 @@ path2kokkostools=/work/bm1183/m300950/kokkos_tools_lib/lib64/
 executables="spdtest"
 
 pythonscript=${path2CLEO}/examples/speedtest/speedtest.py
-configfile=${path2CLEO}/examples/speedtest/src/config/speedtest_config.yaml
+src_config_filename=${path2CLEO}/examples/speedtest/src/config/speedtest_config.yaml
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
@@ -36,11 +38,10 @@ mkdir ${path2build}
 mkdir ${path2build}/bin
 
 ### ---- run test for different types of parallelism ---- ###
-compilername="gcc"
 buildtypes=("cuda" "openmp" "threads" "serial")
 for buildtype in "${buildtypes[@]}"
 do
-  script_args="${configfile} ${path2build}/bin/ ${path2kokkostools} ${buildtype}"
+  script_args="${src_config_filename} ${path2build}/bin/ ${path2kokkostools} ${buildtype}"
   path2build_test=${path2build}${buildtype}"/"
 
   echo "build type: ${buildtype}"
@@ -50,7 +51,7 @@ do
   mkdir ${path2build_test}/share
 
   ### ---------- build, compile and run example ---------- ###
-  ${path2CLEO}/examples/run_example_levante.sh \
+  ${path2CLEO}/scripts/levante/examples/build_compile_run_plot.sh ${do_build} \
     ${buildtype} ${compilername} ${path2CLEO} ${path2build_test} "${build_flags}" \
     "${executables}" ${pythonscript} "${script_args}"
   ### ---------------------------------------------------- ###

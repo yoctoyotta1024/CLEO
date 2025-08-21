@@ -17,7 +17,40 @@ Script generates input files for 3D example with time varying
 thermodynamics read from ICON output of bubble test case by YAC
 """
 
-import sys
+
+# %%
+### ------------------------- FUNCTION DEFINITIONS ------------------------- ###
+def parse_arguments():
+    import argparse
+    from pathlib import Path
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "path2CLEO", type=Path, help="Absolute path to CLEO directory (for PySD)"
+    )
+    parser.add_argument(
+        "path2build", type=Path, help="Absolute path to build directory"
+    )
+    parser.add_argument(
+        "config_filename", type=Path, help="Absolute path to configuration YAML file"
+    )
+    parser.add_argument(
+        "--savefigpath",
+        type=Path,
+        default=None,
+        help="Directory to save initialiation figures in (is save_figures is True)",
+    )
+    parser.add_argument(
+        "--show_figures",
+        action="store_true",  # default is False
+        help="Show initialiation figures",
+    )
+    parser.add_argument(
+        "--save_figures",
+        action="store_true",  # default is False
+        help="Save initialiation figures in savefigpath",
+    )
+    return parser.parse_args()
 
 
 def get_zgrid(icon_grid_file, num_vertical_levels):
@@ -37,6 +70,10 @@ def get_zgrid(icon_grid_file, num_vertical_levels):
 def copy_icon_files(path2build, orginal_icon_grid_file, orginal_icon_data_file):
     import shutil
 
+    assert (
+        path2build / "share"
+    ).is_dir(), "share directory doesn't exist in build directory"
+
     icon_grid_file = path2build / "share" / orginal_icon_grid_file.name
     shutil.copyfile(orginal_icon_grid_file, icon_grid_file)
 
@@ -46,13 +83,15 @@ def copy_icon_files(path2build, orginal_icon_grid_file, orginal_icon_data_file):
     return icon_grid_file, icon_data_file
 
 
+# %%
+### -------------------------------- MAIN ---------------------------------- ###
 def main(
     path2CLEO,
     path2build,
     config_filename,
-    grid_filename,
-    initsupers_filename,
-    SDgbxs2plt,
+    savefigpath=None,
+    show_figures=False,
+    save_figures=False,
 ):
     import sys
     from pathlib import Path
@@ -68,12 +107,15 @@ def main(
         attrsgen,
     )
 
+    if path2CLEO == path2build:
+        raise ValueError("build directory cannot be CLEO")
+
     ### --- Load the config YAML file --- ###
     yaml = YAML()
     with open(config_filename, "r") as file:
         config = yaml.load(file)
 
-    ### --- copy ICON files into build directory for safe-keeping --- ###
+    ### --- (optional) copy ICON files into build directory for safe-keeping --- ###
     icon_yac_config = config["icon_yac_config"]
     orginal_icon_grid_file = Path(icon_yac_config["orginal_icon_grid_file"])
     orginal_icon_data_file = Path(icon_yac_config["orginal_icon_data_file"])
@@ -81,16 +123,12 @@ def main(
         Path(path2build), orginal_icon_grid_file, orginal_icon_data_file
     )
 
-    ### ---------------------------------------------------------------- ###
-    ### ----------------------- INPUT PARAMETERS ----------------------- ###
-    ### ---------------------------------------------------------------- ###
-    ### --- essential paths and filenames --- ###
-    # path and filenames for creating initial SD conditions
-    constants_filename = path2CLEO / Path("libs/cleoconstants.hpp")
-    ### --- plotting initialisation figures --- ###
-    # booleans for [making, saving] initialisation figures
-    isfigures = [True, True]  # TODO(CB): move into args
-    savefigpath = Path(path2build) / "bin"  # binpath # TODO(CB): move into args
+    ### ------------------------ INPUT PARAMETERS -------------------------- ###
+    ### --- required CLEO cleoconstants.hpp file --- ###
+    constants_filename = Path(config["inputfiles"]["constants_filename"])
+
+    ### --- booleans for [showing, saving] initialisation figures --- ###
+    isfigures = [show_figures, save_figures]
 
     ### --- settings for 3-D gridbox boundaries --- ###
     num_vertical_levels = icon_yac_config["num_vertical_levels"]
@@ -107,24 +145,23 @@ def main(
     ]  # evenly spaced xhalf coords [m] # distance must match latitudes in config file
 
     ### --- settings for initial superdroplets --- ###
-    # settings for initial superdroplet coordinates
+    # settings for initial coordinates
     zlim = 1000  # max z coord of superdroplets
     npergbx = 2  # number of superdroplets per gridbox
 
+    # settings for initial radius and aerosol distributions
     monor = 1e-6  # all SDs have this same radius [m]
     dryr_sf = 1.0  # scale factor for dry radii [m]
     numconc = 5e8  # total no. conc of real droplets [m^-3]
     randcoord = False  # sample SD spatial coordinates randomly or not
-    ### ---------------------------------------------------------------- ###
-    ### ---------------------------------------------------------------- ###
 
-    if path2CLEO == path2build:
-        raise ValueError("build directory cannot be CLEO")
+    SDgbxs2plt = [
+        0
+    ]  # gbxindex of initial SDs to plot if any(isfigures) (nb. "all" can be very slow)
 
-    ### ---------------------------------------------------------------- ###
-    ### ------------------- BINARY FILES GENERATION--------------------- ###
-    ### ---------------------------------------------------------------- ###
+    ### --------------------- BINARY FILES GENERATION ---------------------- ###
     ### ----- write gridbox boundaries binary ----- ###
+    grid_filename = config["inputfiles"]["grid_filename"]
     geninitconds.generate_gridbox_boundaries(
         grid_filename,
         zgrid,
@@ -136,6 +173,7 @@ def main(
     )
 
     ### ----- write initial superdroplets binary ----- ###
+    initsupers_filename = config["initsupers"]["initsupers_filename"]
     nsupers = crdgens.nsupers_at_domain_base(
         grid_filename, constants_filename, npergbx, zlim
     )
@@ -161,10 +199,17 @@ def main(
         savefigpath=savefigpath,
         gbxs2plt=SDgbxs2plt,
     )
-    ### ---------------------------------------------------------------- ###
-    ### ---------------------------------------------------------------- ###
 
 
+# %%
+### --------------------------- RUN PROGRAM -------------------------------- ###
 if __name__ == "__main__":
-    ### args = path2CLEO, path2build, config_filename, grid_filename, initsupers_file, icon_grid_file, SDgbxs2plt
-    main(*sys.argv[1:])  # TODO(CB): read in better with argparse
+    args = parse_arguments()
+    main(
+        args.path2CLEO,
+        args.path2build,
+        args.config_filename,
+        savefigpath=args.savefigpath,
+        show_figures=args.show_figures,
+        save_figures=args.save_figures,
+    )

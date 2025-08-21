@@ -1,18 +1,16 @@
 #!/bin/bash
-#SBATCH --job-name=bubble3d
+#SBATCH --job-name=irreg_fromfile_irreg
 #SBATCH --partition=compute
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=2
-#SBATCH --cpus-per-task=32
+#SBATCH --ntasks-per-node=4
+#SBATCH --cpus-per-task=16
 #SBATCH --mem=10G
 #SBATCH --time=00:05:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=bm1183
-#SBATCH --output=./bubble3d_out.%j.out
-#SBATCH --error=./bubble3d_err.%j.out
-
-# TODO(all): complete python script(s) for example (and fix MPI linker error?)
+#SBATCH --output=./fromfile_irreg_out.%j.out
+#SBATCH --error=./fromfile_irreg_err.%j.out
 
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
@@ -20,30 +18,25 @@
 ### ---- build type, directories, the executable(s) ---- ###
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
+do_build="true"
 buildtype="openmp"
 compilername="gcc"
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_bubble3d/
-build_flags="-DCLEO_COUPLED_DYNAMICS=yac -DCLEO_DOMAIN=cartesian \
+path2build=${HOME}/CLEO/build_fromfile_irreg/
+build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
-executables="bubble3d"
+executables="fromfile_irreg"
 
-pythonscript=${path2CLEO}/examples/bubble3d/bubble3d.py
-configfile=${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml
-script_args="${configfile}"
+pythonscript=${path2CLEO}/examples/fromfile_irreg/fromfile_irreg.py
+src_config_filename=${path2CLEO}/examples/fromfile_irreg/src/config/fromfile_irreg_config.yaml
+script_args="${src_config_filename} --do_inputfiles --do_run_executable \
+  --do_plot_results --ntasks=4"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
-
-if [[ "${compilername}" != "gcc" ]]
-then
-  echo "bubble3d example currently only working on Levante with gcc compiler"
-  echo "-> please use compilername=gcc"
-  exit 1
-fi
 
 ### ---------- build, compile and run example ---------- ###
-${path2CLEO}/examples/run_example_levante.sh \
+${path2CLEO}/scripts/levante/examples/build_compile_run_plot.sh ${do_build} \
   ${buildtype} ${compilername} ${path2CLEO} ${path2build} "${build_flags}" \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###

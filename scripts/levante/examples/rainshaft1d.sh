@@ -1,41 +1,40 @@
 #!/bin/bash
-#SBATCH --job-name=irreg_fromfile_irreg
+#SBATCH --job-name=rain1d
 #SBATCH --partition=compute
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=4
-#SBATCH --cpus-per-task=16
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=256
 #SBATCH --mem=10G
-#SBATCH --time=00:05:00
+#SBATCH --time=00:10:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=bm1183
-#SBATCH --output=./fromfile_irreg_out.%j.out
-#SBATCH --error=./fromfile_irreg_err.%j.out
+#SBATCH --output=./rain1d_out.%j.out
+#SBATCH --error=./rain1d_err.%j.out
 
-### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
 ### ------ You MUST edit these lines to set your ------- ###
 ### ---- build type, directories, the executable(s) ---- ###
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
+do_build="true"
 buildtype="openmp"
 compilername="gcc"
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_fromfile_irreg/
+path2build=${HOME}/CLEO/build_rshaft1d/
 build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
-executables="fromfile_irreg"
+executables="rshaft1d"
 
-pythonscript=${path2CLEO}/examples/fromfile_irreg/fromfile_irreg.py
-configfile=${path2CLEO}/examples/fromfile_irreg/src/config/fromfile_irreg_config.yaml
-script_args="${configfile} --do_inputfiles=TRUE --do_run_executable=TRUE \
-  --do_plot_results=TRUE --ntasks=4"
+pythonscript=${path2CLEO}/examples/rainshaft1d/rainshaft1d.py
+src_config_filename=${path2CLEO}/examples/rainshaft1d/src/config/rain1d_config.yaml
+script_args="${src_config_filename}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 
 ### ---------- build, compile and run example ---------- ###
-${path2CLEO}/examples/run_example_levante.sh \
+${path2CLEO}/scripts/levante/examples/build_compile_run_plot.sh ${do_build} \
   ${buildtype} ${compilername} ${path2CLEO} ${path2build} "${build_flags}" \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###

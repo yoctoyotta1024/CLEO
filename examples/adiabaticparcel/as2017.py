@@ -50,8 +50,8 @@ sharepath = path2build / "share"
 initsupers_filename = sharepath / "as2017_dimlessSDsinit.dat"
 grid_filename = sharepath / "as2017_dimlessGBxboundaries.dat"
 
-# booleans for [making, saving] initialisation figures
-isfigures = [True, True]
+# booleans for [showing, saving] initialisation figures
+isfigures = [False, True]
 savefigpath = binpath
 
 # settings for 0D Model (number of SD and grid coordinates)

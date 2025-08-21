@@ -1,16 +1,16 @@
 #!/bin/bash
-#SBATCH --job-name=fromfile
+#SBATCH --job-name=breakup
 #SBATCH --partition=compute
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=4
-#SBATCH --cpus-per-task=16
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=128
 #SBATCH --mem=10G
-#SBATCH --time=00:05:00
+#SBATCH --time=00:15:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=bm1183
-#SBATCH --output=./fromfile_out.%j.out
-#SBATCH --error=./fromfile_err.%j.out
+#SBATCH --output=./breakup_out.%j.out
+#SBATCH --error=./breakup_err.%j.out
 
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
@@ -18,24 +18,24 @@
 ### ---- build type, directories, the executable(s) ---- ###
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
+do_build="true"
 buildtype="openmp"
 compilername="intel"
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_fromfile/
-build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
+path2build=${HOME}/CLEO/build_colls0d/${buildtype}/
+build_flags="-DCLEO_COUPLED_DYNAMICS=null -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
-executables="fromfile"
+executables="longcolls lowlistcolls szakallurbichcolls testikstraubcolls"
 
-pythonscript=${path2CLEO}/examples/fromfile/fromfile.py
-configfile=${path2CLEO}/examples/fromfile/src/config/fromfile_config.yaml
-script_args="${configfile} --do_inputfiles=TRUE --do_run_executable=TRUE \
-  --do_plot_results=TRUE --ntasks=4"
+pythonscript=${path2CLEO}/examples/boxmodelcollisions/breakup.py
+src_config_filename=${path2CLEO}/examples/boxmodelcollisions/src/config/breakup_config.yaml
+script_args="${src_config_filename} long lowlist szakallurbich testikstraub"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 
 ### ---------- build, compile and run example ---------- ###
-${path2CLEO}/examples/run_example_levante.sh \
+${path2CLEO}/scripts/levante/examples/build_compile_run_plot.sh ${do_build} \
   ${buildtype} ${compilername} ${path2CLEO} ${path2build} "${build_flags}" \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###

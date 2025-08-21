@@ -32,7 +32,7 @@ path2CLEO = Path(sys.argv[1])
 path2build = Path(sys.argv[2])
 config_filename = Path(sys.argv[3])
 
-# booleans for [making, saving] initialisation figures
+# booleans for [showing, saving] initialisation figures
 isfigures = [True, True]
 
 ### essential paths and filenames

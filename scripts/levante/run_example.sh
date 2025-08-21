@@ -3,7 +3,7 @@
 example=$1
 sbatch=$2
 path2CLEO=${3:-${HOME}/CLEO}
-examplesdir=${path2CLEO}/examples
+path2examplesbash=${path2CLEO}/scripts/levante/examples
 
 if [ "${example}" == "" ]
 then
@@ -13,47 +13,55 @@ then
 else
   if [ "${example}" == "as2017" ]
   then
-    ${sbatch} ${examplesdir}/adiabaticparcel/as2017.sh
+    ${sbatch} ${path2examplesbash}/as2017.sh
 
   elif  [ "${example}" == "cuspbifurc" ]
   then
-    ${sbatch} ${examplesdir}/adiabaticparcel/cuspbifurc.sh
+    ${sbatch} ${path2examplesbash}/cuspbifurc.sh
 
   elif  [ "${example}" == "shima2009" ]
     then
-    ${sbatch} ${examplesdir}/boxmodelcollisions/shima2009.sh
+    ${sbatch} ${path2examplesbash}/shima2009.sh
 
   elif  [ "${example}" == "breakup" ]
     then
-    ${sbatch} ${examplesdir}/boxmodelcollisions/breakup.sh
+    ${sbatch} ${path2examplesbash}/breakup.sh
 
   elif  [ "${example}" == "bubble3d" ]
     then
-      ${sbatch} ${examplesdir}/bubble3d/bubble3d.sh # WIP
+      ${sbatch} ${path2examplesbash}/bubble3d.sh
 
   elif  [ "${example}" == "constthermo2d" ]
     then
-    ${sbatch} ${examplesdir}/constthermo2d/constthermo2d.sh
+    ${sbatch} ${path2examplesbash}/constthermo2d.sh
 
   elif  [ "${example}" == "divfree2d" ]
   then
-    ${sbatch} ${examplesdir}/divfreemotion/divfree2d.sh
+    ${sbatch} ${path2examplesbash}/divfree2d.sh
 
   elif  [ "${example}" == "eurec4a1d" ]
   then
-    ${sbatch} ${examplesdir}/eurec4a1d/eurec4a1d.sh
+    ${sbatch} ${path2examplesbash}/eurec4a1d.sh
+
+  elif  [ "${example}" == "fromfile" ]
+  then
+    ${sbatch} ${path2examplesbash}/fromfile.sh
+
+  elif  [ "${example}" == "fromfile_irreg" ]
+  then
+    ${sbatch} ${path2examplesbash}/fromfile_irreg.sh
 
   elif  [ "${example}" == "python_bindings" ]
     then
-      ${sbatch} ${examplesdir}/python_bindings/python_bindings.sh
+      ${sbatch} ${path2examplesbash}/python_bindings.sh
 
   elif  [ "${example}" == "rainshaft1d" ]
   then
-    ${sbatch} ${examplesdir}/rainshaft1d/rainshaft1d.sh
+    ${sbatch} ${path2examplesbash}/rainshaft1d.sh
 
   elif  [ "${example}" == "speedtest" ]
   then
-    ${sbatch} ${examplesdir}/speedtest/speedtest.sh
+    ${sbatch} ${path2examplesbash}/speedtest.sh
 
   else
     echo "'${example}' is not an example"

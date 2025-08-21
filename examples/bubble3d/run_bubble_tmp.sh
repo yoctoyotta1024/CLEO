@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ### temporary file for testing running of bubble3d example
-### TODO(CB): delete file, (merge with run_example like other examples)
+### TODO(CB): delete file
 
 ### If you did this to your ~/.spack/upstreams.yaml to get py-netcdf from commin's:
 # then python=/sw/spack-levante/python-3.9.9-fwvsvi/bin/python # is the one loaded by py-netcdf4
@@ -50,9 +50,8 @@ then
    ${path2CLEO} \
    ${path2build} \
    ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
-   ${path2build}/share/bubble3d_dimlessGBxboundaries.dat \
-   ${path2build}/share/bubble3d_dimlessSDsinit.dat \
-   0
+   --save_figures \
+   --savefigpath="${path2build}/bin"
 
 elif [ "${action}" == "run" ]
 then
@@ -67,7 +66,7 @@ then
   export OMP_PROC_BIND=spread
   export OMP_PLACES=threads
 
-  cd ${path2build}
+  cd ${path2build}/../
   mpiexec -n 1 ${path2build}/examples/bubble3d/src/bubble3d \
     ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml \
     : -n 1 ${python} \
@@ -79,6 +78,8 @@ elif [ "${action}" == "plot" ]
 then
   ${python} ${path2CLEO}/examples/bubble3d/bubble3d_plotting.py \
     ${path2CLEO} \
-    ${path2build} \
-    ${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml
+    ${path2build}/bin \
+    ${path2build}/share/bubble3d_dimlessGBxboundaries.dat \
+    ${path2build}/bin/bubble3d_setup.txt \
+    ${path2build}/bin/bubble3d_sol.zarr
 fi

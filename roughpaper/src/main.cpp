@@ -50,8 +50,8 @@ int main(int argc, char *argv[]) {
     const SDMMethods sdm(create_sdm(config, tsteps, dataset, store));
 
     /* Solver of dynamics coupled to CLEO SDM */
-    CoupledDynamics auto coupldyn(
-        create_coupldyn(config, sdm.gbxmaps, tsteps.get_couplstep(), tsteps.get_t_end()));
+    CoupledDynamics auto coupldyn =
+        create_coupldyn(config, sdm.gbxmaps, tsteps.get_couplstep(), tsteps.get_t_end());
 
     /* coupling between coupldyn and SDM */
     const CouplingComms<CartesianMaps, FromFileDynamics> auto comms = FromFileComms{};

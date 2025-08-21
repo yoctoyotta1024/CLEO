@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=divfree2d
+#SBATCH --job-name=eurec4a1d
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
 #SBATCH --gpus=4
@@ -10,31 +10,34 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=bm1183
-#SBATCH --output=./divfree2d_out.%j.out
-#SBATCH --error=./divfree2d_err.%j.out
+#SBATCH --output=./eurec4a1d_out.%j.out
+#SBATCH --error=./eurec4a1d_err.%j.out
+
+# TODO(all): python script(s) for example
 
 ### ------------------ Input Parameters ---------------- ###
 ### ------ You MUST edit these lines to set your ------- ###
 ### ---- build type, directories, the executable(s) ---- ###
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
+do_build="true"
 buildtype="cuda"
 compilername="gcc"
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_divfree2d/
+path2build=${HOME}/CLEO/build_eurec4a1d/
 build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
-executables="divfree2d"
+executables="eurec4a1d"
 
-pythonscript=${path2CLEO}/examples/divfreemotion/divfree2d.py
-configfile=${path2CLEO}/examples/divfreemotion/src/config/divfree2d_config.yaml
-script_args="${configfile}"
+src_config_filename=${path2CLEO}/examples/eurec4a1d/src/config/eurec4a1d_config.yaml
+pythonscript=""
+script_args="${src_config_filename}"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 
 ### ---------- build, compile and run example ---------- ###
-${path2CLEO}/examples/run_example_levante.sh \
+${path2CLEO}/scripts/levante/examples/build_compile_run_plot.sh ${do_build} \
   ${buildtype} ${compilername} ${path2CLEO} ${path2build} "${build_flags}" \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###

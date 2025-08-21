@@ -23,6 +23,7 @@ import shutil
 import subprocess
 import sys
 import numpy as np
+import matplotlib.pyplot as plt
 from pathlib import Path
 
 path2CLEO = Path(sys.argv[1])
@@ -59,8 +60,8 @@ grid_filename = sharepath / "shima2009_dimlessGBxboundaries.dat"
 setupfile = binpath / "shima2009_setup.txt"
 dataset = binpath / "shima2009_sol.zarr"
 
-# booleans for [making, saving] initialisation figures
-isfigures = [True, True]
+# booleans for [showing, saving] initialisation figures
+isfigures = [False, True]
 savefigpath = binpath
 
 ### --- settings for 0-D Model gridbox boundaries --- ###
@@ -217,7 +218,7 @@ def plot_results(
     smoothsig = smoothsigconst * (
         config["maxnsupers"] ** (-1 / 5)
     )  # = ~0.2 for guassian smoothing
-    fig, ax = shima2009fig.plot_validation_figure(
+    shima2009fig.plot_validation_figure(
         plotwitherr,
         time,
         superdrops,
@@ -230,6 +231,7 @@ def plot_results(
         savename=savename,
         withgol=withgol,
     )
+    plt.show()
 
 
 if "golovin" in kernels:
@@ -237,9 +239,7 @@ if "golovin" in kernels:
     ### -------------------- RUN CLEO EXECUTABLE ------------------- ###
     ### ------------------------------------------------------------ ###
     editconfigfile.edit_config_params(config_filename, params_1)
-    executable = (
-        path2build / "examples" / "boxmodelcollisions" / "golovin" / "src" / "golcolls"
-    )
+    executable = path2build / "examples" / "boxmodelcollisions" / "src" / "golcolls"
     run_exectuable(path2build, dataset, executable, config_filename)
     ### ------------------------------------------------------------ ###
     ### ------------------------------------------------------------ ###
@@ -274,9 +274,7 @@ if "long1" in kernels:
     ### -------------------- RUN CLEO EXECUTABLE ------------------- ###
     ### ------------------------------------------------------------ ###
     editconfigfile.edit_config_params(config_filename, params_1)
-    executable = (
-        path2build / "examples" / "boxmodelcollisions" / "long" / "src" / "longcolls"
-    )
+    executable = path2build / "examples" / "boxmodelcollisions" / "src" / "longcolls"
     run_exectuable(path2build, dataset, executable, config_filename)
     ### ------------------------------------------------------------ ###
     ### ------------------------------------------------------------ ###
@@ -311,9 +309,7 @@ if "long2" in kernels:
     ### -------------------- RUN CLEO EXECUTABLE ------------------- ###
     ### ------------------------------------------------------------ ###
     editconfigfile.edit_config_params(config_filename, params_2)
-    executable = (
-        path2build / "examples" / "boxmodelcollisions" / "long" / "src" / "longcolls"
-    )
+    executable = path2build / "examples" / "boxmodelcollisions" / "src" / "longcolls"
     run_exectuable(path2build, dataset, executable, config_filename)
     ### ------------------------------------------------------------ ###
     ### ------------------------------------------------------------ ###

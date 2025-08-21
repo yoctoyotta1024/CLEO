@@ -166,7 +166,7 @@ inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset &d
   const GridboxMaps auto gbxmaps = create_cartesian_maps(
       config.get_ngbxs(), config.get_nspacedims(), config.get_grid_filename());
   const MicrophysicalProcess auto microphys = NullMicrophysicalProcess{};
-  const MoveSupersInDomain movesupers(create_movement(gbxmaps));
+  const MoveSupersInDomain movesupers = create_movement(gbxmaps);
   const Observer auto obs = create_observer(config, tsteps, dataset, store);
   return SDMMethods(couplstep, gbxmaps, microphys, movesupers, obs);
 }
@@ -197,8 +197,8 @@ int main(int argc, char *argv[]) {
     const SDMMethods sdm(create_sdm(config, tsteps, dataset, store));
 
     /* Solver of dynamics coupled to CLEO SDM */
-    CoupledDynamics auto coupldyn(
-        create_coupldyn(config, sdm.gbxmaps, tsteps.get_couplstep(), tsteps.get_t_end()));
+    CoupledDynamics auto coupldyn =
+        create_coupldyn(config, sdm.gbxmaps, tsteps.get_couplstep(), tsteps.get_t_end());
 
     /* coupling between coupldyn and SDM */
     const CouplingComms<CartesianMaps, FromFileDynamics> auto comms = FromFileComms{};

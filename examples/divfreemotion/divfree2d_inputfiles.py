@@ -50,9 +50,9 @@ def main(
 
     ### --- plotting initialisation figures --- ###
     isfigures = [
+        False,
         True,
-        True,
-    ]  # booleans for [making, saving] initialisation figures # TODO(CB): move into args
+    ]  # booleans for [showing, saving] initialisation figures # TODO(CB): move into args
     savefigpath = (
         path2build / "bin"
     )  # directory for saving figures # TODO(CB): move into args

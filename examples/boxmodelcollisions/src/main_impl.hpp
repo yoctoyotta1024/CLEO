@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: main_golcolls.cpp
+ * File: main_impl.hpp
  * Project: src
  * Created Date: Thursday 12th October 2023
  * Author: Clara Bayley (CB)
@@ -13,10 +13,14 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * runs the CLEO super-droplet model (SDM) for 0-D box model with Golovin's kernel.
- * After make/compiling, execute for example via:
+ * Common setup across all executables of CLEO super-droplet model (SDM) for 0-D box model
+ * "boxmodelcollisions" examples (each with it's own microphysics, e.g. different collision kernel).
+ * After make/compiling each executable, execute for example via e.g.
  * ./src/golcolls ../src/config/config.yaml
  */
+
+#ifndef EXAMPLES_BOXMODELCOLLISIONS_SRC_MAIN_IMPL_HPP_
+#define EXAMPLES_BOXMODELCOLLISIONS_SRC_MAIN_IMPL_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <cmath>
@@ -48,8 +52,6 @@
 #include "runcleo/couplingcomms.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
-#include "superdrops/collisions/coalescence.hpp"
-#include "superdrops/collisions/golovinprob.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
 #include "zarr/fsstore.hpp"
@@ -74,13 +76,6 @@ inline auto create_movement(const CartesianMaps &gbxmaps) {
   const BoundaryConditions<CartesianMaps> auto boundary_conditions = NullBoundaryConditions{};
 
   return cartesian_movement(gbxmaps, motion, boundary_conditions);
-}
-
-inline MicrophysicalProcess auto create_microphysics(const Config &config,
-                                                     const Timesteps &tsteps) {
-  const PairProbability auto prob = GolovinProb();
-  const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(), &step2realtime, prob);
-  return colls;
 }
 
 template <typename Dataset, typename Store>
@@ -110,19 +105,21 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
   return obssd >> obs1 >> obs0;
 }
 
-template <typename Dataset, typename Store>
+template <typename Dataset, typename Store, typename CreateMicrophysics>
 inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset &dataset,
-                       Store &store) {
+                       Store &store, const CreateMicrophysics create_microphysics) {
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
-  const GridboxMaps auto gbxmaps(create_gbxmaps(config));
-  const MicrophysicalProcess auto microphys(create_microphysics(config, tsteps));
-  const MoveSupersInDomain movesupers(create_movement(gbxmaps));
+  const GridboxMaps auto gbxmaps = create_gbxmaps(config);
+  const MicrophysicalProcess auto microphys = create_microphysics(config, tsteps);
+  const MoveSupersInDomain movesupers = create_movement(gbxmaps);
   const Observer auto obs = create_observer(config, tsteps, dataset, store);
 
   return SDMMethods(couplstep, gbxmaps, microphys, movesupers, obs);
 }
 
-int main(int argc, char *argv[]) {
+template <typename CreateMicrophysics>
+inline int generic_microphysics_main(int argc, char *argv[],
+                                     const CreateMicrophysics create_microphysics) {
   if (argc < 2) {
     throw std::invalid_argument("configuration file(s) not specified");
   }
@@ -156,7 +153,7 @@ int main(int argc, char *argv[]) {
     auto dataset = SimpleDataset(store);
 
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
-    const SDMMethods sdm = create_sdm(config, tsteps, dataset, store);
+    const SDMMethods sdm = create_sdm(config, tsteps, dataset, store, create_microphysics);
 
     /* Create coupldyn solver and coupling between coupldyn and SDM */
     const CoupledDynamics auto coupldyn = NullDynamics(tsteps.get_couplstep());
@@ -176,3 +173,5 @@ int main(int argc, char *argv[]) {
 
   return 0;
 }
+
+#endif  // EXAMPLES_BOXMODELCOLLISIONS_SRC_MAIN_IMPL_HPP_

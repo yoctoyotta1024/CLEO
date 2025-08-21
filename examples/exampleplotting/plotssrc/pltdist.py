@@ -175,8 +175,6 @@ def plot_domainmass_distribs(
         fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
         print("Figure .png saved as: " + str(savename))
 
-    plt.show()
-
     return fig, ax
 
 
@@ -222,8 +220,6 @@ def plot_domainnsupers_distribs(
         fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
         print("Figure .png saved as: " + str(savename))
 
-    plt.show()
-
     return fig, ax
 
 
@@ -268,7 +264,5 @@ def plot_domainnumconc_distribs(
     if savename != "":
         fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
         print("Figure .png saved as: " + str(savename))
-
-    plt.show()
 
     return fig, ax

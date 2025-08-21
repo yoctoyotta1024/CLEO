@@ -24,7 +24,7 @@ from matplotlib import colors
 from pathlib import Path
 
 
-def plot_domain_thermodynamics_timeseries(time, gbxs, thermo, winds, savedir):
+def plot_domain_thermodynamics_timeseries(time, gbxs, thermo, winds, savedir, do_show):
     """plot 2-D cross-sections of domain along y axis for thermodynamics and
     wind fields at a series of time slices."""
 
@@ -72,6 +72,8 @@ def plot_domain_thermodynamics_timeseries(time, gbxs, thermo, winds, savedir):
             data4d,
             savedir,
         )
+        if do_show:
+            plt.show()
 
 
 def plot_timeseries_domain_slices(
@@ -100,7 +102,6 @@ def plot_timeseries_domain_slices(
         savename = savedir / Path(f"timeseries_{key}.png")
         fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
         print("Figure .png saved as: " + str(savename))
-        plt.show()
 
 
 def plot_domain_slices(

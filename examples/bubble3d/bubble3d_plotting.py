@@ -18,6 +18,7 @@ for bubble test case output
 """
 
 # %%
+### -------------------------------- IMPORTS ------------------------------- ###
 import argparse
 import awkward as ak
 import sys
@@ -27,63 +28,45 @@ import matplotlib.colors as mcolors
 from matplotlib.cm import ScalarMappable
 from pathlib import Path
 
-parser = argparse.ArgumentParser()
-parser.add_argument(
-    "--path2CLEO",
-    type=Path,
-    help="Absolute path to CLEO",
-    default="/home/m/m300950/CLEO",
-)
-parser.add_argument(
-    "--path2build",
-    type=Path,
-    help="Absolute path to build",
-    default="/home/m/m300950/CLEO/build_bubble3d",
-)
-parser.add_argument(
-    "--config_filename",
-    type=Path,
-    help="Absolute path to config file",
-    default="/home/m/m300950/CLEO/examples/bubble3d/src/config/bubble3d_config.yaml",
-)
-args, unknown = parser.parse_known_args()
-
-sys.path.append(str(args.path2CLEO))  # imports from pySD
-sys.path.append(
-    str(args.path2CLEO / "examples" / "exampleplotting")
-)  # imports from example plots package
-
-from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
 
 # %%
-path2build = args.path2build
-config_filename = args.config_filename
+### ------------------------- FUNCTION DEFINITIONS ------------------------- ###
+def parse_known_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--path2CLEO",
+        type=Path,
+        help="Absolute path to CLEO",
+        default="/home/m/m300950/CLEO",
+    )
+    parser.add_argument(
+        "--savefigpath",
+        type=Path,
+        help="Absolute path to build",
+        default="/home/m/m300950/CLEO/build_bubble3d/bin",
+    )
+    parser.add_argument(
+        "--grid_filename",
+        type=Path,
+        help="Absolute path to gridbox boundaries file",
+        default="/home/m/m300950/CLEO/build_bubble3d/share/bubble3d_dimlessGBxboundaries.dat",
+    )
+    parser.add_argument(
+        "--setupfile",
+        type=Path,
+        help="Absolute path to setup file",
+        default="/home/m/m300950/CLEO/build_bubble3d/bin/bubble3d_setup.txt",
+    )
+    parser.add_argument(
+        "--dataset",
+        type=Path,
+        help="Absolute path to dataset",
+        default="/home/m/m300950/CLEO/build_bubble3d/bin/bubble3d_sol.zarr",
+    )
+    args, unknown = parser.parse_known_args()
+    return args, unknown
 
-dataset = path2build / "bin/bubble3d_sol.zarr"
-setuptxt = path2build / "bin/bubble3d_setup.txt"
-gridfile = path2build / "share/bubble3d_dimlessGBxboundaries.dat"
-print(dataset)
 
-ds = pyzarr.get_rawdataset(dataset)
-config = pysetuptxt.get_config(setuptxt, nattrs=3, isprint=True)
-consts = pysetuptxt.get_consts(setuptxt, isprint=True)
-gbxs = pygbxsdat.get_gridboxes(gridfile, consts["COORD0"], isprint=True)
-
-time = pyzarr.get_time(ds)
-gbxindex = pyzarr.get_gbxindex(ds, gbxs["ndims"])
-thermo, winds = pyzarr.get_thermodata(
-    ds, config["ntime"], gbxs["ndims"], consts, getwinds=True
-)
-totnsupers = pyzarr.get_totnsupers(ds)
-superdrops = pyzarr.get_supers(ds, consts)
-superdrops.attach_time(time.mins, "min", do_reshape=True, var4reshape="sdId")
-
-xfull_km = (gbxs["xfull"] - (gbxs["xfull"][-1] + gbxs["xfull"][0]) / 2) / 1000
-zfull_km = gbxs["zfull"] / 1000
-xxh_km, zzh_km = np.meshgrid(xfull_km, zfull_km, indexing="ij")
-
-
-# %%
 def plot_2d_var(
     xxh_km, zzh_km, data, var, label, t2plts, cmap="plasma", vmin=None, vmax=None
 ):
@@ -122,33 +105,6 @@ def plot_2d_var(
     return fig, axes
 
 
-t2plts = [0, 30, 60, 90, 120]  # mins
-vars = ["wvel", "uvel", "vvel"]
-labels = ["vertical velocity /m/s", "eastwards wind /m/s", "northwards wind /m/s"]
-vlims = [[-3.0, 3.0], [-10.0, 10.0], [-3.0, 3.0]]
-for v, var in enumerate(vars):
-    vmin, vmax = vlims[v]
-    label = labels[v]
-    fig, axes = plot_2d_var(
-        xxh_km, zzh_km, winds, var, label, t2plts, cmap="bwr", vmin=vmin, vmax=vmax
-    )
-
-    savename = path2build / "bin" / f"bubble_{var}.png"
-    fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
-    print("Figure .png saved as: " + str(savename))
-# %%
-nsample = 1000
-sample_attrs = ["coord3", "coord1", "radius", "time"]
-sample = superdrops.random_sample("sdId", nsample, variables2sample=sample_attrs)
-
-# %%
-wind_var = winds["wvel"]
-label = "vertical velocity /m/s"
-cmap = "PRGn"
-vlims = [-5.0, 5.0]
-
-
-# %%
 def plot_2d_supers(xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlims, xlims):
     nplots = len(t2plts)
     fig, axes = plt.subplots(
@@ -225,30 +181,6 @@ def plot_2d_supers(xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlims, xlims)
     return fig, axs
 
 
-t2plts = [0, 30, 60, 90, 120]  # mins
-xl = (np.amax(gbxs["xhalf"]) - np.amin(gbxs["xhalf"])) / 2 / 1000
-fig, axs = plot_2d_supers(
-    xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlims, [-xl, xl]
-)
-savename = path2build / "bin" / "bubble_motion.png"
-fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
-print("Figure .png saved as: " + str(savename))
-
-
-# %%
-nsample = 1000
-sample_attrs = ["coord3", "coord1", "radius", "time"]
-sample = superdrops.random_sample("sdId", nsample, variables2sample=sample_attrs)
-
-
-# %%
-wind_var = winds["wvel"]
-label = "vertical velocity /m/s"
-cmap = "PRGn"
-vlims = [-10.0, 10.0]
-
-
-# %%
 def plot_2d_supers_contours(
     xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlims, xlims
 ):
@@ -348,11 +280,99 @@ def plot_2d_supers_contours(
     return fig, axs
 
 
+# %%
+### --------------- IMPORT pySD AND CLEO PLOTTING MODULES ------------------ ###
+path2CLEO = parse_known_arguments()[0].path2CLEO
+sys.path.append(str(path2CLEO))  # imports from pySD
+sys.path.append(
+    str(path2CLEO / "examples" / "exampleplotting")
+)  # imports from example plots package
+from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
+
+# %%
+### -------------------------- INPUT PARAMETERS ---------------------------- ###
+args = parse_known_arguments()[0]
+savefigpath = args.savefigpath
+dataset = args.dataset
+setupfile = args.setupfile
+grid_filename = args.grid_filename
+print(dataset)
+
+ds = pyzarr.get_rawdataset(dataset)
+config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
+consts = pysetuptxt.get_consts(setupfile, isprint=True)
+gbxs = pygbxsdat.get_gridboxes(grid_filename, consts["COORD0"], isprint=True)
+
+time = pyzarr.get_time(ds)
+gbxindex = pyzarr.get_gbxindex(ds, gbxs["ndims"])
+thermo, winds = pyzarr.get_thermodata(
+    ds, config["ntime"], gbxs["ndims"], consts, getwinds=True
+)
+totnsupers = pyzarr.get_totnsupers(ds)
+superdrops = pyzarr.get_supers(ds, consts)
+superdrops.attach_time(time.mins, "min", do_reshape=True, var4reshape="sdId")
+
+xfull_km = (gbxs["xfull"] - (gbxs["xfull"][-1] + gbxs["xfull"][0]) / 2) / 1000
+zfull_km = gbxs["zfull"] / 1000
+xxh_km, zzh_km = np.meshgrid(xfull_km, zfull_km, indexing="ij")
+
+# %%
+### -------------------------- CALL PLOT_2D_VAR ---------------------------- ###
+t2plts = [0, 30, 60, 90, 120]  # mins
+vars = ["wvel", "uvel", "vvel"]
+labels = ["vertical velocity /m/s", "eastwards wind /m/s", "northwards wind /m/s"]
+vlims = [[-3.0, 3.0], [-10.0, 10.0], [-3.0, 3.0]]
+for v, var in enumerate(vars):
+    vmin, vmax = vlims[v]
+    label = labels[v]
+    fig, axes = plot_2d_var(
+        xxh_km, zzh_km, winds, var, label, t2plts, cmap="bwr", vmin=vmin, vmax=vmax
+    )
+
+    savename = savefigpath / f"bubble_{var}.png"
+    fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
+    print("Figure .png saved as: " + str(savename))
+
+# %%
+### ------------ SAMPLE SDs AND SETTINGS FOR PLOT_2D_SUPERS ---------------- ###
+nsample = 1000
+sample_attrs = ["coord3", "coord1", "radius", "time"]
+sample = superdrops.random_sample("sdId", nsample, variables2sample=sample_attrs)
+
+wind_var = winds["wvel"]
+label = "vertical velocity /m/s"
+cmap = "PRGn"
+vlims = [-5.0, 5.0]
+
+# %%
+### ------------------------ CALL PLOT_2D_SUPERS --------------------------- ###
+t2plts = [0, 30, 60, 90, 120]  # mins
+xl = (np.amax(gbxs["xhalf"]) - np.amin(gbxs["xhalf"])) / 2 / 1000
+fig, axs = plot_2d_supers(
+    xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlims, [-xl, xl]
+)
+savename = savefigpath / "bubble_motion.png"
+fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
+print("Figure .png saved as: " + str(savename))
+
+# %%
+### -------- SAMPLE SDs AND SETTINGS FOR PLOT_2D_SUPERS_CONTOURS ----------- ###
+nsample = 1000
+sample_attrs = ["coord3", "coord1", "radius", "time"]
+sample = superdrops.random_sample("sdId", nsample, variables2sample=sample_attrs)
+
+wind_var = winds["wvel"]
+label = "vertical velocity /m/s"
+cmap = "PRGn"
+vlims = [-10.0, 10.0]
+
+# %%
+### ------------------- CALL PLOT_2D_SUPERS_CONTOURS ----------------------- ###
 t2plts = [20, 50, 80]  # mins
 xl = (np.amax(gbxs["xhalf"]) - np.amin(gbxs["xhalf"])) / 2 / 1000
 fig, axs = plot_2d_supers_contours(
     xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlims, [-xl, xl]
 )
-savename = path2build / "bin" / "bubble_motion_v2.png"
+savename = savefigpath / "bubble_motion_v2.png"
 fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
 print("Figure .png saved as: " + str(savename))

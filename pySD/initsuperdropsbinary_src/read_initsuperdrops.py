@@ -28,9 +28,9 @@ def plot_initGBxs_distribs(
     constants_filename,
     initsupers_filename,
     grid_filename,
-    savefigpath,
-    savefig,
     gbxs2plt,
+    savefig=False,
+    savefigpath=None,
     savelabel="",
 ):
     """plot initial superdroplet distribution from initsupersfile binary
@@ -41,9 +41,9 @@ def plot_initGBxs_distribs(
         constants_filename,
         initsupers_filename,
         grid_filename,
+        gbxs2plt,
         savefigpath,
         savefig,
-        gbxs2plt,
         savelabel,
     )
     plot_initGBxs_dropletmasses(
@@ -51,12 +51,11 @@ def plot_initGBxs_distribs(
         constants_filename,
         initsupers_filename,
         grid_filename,
+        gbxs2plt,
         savefigpath,
         savefig,
-        gbxs2plt,
         savelabel,
     )
-    plt.close()
 
 
 def get_superdroplet_attributes(
@@ -186,9 +185,9 @@ def plot_initGBxs_attrdistribs(
     constants_filename,
     initsupers_filename,
     grid_filename,
+    gbxs2plt,
     savefigpath,
     savefig,
-    gbxs2plt,
     savelabel,
 ):
     """plot initial superdroplet distribution from initsupersfile binary
@@ -214,11 +213,11 @@ def plot_initGBxs_attrdistribs(
     fig, axs, lines = plot_initdistribs(attrs, gbxvols, gbxidxs)
 
     fig.tight_layout()
+
     if savefig:
         savename = savefigpath / savename
         fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
         print("Figure .png saved as: " + str(savename))
-    plt.show()
 
 
 def figure_setup(coord3, coord1, coord2):
@@ -392,9 +391,9 @@ def plot_initGBxs_dropletmasses(
     constants_filename,
     initsupers_filename,
     grid_filename,
+    gbxs2plt,
     savefigpath,
     savefig,
-    gbxs2plt,
     savelabel,
 ):
     """plot initial superdroplet mass distributions
@@ -424,11 +423,11 @@ def plot_initGBxs_dropletmasses(
     )
 
     fig.tight_layout()
+
     if savefig:
         savename = savefigpath / savename
         fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
         print("Figure .png saved as: " + str(savename))
-    plt.show()
 
 
 def plot_massdistribs(attrs, gbxvols, gbxidxs, RHO_L, RHO_SOL):

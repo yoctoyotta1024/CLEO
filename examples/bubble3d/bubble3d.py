@@ -17,70 +17,134 @@ Script generates input files, then runs CLEO executable "bubble3d" to
 piggyback ICON bubble test case
 """
 
-import os
+# %%
+### -------------------------------- IMPORTS ------------------------------- ###
+import argparse
 import shutil
 import subprocess
 import sys
 from pathlib import Path
+from ruamel.yaml import YAML
 
-path2CLEO = Path(sys.argv[1])
-path2build = Path(sys.argv[2])
-config_filename = Path(sys.argv[3])
+# %%
+### --------------------------- PARSE ARGUMENTS ---------------------------- ###
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "path2CLEO", type=Path, help="Absolute path to CLEO directory (for PySD)"
+)
+parser.add_argument("path2build", type=Path, help="Absolute path to build directory")
+parser.add_argument(
+    "src_config_filename",
+    type=Path,
+    help="Absolute path to source configuration YAML file",
+)
+parser.add_argument(
+    "--do_inputfiles",
+    action="store_true",  # default is False
+    help="Generate initial condition binary files",
+)
+parser.add_argument(
+    "--do_run_executable",
+    action="store_true",  # default is False
+    help="Run example executable(s)",
+)
+parser.add_argument(
+    "--do_plot_results",
+    action="store_true",  # default is False
+    help="Plot results of example",
+)
+args = parser.parse_args()
 
-import bubble3d_inputfiles
+# %%
+### -------------------------- INPUT PARAMETERS ---------------------------- ###
+### --- command line parsed arguments --- ###
+path2CLEO = args.path2CLEO
+path2build = args.path2build
+src_config_filename = args.src_config_filename
 
-### ---------------------------------------------------------------- ###
-### ----------------------- INPUT PARAMETERS ----------------------- ###
-### ---------------------------------------------------------------- ###
-### --- essential paths and filenames --- ###
-# path and filenames for creating initial SD conditions
-binpath = path2build / "bin"
+### --- additional/derived arguments --- ###
+tmppath = path2build / "tmp"
 sharepath = path2build / "share"
-grid_filename = sharepath / "bubble3d_dimlessGBxboundaries.dat"
-initsupers_filename = sharepath / "bubble3d_dimlessSDsinit.dat"
-savefigpath = path2build / "bin"
-SDgbxs2plt = [0]  # gbxindex of SDs to plot (nb. "all" can be very slow)
+binpath = path2build / "bin"
+savefigpath = binpath
 
-# path and file names for plotting results
-setupfile = binpath / "bubble3d_setup.txt"
-dataset = binpath / "bubble3d_sol.zarr"
+config_filename = path2build / "tmp" / "bubble3d_config.yaml"
+config_params = {
+    "constants_filename": str(path2CLEO / "libs" / "cleoconstants.hpp"),
+    "grid_filename": str(sharepath / "bubble3d_dimlessGBxboundaries.dat"),
+    "initsupers_filename": str(sharepath / "bubble3d_dimlessSDsinit.dat"),
+    "setup_filename": str(binpath / "bubble3d_setup.txt"),
+    "zarrbasedir": str(binpath / "bubble3d_sol.zarr"),
+    "orginal_icon_grid_file": "/work/bm1183/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc",
+    "orginal_icon_data_file": "/work/bm1183/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc",
+}
 
-### ---------------------------------------------------------------- ###
-### ------------------- BINARY FILES GENERATION--------------------- ###
-### ---------------------------------------------------------------- ###
-### --- ensure build, share and bin directories exist --- ###
-if path2CLEO == path2build:
-    raise ValueError("build directory cannot be CLEO")
-else:
-    path2build.mkdir(exist_ok=True)
-    sharepath.mkdir(exist_ok=True)
-    binpath.mkdir(exist_ok=True)
-    savefigpath.mkdir(exist_ok=True)
+isfigures = [False, True]  # booleans for [showing, saving] initialisation figures
 
-### --- delete any existing initial conditions --- ###
-shutil.rmtree(grid_filename, ignore_errors=True)
-shutil.rmtree(initsupers_filename, ignore_errors=True)
 
-bubble3d_inputfiles.main(
+# %%
+### ------------------------- FUNCTION DEFINITIONS ------------------------- ###
+def inputfiles(
     path2CLEO,
     path2build,
+    tmppath,
+    sharepath,
+    binpath,
+    savefigpath,
+    src_config_filename,
     config_filename,
-    grid_filename,
-    initsupers_filename,
-    SDgbxs2plt,
-)
-### ---------------------------------------------------------------- ###
-### ---------------------------------------------------------------- ###
+    config_params,
+    isfigures,
+):
+    sys.path.append(str(path2CLEO))  # for imports from pySD package
+    from pySD import editconfigfile
+
+    ### --- ensure build, tmp, share and bin and savefigpath directories exist --- ###
+    if path2CLEO == path2build:
+        raise ValueError("build directory cannot be CLEO")
+    else:
+        path2build.mkdir(exist_ok=True)
+        tmppath.mkdir(exist_ok=True)
+        sharepath.mkdir(exist_ok=True)
+        binpath.mkdir(exist_ok=True)
+        savefigpath.mkdir(exist_ok=True)
+
+    ### --- copy src_config_filename into tmp and edit parameters --- ###
+    config_filename.unlink(missing_ok=True)  # delete any existing config
+    shutil.copy(src_config_filename, config_filename)
+    editconfigfile.edit_config_params(config_filename, config_params)
+
+    ### --- delete any existing initial conditions --- ###
+    yaml = YAML()
+    with open(config_filename, "r") as file:
+        config = yaml.load(file)
+    Path(config["inputfiles"]["grid_filename"]).unlink(missing_ok=True)
+    Path(config["initsupers"]["initsupers_filename"]).unlink(missing_ok=True)
+
+    ### --- input binary files generation --- ###
+    # equivalent to ``import bubble3d_inputfiles`` followed by
+    # ``bubble3d_inputfiles.main(path2CLEO, path2build, ...)``
+    inputfiles_script = path2CLEO / "examples" / "bubble3d" / "bubble3d_inputfiles.py"
+    python = sys.executable
+    cmd = [python, inputfiles_script, path2CLEO, path2build, config_filename]
+    if isfigures[0]:
+        cmd.append("--show_figures")
+    if isfigures[1]:
+        cmd.append("--save_figures")
+        cmd.append(f"--savefigpath={savefigpath}")
+    print(" ".join([str(c) for c in cmd]))
+    subprocess.run(cmd)
 
 
-### ---------------------------------------------------------------- ###
-### ---------------------- RUN CLEO EXECUTABLE --------------------- ###
-### ---------------------------------------------------------------- ###
-def run_exectuable(path2CLEO, path2build, config_filename, dataset):
-    """delete existing dataset, the run exectuable with given config file"""
-    os.chdir(path2build)
-    os.system("pwd")
-    shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
+def run_exectuable(path2CLEO, path2build, config_filename):
+    ### --- delete any existing output dataset and setup files --- ###
+    yaml = YAML()
+    with open(config_filename, "r") as file:
+        config = yaml.load(file)
+    Path(config["outputdata"]["setup_filename"]).unlink(missing_ok=True)
+    shutil.rmtree(Path(config["outputdata"]["zarrbasedir"]), ignore_errors=True)
+
+    ### --- run exectuable with given config file --- ###
     cleoproc = str(path2build / "examples" / "bubble3d" / "src" / "bubble3d")
     cleoproc_args = str(config_filename)
     print("CLEO Executable: " + cleoproc)
@@ -104,25 +168,52 @@ def run_exectuable(path2CLEO, path2build, config_filename, dataset):
         python,
         pythonproc,
     ] + pythonproc_args
-    print(" ".join(cmd))
+    print(" ".join([str(c) for c in cmd]))
     subprocess.run(cmd)
 
 
-run_exectuable(path2CLEO, path2build, config_filename, dataset)
-### ---------------------------------------------------------------- ###
-### ---------------------------------------------------------------- ###
-
-
-### ---------------------------------------------------------------- ###
-### ------------------------- PLOT RESULTS ------------------------- ###
-### ---------------------------------------------------------------- ###
-def plot_results(path2CLEO):
+def plot_results(path2CLEO, config_filename, savefigpath):
     plotting_script = path2CLEO / "examples" / "bubble3d" / "bubble3d_plotting.py"
     python = sys.executable
-    cmd = [python, plotting_script, path2CLEO, path2build, config_filename]
+
+    yaml = YAML()
+    with open(config_filename, "r") as file:
+        config = yaml.load(file)
+    grid_filename = Path(config["inputfiles"]["grid_filename"])
+    setupfile = Path(config["outputdata"]["setup_filename"])
+    dataset = Path(config["outputdata"]["zarrbasedir"])
+
+    cmd = [
+        python,
+        plotting_script,
+        f"--path2CLEO={path2CLEO}",
+        f"--savefigpath={savefigpath}",
+        f"--grid_filename={grid_filename}",
+        f"--setupfile={setupfile}",
+        f"--dataset={dataset}",
+    ]
+    print(" ".join([str(c) for c in cmd]))
     subprocess.run(cmd)
 
 
-plot_results(path2CLEO)
-### ---------------------------------------------------------------- ###
-### ---------------------------------------------------------------- ###
+# %%
+### ----------------------------- RUN EXAMPLE ------------------------------ ###
+if args.do_inputfiles:
+    inputfiles(
+        path2CLEO,
+        path2build,
+        tmppath,
+        sharepath,
+        binpath,
+        savefigpath,
+        src_config_filename,
+        config_filename,
+        config_params,
+        isfigures,
+    )
+
+if args.do_run_executable:
+    run_exectuable(path2CLEO, path2build, config_filename)
+
+if args.do_plot_results:
+    plot_results(path2CLEO, config_filename, savefigpath)

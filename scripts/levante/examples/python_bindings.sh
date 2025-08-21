@@ -1,16 +1,16 @@
 #!/bin/bash
-#SBATCH --job-name=cuspbifurc
+#SBATCH --job-name=pythonbindings
 #SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=1
+#SBATCH --cpus-per-task=128
 #SBATCH --mem=10G
-#SBATCH --time=00:10:00
+#SBATCH --time=00:05:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=bm1183
-#SBATCH --output=./cuspbifurc_out.%j.out
-#SBATCH --error=./cuspbifurc_err.%j.out
+#SBATCH --output=./pythonbindings_out.%j.out
+#SBATCH --error=./pythonbindings_err.%j.out
 
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
@@ -18,23 +18,24 @@
 ### ---- build type, directories, the executable(s) ---- ###
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
-buildtype="serial"
-compilername="intel"
+do_build="true"
+buildtype="threads"
+compilername="gcc"
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_adia0d/${buildtype}/
-build_flags="-DCLEO_COUPLED_DYNAMICS=cvode -DCLEO_DOMAIN=cartesian \
-  -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
-executables="adia0d"
+path2build=${HOME}/CLEO/build_pybind/
+build_flags="-DCLEO_COUPLED_DYNAMICS=numpy -DCLEO_DOMAIN=cartesian \
+  -DCLEO_NO_ROUGHPAPER=true -DCLEO_PYTHON=/work/bm1183/m300950/bin/envs/cleoenv/bin/python"
+executables="pycleo"
 
-pythonscript=${path2CLEO}/examples/adiabaticparcel/cuspbifurc.py
-configfile=${path2CLEO}/examples/adiabaticparcel/src/config/cuspbifurc_config.yaml
-script_args="${configfile}"
+pythonscript=${path2CLEO}/examples/python_bindings/python_bindings.py
+src_config_filename=${path2CLEO}/examples/python_bindings/src/config/python_bindings_config.yaml
+script_args="${src_config_filename} --do_inputfiles --do_run_executable --do_plot_results"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 
 ### ---------- build, compile and run example ---------- ###
-${path2CLEO}/examples/run_example_levante.sh \
+${path2CLEO}/scripts/levante/examples/build_compile_run_plot.sh ${do_build} \
   ${buildtype} ${compilername} ${path2CLEO} ${path2build} "${build_flags}" \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###
