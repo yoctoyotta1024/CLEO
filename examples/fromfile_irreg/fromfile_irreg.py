@@ -165,7 +165,7 @@ def inputfiles(
     subprocess.run(cmd)
 
 
-def run_exectuable(path2CLEO, path2build, config_filename):
+def run_exectuable(path2build, config_filename):
     ### --- delete any existing output dataset and setup files --- ###
     yaml = YAML()
     with open(config_filename, "r") as file:
@@ -226,7 +226,7 @@ if args.do_inputfiles:
     )
 
 if args.do_run_executable:
-    run_exectuable(path2CLEO, path2build, config_filename)
+    run_exectuable(path2build, config_filename)
 
 if args.do_plot_results:
     plot_results(path2CLEO, config_filename, savefigpath)
