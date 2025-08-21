@@ -17,23 +17,64 @@ Script generates input files for 3D example with time varying thermodynamics
 read from binary files.
 """
 
-import sys
+
+# %%
+### ------------------------- FUNCTION DEFINITIONS ------------------------- ###
+def parse_arguments():
+    import argparse
+    from pathlib import Path
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "path2CLEO", type=Path, help="Absolute path to CLEO directory (for PySD)"
+    )
+    parser.add_argument(
+        "path2build", type=Path, help="Absolute path to build directory"
+    )
+    parser.add_argument(
+        "config_filename", type=Path, help="Absolute path to configuration YAML file"
+    )
+    parser.add_argument(
+        "thermofiles",
+        type=Path,
+        help="Absolute path to derive thermoynamics binary files",
+    )
+    parser.add_argument(
+        "--savefigpath",
+        type=Path,
+        default=None,
+        help="Directory to save initialiation figures in (is save_figures is True)",
+    )
+    parser.add_argument(
+        "--show_figures",
+        action="store_true",  # default is False
+        help="Show initialiation figures",
+    )
+    parser.add_argument(
+        "--save_figures",
+        action="store_true",  # default is False
+        help="Save initialiation figures in savefigpath",
+    )
+    return parser.parse_args()
 
 
+# %%
+### -------------------------------- MAIN ---------------------------------- ###
 def main(
     path2CLEO,
     path2build,
-    savefigpath,
     config_filename,
-    grid_filename,
-    initsupers_filename,
     thermofiles,
-    isfigures=[True, True],  # booleans for [showing, saving] initialisation figures
+    savefigpath=None,
+    show_figures=False,
+    save_figures=False,
 ):
+    import sys
     import numpy as np
+    from pathlib import Path
+    from ruamel.yaml import YAML
 
     sys.path.append(str(path2CLEO))  # for imports from pySD package
-
     from src import gen_input_thermo
     from pySD import geninitconds
     from pySD.initsuperdropsbinary_src import (
@@ -44,12 +85,20 @@ def main(
         attrsgen,
     )
 
-    ### ---------------------------------------------------------------- ###
-    ### ----------------------- INPUT PARAMETERS ----------------------- ###
-    ### ---------------------------------------------------------------- ###
-    ### --- essential paths and filenames --- ###
-    # path and filenames for creating initial SD conditions
-    constants_filename = path2CLEO / "libs" / "cleoconstants.hpp"
+    if path2CLEO == path2build:
+        raise ValueError("build directory cannot be CLEO")
+
+    ### --- Load the config YAML file --- ###
+    yaml = YAML()
+    with open(config_filename, "r") as file:
+        config = yaml.load(file)
+
+    ### ------------------------ INPUT PARAMETERS -------------------------- ###
+    ### --- required CLEO cleoconstants.hpp file --- ###
+    constants_filename = Path(config["inputfiles"]["constants_filename"])
+
+    ### --- booleans for [showing, saving] initialisation figures --- ###
+    isfigures = [show_figures, save_figures]
 
     ### --- settings for 3-D gridbox boundaries --- ###
     zgrid = [0, 1500, 60]  # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
@@ -61,6 +110,7 @@ def main(
     zlim = 1000  # max z coord of superdroplets
     npergbx = 2  # number of superdroplets per gridbox
 
+    # settings for initial radius and aerosol distributions
     monor = 1e-6  # all SDs have this same radius [m]
     dryr_sf = 1.0  # scale factor for dry radii [m]
     numconc = 5e8  # total no. conc of real droplets [m^-3]
@@ -76,16 +126,10 @@ def main(
     Xlength = 1500  # [m]
     VMAX = 1.0  # [m/s]
     Ylength = 300  # [m]
-    ### ---------------------------------------------------------------- ###
-    ### ---------------------------------------------------------------- ###
 
-    if path2CLEO == path2build:
-        raise ValueError("build directory cannot be CLEO")
-
-    ### ---------------------------------------------------------------- ###
-    ### ------------------- BINARY FILES GENERATION--------------------- ###
-    ### ---------------------------------------------------------------- ###
+    ### --------------------- BINARY FILES GENERATION ---------------------- ###
     ### ----- write gridbox boundaries binary ----- ###
+    grid_filename = config["inputfiles"]["grid_filename"]
     geninitconds.generate_gridbox_boundaries(
         grid_filename,
         zgrid,
@@ -112,6 +156,7 @@ def main(
     )
 
     ### ----- write initial superdroplets binary ----- ###
+    initsupers_filename = config["initsupers"]["initsupers_filename"]
     nsupers = crdgens.nsupers_at_domain_base(
         grid_filename, constants_filename, npergbx, zlim
     )
@@ -134,11 +179,18 @@ def main(
         nsupers,
         numconc,
     )
-    ### ---------------------------------------------------------------- ###
-    ### ---------------------------------------------------------------- ###
 
 
+# %%
+### --------------------------- RUN PROGRAM -------------------------------- ###
 if __name__ == "__main__":
-    ### args = path2CLEO, path2build, savefigpath, config_filename,
-    #               grid_filename, initsupers_filename, thermofiles, isfigures
-    main(*sys.argv[1:])
+    args = parse_arguments()
+    main(
+        args.path2CLEO,
+        args.path2build,
+        args.config_filename,
+        args.thermofiles,
+        savefigpath=args.savefigpath,
+        show_figures=args.show_figures,
+        save_figures=args.save_figures,
+    )

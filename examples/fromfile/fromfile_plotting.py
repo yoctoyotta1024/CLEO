@@ -17,16 +17,57 @@ Script plots results of 3D example with time varying thermodynamics
 read from binary files.
 """
 
-import sys
+
+# %%
+### ------------------------- FUNCTION DEFINITIONS ------------------------- ###
+def parse_arguments():
+    import argparse
+    from pathlib import Path
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--path2CLEO",
+        type=Path,
+        help="Absolute path to CLEO",
+        default="/home/m/m300950/CLEO",
+    )
+    parser.add_argument(
+        "--savefigpath",
+        type=Path,
+        help="Absolute path to build",
+        default="/home/m/m300950/CLEO/build_fromfile/bin/ntasks4",
+    )
+    parser.add_argument(
+        "--grid_filename",
+        type=Path,
+        help="Absolute path to gridbox boundaries file",
+        default="/home/m/m300950/CLEO/build_fromfile/share/fromfile_dimlessGBxboundaries.dat",
+    )
+    parser.add_argument(
+        "--setupfile",
+        type=Path,
+        help="Absolute path to setup file",
+        default="/home/m/m300950/CLEO/build_fromfile/bin/ntasks4/fromfile_setup.txt",
+    )
+    parser.add_argument(
+        "--dataset",
+        type=Path,
+        help="Absolute path to dataset",
+        default="/home/m/m300950/CLEO/build_fromfile/bin/ntasks4/fromfile_sol.zarr",
+    )
+    return parser.parse_args()
 
 
+# %%
+### -------------------------------- MAIN ---------------------------------- ###
 def main(
     path2CLEO,
+    savefigpath,
     grid_filename,
     setupfile,
     dataset,
-    savefigpath,
 ):
+    import sys
     import matplotlib.pyplot as plt
 
     sys.path.append(str(path2CLEO))  # imports from pySD
@@ -77,6 +118,15 @@ def main(
     )
 
 
+# %%
+### --------------------------- RUN PROGRAM -------------------------------- ###
 if __name__ == "__main__":
-    ### args = path2CLEO, grid_filename, setupfile, dataset, savefigpath,
-    main(*sys.argv[1:])
+    args = parse_arguments()
+    print(args)
+    main(
+        args.path2CLEO,
+        args.savefigpath,
+        args.grid_filename,
+        args.setupfile,
+        args.dataset,
+    )
