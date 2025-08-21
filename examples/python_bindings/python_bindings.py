@@ -37,23 +37,17 @@ parser.add_argument(
 )
 parser.add_argument(
     "--do_inputfiles",
-    type=str,
-    choices=["TRUE", "FALSE"],
-    default="TRUE",
+    action="store_true",  # default is False
     help="Generate initial condition binary files",
 )
 parser.add_argument(
     "--do_run_executable",
-    type=str,
-    choices=["TRUE", "FALSE"],
-    default="TRUE",
+    action="store_true",  # default is False
     help="Run fromfile executable",
 )
 parser.add_argument(
     "--do_plot_results",
-    type=str,
-    choices=["TRUE", "FALSE"],
-    default="TRUE",
+    action="store_true",  # default is False
     help="Plot results of fromfile example",
 )
 args = parser.parse_args()
@@ -62,16 +56,6 @@ path2CLEO = args.path2CLEO
 path2build = args.path2build
 src_config_filename = args.config_filename
 isfigures = [False, False]
-
-do_inputfiles = True
-if args.do_inputfiles == "FALSE":
-    do_inputfiles = False
-do_run_executable = True
-if args.do_run_executable == "FALSE":
-    do_run_executable = False
-do_plot_results = True
-if args.do_plot_results == "FALSE":
-    do_plot_results = False
 
 sys.path.append(str(path2build / "pycleo"))
 import pycleo
@@ -88,7 +72,7 @@ config_filename = (
 ### ---------------------------------------------------------------- ###
 ### ------------------- BINARY FILES GENERATION--------------------- ###
 ### ---------------------------------------------------------------- ###
-if do_inputfiles:
+if args.do_inputfiles:
     ### --- ensure build, share and bin directories exist --- ###
     pyinit = python_config["python_initconds"]
     tmppath = Path(pyinit["paths"]["tmppath"])
@@ -215,7 +199,7 @@ def run_exec(python_config, config_filename):
     cleo_sdm_example(python_config, cleo_config)
 
 
-if do_run_executable:
+if args.do_run_executable:
     print(f"PYCLEO STATUS: 2+3={pycleo.test_pycleo(i=3, j=2)}")
     print(f"COUPLDYN_NUMPY STATUS: 2*3={coupldyn_numpy.test_coupldyn_numpy(i=3, j=2)}")
 
@@ -229,7 +213,7 @@ if do_run_executable:
 ### ---------------------------------------------------------------- ###
 ### ------------------------- PLOT RESULTS ------------------------- ###
 ### ---------------------------------------------------------------- ###
-if do_plot_results:
+if args.do_plot_results:
     print("no plotting script for python bindings example")
 ### ---------------------------------------------------------------- ###
 ### ---------------------------------------------------------------- ###

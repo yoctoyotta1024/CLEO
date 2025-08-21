@@ -42,23 +42,17 @@ parser.add_argument(
 )
 parser.add_argument(
     "--do_inputfiles",
-    type=str,
-    choices=["TRUE", "FALSE"],
-    default="TRUE",
+    action="store_true",  # default is False
     help="Generate initial condition binary files",
 )
 parser.add_argument(
     "--do_run_executable",
-    type=str,
-    choices=["TRUE", "FALSE"],
-    default="TRUE",
+    action="store_true",  # default is False
     help="Run fromfile executable",
 )
 parser.add_argument(
     "--do_plot_results",
-    type=str,
-    choices=["TRUE", "FALSE"],
-    default="TRUE",
+    action="store_true",  # default is False
     help="Plot results of fromfile example",
 )
 args = parser.parse_args()
@@ -67,16 +61,6 @@ path2CLEO = args.path2CLEO
 path2build = args.path2build
 config_filename = args.config_filename
 ntasks = args.ntasks
-
-do_inputfiles = True
-if args.do_inputfiles == "FALSE":
-    do_inputfiles = False
-do_run_executable = True
-if args.do_run_executable == "FALSE":
-    do_run_executable = False
-do_plot_results = True
-if args.do_plot_results == "FALSE":
-    do_plot_results = False
 
 isfigures = [False, True]  # booleans for [showing, saving] initialisation figures
 
@@ -101,7 +85,7 @@ dataset = binpath / "fromfile_sol.zarr"
 ### ---------------------------------------------------------------- ###
 ### ------------------- BINARY FILES GENERATION--------------------- ###
 ### ---------------------------------------------------------------- ###
-if do_inputfiles:
+if args.do_inputfiles:
     ### --- ensure build, share and bin directories exist --- ###
     if path2CLEO == path2build:
         raise ValueError("build directory cannot be CLEO")
@@ -136,7 +120,7 @@ if do_inputfiles:
 ### ---------------------------------------------------------------- ###
 ### ---------------------- RUN CLEO EXECUTABLE --------------------- ###
 ### ---------------------------------------------------------------- ###
-if do_run_executable:
+if args.do_run_executable:
     os.chdir(path2build)
     subprocess.run(["pwd"])
     shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
@@ -150,7 +134,7 @@ if do_run_executable:
 ### ---------------------------------------------------------------- ###
 ### ------------------------- PLOT RESULTS ------------------------- ###
 ### ---------------------------------------------------------------- ###
-if do_plot_results:
+if args.do_plot_results:
     fromfile_plotting.main(
         path2CLEO,
         grid_filename,

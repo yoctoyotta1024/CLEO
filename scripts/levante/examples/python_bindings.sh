@@ -28,7 +28,7 @@ executables="pycleo"
 
 pythonscript=${path2CLEO}/examples/python_bindings/python_bindings.py
 src_config_filename=${path2CLEO}/examples/python_bindings/src/config/python_bindings_config.yaml
-script_args="${src_config_filename} --do_inputfiles=TRUE --do_run_executable=TRUE --do_plot_results=TRUE"
+script_args="${src_config_filename} --do_inputfiles --do_run_executable --do_plot_results"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
