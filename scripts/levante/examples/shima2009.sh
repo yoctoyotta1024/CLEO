@@ -19,6 +19,7 @@
 ### ---- build type, directories, the executable(s) ---- ###
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
+do_build="true"
 buildtype="cuda"
 compilername="gcc"
 path2CLEO=${HOME}/CLEO/
@@ -35,7 +36,7 @@ script_args="${src_config_filename} golovin long1 long2"
 ### ---------------------------------------------------- ###
 
 ### ---------- build, compile and run example ---------- ###
-${path2CLEO}/scripts/levante/examples/build_compile_run_plot.sh \
+${path2CLEO}/scripts/levante/examples/build_compile_run_plot.sh ${do_build} \
   ${buildtype} ${compilername} ${path2CLEO} ${path2build} "${build_flags}" \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###

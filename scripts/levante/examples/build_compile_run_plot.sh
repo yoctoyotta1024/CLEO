@@ -23,14 +23,15 @@
 ### --------- executable(s) to compile and your -------- ###
 ### --------------  python script to run. -------------- ###
 ### ---------------------------------------------------- ###
-buildtype=$1
-compilername=$2
-path2CLEO=$3
-path2build=$4
-build_flags=$5
-executables="$6"
-pythonscript=$7
-script_args="$8"
+do_build=$1  # == "true" or otherwise false
+buildtype=$2
+compilername=$3
+path2CLEO=$4
+path2build=$5
+build_flags=$6
+executables="$7"
+pythonscript=$8
+script_args="$9"
 
 cleoenv=/work/bm1183/m300950/bin/envs/cleoenv
 python=${cleoenv}/bin/python3
@@ -71,18 +72,21 @@ echo "---------------------------"
 ### ---------------------------------------------------- ###
 
 ### --------------- build and compile CLEO ------------- ###
-cmd="${path2CLEO}/scripts/levante/build_compile_cleo.sh \
-  ${buildtype}
-  ${compilername}
-  ${path2CLEO}
-  ${path2build}
-  ${yacyaxtroot}
-  "\"${build_flags}\""
-  "\"${executables}\""
-  ${enabledebug}
-  ${make_clean}"
-echo ${cmd}
-eval ${cmd}
+if [ "${do_build}" == "true" ]
+then
+  cmd="${path2CLEO}/scripts/levante/build_compile_cleo.sh \
+    ${buildtype}
+    ${compilername}
+    ${path2CLEO}
+    ${path2build}
+    ${yacyaxtroot}
+    "\"${build_flags}\""
+    "\"${executables}\""
+    ${enabledebug}
+    ${make_clean}"
+  echo ${cmd}
+  eval ${cmd}
+fi
 ### ---------------------------------------------------- ###
 
 ### --------- run model through Python script ---------- ###

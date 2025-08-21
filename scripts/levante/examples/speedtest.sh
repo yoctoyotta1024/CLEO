@@ -18,6 +18,8 @@
 ### ---- build type, directories, the executable(s) ---- ###
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
+do_build="true"
+compilername="gcc"  # must be gcc for buildtype=cuda
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_spdtest/
 build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
@@ -36,7 +38,6 @@ mkdir ${path2build}
 mkdir ${path2build}/bin
 
 ### ---- run test for different types of parallelism ---- ###
-compilername="gcc"
 buildtypes=("cuda" "openmp" "threads" "serial")
 for buildtype in "${buildtypes[@]}"
 do
@@ -50,7 +51,7 @@ do
   mkdir ${path2build_test}/share
 
   ### ---------- build, compile and run example ---------- ###
-  ${path2CLEO}/scripts/levante/examples/build_compile_run_plot.sh \
+  ${path2CLEO}/scripts/levante/examples/build_compile_run_plot.sh ${do_build} \
     ${buildtype} ${compilername} ${path2CLEO} ${path2build_test} "${build_flags}" \
     "${executables}" ${pythonscript} "${script_args}"
   ### ---------------------------------------------------- ###
