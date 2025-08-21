@@ -110,12 +110,12 @@ def inputfiles(
     ### --- ensure build, share and bin directories exist --- ###
     if path2CLEO == path2build:
         raise ValueError("build directory cannot be CLEO")
-    else:
-        path2build.mkdir(exist_ok=True)
-        tmppath.mkdir(exist_ok=True)
-        sharepath.mkdir(exist_ok=True)
-        binpath.parent.mkdir(exist_ok=True)
-        binpath.mkdir(exist_ok=True)
+    path2build.mkdir(exist_ok=True)
+    tmppath.mkdir(exist_ok=True)
+    sharepath.mkdir(exist_ok=True)
+    binpath.parent.mkdir(exist_ok=True)
+    binpath.mkdir(exist_ok=True)
+    if savefigpath is not None:
         savefigpath.mkdir(exist_ok=True)
 
     ### --- add names of thermofiles to config_params --- ###
@@ -142,7 +142,7 @@ def inputfiles(
         file.unlink(missing_ok=True)
 
     ### --- input binary files generation --- ###
-    # equivalent to ``import fromfile_irreg_inputfiless`` followed by
+    # equivalent to ``import fromfile_irreg_inputfiles`` followed by
     # ``fromfile_irref_inputfiles.main(path2CLEO, path2build, ...)``
     inputfiles_script = (
         path2CLEO / "examples" / "fromfile_irreg" / "fromfile_irreg_inputfiles.py"

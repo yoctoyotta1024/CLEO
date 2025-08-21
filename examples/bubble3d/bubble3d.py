@@ -102,11 +102,11 @@ def inputfiles(
     ### --- ensure build, tmp, share and bin and savefigpath directories exist --- ###
     if path2CLEO == path2build:
         raise ValueError("build directory cannot be CLEO")
-    else:
-        path2build.mkdir(exist_ok=True)
-        tmppath.mkdir(exist_ok=True)
-        sharepath.mkdir(exist_ok=True)
-        binpath.mkdir(exist_ok=True)
+    path2build.mkdir(exist_ok=True)
+    tmppath.mkdir(exist_ok=True)
+    sharepath.mkdir(exist_ok=True)
+    binpath.mkdir(exist_ok=True)
+    if savefigpath is not None:
         savefigpath.mkdir(exist_ok=True)
 
     ### --- copy src_config_filename into tmp and edit parameters --- ###
