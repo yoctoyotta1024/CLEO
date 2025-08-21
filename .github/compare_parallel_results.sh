@@ -2,7 +2,7 @@
 
 zarr_name=$1 # e.g. "fromfile_sol.zarr" or "fromfile_irreg_sol.zarr"
 
-zarr1=bin_1/${zarr_name}
+zarr1=./build/bin_1/${zarr_name}
 if [ ! -d $zarr1 ]; then
   echo "$zarr1 does not exist."
   exit 1
@@ -13,7 +13,7 @@ for processes in 2 4 8; do
         rm diffs
     fi
 
-    zarrX=bin_${processes}/${zarr_name}
+    zarrX=./build/bin_${processes}/${zarr_name}
     if [ ! -d $zarrX ]; then
         echo "$zarrX does not exist."
         exit 1

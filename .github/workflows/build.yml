@@ -157,15 +157,16 @@ jobs:
           cd build && make ${{ matrix.target }}
           curl https://swift.dkrz.de/v1/dkrz_8f1b1e92-f07c-41c5-a4ae-8089ec495d87/CLEO/${{ matrix.target }}_data.tar.gz -o ${{ matrix.target }}_data.tar.gz
           tar -zxvf ${{ matrix.target }}_data.tar.gz
+          cd .. && pwd
 
-          mpiexec -n 1 ./examples/${{ matrix.target }}/src/${{ matrix.target }} ../examples/${{ matrix.target }}/src/config/${{ matrix.target }}_config.yaml
-          ls bin
-          mv bin/ntasks4 bin_1
-          mpiexec -n 2 --host localhost:64 ./examples/${{ matrix.target }}/src/${{ matrix.target }} ../examples/${{ matrix.target }}/src/config/${{ matrix.target }}_config.yaml
-          mv bin/ntasks4 bin_2
-          mpiexec -n 4 --host localhost:64 ./examples/${{ matrix.target }}/src/${{ matrix.target }} ../examples/${{ matrix.target }}/src/config/${{ matrix.target }}_config.yaml
-          mv bin/ntasks4 bin_4
-          mpiexec -n 8 --host localhost:64 ./examples/${{ matrix.target }}/src/${{ matrix.target }} ../examples/${{ matrix.target }}/src/config/${{ matrix.target }}_config.yaml
-          mv bin/ntasks4 bin_8
-          bash -l ../.github/compare_parallel_results.sh ${{ matrix.target }}_sol.zarr
-          rm -rf bin_*
+          mpiexec -n 1 ./build/examples/${{ matrix.target }}/src/${{ matrix.target }} ./examples/${{ matrix.target }}/src/config/${{ matrix.target }}_config.yaml
+          ls ./build/bin
+          mv ./build/bin ./build/bin_1
+          mpiexec -n 2 --host localhost:64 ./build/examples/${{ matrix.target }}/src/${{ matrix.target }} ./examples/${{ matrix.target }}/src/config/${{ matrix.target }}_config.yaml
+          mv ./build/bin ./build/bin_2
+          mpiexec -n 4 --host localhost:64 ./build/examples/${{ matrix.target }}/src/${{ matrix.target }} ./examples/${{ matrix.target }}/src/config/${{ matrix.target }}_config.yaml
+          mv ./build/bin ./build/bin_4
+          mpiexec -n 8 --host localhost:64 ./build/examples/${{ matrix.target }}/src/${{ matrix.target }} ./examples/${{ matrix.target }}/src/config/${{ matrix.target }}_config.yaml
+          mv ./build/bin ./build/bin_8
+          bash -l .github/compare_parallel_results.sh ${{ matrix.target }}_sol.zarr
+          rm -rf ./build/bin_*
