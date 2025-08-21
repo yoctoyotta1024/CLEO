@@ -18,21 +18,57 @@ Script generates input files for example of using python bindings
 """
 
 
-import sys
+# %%
+### ------------------------- FUNCTION DEFINITIONS ------------------------- ###
+def parse_arguments():
+    import argparse
+    from pathlib import Path
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "path2CLEO", type=Path, help="Absolute path to CLEO directory (for PySD)"
+    )
+    parser.add_argument(
+        "path2build", type=Path, help="Absolute path to build directory"
+    )
+    parser.add_argument(
+        "config_filename", type=Path, help="Absolute path to configuration YAML file"
+    )
+    parser.add_argument(
+        "--savefigpath",
+        type=Path,
+        default=None,
+        help="Directory to save initialiation figures in (is save_figures is True)",
+    )
+    parser.add_argument(
+        "--show_figures",
+        action="store_true",  # default is False
+        help="Show initialiation figures",
+    )
+    parser.add_argument(
+        "--save_figures",
+        action="store_true",  # default is False
+        help="Save initialiation figures in savefigpath",
+    )
+    return parser.parse_args()
 
 
+# %%
+### -------------------------------- MAIN ---------------------------------- ###
 def main(
     path2CLEO,
     path2build,
     config_filename,
-    grid_filename,
-    initsupers_filename,
-    isfigures=[True, True],
+    savefigpath=None,
+    show_figures=False,
+    save_figures=False,
 ):
+    import sys
     import numpy as np
+    from pathlib import Path
+    from ruamel.yaml import YAML
 
     sys.path.append(str(path2CLEO))  # for imports from pySD package
-
     from pySD import geninitconds
     from pySD.initsuperdropsbinary_src import (
         crdgens,
@@ -42,20 +78,26 @@ def main(
         attrsgen,
     )
 
-    ### ---------------------------------------------------------------- ###
-    ### ----------------------- INPUT PARAMETERS ----------------------- ###
-    ### ---------------------------------------------------------------- ###
-    ### --- essential paths and filenames --- ###
-    # path and filenames for creating initial SD conditions
-    constants_filename = path2CLEO / "libs" / "cleoconstants.hpp"
+    if path2CLEO == path2build:
+        raise ValueError("build directory cannot be CLEO")
 
-    ### --- plotting initialisation figures --- ###
-    savefigpath = (
-        path2build / "bin"
-    )  # directory for saving figures # TODO(CB): move into args
+    ### --- Load the config YAML file --- ###
+    yaml = YAML()
+    with open(config_filename, "r") as file:
+        config = yaml.load(file)
+
+    ### ------------------------ INPUT PARAMETERS -------------------------- ###
+    ### --- required CLEO cleoconstants.hpp file --- ###
+    constants_filename = Path(config["inputfiles"]["constants_filename"])
+
+    ### --- plots of initial conditions --- ###
+    isfigures = [
+        show_figures,
+        save_figures,
+    ]  # booleans for [showing, saving] initialisation figures
     SDgbxs2plt = [
         0
-    ]  # gbxindex of SDs to plot (nb. "all" can be very slow) # TODO(CB): move into args
+    ]  # gbxindex of initial SDs to plot if any(isfigures) (nb. "all" can be very slow)
 
     ### --- settings for 2-D gridbox boundaries --- ###
     zgrid = [0, 1500, 500]  # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
@@ -76,16 +118,10 @@ def main(
     geosigs = [1.4, 1.6]
     scalefacs = [6e6, 4e6]
     numconc = np.sum(scalefacs)
-    ### ---------------------------------------------------------------- ###
-    ### ---------------------------------------------------------------- ###
 
-    if path2CLEO == path2build:
-        raise ValueError("build directory cannot be CLEO")
-
-    ### ---------------------------------------------------------------- ###
-    ### ------------------- BINARY FILES GENERATION--------------------- ###
-    ### ---------------------------------------------------------------- ###
+    ### --------------------- BINARY FILES GENERATION ---------------------- ###
     ### ----- write gridbox boundaries binary ----- ###
+    grid_filename = config["inputfiles"]["grid_filename"]
     geninitconds.generate_gridbox_boundaries(
         grid_filename,
         zgrid,
@@ -97,6 +133,7 @@ def main(
     )
 
     ### ----- write initial superdroplets binary ----- ###
+    initsupers_filename = config["initsupers"]["initsupers_filename"]
     nsupers = crdgens.nsupers_at_domain_base(
         grid_filename, constants_filename, npergbx, zlim
     )
@@ -122,10 +159,17 @@ def main(
         savefigpath=savefigpath,
         gbxs2plt=SDgbxs2plt,
     )
-    ### ---------------------------------------------------------------- ###
-    ### ---------------------------------------------------------------- ###
 
 
+# %%
+### --------------------------- RUN PROGRAM -------------------------------- ###
 if __name__ == "__main__":
-    ### args = path2CLEO, path2build, config_filename, grid_filename, initsupers_filename
-    main(*sys.argv[1:])
+    args = parse_arguments()
+    main(
+        args.path2CLEO,
+        args.path2build,
+        args.config_filename,
+        savefigpath=args.savefigpath,
+        show_figures=args.show_figures,
+        save_figures=args.save_figures,
+    )
