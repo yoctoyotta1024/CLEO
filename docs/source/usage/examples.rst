@@ -234,9 +234,9 @@ and ``scripts/levante/examples/divfree2d.sh``.
 
 This example plots the motion of super-droplets without a terminal velocity in a 2-D divergence
 free wind field. It produces a plot showing the motion of a sample of super-droplets, by default
-called ``~/CLEO/build_divfree2D/bin/df2d_motion2d_validation.png``. The number of super-droplets in the domain
+called ``~/CLEO/build_divfree2D/bin/divfree2d_motion2d_validation.png``. The number of super-droplets in the domain
 should remain constant over time, as shown in the plot produced and by default called
-``~/CLEO/build_divfree2D/bin/df2d_totnsupers_validation.png``.
+``~/CLEO/build_divfree2D/bin/divfree2d_totnsupers_validation.png``.
 
 
 1-D Rainshaft

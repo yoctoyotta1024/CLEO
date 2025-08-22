@@ -12,25 +12,68 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script generates input files for divergence free motion of superdroplets in
-a 2-D divergence free wind field.
+Script generates input files for example of divergence free motion of superdroplets
+in a 2-D divergence free wind field.
 """
 
-import sys
+
+# %%
+### ------------------------- FUNCTION DEFINITIONS ------------------------- ###
+def parse_arguments():
+    import argparse
+    from pathlib import Path
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "path2CLEO", type=Path, help="Absolute path to CLEO directory (for PySD)"
+    )
+    parser.add_argument(
+        "path2build", type=Path, help="Absolute path to build directory"
+    )
+    parser.add_argument(
+        "config_filename", type=Path, help="Absolute path to configuration YAML file"
+    )
+    parser.add_argument(
+        "thermofiles",
+        type=Path,
+        help="Absolute path to derive thermoynamics binary files",
+    )
+    parser.add_argument(
+        "--savefigpath",
+        type=Path,
+        default=None,
+        help="Directory to save initialiation figures in (is save_figures is True)",
+    )
+    parser.add_argument(
+        "--show_figures",
+        action="store_true",  # default is False
+        help="Show initialiation figures",
+    )
+    parser.add_argument(
+        "--save_figures",
+        action="store_true",  # default is False
+        help="Save initialiation figures in savefigpath",
+    )
+    return parser.parse_args()
 
 
+# %%
+### -------------------------------- MAIN ---------------------------------- ###
 def main(
     path2CLEO,
     path2build,
     config_filename,
-    grid_filename,
-    initsupers_filename,
     thermofiles,
+    savefigpath=None,
+    show_figures=False,
+    save_figures=False,
 ):
+    import sys
     import numpy as np
+    from pathlib import Path
+    from ruamel.yaml import YAML
 
     sys.path.append(str(path2CLEO))  # for imports from pySD package
-
     from pySD import geninitconds
     from pySD.initsuperdropsbinary_src import (
         crdgens,
@@ -41,9 +84,15 @@ def main(
     )
     from pySD.thermobinary_src import thermogen, windsgen, thermodyngen
 
-    ### ---------------------------------------------------------------- ###
-    ### ----------------------- INPUT PARAMETERS ----------------------- ###
-    ### ---------------------------------------------------------------- ###
+    if path2CLEO == path2build:
+        raise ValueError("build directory cannot be CLEO")
+
+    ### --- Load the config YAML file --- ###
+    yaml = YAML()
+    with open(config_filename, "r") as file:
+        config = yaml.load(file)
+
+    ### ------------------------ INPUT PARAMETERS -------------------------- ###
     ### --- essential paths and filenames --- ###
     # path and filenames for creating initial SD conditions
     constants_filename = path2CLEO / "libs" / "cleoconstants.hpp"
@@ -91,16 +140,10 @@ def main(
     qvapmethod = "sratio"
     Zbase = 750  # [m]
     sratios = [1.0, 1.0]  # s_ratio [below, above] Zbase
-    ### ---------------------------------------------------------------- ###
-    ### ---------------------------------------------------------------- ###
 
-    if path2CLEO == path2build:
-        raise ValueError("build directory cannot be CLEO")
-
-    ### ---------------------------------------------------------------- ###
-    ### ------------------- BINARY FILES GENERATION--------------------- ###
-    ### ---------------------------------------------------------------- ###
+    ### --------------------- BINARY FILES GENERATION ---------------------- ###
     ### ----- write gridbox boundaries binary ----- ###
+    grid_filename = Path(config["inputfiles"]["grid_filename"])
     geninitconds.generate_gridbox_boundaries(
         grid_filename,
         zgrid,
@@ -137,6 +180,7 @@ def main(
     )
 
     ### ----- write initial superdroplets binary ----- ###
+    initsupers_filename = Path(config["initsupers"]["initsupers_filename"])
     nsupers = crdgens.nsupers_at_domain_base(
         grid_filename, constants_filename, npergbx, zlim
     )
@@ -166,6 +210,16 @@ def main(
     ### ---------------------------------------------------------------- ###
 
 
+# %%
+### --------------------------- RUN PROGRAM -------------------------------- ###
 if __name__ == "__main__":
-    ### args = path2CLEO, path2build, config_filename, grid_filename, initsupers_filename, thermofiles
-    main(*sys.argv[1:])
+    args = parse_arguments()
+    main(
+        args.path2CLEO,
+        args.path2build,
+        args.config_filename,
+        args.thermofiles,
+        savefigpath=args.savefigpath,
+        show_figures=args.show_figures,
+        save_figures=args.save_figures,
+    )
