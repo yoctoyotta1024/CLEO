@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=rain1d
+#SBATCH --job-name=rshaft1d
 #SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
@@ -9,8 +9,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=bm1183
-#SBATCH --output=./rain1d_out.%j.out
-#SBATCH --error=./rain1d_err.%j.out
+#SBATCH --output=./rshaft1d_out.%j.out
+#SBATCH --error=./rshaft1d_err.%j.out
 
 ### ------------------ Input Parameters ---------------- ###
 ### ------ You MUST edit these lines to set your ------- ###
@@ -27,8 +27,9 @@ build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
 executables="rshaft1d"
 
 pythonscript=${path2CLEO}/examples/rainshaft1d/rainshaft1d.py
-src_config_filename=${path2CLEO}/examples/rainshaft1d/src/config/rain1d_config.yaml
-script_args="${src_config_filename}"
+src_config_filename=${path2CLEO}/examples/rainshaft1d/src/config/rshaft1d_config.yaml
+script_args="${src_config_filename} \
+  --do_inputfiles --do_run_executable --do_plot_results"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
