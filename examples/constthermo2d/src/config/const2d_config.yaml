@@ -38,17 +38,17 @@ timesteps:
 
 ### Initialisation Parameters ###
 inputfiles:
-  constants_filename : ../libs/cleoconstants.hpp              # name of file for values of physical constants
-  grid_filename : ./share/const2d_dimlessGBxboundaries.dat    # binary filename for initialisation of GBxs / GbxMaps
+  constants_filename : ./libs/cleoconstants.hpp              # name of file for values of physical constants
+  grid_filename : ./build/share/const2d_dimlessGBxboundaries.dat    # binary filename for initialisation of GBxs / GbxMaps
 
 initsupers:
   type: frombinary                                            # type of initialisation of super-droplets
-  initsupers_filename : ./share/const2d_dimlessSDsinit.dat    # binary filename for initialisation of SDs
+  initsupers_filename : ./build/share/const2d_dimlessSDsinit.dat    # binary filename for initialisation of SDs
 
 ### Output Parameters ###
 outputdata:
-  setup_filename : ./bin/const2d_setup.txt                    # .txt filename to copy configuration to
-  zarrbasedir : ./bin/const2d_sol.zarr                        # zarr store base directory
+  setup_filename : ./build/bin/const2d_setup.txt                    # .txt filename to copy configuration to
+  zarrbasedir : ./build/bin/const2d_sol.zarr                        # zarr store base directory
   maxchunk : 2500000                                          # maximum no. of elements in chunks of zarr store array
 
 ### Microphysics Parameters ###
@@ -63,9 +63,9 @@ microphysics:
 ### Coupled Dynamics Parameters ###
 coupled_dynamics:
   type : fromfile                                             # type of coupled dynamics to configure
-  press : ./share/const2d_dimlessthermo_press.dat             # binary filename for pressure
-  temp : ./share/const2d_dimlessthermo_temp.dat               # binary filename for temperature
-  qvap : ./share/const2d_dimlessthermo_qvap.dat               # binary filename for vapour mixing ratio
-  qcond : ./share/const2d_dimlessthermo_qcond.dat             # binary filename for liquid mixing ratio
-  wvel : ./share/const2d_dimlessthermo_wvel.dat               # binary filename for vertical (coord3) velocity
-  uvel : ./share/const2d_dimlessthermo_uvel.dat               # binary filename for eastwards (coord1) velocity
+  press : ./build/share/const2d_dimlessthermo_press.dat             # binary filename for pressure
+  temp : ./build/share/const2d_dimlessthermo_temp.dat               # binary filename for temperature
+  qvap : ./build/share/const2d_dimlessthermo_qvap.dat               # binary filename for vapour mixing ratio
+  qcond : ./build/share/const2d_dimlessthermo_qcond.dat             # binary filename for liquid mixing ratio
+  wvel : ./build/share/const2d_dimlessthermo_wvel.dat               # binary filename for vertical (coord3) velocity
+  uvel : ./build/share/const2d_dimlessthermo_uvel.dat               # binary filename for eastwards (coord1) velocity

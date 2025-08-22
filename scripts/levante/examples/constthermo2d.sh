@@ -29,7 +29,8 @@ executables="const2d"
 
 pythonscript=${path2CLEO}/examples/constthermo2d/constthermo2d.py
 src_config_filename=${path2CLEO}/examples/constthermo2d/src/config/const2d_config.yaml
-script_args="${src_config_filename}"
+script_args="${src_config_filename} \
+  --do_inputfiles --do_run_executable --do_plot_results"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
