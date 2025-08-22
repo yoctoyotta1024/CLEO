@@ -119,7 +119,7 @@ def inputfiles(
         savefigpath.mkdir(exist_ok=True)
 
     ### --- add names of thermofiles to config_params --- ###
-    for var in ["press", "temp", "qvap", "qcond", "wvel", "vvel", "uvel"]:
+    for var in ["press", "temp", "qvap", "qcond", "wvel", "uvel", "vvel"]:
         config_params[var] = str(
             thermofiles.parent / Path(f"{thermofiles.stem}_{var}{thermofiles.suffix}")
         )
