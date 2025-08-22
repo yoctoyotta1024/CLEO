@@ -119,7 +119,7 @@ def main(
         color="green",
         saveani=True,
         savename=savename,
-        fps=5,
+        fps=10,
     )
 
     nframes = len(time.mins)
@@ -138,7 +138,7 @@ def main(
         color="green",
         saveani=True,
         savename=savename,
-        fps=5,
+        fps=10,
     )
 
     nframes = len(time.mins)
@@ -157,7 +157,7 @@ def main(
         color="green",
         saveani=True,
         savename=savename,
-        fps=5,
+        fps=10,
     )
 
 

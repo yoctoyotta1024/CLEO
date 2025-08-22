@@ -255,7 +255,7 @@ animations.animate1dprofile(
     color="green",
     saveani=True,
     savename=savename,
-    fps=5,
+    fps=10,
 )
 
 ### ----- plot 2-D .gif animations ----- ###
@@ -275,7 +275,7 @@ animations.animate2dcmap(
     cmap=cmap,
     saveani=True,
     savename=savename,
-    fps=5,
+    fps=10,
 )
 
 nframes = len(time.mins)
@@ -298,7 +298,7 @@ animations.animate2dcmap(
     cmap=cmap,
     saveani=True,
     savename=savename,
-    fps=5,
+    fps=10,
 )
 ### ------------------------------------------------------------ ###
 ### ------------------------------------------------------------ ###

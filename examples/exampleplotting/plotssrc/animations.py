@@ -25,7 +25,7 @@ from matplotlib.cm import ScalarMappable
 
 
 def animate_me(
-    fig, update_frame, frames, plot_init, saveani=False, savename=None, fargs=(), fps=5
+    fig, update_frame, frames, plot_init, saveani=False, savename=None, fargs=(), fps=10
 ):
     print("making animation")
     ani = FuncAnimation(
@@ -52,7 +52,7 @@ def animate1dprofile(
     color="black",
     saveani=False,
     savename=None,
-    fps=5,
+    fps=10,
 ):
     fig, ax, plots, txt, zkm = prepare_1dprofile(
         gbxs, mom, timemins, xlabel, color=color
@@ -134,7 +134,7 @@ def animate2dcmap(
     cmap="viridis",
     saveani=False,
     savename=None,
-    fps=5,
+    fps=10,
 ):
     fig, ax, cbar, plot, txt = prepare_2dplot(gbxs, mom2ani, timemins, cmap, cmapnorm)
     cbar.set_label(cbarlabel, fontsize=16)
