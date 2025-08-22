@@ -121,7 +121,7 @@ def main(
 
     ### --------------------- BINARY FILES GENERATION ---------------------- ###
     ### ----- write gridbox boundaries binary ----- ###
-    grid_filename = config["inputfiles"]["grid_filename"]
+    grid_filename = Path(config["inputfiles"]["grid_filename"])
     geninitconds.generate_gridbox_boundaries(
         grid_filename,
         zgrid,
@@ -133,7 +133,7 @@ def main(
     )
 
     ### ----- write initial superdroplets binary ----- ###
-    initsupers_filename = config["initsupers"]["initsupers_filename"]
+    initsupers_filename = Path(config["initsupers"]["initsupers_filename"])
     nsupers = crdgens.nsupers_at_domain_base(
         grid_filename, constants_filename, npergbx, zlim
     )
