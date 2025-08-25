@@ -1,230 +1,220 @@
 """
+Copyright (c) 2025 MPI-M, Clara Bayley
+
+
 ----- CLEO -----
 File: speedtest.py
 Project: speedtest
-Created Date: Friday 17th November 2023
+Created Date: Thursday 21st August 2025
 Author: Clara Bayley (CB)
 Additional Contributors:
 -----
 License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
-Copyright (c) 2023 MPI-M, Clara Bayley
------
 File Description:
-Script generates input files, then runs CLEO executable "spdtest" to check performance
-of CLEO usign different build configurations (e.g. serial, OpenmP and CUDA parallelism).
 """
 
-import glob
+# %%
+### -------------------------------- IMPORTS ------------------------------- ###
+import argparse
 import os
 import shutil
 import subprocess
 import sys
-import numpy as np
 from pathlib import Path
+from ruamel.yaml import YAML
 
-path2CLEO = Path(sys.argv[1])
-path2build = Path(sys.argv[2])
-config_filename = Path(sys.argv[3])
-outputdir = Path(sys.argv[4])
-path2kokkostools = Path(sys.argv[5])
-buildtype = sys.argv[6]
-nruns = 2
+from kp_kernel_timer import KpKernelTimer
 
-sys.path.append(str(path2CLEO))  # imports from pySD
-sys.path.append(
-    str(path2CLEO / "examples" / "exampleplotting")
-)  # imports from example plots package
+# %%
+### --------------------------- PARSE ARGUMENTS ---------------------------- ###
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "path2CLEO", type=Path, help="Absolute path to CLEO directory (for PySD)"
+)
+parser.add_argument("path2build", type=Path, help="Absolute path to build directory")
+parser.add_argument(
+    "path2kokkostools",
+    type=Path,
+    help="Absolute path to kokkos tools installation libkp_[XXX]",
+)
+parser.add_argument(
+    "src_config_filename",
+    type=Path,
+    help="Absolute path to source configuration YAML file",
+)
+parser.add_argument(
+    "postproc_filename",
+    type=Path,
+    help="Absolute path for profiler data .txt file(s)",
+)
+parser.add_argument(
+    "--nruns",
+    type=int,
+    default="2",
+    help="Number of times to run program",
+)
+parser.add_argument(
+    "--do_inputfiles",
+    action="store_true",  # default is False
+    help="Generate initial condition binary files",
+)
+parser.add_argument(
+    "--do_run_executable",
+    action="store_true",  # default is False
+    help="Run executable",
+)
+parser.add_argument(
+    "--do_plot_results",
+    action="store_true",  # default is False
+    help="Plot results of example",
+)
+args = parser.parse_args()
 
-from pySD import geninitconds
-from pySD.initsuperdropsbinary_src import crdgens, rgens, dryrgens, probdists, attrsgen
-from pySD.thermobinary_src import thermogen, windsgen, thermodyngen
+# %%
+### -------------------------- INPUT PARAMETERS ---------------------------- ###
+### --- command line parsed arguments --- ###
+path2CLEO = args.path2CLEO
+path2kokkostools = args.path2kokkostools
+path2build = args.path2build
+src_config_filename = args.src_config_filename
+postproc_filename = args.postproc_filename
+nruns = args.nruns
 
-### ---------------------------------------------------------------- ###
-### ----------------------- INPUT PARAMETERS ----------------------- ###
-### ---------------------------------------------------------------- ###
-### --- essential paths and filenames --- ###
-# path and filenames for creating initial SD conditions
-constants_filename = path2CLEO / "libs" / "cleoconstants.hpp"
-binpath = path2build / "bin"
+### --- additional/derived arguments --- ###
+tmppath = path2build / "tmp"
 sharepath = path2build / "share"
-grid_filename = sharepath / "spd_dimlessGBxboundaries.dat"
-initsupers_filename = sharepath / "spd_dimlessSDsinit.dat"
-thermofiles = sharepath / "spd_dimlessthermo.dat"
+binpath = path2build / "bin"
+savefigpath = binpath
 
-# path and file names for plotting results
-setupfile = binpath / "spd_setup.txt"
-dataset = binpath / "spd_sol.zarr"
+config_filename = path2build / "tmp" / "speedtest_config.yaml"
+thermofiles = sharepath / "speedtest_dimlessthermo.dat"
+config_params = {
+    "constants_filename": str(path2CLEO / "libs" / "cleoconstants.hpp"),
+    "grid_filename": str(sharepath / "speedtest_dimlessGBxboundaries.dat"),
+    "initsupers_filename": str(sharepath / "speedtest_dimlessSDsinit.dat"),
+    "setup_filename": str(binpath / "speedtest_setup.txt"),
+    "zarrbasedir": str(binpath / "speedtest_sol.zarr"),
+}
 
-### --- plotting initialisation figures --- ###
 isfigures = [False, False]  # booleans for [showing, saving] initialisation figures
-savefigpath = outputdir  # directory for saving figures
-SDgbxs2plt = [0]  # gbxindex of SDs to plot (nb. "all" can be very slow)
-
-### --- settings for 3-D gridbox boundaries --- ###
-zgrid = [0, 1500, 50]  # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
-xgrid = [0, 1500, 50]  # evenly spaced xhalf coords [m]
-ygrid = np.array([0, 25, 50])  # array of yhalf coords [m]
-
-### --- settings for initial superdroplets --- ###
-# settings for initial superdroplet coordinates
-zlim = 1500  # max z coord of superdroplets
-npergbx = 4  # number of superdroplets per gridbox
-
-# [min, max] range of initial superdroplet radii (and implicitly solute masses)
-rspan = [3e-9, 3e-6]  # [m]
-
-# settings for initial superdroplet multiplicies
-# (from bimodal Lognormal distribution)
-geomeans = [0.02e-6, 0.15e-6]
-geosigs = [1.4, 1.6]
-scalefacs = [6e6, 4e6]
-numconc = np.sum(scalefacs)
-
-### --- settings for 3D Thermodynamics --- ###
-PRESS = 100000  # [Pa]
-THETA = 298.15  # [K]
-qcond = 0.0  # [Kg/Kg]
-qvapmethod = "sratio"
-Zbase = 750  # [m]
-sratios = [0.85, 1.1]  # s_ratio [below, above] Zbase
-WMAX = 3.0  # [m/s]
-VVEL = 1.0  # [m/s]
-Zlength = 1500  # [m]
-Xlength = 1500  # [m]
-### ---------------------------------------------------------------- ###
-### ---------------------------------------------------------------- ###
 
 
-### ---------------------------------------------------------------- ###
-### --------------------- FUNCTION DEFINITIONS --------------------- ###
-### ---------------------------------------------------------------- ###
-class KpKernelTimer:
-    def __init__(self, kokkos_tools_lib: Path):
-        self.kokkos_tools_lib = kokkos_tools_lib
-        self.kp_reader = self.kokkos_tools_lib / ".." / "bin" / "kp_reader"
+# %%
+### ------------------------- FUNCTION DEFINITIONS ------------------------- ###
+def inputfiles(
+    path2CLEO,
+    path2build,
+    tmppath,
+    sharepath,
+    binpath,
+    savefigpath,
+    src_config_filename,
+    config_filename,
+    config_params,
+    thermofiles,
+    postproc_filename,
+    isfigures,
+):
+    sys.path.append(str(path2CLEO))  # for imports from pySD package
+    from pySD import editconfigfile
 
-        os.environ["KOKKOS_TOOLS_LIBS"] = str(
-            self.kokkos_tools_lib / "libkp_kernel_timer.so"
-        )
-        print("Using Kokkos Profiling Tool", os.environ["KOKKOS_TOOLS_LIBS"])
-        print("Using Kokkos Tool Reader", self.kp_reader)
-
-    def postprocess(self, filespath: Path, txt_filepath: Path, txt_filelabel: str):
-        # Add kokkos_tools_lib to LD_LIBRARY_PATH
-        ld_lib_path = os.environ.get("LD_LIBRARY_PATH", "")
-        os.environ["LD_LIBRARY_PATH"] = f"{self.kokkos_tools_lib}:{ld_lib_path}"
-
-        # Use glob to find all .dat files in the specified directory
-        datfiles = glob.glob(os.path.join(filespath, "*.dat"))
-
-        # Print the list of .dat files
-        for f, filename in enumerate(datfiles):
-            txt_filename = txt_filepath / Path(txt_filelabel + f"_{f}.txt")
-            cmd = [str(self.kp_reader), filename]
-            with open(txt_filename, "w") as wfile:
-                subprocess.run(cmd, stdout=wfile, stderr=subprocess.STDOUT)
-
-
-### ---------------------------------------------------------------- ###
-### ---------------------------------------------------------------- ###
-
-### ---------------------------------------------------------------- ###
-### ------------------- BINARY FILES GENERATION--------------------- ###
-### ---------------------------------------------------------------- ###
-### --- ensure build, share and bin directories exist --- ###
-if path2CLEO == path2build:
-    raise ValueError("build directory cannot be CLEO")
-else:
+    ### --- ensure build, share and bin directories exist --- ###
+    if path2CLEO == path2build:
+        raise ValueError("build directory cannot be CLEO")
     path2build.mkdir(exist_ok=True)
+    tmppath.mkdir(exist_ok=True)
     sharepath.mkdir(exist_ok=True)
     binpath.mkdir(exist_ok=True)
-    if isfigures[1]:
+    postproc_filename.parent.mkdir(exist_ok=True)
+    if savefigpath is not None:
         savefigpath.mkdir(exist_ok=True)
 
-### --- delete any existing initial conditions --- ###
-shutil.rmtree(grid_filename, ignore_errors=True)
-shutil.rmtree(initsupers_filename, ignore_errors=True)
-all_thermofiles = thermofiles.parent / Path(f"{thermofiles.stem}*{thermofiles.suffix}")
-shutil.rmtree(all_thermofiles, ignore_errors=True)
+    ### --- add names of thermofiles to config_params --- ###
+    for var in ["press", "temp", "qvap", "qcond", "wvel", "uvel", "vvel"]:
+        config_params[var] = str(
+            thermofiles.parent / Path(f"{thermofiles.stem}_{var}{thermofiles.suffix}")
+        )
 
-### ----- write gridbox boundaries binary ----- ###
-geninitconds.generate_gridbox_boundaries(
-    grid_filename,
-    zgrid,
-    xgrid,
-    ygrid,
-    constants_filename,
-    isfigures=isfigures,
-    savefigpath=savefigpath,
-)
+    ### --- copy src_config_filename into tmp and edit parameters --- ###
+    config_filename.unlink(missing_ok=True)  # delete any existing config
+    shutil.copy(src_config_filename, config_filename)
+    editconfigfile.edit_config_params(config_filename, config_params)
 
-### ----- write thermodynamics binaries ----- ###
-thermog = thermogen.Simple2TierRelativeHumidity(
-    config_filename,
-    constants_filename,
-    PRESS,
-    THETA,
-    qvapmethod,
-    sratios,
-    Zbase,
-    qcond,
-)
-windsg = windsgen.Simple2DFlowField(
-    config_filename, constants_filename, WMAX, Zlength, Xlength, VVEL
-)
-thermodyngen = thermodyngen.ThermodynamicsGenerator(thermog, windsg)
-geninitconds.generate_thermodynamics_conditions_fromfile(
-    thermofiles,
-    thermodyngen,
-    config_filename,
-    constants_filename,
-    grid_filename,
-    isfigures=isfigures,
-    savefigpath=savefigpath,
-)
+    ### --- delete any existing initial conditions --- ###
+    yaml = YAML()
+    with open(config_filename, "r") as file:
+        config = yaml.load(file)
+    Path(config["inputfiles"]["grid_filename"]).unlink(missing_ok=True)
+    Path(config["initsupers"]["initsupers_filename"]).unlink(missing_ok=True)
+    all_thermofiles = thermofiles.parent.glob(
+        f"{thermofiles.stem}*{thermofiles.suffix}"
+    )
+    for file in all_thermofiles:
+        file.unlink(missing_ok=True)
 
-### ----- write initial superdroplets binary ----- ###
-nsupers = crdgens.nsupers_at_domain_base(
-    grid_filename, constants_filename, npergbx, zlim
-)
-coord3gen = crdgens.SampleCoordGen(True)  # sample coord3 randomly
-coord1gen = crdgens.SampleCoordGen(True)  # sample coord1 randomly
-coord2gen = crdgens.SampleCoordGen(True)  # sample coord2 randomly
-xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
-radiigen = rgens.SampleLog10RadiiGen(rspan)  # randomly sample radii from rspan [m]
-dryradiigen = dryrgens.ScaledRadiiGen(1.0)
+    ### --- input binary files generation --- ###
+    # equivalent to ``import speedtest_inputfiles`` followed by
+    # ``speedtest_inputfiles.main(path2CLEO, path2build, ...)``
+    inputfiles_script = path2CLEO / "examples" / "speedtest" / "speedtest_inputfiles.py"
+    python = sys.executable
+    cmd = [
+        python,
+        inputfiles_script,
+        path2CLEO,
+        path2build,
+        config_filename,
+        thermofiles,
+    ]
+    if isfigures[0]:
+        cmd.append("--show_figures")
+    if isfigures[1]:
+        cmd.append("--save_figures")
+        cmd.append(f"--savefigpath={savefigpath}")
+    print(" ".join([str(c) for c in cmd]))
+    subprocess.run(cmd)
 
-initattrsgen = attrsgen.AttrsGenerator(
-    radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
-)
-geninitconds.generate_initial_superdroplet_conditions(
-    initattrsgen,
-    initsupers_filename,
-    config_filename,
-    constants_filename,
-    grid_filename,
-    nsupers,
-    numconc,
-    isfigures=isfigures,
-    savefigpath=savefigpath,
-    gbxs2plt=SDgbxs2plt,
-)
-### ---------------------------------------------------------------- ###
-### ---------------------------------------------------------------- ###
 
-### ---------------------------------------------------------------- ###
-### ---------------------- RUN CLEO EXECUTABLE --------------------- ###
-### ---------------------------------------------------------------- ###
-profiler = KpKernelTimer(path2kokkostools)
-executable = path2build / "examples" / "speedtest" / "src" / "spdtest"
-for n in range(nruns):
-    os.chdir(path2build)
-    shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
-    print("Executable: " + str(executable))
-    print("Config file: " + str(config_filename))
-    subprocess.run([executable, config_filename])
-profiler.postprocess(path2build, outputdir, buildtype)
-### ---------------------------------------------------------------- ###
-### ---------------------------------------------------------------- ###
+def run_exectuable(path2kokkostools, path2build, config_filename, postproc_filename):
+    ### --- delete any existing output dataset and setup files --- ###
+    ### --- Note: profiler and post-processes data is not deleted --- ###
+    yaml = YAML()
+    with open(config_filename, "r") as file:
+        config = yaml.load(file)
+    Path(config["outputdata"]["setup_filename"]).unlink(missing_ok=True)
+    shutil.rmtree(Path(config["outputdata"]["zarrbasedir"]), ignore_errors=True)
+
+    ### --- run exectuable with given config file --- ###
+    os.chdir(path2build / "bin")
+    profiler = KpKernelTimer(path2kokkostools)
+    executable = path2build / "examples" / "speedtest" / "src" / "spdtest"
+    cmd = [executable, config_filename]
+    print(" ".join([str(c) for c in cmd]))
+    subprocess.run(cmd)
+    profiler.postprocess(Path.cwd(), postproc_filename)
+
+
+# %%
+### ----------------------------- RUN EXAMPLE ------------------------------ ###
+if args.do_inputfiles:
+    inputfiles(
+        path2CLEO,
+        path2build,
+        tmppath,
+        sharepath,
+        binpath,
+        savefigpath,
+        src_config_filename,
+        config_filename,
+        config_params,
+        thermofiles,
+        postproc_filename,
+        isfigures,
+    )
+
+if args.do_run_executable:
+    run_exectuable(path2kokkostools, path2build, config_filename, postproc_filename)
+
+if args.do_plot_results:
+    print("no plotting script for speedtest example")
