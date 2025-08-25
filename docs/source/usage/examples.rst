@@ -91,8 +91,8 @@ and ``scripts/levante/examples/as2017.sh``.
 
   $ scripts/levante/examples/as2017.sh
 
-The plots produced, by default called ``~/CLEO/build_adia0d/bin/as2017fig_[x].png``, should be
-similar to the columns of figure 5 from Arabas and Shima 2017 :cite:`arabasshima2017`.
+The plot produced, by default called ``~/CLEO/build_adia0d/bin/as2017fig.png``, should be
+similar to figure 5 from Arabas and Shima 2017 :cite:`arabasshima2017`.
 
 b) Cusp Bifurcation
 ###################
