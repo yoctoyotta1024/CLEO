@@ -1,23 +1,26 @@
 """
-Copyright (c) 2024 MPI-M, Clara Bayley
+Copyright (c) 2025 MPI-M, Clara Bayley
 
 
 ----- CLEO -----
-File: as2017.py
+File: as2017_plotting.py
 Project: adiabaticparcel
-Created Date: Friday 17th November 2023
+Created Date: Monday 25th August 2025
 Author: Clara Bayley (CB)
 Additional Contributors:
+-----
+Last Modified: Monday 25th August 2025
+Modified By: CB
 -----
 License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
-Script generate input files, runs CLEO adia0d executable to create data and then
-creates plots for adiabatic parcel example similar to Figure 5 of
-"On the CCN (de)activation nonlinearities" S. Arabas and S. Shima 2017 to show
+Script plots results for adiabatic parcel example similar to Figure 5 of "On
+the CCN (de)activation nonlinearities" S. Arabas and S. Shima 2017 to show
 example of adaibatic parcel expansion and contraction.
 """
+
 
 import os
 import shutil
