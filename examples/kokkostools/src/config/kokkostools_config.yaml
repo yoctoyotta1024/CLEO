@@ -39,13 +39,13 @@ inputfiles:
 
 initsupers:
   type: frombinary                                        # type of initialisation of super-droplets
-  initsupers_filename : ./build/share/kokkostools_dimlessSDsinit.dat    # binary filename for initialisation of SDs
+  initsupers_filename : ./build/share/kokkostools_dimlessSDsinit_run0.dat    # binary filename for initialisation of SDs
 
 ### Output Parameters ###
 outputdata:
-  setup_filename : ./build/share/kokkostools_setup.txt                    # .txt filename to copy configuration to
-  zarrbasedir : ./build/share/kokkostools_sol.zarr                    # zarr store base directory
-  maxchunk : 2500000                                      # maximum no. of elements in chunks of zarr store array
+  setup_filename : ./build/share/kokkostools_setup_run0.txt  # .txt filename to copy configuration to
+  zarrbasedir : ./build/share/kokkostools_sol_run0.zarr      # zarr store base directory
+  maxchunk : 2500000                                         # maximum no. of elements in chunks of zarr store array
 
 ### Microphysics Parameters ###
 microphysics:

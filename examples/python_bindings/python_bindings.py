@@ -271,4 +271,4 @@ if args.do_run_executable:
     run_exectuable(path2build, config_filename)
 
 if args.do_plot_results:
-    print("no plotting script for python bindings example")
+    print("\nno plotting script for python bindings example")

@@ -91,15 +91,21 @@ sharepath = path2build / "share"
 binpath = path2build / "bin"
 savefigpath = binpath
 
-config_filename = path2build / "tmp" / "kokkostools_config.yaml"
+run_configs = {}  # run number: [config_filename, config_params]
 thermofiles = sharepath / "kokkostools_dimlessthermo.dat"
-config_params = {
-    "constants_filename": str(path2CLEO / "libs" / "cleoconstants.hpp"),
-    "grid_filename": str(sharepath / "kokkostools_dimlessGBxboundaries.dat"),
-    "initsupers_filename": str(sharepath / "kokkostools_dimlessSDsinit.dat"),
-    "setup_filename": str(binpath / "kokkostools_setup.txt"),
-    "zarrbasedir": str(binpath / "kokkostools_sol.zarr"),
-}
+
+for run in range(nruns):
+    cf = path2build / "tmp" / f"kokkostools_config_run{run}.yaml"
+    cp = {
+        "constants_filename": str(path2CLEO / "libs" / "cleoconstants.hpp"),
+        "grid_filename": str(sharepath / "kokkostools_dimlessGBxboundaries.dat"),
+        "initsupers_filename": str(
+            sharepath / f"kokkostools_dimlessSDsinit_run{run}.dat"
+        ),
+        "setup_filename": str(binpath / f"kokkostools_setup_run{run}.txt"),
+        "zarrbasedir": str(binpath / f"kokkostools_sol_run{run}.zarr"),
+    }
+    run_configs[run] = [cf, cp]
 
 isfigures = [False, False]  # booleans for [showing, saving] initialisation figures
 
@@ -202,24 +208,27 @@ def run_exectuable(path2kokkostools, path2build, config_filename, postproc_filen
 
 # %%
 ### ----------------------------- RUN EXAMPLE ------------------------------ ###
-if args.do_inputfiles:
-    inputfiles(
-        path2CLEO,
-        path2build,
-        tmppath,
-        sharepath,
-        binpath,
-        savefigpath,
-        src_config_filename,
-        config_filename,
-        config_params,
-        thermofiles,
-        postproc_filename,
-        isfigures,
-    )
+for run, [config_filename, config_params] in run_configs.items():
+    print(f"---------- RUN NUMBER: {run} ----------")
+    if args.do_inputfiles:
+        inputfiles(
+            path2CLEO,
+            path2build,
+            tmppath,
+            sharepath,
+            binpath,
+            savefigpath,
+            src_config_filename,
+            config_filename,
+            config_params,
+            thermofiles,
+            postproc_filename,
+            isfigures,
+        )
 
-if args.do_run_executable:
-    run_exectuable(path2kokkostools, path2build, config_filename, postproc_filename)
+    if args.do_run_executable:
+        run_exectuable(path2kokkostools, path2build, config_filename, postproc_filename)
 
-if args.do_plot_results:
-    print("\nno plotting script for kokkostools example")
+    if args.do_plot_results:
+        print("\nno plotting script for kokkostools example")
+    print("-----------------------------------")

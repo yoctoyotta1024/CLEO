@@ -35,7 +35,7 @@ postproc_filedirectory=${path2build_parent}/bin
 ### ---------------------------------------------------- ###
 
 # ensure this directory exists
-mkdir ${path2build_parent}
+mkdir -p ${path2build_parent}
 
 ### ---- run test for different types of parallelism ---- ###
 buildtypes=("cuda" "openmp" "threads" "serial")
