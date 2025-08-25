@@ -4,7 +4,7 @@ Copyright (c) 2025 MPI-M, Clara Bayley
 
 ----- CLEO -----
 File: kp_kernel_timer.py
-Project: speedtest
+Project: kokkostools
 Created Date: Monday 25th August 2025
 Author: Clara Bayley (CB)
 Additional Contributors:

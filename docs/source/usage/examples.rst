@@ -275,27 +275,29 @@ Several plots and animations are produced by this example. If you would like to 
 reference solutions please :ref:`contact us <contact>`.
 
 
-Speed Test
-----------
-This example, ``speedtest.py``, in ``examples/speedtest/`` compiles and runs the same
+Kokkos Tools Profiling Test
+---------------------------
+This example, ``kokkostools.py``, in ``examples/kokkostools/`` compiles and runs the same
 exectuable ``spdtest`` for four different build configurations, (1) "cuda" with CUDA and OpenMP
 parallelism, (2) "openmp" with only OpenMP parallelism, (3) "threads" with only C++ threads
-parallelism, and (4) "serial" without parallelism.
+parallelism, and (4) "serial" without parallelism. Using the (pre-installed) Kokkos tooks'
+Kernel Timer profiler, this example then outputs the time taken for each run in various ones of
+CLEO's kernels.
 
 1. :ref:`Configure the bash scripts<configurebash>`, ``scripts/levante/examples/build_compile_run_plot.sh``
-and ``scripts/levante/examples/speedtest.sh``.
+and ``scripts/levante/examples/kokkostools.sh``.
 
-2. Execute the bash script ``speedtest.sh``, e.g.
+2. Execute the bash script ``kokkostools.sh``, e.g.
 
 .. code-block:: console
 
-  $ scripts/levante/examples/speedtest.sh
+  $ scripts/levante/examples/kokkostools.sh
 
-By default, a .txt file with Kokkos' simple kernel timer profiling tool data for
-each of the three different build configurations and runs is written
-to ``~/CLEO/build_spdtest/bin/[build_type]_[run_number].txt``.
+By default, a .txt file with Kokkos' simple kernel timer profiling tool data for two runs of each
+of the four different build configurations is written to
+``~/CLEO/build_spdtest/bin/[build_type]_[run_number]_[process_info].txt``.
 The time spent in the "timestep" region can be compared with the ones
-in ``~/CLEO/examples/speedtest/speedtest_allstats_examples.txt``.
+in ``~/CLEO/examples/kokkostools/spdtest_kpkerneltimer_example_solution``.
 
 Extension
 ---------

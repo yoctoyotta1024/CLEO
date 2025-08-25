@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=speedtest
+#SBATCH --job-name=kokkostools
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
 #SBATCH --gpus=4
@@ -10,8 +10,8 @@
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
 #SBATCH --account=bm1183
-#SBATCH --output=./speedtest_out.%j.out
-#SBATCH --error=./speedtest_err.%j.out
+#SBATCH --output=./kokkostools_out.%j.out
+#SBATCH --error=./kokkostools_err.%j.out
 
 ### ------------------ Input Parameters ---------------- ###
 ### ------ You MUST edit these lines to set your ------- ###
@@ -27,8 +27,8 @@ build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
 path2kokkostools=/work/bm1183/m300950/kokkos_tools_lib/lib64/
 executables="spdtest"
 
-pythonscript=${path2CLEO}/examples/speedtest/speedtest.py
-src_config_filename=${path2CLEO}/examples/speedtest/src/config/speedtest_config.yaml
+pythonscript=${path2CLEO}/examples/kokkostools/kokkostools.py
+src_config_filename=${path2CLEO}/examples/kokkostools/src/config/kokkostools_config.yaml
 postproc_filedirectory=${path2build_parent}/bin
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
@@ -42,7 +42,7 @@ buildtypes=("cuda" "openmp" "threads" "serial")
 for buildtype in "${buildtypes[@]}"
 do
   path2build="${path2build_parent}/${buildtype}"
-  postproc_filename="${postproc_filedirectory}/spdtest_${buildtype}.txt"
+  postproc_filename="${postproc_filedirectory}/${executables}_${buildtype}.txt"
   script_args="${path2kokkostools} ${src_config_filename} ${postproc_filename} \
   --nruns=2 --do_inputfiles --do_run_executable --do_plot_results"
 

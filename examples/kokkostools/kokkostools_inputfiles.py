@@ -1,10 +1,10 @@
-'''
+"""
 Copyright (c) 2025 MPI-M, Clara Bayley
 
 
 ----- CLEO -----
-File: speedtest_inputfiles.py
-Project: speedtest
+File: kokkostools_inputfiles.py
+Project: kokkostools
 Created Date: Monday 25th August 2025
 Author: Clara Bayley (CB)
 Additional Contributors:
@@ -16,7 +16,6 @@ File Description:
 Script generates input files for running program with "spdtest" executable
 to profile performance of CLEO using Kokkos tools
 """
-'''
 
 
 # %%

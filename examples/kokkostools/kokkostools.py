@@ -3,8 +3,8 @@ Copyright (c) 2025 MPI-M, Clara Bayley
 
 
 ----- CLEO -----
-File: speedtest.py
-Project: speedtest
+File: kokkostools.py
+Project: kokkostools
 Created Date: Thursday 21st August 2025
 Author: Clara Bayley (CB)
 Additional Contributors:
@@ -12,8 +12,11 @@ Additional Contributors:
 License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
-File Description:
+Script generates input files, runs program with "spdtest" executable, and post-processes
+kokkos tools kernel timer profiling outful to test performance of CLEO using Kokkos tools
+for a particular buildtype
 """
+
 
 # %%
 ### -------------------------------- IMPORTS ------------------------------- ###
@@ -88,14 +91,14 @@ sharepath = path2build / "share"
 binpath = path2build / "bin"
 savefigpath = binpath
 
-config_filename = path2build / "tmp" / "speedtest_config.yaml"
-thermofiles = sharepath / "speedtest_dimlessthermo.dat"
+config_filename = path2build / "tmp" / "kokkostools_config.yaml"
+thermofiles = sharepath / "kokkostools_dimlessthermo.dat"
 config_params = {
     "constants_filename": str(path2CLEO / "libs" / "cleoconstants.hpp"),
-    "grid_filename": str(sharepath / "speedtest_dimlessGBxboundaries.dat"),
-    "initsupers_filename": str(sharepath / "speedtest_dimlessSDsinit.dat"),
-    "setup_filename": str(binpath / "speedtest_setup.txt"),
-    "zarrbasedir": str(binpath / "speedtest_sol.zarr"),
+    "grid_filename": str(sharepath / "kokkostools_dimlessGBxboundaries.dat"),
+    "initsupers_filename": str(sharepath / "kokkostools_dimlessSDsinit.dat"),
+    "setup_filename": str(binpath / "kokkostools_setup.txt"),
+    "zarrbasedir": str(binpath / "kokkostools_sol.zarr"),
 }
 
 isfigures = [False, False]  # booleans for [showing, saving] initialisation figures
@@ -155,9 +158,11 @@ def inputfiles(
         file.unlink(missing_ok=True)
 
     ### --- input binary files generation --- ###
-    # equivalent to ``import speedtest_inputfiles`` followed by
-    # ``speedtest_inputfiles.main(path2CLEO, path2build, ...)``
-    inputfiles_script = path2CLEO / "examples" / "speedtest" / "speedtest_inputfiles.py"
+    # equivalent to ``import kokkostools_inputfiles`` followed by
+    # ``kokkostools_inputfiles.main(path2CLEO, path2build, ...)``
+    inputfiles_script = (
+        path2CLEO / "examples" / "kokkostools" / "kokkostools_inputfiles.py"
+    )
     python = sys.executable
     cmd = [
         python,
@@ -188,7 +193,7 @@ def run_exectuable(path2kokkostools, path2build, config_filename, postproc_filen
     ### --- run exectuable with given config file --- ###
     os.chdir(path2build / "bin")
     profiler = KpKernelTimer(path2kokkostools)
-    executable = path2build / "examples" / "speedtest" / "src" / "spdtest"
+    executable = path2build / "examples" / "kokkostools" / "src" / "spdtest"
     cmd = [executable, config_filename]
     print(" ".join([str(c) for c in cmd]))
     subprocess.run(cmd)
@@ -217,4 +222,4 @@ if args.do_run_executable:
     run_exectuable(path2kokkostools, path2build, config_filename, postproc_filename)
 
 if args.do_plot_results:
-    print("no plotting script for speedtest example")
+    print("\nno plotting script for kokkostools example")
