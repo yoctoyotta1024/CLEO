@@ -13,7 +13,7 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * runs the CLEO super-droplet model (SDM) for speed test model example.
+ * runs the CLEO super-droplet model (SDM) for kokkostools profiling example.
  * After make/compiling, execute for example via:
  * ./src/spdtest ../src/config/config.yaml
  */

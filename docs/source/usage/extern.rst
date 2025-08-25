@@ -44,7 +44,7 @@ them yourself.
 yaml-cpp
 --------
 CLEO's ``configuration`` library depends on the ```yaml-cpp``` package to read and write YAML files. You
-can find more information about it from `its repository: <https://github.com/jbeder/yaml-cpp>`_.
+can find more information about it from `the yaml-cpp repository: <https://github.com/jbeder/yaml-cpp>`_.
 
 The yaml-cpp library for CLEO is automatically built using CMAKE and compiled if required.
 
@@ -58,7 +58,7 @@ The CVODE libraries for CLEO are automatically built using CMAKE and compiled if
 pybind11
 --------
 CLEO's ``pycleo`` library requires pybind11 to create python binding for selected parts of CLEO's
-libraries. You can find more information about it from `its repository: <https://github.com/pybind/pybind11>`_.
+libraries. You can find more information about it from `the pybind11 repository: <https://github.com/pybind/pybind11>`_.
 
 The pybind11 library for CLEO is automatically built using CMAKE and compiled if required. Note you
 can avoid making CLEO's python bindings, and thereby avoid the pybind11 dependency on your build,

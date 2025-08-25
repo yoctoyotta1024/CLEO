@@ -1,5 +1,5 @@
 THERMODYNGEN
-=========
+============
 
 Combines thermogen and windsgen into single object
 

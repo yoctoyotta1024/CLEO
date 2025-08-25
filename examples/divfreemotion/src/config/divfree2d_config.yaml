@@ -1,4 +1,3 @@
----
 # ----- CLEO -----
 # File: divfree2d_config.yaml
 # Project: config
@@ -41,25 +40,25 @@ timesteps:
 
 ### Initialisation Parameters ###
 inputfiles:
-  constants_filename : ../libs/cleoconstants.hpp          # name of file for values of physical constants
-  grid_filename : ./share/df2d_dimlessGBxboundaries.dat   # binary filename for initialisation of GBxs / GbxMaps
+  constants_filename : ./libs/cleoconstants.hpp          # name of file for values of physical constants
+  grid_filename : ./build/share/divfree2d_dimlessGBxboundaries.dat   # binary filename for initialisation of GBxs / GbxMaps
 
 initsupers:
   type: frombinary                                        # type of initialisation of super-droplets
-  initsupers_filename : ./share/df2d_dimlessSDsinit.dat   # binary filename for initialisation of SDs
+  initsupers_filename : ./build/share/divfree2d_dimlessSDsinit.dat   # binary filename for initialisation of SDs
 
 ### Output Parameters ###
 outputdata:
-  setup_filename : ./bin/df2d_setup.txt                   # .txt filename to copy configuration to
-  zarrbasedir : ./bin/df2d_sol.zarr                       # zarr store base directory
-  maxchunk : 2500000                                      # maximum no. of elements in chunks of zarr store array
+  setup_filename : ./build/bin/divfree2d_setup.txt                   # .txt filename to copy configuration to
+  zarrbasedir : ./build/bin/divfree2d_sol.zarr                       # zarr store base directory
+  maxchunk : 2500000                                            # maximum no. of elements in chunks of zarr store array
 
 ### Coupled Dynamics Parameters ###
 coupled_dynamics:
-  type : fromfile                                         # type of coupled dynamics to configure
-  press : ./share/df2d_dimlessthermo_press.dat            # binary filename for pressure
-  temp : ./share/df2d_dimlessthermo_temp.dat              # binary filename for temperature
-  qvap : ./share/df2d_dimlessthermo_qvap.dat              # binary filename for vapour mixing ratio
-  qcond : ./share/df2d_dimlessthermo_qcond.dat            # binary filename for liquid mixing ratio
-  wvel : ./share/df2d_dimlessthermo_wvel.dat              # binary filename for vertical (coord3) velocity
-  uvel : ./share/df2d_dimlessthermo_uvel.dat              # binary filename for eastwards (coord1) velocity
+  type : fromfile                                               # type of coupled dynamics to configure
+  press : ./build/share/divfree2d_dimlessthermo_press.dat            # binary filename for pressure
+  temp : ./build/share/divfree2d_dimlessthermo_temp.dat              # binary filename for temperature
+  qvap : ./build/share/divfree2d_dimlessthermo_qvap.dat              # binary filename for vapour mixing ratio
+  qcond : ./build/share/divfree2d_dimlessthermo_qcond.dat            # binary filename for liquid mixing ratio
+  wvel : ./build/share/divfree2d_dimlessthermo_wvel.dat              # binary filename for vertical (coord3) velocity
+  uvel : ./build/share/divfree2d_dimlessthermo_uvel.dat              # binary filename for eastwards (coord1) velocity

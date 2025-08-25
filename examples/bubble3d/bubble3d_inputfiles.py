@@ -127,8 +127,14 @@ def main(
     ### --- required CLEO cleoconstants.hpp file --- ###
     constants_filename = Path(config["inputfiles"]["constants_filename"])
 
-    ### --- booleans for [showing, saving] initialisation figures --- ###
-    isfigures = [show_figures, save_figures]
+    ### --- plots of initial conditions --- ###
+    isfigures = [
+        show_figures,
+        save_figures,
+    ]  # booleans for [showing, saving] initialisation figures
+    SDgbxs2plt = [
+        0
+    ]  # gbxindex of initial SDs to plot if any(isfigures) (nb. "all" can be very slow)
 
     ### --- settings for 3-D gridbox boundaries --- ###
     num_vertical_levels = icon_yac_config["num_vertical_levels"]
@@ -155,13 +161,9 @@ def main(
     numconc = 5e8  # total no. conc of real droplets [m^-3]
     randcoord = False  # sample SD spatial coordinates randomly or not
 
-    SDgbxs2plt = [
-        0
-    ]  # gbxindex of initial SDs to plot if any(isfigures) (nb. "all" can be very slow)
-
     ### --------------------- BINARY FILES GENERATION ---------------------- ###
     ### ----- write gridbox boundaries binary ----- ###
-    grid_filename = config["inputfiles"]["grid_filename"]
+    grid_filename = Path(config["inputfiles"]["grid_filename"])
     geninitconds.generate_gridbox_boundaries(
         grid_filename,
         zgrid,
@@ -173,7 +175,7 @@ def main(
     )
 
     ### ----- write initial superdroplets binary ----- ###
-    initsupers_filename = config["initsupers"]["initsupers_filename"]
+    initsupers_filename = Path(config["initsupers"]["initsupers_filename"])
     nsupers = crdgens.nsupers_at_domain_base(
         grid_filename, constants_filename, npergbx, zlim
     )

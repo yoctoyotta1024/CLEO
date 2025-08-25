@@ -92,6 +92,6 @@ export CLEO_COMPILERNAME=${compilername}
 export CLEO_YACYAXTROOT=${yacyaxtroot}
 source ${path2CLEO}/scripts/juwels/bash/src/runtime_settings.sh ${stacksize_limit}
 
-# TODO(all): split python scripts away from running executable
+# TODO(ALL): split python scripts away from running executable
 ${python} ${pythonscript} ${path2CLEO} ${path2build} ${script_args}
 ### ---------------------------------------------------- ###

@@ -22,14 +22,15 @@ do_build="true"
 buildtype="openmp"
 compilername="intel"
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_colls0d/${buildtype}/
+path2build=${HOME}/CLEO/build_colls0d/breakup/
 build_flags="-DCLEO_COUPLED_DYNAMICS=null -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
 executables="longcolls lowlistcolls szakallurbichcolls testikstraubcolls"
 
 pythonscript=${path2CLEO}/examples/boxmodelcollisions/breakup.py
 src_config_filename=${path2CLEO}/examples/boxmodelcollisions/src/config/breakup_config.yaml
-script_args="${src_config_filename} long lowlist szakallurbich testikstraub"
+script_args="${src_config_filename} --kernels long lowlist szakallurbich testikstraub \
+  --do_inputfiles --do_run_executable --do_plot_results"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

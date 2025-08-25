@@ -14,9 +14,6 @@ Header file: ``<libs/observers/collect_data_for_dataset.hpp>``
    :members:
    :undoc-members:
 
-.. doxygenfunction:: operator>>(const CollectData1 a, const CollectData2 b)
-   :project: observers
-
 .. doxygenstruct:: NullCollectDataForDataset
    :project: observers
    :private-members:

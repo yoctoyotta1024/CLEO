@@ -1,6 +1,5 @@
----
 # ----- CLEO -----
-# File: rain1d_config.yaml
+# File: rshaft1d_config.yaml
 # Project: config
 # Created Date: Thursday 18th April 2024
 # Author: Clara Bayley (CB)
@@ -39,17 +38,17 @@ timesteps:
 
 ### Initialisation Parameters ###
 inputfiles:
-  constants_filename : ../libs/cleoconstants.hpp             # name of file for values of physical constants
-  grid_filename : ./share/rain1d_dimlessGBxboundaries.dat    # binary filename for initialisation of GBxs / GbxMaps
+  constants_filename : ./libs/cleoconstants.hpp             # name of file for values of physical constants
+  grid_filename : ./build/share/rshaft1d_dimlessGBxboundaries.dat    # binary filename for initialisation of GBxs / GbxMaps
 
 initsupers:
   type: frombinary                                           # type of initialisation of super-droplets
-  initsupers_filename : ./share/rain1d_dimlessSDsinit.dat    # binary filename for initialisation of SDs
+  initsupers_filename : ./build/share/rshaft1d_dimlessSDsinit.dat    # binary filename for initialisation of SDs
 
 ### Output Parameters ###
 outputdata:
-  setup_filename : ./bin/rain1d_setup.txt                    # .txt filename to copy configuration to
-  zarrbasedir : ./bin/rain1d_sol.zarr                        # zarr store base directory
+  setup_filename : ./build/bin/rshaft1d_setup.txt                    # .txt filename to copy configuration to
+  zarrbasedir : ./build/bin/rshaft1d_sol.zarr                        # zarr store base directory
   maxchunk : 2500000                                         # maximum no. of elements in chunks of zarr store array
 
 ### Microphysics Parameters ###
@@ -64,8 +63,8 @@ microphysics:
 ### Coupled Dynamics Parameters ###
 coupled_dynamics:
   type : fromfile                                            # type of coupled dynamics to configure
-  press : ./share/rain1d_dimlessthermo_press.dat             # binary filename for pressure
-  temp : ./share/rain1d_dimlessthermo_temp.dat               # binary filename for temperature
-  qvap : ./share/rain1d_dimlessthermo_qvap.dat               # binary filename for vapour mixing ratio
-  qcond : ./share/rain1d_dimlessthermo_qcond.dat             # binary filename for liquid mixing ratio
-  wvel : ./share/rain1d_dimlessthermo_wvel.dat               # binary filename for vertical (coord3) velocity
+  press : ./build/share/rshaft1d_dimlessthermo_press.dat             # binary filename for pressure
+  temp : ./build/share/rshaft1d_dimlessthermo_temp.dat               # binary filename for temperature
+  qvap : ./build/share/rshaft1d_dimlessthermo_qvap.dat               # binary filename for vapour mixing ratio
+  qcond : ./build/share/rshaft1d_dimlessthermo_qcond.dat             # binary filename for liquid mixing ratio
+  wvel : ./build/share/rshaft1d_dimlessthermo_wvel.dat               # binary filename for vertical (coord3) velocity

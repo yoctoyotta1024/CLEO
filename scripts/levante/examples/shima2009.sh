@@ -23,14 +23,15 @@ do_build="true"
 buildtype="cuda"
 compilername="gcc"
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_colls0d/${buildtype}/
+path2build=${HOME}/CLEO/build_colls0d/shima2009/
 build_flags="-DCLEO_COUPLED_DYNAMICS=null -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
 executables="golcolls longcolls"
 
 pythonscript=${path2CLEO}/examples/boxmodelcollisions/shima2009.py
 src_config_filename=${path2CLEO}/examples/boxmodelcollisions/src/config/shima2009_config.yaml
-script_args="${src_config_filename} golovin long1 long2"
+script_args="${src_config_filename} --kernels golovin long1 long2 \
+  --do_inputfiles --do_run_executable --do_plot_results"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

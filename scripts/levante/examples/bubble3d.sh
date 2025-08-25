@@ -29,7 +29,8 @@ executables="bubble3d"
 
 pythonscript=${path2CLEO}/examples/bubble3d/bubble3d.py
 src_config_filename=${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml
-script_args="${src_config_filename} --do_inputfiles --do_run_executable --do_plot_results"
+script_args="${src_config_filename} \
+  --do_inputfiles --do_run_executable --do_plot_results"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

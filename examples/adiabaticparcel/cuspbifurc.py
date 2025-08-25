@@ -12,181 +12,198 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-Script generate input files, runs CLEO adia0d executable to
-create data and then creates plots for adiabatic parcel example
-similar to Figure 5 of "On the CCN (de)activation nonlinearities"
-S. Arabas and S. Shima 2017 to show example of cusp birfucation for
-0D adiabatic parcel expansion and contraction.
-Note: SD(M) = superdroplet (model)
+Script generate input files, runs CLEO adia0d executable to create data and then
+creates plots for adiabatic parcel example similar to Figure 5 of
+"On the CCN (de)activation nonlinearities" S. Arabas and S. Shima 2017 to show
+example of cusp birfucation for 0D adiabatic parcel expansion and contraction.
 """
 
-import os
+# %%
+### -------------------------------- IMPORTS ------------------------------- ###
+import argparse
 import shutil
 import subprocess
 import sys
-import numpy as np
-import matplotlib.pyplot as plt
 from pathlib import Path
+from ruamel.yaml import YAML
 
-path2CLEO = Path(sys.argv[1])
-path2build = Path(sys.argv[2])
-config_filename = Path(sys.argv[3])
+# %%
+### --------------------------- PARSE ARGUMENTS ---------------------------- ###
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "path2CLEO", type=Path, help="Absolute path to CLEO directory (for PySD)"
+)
+parser.add_argument("path2build", type=Path, help="Absolute path to build directory")
+parser.add_argument(
+    "src_config_filename",
+    type=Path,
+    help="Absolute path to source configuration YAML file",
+)
+parser.add_argument(
+    "--do_inputfiles",
+    action="store_true",  # default is False
+    help="Generate initial condition binary files",
+)
+parser.add_argument(
+    "--do_run_executable",
+    action="store_true",  # default is False
+    help="Run executable",
+)
+parser.add_argument(
+    "--do_plot_results",
+    action="store_true",  # default is False
+    help="Plot results of example",
+)
+args = parser.parse_args()
 
-sys.path.append(str(path2CLEO))  # imports from pySD
-sys.path.append(
-    str(path2CLEO / "examples" / "exampleplotting")
-)  # imports from example plots package
+# %%
+### -------------------------- INPUT PARAMETERS ---------------------------- ###
+### --- command line parsed arguments --- ###
+path2CLEO = args.path2CLEO
+path2build = args.path2build
+src_config_filename = args.src_config_filename
 
-
-from plotssrc import pltsds, as2017fig
-from pySD import geninitconds
-from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
-from pySD.initsuperdropsbinary_src import rgens, dryrgens, probdists, attrsgen
-
-
-############### INPUTS ##################
-# path and filenames for creating SD initial conditions and for running model
-constants_filename = path2CLEO / "libs" / "cleoconstants.hpp"
-binpath = path2build / "bin"
+### --- additional/derived arguments --- ###
+tmppath = path2build / "tmp"
 sharepath = path2build / "share"
-initsupers_filename = sharepath / "cuspbifurc_dimlessSDsinit.dat"
-grid_filename = sharepath / "cuspbifurc_dimlessGBxboundaries.dat"
-
-# path and file names for plotting results
-setupfile = binpath / "cuspbifurc_setup.txt"
-dataset = binpath / "cuspbifurc_sol.zarr"
-
-# booleans for [showing, saving] initialisation figures
-isfigures = [False, True]
+binpath = path2build / "bin"
 savefigpath = binpath
 
-# settings for 0D Model (number of SD and grid coordinates)
-nsupers = {0: 1}
-coord_params = ["false"]
-zgrid = np.asarray([0, 100])
-xgrid = np.asarray([0, 100])
-ygrid = np.asarray([0, 100])
+config_filename = path2build / "tmp" / "cuspbifurc_config.yaml"
+config_params = {
+    "constants_filename": str(path2CLEO / "libs" / "cleoconstants.hpp"),
+    "grid_filename": str(sharepath / "cuspbifurc_dimlessGBxboundaries.dat"),
+    "initsupers_filename": str(sharepath / "cuspbifurc_dimlessSDsinit.dat"),
+    "setup_filename": str(binpath / "cuspbifurc_setup.txt"),
+    "zarrbasedir": str(binpath / "cuspbifurc_sol.zarr"),
+}
 
-# settings for monodisperse droplet radii
-# numconc = total no. concentration of droplets [m^-3]
-numconc = 0.5e9
-# monor = dry radius of all droplets [m]
-monor = 0.025e-6
-
-# monodisperse droplet radii probability distribution
-radiigen = rgens.MonoAttrGen(monor)
-dryradiigen = dryrgens.ScaledRadiiGen(1.0)
-xiprobdist = probdists.DiracDelta(monor)
-
-# do not generate SD coords
-coord3gen = None
-coord1gen = None
-coord2gen = None
+isfigures = [False, True]  # booleans for [showing, saving] initialisation figures
 
 
-def displacement(time, w_avg, thalf):
-    """displacement z given velocity, w, is sinusoidal
-    profile: w = w_avg * pi/2 * np.sin(np.pi * t/thalf)
-    where wmax = pi/2*w_avg and tauhalf = thalf/pi."""
+# %%
+### ------------------------- FUNCTION DEFINITIONS ------------------------- ###
+def inputfiles(
+    path2CLEO,
+    path2build,
+    tmppath,
+    sharepath,
+    binpath,
+    savefigpath,
+    src_config_filename,
+    config_filename,
+    config_params,
+    isfigures,
+):
+    sys.path.append(str(path2CLEO))  # for imports from pySD package
+    from pySD import editconfigfile
 
-    zmax = w_avg / 2 * thalf
-    z = zmax * (1 - np.cos(np.pi * time / thalf))
-    return z
-
-
-############### RUN EXAMPLE ##################
-### ensure build, share and bin directories exist
-if path2CLEO == path2build:
-    raise ValueError("build directory cannot be CLEO")
-else:
+    ### --- ensure build, share and bin directories exist --- ###
+    if path2CLEO == path2build:
+        raise ValueError("build directory cannot be CLEO")
     path2build.mkdir(exist_ok=True)
+    tmppath.mkdir(exist_ok=True)
     sharepath.mkdir(exist_ok=True)
     binpath.mkdir(exist_ok=True)
-    if isfigures[1]:
+    if savefigpath is not None:
         savefigpath.mkdir(exist_ok=True)
 
-###  delete any exisitng initial conditions
-shutil.rmtree(grid_filename, ignore_errors=True)
-shutil.rmtree(initsupers_filename, ignore_errors=True)
+    ### --- copy src_config_filename into tmp and edit parameters --- ###
+    config_filename.unlink(missing_ok=True)  # delete any existing config
+    shutil.copy(src_config_filename, config_filename)
+    editconfigfile.edit_config_params(config_filename, config_params)
 
-### create files (and plots) for gridbox boundaries and initial SD conditions
-geninitconds.generate_gridbox_boundaries(
-    grid_filename,
-    zgrid,
-    xgrid,
-    ygrid,
-    constants_filename,
-    isprintinfo=True,
-    isfigures=isfigures,
-    savefigpath=savefigpath,
-)
+    ### --- delete any existing initial conditions --- ###
+    yaml = YAML()
+    with open(config_filename, "r") as file:
+        config = yaml.load(file)
+    Path(config["inputfiles"]["grid_filename"]).unlink(missing_ok=True)
+    Path(config["initsupers"]["initsupers_filename"]).unlink(missing_ok=True)
 
-initattrsgen = attrsgen.AttrsGenerator(
-    radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
-)
-geninitconds.generate_initial_superdroplet_conditions(
-    initattrsgen,
-    initsupers_filename,
-    config_filename,
-    constants_filename,
-    grid_filename,
-    nsupers,
-    numconc,
-    isprintinfo=True,
-    isfigures=isfigures,
-    savefigpath=savefigpath,
-    gbxs2plt="all",
-)
+    ### --- input binary files generation --- ###
+    # equivalent to ``import cuspbifurc_inputfiles`` followed by
+    # ``cuspbifurc_inputfiles.main(path2CLEO, path2build, ...)``
+    inputfiles_script = (
+        path2CLEO / "examples" / "adiabaticparcel" / "cuspbifurc_inputfiles.py"
+    )
+    python = sys.executable
+    cmd = [
+        python,
+        inputfiles_script,
+        path2CLEO,
+        path2build,
+        config_filename,
+    ]
+    if isfigures[0]:
+        cmd.append("--show_figures")
+    if isfigures[1]:
+        cmd.append("--save_figures")
+        cmd.append(f"--savefigpath={savefigpath}")
+    print(" ".join([str(c) for c in cmd]))
+    subprocess.run(cmd)
 
-### run model
-os.chdir(path2build)
-subprocess.run(["pwd"])
-shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
-executable = path2build / "examples" / "adiabaticparcel" / "src" / "adia0d"
-print("Executable: " + str(executable))
-print("Config file: " + str(config_filename))
-subprocess.run([executable, config_filename])
 
-### load results
-# read in constants and intial setup from setup .txt file
-config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
-consts = pysetuptxt.get_consts(setupfile, isprint=True)
-gbxs = pygbxsdat.get_gridboxes(grid_filename, consts["COORD0"], isprint=True)
+def run_exectuable(path2build, config_filename):
+    ### --- delete any existing output dataset and setup files --- ###
+    yaml = YAML()
+    with open(config_filename, "r") as file:
+        config = yaml.load(file)
+    Path(config["outputdata"]["setup_filename"]).unlink(missing_ok=True)
+    shutil.rmtree(Path(config["outputdata"]["zarrbasedir"]), ignore_errors=True)
 
-# read in output Xarray data
-thermo = pyzarr.get_thermodata(dataset, config["ntime"], gbxs["ndims"], consts)
-supersat = thermo.supersaturation()
-time = pyzarr.get_time(dataset).secs
-superdrops = pyzarr.get_supers(dataset, consts)
-zprof = displacement(time, config["W_avg"], config["TAU_half"])
+    ### --- run exectuable with given config file --- ###
+    executable = path2build / "examples" / "adiabaticparcel" / "src" / "adia0d"
+    cmd = [executable, config_filename]
+    print(" ".join([str(c) for c in cmd]))
+    subprocess.run(cmd)
 
-### plot results
-# sample drops to plot from whole range of SD ids
-radii = superdrops.sample(
-    "sdId", sample_values="all", variables2sample="radius"
-).radius()
-savename = savefigpath / "cuspbifurc_SDgrowth.png"
-pltsds.individ_radiusgrowths_figure(time, radii, savename=savename)
-plt.show()
 
-attrs = ["radius", "xi", "msol"]
-sd0 = superdrops.sample("sdId", sample_values=0, variables2sample=attrs)
-radius = np.array(sd0["radius"])  # convert list of awkward arrays to numpy
-msol = np.array(sd0["msol"])  # convert list of awkward arrays to numpy
-numconc = np.sum(superdrops["xi"][0]) / gbxs["domainvol"] / 1e6  # [/cm^3]
+def plot_results(path2CLEO, config_filename, savefigpath):
+    plotting_script = (
+        path2CLEO / "examples" / "adiabaticparcel" / "cuspbifurc_plotting.py"
+    )
+    python = sys.executable
 
-savename2 = savefigpath / "cuspbifurc_validation.png"
-as2017fig.arabas_shima_2017_fig(
-    time,
-    zprof,
-    radius,
-    msol,
-    thermo.temp[:, 0, 0, 0],
-    supersat[:, 0, 0, 0],
-    superdrops.IONIC(),
-    superdrops.MR_SOL(),
-    config["W_avg"],
-    numconc,
-    savename2,
-)
-plt.show()
+    yaml = YAML()
+    with open(config_filename, "r") as file:
+        config = yaml.load(file)
+    grid_filename = Path(config["inputfiles"]["grid_filename"])
+    setupfile = Path(config["outputdata"]["setup_filename"])
+    dataset = Path(config["outputdata"]["zarrbasedir"])
+
+    # equivalent to ``import cuspbifurc_plotting`` followed by
+    # ``cuspbifurc_plotting.main(path2CLEO, savefigpath, ...)``
+    cmd = [
+        python,
+        plotting_script,
+        f"--path2CLEO={path2CLEO}",
+        f"--savefigpath={savefigpath}",
+        f"--grid_filename={grid_filename}",
+        f"--setupfile={setupfile}",
+        f"--dataset={dataset}",
+    ]
+    print(" ".join([str(c) for c in cmd]))
+    subprocess.run(cmd)
+
+
+# %%
+### ----------------------------- RUN EXAMPLE ------------------------------ ###
+if args.do_inputfiles:
+    inputfiles(
+        path2CLEO,
+        path2build,
+        tmppath,
+        sharepath,
+        binpath,
+        savefigpath,
+        src_config_filename,
+        config_filename,
+        config_params,
+        isfigures,
+    )
+
+if args.do_run_executable:
+    run_exectuable(path2build, config_filename)
+
+if args.do_plot_results:
+    plot_results(path2CLEO, config_filename, savefigpath)

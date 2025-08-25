@@ -122,7 +122,6 @@ def main(
 ### --------------------------- RUN PROGRAM -------------------------------- ###
 if __name__ == "__main__":
     args = parse_arguments()
-    print(args)
     main(
         args.path2CLEO,
         args.savefigpath,
