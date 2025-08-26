@@ -162,7 +162,7 @@ class SDMMethods {
   template <SDMMonitor SDMMo>
   void sdm_microphysics(const unsigned int t_sdm, const unsigned int t_next, const viewd_gbx d_gbxs,
                         const subviewd_supers domainsupers, const SDMMo mo) const {
-    // TODO(all) use scratch space for parallel region
+    // TODO(ALL) use scratch space for parallel region(?)
     const size_t ngbxs(d_gbxs.extent(0));
     const auto functor = SDMMicrophysicsFunctor{microphys, t_sdm, t_next, d_gbxs, domainsupers, mo};
     Kokkos::parallel_for("sdm_microphysics", TeamPolicy(ngbxs, KCS::team_size), functor);

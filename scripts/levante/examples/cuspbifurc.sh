@@ -22,14 +22,15 @@ do_build="true"
 buildtype="serial"
 compilername="intel"
 path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_adia0d/${buildtype}/
+path2build=${HOME}/CLEO/build_adia0d/cuspbifurc/
 build_flags="-DCLEO_COUPLED_DYNAMICS=cvode -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
 executables="adia0d"
 
 pythonscript=${path2CLEO}/examples/adiabaticparcel/cuspbifurc.py
 src_config_filename=${path2CLEO}/examples/adiabaticparcel/src/config/cuspbifurc_config.yaml
-script_args="${src_config_filename}"
+script_args="${src_config_filename} \
+  --do_inputfiles --do_run_executable --do_plot_results"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

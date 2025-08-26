@@ -13,7 +13,7 @@
 #SBATCH --output=./eurec4a1d_out.%j.out
 #SBATCH --error=./eurec4a1d_err.%j.out
 
-# TODO(all): python script(s) for example
+# TODO(ALL): python inputfiles and plotting script(s) for example
 
 ### ------------------ Input Parameters ---------------- ###
 ### ------ You MUST edit these lines to set your ------- ###
@@ -29,9 +29,10 @@ build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
 executables="eurec4a1d"
 
+pythonscript=${path2CLEO}/examples/eurec4a1d/eurec4a1d.py
 src_config_filename=${path2CLEO}/examples/eurec4a1d/src/config/eurec4a1d_config.yaml
-pythonscript=""
-script_args="${src_config_filename}"
+script_args="${src_config_filename} \
+  --do_inputfiles --do_run_executable --do_plot_results"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

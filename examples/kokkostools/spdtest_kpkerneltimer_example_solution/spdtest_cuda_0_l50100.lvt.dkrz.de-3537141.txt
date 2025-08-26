@@ -1,0 +1,144 @@
+ (Type)   Total Time, Call Count, Avg. Time per Call, %Total Time in Kernels, %Total Program Time
+-------------------------------------------------------------------------
+
+Regions:
+
+- runcleo
+ (REGION)   0.602561 1 0.602561 104.501939 33.380939
+- timestep
+ (REGION)   0.596240 1 0.596240 103.405657 33.030755
+- timestep_sdm
+ (REGION)   0.473399 121 0.003912 82.101448 26.225575
+- timestep_sdm_microphysics
+ (REGION)   0.340292 484 0.000703 59.016675 18.851632
+- timestep_sdm_movement
+ (REGION)   0.130049 484 0.000269 22.554433 7.204538
+- sdm_movement_between_gridboxes
+ (REGION)   0.083669 404 0.000207 14.510676 4.635129
+- sdm_movement_move_in_gridboxes
+ (REGION)   0.028339 404 0.000070 4.914890 1.569958
+- sdm_movement_effect_on_hydrometeor_states
+ (REGION)   0.010309 404 0.000026 1.787842 0.571088
+- init
+ (REGION)   0.006305 1 0.006305 1.093470 0.349286
+- init_supers
+ (REGION)   0.005507 1 0.005507 0.955076 0.305079
+- sdm_movement_boundary_conditions
+ (REGION)   0.001072 404 0.000003 0.185863 0.059370
+- init_gbxs
+ (REGION)   0.000624 1 0.000624 0.108210 0.034565
+- timestep_coupldyn
+ (REGION)   0.000348 121 0.000003 0.060369 0.019284
+
+-------------------------------------------------------------------------
+Kernels:
+
+- sdm_microphysics
+ (ParFor)   0.337514 484 0.000697 58.534878 18.697732
+- Kokkos::View::initialization [buffer] via memset
+ (ParFor)   0.065287 26 0.002511 11.322721 3.616804
+- reset_buffer
+ (ParFor)   0.053347 52 0.001026 9.251888 2.955320
+- move_supers_in_gridboxes
+ (ParFor)   0.024331 404 0.000060 4.219691 1.347891
+- cumulative_sum
+ (ParScan)  0.009573 405 0.000024 1.660322 0.530355
+- write_gridboxes_team
+ (ParFor)   0.009426 242 0.000039 1.634727 0.522179
+- effect_on_hydrometeor_states
+ (ParFor)   0.008076 404 0.000020 1.400568 0.447382
+- Kokkos::View::initialization [h_data_mirror] via memset
+ (ParFor)   0.007617 791 0.000010 1.321013 0.421970
+- set_gridboxes_refs
+ (ParFor)   0.006624 404 0.000016 1.148836 0.366972
+- counting_sort_oob
+ (ParFor)   0.005954 404 0.000015 1.032522 0.329817
+- counting_sort_gbxs
+ (ParFor)   0.005621 404 0.000014 0.974882 0.311405
+- find_domainrefs_cuda
+ (ParFor)   0.005472 405 0.000014 0.948997 0.303137
+- increment_counts
+ (ParFor)   0.005455 405 0.000013 0.945979 0.302173
+- set_cartesian_maps
+ (ParFor)   0.005156 1 0.005156 0.894210 0.285637
+- Kokkos::ScatterView::ResetDuplicates [counts]
+ (ParFor)   0.004148 405 0.000010 0.719305 0.229767
+- Kokkos::fill_view_api_default
+ (ParFor)   0.003990 405 0.000010 0.691932 0.221023
+- Kokkos::ViewFill-1D
+ (ParFor)   0.003820 62 0.000062 0.662450 0.211606
+- Kokkos::View::initialization [domainref1] via memset
+ (ParFor)   0.003489 405 0.000009 0.605058 0.193273
+- write_gridboxes_range
+ (ParFor)   0.002908 121 0.000024 0.504373 0.161111
+- write_supers
+ (ParFor)   0.002836 121 0.000023 0.491803 0.157096
+- Kokkos::View::initialization [h_data] via memset
+ (ParFor)   0.002485 791 0.000003 0.431020 0.137680
+- receive_dynamics
+ (ParFor)   0.000708 3 0.000236 0.122765 0.039215
+- Kokkos::Impl::BitsetCount::apply
+ (ParRed)   0.000509 11 0.000046 0.088321 0.028212
+- initialise_supers_on_host
+ (ParFor)   0.000436 1 0.000436 0.075627 0.024157
+- Kokkos::View::initialization [UnorderedMap - values] via memset
+ (ParFor)   0.000213 31 0.000007 0.036883 0.011782
+- Kokkos::View::initialization [UnorderedMap - bitset] via memset
+ (ParFor)   0.000209 31 0.000007 0.036222 0.011570
+- Kokkos::View::initialization [UnorderedMap - keys] via memset
+ (ParFor)   0.000199 31 0.000006 0.034568 0.011042
+- is_gbxinit_complete
+ (ParFor)   0.000193 1 0.000193 0.033451 0.010685
+- Kokkos::View::initialization [UnorderedMap - scalars] via memset
+ (ParFor)   0.000191 31 0.000006 0.033203 0.010606
+- initialise_gbxs_on_host
+ (ParFor)   0.000152 1 0.000152 0.026339 0.008414
+- Kokkos::View::initialization [totsupers_mirror] via memset
+ (ParFor)   0.000118 1 0.000118 0.020468 0.006538
+- Kokkos::View::initialization [UnorderedMap scalars] via memset
+ (ParFor)   0.000100 9 0.000011 0.017325 0.005534
+- Kokkos::View::initialization [UnorderedMap - size] via memset
+ (ParFor)   0.000093 31 0.000003 0.016043 0.005125
+- Kokkos::View::initialization [Bitset] via memset
+ (ParFor)   0.000083 9 0.000009 0.014431 0.004610
+- IsSupersSorted
+ (ParRed)   0.000056 1 0.000056 0.009717 0.003104
+- collect_gbxs_data
+ (ParFor)   0.000036 1 0.000036 0.006244 0.001994
+- counting_sort
+ (ParFor)   0.000036 1 0.000036 0.006244 0.001994
+- Kokkos::View::initialization [totsupers] via memset
+ (ParFor)   0.000020 1 0.000020 0.003473 0.001109
+- Kokkos::View::initialization [totsupers_tmp_mirror] via memset
+ (ParFor)   0.000016 1 0.000016 0.002770 0.000885
+- Kokkos::View::initialization [Kokkos::Random_XorShift64::locks] via memset
+ (ParFor)   0.000015 1 0.000015 0.002605 0.000832
+- Kokkos::View::initialization [counts] via memset
+ (ParFor)   0.000014 1 0.000014 0.002440 0.000779
+- Kokkos::View::initialization [Kokkos::Random_XorShift64::state] via memset
+ (ParFor)   0.000014 1 0.000014 0.002440 0.000779
+- Kokkos::View::initialization [cumlcounts] via memset
+ (ParFor)   0.000012 1 0.000012 0.002067 0.000660
+- Kokkos::View::initialization [gbxs] via memset
+ (ParFor)   0.000012 1 0.000012 0.002067 0.000660
+- Kokkos::View::initialization [totsupers_tmp] via memset
+ (ParFor)   0.000011 1 0.000011 0.001902 0.000608
+- Kokkos::View::initialization [gbxs_mirror] via memset
+ (ParFor)   0.000009 1 0.000009 0.001571 0.000502
+- Kokkos::View::initialization [global_ndims] via memset
+ (ParFor)   0.000009 1 0.000009 0.001571 0.000502
+- Kokkos::View::initialization [global_ndims_mirror] via memset
+ (ParFor)   0.000009 3 0.000003 0.001530 0.000489
+- Kokkos::View::initialization [DualView::modified_flags] via memset
+ (ParFor)   0.000003 1 0.000003 0.000538 0.000172
+
+-------------------------------------------------------------------------
+Summary:
+
+Total Execution Time (incl. Kokkos + non-Kokkos):                   1.80510 seconds
+Total Time in Kokkos kernels:                                       0.57660 seconds
+   -> Time outside Kokkos kernels:                                  1.22850 seconds
+   -> Percentage in Kokkos kernels:                                   31.94 %
+Total Calls to Kokkos Kernels:                                         7349
+
+-------------------------------------------------------------------------

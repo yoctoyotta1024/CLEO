@@ -13,65 +13,69 @@ License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
-Script generate input files, runs CLEO adia0d executable to create data and
-then creates plots for adiabatic parcel example similar to Figure 5 of "On
-the CCN (de)activation nonlinearities" S. Arabas and S. Shima 2017 to show
+Script generate input files, runs CLEO adia0d executable to create data and then
+creates plots for adiabatic parcel example similar to Figure 5 of
+"On the CCN (de)activation nonlinearities" S. Arabas and S. Shima 2017 to show
 example of adaibatic parcel expansion and contraction.
-Note: SD(M) = superdroplet (model)
 """
 
-import os
+# %%
+### -------------------------------- IMPORTS ------------------------------- ###
+import argparse
 import shutil
 import subprocess
 import sys
-import numpy as np
-import matplotlib.pyplot as plt
 from pathlib import Path
+from ruamel.yaml import YAML
 
-path2CLEO = Path(sys.argv[1])
-path2build = Path(sys.argv[2])
-config_filename = Path(sys.argv[3])
+# %%
+### --------------------------- PARSE ARGUMENTS ---------------------------- ###
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "path2CLEO", type=Path, help="Absolute path to CLEO directory (for PySD)"
+)
+parser.add_argument("path2build", type=Path, help="Absolute path to build directory")
+parser.add_argument(
+    "src_config_filename",
+    type=Path,
+    help="Absolute path to source configuration YAML file",
+)
+parser.add_argument(
+    "--do_inputfiles",
+    action="store_true",  # default is False
+    help="Generate initial condition binary files",
+)
+parser.add_argument(
+    "--do_run_executable",
+    action="store_true",  # default is False
+    help="Run executable",
+)
+parser.add_argument(
+    "--do_plot_results",
+    action="store_true",  # default is False
+    help="Plot results of example",
+)
+args = parser.parse_args()
 
-sys.path.append(str(path2CLEO))  # imports from pySD
-sys.path.append(
-    str(path2CLEO / "examples" / "exampleplotting")
-)  # imports from example plots package
+# %%
+### -------------------------- INPUT PARAMETERS ---------------------------- ###
+### --- command line parsed arguments --- ###
+path2CLEO = args.path2CLEO
+path2build = args.path2build
+src_config_filename = args.src_config_filename
 
-from plotssrc import as2017fig
-from pySD import editconfigfile, geninitconds
-from pySD.initsuperdropsbinary_src import rgens, dryrgens, probdists, attrsgen
-from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
-
-############### INPUTS ##################
-# path and filenames for creating SD initial conditions and for running model
-constants_filename = path2CLEO / "libs" / "cleoconstants.hpp"
-binpath = path2build / "bin"
+### --- additional/derived arguments --- ###
+tmppath = path2build / "tmp"
 sharepath = path2build / "share"
-initsupers_filename = sharepath / "as2017_dimlessSDsinit.dat"
-grid_filename = sharepath / "as2017_dimlessGBxboundaries.dat"
-
-# booleans for [showing, saving] initialisation figures
-isfigures = [False, True]
+binpath = path2build / "bin"
 savefigpath = binpath
 
-# settings for 0D Model (number of SD and grid coordinates)
-nsupers = {0: 64}
-coord_params = ["false"]
-zgrid = np.asarray([0, 100])
-xgrid = np.asarray([0, 100])
-ygrid = np.asarray([0, 100])
+isfigures = [False, True]  # booleans for [showing, saving] initialisation figures
 
-# settings for monodisperse droplet radii
-# [m^-3] total no. concentration of droplets
-numconcs = [500e6, 500e6, 50e6]
-monors = [0.05e-6, 0.1e-6, 0.1e-6]
+### configuration parameters for yaml file for each of three runs of three
+### different initial radii and number concentration runs (nine runs overall)
+run_configs = {}  # run number: [config_filename, config_params]
 
-# do not generate superdroplet coords
-coord3gen = None
-coord1gen = None
-coord2gen = None
-
-# parameters to edit in model configuration and plotting
 params1 = {
     "W_avg": 1,
     "TAU_half": 150,
@@ -93,158 +97,184 @@ params3 = {
     "COUPLTSTEP": 3,
     "OBSTSTEP": 750,
 }
-paramslist = [params1, params2, params3]
-lwdths = [2, 1, 0.5]
-
-
-def displacement(time, w_avg, thalf):
-    """displacement z given velocity, w, is sinusoidal
-    profile: w = w_avg * pi/2 * np.sin(np.pi * t/thalf)
-    where wmax = pi/2*w_avg and tauhalf = thalf/pi."""
-
-    zmax = w_avg / 2 * thalf
-    z = zmax * (1 - np.cos(np.pi * time / thalf))
-    return z
-
-
-############### RUN EXAMPLE ##################
-###  delete any existing datasets
-for run_num in range(len(monors) * len(paramslist)):
-    dataset = "as2017_sol" + str(run_num) + ".zarr"
-    shutil.rmtree(binpath / dataset, ignore_errors=True)
-
-### ensure build, share and bin directories exist
-if path2CLEO == path2build:
-    raise ValueError("build directory cannot be CLEO")
-else:
-    path2build.mkdir(exist_ok=True)
-    sharepath.mkdir(exist_ok=True)
-    binpath.mkdir(exist_ok=True)
-    if isfigures[1]:
-        savefigpath.mkdir(exist_ok=True)
-
-### create file (and plot) for gridbox boundaries
-shutil.rmtree(grid_filename, ignore_errors=True)
-geninitconds.generate_gridbox_boundaries(
-    grid_filename,
-    zgrid,
-    xgrid,
-    ygrid,
-    constants_filename,
-    isprintinfo=True,
-    isfigures=isfigures,
-    savefigpath=savefigpath,
-)
 
 runnum = 0
-for i in range(len(monors)):
-    ### create file (and plots) for initial SDs conditions
-    monor, numconc = monors[i], numconcs[i]
-    # all SDs have the same dryradius = monor [m]
-    radiigen = rgens.MonoAttrGen(monor)
-    dryradiigen = dryrgens.ScaledRadiiGen(1.0)
-    # monodisperse droplet radii probability distribution
-    xiprobdist = probdists.DiracDelta(monor)
+for icond in range(3):  # 3 diff initial conditions
+    for params in [params1, params2, params3]:  # 3 different run parameters
+        cf = path2build / "tmp" / f"as2017_config_run{runnum}.yaml"
+        cp = {
+            "constants_filename": str(path2CLEO / "libs" / "cleoconstants.hpp"),
+            "grid_filename": str(sharepath / "as2017_dimlessGBxboundaries.dat"),
+            "initsupers_filename": str(
+                sharepath / f"as2017_dimlessSDsinit_icond{icond}.dat"
+            ),
+            "setup_filename": str(binpath / f"as2017_setup_run{runnum}.txt"),
+            "zarrbasedir": str(binpath / f"as2017_sol_run{runnum}.zarr"),
+        }
+        for key, value in params.items():
+            cp[key] = value
 
-    initattrsgen = attrsgen.AttrsGenerator(
-        radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
-    )
-    shutil.rmtree(initsupers_filename, ignore_errors=True)
-    geninitconds.generate_initial_superdroplet_conditions(
-        initattrsgen,
-        initsupers_filename,
-        config_filename,
-        constants_filename,
-        grid_filename,
-        nsupers,
-        numconc,
-        isprintinfo=True,
-        isfigures=isfigures,
-        savefigpath=savefigpath,
-        gbxs2plt="all",
-    )
-
-    fig, axs = plt.subplots(nrows=3, ncols=1, figsize=(5, 16))
-    for params, lwdth in zip(paramslist, lwdths):
-        ### edit relevant setup file parameters
-        zarrbasedir = "as2017_sol" + str(runnum) + ".zarr"
-        params["zarrbasedir"] = str(binpath / zarrbasedir)
-        params["setup_filename"] = str(binpath / "as2017_setup.txt")
-        editconfigfile.edit_config_params(config_filename, params)
-
-        ### delete any existing dataset
-        shutil.rmtree(params["zarrbasedir"], ignore_errors=True)
-        shutil.rmtree(params["setup_filename"], ignore_errors=True)
-
-        ### run model
-        os.chdir(path2build)
-        executable = path2build / "examples" / "adiabaticparcel" / "src" / "adia0d"
-        print("Executable: " + str(executable))
-        print("Config file: " + str(config_filename))
-        subprocess.run([executable, config_filename])
-
-        ### load results
-        setupfile = binpath / "as2017_setup.txt"
-        dataset = binpath / Path("as2017_sol" + str(runnum) + ".zarr")
-
-        ### read in constants and intial setup from setup .txt file
-        config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
-        consts = pysetuptxt.get_consts(setupfile, isprint=True)
-        gbxs = pygbxsdat.get_gridboxes(grid_filename, consts["COORD0"], isprint=True)
-
-        # read in output Xarray data
-        thermo = pyzarr.get_thermodata(dataset, config["ntime"], gbxs["ndims"], consts)
-        supersat = thermo.supersaturation()
-        time = pyzarr.get_time(dataset).secs
-        superdrops = pyzarr.get_supers(dataset, consts)
-        zprof = displacement(time, config["W_avg"], config["TAU_half"])
-
-        attrs = ["radius", "xi", "msol"]
-        sd0 = superdrops.sample("sdId", sample_values=0, variables2sample=attrs)
-        radius = sd0["radius"][0]
-        msol_initial = sd0["msol"][0][0]
-        numconc = np.sum(superdrops["xi"][0]) / gbxs["domainvol"] / 1e6  # [/cm^3]
-
-        ### plot results
-        wlab = "<w> = {:.1f}".format(config["W_avg"] * 100) + "cm s$^{-1}$"
-        as2017fig.condensation_validation_subplots(
-            axs, time, radius, supersat[:, 0, 0, 0], zprof, lwdth=lwdth, lab=wlab
-        )
-
+        run_configs[runnum] = [cf, cp]
         runnum += 1
 
-    ### save figure
-    as2017fig.plot_kohlercurve_with_criticalpoints(
-        axs[1],
-        radius,
-        msol_initial,
-        thermo.temp[0, 0, 0, 0],
-        superdrops.IONIC(),
-        superdrops.MR_SOL(),
+
+# %%
+### ------------------------- FUNCTION DEFINITIONS ------------------------- ###
+def inputfiles(
+    path2CLEO,
+    path2build,
+    tmppath,
+    sharepath,
+    binpath,
+    savefigpath,
+    src_config_filename,
+    config_filename,
+    config_params,
+    gen_gbxs,
+    gen_supers,
+    icond,
+    isfigures,
+):
+    sys.path.append(str(path2CLEO))  # for imports from pySD package
+    from pySD import editconfigfile
+
+    ### --- ensure build, share and bin directories exist --- ###
+    if path2CLEO == path2build:
+        raise ValueError("build directory cannot be CLEO")
+    path2build.mkdir(exist_ok=True)
+    tmppath.mkdir(exist_ok=True)
+    sharepath.mkdir(exist_ok=True)
+    binpath.mkdir(exist_ok=True)
+    if savefigpath is not None:
+        savefigpath.mkdir(exist_ok=True)
+
+    ### --- copy src_config_filename into tmp and edit parameters --- ###
+    config_filename.unlink(missing_ok=True)  # delete any existing config
+    shutil.copy(src_config_filename, config_filename)
+    editconfigfile.edit_config_params(config_filename, config_params)
+
+    ### --- delete any existing initial conditions --- ###
+    yaml = YAML()
+    with open(config_filename, "r") as file:
+        config = yaml.load(file)
+    if gen_gbxs:
+        Path(config["inputfiles"]["grid_filename"]).unlink(missing_ok=True)
+    if gen_supers:
+        Path(config["initsupers"]["initsupers_filename"]).unlink(missing_ok=True)
+
+    ### --- input binary files generation --- ###
+    # equivalent to ``import as2017_inputfiles`` followed by
+    # ``as2017_inputfiles.main(path2CLEO, path2build, ...)``
+    inputfiles_script = (
+        path2CLEO / "examples" / "adiabaticparcel" / "as2017_inputfiles.py"
     )
+    python = sys.executable
+    cmd = [
+        python,
+        inputfiles_script,
+        path2CLEO,
+        path2build,
+        config_filename,
+    ]
+    if gen_gbxs:
+        cmd.append("--gen_gbxs")
+    if gen_supers:
+        cmd.append("--gen_supers")
+        cmd.append(f"--icond={icond}")
+    if isfigures[0]:
+        cmd.append("--show_figures")
+    if isfigures[1]:
+        cmd.append("--save_figures")
+        cmd.append(f"--savefigpath={savefigpath}")
+    print(" ".join([str(c) for c in cmd]))
+    subprocess.run(cmd, check=True)
 
-    textlab = (
-        "N = "
-        + str(numconc)
-        + "cm$^{-3}$\n"
-        + "r$_{dry}$ = "
-        + "{:.2g}\u03BCm\n".format(radius[0])
-    )
-    axs[0].legend(loc="lower right", fontsize=10)
-    axs[1].legend(loc="upper left")
-    axs[0].text(0.03, 0.85, textlab, transform=axs[0].transAxes)
 
-    axs[0].set_xlim([-1, 1])
-    for ax in axs[1:]:
-        ax.set_xlim([0.125, 10])
-        ax.set_xscale("log")
-    axs[0].set_ylim([0, 150])
-    axs[1].set_ylim([-1, 1])
-    axs[2].set_ylim([5, 75])
+def run_exectuable(path2build, config_filename):
+    ### --- delete any existing output dataset and setup files --- ###
+    yaml = YAML()
+    with open(config_filename, "r") as file:
+        config = yaml.load(file)
+    Path(config["outputdata"]["setup_filename"]).unlink(missing_ok=True)
+    shutil.rmtree(Path(config["outputdata"]["zarrbasedir"]), ignore_errors=True)
 
-    fig.tight_layout()
+    ### --- run exectuable with given config file --- ###
+    executable = path2build / "examples" / "adiabaticparcel" / "src" / "adia0d"
+    cmd = [executable, config_filename]
+    print(" ".join([str(c) for c in cmd]))
+    subprocess.run(cmd, check=True)
 
-    savename = savefigpath / Path("as2017fig_" + str(i) + ".png")
-    fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
-    print("Figure .png saved as: " + str(savename))
-    plt.show()
+
+def plot_results(path2CLEO, savefigpath, config_filenames, runnums):
+    plotting_script = path2CLEO / "examples" / "adiabaticparcel" / "as2017_plotting.py"
+    python = sys.executable
+
+    setupfiles, datasets = [], []
+    for config_filename in config_filenames:
+        yaml = YAML()
+        with open(config_filename, "r") as file:
+            config = yaml.load(file)
+        setupfiles.append(Path(config["outputdata"]["setup_filename"]))
+        datasets.append(Path(config["outputdata"]["zarrbasedir"]))
+    grid_filename = Path(
+        config["inputfiles"]["grid_filename"]
+    )  # same grid for all datasets
+
+    # equivalent to ``import as2017_plotting`` followed by
+    # ``as2017_plotting.main(path2CLEO, savefigpath, ...)``
+    cmd = [
+        python,
+        plotting_script,
+        f"--path2CLEO={path2CLEO}",
+        f"--savefigpath={savefigpath}",
+        f"--grid_filename={grid_filename}",
+    ]
+    cmd += ["--setupfiles"] + setupfiles
+    cmd += ["--datasets"] + datasets
+    cmd += ["--runnums"] + [str(r) for r in runnums]
+    print(" ".join([str(c) for c in cmd]))
+    subprocess.run(cmd, check=True)
+
+
+# %%
+### ----------------------------- RUN EXAMPLE ------------------------------ ###
+if args.do_inputfiles:
+    for runnum, [config_filename, config_params] in run_configs.items():
+        if runnum == 0:
+            gen_gbxs = True
+        else:
+            gen_gbxs = False
+
+        if runnum % 3 == 0:  # 3 = number of different params dicts
+            gen_supers, icond = (
+                True,
+                runnum // 3,
+            )  # 3 = number of different params dicts
+        else:
+            gen_supers, icond = False, None
+
+        inputfiles(
+            path2CLEO,
+            path2build,
+            tmppath,
+            sharepath,
+            binpath,
+            savefigpath,
+            src_config_filename,
+            config_filename,
+            config_params,
+            gen_gbxs,
+            gen_supers,
+            icond,
+            isfigures,
+        )
+
+if args.do_run_executable:
+    cfs = list([cfgs[0] for cfgs in run_configs.values()])
+    for config_filename in cfs:
+        run_exectuable(path2build, config_filename)
+
+if args.do_plot_results:
+    runnums = list(run_configs.keys())
+    cfs = list([cfgs[0] for cfgs in run_configs.values()])
+    plot_results(path2CLEO, savefigpath, cfs, runnums)

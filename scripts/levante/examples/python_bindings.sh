@@ -28,8 +28,9 @@ build_flags="-DCLEO_COUPLED_DYNAMICS=numpy -DCLEO_DOMAIN=cartesian \
 executables="pycleo"
 
 pythonscript=${path2CLEO}/examples/python_bindings/python_bindings.py
-src_config_filename=${path2CLEO}/examples/python_bindings/src/config/python_bindings_config.yaml
-script_args="${src_config_filename} --do_inputfiles --do_run_executable --do_plot_results"
+src_config_filename=${path2CLEO}/examples/python_bindings/src/config/pybind_config.yaml
+script_args="${src_config_filename} \
+  --do_inputfiles --do_run_executable --do_plot_results"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###

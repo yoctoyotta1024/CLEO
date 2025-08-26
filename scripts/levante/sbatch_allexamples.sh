@@ -19,5 +19,5 @@ else
   sbatch ${path2examplesbash}/fromfile_irreg.sh
   sbatch ${path2examplesbash}/python_bindings.sh
   sbatch ${path2examplesbash}/rainshaft1d.sh
-  sbatch ${path2examplesbash}/speedtest.sh
+  sbatch ${path2examplesbash}/kokkostools.sh
 fi

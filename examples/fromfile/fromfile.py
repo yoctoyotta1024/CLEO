@@ -110,16 +110,16 @@ def inputfiles(
     ### --- ensure build, share and bin directories exist --- ###
     if path2CLEO == path2build:
         raise ValueError("build directory cannot be CLEO")
-    else:
-        path2build.mkdir(exist_ok=True)
-        tmppath.mkdir(exist_ok=True)
-        sharepath.mkdir(exist_ok=True)
-        binpath.parent.mkdir(exist_ok=True)
-        binpath.mkdir(exist_ok=True)
+    path2build.mkdir(exist_ok=True)
+    tmppath.mkdir(exist_ok=True)
+    sharepath.mkdir(exist_ok=True)
+    binpath.parent.mkdir(exist_ok=True)
+    binpath.mkdir(exist_ok=True)
+    if savefigpath is not None:
         savefigpath.mkdir(exist_ok=True)
 
     ### --- add names of thermofiles to config_params --- ###
-    for var in ["press", "temp", "qvap", "qcond", "wvel", "vvel", "uvel"]:
+    for var in ["press", "temp", "qvap", "qcond", "wvel", "uvel", "vvel"]:
         config_params[var] = str(
             thermofiles.parent / Path(f"{thermofiles.stem}_{var}{thermofiles.suffix}")
         )
@@ -142,7 +142,7 @@ def inputfiles(
         file.unlink(missing_ok=True)
 
     ### --- input binary files generation --- ###
-    # equivalent to ``import fromfile_inputfiless`` followed by
+    # equivalent to ``import fromfile_inputfiles`` followed by
     # ``fromfile_inputfiles.main(path2CLEO, path2build, ...)``
     inputfiles_script = path2CLEO / "examples" / "fromfile" / "fromfile_inputfiles.py"
     python = sys.executable
@@ -160,10 +160,10 @@ def inputfiles(
         cmd.append("--save_figures")
         cmd.append(f"--savefigpath={savefigpath}")
     print(" ".join([str(c) for c in cmd]))
-    subprocess.run(cmd)
+    subprocess.run(cmd, check=True)
 
 
-def run_exectuable(path2CLEO, path2build, config_filename):
+def run_exectuable(path2build, config_filename):
     ### --- delete any existing output dataset and setup files --- ###
     yaml = YAML()
     with open(config_filename, "r") as file:
@@ -175,7 +175,7 @@ def run_exectuable(path2CLEO, path2build, config_filename):
     executable = path2build / "examples" / "fromfile" / "src" / "fromfile"
     cmd = ["srun", f"--ntasks={ntasks}", executable, config_filename]
     print(" ".join([str(c) for c in cmd]))
-    subprocess.run(cmd)
+    subprocess.run(cmd, check=True)
 
 
 def plot_results(path2CLEO, config_filename, savefigpath):
@@ -201,7 +201,7 @@ def plot_results(path2CLEO, config_filename, savefigpath):
         f"--dataset={dataset}",
     ]
     print(" ".join([str(c) for c in cmd]))
-    subprocess.run(cmd)
+    subprocess.run(cmd, check=True)
 
 
 # %%
@@ -222,7 +222,7 @@ if args.do_inputfiles:
     )
 
 if args.do_run_executable:
-    run_exectuable(path2CLEO, path2build, config_filename)
+    run_exectuable(path2build, config_filename)
 
 if args.do_plot_results:
     plot_results(path2CLEO, config_filename, savefigpath)

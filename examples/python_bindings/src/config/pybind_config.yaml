@@ -1,6 +1,5 @@
----
 # ----- CLEO -----
-# File: python_bindings_config.yaml
+# File: pybind_config.yaml
 # Project: config
 # Created Date: Friday 6th June 2025
 # Author: Clara Bayley (CB)
@@ -17,14 +16,6 @@
 # CLEO's pySD module (see Python script "create_initsuperdropsbinary_script.py" for usage).
 # Likewise the "grid_filename" can be made using pySD (see "create_gbxboundariesbinary_script.py").
 #
-
-### Initial Conditions Parameters for Python Script ###
-python_initconds:
-  paths:
-    tmppath: /home/m/m300950/CLEO/build_pybind/tmp # absolute path to tmp directory
-    binpath: /home/m/m300950/CLEO/build_pybind/bin # absolute path to bin directory
-    sharepath: /home/m/m300950/CLEO/build_pybind/share # absolute path to share directory
-    savefigpath: /home/m/m300950/CLEO/build_pybind/bin # absolute path to save figures in
 
 ### Kokkos Initialization Parameters ###
 kokkos_settings:
@@ -48,18 +39,18 @@ timesteps:
 
 ### Initialisation Parameters ###
 inputfiles:
-  constants_filename : /home/m/m300950/CLEO/libs/cleoconstants.hpp   # name of file for values of physical constants
-  grid_filename : /home/m/m300950/CLEO/build_pybind/share/pybind_dimlessGBxboundaries.dat   # binary filename for initialisation of GBxs / GbxMaps
+  constants_filename : ./libs/cleoconstants.hpp   # name of file for values of physical constants
+  grid_filename : ./build/share/pybind_dimlessGBxboundaries.dat   # binary filename for initialisation of GBxs / GbxMaps
 
 initsupers:
   type: frombinary                                        # type of initialisation of super-droplets
-  initsupers_filename : /home/m/m300950/CLEO/build_pybind/share/pybind_dimlessSDsinit.dat   # binary filename for initialisation of SDs
+  initsupers_filename : ./build/share/pybind_dimlessSDsinit.dat   # binary filename for initialisation of SDs
   initnsupers: 24
 
 ### Output Parameters ###
 outputdata:
-  setup_filename : /home/m/m300950/CLEO/build_pybind/bin/pybind_setup.txt                   # .txt filename to copy configuration to
-  zarrbasedir : /home/m/m300950/CLEO/build_pybind/bin/pybind_sol.zarr                       # zarr store base directory
+  setup_filename : ./build/bin/pybind_setup.txt                   # .txt filename to copy configuration to
+  zarrbasedir : ./build/bin/pybind_sol.zarr                       # zarr store base directory
   maxchunk : 2500000                                      # maximum no. of elements in chunks of zarr store array
 
 ### Pycleo (Python Bindings) Parameters ###

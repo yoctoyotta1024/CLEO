@@ -30,7 +30,7 @@ int init_communicator::my_rank = -1;
 
 init_communicator::init_communicator(int argc, char *argv[], const Config &config) {
   if (!(std::isnan(config.get_yac_dynamics().lower_longitude))) {
-    std::cout << "yac is present";
+    std::cout << "yac is present\n";
     // -- YAC initialization and calendar definitions ---
     yac_cinit();
     // --- Component definition ---
@@ -40,7 +40,6 @@ init_communicator::init_communicator(int argc, char *argv[], const Config &confi
     yac_present = true;
     MPI_Comm_size(comm, &init_communicator::comm_size);
     MPI_Comm_rank(comm, &my_rank);
-
   } else {
     std::cout << "yac is not present " << yac_present << "\n";
 
@@ -61,9 +60,9 @@ init_communicator::init_communicator(int argc, char *argv[], const Config &confi
 
 init_communicator::~init_communicator() {
   if (yac_present) {
-    std::cout << "yac_finalized elsewhere";
+    std::cout << "yac_finalized elsewhere" << std::endl;
   } else {
-    std::cout << "mpi finalizing";
+    std::cout << "mpi finalizing" << std::endl;
     MPI_Finalize();
   }
 };

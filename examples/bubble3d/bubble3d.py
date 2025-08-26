@@ -102,11 +102,11 @@ def inputfiles(
     ### --- ensure build, tmp, share and bin and savefigpath directories exist --- ###
     if path2CLEO == path2build:
         raise ValueError("build directory cannot be CLEO")
-    else:
-        path2build.mkdir(exist_ok=True)
-        tmppath.mkdir(exist_ok=True)
-        sharepath.mkdir(exist_ok=True)
-        binpath.mkdir(exist_ok=True)
+    path2build.mkdir(exist_ok=True)
+    tmppath.mkdir(exist_ok=True)
+    sharepath.mkdir(exist_ok=True)
+    binpath.mkdir(exist_ok=True)
+    if savefigpath is not None:
         savefigpath.mkdir(exist_ok=True)
 
     ### --- copy src_config_filename into tmp and edit parameters --- ###
@@ -133,7 +133,7 @@ def inputfiles(
         cmd.append("--save_figures")
         cmd.append(f"--savefigpath={savefigpath}")
     print(" ".join([str(c) for c in cmd]))
-    subprocess.run(cmd)
+    subprocess.run(cmd, check=True)
 
 
 def run_exectuable(path2CLEO, path2build, config_filename):
@@ -169,7 +169,7 @@ def run_exectuable(path2CLEO, path2build, config_filename):
         pythonproc,
     ] + pythonproc_args
     print(" ".join([str(c) for c in cmd]))
-    subprocess.run(cmd)
+    subprocess.run(cmd, check=True)
 
 
 def plot_results(path2CLEO, config_filename, savefigpath):
@@ -193,7 +193,7 @@ def plot_results(path2CLEO, config_filename, savefigpath):
         f"--dataset={dataset}",
     ]
     print(" ".join([str(c) for c in cmd]))
-    subprocess.run(cmd)
+    subprocess.run(cmd, check=True)
 
 
 # %%

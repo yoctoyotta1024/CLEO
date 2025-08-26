@@ -14,110 +14,209 @@ https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
 Script generates input files, then runs CLEO executable "divfree2d" to create the
-data to then plot for divergence free motion of superdroplets in a 2-D divergence
+data for example of divergence free motion of superdroplets in a 2-D divergence
+free flow field.
 """
 
-import os
+# %%
+### -------------------------------- IMPORTS ------------------------------- ###
+import argparse
 import shutil
 import subprocess
 import sys
-import matplotlib.pyplot as plt
 from pathlib import Path
-import divfree2d_inputfiles
+from ruamel.yaml import YAML
 
-path2CLEO = Path(sys.argv[1])
-path2build = Path(sys.argv[2])
-config_filename = Path(sys.argv[3])
+# %%
+### --------------------------- PARSE ARGUMENTS ---------------------------- ###
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "path2CLEO", type=Path, help="Absolute path to CLEO directory (for PySD)"
+)
+parser.add_argument("path2build", type=Path, help="Absolute path to build directory")
+parser.add_argument(
+    "src_config_filename",
+    type=Path,
+    help="Absolute path to source configuration YAML file",
+)
+parser.add_argument(
+    "--do_inputfiles",
+    action="store_true",  # default is False
+    help="Generate initial condition binary files",
+)
+parser.add_argument(
+    "--do_run_executable",
+    action="store_true",  # default is False
+    help="Run executable",
+)
+parser.add_argument(
+    "--do_plot_results",
+    action="store_true",  # default is False
+    help="Plot results of example",
+)
+args = parser.parse_args()
 
-sys.path.append(str(path2CLEO))  # imports from pySD
-sys.path.append(
-    str(path2CLEO / "examples" / "exampleplotting")
-)  # imports from example plots package
+# %%
+### -------------------------- INPUT PARAMETERS ---------------------------- ###
+### --- command line parsed arguments --- ###
+path2CLEO = args.path2CLEO
+path2build = args.path2build
+src_config_filename = args.src_config_filename
 
-
-from plotssrc import pltsds, pltmoms
-from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
-
-### ---------------------------------------------------------------- ###
-### ----------------------- INPUT PARAMETERS ----------------------- ###
-### ---------------------------------------------------------------- ###
-### --- essential paths and filenames --- ###
-# path and filenames for creating initial SD conditions
-binpath = path2build / "bin"
+### --- additional/derived arguments --- ###
+tmppath = path2build / "tmp"
 sharepath = path2build / "share"
-grid_filename = sharepath / "df2d_dimlessGBxboundaries.dat"
-initsupers_filename = sharepath / "df2d_dimlessSDsinit.dat"
-thermofiles = sharepath / "df2d_dimlessthermo.dat"
-savefigpath = path2build / "bin"  # directory for saving figures
+binpath = path2build / "bin"
+savefigpath = binpath
 
-# path and file names for plotting results
-setupfile = binpath / "df2d_setup.txt"
-dataset = binpath / "df2d_sol.zarr"
+config_filename = path2build / "tmp" / "divfree2d_config.yaml"
+thermofiles = sharepath / "divfree2d_dimlessthermo.dat"
+config_params = {
+    "constants_filename": str(path2CLEO / "libs" / "cleoconstants.hpp"),
+    "grid_filename": str(sharepath / "divfree2d_dimlessGBxboundaries.dat"),
+    "initsupers_filename": str(sharepath / "divfree2d_dimlessSDsinit.dat"),
+    "setup_filename": str(binpath / "divfree2d_setup.txt"),
+    "zarrbasedir": str(binpath / "divfree2d_sol.zarr"),
+}
 
-### ---------------------------------------------------------------- ###
-### ------------------- BINARY FILES GENERATION--------------------- ###
-### ---------------------------------------------------------------- ###
-### --- ensure build, share and bin directories exist --- ###
-if path2CLEO == path2build:
-    raise ValueError("build directory cannot be CLEO")
-else:
-    path2build.mkdir(exist_ok=True)
-    sharepath.mkdir(exist_ok=True)
-    binpath.mkdir(exist_ok=True)
-    savefigpath.mkdir(exist_ok=True)
+isfigures = [False, True]  # booleans for [showing, saving] initialisation figures
 
-### --- delete any existing initial conditions --- ###
-shutil.rmtree(grid_filename, ignore_errors=True)
-shutil.rmtree(initsupers_filename, ignore_errors=True)
-all_thermofiles = thermofiles.parent / Path(f"{thermofiles.stem}*{thermofiles.suffix}")
-shutil.rmtree(all_thermofiles, ignore_errors=True)
 
-divfree2d_inputfiles.main(
+# %%
+### ------------------------- FUNCTION DEFINITIONS ------------------------- ###
+def inputfiles(
     path2CLEO,
     path2build,
+    tmppath,
+    sharepath,
+    binpath,
+    savefigpath,
+    src_config_filename,
     config_filename,
-    grid_filename,
-    initsupers_filename,
+    config_params,
     thermofiles,
-)
-### ---------------------------------------------------------------- ###
-### ---------------------------------------------------------------- ###
+    isfigures,
+):
+    sys.path.append(str(path2CLEO))  # for imports from pySD package
+    from pySD import editconfigfile
 
-### ---------------------------------------------------------------- ###
-### ---------------------- RUN CLEO EXECUTABLE --------------------- ###
-### ---------------------------------------------------------------- ###
-os.chdir(path2build)
-subprocess.run(["pwd"])
-shutil.rmtree(dataset, ignore_errors=True)  # delete any existing dataset
-executable = path2build / "examples" / "divfreemotion" / "src" / "divfree2d"
-print("Executable: " + str(executable))
-print("Config file: " + str(config_filename))
-subprocess.run([executable, config_filename])
-### ---------------------------------------------------------------- ###
-### ---------------------------------------------------------------- ###
+    ### --- ensure build, share and bin directories exist --- ###
+    if path2CLEO == path2build:
+        raise ValueError("build directory cannot be CLEO")
+    path2build.mkdir(exist_ok=True)
+    tmppath.mkdir(exist_ok=True)
+    sharepath.mkdir(exist_ok=True)
+    binpath.mkdir(exist_ok=True)
+    if savefigpath is not None:
+        savefigpath.mkdir(exist_ok=True)
 
-### ---------------------------------------------------------------- ###
-### ------------------------- PLOT RESULTS ------------------------- ###
-### ---------------------------------------------------------------- ###
-# read in constants and intial setup from setup .txt file
-config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
-consts = pysetuptxt.get_consts(setupfile, isprint=True)
-gbxs = pygbxsdat.get_gridboxes(grid_filename, consts["COORD0"], isprint=True)
+    ### --- add names of thermofiles to config_params --- ###
+    for var in ["press", "temp", "qvap", "qcond", "wvel", "uvel"]:
+        config_params[var] = str(
+            thermofiles.parent / Path(f"{thermofiles.stem}_{var}{thermofiles.suffix}")
+        )
 
-time = pyzarr.get_time(dataset)
-superdrops = pyzarr.get_supers(dataset, consts)
-maxnsupers = pyzarr.get_totnsupers(dataset)
+    ### --- copy src_config_filename into tmp and edit parameters --- ###
+    config_filename.unlink(missing_ok=True)  # delete any existing config
+    shutil.copy(src_config_filename, config_filename)
+    editconfigfile.edit_config_params(config_filename, config_params)
 
-# 4. plot results
-savename = savefigpath / "df2d_maxnsupers_validation.png"
-pltmoms.plot_totnsupers(time, maxnsupers, savename=savename)
-plt.show()
+    ### --- delete any existing initial conditions --- ###
+    yaml = YAML()
+    with open(config_filename, "r") as file:
+        config = yaml.load(file)
+    Path(config["inputfiles"]["grid_filename"]).unlink(missing_ok=True)
+    Path(config["initsupers"]["initsupers_filename"]).unlink(missing_ok=True)
+    all_thermofiles = thermofiles.parent.glob(
+        f"{thermofiles.stem}*{thermofiles.suffix}"
+    )
+    for file in all_thermofiles:
+        file.unlink(missing_ok=True)
 
-nsample = 500
-savename = savefigpath / "df2d_motion2d_validation.png"
-pltsds.plot_randomsample_superdrops_2dmotion(
-    superdrops, nsample, savename=savename, arrows=False
-)
-plt.show()
-### ---------------------------------------------------------------- ###
-### ---------------------------------------------------------------- ###
+    ### --- input binary files generation --- ###
+    # equivalent to ``import divfree2d_inputfiles`` followed by
+    # ``divfree2d_inputfiles.main(path2CLEO, path2build, ...)``
+    inputfiles_script = (
+        path2CLEO / "examples" / "divfreemotion" / "divfree2d_inputfiles.py"
+    )
+    python = sys.executable
+    cmd = [
+        python,
+        inputfiles_script,
+        path2CLEO,
+        path2build,
+        config_filename,
+        thermofiles,
+    ]
+    if isfigures[0]:
+        cmd.append("--show_figures")
+    if isfigures[1]:
+        cmd.append("--save_figures")
+        cmd.append(f"--savefigpath={savefigpath}")
+    print(" ".join([str(c) for c in cmd]))
+    subprocess.run(cmd, check=True)
+
+
+def run_exectuable(path2build, config_filename):
+    ### --- delete any existing output dataset and setup files --- ###
+    yaml = YAML()
+    with open(config_filename, "r") as file:
+        config = yaml.load(file)
+    Path(config["outputdata"]["setup_filename"]).unlink(missing_ok=True)
+    shutil.rmtree(Path(config["outputdata"]["zarrbasedir"]), ignore_errors=True)
+
+    ### --- run exectuable with given config file --- ###
+    executable = path2build / "examples" / "divfreemotion" / "src" / "divfree2d"
+    cmd = [executable, config_filename]
+    print(" ".join([str(c) for c in cmd]))
+    subprocess.run(cmd, check=True)
+
+
+def plot_results(path2CLEO, config_filename, savefigpath):
+    plotting_script = path2CLEO / "examples" / "divfreemotion" / "divfree2d_plotting.py"
+    python = sys.executable
+
+    yaml = YAML()
+    with open(config_filename, "r") as file:
+        config = yaml.load(file)
+    grid_filename = Path(config["inputfiles"]["grid_filename"])
+    setupfile = Path(config["outputdata"]["setup_filename"])
+    dataset = Path(config["outputdata"]["zarrbasedir"])
+
+    # equivalent to ``import divfree2d_plotting`` followed by
+    # ``divfree2d_plotting.main(path2CLEO, savefigpath, ...)``
+    cmd = [
+        python,
+        plotting_script,
+        f"--path2CLEO={path2CLEO}",
+        f"--savefigpath={savefigpath}",
+        f"--grid_filename={grid_filename}",
+        f"--setupfile={setupfile}",
+        f"--dataset={dataset}",
+    ]
+    print(" ".join([str(c) for c in cmd]))
+    subprocess.run(cmd, check=True)
+
+
+# %%
+### ----------------------------- RUN EXAMPLE ------------------------------ ###
+if args.do_inputfiles:
+    inputfiles(
+        path2CLEO,
+        path2build,
+        tmppath,
+        sharepath,
+        binpath,
+        savefigpath,
+        src_config_filename,
+        config_filename,
+        config_params,
+        thermofiles,
+        isfigures,
+    )
+
+if args.do_run_executable:
+    run_exectuable(path2build, config_filename)
+
+if args.do_plot_results:
+    plot_results(path2CLEO, config_filename, savefigpath)

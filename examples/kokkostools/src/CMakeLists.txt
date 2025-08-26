@@ -5,13 +5,13 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
 endif()
 
 # set project name and print directory of this CMakeLists.txt (source directory of project)
-project("speedtest")
+project("kokkostools")
 message(STATUS "CLEO including ${PROJECT_NAME} with PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
 # Set libraries from CLEO to link with executable
 set(CLEOLIBS configuration gridboxes initialise observers runcleo superdrops zarr)
 
-# create primary executable for CLEO in serial, gpu and cpu speed tests
+# create primary executable for CLEO in serial, gpu and cpu kokkostools example test executable
 add_executable(spdtest EXCLUDE_FROM_ALL "main_spdtest.cpp")
 
 # Add directories and link libraries to target

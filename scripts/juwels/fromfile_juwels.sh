@@ -28,7 +28,8 @@ cleoenv=/p/project1/exaww/bayley1/micromamba/envs/cleoenv
 python=${cleoenv}/bin/python
 pythonscript=${path2CLEO}/examples/fromfile/fromfile.py
 configfile=${path2CLEO}/examples/fromfile/src/config/fromfile_config.yaml
-script_args="${configfile} --do_inputfiles --do_run_executable --do_plot_results --ntasks=4"
+script_args="${configfile} \
+  --do_inputfiles --do_run_executable --do_plot_results --ntasks=4"
 
 yacyaxtroot=NA
 enabledebug=false
@@ -94,6 +95,6 @@ export CLEO_COMPILERNAME=${compilername}
 export CLEO_YACYAXTROOT=${yacyaxtroot}
 source ${path2CLEO}/scripts/juwels/bash/src/runtime_settings.sh ${stacksize_limit}
 
-# TODO(all): split python scripts away from running executable
+# TODO(ALL): split python scripts away from running executable
 ${python} ${pythonscript} ${path2CLEO} ${path2build} ${script_args}
 ### ---------------------------------------------------- ###

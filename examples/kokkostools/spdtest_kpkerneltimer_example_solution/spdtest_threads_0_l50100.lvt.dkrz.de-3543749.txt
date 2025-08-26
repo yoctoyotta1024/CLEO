@@ -1,0 +1,138 @@
+ (Type)   Total Time, Call Count, Avg. Time per Call, %Total Time in Kernels, %Total Program Time
+-------------------------------------------------------------------------
+
+Regions:
+
+- runcleo
+ (REGION)   5.772464 1 5.772464 98.761127 89.805948
+- timestep
+ (REGION)   5.754664 1 5.754664 98.456589 89.529024
+- timestep_sdm
+ (REGION)   5.713022 121 0.047215 97.744141 88.881177
+- timestep_sdm_microphysics
+ (REGION)   5.321498 484 0.010995 91.045553 82.789985
+- timestep_sdm_movement
+ (REGION)   0.390679 484 0.000807 6.684136 6.078051
+- sdm_movement_move_in_gridboxes
+ (REGION)   0.258950 404 0.000641 4.430377 4.028652
+- sdm_movement_between_gridboxes
+ (REGION)   0.097691 404 0.000242 1.671397 1.519843
+- sdm_movement_effect_on_hydrometeor_states
+ (REGION)   0.032020 404 0.000079 0.547828 0.498154
+- init
+ (REGION)   0.017798 1 0.017798 0.304505 0.276894
+- init_gbxs
+ (REGION)   0.014005 1 0.014005 0.239611 0.217884
+- init_supers
+ (REGION)   0.003767 1 0.003767 0.064450 0.058606
+- sdm_movement_boundary_conditions
+ (REGION)   0.000113 404 0.000000 0.001933 0.001758
+- timestep_coupldyn
+ (REGION)   0.000016 121 0.000000 0.000277 0.000252
+
+-------------------------------------------------------------------------
+Kernels:
+
+- sdm_microphysics
+ (ParFor)   5.320982 484 0.010994 91.036713 82.781947
+- move_supers_in_gridboxes
+ (ParFor)   0.257076 404 0.000636 4.398315 3.999498
+- Kokkos::View::initialization [buffer] via memset
+ (ParFor)   0.067427 26 0.002593 1.153604 1.049000
+- set_gridboxes_refs
+ (ParFor)   0.048584 404 0.000120 0.831224 0.755852
+- effect_on_hydrometeor_states
+ (ParFor)   0.031624 404 0.000078 0.541053 0.491992
+- reset_buffer
+ (ParFor)   0.022216 52 0.000427 0.380087 0.345623
+- counting_sort_gbxs
+ (ParFor)   0.016668 404 0.000041 0.285170 0.259312
+- write_gridboxes_team
+ (ParFor)   0.016120 242 0.000067 0.275796 0.250789
+- increment_counts
+ (ParFor)   0.015942 405 0.000039 0.272745 0.248014
+- is_gbxinit_complete
+ (ParFor)   0.013681 1 0.013681 0.234067 0.212843
+- write_supers
+ (ParFor)   0.010445 121 0.000086 0.178710 0.162505
+- counting_sort_oob
+ (ParFor)   0.008205 404 0.000020 0.140374 0.127646
+- set_cartesian_maps
+ (ParFor)   0.007205 1 0.007205 0.123271 0.112093
+- write_gridboxes_range
+ (ParFor)   0.004345 121 0.000036 0.074334 0.067593
+- cumulative_sum
+ (ParScan)  0.001139 405 0.000003 0.019482 0.017715
+- Kokkos::ScatterView::ReduceDuplicates [duplicated_counts]
+ (ParFor)   0.000900 405 0.000002 0.015403 0.014006
+- Kokkos::View::initialization [h_data] via memset
+ (ParFor)   0.000610 1551 0.000000 0.010430 0.009485
+- Kokkos::fill_view_api_default
+ (ParFor)   0.000315 405 0.000001 0.005388 0.004900
+- initialise_gbxs_on_host
+ (ParFor)   0.000252 1 0.000252 0.004312 0.003921
+- Kokkos::ScatterView::ResetDuplicates [duplicated_counts]
+ (ParFor)   0.000245 406 0.000001 0.004193 0.003813
+- initialise_supers_on_host
+ (ParFor)   0.000232 1 0.000232 0.003969 0.003609
+- receive_dynamics
+ (ParFor)   0.000169 3 0.000056 0.002892 0.002630
+- find_domainrefs_cuda
+ (ParFor)   0.000132 405 0.000000 0.002256 0.002051
+- Kokkos::View::initialization [totsupers] via memset
+ (ParFor)   0.000119 1 0.000119 0.002035 0.001851
+- Kokkos::View::initialization [domainref1] via memset
+ (ParFor)   0.000078 405 0.000000 0.001330 0.001209
+- counting_sort
+ (ParFor)   0.000046 1 0.000046 0.000787 0.000716
+- Kokkos::ViewFill-1D
+ (ParFor)   0.000025 62 0.000000 0.000428 0.000389
+- Kokkos::View::initialization [UnorderedMap - keys] via memset
+ (ParFor)   0.000017 31 0.000001 0.000298 0.000271
+- Kokkos::View::initialization [totsupers_tmp] via memset
+ (ParFor)   0.000014 1 0.000014 0.000241 0.000219
+- Kokkos::View::initialization [UnorderedMap - values] via memset
+ (ParFor)   0.000014 31 0.000000 0.000241 0.000219
+- Kokkos::View::initialization [totsupers_tmp_mirror] via memset
+ (ParFor)   0.000011 1 0.000011 0.000188 0.000171
+- IsSupersSorted
+ (ParRed)   0.000011 1 0.000011 0.000188 0.000171
+- Kokkos::View::initialization [UnorderedMap - bitset] via memset
+ (ParFor)   0.000007 31 0.000000 0.000114 0.000104
+- collect_gbxs_data
+ (ParFor)   0.000005 1 0.000005 0.000086 0.000078
+- Kokkos::View::initialization [UnorderedMap - size] via memset
+ (ParFor)   0.000005 31 0.000000 0.000082 0.000074
+- Kokkos::View::initialization [gbxs] via memset
+ (ParFor)   0.000004 1 0.000004 0.000065 0.000059
+- Kokkos::Impl::BitsetCount::apply
+ (ParRed)   0.000003 11 0.000000 0.000049 0.000045
+- Kokkos::View::initialization [UnorderedMap scalars] via memset
+ (ParFor)   0.000002 9 0.000000 0.000033 0.000030
+- Kokkos::View::initialization [UnorderedMap - scalars] via memset
+ (ParFor)   0.000001 31 0.000000 0.000016 0.000015
+- Kokkos::View::initialization [Bitset] via memset
+ (ParFor)   0.000001 9 0.000000 0.000016 0.000015
+- Kokkos::View::initialization [cumlcounts] via memset
+ (ParFor)   0.000001 1 0.000001 0.000016 0.000015
+- Kokkos::View::initialization [Kokkos::Random_XorShift64::state] via memset
+ (ParFor)   0.000000 1 0.000000 0.000000 0.000000
+- Kokkos::View::initialization [Kokkos::Random_XorShift64::locks] via memset
+ (ParFor)   0.000000 1 0.000000 0.000000 0.000000
+- Kokkos::View::initialization [DualView::modified_flags] via memset
+ (ParFor)   0.000000 1 0.000000 0.000000 0.000000
+- Kokkos::View::initialization [counts] via memset
+ (ParFor)   0.000000 1 0.000000 0.000000 0.000000
+- Kokkos::View::initialization [global_ndims] via memset
+ (ParFor)   0.000000 1 0.000000 0.000000 0.000000
+
+-------------------------------------------------------------------------
+Summary:
+
+Total Execution Time (incl. Kokkos + non-Kokkos):                   6.42771 seconds
+Total Time in Kokkos kernels:                                       5.84487 seconds
+   -> Time outside Kokkos kernels:                                  0.58283 seconds
+   -> Percentage in Kokkos kernels:                                   90.93 %
+Total Calls to Kokkos Kernels:                                         7719
+
+-------------------------------------------------------------------------

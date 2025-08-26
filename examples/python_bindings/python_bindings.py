@@ -15,25 +15,31 @@ https://opensource.org/licenses/BSD-3-Clause
 File Description:
 """
 
+# %%
+### -------------------------------- IMPORTS ------------------------------- ###
 import argparse
 import numpy as np
 import shutil
+import subprocess
 import sys
 from mpi4py import MPI
 from pathlib import Path
 from ruamel.yaml import YAML
 
-import python_bindings_inputfiles
 from cleo_sdm import CleoSDM
 from thermodynamics import Thermodynamics
 
+# %%
+### --------------------------- PARSE ARGUMENTS ---------------------------- ###
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "path2CLEO", type=Path, help="Absolute path to CLEO directory (for PySD)"
 )
 parser.add_argument("path2build", type=Path, help="Absolute path to build directory")
 parser.add_argument(
-    "config_filename", type=Path, help="Absolute path to configuration YAML file"
+    "src_config_filename",
+    type=Path,
+    help="Absolute path to source configuration YAML file",
 )
 parser.add_argument(
     "--do_inputfiles",
@@ -43,45 +49,58 @@ parser.add_argument(
 parser.add_argument(
     "--do_run_executable",
     action="store_true",  # default is False
-    help="Run fromfile executable",
+    help="Run executable",
 )
 parser.add_argument(
     "--do_plot_results",
     action="store_true",  # default is False
-    help="Plot results of fromfile example",
+    help="Plot results of example",
 )
 args = parser.parse_args()
 
+# %%
+### -------------------------- INPUT PARAMETERS ---------------------------- ###
+### --- command line parsed arguments --- ###
 path2CLEO = args.path2CLEO
 path2build = args.path2build
-src_config_filename = args.config_filename
-isfigures = [False, False]
+src_config_filename = args.src_config_filename
 
-sys.path.append(str(path2build / "pycleo"))
-import pycleo
-from pycleo import coupldyn_numpy
+### --- additional/derived arguments --- ###
+tmppath = path2build / "tmp"
+sharepath = path2build / "share"
+binpath = path2build / "bin"
+savefigpath = binpath
 
-yaml = YAML()
-with open(src_config_filename, "r") as file:
-    python_config = yaml.load(file)
-config_filename = (
-    Path(python_config["python_initconds"]["paths"]["tmppath"])
-    / src_config_filename.name
-)
+config_filename = path2build / "tmp" / "pybind_config.yaml"
+config_params = {
+    "constants_filename": str(path2CLEO / "libs" / "cleoconstants.hpp"),
+    "grid_filename": str(sharepath / "pybind_dimlessGBxboundaries.dat"),
+    "initsupers_filename": str(sharepath / "pybind_dimlessSDsinit.dat"),
+    "setup_filename": str(binpath / "pybind_setup.txt"),
+    "zarrbasedir": str(binpath / "pybind_sol.zarr"),
+}
 
-### ---------------------------------------------------------------- ###
-### ------------------- BINARY FILES GENERATION--------------------- ###
-### ---------------------------------------------------------------- ###
-if args.do_inputfiles:
+isfigures = [False, False]  # booleans for [showing, saving] initialisation figures
+
+
+# %%
+### ------------------------- FUNCTION DEFINITIONS ------------------------- ###
+def inputfiles(
+    path2CLEO,
+    path2build,
+    tmppath,
+    sharepath,
+    binpath,
+    savefigpath,
+    src_config_filename,
+    config_filename,
+    config_params,
+    isfigures,
+):
+    sys.path.append(str(path2CLEO))  # for imports from pySD package
+    from pySD import editconfigfile
+
     ### --- ensure build, share and bin directories exist --- ###
-    pyinit = python_config["python_initconds"]
-    tmppath = Path(pyinit["paths"]["tmppath"])
-    sharepath = Path(pyinit["paths"]["sharepath"])
-    binpath = Path(pyinit["paths"]["binpath"])
-    savefigpath = Path(pyinit["paths"]["savefigpath"])
-    grid_filename = Path(python_config["inputfiles"]["grid_filename"])
-    initsupers_filename = Path(python_config["initsupers"]["initsupers_filename"])
-
     if path2CLEO == path2build:
         raise ValueError("build directory cannot be CLEO")
     else:
@@ -90,27 +109,44 @@ if args.do_inputfiles:
         sharepath.mkdir(exist_ok=True)
         binpath.mkdir(exist_ok=True)
         savefigpath.mkdir(exist_ok=True)
-        shutil.copy(src_config_filename, config_filename)
 
-        ### --- delete any existing initial conditions --- ###
-        shutil.rmtree(grid_filename, ignore_errors=True)
-        shutil.rmtree(initsupers_filename, ignore_errors=True)
+    ### --- copy src_config_filename into tmp and edit parameters --- ###
+    config_filename.unlink(missing_ok=True)  # delete any existing config
+    shutil.copy(src_config_filename, config_filename)
+    editconfigfile.edit_config_params(config_filename, config_params)
 
-        python_bindings_inputfiles.main(
-            path2CLEO,
-            path2build,
-            config_filename,
-            grid_filename,
-            initsupers_filename,
-            isfigures=isfigures,
-        )
-### ---------------------------------------------------------------- ###
-### ---------------------------------------------------------------- ###
+    ### --- delete any existing initial conditions --- ###
+    yaml = YAML()
+    with open(config_filename, "r") as file:
+        config = yaml.load(file)
+    Path(config["inputfiles"]["grid_filename"]).unlink(missing_ok=True)
+    Path(config["initsupers"]["initsupers_filename"]).unlink(missing_ok=True)
+
+    ### --- input binary files generation --- ###
+    # equivalent to ``import python_bindings_inputfiles`` followed by
+    # ``python_bindings_inputfiles.main(path2CLEO, path2build, ...)``
+    inputfiles_script = (
+        path2CLEO / "examples" / "python_bindings" / "python_bindings_inputfiles.py"
+    )
+    python = sys.executable
+    cmd = [
+        python,
+        inputfiles_script,
+        path2CLEO,
+        path2build,
+        config_filename,
+    ]
+    if isfigures[0]:
+        cmd.append("--show_figures")
+    if isfigures[1]:
+        cmd.append("--save_figures")
+        cmd.append(f"--savefigpath={savefigpath}")
+    print(" ".join([str(c) for c in cmd]))
+    subprocess.run(cmd, check=True)
 
 
-### ---------------------------------------------------------------- ###
-### ---------------------- RUN CLEO EXECUTABLE --------------------- ###
-### ---------------------------------------------------------------- ###
+# %%
+### --------------- FUNCTION DEFINITIONS FOR RUN_EXECUTABLE ---------------- ###
 def mpi_info(comm):
     print("\n--- PYCLEO STATUS: MPI INFORMATION ---")
     print(f"MPI version: {MPI.Get_version()}")
@@ -169,7 +205,7 @@ def timestep_example(t_mdl, t_end, timestep, thermo, cleo_sdm):
         t_mdl += timestep
 
 
-def cleo_sdm_example(python_config, cleo_config):
+def cleo_sdm_example(pycleo, python_config, cleo_config):
     t_mdl, t_end = 0, python_config["timesteps"]["T_END"]  # [s]
     timestep = python_config["timesteps"]["COUPLTSTEP"]  # [s]
 
@@ -193,27 +229,46 @@ def cleo_sdm_example(python_config, cleo_config):
     timestep_example(t_mdl, t_end, timestep, thermo, cleo_sdm)
 
 
-def run_exec(python_config, config_filename):
+def run_sdm_example(pycleo, python_config, config_filename):
     cleo_config = pycleo.Config(config_filename)
     pycleo.pycleo_initialize(cleo_config)
-    cleo_sdm_example(python_config, cleo_config)
+    cleo_sdm_example(pycleo, python_config, cleo_config)
 
 
-if args.do_run_executable:
+def run_exectuable(path2build, config_filename):
+    sys.path.append(str(path2build / "pycleo"))
+    import pycleo
+    from pycleo import coupldyn_numpy
+
+    yaml = YAML()
+    with open(config_filename, "r") as file:
+        python_config = yaml.load(file)
+
     print(f"PYCLEO STATUS: 2+3={pycleo.test_pycleo(i=3, j=2)}")
     print(f"COUPLDYN_NUMPY STATUS: 2*3={coupldyn_numpy.test_coupldyn_numpy(i=3, j=2)}")
 
     mpi_info(MPI.COMM_WORLD)
-    run_exec(python_config, config_filename)
+    run_sdm_example(pycleo, python_config, config_filename)
 
 
-### ---------------------------------------------------------------- ###
-### ---------------------------------------------------------------- ###
+# %%
+### ----------------------------- RUN EXAMPLE ------------------------------ ###
+if args.do_inputfiles:
+    inputfiles(
+        path2CLEO,
+        path2build,
+        tmppath,
+        sharepath,
+        binpath,
+        savefigpath,
+        src_config_filename,
+        config_filename,
+        config_params,
+        isfigures,
+    )
 
-### ---------------------------------------------------------------- ###
-### ------------------------- PLOT RESULTS ------------------------- ###
-### ---------------------------------------------------------------- ###
+if args.do_run_executable:
+    run_exectuable(path2build, config_filename)
+
 if args.do_plot_results:
-    print("no plotting script for python bindings example")
-### ---------------------------------------------------------------- ###
-### ---------------------------------------------------------------- ###
+    print("\nno plotting script for python bindings example")
