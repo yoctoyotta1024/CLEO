@@ -76,12 +76,12 @@ e.g.
 
 Python
 ------
-To use PySD you need Python minimum version 3.10.4. We advise you to :ref:`create an
+To use ``cleopy`` you need Python minimum version 3.10.4. We advise you to :ref:`create an
 environment<environment>` using our envirnoment.yml file. This environment should automatically
 include all the additional packages you may require. If not, please :ref:`contact us <contact>` or
 `open a new issue <https://github.com/yoctoyotta1024/CLEO/issues/new>`_ on our GitHub repository.
 
-To use PySD and to run CLEO's examples, particular Python packages are needed. These are included in
+To use ``cleopy`` and to run CLEO's examples, particular Python packages are needed. These are included in
 our environment.yml file and are the following: ``matplotlib``, ``numpy``, ``scipy``, ``xarray``,
 ``zarr``, and ``awkward``. If there are other dependencies not listed here, you will have to install
 them too. We kindly ask that you also :ref:`contact us <contact>` or `open a new

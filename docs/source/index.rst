@@ -36,8 +36,8 @@ Time to get involved! Start by :doc:`installing CLEO<usage/installation>` and ex
    usage/examples
    usage/quickstart
 
-   pySD/pySD
-   cxx/cxx
+   cleopy/cleopy
+   libs/libs
 
    usage/contributing
    usage/ourdocs

@@ -302,5 +302,5 @@ in ``~/CLEO/examples/kokkostools/spdtest_kpkerneltimer_example_solution``.
 Extension
 ---------
 Explore the ``examples/exampleplotting/plotssrc`` Python module which gives examples of how to plot output
-from CLEO with pySD, a few of which are demonstrated in the ``examples/exampleplotting/exampleplotting.py``
+from CLEO with ``cleopy``, a few of which are demonstrated in the ``examples/exampleplotting/exampleplotting.py``
 script.

@@ -6,7 +6,7 @@ Good Coding Practices
 Packages and Environment
 ------------------------
 We provide an environment yaml file for creating an envirnoment with all the packages you need to
-use CLEO (to use PySD, to build the documentation, or to run pre-commit etc.).
+use CLEO (to use ``cleopy``, to build the documentation, or to run pre-commit etc.).
 
 The easiest way to use it is to create a new Conda or Micromamba environment, e.g.
 

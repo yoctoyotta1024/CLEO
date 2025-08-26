@@ -4,7 +4,7 @@ Copyright (c) 2024 MPI-M, Clara Bayley
 
 ----- CLEO -----
 File: geninitconds.py
-Project: pySD
+Project: cleopy
 Created Date: Friday 8th November 2024
 Author: Clara Bayley (CB)
 Additional Contributors:

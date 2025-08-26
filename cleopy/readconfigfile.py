@@ -4,7 +4,7 @@ Copyright (c) 2024 MPI-M, Clara Bayley
 
 ----- CLEO -----
 File: readconfigfile.py
-Project: pySD
+Project: cleopy
 Created Date: Wednesday 17th April 2024
 Author: Clara Bayley (CB)
 Additional Contributors:

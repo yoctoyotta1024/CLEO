@@ -4,7 +4,7 @@ Copyright (c) 2025 MPI-M, Clara Bayley
 
 ----- CLEO -----
 File: editconfigfile.py
-Project: pySD
+Project: cleopy
 Created Date: Wednesday 17th January 2024
 Author: Clara Bayley (CB)
 Additional Contributors:

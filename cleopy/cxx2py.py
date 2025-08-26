@@ -4,7 +4,7 @@ Copyright (c) 2024 MPI-M, Clara Bayley
 
 ----- CLEO -----
 File: cxx2py.py
-Project: pySD
+Project: cleopy
 Created Date: Friday 13th October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:

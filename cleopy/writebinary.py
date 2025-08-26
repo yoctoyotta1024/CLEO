@@ -4,7 +4,7 @@ Copyright (c) 2024 MPI-M, Clara Bayley
 
 ----- CLEO -----
 File: writebinary.py
-Project: pySD
+Project: cleopy
 Created Date: Tuesday 7th May 2024
 Author: Clara Bayley (CB)
 Additional Contributors:
