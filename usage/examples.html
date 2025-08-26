@@ -449,8 +449,8 @@ and <code class="docutils literal notranslate"><span class="pre">scripts/levante
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>scripts/levante/examples/as2017.sh
 </pre></div>
 </div>
-<p>The plots produced, by default called <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_adia0d/bin/as2017fig_[x].png</span></code>, should be
-similar to the columns of figure 5 from Arabas and Shima 2017 <span id="id3">[<a class="reference internal" href="../references.html#id6" title="S. Arabas and S. Shima. On the ccn (de)activation nonlinearities. Nonlinear Processes in Geophysics, 24(3):535–542, 2017. URL: https://npg.copernicus.org/articles/24/535/2017/, doi:10.5194/npg-24-535-2017.">AS17</a>]</span>.</p>
+<p>The plot produced, by default called <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_adia0d/bin/as2017fig.png</span></code>, should be
+similar to figure 5 from Arabas and Shima 2017 <span id="id3">[<a class="reference internal" href="../references.html#id6" title="S. Arabas and S. Shima. On the ccn (de)activation nonlinearities. Nonlinear Processes in Geophysics, 24(3):535–542, 2017. URL: https://npg.copernicus.org/articles/24/535/2017/, doi:10.5194/npg-24-535-2017.">AS17</a>]</span>.</p>
 </section>
 <section id="b-cusp-bifurcation">
 <h3>b) Cusp Bifurcation<a class="headerlink" href="#b-cusp-bifurcation" title="Link to this heading">¶</a></h3>
@@ -560,9 +560,9 @@ and <code class="docutils literal notranslate"><span class="pre">scripts/levante
 </div>
 <p>This example plots the motion of super-droplets without a terminal velocity in a 2-D divergence
 free wind field. It produces a plot showing the motion of a sample of super-droplets, by default
-called <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_divfree2D/bin/df2d_motion2d_validation.png</span></code>. The number of super-droplets in the domain
+called <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_divfree2D/bin/divfree2d_motion2d_validation.png</span></code>. The number of super-droplets in the domain
 should remain constant over time, as shown in the plot produced and by default called
-<code class="docutils literal notranslate"><span class="pre">~/CLEO/build_divfree2D/bin/df2d_totnsupers_validation.png</span></code>.</p>
+<code class="docutils literal notranslate"><span class="pre">~/CLEO/build_divfree2D/bin/divfree2d_totnsupers_validation.png</span></code>.</p>
 </section>
 <section id="d-rainshaft">
 <h2>1-D Rainshaft<a class="headerlink" href="#d-rainshaft" title="Link to this heading">¶</a></h2>
@@ -592,25 +592,27 @@ and <code class="docutils literal notranslate"><span class="pre">scripts/levante
 <p>Several plots and animations are produced by this example. If you would like to compare to our
 reference solutions please <a class="reference internal" href="contact.html#contact"><span class="std std-ref">contact us</span></a>.</p>
 </section>
-<section id="speed-test">
-<h2>Speed Test<a class="headerlink" href="#speed-test" title="Link to this heading">¶</a></h2>
-<p>This example, <code class="docutils literal notranslate"><span class="pre">speedtest.py</span></code>, in <code class="docutils literal notranslate"><span class="pre">examples/speedtest/</span></code> compiles and runs the same
+<section id="kokkos-tools-profiling-test">
+<h2>Kokkos Tools Profiling Test<a class="headerlink" href="#kokkos-tools-profiling-test" title="Link to this heading">¶</a></h2>
+<p>This example, <code class="docutils literal notranslate"><span class="pre">kokkostools.py</span></code>, in <code class="docutils literal notranslate"><span class="pre">examples/kokkostools/</span></code> compiles and runs the same
 exectuable <code class="docutils literal notranslate"><span class="pre">spdtest</span></code> for four different build configurations, (1) “cuda” with CUDA and OpenMP
 parallelism, (2) “openmp” with only OpenMP parallelism, (3) “threads” with only C++ threads
-parallelism, and (4) “serial” without parallelism.</p>
+parallelism, and (4) “serial” without parallelism. Using the (pre-installed) Kokkos tooks’
+Kernel Timer profiler, this example then outputs the time taken for each run in various ones of
+CLEO’s kernels.</p>
 <p>1. <a class="reference internal" href="#configurebash"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">scripts/levante/examples/build_compile_run_plot.sh</span></code>
-and <code class="docutils literal notranslate"><span class="pre">scripts/levante/examples/speedtest.sh</span></code>.</p>
+and <code class="docutils literal notranslate"><span class="pre">scripts/levante/examples/kokkostools.sh</span></code>.</p>
 <ol class="arabic simple" start="2">
-<li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">speedtest.sh</span></code>, e.g.</p></li>
+<li><p>Execute the bash script <code class="docutils literal notranslate"><span class="pre">kokkostools.sh</span></code>, e.g.</p></li>
 </ol>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>scripts/levante/examples/speedtest.sh
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>scripts/levante/examples/kokkostools.sh
 </pre></div>
 </div>
-<p>By default, a .txt file with Kokkos’ simple kernel timer profiling tool data for
-each of the three different build configurations and runs is written
-to <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_spdtest/bin/[build_type]_[run_number].txt</span></code>.
+<p>By default, a .txt file with Kokkos’ simple kernel timer profiling tool data for two runs of each
+of the four different build configurations is written to
+<code class="docutils literal notranslate"><span class="pre">~/CLEO/build_spdtest/bin/[build_type]_[run_number]_[process_info].txt</span></code>.
 The time spent in the “timestep” region can be compared with the ones
-in <code class="docutils literal notranslate"><span class="pre">~/CLEO/examples/speedtest/speedtest_allstats_examples.txt</span></code>.</p>
+in <code class="docutils literal notranslate"><span class="pre">~/CLEO/examples/kokkostools/spdtest_kpkerneltimer_example_solution</span></code>.</p>
 </section>
 <section id="extension">
 <h2>Extension<a class="headerlink" href="#extension" title="Link to this heading">¶</a></h2>
@@ -655,7 +657,7 @@ script.</p>
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 21 August 2025</div>
+              Last updated on 26 August 2025</div>
           </div>
           <div class="right-details">
             
@@ -693,7 +695,7 @@ script.</p>
 <li><a class="reference internal" href="#divergence-free-motion">Divergence Free Motion</a></li>
 <li><a class="reference internal" href="#d-rainshaft">1-D Rainshaft</a></li>
 <li><a class="reference internal" href="#constant-2-d-thermodynamics">Constant 2-D Thermodynamics</a></li>
-<li><a class="reference internal" href="#speed-test">Speed Test</a></li>
+<li><a class="reference internal" href="#kokkos-tools-profiling-test">Kokkos Tools Profiling Test</a></li>
 <li><a class="reference internal" href="#extension">Extension</a></li>
 </ul>
 </li>
