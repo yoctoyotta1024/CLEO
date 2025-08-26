@@ -32,7 +32,7 @@ jobs:
           which python && python --version
 
       - name: Test with pytest
-        run: pytest .
+        run: python -m pytest .
 
       - name: Generate Doxygen Documentation
         run: cd docs &&
