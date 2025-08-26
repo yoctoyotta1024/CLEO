@@ -6,13 +6,21 @@ dependencies:
     - conda-forge::doxygen>=1.10.0
     - pip
     - pip:
-      - numpy
-      - pytest
-      - sphinx
+      - awkward
+      - breathe
       - furo
+      - numpy
+      - matplotlib
+      - pathlib
+      - pre-commit
+      - pytest
+      - ruamel.yaml
+      - scipy
+      - sphinx
       - sphinx_copybutton
       - sphinxcontrib-bibtex
       - sphinxcontrib-applehelp
       - sphinxcontrib-htmlhelp
-      - breathe
-      - pre-commit
+      - typing
+      - xarray
+      - zarr
