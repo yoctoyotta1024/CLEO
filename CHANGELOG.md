@@ -2,6 +2,60 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.55.0](https://github.com/yoctoyotta1024/CLEO/compare/b5828bd09a47dd3ba5f5b39a53c490b1e8f5165f..v0.55.0) - 2025-08-26
+#### Bug Fixes
+- delete post processed files before running executable in kokkostools example - ([42e119d](https://github.com/yoctoyotta1024/CLEO/commit/42e119d4d026511fd9a6cd5f0116f64be61101f0)) - clara.bayley
+- perform multiple runs for kokkos tools profiling example - ([f389020](https://github.com/yoctoyotta1024/CLEO/commit/f389020abfacc300e65d20039ca1d2698d560dbb)) - clara.bayley
+#### Continuous Integration
+- no longer hardcode ntasks4 directory in fromfile parallel test - ([2475933](https://github.com/yoctoyotta1024/CLEO/commit/2475933598e97cfcb760685a598726258595fada)) - clara.bayley
+#### Documentation
+- minor doc fixes - ([d2f42b1](https://github.com/yoctoyotta1024/CLEO/commit/d2f42b12bd6bdc304c5cec9dd074c994e03242a1)) - clara.bayley
+- update how to run examples - ([c67832b](https://github.com/yoctoyotta1024/CLEO/commit/c67832bd1d4b8bc0d0d8f44661ffcabc1deb73a7)) - clara.bayley
+#### Features
+- first python script for eurec4a example - ([6ca6c16](https://github.com/yoctoyotta1024/CLEO/commit/6ca6c16a2791858a8b7f79fd9d1ecaac264e7193)) - clara.bayley
+#### Miscellaneous Chores
+- remove todos - ([2a2e06e](https://github.com/yoctoyotta1024/CLEO/commit/2a2e06e81fd61f65860810acd57e642fa6dd6832)) - clara.bayley
+- better formatting - ([0a11570](https://github.com/yoctoyotta1024/CLEO/commit/0a11570fc6bdb7d6cc1392f9323f2a615ae1fb76)) - clara.bayley
+- typo - ([416baaf](https://github.com/yoctoyotta1024/CLEO/commit/416baaf5df0fe2a0dfcf68f901f63fdec13c1d3a)) - clara.bayley
+- variable rename - ([d8e134e](https://github.com/yoctoyotta1024/CLEO/commit/d8e134e00f494b8beb19837ee07441b1d248d4b0)) - clara.bayley
+- typo - ([4c903f1](https://github.com/yoctoyotta1024/CLEO/commit/4c903f1790d4c5862b1db9b2ae0a6a140b18e637)) - clara.bayley
+- clearer formatting - ([9e09030](https://github.com/yoctoyotta1024/CLEO/commit/9e09030a0fff4974f78afcb6090c7e986009b257)) - clara.bayley
+#### Performance Improvements
+- delete commented neatness lines - ([a9f9ccf](https://github.com/yoctoyotta1024/CLEO/commit/a9f9ccfaee28e77cc28754a0f61084f193785611)) - clara.bayley
+- remove unnecessary line - ([ad2089d](https://github.com/yoctoyotta1024/CLEO/commit/ad2089dac5970bddd1f823fd498fe7978b07a184)) - clara.bayley
+- delete unused argument - ([54fc08e](https://github.com/yoctoyotta1024/CLEO/commit/54fc08eb861604b368b7a77a6939f41d49642657)) - clara.bayley
+- plotting variables together - ([3a9f89b](https://github.com/yoctoyotta1024/CLEO/commit/3a9f89b538b0e4c6be74d1d8cc3e535ea484171b)) - clara.bayley
+#### Refactoring
+- update example solution to kokkostools profiling - ([1b3eb84](https://github.com/yoctoyotta1024/CLEO/commit/1b3eb84cf774258c8dee3ae7772a8e12eb07a464)) - clara.bayley
+- check error code of subprocess is zero - ([6aca62d](https://github.com/yoctoyotta1024/CLEO/commit/6aca62d036902b70288e86811afd87519cbbfd20)) - clara.bayley
+- clean up as1027 example - ([71a37f7](https://github.com/yoctoyotta1024/CLEO/commit/71a37f7da26d4055c526dc25d85179cac0b8b883)) - clara.bayley
+- assert data lengths are equal - ([db62b01](https://github.com/yoctoyotta1024/CLEO/commit/db62b016245cc574cbc76f35cdacc001ee97903a)) - clara.bayley
+- add end lines to print statements - ([c4062e5](https://github.com/yoctoyotta1024/CLEO/commit/c4062e568f21c1bbeb35f73b693e821911380f01)) - clara.bayley
+- rename speedtest kokkostools - ([3503636](https://github.com/yoctoyotta1024/CLEO/commit/350363633452e51ae5b033f69af1fe39afe56fef)) - clara.bayley
+- clean up cuspbifurc example - ([cdf52ca](https://github.com/yoctoyotta1024/CLEO/commit/cdf52ca5ad4e05ec76575d8cb74ee7f68076b49e)) - clara.bayley
+- clean up speedtest example - ([ce76610](https://github.com/yoctoyotta1024/CLEO/commit/ce766103c2c82703273a3b656a79bda3ab7f373e)) - clara.bayley
+- clean up constthermo2d example - ([2815080](https://github.com/yoctoyotta1024/CLEO/commit/28150808128076bb86111ea61ae0946cf9ed0f8a)) - clara.bayley
+- correct order for z,x,y velocities - ([ff3feb8](https://github.com/yoctoyotta1024/CLEO/commit/ff3feb8a2bd7006c40e08ebe75e3bf5c19d9095f)) - clara.bayley
+- double frames per second in example animations - ([b07c8a2](https://github.com/yoctoyotta1024/CLEO/commit/b07c8a2366fd061ba34cec52a8161b8e3dce9614)) - clara.bayley
+- clean up divfreemotion example scripts - ([8e8b1e1](https://github.com/yoctoyotta1024/CLEO/commit/8e8b1e142cceb6071111b7ab01a0f2f1d5ad116e)) - clara.bayley
+- clean up rainshaft1d example script - ([a32c287](https://github.com/yoctoyotta1024/CLEO/commit/a32c287fb3d7af6501bce71a2781afd5f86d5306)) - clara.bayley
+- clean up breakup example script - ([678534e](https://github.com/yoctoyotta1024/CLEO/commit/678534e89f0118df858033d6b8aeaa9eac190812)) - clara.bayley
+- ensure paths from configs read as paths - ([514b3a5](https://github.com/yoctoyotta1024/CLEO/commit/514b3a56841a8350101f7f3d37ca4216d586a7fb)) - clara.bayley
+- clean up shima2009 example script - ([11a8aab](https://github.com/yoctoyotta1024/CLEO/commit/11a8aab2bebb1257207fdba778d4203544dc9b48)) - clara.bayley
+- clean up python_bindings example script - ([c512877](https://github.com/yoctoyotta1024/CLEO/commit/c512877560796e4dfa01d79cb99e6b527d5cc396)) - clara.bayley
+- better logic in example  mkdirs - ([46cb666](https://github.com/yoctoyotta1024/CLEO/commit/46cb66613b99e1ee6b3384349ad0a7db45ccc1b8)) - clara.bayley
+- rename python bindings source config - ([685310b](https://github.com/yoctoyotta1024/CLEO/commit/685310b476250eb107f2756898a05e8d0cad890a)) - clara.bayley
+- add boolean for building/compiling or not - ([218e37a](https://github.com/yoctoyotta1024/CLEO/commit/218e37aee8b696071371cfcaffe758e3821876b0)) - clara.bayley
+- clean up fromfile and fromfile_irreg example scripts - ([3142e32](https://github.com/yoctoyotta1024/CLEO/commit/3142e3266e6ebc64cfd568b84d2aa2d7aa3a5e8d)) - clara.bayley
+- clean up bubble example scripts - ([d410a6d](https://github.com/yoctoyotta1024/CLEO/commit/d410a6d78e878ac9ecfcc8da049d9e31cf9849e1)) - clara.bayley
+- use booleans correctly with argparse - ([00725ac](https://github.com/yoctoyotta1024/CLEO/commit/00725ac493ac819e5e90ef8e41bc2d37e94f7919)) - clara.bayley
+- move bash scripts into levante bash - ([4e80091](https://github.com/yoctoyotta1024/CLEO/commit/4e800919353e3589cec03892343ca14d5440cf88)) - clara.bayley
+- use isfigures to show/save figs - ([6d57229](https://github.com/yoctoyotta1024/CLEO/commit/6d5722940bc113f937149b3a2077b105c898657a)) - clara.bayley
+- reduce code duplicaiton in boxmodelcollisions - ([bce1b78](https://github.com/yoctoyotta1024/CLEO/commit/bce1b78435a800df9eac1f8a0bf59e2ca1cc8372)) - clara.bayley
+- move boxmodelcollision configs into src - ([b5828bd](https://github.com/yoctoyotta1024/CLEO/commit/b5828bd09a47dd3ba5f5b39a53c490b1e8f5165f)) - clara.bayley
+
+- - -
+
 ## [v0.54.0](https://github.com/yoctoyotta1024/CLEO/compare/c4545fd5929862701be345c5c1d3b45612a28aea..v0.54.0) - 2025-08-20
 #### Bug Fixes
 - bubble plotting script works using updated sample of superdrops class - ([f2f775a](https://github.com/yoctoyotta1024/CLEO/commit/f2f775a98e71bd207d821c92de1e4791e603a01e)) - clara.bayley
