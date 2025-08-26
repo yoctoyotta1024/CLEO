@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: py_observers.hpp
- * Project: pycleo
+ * Project: cleo_python_bindings
  * Created Date: Thursday 5th June 2025
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -16,15 +16,15 @@
  * Python bindings to various different CLEO's Observers instantiations
  */
 
-#ifndef LIBS_PYCLEO_PY_OBSERVERS_HPP_
-#define LIBS_PYCLEO_PY_OBSERVERS_HPP_
+#ifndef LIBS_CLEO_PYTHON_BINDINGS_PY_OBSERVERS_HPP_
+#define LIBS_CLEO_PYTHON_BINDINGS_PY_OBSERVERS_HPP_
 
 #include <pybind11/pybind11.h>
 
 #include <stdexcept>
 
 #include "../cleoconstants.hpp"
-#include "./pycleo_aliases.hpp"
+#include "./cleo_python_bindings_aliases.hpp"
 #include "configuration/config.hpp"
 #include "initialise/timesteps.hpp"
 #include "observers/collect_data_for_simple_dataset.hpp"
@@ -43,10 +43,10 @@
 #include "zarr/simple_dataset.hpp"
 
 namespace py = pybind11;
-namespace pyca = pycleo_aliases;
+namespace pyca = cleo_python_bindings_aliases;
 
 void pyNullObserver(py::module &m);
 void pyObserver(py::module &m);
 void pycreate_observer(py::module &m);
 
-#endif  // LIBS_PYCLEO_PY_OBSERVERS_HPP_
+#endif  // LIBS_CLEO_PYTHON_BINDINGS_PY_OBSERVERS_HPP_

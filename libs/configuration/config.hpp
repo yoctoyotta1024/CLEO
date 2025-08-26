@@ -103,7 +103,9 @@ struct Config {
     return optional.addsupersatdomaintop;
   }
 
-  OptionalConfigParams::PycleoParams get_pycleo() const { return optional.pycleo; }
+  OptionalConfigParams::PythonBindingsParams get_python_bindings() const {
+    return optional.python_bindings;
+  }
 };
 
 #endif  // LIBS_CONFIGURATION_CONFIG_HPP_

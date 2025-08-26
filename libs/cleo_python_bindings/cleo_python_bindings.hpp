@@ -3,8 +3,8 @@
  *
  *
  * ----- CLEO -----
- * File: pycleo.hpp
- * Project: pycleo
+ * File: cleo_python_bindings.hpp
+ * Project: cleo_python_bindings
  * Created Date: Thursday 5th June 2025
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -16,8 +16,8 @@
  * Entry point for creating CLEO's python bindngs module
  */
 
-#ifndef LIBS_PYCLEO_PYCLEO_HPP_
-#define LIBS_PYCLEO_PYCLEO_HPP_
+#ifndef LIBS_CLEO_PYTHON_BINDINGS_CLEO_PYTHON_BINDINGS_HPP_
+#define LIBS_CLEO_PYTHON_BINDINGS_CLEO_PYTHON_BINDINGS_HPP_
 
 #include <pybind11/pybind11.h>
 
@@ -38,22 +38,22 @@
 
 namespace py = pybind11;
 
-int test_pycleo(const int i, const int j);
+int test_cleo_python_bindings(const int i, const int j);
 
-void pycleo_initialize(const Config &config);
+void cleo_initialize(const Config &config);
 
-void inline pycleo_finalize() { Kokkos::finalize(); }
+void inline cleo_finalize() { Kokkos::finalize(); }
 
-PYBIND11_MODULE(pycleo, m) {
+PYBIND11_MODULE(cleo_python_bindings, m) {
   m.doc() = "Python bindings for selected parts of CLEO's libraries";
 
-  m.def("test_pycleo", &test_pycleo, "test function for CLEO example", py::arg("i"), py::arg("j"));
+  m.def("test_cleo_python_bindings", &test_cleo_python_bindings, "test function for CLEO example",
+        py::arg("i"), py::arg("j"));
 
-  m.def("pycleo_initialize", &pycleo_initialize,
+  m.def("cleo_initialize", &cleo_initialize,
         "necessary initialisation before running CLEO via python", py::arg("config"));
 
-  m.def("pycleo_finalize", &pycleo_finalize,
-        "necessary finalisation after running CLEO via python ");
+  m.def("cleo_finalize", &cleo_finalize, "necessary finalisation after running CLEO via python ");
 
   /* coupldyn_numpy submodule */
   include_coupldyn_numpy_submodule(m);
@@ -111,4 +111,4 @@ PYBIND11_MODULE(pycleo, m) {
   pyCartesianSDMMethods(m);
 }
 
-#endif  // LIBS_PYCLEO_PYCLEO_HPP_
+#endif  // LIBS_CLEO_PYTHON_BINDINGS_CLEO_PYTHON_BINDINGS_HPP_

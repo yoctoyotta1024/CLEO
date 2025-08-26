@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: py_configuration.hpp
- * Project: pycleo
+ * Project: cleo_python_bindings
  * Created Date: Thursday 5th June 2025
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -16,8 +16,8 @@
  * Python bindings to various different CLEO configuration functions and structures
  */
 
-#ifndef LIBS_PYCLEO_PY_CONFIGURATION_HPP_
-#define LIBS_PYCLEO_PY_CONFIGURATION_HPP_
+#ifndef LIBS_CLEO_PYTHON_BINDINGS_PY_CONFIGURATION_HPP_
+#define LIBS_CLEO_PYTHON_BINDINGS_PY_CONFIGURATION_HPP_
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl/filesystem.h>
@@ -31,4 +31,4 @@ void pyConfig(py::module &m);
 
 void pyInitSupersFromBinaryParams(py::module &m);
 
-#endif  // LIBS_PYCLEO_PY_CONFIGURATION_HPP_
+#endif  // LIBS_CLEO_PYTHON_BINDINGS_PY_CONFIGURATION_HPP_

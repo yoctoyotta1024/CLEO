@@ -58,7 +58,7 @@ struct OptionalConfigParams {
 
   void set_boundary_conditions(const YAML::Node& config);
 
-  void set_pycleo(const YAML::Node& config);
+  void set_python_bindings(const YAML::Node& config);
 
   /*** Kokkos Initialization Parameters ***/
   struct KokkosSettings {
@@ -153,8 +153,8 @@ struct OptionalConfigParams {
     double geosigma_b = NaNVals::dbl(); /**< geometric standard deviation of 2nd lognormal dist */
   } addsupersatdomaintop;
 
-  /** Pycleo (Python Bindings) Parameters */
-  struct PycleoParams {
+  /** CLEO Python Bindings Parameters */
+  struct PythonBindingsParams {
     void set_params(const YAML::Node& config);
     void print_params() const;
     bool enable_terminal_velocity =
@@ -171,7 +171,7 @@ struct OptionalConfigParams {
       bool superdrops = false;
       bool precip = false;
     } enable_observers; /**< true for set of booleans in struct enables various observers */
-  } pycleo;
+  } python_bindings;
 };
 
 #endif  // LIBS_CONFIGURATION_OPTIONAL_CONFIG_PARAMS_HPP_

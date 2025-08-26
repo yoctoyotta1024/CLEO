@@ -3,8 +3,8 @@
  *
  *
  * ----- CLEO -----
- * File: pycleo_aliases.hpp
- * Project: pycleo
+ * File: cleo_python_bindings_aliases.hpp
+ * Project: cleo_python_bindings
  * Created Date: Thursday 5th June 2025
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -17,8 +17,8 @@
  * in order to make long template instantiations readable.
  */
 
-#ifndef LIBS_PYCLEO_PYCLEO_ALIASES_HPP_
-#define LIBS_PYCLEO_PYCLEO_ALIASES_HPP_
+#ifndef LIBS_CLEO_PYTHON_BINDINGS_CLEO_PYTHON_BINDINGS_ALIASES_HPP_
+#define LIBS_CLEO_PYTHON_BINDINGS_CLEO_PYTHON_BINDINGS_ALIASES_HPP_
 
 #include <pybind11/pybind11.h>
 
@@ -138,7 +138,7 @@ using obs = CombinedObserver<obs0123456, obs7, mo01234567>;
  *      - predcorr = predictor-corrector
  *      - all = SDM with combination of microphysics and superdroplet motion (null observer)
  */
-namespace pycleo_aliases {
+namespace cleo_python_bindings_aliases {
 using map_cart = CartesianMaps;
 
 using micro_null = NullMicrophysicalProcess;
@@ -160,6 +160,6 @@ using obs_null = NullObserver;
 using sdm_cart_null = SDMMethods<map_cart, micro_null, mo_null, trans_cart, bcs_null, obs_null>;
 using sdm_cart_all =
     SDMMethods<map_cart, micro_all, mo_cart_predcorr, trans_cart, bcs_null, pyobserver::obs>;
-}  // namespace pycleo_aliases
+}  // namespace cleo_python_bindings_aliases
 
-#endif  // LIBS_PYCLEO_PYCLEO_ALIASES_HPP_
+#endif  // LIBS_CLEO_PYTHON_BINDINGS_CLEO_PYTHON_BINDINGS_ALIASES_HPP_

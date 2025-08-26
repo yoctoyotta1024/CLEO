@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: py_cartesiandomain.cpp
- * Project: pycleo
+ * Project: cleo_python_bindings
  * Created Date: Thursday 5th June 2025
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -49,8 +49,9 @@ void pycreate_cartesian_predcorr_motion(py::module &m) {
         if (!motionstep) {
           motionstep = LIMITVALUES::uintmax;
         }
-        const auto pycleo_config = config.get_pycleo();
-        const auto terminalv = OptionalTerminalVelocity(pycleo_config.enable_terminal_velocity);
+        const auto python_bindings_config = config.get_python_bindings();
+        const auto terminalv =
+            OptionalTerminalVelocity(python_bindings_config.enable_terminal_velocity);
         return CartesianMotion(motionstep, &step2dimlesstime, terminalv);
       },
       "returns CartesianPredCorrMotion instance", py::arg("config"), py::arg("motionstep"));

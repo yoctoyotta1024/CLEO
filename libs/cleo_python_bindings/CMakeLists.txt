@@ -4,11 +4,11 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
 endif()
 
 # set library name and print directory of this CMakeLists.txt (source directory of library)
-set(LIBNAME "pycleo")
+set(LIBNAME "cleo_python_bindings")
 message(STATUS "CLEO using ${LIBNAME} with LIBRARY_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
 
 # explicitly set library executables path to /lib in top level of build tree
-set(LIB_BINARY_DIR ${CLEO_BINARY_DIR}/pycleo)
+set(LIB_BINARY_DIR ${CLEO_BINARY_DIR}/cleo_python_bindings)
 
 # require MPI explicitly for this library
 find_package(MPI REQUIRED COMPONENTS C)
@@ -41,7 +41,7 @@ set(SOURCES
 "py_cartesiandomain.cpp"
 "py_observers.cpp"
 "py_runcleo.cpp"
-"pycleo.cpp"
+"cleo_python_bindings.cpp"
 "coupldyn_numpy/numpy_dynamics.cpp"
 "coupldyn_numpy/numpy_comms.cpp"
 "coupldyn_numpy/pycoupldyn_numpy.cpp"

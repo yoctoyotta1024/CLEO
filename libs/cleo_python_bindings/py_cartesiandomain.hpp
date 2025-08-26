@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: py_cartesiandomain.hpp
- * Project: pycleo
+ * Project: cleo_python_bindings
  * Created Date: Thursday 5th June 2025
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -16,15 +16,15 @@
  * Python bindings to various parts of CLEO's cartesiandomain library
  */
 
-#ifndef LIBS_PYCLEO_PY_CARTESIANDOMAIN_HPP_
-#define LIBS_PYCLEO_PY_CARTESIANDOMAIN_HPP_
+#ifndef LIBS_CLEO_PYTHON_BINDINGS_PY_CARTESIANDOMAIN_HPP_
+#define LIBS_CLEO_PYTHON_BINDINGS_PY_CARTESIANDOMAIN_HPP_
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl/filesystem.h>
 
 #include "../cleoconstants.hpp"
+#include "./cleo_python_bindings_aliases.hpp"
 #include "./optional_terminal_velocity.hpp"
-#include "./pycleo_aliases.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
 #include "cartesiandomain/movement/cartesian_motion.hpp"
@@ -36,7 +36,7 @@
 #include "initialise/timesteps.hpp"
 
 namespace py = pybind11;
-namespace pyca = pycleo_aliases;
+namespace pyca = cleo_python_bindings_aliases;
 
 void pyCartesianMaps(py::module &m);
 void pycreate_cartesian_maps(py::module &m);
@@ -48,4 +48,4 @@ void pycreate_cartesian_predcorr_motion(py::module &m);
 
 void pyCartesianMoveSupersInDomain(py::module &m);
 
-#endif  // LIBS_PYCLEO_PY_CARTESIANDOMAIN_HPP_
+#endif  // LIBS_CLEO_PYTHON_BINDINGS_PY_CARTESIANDOMAIN_HPP_

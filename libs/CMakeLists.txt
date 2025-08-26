@@ -24,13 +24,13 @@ if("${CLEO_COUPLED_DYNAMICS}" IN_LIST valid_coupled_dynamics)
     add_subdirectory(coupldyn_cvode EXCLUDE_FROM_ALL)
   elseif("${CLEO_COUPLED_DYNAMICS}" STREQUAL "yac")
     add_subdirectory(coupldyn_yac EXCLUDE_FROM_ALL)
-  # "numpy" case contained within add_subdirectory(pycleo [...]), see below
+  # "numpy" case contained within add_subdirectory(cleo_python_bindings [...]), see below
   endif()
 elseif("${CLEO_COUPLED_DYNAMICS}" STREQUAL "all") # all
   add_subdirectory(coupldyn_cvode EXCLUDE_FROM_ALL)
   add_subdirectory(coupldyn_fromfile EXCLUDE_FROM_ALL)
   add_subdirectory(coupldyn_yac EXCLUDE_FROM_ALL)
-  # "numpy" case also included if add_subdirectory(pycleo [...]), see below
+  # "numpy" case also included if add_subdirectory(cleo_python_bindings [...]), see below
 elseif("${CLEO_COUPLED_DYNAMICS}" STREQUAL "") # default
   add_subdirectory(coupldyn_cvode EXCLUDE_FROM_ALL)
   add_subdirectory(coupldyn_fromfile EXCLUDE_FROM_ALL)
@@ -56,5 +56,5 @@ endif()
 if(CLEO_NO_PYBINDINGS)
   message(STATUS "CLEO excluding python bindings CLEO_NO_PYBINDINGS=${CLEO_NO_PYBINDINGS}")
 else()
-  add_subdirectory(pycleo EXCLUDE_FROM_ALL)
+  add_subdirectory(cleo_python_bindings EXCLUDE_FROM_ALL)
 endif()

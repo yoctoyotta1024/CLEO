@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: py_initialise.hpp
- * Project: pycleo
+ * Project: cleo_python_bindings
  * Created Date: Thursday 5th June 2025
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -16,8 +16,8 @@
  * Python bindings to various different CLEO initialisation functions and structures
  */
 
-#ifndef LIBS_PYCLEO_PY_INITIALISE_HPP_
-#define LIBS_PYCLEO_PY_INITIALISE_HPP_
+#ifndef LIBS_CLEO_PYTHON_BINDINGS_PY_INITIALISE_HPP_
+#define LIBS_CLEO_PYTHON_BINDINGS_PY_INITIALISE_HPP_
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl/filesystem.h>
@@ -37,4 +37,4 @@ void pyInitSupersFromBinary(py::module &m);
 
 void pyInitGbxsNull(py::module &m);
 
-#endif  // LIBS_PYCLEO_PY_INITIALISE_HPP_
+#endif  // LIBS_CLEO_PYTHON_BINDINGS_PY_INITIALISE_HPP_

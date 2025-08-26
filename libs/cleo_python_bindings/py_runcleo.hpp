@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: py_runcleo.hpp
- * Project: pycleo
+ * Project: cleo_python_bindings
  * Created Date: Thursday 5th June 2025
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -17,13 +17,13 @@
  * to various different CLEO's SDMMethods instantiations
  */
 
-#ifndef LIBS_PYCLEO_PY_RUNCLEO_HPP_
-#define LIBS_PYCLEO_PY_RUNCLEO_HPP_
+#ifndef LIBS_CLEO_PYTHON_BINDINGS_PY_RUNCLEO_HPP_
+#define LIBS_CLEO_PYTHON_BINDINGS_PY_RUNCLEO_HPP_
 
 #include <pybind11/pybind11.h>
 
 #include "../kokkosaliases.hpp"
-#include "./pycleo_aliases.hpp"
+#include "./cleo_python_bindings_aliases.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/movement/cartesian_transport_across_domain.hpp"
 #include "gridboxes/boundary_conditions.hpp"
@@ -53,7 +53,7 @@
 #include "zarr/simple_dataset.hpp"
 
 namespace py = pybind11;
-namespace pyca = pycleo_aliases;
+namespace pyca = cleo_python_bindings_aliases;
 
 void pycreate_supers_from_binary(py::module &m);
 
@@ -62,4 +62,4 @@ void pycreate_gbxs_cartesian_null(py::module &m);
 void pyCartesianNullSDMMethods(py::module &m);
 void pyCartesianSDMMethods(py::module &m);
 
-#endif  // LIBS_PYCLEO_PY_RUNCLEO_HPP_
+#endif  // LIBS_CLEO_PYTHON_BINDINGS_PY_RUNCLEO_HPP_
