@@ -57,7 +57,7 @@ The CVODE libraries for CLEO are automatically built using CMAKE and compiled if
 
 pybind11
 --------
-CLEO's ``pycleo`` library requires pybind11 to create python binding for selected parts of CLEO's
+CLEO's ``cleo_python_bindings`` library requires pybind11 to create python binding for selected parts of CLEO's
 libraries. You can find more information about it from `the pybind11 repository: <https://github.com/pybind/pybind11>`_.
 
 The pybind11 library for CLEO is automatically built using CMAKE and compiled if required. Note you
