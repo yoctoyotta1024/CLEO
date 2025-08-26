@@ -1,0 +1,47 @@
+[project]
+name = "cleopy"
+description = "Python package for generating input and processing output of CLEO SDM"
+dynamic = ["version"]
+authors = [
+	{name="Clara Bayley", email="yoctoyotta1024@yahoo.com"},
+]
+readme = "README.md"
+repository = "https://github.com/yoctoyotta1024/CLEO"
+license = "BSD-3-Clause"
+license-files = ["LICENSE.md"]
+requires-python=">=3.13"
+
+dependencies = [
+  "awkward",
+	"numpy",
+  "matplotlib",
+  "pathlib",
+  "ruamel.yaml",
+	"scipy",
+  "typing",
+  "xarray",
+  "zarr",
+]
+
+[project.urls]
+Homepage = "https://github.com/yoctoyotta1024/CLEO"
+Website = "https://yoctoyotta1024.github.io/CLEO"
+Issues = "https://github.com/yoctoyotta1024/CLEO/issues"
+
+[tool.pytest.ini_options]
+pythonpath=[
+  ".", "cleopy"
+]
+
+[build-system]
+requires=["hatchling >= 1.26", "uv-dynamic-versioning"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "ruff",
+]
+
+[tool.hatch.version]
+source = "uv-dynamic-versioning"

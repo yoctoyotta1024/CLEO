@@ -1,6 +1,9 @@
 """
+Copyright (c) 2023 MPI-M, Clara Bayley
+
+
 ----- CLEO -----
-File: test_math.py
+File: test_dummy.py
 Project: tests
 Created Date: Thursday 12th October 2023
 Author: Clara Bayley (CB)
@@ -9,8 +12,12 @@ Additional Contributors:
 License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
-Copyright (c) 2023 MPI-M, Clara Bayley
+File Description:
 """
+
+
+def test_dummy():
+    pass
 
 
 def test_math():
