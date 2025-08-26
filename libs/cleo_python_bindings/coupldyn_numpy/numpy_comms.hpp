@@ -17,8 +17,8 @@
  * coupling between NumpyDynamics and SDM
  */
 
-#ifndef LIBS_PYCLEO_COUPLDYN_NUMPY_NUMPY_COMMS_HPP_
-#define LIBS_PYCLEO_COUPLDYN_NUMPY_NUMPY_COMMS_HPP_
+#ifndef LIBS_CLEO_PYTHON_BINDINGS_COUPLDYN_NUMPY_NUMPY_COMMS_HPP_
+#define LIBS_CLEO_PYTHON_BINDINGS_COUPLDYN_NUMPY_NUMPY_COMMS_HPP_
 
 #include <Kokkos_Core.hpp>
 
@@ -41,4 +41,4 @@ struct NumpyComms {
                                      NumpyDynamics &numpydyn) const;
 };
 
-#endif  // LIBS_PYCLEO_COUPLDYN_NUMPY_NUMPY_COMMS_HPP_
+#endif  // LIBS_CLEO_PYTHON_BINDINGS_COUPLDYN_NUMPY_NUMPY_COMMS_HPP_

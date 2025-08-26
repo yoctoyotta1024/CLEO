@@ -148,7 +148,7 @@ def inputfiles(
 # %%
 ### --------------- FUNCTION DEFINITIONS FOR RUN_EXECUTABLE ---------------- ###
 def mpi_info(comm):
-    print("\n--- PYCLEO STATUS: MPI INFORMATION ---")
+    print("\n--- CLEO STATUS: MPI INFORMATION ---")
     print(f"MPI version: {MPI.Get_version()}")
     print(f"Processor name: {MPI.Get_processor_name()}")
     print(f"Total processes: {comm.Get_size()}")
@@ -186,15 +186,15 @@ def create_winds(python_config):
 
 def timestep_example(t_mdl, t_end, timestep, thermo, cleo_sdm):
     print(
-        f"PYCLEO STATUS: timestepping SDM from {t_mdl}s to {t_end}s (timestep = {timestep}s)"
+        f"CLEO STATUS: timestepping SDM from {t_mdl}s to {t_end}s (timestep = {timestep}s)"
     )
 
-    print("\n--- PYCLEO STATUS: THERMO INFORMATION ---")
+    print("\n--- CLEO STATUS: THERMO INFORMATION ---")
     thermo.print_state()
     print("\n-----------------------------------------")
 
     while t_mdl <= t_end:
-        print(f"PYCLEO STATUS: t = {t_mdl}s")
+        print(f"CLEO STATUS: t = {t_mdl}s")
 
         thermo.temp[0] += 10  # mock example of changing dynamics
 
@@ -205,14 +205,14 @@ def timestep_example(t_mdl, t_end, timestep, thermo, cleo_sdm):
         t_mdl += timestep
 
 
-def cleo_sdm_example(pycleo, python_config, cleo_config):
+def cleo_sdm_example(cleo, python_config, cleo_config):
     t_mdl, t_end = 0, python_config["timesteps"]["T_END"]  # [s]
     timestep = python_config["timesteps"]["COUPLTSTEP"]  # [s]
 
     thermo = create_thermodynamics(python_config)
     wvel, uvel, vvel = create_winds(python_config)
     cleo_sdm = CleoSDM(
-        pycleo,
+        cleo,
         cleo_config,
         t_mdl,
         timestep,
@@ -229,26 +229,26 @@ def cleo_sdm_example(pycleo, python_config, cleo_config):
     timestep_example(t_mdl, t_end, timestep, thermo, cleo_sdm)
 
 
-def run_sdm_example(pycleo, python_config, config_filename):
-    cleo_config = pycleo.Config(config_filename)
-    pycleo.pycleo_initialize(cleo_config)
-    cleo_sdm_example(pycleo, python_config, cleo_config)
+def run_sdm_example(cleo, python_config, config_filename):
+    cleo_config = cleo.Config(config_filename)
+    cleo.cleo_initialize(cleo_config)
+    cleo_sdm_example(cleo, python_config, cleo_config)
 
 
 def run_exectuable(path2build, config_filename):
-    sys.path.append(str(path2build / "pycleo"))
-    import pycleo
-    from pycleo import coupldyn_numpy
+    sys.path.append(str(path2build / "cleo_python_bindings"))
+    import cleo_python_bindings as cleo
+    from cleo_python_bindings import coupldyn_numpy
 
     yaml = YAML()
     with open(config_filename, "r") as file:
         python_config = yaml.load(file)
 
-    print(f"PYCLEO STATUS: 2+3={pycleo.test_pycleo(i=3, j=2)}")
+    print(f"CLEO STATUS: 2+3={cleo.test_cleo_python_bindings(i=3, j=2)}")
     print(f"COUPLDYN_NUMPY STATUS: 2*3={coupldyn_numpy.test_coupldyn_numpy(i=3, j=2)}")
 
     mpi_info(MPI.COMM_WORLD)
-    run_sdm_example(pycleo, python_config, config_filename)
+    run_sdm_example(cleo, python_config, config_filename)
 
 
 # %%

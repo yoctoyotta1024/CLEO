@@ -43,8 +43,8 @@ OptionalConfigParams::OptionalConfigParams(const std::filesystem::path config_fi
     set_boundary_conditions(config);
   }
 
-  if (config["pycleo"]) {
-    set_pycleo(config);
+  if (config["python_bindings"]) {
+    set_python_bindings(config);
   }
 }
 
@@ -138,11 +138,11 @@ void OptionalConfigParams::set_boundary_conditions(const YAML::Node &config) {
   }
 }
 
-void OptionalConfigParams::set_pycleo(const YAML::Node &config) {
-  const YAML::Node node = config["pycleo"];
+void OptionalConfigParams::set_python_bindings(const YAML::Node &config) {
+  const YAML::Node node = config["python_bindings"];
 
-  pycleo.set_params(config);
-  pycleo.print_params();
+  python_bindings.set_params(config);
+  python_bindings.print_params();
 }
 
 void OptionalConfigParams::CondensationParams::set_params(const YAML::Node &config) {
@@ -303,8 +303,8 @@ void OptionalConfigParams::AddSupersAtDomainTopParams::print_params() const {
             << "\n---------------------------------------------------------\n";
 }
 
-void OptionalConfigParams::PycleoParams::set_params(const YAML::Node &config) {
-  const YAML::Node node = config["pycleo"];
+void OptionalConfigParams::PythonBindingsParams::set_params(const YAML::Node &config) {
+  const YAML::Node node = config["python_bindings"];
   const YAML::Node mphys_node = config["microphysics"];
 
   if (node["enable_terminal_velocity"]) {
@@ -358,8 +358,8 @@ void OptionalConfigParams::PycleoParams::set_params(const YAML::Node &config) {
   }
 }
 
-void OptionalConfigParams::PycleoParams::print_params() const {
-  std::cout << "\n-------- Pycleo Configuration Parameters --------------"
+void OptionalConfigParams::PythonBindingsParams::print_params() const {
+  std::cout << "\n-------- Python Bindings Configuration Parameters --------------"
             << "\nenable_terminal_velocity: " << enable_terminal_velocity
             << "\nenable_condensation: " << enable_condensation
             << "\nenable_collisions: " << enable_collisions

@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: py_observers.cpp
- * Project: pycleo
+ * Project: cleo_python_bindings
  * Created Date: Thursday 5th June 2025
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -49,7 +49,7 @@ void pycreate_observer(py::module &m) {
 
 pyobserver::obs create_observer(const Config &config, const Timesteps &tsteps,
                                 SimpleDataset<FSStore> &dataset, FSStore &store) {
-  const auto enable_observers = config.get_pycleo().enable_observers;
+  const auto enable_observers = config.get_python_bindings().enable_observers;
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
   const auto ngbxs = config.get_ngbxs();

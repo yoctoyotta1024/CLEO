@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: py_superdrops.cpp
- * Project: pycleo
+ * Project: cleo_python_bindings
  * Created Date: Thursday 5th June 2025
  * Author: Clara Bayley (CB)
  * Additional Contributors:
@@ -46,14 +46,14 @@ pyca::micro_all create_microphysical_process(const Config &config, const Timeste
   (i.e. maxniters is not a NaNVals::sizet()), the an actual active condensation/evaporation
   process is initialised according to this configuration.
   */
-  const auto pycleo_config = config.get_pycleo();
+  const auto python_bindings_config = config.get_python_bindings();
 
   MicrophysicalProcess auto null = NullMicrophysicalProcess{};
   std::cout << "Null microphysical process initialised\n";
 
   const MicrophysicsFunc auto no_cond = DoCondensation(false, 0.0, 0, 0.0, 0.0, 0.0);
   MicrophysicalProcess auto cond = ConstTstepMicrophysics(LIMITVALUES::uintmax, no_cond);
-  if (pycleo_config.enable_condensation) {
+  if (python_bindings_config.enable_condensation) {
     std::cout << "Adding condensation/evaporation to microphysical process\n";
     const auto c = config.get_condensation();
     cond = Condensation(tsteps.get_condstep(), &step2dimlesstime, c.do_alter_thermo, c.maxniters,
@@ -64,7 +64,7 @@ pyca::micro_all create_microphysical_process(const Config &config, const Timeste
   const MicrophysicsFunc auto no_colls =
       DoCollisions<LongHydroProb, DoCoalescence>(0.0, collcoalprob, DoCoalescence{});
   MicrophysicalProcess auto colls = ConstTstepMicrophysics(LIMITVALUES::uintmax, no_colls);
-  if (pycleo_config.enable_collisions) {
+  if (python_bindings_config.enable_collisions) {
     std::cout << "Adding collision-coalescence to microphysical process\n";
     colls = CollCoal(tsteps.get_collstep(), &step2realtime, collcoalprob);
   }

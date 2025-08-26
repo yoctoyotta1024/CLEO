@@ -4,7 +4,7 @@
  *
  * ----- CLEO -----
  * File: py_initialise.cpp
- * Project: pycleo
+ * Project: cleo_python_bindings
  * Created Date: Thursday 5th June 2025
  * Author: Clara Bayley (CB)
  * Additional Contributors:

@@ -14,7 +14,7 @@
  * -----
  * File Description:
  * functionality for creating CLEO's python bindngs for the coupldyn_numpy
- * library sub-module of pycleo
+ * library sub-module of cleo_python_bindings
  */
 
 #include "./pycoupldyn_numpy.hpp"
