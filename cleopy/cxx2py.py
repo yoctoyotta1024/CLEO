@@ -13,9 +13,8 @@ License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
+function(s) for converting c++ values into python ones
 """
-
-######## function(s) for converting c++ values into python ones  ########
 
 
 def print_dict_statement(filename, dictname, dict):
