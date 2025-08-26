@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.55.1](https://github.com/yoctoyotta1024/CLEO/compare/9baf8bdcb25a26b0006032b0184ce61c7b39d72f..v0.55.1) - 2025-08-26
+#### Bug Fixes
+- make examples, docs and ci compatible with bindings renaming - ([d017638](https://github.com/yoctoyotta1024/CLEO/commit/d0176387d6ae3089d084c976d4e1224d81f4e06f)) - clara.bayley
+#### Refactoring
+- rename pycleo as cleo_python_bindings - ([9baf8bd](https://github.com/yoctoyotta1024/CLEO/commit/9baf8bdcb25a26b0006032b0184ce61c7b39d72f)) - clara.bayley
+
+- - -
+
 ## [v0.55.0](https://github.com/yoctoyotta1024/CLEO/compare/b5828bd09a47dd3ba5f5b39a53c490b1e8f5165f..v0.55.0) - 2025-08-26
 #### Bug Fixes
 - delete post processed files before running executable in kokkostools example - ([42e119d](https://github.com/yoctoyotta1024/CLEO/commit/42e119d4d026511fd9a6cd5f0116f64be61101f0)) - clara.bayley
