@@ -242,6 +242,10 @@ def plot_allkernels_results(
 
 
 def main(path2CLEO, savefigpath, grid_filename, setupfiles, datasets, kernels):
+    assert len(setupfiles) == len(datasets) and len(kernels) == len(
+        datasets
+    ), "number of items in lists of setupfiles, datasets and kernels should be equal"
+
     for ker, set, dat in zip(kernels, setupfiles, datasets):
         t2plts = [0, 600, 1200, 1800, 2400]
         xlims = [10, 5000]
