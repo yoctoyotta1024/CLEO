@@ -184,7 +184,7 @@ def inputfiles(
         cmd.append("--save_figures")
         cmd.append(f"--savefigpath={savefigpath}")
     print(" ".join([str(c) for c in cmd]))
-    subprocess.run(cmd)
+    subprocess.run(cmd, check=True)
 
 
 def run_exectuable(path2kokkostools, path2build, config_filename, postproc_filename):
@@ -207,7 +207,7 @@ def run_exectuable(path2kokkostools, path2build, config_filename, postproc_filen
     executable = path2build / "examples" / "kokkostools" / "src" / "spdtest"
     cmd = [executable, config_filename]
     print(" ".join([str(c) for c in cmd]))
-    subprocess.run(cmd)
+    subprocess.run(cmd, check=True)
     profiler.postprocess(Path.cwd(), postproc_filename)
 
 

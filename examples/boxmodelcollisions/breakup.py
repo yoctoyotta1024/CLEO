@@ -162,7 +162,7 @@ def inputfiles(
         cmd.append("--save_figures")
         cmd.append(f"--savefigpath={savefigpath}")
     print(" ".join([str(c) for c in cmd]))
-    subprocess.run(cmd)
+    subprocess.run(cmd, check=True)
 
 
 def run_exectuable(executable, config_filename):
@@ -176,7 +176,7 @@ def run_exectuable(executable, config_filename):
     ### --- run exectuable with given config file --- ###
     cmd = [executable, config_filename]
     print(" ".join([str(c) for c in cmd]))
-    subprocess.run(cmd)
+    subprocess.run(cmd, check=True)
 
 
 def plot_results(path2CLEO, savefigpath, kernels, config_filenames):
@@ -209,7 +209,7 @@ def plot_results(path2CLEO, savefigpath, kernels, config_filenames):
     cmd += ["--setupfiles"] + setupfiles
     cmd += ["--datasets"] + datasets
     print(" ".join([str(c) for c in cmd]))
-    subprocess.run(cmd)
+    subprocess.run(cmd, check=True)
 
 
 # %%

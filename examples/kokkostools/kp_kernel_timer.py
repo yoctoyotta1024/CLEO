@@ -60,4 +60,4 @@ class KpKernelTimer:
             txt_filename_run = txt_filename.parent / txt_filename_run
             cmd = [str(self.kp_reader), str(datafile)]
             with open(txt_filename_run, "w") as wfile:
-                subprocess.run(cmd, stdout=wfile, stderr=subprocess.STDOUT)
+                subprocess.run(cmd, stdout=wfile, stderr=subprocess.STDOUT, check=True)

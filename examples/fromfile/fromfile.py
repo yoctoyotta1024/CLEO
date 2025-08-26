@@ -160,7 +160,7 @@ def inputfiles(
         cmd.append("--save_figures")
         cmd.append(f"--savefigpath={savefigpath}")
     print(" ".join([str(c) for c in cmd]))
-    subprocess.run(cmd)
+    subprocess.run(cmd, check=True)
 
 
 def run_exectuable(path2build, config_filename):
@@ -175,7 +175,7 @@ def run_exectuable(path2build, config_filename):
     executable = path2build / "examples" / "fromfile" / "src" / "fromfile"
     cmd = ["srun", f"--ntasks={ntasks}", executable, config_filename]
     print(" ".join([str(c) for c in cmd]))
-    subprocess.run(cmd)
+    subprocess.run(cmd, check=True)
 
 
 def plot_results(path2CLEO, config_filename, savefigpath):
@@ -201,7 +201,7 @@ def plot_results(path2CLEO, config_filename, savefigpath):
         f"--dataset={dataset}",
     ]
     print(" ".join([str(c) for c in cmd]))
-    subprocess.run(cmd)
+    subprocess.run(cmd, check=True)
 
 
 # %%

@@ -142,7 +142,7 @@ def inputfiles(
         cmd.append("--save_figures")
         cmd.append(f"--savefigpath={savefigpath}")
     print(" ".join([str(c) for c in cmd]))
-    subprocess.run(cmd)
+    subprocess.run(cmd, check=True)
 
 
 # %%
