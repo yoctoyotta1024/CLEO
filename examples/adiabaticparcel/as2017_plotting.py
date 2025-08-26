@@ -89,10 +89,7 @@ def displacement(time, w_avg, thalf):
 
 def get_results(path2CLEO, grid_filename, setupfile, dataset):
     """read in required data from given dataset and setupfile"""
-    import sys
-
-    sys.path.append(str(path2CLEO))  # imports from pySD
-    from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
+    from cleopy.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
 
     config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
     consts = pysetuptxt.get_consts(setupfile, isprint=True)

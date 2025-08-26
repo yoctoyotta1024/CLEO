@@ -12,22 +12,31 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-uses pySD module to create gridbox boundaries
+example of various ways to use cleopy module to create gridbox boundaries
 binary file for input to CLEO SDM
 """
 
-import sys
+import argparse
 import numpy as np
 from pathlib import Path
 
-sys.path.append(sys.argv[1])  # path to pySD (same as to CLEO)
-from pySD import geninitconds
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "path2CLEO", type=Path, help="Absolute path to CLEO directory (for cleopy)"
+)
+parser.add_argument("path2build", type=Path, help="Absolute path to build directory")
+parser.add_argument(
+    "config_filename", type=Path, help="Absolute path to configuration YAML file"
+)
+args = parser.parse_args()
+
+from cleopy import geninitconds
 
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### absolute or relative paths for build and CLEO directories
-path2CLEO = Path(sys.argv[1])
-path2build = Path(sys.argv[2])
-config_filename = Path(sys.argv[3])
+path2CLEO = args.path2CLEO
+path2build = args.path2build
+config_filename = args.config_filename
 
 # booleans for [showing, saving] initialisation figures
 isfigures = [True, True]
