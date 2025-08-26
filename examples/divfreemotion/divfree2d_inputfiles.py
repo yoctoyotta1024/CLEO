@@ -101,13 +101,9 @@ def main(
     isfigures = [
         False,
         True,
-    ]  # booleans for [showing, saving] initialisation figures # TODO(CB): move into args
-    savefigpath = (
-        path2build / "bin"
-    )  # directory for saving figures # TODO(CB): move into args
-    SDgbxs2plt = [
-        0
-    ]  # gbxindex of SDs to plot (nb. "all" can be very slow) # TODO(CB): move into args
+    ]  # booleans for [showing, saving] initialisation figures
+    savefigpath = path2build / "bin"  # directory for saving figures
+    SDgbxs2plt = [0]  # gbxindex of SDs to plot (nb. "all" can be very slow)
 
     ### --- settings for 2-D gridbox boundaries --- ###
     zgrid = [0, 1500, 50]  # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
