@@ -195,6 +195,11 @@ def run_exectuable(path2kokkostools, path2build, config_filename, postproc_filen
         config = yaml.load(file)
     Path(config["outputdata"]["setup_filename"]).unlink(missing_ok=True)
     shutil.rmtree(Path(config["outputdata"]["zarrbasedir"]), ignore_errors=True)
+    all_postproc_filenames = postproc_filename.parent.glob(
+        f"{postproc_filename.stem}*{postproc_filename.suffix}"
+    )
+    for file in all_postproc_filenames:
+        file.unlink(missing_ok=True)
 
     ### --- run exectuable with given config file --- ###
     os.chdir(path2build / "bin")
