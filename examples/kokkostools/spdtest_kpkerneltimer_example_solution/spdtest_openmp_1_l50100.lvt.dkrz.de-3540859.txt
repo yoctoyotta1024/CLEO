@@ -1,0 +1,140 @@
+ (Type)   Total Time, Call Count, Avg. Time per Call, %Total Time in Kernels, %Total Program Time
+-------------------------------------------------------------------------
+
+Regions:
+
+- runcleo
+ (REGION)   0.643084 1 0.643084 89.167938 34.657104
+- timestep
+ (REGION)   0.633776 1 0.633776 87.877340 34.155485
+- timestep_sdm
+ (REGION)   0.578216 121 0.004779 80.173523 31.161225
+- timestep_sdm_movement
+ (REGION)   0.458181 484 0.000947 63.529838 24.692286
+- sdm_movement_between_gridboxes
+ (REGION)   0.385220 404 0.000954 53.413290 20.760265
+- timestep_sdm_microphysics
+ (REGION)   0.118881 484 0.000246 16.483617 6.406725
+- sdm_movement_move_in_gridboxes
+ (REGION)   0.035270 404 0.000087 4.890387 1.900758
+- sdm_movement_effect_on_hydrometeor_states
+ (REGION)   0.033333 404 0.000083 4.621788 1.796361
+- init
+ (REGION)   0.009304 1 0.009304 1.290069 0.501414
+- init_supers
+ (REGION)   0.005392 1 0.005392 0.747647 0.290590
+- init_gbxs
+ (REGION)   0.003773 1 0.003773 0.523148 0.203333
+- sdm_movement_boundary_conditions
+ (REGION)   0.000172 404 0.000000 0.023868 0.009277
+- timestep_coupldyn
+ (REGION)   0.000025 121 0.000000 0.003438 0.001336
+
+-------------------------------------------------------------------------
+Kernels:
+
+- sdm_microphysics
+ (ParFor)   0.117831 484 0.000243 16.337995 6.350126
+- Kokkos::View::initialization [buffer] via memset
+ (ParFor)   0.065759 26 0.002529 9.117888 3.543870
+- counting_sort_oob
+ (ParFor)   0.059247 404 0.000147 8.215031 3.192955
+- Kokkos::ScatterView::ResetDuplicates [duplicated_counts]
+ (ParFor)   0.054404 406 0.000134 7.543550 2.931969
+- cumulative_sum
+ (ParScan)  0.053114 405 0.000131 7.364572 2.862405
+- Kokkos::ScatterView::ReduceDuplicates [duplicated_counts]
+ (ParFor)   0.050993 405 0.000126 7.070485 2.748102
+- reset_buffer
+ (ParFor)   0.047697 52 0.000917 6.613553 2.570505
+- counting_sort_gbxs
+ (ParFor)   0.036559 404 0.000090 5.069100 1.970219
+- set_gridboxes_refs
+ (ParFor)   0.034235 404 0.000085 4.746847 1.844968
+- increment_counts
+ (ParFor)   0.033956 405 0.000084 4.708268 1.829973
+- move_supers_in_gridboxes
+ (ParFor)   0.032929 404 0.000082 4.565886 1.774633
+- effect_on_hydrometeor_states
+ (ParFor)   0.032409 404 0.000080 4.493753 1.746597
+- Kokkos::fill_view_api_default
+ (ParFor)   0.025646 405 0.000063 3.555954 1.382101
+- find_domainrefs_cuda
+ (ParFor)   0.025408 405 0.000063 3.523028 1.369303
+- write_gridboxes_team
+ (ParFor)   0.017109 242 0.000071 2.372234 0.922021
+- write_supers
+ (ParFor)   0.009719 121 0.000080 1.347557 0.523758
+- write_gridboxes_range
+ (ParFor)   0.009359 121 0.000077 1.297738 0.504395
+- Kokkos::ViewFill-1D
+ (ParFor)   0.004996 62 0.000081 0.692771 0.269261
+- is_gbxinit_complete
+ (ParFor)   0.003349 1 0.003349 0.464337 0.180475
+- Kokkos::View::initialization [h_data] via memset
+ (ParFor)   0.002012 1551 0.000001 0.279045 0.108457
+- set_cartesian_maps
+ (ParFor)   0.001890 1 0.001890 0.262053 0.101853
+- Kokkos::Impl::BitsetCount::apply
+ (ParRed)   0.000823 11 0.000075 0.114150 0.044367
+- initialise_supers_on_host
+ (ParFor)   0.000489 1 0.000489 0.067803 0.026353
+- receive_dynamics
+ (ParFor)   0.000342 3 0.000114 0.047406 0.018425
+- initialise_gbxs_on_host
+ (ParFor)   0.000190 1 0.000190 0.026347 0.010241
+- Kokkos::View::initialization [totsupers] via memset
+ (ParFor)   0.000114 1 0.000114 0.015802 0.006142
+- Kokkos::View::initialization [domainref1] via memset
+ (ParFor)   0.000113 405 0.000000 0.015670 0.006090
+- counting_sort
+ (ParFor)   0.000093 1 0.000093 0.012893 0.005011
+- Kokkos::Impl::host_space_deepcopy_double
+ (ParFor)   0.000091 1 0.000091 0.012595 0.004895
+- IsSupersSorted
+ (ParRed)   0.000075 1 0.000075 0.010413 0.004047
+- collect_gbxs_data
+ (ParFor)   0.000071 1 0.000071 0.009851 0.003829
+- Kokkos::View::initialization [Kokkos::Random_XorShift64::state] via memset
+ (ParFor)   0.000042 1 0.000042 0.005851 0.002274
+- Kokkos::View::initialization [totsupers_tmp_mirror] via memset
+ (ParFor)   0.000033 1 0.000033 0.004562 0.001773
+- Kokkos::View::initialization [UnorderedMap - values] via memset
+ (ParFor)   0.000027 31 0.000001 0.003802 0.001478
+- Kokkos::View::initialization [totsupers_tmp] via memset
+ (ParFor)   0.000025 1 0.000025 0.003471 0.001349
+- Kokkos::View::initialization [UnorderedMap - keys] via memset
+ (ParFor)   0.000017 31 0.000001 0.002314 0.000899
+- Kokkos::View::initialization [UnorderedMap - scalars] via memset
+ (ParFor)   0.000009 31 0.000000 0.001256 0.000488
+- Kokkos::View::initialization [UnorderedMap - size] via memset
+ (ParFor)   0.000008 31 0.000000 0.001157 0.000450
+- Kokkos::View::initialization [gbxs] via memset
+ (ParFor)   0.000006 1 0.000006 0.000826 0.000321
+- Kokkos::View::initialization [UnorderedMap - bitset] via memset
+ (ParFor)   0.000005 31 0.000000 0.000661 0.000257
+- Kokkos::View::initialization [UnorderedMap scalars] via memset
+ (ParFor)   0.000004 9 0.000000 0.000595 0.000231
+- Kokkos::View::initialization [Kokkos::Random_XorShift64::locks] via memset
+ (ParFor)   0.000002 1 0.000002 0.000264 0.000103
+- Kokkos::View::initialization [Bitset] via memset
+ (ParFor)   0.000002 9 0.000000 0.000264 0.000103
+- Kokkos::View::initialization [cumlcounts] via memset
+ (ParFor)   0.000002 1 0.000002 0.000264 0.000103
+- Kokkos::View::initialization [counts] via memset
+ (ParFor)   0.000001 1 0.000001 0.000132 0.000051
+- Kokkos::View::initialization [DualView::modified_flags] via memset
+ (ParFor)   0.000000 1 0.000000 0.000000 0.000000
+- Kokkos::View::initialization [global_ndims] via memset
+ (ParFor)   0.000000 1 0.000000 0.000000 0.000000
+
+-------------------------------------------------------------------------
+Summary:
+
+Total Execution Time (incl. Kokkos + non-Kokkos):                   1.85556 seconds
+Total Time in Kokkos kernels:                                       0.72121 seconds
+   -> Time outside Kokkos kernels:                                  1.13436 seconds
+   -> Percentage in Kokkos kernels:                                   38.87 %
+Total Calls to Kokkos Kernels:                                         7720
+
+-------------------------------------------------------------------------
