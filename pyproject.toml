@@ -15,17 +15,14 @@ dependencies = [
   "awkward",
 	"numpy",
   "matplotlib",
-  "pathlib",
   "ruamel.yaml",
 	"scipy",
-  "typing",
   "xarray",
   "zarr",
 ]
 
 [project.optional-dependencies]
 examples = [
-  "argparse",
   "mpi4py",
 ]
 yac = [
