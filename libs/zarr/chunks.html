@@ -1,0 +1,677 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Dataset" href="dataset.html" /><link rel="prev" title="Buffer" href="buffer.html" />
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 -->
+        <title>Chunks - CLEO 0.38.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">CLEO 0.38.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  <span class="sidebar-brand-text">CLEO 0.38.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../intro/intro.html">Programming Guide</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Programming Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/background.html">Background to the Super-Droplet Model (SDM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/motivation.html">Motivation for CLEO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/memorylayout.html">Memory Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/timestepping.html">Timestepping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/coupling.html">Coupling to Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/monoids.html">Monoids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/kokkos.html">Kokkos Thread Parallelism</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/extern.html">External Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../cleopy/cleopy.html">API: cleopy CLEO Python Package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of API: cleopy CLEO Python Package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../cleopy/gbxboundariesbinary_src/gbxboundariesbinary_src.html">GbxBoundariesBinary</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of GbxBoundariesBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/gbxboundariesbinary_src/create_gbxboundaries.html">CREATE_GBXBOUNDARIES</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/gbxboundariesbinary_src/read_gbxboundaries.html">READ_GBXBOUNDARIES</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/initsuperdropsbinary_src.html">InitSuperdropsBinary</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of InitSuperdropsBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/create_initsuperdrops.html">CREATE_INITSUPERDROPS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/read_initsuperdrops.html">READ_INITSUPERDROPS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/attrsgen.html">ATTRSGEN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/crdgens.html">CRDGENS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/probdists.html">PROBDISTS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/rgens.html">RGENS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/dryrgens.html">DRYRGENS</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../cleopy/thermobinary_src/thermobinary_src.html">ThermoBinary</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of ThermoBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/create_thermodynamics.html">CREATE_THERMODYNAMICS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/read_thermodynamics.html">READ_THERMODYNAMICS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/thermodyngen.html">THERMODYNGEN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/thermogen.html">THERMOGEN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/windsgen.html">WINDSGEN</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../cleopy/sdmout_src/sdmout_src.html">SDMOut</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of SDMOut</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/pyzarr.html">PYZARR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/pysetuptxt.html">PYSETUPTXT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/pygbxsdat.html">PYGBXSDAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/timedata.html">TIMEDATA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/thermodata.html">THERMODATA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/massmoms.html">MASSMOMS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/thermoeqns.html">THERMOEQNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/superdrops.html">SUPERDROPS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleopy/cxx2py.html">CXX2PY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleopy/readconfigfile.html">READCONFIGFILE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleopy/editconfigfile.html">EDITCONFIGFILE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleopy/readbinary.html">READBINARY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleopy/writebinary.html">WRITEBINARY</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../libs.html">API: CLEO C++ Library</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of API: CLEO C++ Library</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../runcleo/runcleomod.html">RunCLEO Module</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/coupleddynamics.html">CoupledDynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/couplingcomms.html">CouplingComms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/creategbxs.html">Create Gridboxes Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/createsupers.html">Create Super-droplets Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/runcleo.html">RunCLEO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/sdmmethods.html">SDMMethods</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../superdrops/superdropsmod.html">Superdrops Module</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Superdrops Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../superdrops/collisions/collisionsmod.html">Collisions Module</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Collisions Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/collisions.html">Collisions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/collisionkinetics.html">Collision Kinetics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/coalescence.html">Coalescence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/coalbure.html">Coalescence-Breakup-Rebound</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/shuffle.html">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/urbg.html">Randomness Generation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/condensation.html">Condensation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/impliciteuler.html">Implicit Euler Method for Condensation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/kokkosaliases_sd.html">Super-Droplet Kokkos Aliases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/microphysical_process.html">Microphysical Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/state.html">State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/superdrop.html">Superdrop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/superdrop_ids.html">Superdrop IDs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/superdrop_attrs.html">Superdrop Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/terminalvelocity.html">Terminal Velocities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/thermodynamic_equations.html">Thermodynamic Equations</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="zarrmod.html">Zarr Module</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of Zarr Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="buffer.html">Buffer</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Chunks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dataset.html">Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fsstore.html">FSStore</a></li>
+<li class="toctree-l3"><a class="reference internal" href="store_accessor.html">StoreAccessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xarray_zarr_array.html">XarrayZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xarray_metadata.html">Xarray Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zarr_array.html">ZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zarr_metadata.html">Zarr Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zarr_group.html">ZarrGroup</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../observers/observersmod.html">Observers Module</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of Observers Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../observers/observers.html">Observers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/streamout_observer.html">StreamOut Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/consttstep_observer.html">Constant Time Step Observers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/write_to_dataset_observer.html">Template for Observer to Write To Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/parallel_write_data.html">Parallel Write Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/collect_data_for_dataset.html">Collect Data For Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/generic_collect_data.html">Generic Collect Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/time_observer.html">Time Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/gbxindex_observer.html">Gbxindex Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/superdrops_observer.html">Superdrops Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/nsupers_observer.html">Nsupers Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/totnsupers_observer.html">TotNsupers Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/state_observer.html">State Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/thermo_observer.html">Thermodynamics Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/windvel_observer.html">WindVel Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/massmoments_observer.html">Massmoments Observer</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../initialise/initialisemod.html">RunCLEO Module</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../initialise/initialconditions.html">InitialConditions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cleoconstants.html">CLEO Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kokkosaliases.html">Kokkos Aliases</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/ourdocs.html">Our Docs</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/yoctoyotta1024/CLEO.git">GitHub Repo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/good_coding.html">Good Coding Practices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/contact.html">Contact Us!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../../_sources/libs/zarr/chunks.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="chunks">
+<h1>Chunks<a class="headerlink" href="#chunks" title="Link to this heading">¶</a></h1>
+<p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/zarr/chunks.hpp&gt;</span></code>
+<a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/zarr/chunks.hpp">[source]</a></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv411vec_productRKNSt6vectorI6size_tEE">
+<span id="_CPPv311vec_productRKNSt6vectorI6size_tEE"></span><span id="_CPPv211vec_productRKNSt6vectorI6size_tEE"></span><span id="vec_product__std::vector:s:CR"></span><span class="target" id="chunks_8hpp_1a683cb83f732ea65d5256dabb5bb0cf08"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vec_product</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">vec</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411vec_productRKNSt6vectorI6size_tEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Calculates the product of all elements in a vector of size_t numbers. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>vec</strong> – The vector of size_t numbers. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The product of all the elements in the vector. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv411vec_productRKNSt6vectorI6size_tEEK6size_t">
+<span id="_CPPv311vec_productRKNSt6vectorI6size_tEEK6size_t"></span><span id="_CPPv211vec_productRKNSt6vectorI6size_tEEK6size_t"></span><span id="vec_product__std::vector:s:CR.sC"></span><span class="target" id="chunks_8hpp_1a63da95dad0e0e0bedb897e2401f8d6aa"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vec_product</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">vec</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">aa</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411vec_productRKNSt6vectorI6size_tEEK6size_t" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Calculates the product of elements in a vector of size_t numbers starting from the aa’th index of the vector. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vec</strong> – The vector of size_t numbers. </p></li>
+<li><p><strong>aa</strong> – The starting index from which to calculate the product. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The product of elements from the aa’th index in the vector. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv46Chunks">
+<span id="_CPPv36Chunks"></span><span id="_CPPv26Chunks"></span><span id="Chunks"></span><span class="target" id="classChunks"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Chunks</span></span></span><a class="headerlink" href="#_CPPv46Chunks" title="Link to this definition">¶</a><br /></dt>
+<dd><p>A class template for managing and writing chunks of an array. </p>
+<p>This class provides functionality for writing chunks of an array to a store. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6Chunks6ChunksERKNSt6vectorI6size_tEERKNSt6vectorI6size_tEE">
+<span id="_CPPv3N6Chunks6ChunksERKNSt6vectorI6size_tEERKNSt6vectorI6size_tEE"></span><span id="_CPPv2N6Chunks6ChunksERKNSt6vectorI6size_tEERKNSt6vectorI6size_tEE"></span><span id="Chunks::Chunks__std::vector:s:CR.std::vector:s:CR"></span><span class="target" id="classChunks_1a210973b0eb288d13fe03efa26fd9b136"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Chunks</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">chunkshape</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">reduced_arrayshape</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6Chunks6ChunksERKNSt6vectorI6size_tEERKNSt6vectorI6size_tEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Constructor for the <a class="reference internal" href="#classChunks"><span class="std std-ref">Chunks</span></a> class. </p>
+<p>Initializes the <a class="reference internal" href="#classChunks"><span class="std std-ref">Chunks</span></a> with the provided chunk shape and shape of reduced array. Reduced array shape is the shape of the array excluding its outermost (0th) dimension. The chunkshape along all the inner dimensions must be factor of the reduced array shape (completely divisible) to ensure good chunking.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>chunkshape</strong> – The shape of chunks along each dimension. </p></li>
+<li><p><strong>reduced_arrayshape</strong> – The shape of the reduced array along each dimension. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6Chunks14get_chunkshapeEv">
+<span id="_CPPv3NK6Chunks14get_chunkshapeEv"></span><span id="_CPPv2NK6Chunks14get_chunkshapeEv"></span><span id="Chunks::get_chunkshapeC"></span><span class="target" id="classChunks_1a5f2edd67686d4ac27e3da6f908e1e820"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_chunkshape</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6Chunks14get_chunkshapeEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Gets the shape of a chunk. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A vector containing the shape (number of data elements) of a chunk along each dimension. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6Chunks24get_reducedarray_nchunksEv">
+<span id="_CPPv3NK6Chunks24get_reducedarray_nchunksEv"></span><span id="_CPPv2NK6Chunks24get_reducedarray_nchunksEv"></span><span id="Chunks::get_reducedarray_nchunksC"></span><span class="target" id="classChunks_1a881306de317a10a0792014dfc7f0ced6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_reducedarray_nchunks</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6Chunks24get_reducedarray_nchunksEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Gets the number of chunks of the reduced array. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A vector containing the number of chunks of an array along its dimensions except for its outermost one. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6Chunks22get_reduced_arrayshapeEv">
+<span id="_CPPv3NK6Chunks22get_reduced_arrayshapeEv"></span><span id="_CPPv2NK6Chunks22get_reduced_arrayshapeEv"></span><span id="Chunks::get_reduced_arrayshapeC"></span><span class="target" id="classChunks_1af340ec99bfc1acab9de1f21ea8286ca6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_reduced_arrayshape</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6Chunks22get_reduced_arrayshapeEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Gets complete shape of the array excluding its outermost dimension. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A vector containing the shape (number of data elements) of the array when complete along all but its outermost dimension. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00ENK6Chunks11write_chunkE6size_tR5StoreKNSt11string_viewEK6size_tR6BufferI1TE">
+<span id="_CPPv3I00ENK6Chunks11write_chunkER5StoreKNSt11string_viewEK6size_tR6BufferI1TE"></span><span id="_CPPv2I00ENK6Chunks11write_chunkER5StoreKNSt11string_viewEK6size_tR6BufferI1TE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Store</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classChunks_1aa92955c7b2d5af6871a588ce6b7b1692"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_chunk</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00ENK6Chunks11write_chunkE6size_tR5StoreKNSt11string_viewEK6size_tR6BufferI1TE" title="Chunks::write_chunk::Store"><span class="n"><span class="pre">Store</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">store</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">chunk_num</span></span>, <a class="reference internal" href="buffer.html#_CPPv4I0E6Buffer" title="Buffer"><span class="n"><span class="pre">Buffer</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00ENK6Chunks11write_chunkE6size_tR5StoreKNSt11string_viewEK6size_tR6BufferI1TE" title="Chunks::write_chunk::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">buffer</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4I00ENK6Chunks11write_chunkE6size_tR5StoreKNSt11string_viewEK6size_tR6BufferI1TE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Writes a chunk to the store and increments the total number of chunks written. </p>
+<p>This function writes the data held in a buffer in the specified store to a chunk identified by “chunk_label” of an array called “name” given the number of chunks of the array already existing. After writing the chunk, the total number of chunks is incremented.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Store</strong> – The type of the store. </p></li>
+<li><p><strong>T</strong> – The type of the data elements stored in the buffer. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>store</strong> – Reference to the store where the chunk will be written. </p></li>
+<li><p><strong>name</strong> – Name of the array in the store where the chunk will be written. </p></li>
+<li><p><strong>chunk_num</strong> – The total number of chunks of the array already written. </p></li>
+<li><p><strong>buffer</strong> – The buffer containing the data to be written to the chunk. </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The updated total number of chunks after writing. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00ENK6Chunks11write_chunkE6size_tR5StoreKNSt11string_viewEK6size_tKN6BufferI1TE15subviewh_bufferE">
+<span id="_CPPv3I00ENK6Chunks11write_chunkER5StoreKNSt11string_viewEK6size_tKN6BufferI1TE15subviewh_bufferE"></span><span id="_CPPv2I00ENK6Chunks11write_chunkER5StoreKNSt11string_viewEK6size_tKN6BufferI1TE15subviewh_bufferE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Store</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classChunks_1ab176c678fa72a2802d8433cc1c5b53c7"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_chunk</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00ENK6Chunks11write_chunkE6size_tR5StoreKNSt11string_viewEK6size_tKN6BufferI1TE15subviewh_bufferE" title="Chunks::write_chunk::Store"><span class="n"><span class="pre">Store</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">store</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">chunk_num</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="buffer.html#_CPPv4I0E6Buffer" title="Buffer"><span class="n"><span class="pre">Buffer</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00ENK6Chunks11write_chunkE6size_tR5StoreKNSt11string_viewEK6size_tKN6BufferI1TE15subviewh_bufferE" title="Chunks::write_chunk::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">subviewh_buffer</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">h_data_chunk</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4I00ENK6Chunks11write_chunkE6size_tR5StoreKNSt11string_viewEK6size_tKN6BufferI1TE15subviewh_bufferE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Writes a chunk to the store and increments the total number of chunks written. </p>
+<p>This function writes the data stored in the Kokkos view (in host memory) in the specified store to a chunk identified by “chunk_label” of an array called “name” given the number of chunks of the array already existing. After writing the chunk, the total number of chunks is incremented.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Store</strong> – The type of the store. </p></li>
+<li><p><strong>T</strong> – The type of the data elements stored in the buffer. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>store</strong> – Reference to the store where the chunk will be written. </p></li>
+<li><p><strong>name</strong> – Name of the array in the store where the chunk will be written. </p></li>
+<li><p><strong>chunk_num</strong> – The total number of chunks of the array already written. </p></li>
+<li><p><strong>h_data_chunk</strong> – The view containing the data in host memory to be written to the chunk. </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The updated total number of chunks after writing. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00ENK6Chunks12write_chunksE6size_tR5StoreKNSt11string_viewEKN6BufferI1TE15subviewh_bufferEK6size_tK6size_tK6size_t">
+<span id="_CPPv3I00ENK6Chunks12write_chunksER5StoreKNSt11string_viewEKN6BufferI1TE15subviewh_bufferEK6size_tK6size_tK6size_t"></span><span id="_CPPv2I00ENK6Chunks12write_chunksER5StoreKNSt11string_viewEKN6BufferI1TE15subviewh_bufferEK6size_tK6size_tK6size_t"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Store</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classChunks_1af61c48669496c9bf54eef9f4fb3093db"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_chunks</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00ENK6Chunks12write_chunksE6size_tR5StoreKNSt11string_viewEKN6BufferI1TE15subviewh_bufferEK6size_tK6size_tK6size_t" title="Chunks::write_chunks::Store"><span class="n"><span class="pre">Store</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">store</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="buffer.html#_CPPv4I0E6Buffer" title="Buffer"><span class="n"><span class="pre">Buffer</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00ENK6Chunks12write_chunksE6size_tR5StoreKNSt11string_viewEKN6BufferI1TE15subviewh_bufferEK6size_tK6size_tK6size_t" title="Chunks::write_chunks::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">subviewh_buffer</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">h_data</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">totnchunks</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">chunksize</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">nchunks</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4I00ENK6Chunks12write_chunksE6size_tR5StoreKNSt11string_viewEKN6BufferI1TE15subviewh_bufferEK6size_tK6size_tK6size_t" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Writes multiple chunks to the store and increments the total number of chunks written. </p>
+<p>This function writes “nchunks” whole number of chunks from the data stored in the Kokkos view (in host memory) in an array called “name” in the specified store given the total number of chunks of the array already existing.After writing all the chunks, the total number of chunks is updated accordingly.</p>
+<p>TODO(ALL) parallelise this for loop for writing chunks</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Store</strong> – The type of the store. </p></li>
+<li><p><strong>T</strong> – The type of the data elements stored in the buffer. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>store</strong> – Reference to the store where the chunks will be written. </p></li>
+<li><p><strong>name</strong> – Name of the array in the store where the chunks will be written. </p></li>
+<li><p><strong>h_data</strong> – The view containing the data in host memory to be written to the chunks. </p></li>
+<li><p><strong>totnchunks</strong> – The total number of chunks of the array already written. </p></li>
+<li><p><strong>chunksize</strong> – The size of each chunk. </p></li>
+<li><p><strong>nchunks</strong> – The number of chunks to write. </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The updated total number of chunks after writing. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-functions">Private Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6Chunks11chunk_labelEK6size_t">
+<span id="_CPPv3NK6Chunks11chunk_labelEK6size_t"></span><span id="_CPPv2NK6Chunks11chunk_labelEK6size_t"></span><span id="Chunks::chunk_label__sCC"></span><span class="target" id="classChunks_1ac61ce9b86267c7ae9770edcb67a8ea1e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">chunk_label</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">chunk_num</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6Chunks11chunk_labelEK6size_t" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Create label for a chunk given current number of chunks written to array. </p>
+<p>This function creates a vector of integers for the number of a chunk along each dimension of an array given the chunk is the n’th chunk to be written to the store (starting at n=0 and incrementing along the innermost dimensions first). The vector is then converted into a string which can be used to label the chunk.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>chunk_num</strong> – The number of the chunk to write to the array. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A string representing the label of the current chunk to write. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N6Chunks10chunkshapeE">
+<span id="_CPPv3N6Chunks10chunkshapeE"></span><span id="_CPPv2N6Chunks10chunkshapeE"></span><span id="Chunks::chunkshape__std::vector:s:"></span><span class="target" id="classChunks_1a76646024239230396d6f385ff9b9887a"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">chunkshape</span></span></span><a class="headerlink" href="#_CPPv4N6Chunks10chunkshapeE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Shape of chunks along each dimension (constant) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N6Chunks20reducedarray_nchunksE">
+<span id="_CPPv3N6Chunks20reducedarray_nchunksE"></span><span id="_CPPv2N6Chunks20reducedarray_nchunksE"></span><span id="Chunks::reducedarray_nchunks__std::vector:s:"></span><span class="target" id="classChunks_1a29bd9b664b3f0ad92e8f8b24bf3e869c"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reducedarray_nchunks</span></span></span><a class="headerlink" href="#_CPPv4N6Chunks20reducedarray_nchunksE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Number chunks of array along all but outermost dimension of array (constant) </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="dataset.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Dataset</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="buffer.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Buffer</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; (2023) MPI-M, Clara Bayley
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 27 August 2025</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Chunks</a><ul>
+<li><a class="reference internal" href="#_CPPv411vec_productRKNSt6vectorI6size_tEE"><code class="docutils literal notranslate"><span class="pre">vec_product()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv411vec_productRKNSt6vectorI6size_tEEK6size_t"><code class="docutils literal notranslate"><span class="pre">vec_product()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv46Chunks"><code class="docutils literal notranslate"><span class="pre">Chunks</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N6Chunks6ChunksERKNSt6vectorI6size_tEERKNSt6vectorI6size_tEE"><code class="docutils literal notranslate"><span class="pre">Chunks()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6Chunks14get_chunkshapeEv"><code class="docutils literal notranslate"><span class="pre">get_chunkshape()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6Chunks24get_reducedarray_nchunksEv"><code class="docutils literal notranslate"><span class="pre">get_reducedarray_nchunks()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6Chunks22get_reduced_arrayshapeEv"><code class="docutils literal notranslate"><span class="pre">get_reduced_arrayshape()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I00ENK6Chunks11write_chunkE6size_tR5StoreKNSt11string_viewEK6size_tR6BufferI1TE"><code class="docutils literal notranslate"><span class="pre">write_chunk()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I00ENK6Chunks11write_chunkE6size_tR5StoreKNSt11string_viewEK6size_tKN6BufferI1TE15subviewh_bufferE"><code class="docutils literal notranslate"><span class="pre">write_chunk()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I00ENK6Chunks12write_chunksE6size_tR5StoreKNSt11string_viewEKN6BufferI1TE15subviewh_bufferEK6size_tK6size_tK6size_t"><code class="docutils literal notranslate"><span class="pre">write_chunks()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK6Chunks11chunk_labelEK6size_t"><code class="docutils literal notranslate"><span class="pre">chunk_label()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6Chunks10chunkshapeE"><code class="docutils literal notranslate"><span class="pre">chunkshape</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6Chunks20reducedarray_nchunksE"><code class="docutils literal notranslate"><span class="pre">reducedarray_nchunks</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=9fa2033d"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    </body>
+</html>

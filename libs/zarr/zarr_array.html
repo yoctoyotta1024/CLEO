@@ -1,0 +1,732 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Zarr Metadata" href="zarr_metadata.html" /><link rel="prev" title="Xarray Metadata" href="xarray_metadata.html" />
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 -->
+        <title>ZarrArray - CLEO 0.38.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">CLEO 0.38.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  <span class="sidebar-brand-text">CLEO 0.38.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../intro/intro.html">Programming Guide</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Programming Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/background.html">Background to the Super-Droplet Model (SDM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/motivation.html">Motivation for CLEO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/memorylayout.html">Memory Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/timestepping.html">Timestepping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/coupling.html">Coupling to Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/monoids.html">Monoids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/kokkos.html">Kokkos Thread Parallelism</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/extern.html">External Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../cleopy/cleopy.html">API: cleopy CLEO Python Package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of API: cleopy CLEO Python Package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../cleopy/gbxboundariesbinary_src/gbxboundariesbinary_src.html">GbxBoundariesBinary</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of GbxBoundariesBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/gbxboundariesbinary_src/create_gbxboundaries.html">CREATE_GBXBOUNDARIES</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/gbxboundariesbinary_src/read_gbxboundaries.html">READ_GBXBOUNDARIES</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/initsuperdropsbinary_src.html">InitSuperdropsBinary</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of InitSuperdropsBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/create_initsuperdrops.html">CREATE_INITSUPERDROPS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/read_initsuperdrops.html">READ_INITSUPERDROPS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/attrsgen.html">ATTRSGEN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/crdgens.html">CRDGENS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/probdists.html">PROBDISTS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/rgens.html">RGENS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/dryrgens.html">DRYRGENS</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../cleopy/thermobinary_src/thermobinary_src.html">ThermoBinary</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of ThermoBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/create_thermodynamics.html">CREATE_THERMODYNAMICS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/read_thermodynamics.html">READ_THERMODYNAMICS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/thermodyngen.html">THERMODYNGEN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/thermogen.html">THERMOGEN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/windsgen.html">WINDSGEN</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../cleopy/sdmout_src/sdmout_src.html">SDMOut</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of SDMOut</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/pyzarr.html">PYZARR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/pysetuptxt.html">PYSETUPTXT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/pygbxsdat.html">PYGBXSDAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/timedata.html">TIMEDATA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/thermodata.html">THERMODATA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/massmoms.html">MASSMOMS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/thermoeqns.html">THERMOEQNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/superdrops.html">SUPERDROPS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleopy/cxx2py.html">CXX2PY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleopy/readconfigfile.html">READCONFIGFILE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleopy/editconfigfile.html">EDITCONFIGFILE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleopy/readbinary.html">READBINARY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleopy/writebinary.html">WRITEBINARY</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../libs.html">API: CLEO C++ Library</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of API: CLEO C++ Library</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../runcleo/runcleomod.html">RunCLEO Module</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/coupleddynamics.html">CoupledDynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/couplingcomms.html">CouplingComms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/creategbxs.html">Create Gridboxes Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/createsupers.html">Create Super-droplets Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/runcleo.html">RunCLEO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/sdmmethods.html">SDMMethods</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../superdrops/superdropsmod.html">Superdrops Module</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Superdrops Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../superdrops/collisions/collisionsmod.html">Collisions Module</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Collisions Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/collisions.html">Collisions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/collisionkinetics.html">Collision Kinetics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/coalescence.html">Coalescence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/coalbure.html">Coalescence-Breakup-Rebound</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/shuffle.html">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/urbg.html">Randomness Generation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/condensation.html">Condensation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/impliciteuler.html">Implicit Euler Method for Condensation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/kokkosaliases_sd.html">Super-Droplet Kokkos Aliases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/microphysical_process.html">Microphysical Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/state.html">State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/superdrop.html">Superdrop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/superdrop_ids.html">Superdrop IDs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/superdrop_attrs.html">Superdrop Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/terminalvelocity.html">Terminal Velocities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/thermodynamic_equations.html">Thermodynamic Equations</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="zarrmod.html">Zarr Module</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of Zarr Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="buffer.html">Buffer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="chunks.html">Chunks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dataset.html">Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fsstore.html">FSStore</a></li>
+<li class="toctree-l3"><a class="reference internal" href="store_accessor.html">StoreAccessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xarray_zarr_array.html">XarrayZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="xarray_metadata.html">Xarray Metadata</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">ZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zarr_metadata.html">Zarr Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="zarr_group.html">ZarrGroup</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../observers/observersmod.html">Observers Module</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of Observers Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../observers/observers.html">Observers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/streamout_observer.html">StreamOut Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/consttstep_observer.html">Constant Time Step Observers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/write_to_dataset_observer.html">Template for Observer to Write To Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/parallel_write_data.html">Parallel Write Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/collect_data_for_dataset.html">Collect Data For Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/generic_collect_data.html">Generic Collect Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/time_observer.html">Time Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/gbxindex_observer.html">Gbxindex Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/superdrops_observer.html">Superdrops Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/nsupers_observer.html">Nsupers Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/totnsupers_observer.html">TotNsupers Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/state_observer.html">State Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/thermo_observer.html">Thermodynamics Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/windvel_observer.html">WindVel Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/massmoments_observer.html">Massmoments Observer</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../initialise/initialisemod.html">RunCLEO Module</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../initialise/initialconditions.html">InitialConditions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cleoconstants.html">CLEO Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kokkosaliases.html">Kokkos Aliases</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/ourdocs.html">Our Docs</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/yoctoyotta1024/CLEO.git">GitHub Repo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/good_coding.html">Good Coding Practices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/contact.html">Contact Us!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../../_sources/libs/zarr/zarr_array.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="zarrarray">
+<h1>ZarrArray<a class="headerlink" href="#zarrarray" title="Link to this heading">¶</a></h1>
+<p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/zarr/zarr_array.hpp&gt;</span></code>
+<a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/zarr/zarr_array.hpp">[source]</a></p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv416good2DchunkshapeK6size_tK6size_t">
+<span id="_CPPv316good2DchunkshapeK6size_tK6size_t"></span><span id="_CPPv216good2DchunkshapeK6size_tK6size_t"></span><span id="good2Dchunkshape__sC.sC"></span><span class="target" id="zarr__array_8hpp_1a98e792394466fa97ad3d12b1aaf97949"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">good2Dchunkshape</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">maxchunk</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">dim1size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416good2DchunkshapeK6size_tK6size_t" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Given maximum chunk size ‘maxchunk’ and length of inner dimension of one chunk of array ‘dim1size’, function returns the largest possible chunk shape that has the length of its inner dimension = dim1size. </p>
+<p>dim1size must also be &lt;= maxchunk and to ensure good chunking, dim1size should itself be completely divisible by the final length of the inner dimension of the 2-D array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>maxchunk</strong> – The maximum chunk size (maximum number of elements in chunk). </p></li>
+<li><p><strong>dim1size</strong> – The length of (number of elements along) the inner dimension of one chunk. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>std::vector&lt;size_t&gt; The largest possible 2-D chunk shape. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0E17write_zarray_jsonvR5StoreNSt11string_viewENSt11string_viewE">
+<span id="_CPPv3I0E17write_zarray_jsonR5StoreNSt11string_viewENSt11string_viewE"></span><span id="_CPPv2I0E17write_zarray_jsonR5StoreNSt11string_viewENSt11string_viewE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Store</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="zarr__array_8hpp_1a565adf2ac22221a3b650019443d1cae5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_zarray_json</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0E17write_zarray_jsonvR5StoreNSt11string_viewENSt11string_viewE" title="write_zarray_json::Store"><span class="n"><span class="pre">Store</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">store</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">name</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">metadata</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0E17write_zarray_jsonvR5StoreNSt11string_viewENSt11string_viewE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Write metadata string to a store under a .zarray key. </p>
+<p>write metadata under .zarray key in store for an array called ‘name’. The key and metadata could be anything, but for example .zarray could be a json file in a file system store (see <a class="reference internal" href="fsstore.html#classFSStore"><span class="std std-ref">FSStore</span></a>) for the metadata which must exist in order to decode chunks of an array according to Zarr storage specification version 2 (<a class="reference external" href="https://zarr.readthedocs.io/en/stable/spec/v2.html">https://zarr.readthedocs.io/en/stable/spec/v2.html</a>),</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Store</strong> – The type of the store object where the metadata will be written. </p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>store</strong> – The store object where the metadata will be written. </p></li>
+<li><p><strong>name</strong> – The name under which the .zarray key will be stored in the store. </p></li>
+<li><p><strong>metadata</strong> – The metadata to write for the .zarray key. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4I00E9ZarrArray">
+<span id="_CPPv3I00E9ZarrArray"></span><span id="_CPPv2I00E9ZarrArray"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Store</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">T</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="classZarrArray"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZarrArray</span></span></span><a class="headerlink" href="#_CPPv4I00E9ZarrArray" title="Link to this definition">¶</a><br /></dt>
+<dd><p>A template class representing a Zarr array. </p>
+<p>This class provides functionality to write an array to a specified store via a buffer according to the Zarr storage specification version 2 (<a class="reference external" href="https://zarr.readthedocs.io/en/stable/spec/v2.html">https://zarr.readthedocs.io/en/stable/spec/v2.html</a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Store</strong> – The type of store where the array will be stored. </p></li>
+<li><p><strong>T</strong> – The data type stored in the arrays. </p></li>
+</ul>
+</dd>
+</dl>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArray9ZarrArrayER5StoreKNSt11string_viewERKNSt6vectorI6size_tEEKbRKNSt6vectorI6size_tEE">
+<span id="_CPPv3N9ZarrArray9ZarrArrayER5StoreKNSt11string_viewERKNSt6vectorI6size_tEEKbRKNSt6vectorI6size_tEE"></span><span id="_CPPv2N9ZarrArray9ZarrArrayER5StoreKNSt11string_viewERKNSt6vectorI6size_tEEKbRKNSt6vectorI6size_tEE"></span><span id="ZarrArray::ZarrArray__StoreR.std::string_viewC.std::vector:s:CR.bC.std::vector:s:CR"></span><span class="target" id="classZarrArray_1a5eae8a2e511785dc9aa5b6710d643dd6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ZarrArray</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I00E9ZarrArray" title="ZarrArray::Store"><span class="n"><span class="pre">Store</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">store</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">name</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">chunkshape</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">is_backend</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">reduced_arrayshape</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">{</span></span><span class="p"><span class="pre">}</span></span><span class="p"><span class="pre">)</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9ZarrArray9ZarrArrayER5StoreKNSt11string_viewERKNSt6vectorI6size_tEEKbRKNSt6vectorI6size_tEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Constructs a <a class="reference internal" href="#classZarrArray"><span class="std std-ref">ZarrArray</span></a> object. </p>
+<p>Initializes an empty Zarr array in the provided store in order to writes chunks of an array to the store via a buffer. The assertions in this constructor ensure chunks have the same number of dimensions for the array. The buffer is the size of exactly 1 chunk, and chunks’ shape is restricted such that the final array dimensions are exactly integer multiples of its chunks along all but the outermost (0th) dimension of the array. Order of data written to chunks is assumed to increment along innermost dimensions first.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>store</strong> – The store where the array will be stored. </p></li>
+<li><p><strong>name</strong> – The name of the array. </p></li>
+<li><p><strong>chunkshape</strong> – The shape of individual data chunks along each dimension. </p></li>
+<li><p><strong>is_backend</strong> – boolean is true if zarr array is a backend of something else e.g. xarray. </p></li>
+<li><p><strong>reduced_arrayshape</strong> – The shape of the array along all but the outermost (0th) dimension. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArrayD0Ev">
+<span id="_CPPv3N9ZarrArrayD0Ev"></span><span id="_CPPv2N9ZarrArrayD0Ev"></span><span id="ZarrArray::~ZarrArray"></span><span class="target" id="classZarrArray_1a4a2ac09a8128f9b25ef0f1a2353174e9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">~ZarrArray</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9ZarrArrayD0Ev" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Destroys the <a class="reference internal" href="#classZarrArray"><span class="std std-ref">ZarrArray</span></a> object. </p>
+<p>Writes the buffer to a chunk of the array in the store if it isn’t empty and issues a warning if the data in buffer mismatches the array’s expected dimensions. If the array is not a backend (e.g. of an array in an xarray or NetCDF dataset), then the metadata for the array’s shape is also updated and warnings are issued if the array is incomplete. </p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArray14get_totnchunksEv">
+<span id="_CPPv3N9ZarrArray14get_totnchunksEv"></span><span id="_CPPv2N9ZarrArray14get_totnchunksEv"></span><span id="ZarrArray::get_totnchunks"></span><span class="target" id="classZarrArray_1aef64a39834d866170baa5d43fa20d77c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_totnchunks</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9ZarrArray14get_totnchunksEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Get the total number of chunks currently written to array in store. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The total number of chunks. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArray14get_totalndataEv">
+<span id="_CPPv3N9ZarrArray14get_totalndataEv"></span><span id="_CPPv2N9ZarrArray14get_totalndataEv"></span><span id="ZarrArray::get_totalndata"></span><span class="target" id="classZarrArray_1a48797d6c52e374b6d70587ac618fce8e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_totalndata</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9ZarrArray14get_totalndataEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Get the total number of data elements currently written to array in store and in buffer. </p>
+<p>Includes data in buffer, so not equal to totndata</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The total number of data elements. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArray16write_arrayshapeERKNSt6vectorI6size_tEE">
+<span id="_CPPv3N9ZarrArray16write_arrayshapeERKNSt6vectorI6size_tEE"></span><span id="_CPPv2N9ZarrArray16write_arrayshapeERKNSt6vectorI6size_tEE"></span><span id="ZarrArray::write_arrayshape__std::vector:s:CR"></span><span class="target" id="classZarrArray_1a9b35096ab3e7b4e55be8d143ed677b76"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_arrayshape</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">arrayshape</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9ZarrArray16write_arrayshapeERKNSt6vectorI6size_tEE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Write the array shape to the store. </p>
+<p>This function writes the given array shape to the store as part of the metadata in the Zarr .zarray json file. Function also asserts that the number of dimensions of the given arrayshape is consitent with number of dimensions provided by the shape of each chunk.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>arrayshape</strong> – The array shape to be written.</p>
+</dd>
+<dt class="field-even">Pre<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of dimensions of the provided array shape must be equal to that of the chunk shape. Otherwise, an assertion error is triggered. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArray19write_to_zarr_arrayEK12viewh_buffer">
+<span id="_CPPv3N9ZarrArray19write_to_zarr_arrayEK12viewh_buffer"></span><span id="_CPPv2N9ZarrArray19write_to_zarr_arrayEK12viewh_buffer"></span><span id="ZarrArray::write_to_zarr_array__viewh_bufferC"></span><span class="target" id="classZarrArray_1abda648bf34dbdad2e37af47cdbc1d205"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_to_zarr_array</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N9ZarrArray12viewh_bufferE" title="ZarrArray::viewh_buffer"><span class="n"><span class="pre">viewh_buffer</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">h_data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9ZarrArray19write_to_zarr_arrayEK12viewh_buffer" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Writes data from Kokkos view in host memory to chunks of a Zarr array in a store via a buffer and keep metadata in zarray .json file up-to-date with written chunks. </p>
+<p>First copies some data from the view to a buffer (until number of elements in buffer = chunksize). Second writes any whole chunks of the array into a store. Thirdly updates the .zarray json file for the Zarr metadata about the shape of the array accordingly. Finally copies any leftover data, number of elements &lt; chunksize, into the buffer. Assertion checks there is no remainng data unattended to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>h_data</strong> – The data in a Kokkos view in host memory which should be written to the array in a store. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArray14write_to_arrayEK12viewh_buffer">
+<span id="_CPPv3N9ZarrArray14write_to_arrayEK12viewh_buffer"></span><span id="_CPPv2N9ZarrArray14write_to_arrayEK12viewh_buffer"></span><span id="ZarrArray::write_to_array__viewh_bufferC"></span><span class="target" id="classZarrArray_1aba9788fbf6ea96309e5064927b9c6614"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_to_array</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N9ZarrArray12viewh_bufferE" title="ZarrArray::viewh_buffer"><span class="n"><span class="pre">viewh_buffer</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">h_data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9ZarrArray14write_to_arrayEK12viewh_buffer" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Writes data from Kokkos view in host memory to chunks of Zarr array in a store via a buffer. Function does <em>not</em> write metadata to zarray .json file. </p>
+<p>First copies some data from the view to a buffer (until number of elements in buffer = chunksize), then writes any whole chunks of the array into a store. Finally copies any leftover data, number of elements &lt; chunksize, into the buffer. Assertion checks there is no remainng data unattended to. Function useful when using zarr array as backend of a dataset and/or you do not want to write metadata for the array when writing data elements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>h_data</strong> – The data in a Kokkos view in host memory which should be written to the array in a store. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArray14write_to_arrayEK1T">
+<span id="_CPPv3N9ZarrArray14write_to_arrayEK1T"></span><span id="_CPPv2N9ZarrArray14write_to_arrayEK1T"></span><span id="ZarrArray::write_to_array__TC"></span><span class="target" id="classZarrArray_1af188a2bea5089f28987975f4f7da9905"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_to_array</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00E9ZarrArray" title="ZarrArray::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9ZarrArray14write_to_arrayEK1T" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Writes 1 element of data to a Zarr array (writing to the store in chunks via a buffer). Function does <em>not</em> write metadata to zarray .json file. </p>
+<p>First copies data element from the view to a buffer (until number of elements in buffer = chunksize), then writes whole chunk of the array into the store. Function useful when using zarr array as backend of a dataset and/or you do not want to write metadata for the array when writing data elements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>data</strong> – The data element which should be written to the array in a store. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-types">Private Types</p>
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArray12viewh_bufferE">
+<span id="_CPPv3N9ZarrArray12viewh_bufferE"></span><span id="_CPPv2N9ZarrArray12viewh_bufferE"></span><span class="target" id="classZarrArray_1a085c2b549205db2607f2d3fdccc518c0"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">viewh_buffer</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="buffer.html#_CPPv4I0E6Buffer" title="Buffer"><span class="n"><span class="pre">Buffer</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00E9ZarrArray" title="ZarrArray::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">viewh_buffer</span></span><a class="headerlink" href="#_CPPv4N9ZarrArray12viewh_bufferE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp type">
+<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArray15subviewh_bufferE">
+<span id="_CPPv3N9ZarrArray15subviewh_bufferE"></span><span id="_CPPv2N9ZarrArray15subviewh_bufferE"></span><span class="target" id="classZarrArray_1acd21e84fec8432cb338846c125fad438"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">subviewh_buffer</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="buffer.html#_CPPv4I0E6Buffer" title="Buffer"><span class="n"><span class="pre">Buffer</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00E9ZarrArray" title="ZarrArray::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">subviewh_buffer</span></span><a class="headerlink" href="#_CPPv4N9ZarrArray15subviewh_bufferE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-functions">Private Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9ZarrArray14get_arrayshapeEv">
+<span id="_CPPv3NK9ZarrArray14get_arrayshapeEv"></span><span id="_CPPv2NK9ZarrArray14get_arrayshapeEv"></span><span id="ZarrArray::get_arrayshapeC"></span><span class="target" id="classZarrArray_1af9ce874ef7144ce6579a1af81c815d2e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_arrayshape</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9ZarrArray14get_arrayshapeEv" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Get the shape of the array based on the number of data elements and chunks written in the store. </p>
+<p>This method assumes that writing of chunks always fills inner dimensions first. The array shape returned is always at least large enough to display all the elements of data in the array so far along each dimension (i.e., arraysize &gt;= totndata along each dimension of the array).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A vector representing the shape of the array. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArray21write_chunks_to_storeEK15subviewh_buffer">
+<span id="_CPPv3N9ZarrArray21write_chunks_to_storeEK15subviewh_buffer"></span><span id="_CPPv2N9ZarrArray21write_chunks_to_storeEK15subviewh_buffer"></span><span id="ZarrArray::write_chunks_to_store__subviewh_bufferC"></span><span class="target" id="classZarrArray_1a13f74cc23f6fe857e5490652fb2fe0af"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N9ZarrArray15subviewh_bufferE" title="ZarrArray::subviewh_buffer"><span class="n"><span class="pre">subviewh_buffer</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">write_chunks_to_store</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N9ZarrArray15subviewh_bufferE" title="ZarrArray::subviewh_buffer"><span class="n"><span class="pre">subviewh_buffer</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">h_data</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9ZarrArray21write_chunks_to_storeEK15subviewh_buffer" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Writes chunks of data from a kokkos view in host memory to the Zarr array in a store. </p>
+<p>First writes the buffer to a chunk of the array if it’s full. Then writes whole chunks directly from the Kokkos view if the view contains enough elements for whole chunk(s) to be written. Then updates the shape of the array along its outermost dimension with the accumulated change in shape of the array due to the chunks that have been written. Finally returns a (sub)view of the remaining data not written to a chunk (number of elements in subview &lt; chunksize). Note that this function does not ensure the .zarray json file metadata is kept up-to-date with changes to the arrayshape that may occur due to the increase in number of elements of data written to the array during this function call.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>h_data</strong> – Kokkos view of the data to write to the store in host memory. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The remaining data that was not written to chunks. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArray5storeE">
+<span id="_CPPv3N9ZarrArray5storeE"></span><span id="_CPPv2N9ZarrArray5storeE"></span><span id="ZarrArray::store__StoreR"></span><span class="target" id="classZarrArray_1ad505ae530de309e8f68cfe1f25f7b23e"></span><a class="reference internal" href="#_CPPv4I00E9ZarrArray" title="ZarrArray::Store"><span class="n"><span class="pre">Store</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">store</span></span></span><a class="headerlink" href="#_CPPv4N9ZarrArray5storeE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>store in which to write Zarr array </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArray4nameE">
+<span id="_CPPv3N9ZarrArray4nameE"></span><span id="_CPPv2N9ZarrArray4nameE"></span><span id="ZarrArray::name__std::string_view"></span><span class="target" id="classZarrArray_1abc967274707ed293a56b8d814070c749"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string_view</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><a class="headerlink" href="#_CPPv4N9ZarrArray4nameE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Name of array to write in store. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArray10totnchunksE">
+<span id="_CPPv3N9ZarrArray10totnchunksE"></span><span id="_CPPv2N9ZarrArray10totnchunksE"></span><span id="ZarrArray::totnchunks__s"></span><span class="target" id="classZarrArray_1a525fc0c7f07aaaab0b41f44b30478b75"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">totnchunks</span></span></span><a class="headerlink" href="#_CPPv4N9ZarrArray10totnchunksE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Total number of chunks of array written to store. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArray8totndataE">
+<span id="_CPPv3N9ZarrArray8totndataE"></span><span id="_CPPv2N9ZarrArray8totndataE"></span><span id="ZarrArray::totndata__s"></span><span class="target" id="classZarrArray_1a37c0379e3c521c5794dc3d99ff55fc79"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">totndata</span></span></span><a class="headerlink" href="#_CPPv4N9ZarrArray8totndataE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Total number of elements of data in array written to store. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArray6chunksE">
+<span id="_CPPv3N9ZarrArray6chunksE"></span><span id="_CPPv2N9ZarrArray6chunksE"></span><span id="ZarrArray::chunks__Chunks"></span><span class="target" id="classZarrArray_1a72a773b28a0aaea38e1e13debdeb95c1"></span><a class="reference internal" href="chunks.html#_CPPv46Chunks" title="Chunks"><span class="n"><span class="pre">Chunks</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">chunks</span></span></span><a class="headerlink" href="#_CPPv4N9ZarrArray6chunksE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Method to write chunks of array in store. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArray6bufferE">
+<span id="_CPPv3N9ZarrArray6bufferE"></span><span id="_CPPv2N9ZarrArray6bufferE"></span><span id="ZarrArray::buffer__Buffer:T:"></span><span class="target" id="classZarrArray_1a7aabb936f3fad9c6b9aa4df3a2a6ee9c"></span><a class="reference internal" href="buffer.html#_CPPv4I0E6Buffer" title="Buffer"><span class="n"><span class="pre">Buffer</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00E9ZarrArray" title="ZarrArray::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">buffer</span></span></span><a class="headerlink" href="#_CPPv4N9ZarrArray6bufferE" title="Link to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="buffer.html#structBuffer"><span class="std std-ref">Buffer</span></a> to hold data before writing chunks to store. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArray13zarr_metadataE">
+<span id="_CPPv3N9ZarrArray13zarr_metadataE"></span><span id="_CPPv2N9ZarrArray13zarr_metadataE"></span><span id="ZarrArray::zarr_metadata__ZarrMetadata:T:"></span><span class="target" id="classZarrArray_1ad26d76fcd66798b43e4bfa11054c8556"></span><a class="reference internal" href="zarr_metadata.html#_CPPv4I0E12ZarrMetadata" title="ZarrMetadata"><span class="n"><span class="pre">ZarrMetadata</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00E9ZarrArray" title="ZarrArray::T"><span class="n"><span class="pre">T</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">zarr_metadata</span></span></span><a class="headerlink" href="#_CPPv4N9ZarrArray13zarr_metadataE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Metadata required for zarr array excluding array’s shape </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9ZarrArray10is_backendE">
+<span id="_CPPv3N9ZarrArray10is_backendE"></span><span id="_CPPv2N9ZarrArray10is_backendE"></span><span id="ZarrArray::is_backend__b"></span><span class="target" id="classZarrArray_1a759ad6693cb05cc4d3a3f5f6b5b8846a"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_backend</span></span></span><a class="headerlink" href="#_CPPv4N9ZarrArray10is_backendE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>true if zarr array is a backend of something else e.g. xarray </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="zarr_metadata.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Zarr Metadata</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="xarray_metadata.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Xarray Metadata</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; (2023) MPI-M, Clara Bayley
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 27 August 2025</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">ZarrArray</a><ul>
+<li><a class="reference internal" href="#_CPPv416good2DchunkshapeK6size_tK6size_t"><code class="docutils literal notranslate"><span class="pre">good2Dchunkshape()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I0E17write_zarray_jsonvR5StoreNSt11string_viewENSt11string_viewE"><code class="docutils literal notranslate"><span class="pre">write_zarray_json()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I00E9ZarrArray"><code class="docutils literal notranslate"><span class="pre">ZarrArray</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N9ZarrArray9ZarrArrayER5StoreKNSt11string_viewERKNSt6vectorI6size_tEEKbRKNSt6vectorI6size_tEE"><code class="docutils literal notranslate"><span class="pre">ZarrArray()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9ZarrArrayD0Ev"><code class="docutils literal notranslate"><span class="pre">~ZarrArray()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9ZarrArray14get_totnchunksEv"><code class="docutils literal notranslate"><span class="pre">get_totnchunks()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9ZarrArray14get_totalndataEv"><code class="docutils literal notranslate"><span class="pre">get_totalndata()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9ZarrArray16write_arrayshapeERKNSt6vectorI6size_tEE"><code class="docutils literal notranslate"><span class="pre">write_arrayshape()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9ZarrArray19write_to_zarr_arrayEK12viewh_buffer"><code class="docutils literal notranslate"><span class="pre">write_to_zarr_array()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9ZarrArray14write_to_arrayEK12viewh_buffer"><code class="docutils literal notranslate"><span class="pre">write_to_array()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9ZarrArray14write_to_arrayEK1T"><code class="docutils literal notranslate"><span class="pre">write_to_array()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9ZarrArray12viewh_bufferE"><code class="docutils literal notranslate"><span class="pre">viewh_buffer</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9ZarrArray15subviewh_bufferE"><code class="docutils literal notranslate"><span class="pre">subviewh_buffer</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK9ZarrArray14get_arrayshapeEv"><code class="docutils literal notranslate"><span class="pre">get_arrayshape()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9ZarrArray21write_chunks_to_storeEK15subviewh_buffer"><code class="docutils literal notranslate"><span class="pre">write_chunks_to_store()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9ZarrArray5storeE"><code class="docutils literal notranslate"><span class="pre">store</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9ZarrArray4nameE"><code class="docutils literal notranslate"><span class="pre">name</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9ZarrArray10totnchunksE"><code class="docutils literal notranslate"><span class="pre">totnchunks</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9ZarrArray8totndataE"><code class="docutils literal notranslate"><span class="pre">totndata</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9ZarrArray6chunksE"><code class="docutils literal notranslate"><span class="pre">chunks</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9ZarrArray6bufferE"><code class="docutils literal notranslate"><span class="pre">buffer</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9ZarrArray13zarr_metadataE"><code class="docutils literal notranslate"><span class="pre">zarr_metadata</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9ZarrArray10is_backendE"><code class="docutils literal notranslate"><span class="pre">is_backend</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=9fa2033d"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    </body>
+</html>

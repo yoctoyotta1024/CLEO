@@ -1,0 +1,638 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Thread-Safe Superdroplet Shuffling Algorithms" href="shuffle.html" /><link rel="prev" title="Coalescence" href="coalescence.html" />
+
+    <!-- Generated with Sphinx 8.2.3 and Furo 2025.07.19 -->
+        <title>Coalescence-Breakup-Rebound - CLEO 0.38.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=25af2a20" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #2b2b2b;
+  --color-code-foreground: #f8f8f2;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">CLEO 0.38.0 documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  <span class="sidebar-brand-text">CLEO 0.38.0 documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../intro/intro.html">Programming Guide</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of Programming Guide</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../intro/background.html">Background to the Super-Droplet Model (SDM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../intro/motivation.html">Motivation for CLEO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../intro/memorylayout.html">Memory Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../intro/timestepping.html">Timestepping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../intro/coupling.html">Coupling to Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../intro/monoids.html">Monoids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../intro/kokkos.html">Kokkos Thread Parallelism</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/extern.html">External Libraries</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/examples.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cleopy/cleopy.html">API: cleopy CLEO Python Package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of API: cleopy CLEO Python Package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/gbxboundariesbinary_src/gbxboundariesbinary_src.html">GbxBoundariesBinary</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of GbxBoundariesBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/gbxboundariesbinary_src/create_gbxboundaries.html">CREATE_GBXBOUNDARIES</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/gbxboundariesbinary_src/read_gbxboundaries.html">READ_GBXBOUNDARIES</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/initsuperdropsbinary_src.html">InitSuperdropsBinary</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of InitSuperdropsBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/create_initsuperdrops.html">CREATE_INITSUPERDROPS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/read_initsuperdrops.html">READ_INITSUPERDROPS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/attrsgen.html">ATTRSGEN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/crdgens.html">CRDGENS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/probdists.html">PROBDISTS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/rgens.html">RGENS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/dryrgens.html">DRYRGENS</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/thermobinary_src/thermobinary_src.html">ThermoBinary</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of ThermoBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/create_thermodynamics.html">CREATE_THERMODYNAMICS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/read_thermodynamics.html">READ_THERMODYNAMICS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/thermodyngen.html">THERMODYNGEN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/thermogen.html">THERMOGEN</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/windsgen.html">WINDSGEN</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/sdmout_src/sdmout_src.html">SDMOut</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of SDMOut</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/pyzarr.html">PYZARR</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/pysetuptxt.html">PYSETUPTXT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/pygbxsdat.html">PYGBXSDAT</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/timedata.html">TIMEDATA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/thermodata.html">THERMODATA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/massmoms.html">MASSMOMS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/thermoeqns.html">THERMOEQNS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/superdrops.html">SUPERDROPS</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cleopy/cxx2py.html">CXX2PY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cleopy/readconfigfile.html">READCONFIGFILE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cleopy/editconfigfile.html">EDITCONFIGFILE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cleopy/readbinary.html">READBINARY</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cleopy/writebinary.html">WRITEBINARY</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../../libs.html">API: CLEO C++ Library</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of API: CLEO C++ Library</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../runcleo/runcleomod.html">RunCLEO Module</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../runcleo/coupleddynamics.html">CoupledDynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../runcleo/couplingcomms.html">CouplingComms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../runcleo/creategbxs.html">Create Gridboxes Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../runcleo/createsupers.html">Create Super-droplets Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../runcleo/runcleo.html">RunCLEO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../runcleo/sdmmethods.html">SDMMethods</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="../superdropsmod.html">Superdrops Module</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of Superdrops Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3 current has-children"><a class="reference internal" href="collisionsmod.html">Collisions Module</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of Collisions Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="collisions.html">Collisions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="collisionkinetics.html">Collision Kinetics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="coalescence.html">Coalescence</a></li>
+<li class="toctree-l4 current current-page"><a class="current reference internal" href="#">Coalescence-Breakup-Rebound</a></li>
+<li class="toctree-l4"><a class="reference internal" href="shuffle.html">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="urbg.html">Randomness Generation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../condensation.html">Condensation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../impliciteuler.html">Implicit Euler Method for Condensation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kokkosaliases_sd.html">Super-Droplet Kokkos Aliases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../microphysical_process.html">Microphysical Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../state.html">State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrop.html">Superdrop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrop_ids.html">Superdrop IDs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrop_attrs.html">Superdrop Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../terminalvelocity.html">Terminal Velocities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../thermodynamic_equations.html">Thermodynamic Equations</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../zarr/zarrmod.html">Zarr Module</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of Zarr Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../zarr/buffer.html">Buffer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../zarr/chunks.html">Chunks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../zarr/dataset.html">Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../zarr/fsstore.html">FSStore</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../zarr/store_accessor.html">StoreAccessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../zarr/xarray_zarr_array.html">XarrayZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../zarr/xarray_metadata.html">Xarray Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../zarr/zarr_array.html">ZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../zarr/zarr_metadata.html">Zarr Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../zarr/zarr_group.html">ZarrGroup</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../observers/observersmod.html">Observers Module</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of Observers Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/observers.html">Observers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/streamout_observer.html">StreamOut Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/consttstep_observer.html">Constant Time Step Observers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/write_to_dataset_observer.html">Template for Observer to Write To Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/parallel_write_data.html">Parallel Write Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/collect_data_for_dataset.html">Collect Data For Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/generic_collect_data.html">Generic Collect Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/time_observer.html">Time Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/gbxindex_observer.html">Gbxindex Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/superdrops_observer.html">Superdrops Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/nsupers_observer.html">Nsupers Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/totnsupers_observer.html">TotNsupers Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/state_observer.html">State Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/thermo_observer.html">Thermodynamics Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/windvel_observer.html">WindVel Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/massmoments_observer.html">Massmoments Observer</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../initialise/initialisemod.html">RunCLEO Module</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of RunCLEO Module</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../initialise/initialconditions.html">InitialConditions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleoconstants.html">CLEO Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kokkosaliases.html">Kokkos Aliases</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/ourdocs.html">Our Docs</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/yoctoyotta1024/CLEO.git">GitHub Repo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/good_coding.html">Good Coding Practices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage/contact.html">Contact Us!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../../../_sources/libs/superdrops/collisions/coalbure.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="coalescence-breakup-rebound">
+<h1>Coalescence-Breakup-Rebound<a class="headerlink" href="#coalescence-breakup-rebound" title="Link to this heading">¶</a></h1>
+<p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/superdrops/collisions/coalbure.hpp&gt;</span></code>
+<a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/superdrops/collisions/coalbure.hpp">[source]</a></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4I_10NFragments_12CoalBuReFlagE10DoCoalBuRe">
+<span id="_CPPv3I_10NFragments_12CoalBuReFlagE10DoCoalBuRe"></span><span id="_CPPv2I_10NFragments_12CoalBuReFlagE10DoCoalBuRe"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">NFragments</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NFrags</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">CoalBuReFlag</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Flag</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structDoCoalBuRe"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DoCoalBuRe</span></span></span><a class="headerlink" href="#_CPPv4I_10NFragments_12CoalBuReFlagE10DoCoalBuRe" title="Link to this definition">¶</a><br /></dt>
+<dd><p><a class="reference internal" href="#structDoCoalBuRe"><span class="std std-ref">DoCoalBuRe</span></a> = DoCoalescenceBreakupRebound, i.e. enacts collision-coalescence, breakup, or rebound of super-droplets. </p>
+<p>This class template implements the collision-coalescence, breakup, or rebound of superdroplets based on specified flag values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>NFrags</strong> – Calculation for number of fragments in case of breakup. </p></li>
+<li><p><strong>Flag</strong> – Flag indicating the type of action to perform: coalescence, breakup, or rebound. </p></li>
+</ul>
+</dd>
+</dl>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N10DoCoalBuRe10DoCoalBuReEK6NFragsK4Flag">
+<span id="_CPPv3N10DoCoalBuRe10DoCoalBuReEK6NFragsK4Flag"></span><span id="_CPPv2N10DoCoalBuRe10DoCoalBuReEK6NFragsK4Flag"></span><span id="DoCoalBuRe::DoCoalBuRe__NFragsC.FlagC"></span><span class="target" id="structDoCoalBuRe_1aba0faf2cddc5f30fc6acd2d3ecca789f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DoCoalBuRe</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_10NFragments_12CoalBuReFlagE10DoCoalBuRe" title="DoCoalBuRe::NFrags"><span class="n"><span class="pre">NFrags</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">nfrags</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_10NFragments_12CoalBuReFlagE10DoCoalBuRe" title="DoCoalBuRe::Flag"><span class="n"><span class="pre">Flag</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">flag</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N10DoCoalBuRe10DoCoalBuReEK6NFragsK4Flag" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Constructs a new <a class="reference internal" href="#structDoCoalBuRe"><span class="std std-ref">DoCoalBuRe</span></a> = DoCoalescenceBreakupRebound object. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nfrags</strong> – Calculation for the nmber of fragments in cases of breakup. </p></li>
+<li><p><strong>flag</strong> – Flag indicating the action to perform: coalescence, breakup or rebound. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10DoCoalBuReclER9SuperdropR9SuperdropKdKd">
+<span id="_CPPv3NK10DoCoalBuReclER9SuperdropR9SuperdropKdKd"></span><span id="_CPPv2NK10DoCoalBuReclER9SuperdropR9SuperdropKdKd"></span><span id="DoCoalBuRe::call-operator__SuperdropR.SuperdropR.doubleC.doubleCC"></span><span class="target" id="structDoCoalBuRe_1ae38d27725bebebb61de9163855a6fc61"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop1</span></span>, <a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop2</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">prob</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">phi</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10DoCoalBuReclER9SuperdropR9SuperdropKdKd" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Operator used as an adaptor such that <a class="reference internal" href="#structDoCoalBuRe"><span class="std std-ref">DoCoalBuRe</span></a> satisfies the <a class="reference internal" href="collisions.html#conceptPairEnactX"><span class="std std-ref">PairEnactX</span></a> concept and so can be used as the EnactCollision function-like object in the <a class="reference internal" href="collisions.html#structDoCollisions"><span class="std std-ref">DoCollisions</span></a> struct. </p>
+<p>This operator calls functions to enact the collision- coalescence, breakup or rebound of two super-droplets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>drop1</strong> – First superdroplet. </p></li>
+<li><p><strong>drop2</strong> – Second superdroplet. </p></li>
+<li><p><strong>prob</strong> – Probability of collision. </p></li>
+<li><p><strong>phi</strong> – Phi value. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the resulting superdroplet is null, otherwise false. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-functions">Private Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10DoCoalBuRe11rescale_phiEKdKd">
+<span id="_CPPv3NK10DoCoalBuRe11rescale_phiEKdKd"></span><span id="_CPPv2NK10DoCoalBuRe11rescale_phiEKdKd"></span><span id="DoCoalBuRe::rescale_phi__doubleC.doubleCC"></span><span class="target" id="structDoCoalBuRe_1a229ac456ce833a15017b14941cf45666"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rescale_phi</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">prob</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">phi</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10DoCoalBuRe11rescale_phiEKdKd" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Rescales a random number phi to be in the desired range [0, 1]. </p>
+<p>This function adjusts the value of phi to account for the fact that if a collision occurs (i.e., if gamma != 0), then phi lies in the range [0, prob - floor(prob)] instead of [0, 1].</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is assumed to be consistent with collision_gamma(…) and must be.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prob</strong> – The probability of collision. </p></li>
+<li><p><strong>phi</strong> – Random number, assumed to be in the range [0.0, prob - floor(prob)].</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The rescaled value of phi as a uint64_t. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10DoCoalBuRe15collision_gammaEK8uint64_tK8uint64_tKdKd">
+<span id="_CPPv3NK10DoCoalBuRe15collision_gammaEK8uint64_tK8uint64_tKdKd"></span><span id="_CPPv2NK10DoCoalBuRe15collision_gammaEK8uint64_tK8uint64_tKdKd"></span><span id="DoCoalBuRe::collision_gamma__uint64_tC.uint64_tC.doubleC.doubleCC"></span><span class="target" id="structDoCoalBuRe_1ae9c85450322c4c9f37d6f3dea47f74a6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">collision_gamma</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">xi1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">xi2</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">prob</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">phi</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10DoCoalBuRe15collision_gammaEK8uint64_tK8uint64_tKdKd" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Calculates the value of the gamma factor in Monte Carlo collision. </p>
+<p>This function calculates the value of the gamma factor for collisions based on the given probability of collisions. The calculation is as described for collision-coalescence in Shima et al. 2009 but applied to collisions (which may result in coalescence, rebound or breakup) not just collision-coalescence.</p>
+<p><em>Note:</em> Probability is probability of collision <em>NOT</em> collision-coalescence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>xi1</strong> – The multiplicity of the first super-droplet. </p></li>
+<li><p><strong>xi2</strong> – The multiplicity of the second super-droplet. </p></li>
+<li><p><strong>prob</strong> – The probability of collision. </p></li>
+<li><p><strong>phi</strong> – Random number in the range [0.0, 1.0]. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The calculated value of the collision gamma factor. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK10DoCoalBuRe27coalesce_breakup_or_reboundEK8uint64_tKdR9SuperdropR9Superdrop">
+<span id="_CPPv3NK10DoCoalBuRe27coalesce_breakup_or_reboundEK8uint64_tKdR9SuperdropR9Superdrop"></span><span id="_CPPv2NK10DoCoalBuRe27coalesce_breakup_or_reboundEK8uint64_tKdR9SuperdropR9Superdrop"></span><span id="DoCoalBuRe::coalesce_breakup_or_rebound__uint64_tC.doubleC.SuperdropR.SuperdropRC"></span><span class="target" id="structDoCoalBuRe_1a8cdc7588c75ccadfd27fd9bfff5b14e3"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coalesce_breakup_or_rebound</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gamma</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">phi</span></span>, <a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop1</span></span>, <a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop2</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10DoCoalBuRe27coalesce_breakup_or_reboundEK8uint64_tKdR9SuperdropR9Superdrop" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Enacts rebound, coalescence, or breakup based on the flag. </p>
+<p>This function enacts rebound, coalescence, or breakup based on the specified flag value: If flag = 1 -&gt; coalescence. If flag = 2 -&gt; breakup. Otherwise -&gt; rebound.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gamma</strong> – The gamma factor. </p></li>
+<li><p><strong>phi</strong> – Phi value. </p></li>
+<li><p><strong>drop1</strong> – First superdroplet. </p></li>
+<li><p><strong>drop2</strong> – Second superdroplet. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the resulting superdroplet is null, otherwise false. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10DoCoalBuRe4coalE">
+<span id="_CPPv3N10DoCoalBuRe4coalE"></span><span id="_CPPv2N10DoCoalBuRe4coalE"></span><span id="DoCoalBuRe::coal__DoCoalescence"></span><span class="target" id="structDoCoalBuRe_1aa0f8069826c5174a3daae68fc34707fa"></span><a class="reference internal" href="coalescence.html#_CPPv413DoCoalescence" title="DoCoalescence"><span class="n"><span class="pre">DoCoalescence</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coal</span></span></span><a class="headerlink" href="#_CPPv4N10DoCoalBuRe4coalE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Instance of <a class="reference internal" href="coalescence.html#structDoCoalescence"><span class="std std-ref">DoCoalescence</span></a>. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10DoCoalBuRe2buE">
+<span id="_CPPv3N10DoCoalBuRe2buE"></span><span id="_CPPv2N10DoCoalBuRe2buE"></span><span id="DoCoalBuRe::bu__DoBreakup:NFrags:"></span><span class="target" id="structDoCoalBuRe_1a9996fdffa0464ece178366dedc0fb499"></span><span class="n"><span class="pre">DoBreakup</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_10NFragments_12CoalBuReFlagE10DoCoalBuRe" title="DoCoalBuRe::NFrags"><span class="n"><span class="pre">NFrags</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bu</span></span></span><a class="headerlink" href="#_CPPv4N10DoCoalBuRe2buE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Instance of DoBreakup with specified no. of fragments calculation. </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10DoCoalBuRe13coalbure_flagE">
+<span id="_CPPv3N10DoCoalBuRe13coalbure_flagE"></span><span id="_CPPv2N10DoCoalBuRe13coalbure_flagE"></span><span id="DoCoalBuRe::coalbure_flag__Flag"></span><span class="target" id="structDoCoalBuRe_1ab164a42f7e5a6be53f5e49fcadee27f3"></span><a class="reference internal" href="#_CPPv4I_10NFragments_12CoalBuReFlagE10DoCoalBuRe" title="DoCoalBuRe::Flag"><span class="n"><span class="pre">Flag</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coalbure_flag</span></span></span><a class="headerlink" href="#_CPPv4N10DoCoalBuRe13coalbure_flagE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Instance of CoalBuReFlag indicating the action to perform. </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuRe20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4Flag">
+<span id="_CPPv3I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuReKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4Flag"></span><span id="_CPPv2I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuReKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4Flag"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="collisions.html#_CPPv4I0E15PairProbability" title="PairProbability"><span class="n"><span class="pre">PairProbability</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Probability</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">NFragments</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NFrags</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">CoalBuReFlag</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Flag</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="coalbure_8hpp_1aba708f07acca19f6c2133b342e8224a5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../microphysical_process.html#_CPPv4I0E20MicrophysicalProcess" title="MicrophysicalProcess"><span class="n"><span class="pre">MicrophysicalProcess</span></span></a><span class="w"> </span><span class="k"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CoalBuRe</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">interval</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">(</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">int2realtime</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuRe20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4Flag" title="CoalBuRe::Probability"><span class="n"><span class="pre">Probability</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">collprob</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuRe20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4Flag" title="CoalBuRe::NFrags"><span class="n"><span class="pre">NFrags</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">nfrags</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuRe20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4Flag" title="CoalBuRe::Flag"><span class="n"><span class="pre">Flag</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">coalbure_flag</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuRe20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4Flag" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Constructs a Microphysical Process for collision-coalescence, breakup, or rebound of superdroplets. </p>
+<p>This function constructs a Microphysical Process for collision-coalescence, breakup, or rebound of superdroplets with a constant timestep ‘interval’ and probability of collision determined by ‘collprob’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Probability</strong> – Type of <a class="reference internal" href="collisions.html#conceptPairProbability"><span class="std std-ref">PairProbability</span></a>. </p></li>
+<li><p><strong>NFrags</strong> – Number of fragments for breakup. </p></li>
+<li><p><strong>Flag</strong> – Flag indicating the action to perform. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>interval</strong> – Timestep interval between collision events. </p></li>
+<li><p><strong>int2realtime</strong> – Function to convert interval to a real time [s]. </p></li>
+<li><p><strong>collprob</strong> – Probability of collisions. </p></li>
+<li><p><strong>nfrags</strong> – Calculatino for number of fragments cases of breakup. </p></li>
+<li><p><strong>coalbure_flag</strong> – Flag indicating the action to perform: coalescence, breakup or rebound. </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A Microphysical Process enacting collision- coalescence, breakup or rebound. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="shuffle.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Thread-Safe Superdroplet Shuffling Algorithms</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="coalescence.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Coalescence</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; (2023) MPI-M, Clara Bayley
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 27 August 2025</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Coalescence-Breakup-Rebound</a><ul>
+<li><a class="reference internal" href="#_CPPv4I_10NFragments_12CoalBuReFlagE10DoCoalBuRe"><code class="docutils literal notranslate"><span class="pre">DoCoalBuRe</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N10DoCoalBuRe10DoCoalBuReEK6NFragsK4Flag"><code class="docutils literal notranslate"><span class="pre">DoCoalBuRe()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10DoCoalBuReclER9SuperdropR9SuperdropKdKd"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10DoCoalBuRe11rescale_phiEKdKd"><code class="docutils literal notranslate"><span class="pre">rescale_phi()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10DoCoalBuRe15collision_gammaEK8uint64_tK8uint64_tKdKd"><code class="docutils literal notranslate"><span class="pre">collision_gamma()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10DoCoalBuRe27coalesce_breakup_or_reboundEK8uint64_tKdR9SuperdropR9Superdrop"><code class="docutils literal notranslate"><span class="pre">coalesce_breakup_or_rebound()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10DoCoalBuRe4coalE"><code class="docutils literal notranslate"><span class="pre">coal</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10DoCoalBuRe2buE"><code class="docutils literal notranslate"><span class="pre">bu</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N10DoCoalBuRe13coalbure_flagE"><code class="docutils literal notranslate"><span class="pre">coalbure_flag</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#_CPPv4I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuRe20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4Flag"><code class="docutils literal notranslate"><span class="pre">CoalBuRe()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../../_static/documentation_options.js?v=9fa2033d"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    </body>
+</html>
