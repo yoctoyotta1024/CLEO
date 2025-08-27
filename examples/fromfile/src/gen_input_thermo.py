@@ -17,11 +17,9 @@ Python functions used by fromfile example to make thermo and wind fields
 for CLEO to run example with 3-D time-varying thermodynamics.
 """
 
-import sys
 import numpy as np
 
-sys.path.append("../../../..")  # for imports from pySD package
-from pySD.gbxboundariesbinary_src import read_gbxboundaries as rgrid
+from cleopy.gbxboundariesbinary_src import read_gbxboundaries as rgrid
 
 
 class TimeVarying3DThermodyn:

@@ -20,8 +20,7 @@ path2CLEO=${2:-${HOME}/CLEO}
 path2build=${3:-${path2CLEO}/build}
 
 path2scripts=${path2CLEO}/scripts
-condaenv=/work/bm1183/m300950/bin/envs/cleoenv
-python=${condaenv}/bin/python
+python=/home/m/m300950/CLEO/.venv/bin/python3
 ### ---------------------------------------------------- ###
 
 if [ "${configfile}" == "" ]

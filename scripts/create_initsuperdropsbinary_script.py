@@ -12,26 +12,33 @@ https://opensource.org/licenses/BSD-3-Clause
 Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
-uses pySD module to create binary file
-for  initial superdroplet conditions
-to read into CLEO SDM
+example of various ways to use cleopy module to create binary file for
+initial superdroplet conditions to read into CLEO SDM
 """
 
-import sys
-
-# import numpy as np
+import argparse
 from pathlib import Path
+# import numpy as np
 
-sys.path.append(sys.argv[1])  # path to pySD (same as to CLEO)
-from pySD import geninitconds
-from pySD.initsuperdropsbinary_src import rgens, probdists, attrsgen, crdgens
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "path2CLEO", type=Path, help="Absolute path to CLEO directory (for cleopy)"
+)
+parser.add_argument("path2build", type=Path, help="Absolute path to build directory")
+parser.add_argument(
+    "config_filename", type=Path, help="Absolute path to configuration YAML file"
+)
+args = parser.parse_args()
+
+from cleopy import geninitconds
+from cleopy.initsuperdropsbinary_src import rgens, probdists, attrsgen, crdgens
 
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### --- absolute or relative paths for --- ###
 ### ---   build and CLEO directories --- ###
-path2CLEO = Path(sys.argv[1])
-path2build = Path(sys.argv[2])
-config_filename = Path(sys.argv[3])
+path2CLEO = args.path2CLEO
+path2build = args.path2build
+config_filename = args.config_filename
 
 # booleans for [showing, saving] initialisation figures
 isfigures = [True, True]

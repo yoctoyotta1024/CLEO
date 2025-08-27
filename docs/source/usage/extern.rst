@@ -29,13 +29,13 @@ interpreter you want to use for YAC's python bindings. E.g.
 
 .. code-block:: console
 
-  $ scripts/levante/bash/install_yac.sh /work/bm1183/m300950/yacyaxt/intel/ intel /work/bm1183/m300950/bin/envs/cleoenv/bin/python
+  $ scripts/levante/bash/install_yac.sh /work/bm1183/m300950/yacyaxt/intel/ intel /home/m/m300950/CLEO/.venv/bin/python3
 
 or
 
 .. code-block:: console
 
-  $ scripts/levante/bash/install_yac.sh /work/bm1183/m300950/yacyaxt/gcc/ gcc /work/bm1183/m300950/bin/envs/cleoenv/bin/python
+  $ scripts/levante/bash/install_yac.sh /work/bm1183/m300950/yacyaxt/gcc/ gcc /home/m/m300950/CLEO/.venv/bin/python3
 
 Alternatively you can download `YAXT <https://swprojects.dkrz.de/redmine/>`_ and
 `YAC <https://gitlab.dkrz.de/dkrz-sw/yac/>`_ as compressed files and then configure and compile

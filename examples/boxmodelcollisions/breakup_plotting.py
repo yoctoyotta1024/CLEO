@@ -75,10 +75,7 @@ def parse_arguments():
 
 def get_results(path2CLEO, setupfile, dataset):
     """read in time, superdrops and setup for given dataset and setupfile"""
-    import sys
-
-    sys.path.append(str(path2CLEO))  # imports from pySD
-    from pySD.sdmout_src import pyzarr, pysetuptxt
+    from cleopy.sdmout_src import pyzarr, pysetuptxt
 
     # read in constants and intial setup from setup .txt file
     config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
@@ -103,12 +100,11 @@ def plot_onekernel_results(
     import sys
     import matplotlib.pyplot as plt
 
-    sys.path.append(str(path2CLEO))  # imports from pySD
     sys.path.append(
         str(path2CLEO / "examples" / "exampleplotting")
     )  # imports from example plots package
     from plotssrc import shima2009fig
-    from pySD.sdmout_src import pygbxsdat
+    from cleopy.sdmout_src import pygbxsdat
 
     # read in data
     config, consts, time, superdrops = get_results(path2CLEO, setupfile, dataset)
@@ -146,12 +142,11 @@ def plot_allkernels_results(
     import awkward as ak
     import matplotlib.pyplot as plt
 
-    sys.path.append(str(path2CLEO))  # imports from pySD
     sys.path.append(
         str(path2CLEO / "examples" / "exampleplotting")
     )  # imports from example plots package
     from plotssrc import shima2009fig
-    from pySD.sdmout_src import pygbxsdat
+    from cleopy.sdmout_src import pygbxsdat
 
     def blank_axis(ax, xlims, ylims):
         ax2.set_xlim(xlims)

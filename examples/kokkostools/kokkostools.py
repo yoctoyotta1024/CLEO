@@ -34,7 +34,7 @@ from kp_kernel_timer import KpKernelTimer
 ### --------------------------- PARSE ARGUMENTS ---------------------------- ###
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    "path2CLEO", type=Path, help="Absolute path to CLEO directory (for PySD)"
+    "path2CLEO", type=Path, help="Absolute path to CLEO directory (for cleopy)"
 )
 parser.add_argument("path2build", type=Path, help="Absolute path to build directory")
 parser.add_argument(
@@ -126,8 +126,7 @@ def inputfiles(
     postproc_filename,
     isfigures,
 ):
-    sys.path.append(str(path2CLEO))  # for imports from pySD package
-    from pySD import editconfigfile
+    from cleopy import editconfigfile
 
     ### --- ensure build, share and bin directories exist --- ###
     if path2CLEO == path2build:

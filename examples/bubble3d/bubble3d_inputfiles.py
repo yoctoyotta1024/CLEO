@@ -26,7 +26,7 @@ def parse_arguments():
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "path2CLEO", type=Path, help="Absolute path to CLEO directory (for PySD)"
+        "path2CLEO", type=Path, help="Absolute path to CLEO directory (for cleopy)"
     )
     parser.add_argument(
         "path2build", type=Path, help="Absolute path to build directory"
@@ -93,13 +93,11 @@ def main(
     show_figures=False,
     save_figures=False,
 ):
-    import sys
     from pathlib import Path
     from ruamel.yaml import YAML
 
-    sys.path.append(str(path2CLEO))  # for imports from pySD package
-    from pySD import geninitconds
-    from pySD.initsuperdropsbinary_src import (
+    from cleopy import geninitconds
+    from cleopy.initsuperdropsbinary_src import (
         crdgens,
         rgens,
         dryrgens,

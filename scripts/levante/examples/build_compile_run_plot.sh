@@ -33,8 +33,7 @@ executables="$7"
 pythonscript=$8
 script_args="$9"
 
-cleoenv=/work/bm1183/m300950/bin/envs/cleoenv
-python=${cleoenv}/bin/python3
+python=/home/m/m300950/CLEO/.venv/bin/python3
 enabledebug=false
 make_clean=false
 stacksize_limit=204800 # ulimit -s [stacksize_limit] (kB)

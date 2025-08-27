@@ -24,8 +24,7 @@ path2build=${PROJECT}/bayley1/CLEO/build_divfree2d/
 build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian -DCLEO_NO_PYBINDINGS=true"
 executables="divfree2d"
 
-cleoenv=/p/project1/exaww/bayley1/micromamba/envs/cleoenv
-python=${cleoenv}/bin/python
+python=/home/m/m300950/CLEO/.venv/bin/python3
 pythonscript=${path2CLEO}/examples/divfreemotion/divfree2d.py
 configfile=${path2CLEO}/examples/divfreemotion/src/config/divfree2d_config.yaml
 script_args="${configfile}"

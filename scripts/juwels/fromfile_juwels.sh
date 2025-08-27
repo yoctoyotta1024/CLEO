@@ -24,8 +24,7 @@ path2build=${PROJECT}/bayley1/CLEO/build_fromfile/
 build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian -DCLEO_NO_PYBINDINGS=true"
 executables="fromfile"
 
-cleoenv=/p/project1/exaww/bayley1/micromamba/envs/cleoenv
-python=${cleoenv}/bin/python
+python=/p/project1/exaww/bayley1/micromamba/envs/cleoenv/bin/python
 pythonscript=${path2CLEO}/examples/fromfile/fromfile.py
 configfile=${path2CLEO}/examples/fromfile/src/config/fromfile_config.yaml
 script_args="${configfile} \

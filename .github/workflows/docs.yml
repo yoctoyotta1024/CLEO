@@ -1,0 +1,67 @@
+name: documentation
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialise Mamba
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          activate-environment: cleodev
+          auto-activate-base: false
+          use-mamba: true
+          miniforge-version: 'latest'
+          conda-remove-defaults: true
+
+      - name: Update Mamba Environment
+        run: |
+          mamba env update -n cleodev -f environment.yml
+
+      - name: Environment Info
+        run: |
+          mamba info
+          mamba list
+          which doxygen && doxygen --version
+          which uv && uv --version
+          uv run which python && uv run python --version
+
+      - name: Generate Doxygen Documentation
+        run: cd docs &&
+          mkdir -p build/doxygen &&
+          doxygen doxygen/doxygen.dox
+
+      - name: Build docs
+        run: |
+          cd docs && uv run make html
+
+      - name: Archive build artifacts (i.e. documentation)
+        uses: actions/upload-artifact@v4
+        with:
+          name: html-docs
+          path: docs/build/html/
+
+  publish:
+    needs: build
+    # Only publish documentation when merging into `origin/main`.`
+    if: "github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository_owner == 'yoctoyotta1024'"
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download build artifacts (i.e. documentation)
+        uses: actions/download-artifact@v4
+        with:
+          name: html-docs
+          path: docs/build/html/
+      - name: Publish docs on GitHub pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/build/html

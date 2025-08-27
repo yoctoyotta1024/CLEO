@@ -23,8 +23,8 @@ import sys
 import numpy as np
 import zarr
 
-from ....pySD.sdmout_src import pyzarr
-from ....pySD import editconfigfile
+from ....cleopy.sdmout_src import pyzarr
+from ....cleopy import editconfigfile
 
 
 def write_ensemble_info(ensembsetupfile, setupfile, datasets):

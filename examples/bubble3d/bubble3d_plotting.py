@@ -281,13 +281,12 @@ def plot_2d_supers_contours(
 
 
 # %%
-### --------------- IMPORT pySD AND CLEO PLOTTING MODULES ------------------ ###
+### --------------- IMPORT cleopy AND CLEO PLOTTING MODULES ------------------ ###
 path2CLEO = parse_known_arguments()[0].path2CLEO
-sys.path.append(str(path2CLEO))  # imports from pySD
 sys.path.append(
     str(path2CLEO / "examples" / "exampleplotting")
 )  # imports from example plots package
-from pySD.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
+from cleopy.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
 
 # %%
 ### -------------------------- INPUT PARAMETERS ---------------------------- ###

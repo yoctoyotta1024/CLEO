@@ -19,12 +19,12 @@ output data and CLEO (e.g. for the bubble test case)
 
 #!/usr/bin/env python3
 
+import argparse
+import numpy as np
 from yac import YAC, UnstructuredGrid, Field, Location, Calendar, TimeUnit, def_calendar
 from netCDF4 import Dataset
 from pathlib import Path
 from ruamel.yaml import YAML
-import numpy as np
-import sys
 
 
 def convert_seconds_to_isodate(seconds):
@@ -132,8 +132,15 @@ def prepare_data_for_yac(source):
 
 
 # Load the icon yac configuration parameters from the config YAML file
-path2build = Path(sys.argv[1])
-config_filename = Path(sys.argv[2])
+parser = argparse.ArgumentParser()
+parser.add_argument("path2build", type=Path, help="Absolute path to build directory")
+parser.add_argument(
+    "config_filename", type=Path, help="Absolute path to configuration YAML file"
+)
+args = parser.parse_args()
+
+path2build = args.path2build
+config_filename = args.config_filename
 yaml = YAML()
 with open(config_filename, "r") as file:
     config = yaml.load(file)

@@ -16,13 +16,11 @@ functions for plotting similar to
 figure 2(a) from Shima et al. 2009
 """
 
-import sys
 import numpy as np
 import awkward as ak
 import matplotlib.pyplot as plt
 from scipy.special import iv
 
-sys.path.append("../../../")  # for imports from pySD package
 from .pltdist import logr_distribution
 
 

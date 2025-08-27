@@ -1,0 +1,181 @@
+name: build and run tests
+
+on: pull_request
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache YAXT
+        id: cache_yaxt
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/yaxt/
+          key: ${{ runner.os }}-yaxt-cache-v0.11.1
+          restore-keys: |
+            ${{ runner.os }}-yaxt-
+
+      - name: Cache YAC
+        id: cache_yac
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/yac/
+          key: ${{ runner.os }}-yac-cache-v3.5.2
+          restore-keys: |
+            ${{ runner.os }}-yac-
+
+      - name: Setup
+        if: steps.cache_yaxt.outputs.cache-hit != 'true' || steps.cache_yac.outputs.cache-hit != 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+          cmake libopenmpi-dev openmpi-bin \
+          libnetcdff-dev liblapack-dev libfyaml-dev \
+          python3-dev python3-numpy python3-mpi4py python3-pip curl
+          apt list --installed
+
+      - name: Build YAXT
+        if: steps.cache_yaxt.outputs.cache-hit != 'true'
+        run: |
+          mkdir yaxt-0.11.1 && cd yaxt-0.11.1
+          curl -s -L https://gitlab.dkrz.de/dkrz-sw/yaxt/-/archive/release-0.11.1/yaxt-0.11.1.tar.gz | tar xvz --strip-components=1
+          ./configure --without-regard-for-quality --without-example-programs \
+            --without-perf-programs --with-pic --prefix=${{ runner.temp }}/yaxt
+          make -j 4
+          make install
+
+      - name: Build YAC
+        if: steps.cache_yac.outputs.cache-hit != 'true'
+        run: |
+          mkdir yac-v3.5.2 && cd yac-v3.5.2
+          curl -s -L https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/v3.5.2/yac_v3.5.2.tar.gz | tar xvz --strip-components=1
+          ./configure CFLAGS="-fPIC" CC=mpicc FC=mpif90 --disable-mpi-checks \
+            --with-yaxt-root=${{ runner.temp }}/yaxt --prefix=${{ runner.temp }}/yac
+          make -j 4
+          make install
+
+  build_yac_examples:
+    runs-on: ubuntu-latest
+    needs: setup
+    strategy:
+      matrix:
+        target: [all, adia0d, golcolls, longcolls, lowlistcolls, szakallurbichcolls,
+                testikstraubcolls, const2d, divfree2d, eurec4a1d, rshaft1d, spdtest,
+                bubble3d, fromfile, fromfile_irreg, cleo_python_bindings]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+          cmake libopenmpi-dev openmpi-bin \
+          libnetcdff-dev liblapack-dev libfyaml-dev \
+          python3-dev python3-numpy python3-mpi4py python3-pip curl
+          apt list --installed
+
+      - name: Restore YAXT Cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/yaxt/
+          key: ${{ runner.os }}-yaxt-cache-v0.11.1
+
+      - name: Restore YAC Cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/yac/
+          key: ${{ runner.os }}-yac-cache-v3.5.2
+
+      - name: Build YAC Example
+        run: |
+          mkdir build
+          cmake -S ./ -B ./build \
+          -DCMAKE_C_COMPILER=mpicc \
+          -DCMAKE_CXX_COMPILER=mpic++ \
+          -DCMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3" \
+          -DKokkos_ENABLE_SERIAL=ON \
+          -DCLEO_COUPLED_DYNAMICS=all \
+          -DCLEO_DOMAIN=cartesian \
+          -DCLEO_YAXT_ROOT=${{ runner.temp }}/yaxt \
+          -DCLEO_YAC_ROOT=${{ runner.temp }}/yac \
+          -DCMAKE_MODULE_PATH=${PWD}/libs/coupldyn_yac/cmake
+
+      - name: Compile YAC Example
+        run: cd build && make ${{ matrix.target }}
+
+  parallelisation_execution_test:
+    runs-on: ubuntu-latest
+    needs: setup
+    strategy:
+      matrix:
+        target: [fromfile, fromfile_irreg]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+          cmake libopenmpi-dev openmpi-bin \
+          libnetcdff-dev liblapack-dev libfyaml-dev \
+          python3-dev python3-numpy python3-mpi4py python3-pip curl
+          apt list --installed
+
+      - name: Restore YAXT Cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/yaxt/
+          key: ${{ runner.os }}-yaxt-cache-v0.11.1
+
+      - name: Restore YAC Cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/yac/
+          key: ${{ runner.os }}-yac-cache-v3.5.2
+
+      - name: Build and Compile Parallel Example
+        run: |
+          mkdir build
+          cmake -S ./ -B ./build \
+          -DCMAKE_C_COMPILER=mpicc \
+          -DCMAKE_CXX_COMPILER=mpic++ \
+          -DCMAKE_CXX_FLAGS="-Werror -Wall -pedantic -O3" \
+          -DKokkos_ENABLE_SERIAL=ON \
+          -DCLEO_COUPLED_DYNAMICS=fromfile \
+          -DCLEO_DOMAIN=cartesian \
+          -DCLEO_YAXT_ROOT=${{ runner.temp }}/yaxt \
+          -DCLEO_YAC_ROOT=${{ runner.temp }}/yac \
+          -DCMAKE_MODULE_PATH=${PWD}/libs/coupldyn_yac/cmake
+
+      - name: Parallelization execution test
+        run: |
+          cd build && make ${{ matrix.target }}
+          curl https://swift.dkrz.de/v1/dkrz_8f1b1e92-f07c-41c5-a4ae-8089ec495d87/CLEO/${{ matrix.target }}_data.tar.gz -o ${{ matrix.target }}_data.tar.gz
+          tar -zxvf ${{ matrix.target }}_data.tar.gz
+          cd .. && pwd
+
+          mpiexec -n 1 ./build/examples/${{ matrix.target }}/src/${{ matrix.target }} ./examples/${{ matrix.target }}/src/config/${{ matrix.target }}_config.yaml
+          ls ./build/bin
+          mv ./build/bin ./build/bin_1
+          mpiexec -n 2 --host localhost:64 ./build/examples/${{ matrix.target }}/src/${{ matrix.target }} ./examples/${{ matrix.target }}/src/config/${{ matrix.target }}_config.yaml
+          mv ./build/bin ./build/bin_2
+          mpiexec -n 4 --host localhost:64 ./build/examples/${{ matrix.target }}/src/${{ matrix.target }} ./examples/${{ matrix.target }}/src/config/${{ matrix.target }}_config.yaml
+          mv ./build/bin ./build/bin_4
+          mpiexec -n 8 --host localhost:64 ./build/examples/${{ matrix.target }}/src/${{ matrix.target }} ./examples/${{ matrix.target }}/src/config/${{ matrix.target }}_config.yaml
+          mv ./build/bin ./build/bin_8
+          bash -l .github/compare_parallel_results.sh ${{ matrix.target }}_sol.zarr
+          rm -rf ./build/bin_*
+
+  pytests:
+    name: pytest tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+
+      - run: uv run pytest tests/

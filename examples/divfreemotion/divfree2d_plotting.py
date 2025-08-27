@@ -69,13 +69,12 @@ def main(
     import sys
     import matplotlib.pyplot as plt
 
-    sys.path.append(str(path2CLEO))  # imports from pySD
     sys.path.append(
         str(path2CLEO / "examples" / "exampleplotting")
     )  # imports from example plots package
 
     from plotssrc import pltsds, pltmoms
-    from pySD.sdmout_src import pyzarr, pysetuptxt
+    from cleopy.sdmout_src import pyzarr, pysetuptxt
 
     # read in constants and dataset
     consts = pysetuptxt.get_consts(setupfile, isprint=True)

@@ -26,7 +26,7 @@ def parse_arguments():
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "path2CLEO", type=Path, help="Absolute path to CLEO directory (for PySD)"
+        "path2CLEO", type=Path, help="Absolute path to CLEO directory (for cleopy)"
     )
     parser.add_argument(
         "path2build", type=Path, help="Absolute path to build directory"
@@ -73,13 +73,11 @@ def initial_superdroplet_conditions_for_setup(
     savelabel="",
     gbxs2plt="all",
 ):
-    import sys
     from pathlib import Path
     from ruamel.yaml import YAML
 
-    sys.path.append(str(path2CLEO))  # imports from pySD
-    from pySD import geninitconds
-    from pySD.initsuperdropsbinary_src import rgens, attrsgen
+    from cleopy import geninitconds
+    from cleopy.initsuperdropsbinary_src import rgens, attrsgen
 
     ### --- Load the config YAML file --- ###
     yaml = YAML()
@@ -128,15 +126,12 @@ def main(
     show_figures=False,
     save_figures=False,
 ):
-    import sys
     import numpy as np
     from pathlib import Path
     from ruamel.yaml import YAML
 
     import attrgens_shima2009
-
-    sys.path.append(str(path2CLEO))  # imports from pySD
-    from pySD import geninitconds
+    from cleopy import geninitconds
 
     if path2CLEO == path2build:
         raise ValueError("build directory cannot be CLEO")

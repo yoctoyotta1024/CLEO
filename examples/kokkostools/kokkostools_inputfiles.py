@@ -26,7 +26,7 @@ def parse_arguments():
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "path2CLEO", type=Path, help="Absolute path to CLEO directory (for PySD)"
+        "path2CLEO", type=Path, help="Absolute path to CLEO directory (for cleopy)"
     )
     parser.add_argument(
         "path2build", type=Path, help="Absolute path to build directory"
@@ -69,21 +69,19 @@ def main(
     show_figures=False,
     save_figures=False,
 ):
-    import sys
     import numpy as np
     from pathlib import Path
     from ruamel.yaml import YAML
 
-    sys.path.append(str(path2CLEO))  # imports from pySD
-    from pySD import geninitconds
-    from pySD.initsuperdropsbinary_src import (
+    from cleopy import geninitconds
+    from cleopy.initsuperdropsbinary_src import (
         crdgens,
         rgens,
         dryrgens,
         probdists,
         attrsgen,
     )
-    from pySD.thermobinary_src import thermogen, windsgen, thermodyngen
+    from cleopy.thermobinary_src import thermogen, windsgen, thermodyngen
 
     if path2CLEO == path2build:
         raise ValueError("build directory cannot be CLEO")

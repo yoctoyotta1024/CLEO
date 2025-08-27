@@ -5,26 +5,35 @@ Good Coding Practices
 
 Packages and Environment
 ------------------------
-We provide an environment yaml file for creating an envirnoment with all the packages you need to
-use CLEO (to use PySD, to build the documentation, or to run pre-commit etc.).
+We provide a ``pyproject.toml`` file for creating the python version and all the pip-installable
+packages you need to use CLEO (e.g to use ``cleopy`` python package, to run the examples,
+to build the documentation, or to run pre-commit etc.).
 
-The easiest way to use it is to create a new Conda or Micromamba environment, e.g.
+The easiest way to setup your environment is with `uv <https://docs.astral.sh/uv/>`_ so you will
+need to install ``uv`` before continuing. If you want, you can do that within our
+Conda/Micromamba environment e.g. via ``mamba create --file=environment.yml``, which addionally
+installs CLEO's non-python dependencies available on conda-forge, e.g. doxygen.
 
-.. code-block:: console
-
-  $ conda env create --file=environment.yml
-
-or
-
-.. code-block:: console
-
-  $ micromamba env create --file=environment.yml
-
-And then activate this environment everytime you use CLEO, e.g.
+Via ``uv`` you can then install python for CLEO and the required dependencies.
+For only the dependencies required by ``cleopy`` you can do
 
 .. code-block:: console
 
-  $ micromamba activate cleoenv
+  $ uv sync --no-dev
+
+Or, if you would like to have the dependencies CLEO's examples and for CLEO's development
+(e.g. for ``pre-commit`` and documentation), you can do
+
+.. code-block:: console
+
+  $ uv sync --extra examples --extra yac
+
+Sometimes it is useful to know where uv has installed your python
+(e.g. for :ref:`CLEO's examples <examples>`), in which case you can run
+
+.. code-block:: console
+
+  $ uv python find
 
 We kindly ask that you also :ref:`contact us <contact>` or `open a new
 issue <https://github.com/yoctoyotta1024/CLEO/issues/new>`_ on our GitHub repository if you discover

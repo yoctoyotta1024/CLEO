@@ -76,20 +76,19 @@ e.g.
 
 Python
 ------
-To use PySD you need Python minimum version 3.10.4. We advise you to :ref:`create an
-environment<environment>` using our envirnoment.yml file. This environment should automatically
-include all the additional packages you may require. If not, please :ref:`contact us <contact>` or
+To use ``cleopy`` you need Python minimum version 3.13.0. We advise you to use the
+``pyproject.toml`` file via `uv <https://docs.astral.sh/uv/>`_ to manage the python version and
+packages you need for ``cleopy`` and other parts of CLEO, e.g to run the examples.
+If using the ``pyproject.toml`` does not automatically include all the version control and
+dependencies you require, please :ref:`contact us <contact>` or
 `open a new issue <https://github.com/yoctoyotta1024/CLEO/issues/new>`_ on our GitHub repository.
 
-To use PySD and to run CLEO's examples, particular Python packages are needed. These are included in
-our environment.yml file and are the following: ``matplotlib``, ``numpy``, ``scipy``, ``xarray``,
-``zarr``, and ``awkward``. If there are other dependencies not listed here, you will have to install
-them too. We kindly ask that you also :ref:`contact us <contact>` or `open a new
-issue <https://github.com/yoctoyotta1024/CLEO/issues/new>`_ on our GitHub repository to notify us.
+To install python with all of CLEO's dependencies, please do
+``uv sync --extra examples --extra yac``. If you only require only the dependencies for ``cleopy``,
+you can instead do ``uv sync --no-dev``. If there are any missing version controls or dependencies,
+you will have to install them too. We kindly ask that you also :ref:`contact us <contact>`
+or `open a new issue <https://github.com/yoctoyotta1024/CLEO/issues/new>`_ on our GitHub
+repository to notify us.
 
-You can install Python packages to an existing Conda (or Micromamba) environment via:
-
-.. code-block:: console
-
-  $ micromamba activate [your environment]
-  $ python -m pip install [package name(s)]
+To run your python for CLEO or find it's location you can do  ``uv run python`` and
+``uv python find`` respectively.\
