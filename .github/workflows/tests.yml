@@ -1,4 +1,4 @@
-name: build and test
+name: build and run tests
 
 on: pull_request
 
@@ -170,3 +170,12 @@ jobs:
           mv ./build/bin ./build/bin_8
           bash -l .github/compare_parallel_results.sh ${{ matrix.target }}_sol.zarr
           rm -rf ./build/bin_*
+
+  pytests:
+    name: pytest tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+
+      - run: uv run pytest tests/

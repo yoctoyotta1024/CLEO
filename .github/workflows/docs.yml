@@ -1,4 +1,4 @@
-name: CI (pytest and documentation)
+name: documentation
 
 on: [push, pull_request]
 
@@ -14,7 +14,7 @@ jobs:
       - name: Initialise Mamba
         uses: conda-incubator/setup-miniconda@v3
         with:
-          activate-environment: cienv
+          activate-environment: cleodev
           auto-activate-base: false
           use-mamba: true
           miniforge-version: 'latest'
@@ -22,17 +22,15 @@ jobs:
 
       - name: Update Mamba Environment
         run: |
-          mamba env update -n cienv -f ci_environment.yaml
+          mamba env update -n cleodev -f environment.yml
 
       - name: Environment Info
         run: |
           mamba info
           mamba list
           which doxygen && doxygen --version
-          which python && python --version
-
-      - name: Test with pytest
-        run: python -m pytest .
+          which uv && uv --version
+          uv run which python && uv run python --version
 
       - name: Generate Doxygen Documentation
         run: cd docs &&
@@ -41,7 +39,7 @@ jobs:
 
       - name: Build docs
         run: |
-          cd docs && make html
+          cd docs && uv run make html
 
       - name: Archive build artifacts (i.e. documentation)
         uses: actions/upload-artifact@v4
