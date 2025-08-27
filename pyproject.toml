@@ -23,6 +23,41 @@ dependencies = [
   "zarr",
 ]
 
+[project.optional-dependencies]
+examples = [
+  "argparse",
+  "mpi4py",
+]
+yac = [
+  "cython",
+  "datetime",
+  "isodate",
+  "netcdf4",
+  "mpi4py",
+]
+
+[dependency-groups]
+dev = [
+  {include-group = "pre-commit"},
+  {include-group = "test"},
+  {include-group = "docs"},
+]
+pre-commit = [
+    "pre-commit",
+]
+test = [
+    "pytest",
+]
+docs = [
+    "breathe",
+    "furo",
+    "sphinx",
+    "sphinx_copybutton",
+    "sphinxcontrib-applehelp",
+    "sphinxcontrib-bibtex",
+    "sphinxcontrib-htmlhelp",
+]
+
 [project.urls]
 Homepage = "https://github.com/yoctoyotta1024/CLEO"
 Website = "https://yoctoyotta1024.github.io/CLEO"
@@ -36,12 +71,6 @@ pythonpath=[
 [build-system]
 requires=["hatchling >= 1.26", "uv-dynamic-versioning"]
 build-backend = "hatchling.build"
-
-[dependency-groups]
-dev = [
-    "pytest",
-    "ruff",
-]
 
 [tool.hatch.version]
 source = "uv-dynamic-versioning"

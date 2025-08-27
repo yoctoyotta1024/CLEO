@@ -1,9 +1,6 @@
-name: cleoenv
+name: cleodev
 channels:
     - conda-forge
 dependencies:
-    - python==3.13
     - doxygen>=1.10.0
-    - pip
-    - pip:
-      - -r requirements.txt
+    - uv
