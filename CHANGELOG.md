@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file. See [conven
 - - -
 ## [v0.57.0](https://github.com/yoctoyotta1024/CLEO/compare/6ecea4d01f9ab2c5f8517222f3061228bb339671..v0.57.0) - 2025-08-27
 #### Bug Fixes
+- ci cleopy package publishing - ([7b8eae0](https://github.com/yoctoyotta1024/CLEO/commit/7b8eae02b45005901b1a6c872dace9122ba5e291)) - clara.bayley
+- missing permissions - ([b5a13d9](https://github.com/yoctoyotta1024/CLEO/commit/b5a13d9453bbf070857d3a545a5a41fdf2a2e286)) - clara.bayley
+#### Features
+- publish cleoopy with py-pi in cocogitto releases - ([6ecea4d](https://github.com/yoctoyotta1024/CLEO/commit/6ecea4d01f9ab2c5f8517222f3061228bb339671)) - clara.bayley
+#### Miscellaneous Chores
+- **(version)** v0.57.0 - ([7663eab](https://github.com/yoctoyotta1024/CLEO/commit/7663eab2398fbb7856e6e467b8e2205cd87bcd81)) - yoctoyotta1024
+- **(version)** v0.57.0 - ([582bb90](https://github.com/yoctoyotta1024/CLEO/commit/582bb9050c94757d70d22c799e9e7ef722131301)) - yoctoyotta1024
+- **(version)** v0.57.0 - ([92673f5](https://github.com/yoctoyotta1024/CLEO/commit/92673f5b2c328bdc845506687c60196ade56b05d)) - yoctoyotta1024
+
+- - -
+
+## [v0.57.0](https://github.com/yoctoyotta1024/CLEO/compare/6ecea4d01f9ab2c5f8517222f3061228bb339671..v0.57.0) - 2025-08-27
+#### Bug Fixes
 - missing permissions - ([b5a13d9](https://github.com/yoctoyotta1024/CLEO/commit/b5a13d9453bbf070857d3a545a5a41fdf2a2e286)) - clara.bayley
 #### Features
 - publish cleoopy with py-pi in cocogitto releases - ([6ecea4d](https://github.com/yoctoyotta1024/CLEO/commit/6ecea4d01f9ab2c5f8517222f3061228bb339671)) - clara.bayley
