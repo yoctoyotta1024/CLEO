@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.57.0](https://github.com/yoctoyotta1024/CLEO/compare/6ecea4d01f9ab2c5f8517222f3061228bb339671..v0.57.0) - 2025-08-27
+#### Features
+- publish cleoopy with py-pi in cocogitto releases - ([6ecea4d](https://github.com/yoctoyotta1024/CLEO/commit/6ecea4d01f9ab2c5f8517222f3061228bb339671)) - clara.bayley
+
+- - -
+
 ## [v0.56.0](https://github.com/yoctoyotta1024/CLEO/compare/919e4f5c3cbee89d7369e56e2668bddc55f6bbde..v0.56.0) - 2025-08-27
 #### Bug Fixes
 - make examples compatible with pySD renaming - ([0fc7244](https://github.com/yoctoyotta1024/CLEO/commit/0fc7244f6ea2a4ac0fbab102eabb210a870567b6)) - clara.bayley
