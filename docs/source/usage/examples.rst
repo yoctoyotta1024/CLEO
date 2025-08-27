@@ -33,13 +33,11 @@ two steps:
 
 You will need to configure ``build_compile_run_plot.sh`` in the following ways:
 
-* Use your Conda (or Micromamba) environment:
-
-  replace the path in the line stating ``cleoenv=[…]`` with the path to your environment.
-
 * Use your Python version:
 
   replace the path in the line stating ``python=[...]`` with the path to your Python interpreter.
+  (*hint*: if you used ``uv`` to install python for CLEO, you can find the interpreter path
+  via ``uv python find``.)
 
 * Set the path to your YAC and YAXT installations
 
