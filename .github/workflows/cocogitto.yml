@@ -1,4 +1,4 @@
-name: cocogitto
+name: cocogitto (and release)
 
 on: [push]
 
@@ -18,8 +18,26 @@ jobs:
           git-user: 'yoctoyotta1024'
           git-user-email: 'yoctoyotta1024@yahoo.com'
 
+  pypi-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v3
+
+      - name: build and test cleopy
+        run: |
+          uv build
+          uv run pytest tests/
+
+      # Check that basic features work and we didn't miss to include crucial files
+      - name: pytests (wheel)
+        run: uv run --isolated --no-project -p 3.13 --with dist/*.whl tests/test_publish.py
+
+      - name: pytests (source distribution)
+        run: uv run --isolated --no-project -p 3.13 --with dist/*.tar.gz tests/test_publish.py
+
   release:
-    needs: cog_check_job
+    needs: ["cog_check_job", "pypi-build"]
     # Only release new version when merging into `origin/main`.`
     if: "github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository_owner == 'yoctoyotta1024'"
     permissions:
@@ -30,6 +48,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - uses: astral-sh/setup-uv@v3
 
       - name: semver release with cocogitto
         uses: oknozor/cocogitto-action@v3
@@ -39,6 +58,11 @@ jobs:
           check-latest-tag-only: true
           git-user: 'yoctoyotta1024'
           git-user-email: 'yoctoyotta1024@yahoo.com'
+
+      - name: build and publish cleopy
+        run: |
+          uv build
+          uv publish --trusted-publishing always
 
       # The version number is accessible as a github action output
       - name: Print version
