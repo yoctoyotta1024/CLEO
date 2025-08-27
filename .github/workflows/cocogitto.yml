@@ -41,7 +41,8 @@ jobs:
     # Only release new version when merging into `origin/main`.`
     if: "github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository_owner == 'yoctoyotta1024'"
     permissions:
-      contents: write
+      - contents: write
+      - id-token: write
     runs-on: ubuntu-latest
     name: Perform semantic versioning release
     steps:
