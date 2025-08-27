@@ -2,6 +2,28 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.56.0](https://github.com/yoctoyotta1024/CLEO/compare/919e4f5c3cbee89d7369e56e2668bddc55f6bbde..v0.56.0) - 2025-08-27
+#### Bug Fixes
+- make examples compatible with pySD renaming - ([0fc7244](https://github.com/yoctoyotta1024/CLEO/commit/0fc7244f6ea2a4ac0fbab102eabb210a870567b6)) - clara.bayley
+- ci needs to use correct python - ([cbcf595](https://github.com/yoctoyotta1024/CLEO/commit/cbcf595284b9ca2ac74653d551478dc3ca9bc079)) - clara.bayley
+#### Continuous Integration
+- use uv for docs building and cleopy publishing - ([dc6641a](https://github.com/yoctoyotta1024/CLEO/commit/dc6641aef058371a508c0badfe7ef3e8c2fb1400)) - clara.bayley
+#### Documentation
+- update environment and python handling in docs - ([c484d6e](https://github.com/yoctoyotta1024/CLEO/commit/c484d6e01ec31e7c24b02c8342b623940a1b4b1c)) - clara.bayley
+- rename documentation folders for cleopy and libs - ([949d4e6](https://github.com/yoctoyotta1024/CLEO/commit/949d4e6c2e4d6cdad88a1ab3a45c2e2a444c901a)) - clara.bayley
+#### Features
+- convert cleopy into pip installable package - ([8b153ad](https://github.com/yoctoyotta1024/CLEO/commit/8b153ad632936967c76bda7989b436fe09d1c04c)) - clara.bayley
+#### Miscellaneous Chores
+- delete redundant files - ([919e4f5](https://github.com/yoctoyotta1024/CLEO/commit/919e4f5c3cbee89d7369e56e2668bddc55f6bbde)) - clara.bayley
+#### Refactoring
+- manage python dependencies with uv - ([f1af0ac](https://github.com/yoctoyotta1024/CLEO/commit/f1af0ac24704af95ebcd0f5577b28761709fc44c)) - clara.bayley
+- delete unwanted __all__ on module imports - ([881cb3c](https://github.com/yoctoyotta1024/CLEO/commit/881cb3c1106ffbbec132d85d44ec3317ba46a88d)) - clara.bayley
+- rename pySD as cleopy - ([f04722c](https://github.com/yoctoyotta1024/CLEO/commit/f04722c0a18ec1ee97a7b7d3f3a8445f5217bb53)) - clara.bayley
+- alphabetise requirements - ([9923ed2](https://github.com/yoctoyotta1024/CLEO/commit/9923ed28562f9d1206121fd1df65f782c5acb520)) - clara.bayley
+- use argparse - ([f2fa2ca](https://github.com/yoctoyotta1024/CLEO/commit/f2fa2ca69404c32cf42661db70a27de689ee9311)) - clara.bayley
+
+- - -
+
 ## [v0.55.1](https://github.com/yoctoyotta1024/CLEO/compare/9baf8bdcb25a26b0006032b0184ce61c7b39d72f..v0.55.1) - 2025-08-26
 #### Bug Fixes
 - make examples, docs and ci compatible with bindings renaming - ([d017638](https://github.com/yoctoyotta1024/CLEO/commit/d0176387d6ae3089d084c976d4e1224d81f4e06f)) - clara.bayley
