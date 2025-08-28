@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.57.19](https://github.com/yoctoyotta1024/CLEO/compare/3536fbb158d890f690bf46db4e62c99bb79629f8..v0.57.19) - 2025-08-28
+#### Bug Fixes
+- only publish cleopy when CHANGELOG.md changes - ([e6104fc](https://github.com/yoctoyotta1024/CLEO/commit/e6104fcdab49b0ee8feb4afe78d898759df7bdb5)) - clara.bayley
+#### Refactoring
+- use cleopy from pip install not path append - ([3536fbb](https://github.com/yoctoyotta1024/CLEO/commit/3536fbb158d890f690bf46db4e62c99bb79629f8)) - clara.bayley
+
+- - -
+
 ## [v0.57.18](https://github.com/yoctoyotta1024/CLEO/compare/febfafbd908b5fba0392ff97e2659e7fe40cbb1e..v0.57.18) - 2025-08-28
 #### Bug Fixes
 - trigger cleopy when cocogitto finished and changelgog changes - ([febfafb](https://github.com/yoctoyotta1024/CLEO/commit/febfafbd908b5fba0392ff97e2659e7fe40cbb1e)) - clara.bayley
