@@ -16,14 +16,10 @@ File Description:
 """
 
 # %%
-import os
-import sys
 import awkward as ak
 import matplotlib.pyplot as plt
 from pathlib import Path
 
-path2cleopy = os.path.dirname(os.path.realpath(__file__)) + "/../../"
-sys.path.append(path2cleopy)
 from cleopy.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
 from plotssrc import pltsds, pltdist
 
