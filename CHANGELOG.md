@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.57.5](https://github.com/yoctoyotta1024/CLEO/compare/b55fd260bbda4359c575fb931cc63ce3cabd6886..v0.57.5) - 2025-08-28
+#### Bug Fixes
+- cleopy trigger of ci - ([b1e6a20](https://github.com/yoctoyotta1024/CLEO/commit/b1e6a2054752f551f71d50164ce0822415718416)) - clara.bayley
+- project name - ([b55fd26](https://github.com/yoctoyotta1024/CLEO/commit/b55fd260bbda4359c575fb931cc63ce3cabd6886)) - clara.bayley
+
+- - -
+
 ## [v0.57.4](https://github.com/yoctoyotta1024/CLEO/compare/36f88d7219441f39fdc16bbdd6cbea10e7fea46e..v0.57.4) - 2025-08-28
 #### Bug Fixes
 - trigger cleopy ci - ([36f88d7](https://github.com/yoctoyotta1024/CLEO/commit/36f88d7219441f39fdc16bbdd6cbea10e7fea46e)) - clara.bayley
