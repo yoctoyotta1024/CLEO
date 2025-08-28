@@ -16,6 +16,7 @@ pre_bump_hooks = [
 
 post_bump_hooks = [
     "git push",
+    "echo $(git tag --sort=creatordate | tail -n 1)"
     "git push origin $(git tag --sort=creatordate | tail -n 1)",
     "echo 'bump done with chore commit for notes appended to changelog'",
 ]

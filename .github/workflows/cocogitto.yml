@@ -29,12 +29,6 @@ jobs:
           uv build
           uv run pytest tests/
 
-      - name: Store cleopy distribution packages
-        uses: actions/upload-artifact@v4
-        with:
-          name: python-package-distributions
-          path: dist/
-
       # Check that basic features work and we didn't miss to include crucial files
       - name: pytests (wheel)
         run: uv run --isolated --no-project -p 3.13 --with dist/*.whl tests/test_publish.py
