@@ -35,6 +35,13 @@ script_args="${src_config_filename} \
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 
+if [[ "${compilername}" != "gcc" ]]
+then
+  echo "python bindings example currently only working on Levante with gcc compiler"
+  echo "-> please use compilername=gcc"
+  exit 1
+fi
+
 ### ---------- build, compile and run example ---------- ###
 ${path2CLEO}/scripts/levante/examples/build_compile_run_plot.sh ${do_build} \
   ${buildtype} ${compilername} ${path2CLEO} ${path2build} "${build_flags}" \
