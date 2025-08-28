@@ -29,6 +29,7 @@ Alternatively, to only install the python dependencies required by CLEO's python
 installing mpi4py in order to be able to run MPI via mpi4py. On Levante if you want to use openMPI
 from ``module load openmpi/4.1.2-gcc-11.2.0``, you will need to uninstall the default
 ``mpi4py`` installation from ``uv sync [...]`` and re-install with the correct paths, e.g.
+
 .. code-block:: console
 
   $ uv pip uninstall mpi4py
