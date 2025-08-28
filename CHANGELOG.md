@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.57.14](https://github.com/yoctoyotta1024/CLEO/compare/6dd0af46f7574db9150fde909a7b76a01f179645..v0.57.14) - 2025-08-28
+#### Bug Fixes
+- hack with pushing trigger-pypi-publish to trigger cleopy publishing - ([6dd0af4](https://github.com/yoctoyotta1024/CLEO/commit/6dd0af46f7574db9150fde909a7b76a01f179645)) - clara.bayley
+
+- - -
+
 ## [v0.57.13](https://github.com/yoctoyotta1024/CLEO/compare/2a80f874f7348e047b8450d7fd21e33c66416ace..v0.57.13) - 2025-08-28
 #### Bug Fixes
 - hotfix missing , - ([6752875](https://github.com/yoctoyotta1024/CLEO/commit/67528754d5319dbbbbcf6b0f0fa4c3db088c283b)) - clara.bayley
