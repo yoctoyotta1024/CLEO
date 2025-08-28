@@ -1,8 +1,4 @@
 on:
-  workflow_run:
-    workflows: ["cocogitto (and release)"]
-    types:
-      - completed
   push:
     branches:
       - main
