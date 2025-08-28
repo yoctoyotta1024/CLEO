@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.57.16](https://github.com/yoctoyotta1024/CLEO/compare/8b6d59cb7d9caf71d3feb049edcc058cc1daf25a..v0.57.16) - 2025-08-28
+#### Bug Fixes
+- move trigger-ypi-publish into workflow - ([8b6d59c](https://github.com/yoctoyotta1024/CLEO/commit/8b6d59cb7d9caf71d3feb049edcc058cc1daf25a)) - clara.bayley
+
+- - -
+
 ## [v0.57.15](https://github.com/yoctoyotta1024/CLEO/compare/795d3f7ef120f2d5f473b88525f1e57d06d7638b..v0.57.15) - 2025-08-28
 #### Bug Fixes
 - delete tags after trigger push - ([795d3f7](https://github.com/yoctoyotta1024/CLEO/commit/795d3f7ef120f2d5f473b88525f1e57d06d7638b)) - clara.bayley
