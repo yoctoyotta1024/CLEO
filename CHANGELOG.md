@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.57.21](https://github.com/yoctoyotta1024/CLEO/compare/fad6ef76c34eeaf5010849641d8578386884a8fb..v0.57.21) - 2025-08-28
+#### Bug Fixes
+- missing path for libs in LD_LIBRARY_PATH at runtime - ([26c8ae4](https://github.com/yoctoyotta1024/CLEO/commit/26c8ae486f2457857952dbb78476b3dadb87a210)) - clara.bayley
+#### Documentation
+- missing space for formattings - ([fad6ef7](https://github.com/yoctoyotta1024/CLEO/commit/fad6ef76c34eeaf5010849641d8578386884a8fb)) - clara.bayley
+
+- - -
+
 ## [v0.57.20](https://github.com/yoctoyotta1024/CLEO/compare/c0a0ecc63219846ff9135efb183274acc9fadca0..v0.57.20) - 2025-08-28
 #### Bug Fixes
 - only run cleopy on pushes to main - ([66594bc](https://github.com/yoctoyotta1024/CLEO/commit/66594bc05945a008a219a501ef610e0bcb539fb3)) - clara.bayley
