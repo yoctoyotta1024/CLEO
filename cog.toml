@@ -17,6 +17,8 @@ pre_bump_hooks = [
 post_bump_hooks = [
     "git push",
     "echo 'bump done with chore commit for notes appended to changelog'",
+    "uv build",
+    "uv publish --trusted-publishing always",
 ]
 
 [git_hooks]
