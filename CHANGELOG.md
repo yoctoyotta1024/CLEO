@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.57.7](https://github.com/yoctoyotta1024/CLEO/compare/527b10650dcf2365e058f7278473a81391a56b70..v0.57.7) - 2025-08-28
+#### Bug Fixes
+- run on main push with tags - ([527b106](https://github.com/yoctoyotta1024/CLEO/commit/527b10650dcf2365e058f7278473a81391a56b70)) - clara.bayley
+
+- - -
+
 ## [v0.57.6](https://github.com/yoctoyotta1024/CLEO/compare/da14a5073c1cdc7c98b99ee8517a50c1f2d7c2f8..v0.57.6) - 2025-08-28
 #### Bug Fixes
 - only run cleopy on version tags push - ([da14a50](https://github.com/yoctoyotta1024/CLEO/commit/da14a5073c1cdc7c98b99ee8517a50c1f2d7c2f8)) - clara.bayley
