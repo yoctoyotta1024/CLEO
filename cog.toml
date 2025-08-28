@@ -16,9 +16,13 @@ pre_bump_hooks = [
 
 post_bump_hooks = [
     "git push",
-    "echo $(git tag --sort=creatordate | tail -n 1)",
-    "git push origin $(git tag --sort=creatordate | tail -n 1)",
     "echo 'bump done with chore commit for notes appended to changelog'",
+    "echo 'starting hack to trigger cleopy.yml(!)'",
+    "git tag -d trigger-pypi-publish",
+    "git push --delete origin trigger-pypi-publish",
+    "git tag -a trigger-pypi-publish -m 'trigger-pypi-publish'",
+    "git push origin trigger-pypi-publish",
+    "echo 'pushed new trigger-pypi-publish tag to trigger cleopy.yml(!)'",
 ]
 
 [git_hooks]
