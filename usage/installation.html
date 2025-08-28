@@ -391,10 +391,22 @@ e.g. <code class="docutils literal notranslate"><span class="pre">mamba</span> <
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>uv<span class="w"> </span>sync<span class="w"> </span>--extra<span class="w"> </span>examples<span class="w"> </span>--extra<span class="w"> </span>yac
 </pre></div>
 </div>
-<p><em>Note</em>: on Levante you may need to first load an openmpi package to install mpi4py, e.g. via
-<code class="docutils literal notranslate"><span class="pre">`module</span> <span class="pre">load</span> <span class="pre">openmpi/4.1.2-gcc-11.2.0`</span></code></p>
 <p>Alternatively, to only install the python dependencies required by CLEO’s python package,
 <code class="docutils literal notranslate"><span class="pre">cleopy</span></code>, you can just do <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">sync</span> <span class="pre">--no-dev</span></code>.</p>
+<p><em>Note</em>: on Levante/HPCs you may need to set the paths to your mpi wrapper/libraries before
+installing mpi4py in order to be able to run MPI via mpi4py. On Levante if you want to use openMPI
+from <code class="docutils literal notranslate"><span class="pre">module</span> <span class="pre">load</span> <span class="pre">openmpi/4.1.2-gcc-11.2.0</span></code>, you will need to uninstall the default
+<code class="docutils literal notranslate"><span class="pre">mpi4py</span></code> installation from <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">sync</span> <span class="pre">[...]</span></code> and re-install with the correct paths, e.g.
+.. code-block:: console</p>
+<blockquote>
+<div><p>$ uv pip uninstall mpi4py
+$ export MPI4PY_BUILD_MPICC=/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpicc  # mpicc wrapper
+$ export MPI4PY_BUILD_MPILD=/sw/spack-levante/openmpi-4.1.2-mnmady/lib  # path to mpi libraries (libmpi.so)
+$ uv pip install –no-cache-dir –no-binary=mpi4py mpi4py
+$ uv run python -c ‘from mpi4py import MPI; print(f”MPI version: {MPI.Get_version()}”)’  # check installation</p>
+</div></blockquote>
+<p>See the <a class="reference external" href="https://mpi4py.readthedocs.io/en/stable/install.html#build-backends">mpi4py documentation</a>
+for more information</p>
 <p>For advanced users/developers, even if you already have <code class="docutils literal notranslate"><span class="pre">uv</span></code> installed elsewhere you may
 want to install CLEO’s non-python dependencies sourced from conda-forge via our <code class="docutils literal notranslate"><span class="pre">environment.yml</span></code>,
 (e.g. <code class="docutils literal notranslate"><span class="pre">doxygen</span></code>), for examples with Micromamba: <code class="docutils literal notranslate"><span class="pre">mamba</span> <span class="pre">create</span> <span class="pre">--file=environment.yml</span></code>.</p>
