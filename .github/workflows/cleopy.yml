@@ -6,6 +6,8 @@ on:
     types:
       - completed
   push:
+    branches:
+      - main
     paths:
       - 'CHANGELOG.md'
 
