@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.57.10](https://github.com/yoctoyotta1024/CLEO/compare/577c7bb1710f3444c95393e79c8981102046adaf..v0.57.10) - 2025-08-28
+#### Bug Fixes
+- try to trigger cleopy on tag push from cocogitto - ([577c7bb](https://github.com/yoctoyotta1024/CLEO/commit/577c7bb1710f3444c95393e79c8981102046adaf)) - clara.bayley
+
+- - -
+
 ## [v0.57.9](https://github.com/yoctoyotta1024/CLEO/compare/c290fe0f0c3c1f450a809d16183acd600bce1636..v0.57.9) - 2025-08-28
 #### Bug Fixes
 - perform upload with pypi action without uv - ([ca6690d](https://github.com/yoctoyotta1024/CLEO/commit/ca6690d81b4063c77347c78946a57955f5d68197)) - clara.bayley
