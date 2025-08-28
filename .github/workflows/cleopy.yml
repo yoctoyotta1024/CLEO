@@ -4,8 +4,8 @@ on:
     types:
       - completed
   push:
-    tags:
-      - v**
+    branches:
+      - main
 
 jobs:
   pypi-publish:
