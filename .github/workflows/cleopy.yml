@@ -9,10 +9,19 @@ jobs:
     name: upload release to PyPI
     runs-on: ubuntu-latest
     environment: release
+    # Only release new version when merging into `origin/main`.`
+    if: "github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository_owner == 'yoctoyotta1024'"
     permissions:
       id-token: write
     steps:
       - uses: actions/checkout@v4
+        with:
+            fetch-depth: 0
       - uses: astral-sh/setup-uv@v3
+
+      # The version number is accessible as a github action output
+      - name: Print version
+        run: "echo '${{ steps.release.outputs.version }}'"
+
       - run: uv build
       - run: uv publish --trusted-publishing always
