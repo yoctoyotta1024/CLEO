@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.57.11](https://github.com/yoctoyotta1024/CLEO/compare/fae80c6b8a29ba13a2b31309608e64feb4d6d617..v0.57.11) - 2025-08-28
+#### Bug Fixes
+- don't wait for cocogitto - ([cbdd3df](https://github.com/yoctoyotta1024/CLEO/commit/cbdd3df3277bead18bebae6bcf963b9cc83e286b)) - clara.bayley
+#### Refactoring
+- run on push to main - ([fae80c6](https://github.com/yoctoyotta1024/CLEO/commit/fae80c6b8a29ba13a2b31309608e64feb4d6d617)) - clara.bayley
+
+- - -
+
 ## [v0.57.10](https://github.com/yoctoyotta1024/CLEO/compare/577c7bb1710f3444c95393e79c8981102046adaf..v0.57.10) - 2025-08-28
 #### Bug Fixes
 - missing origin - ([ae1ee2b](https://github.com/yoctoyotta1024/CLEO/commit/ae1ee2b58dd58d00a740590d1a5ed2628dd2c7cf)) - clara.bayley
