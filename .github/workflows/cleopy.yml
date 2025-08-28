@@ -1,3 +1,5 @@
+name: publish cleopy to PyPI
+
 on:
   push:
     tags:
