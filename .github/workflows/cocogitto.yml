@@ -29,6 +29,12 @@ jobs:
           uv build
           uv run pytest tests/
 
+      - name: Store cleopy distribution packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+
       # Check that basic features work and we didn't miss to include crucial files
       - name: pytests (wheel)
         run: uv run --isolated --no-project -p 3.13 --with dist/*.whl tests/test_publish.py
@@ -41,22 +47,19 @@ jobs:
     # Only release new version when merging into `origin/main`.`
     if: "github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository_owner == 'yoctoyotta1024'"
     permissions:
-      contents: write
       id-token: write
+      contents: write
     runs-on: ubuntu-latest
-    environment: release
+    environment:
+      name: release
+      url: https://pypi.org/p/cleopy
     name: Perform semantic versioning release
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: astral-sh/setup-uv@v3
-      - uses: pypa/gh-action-pypi-publish@release/v1
 
-      - name: build cleopy
-        run: uv build
-
-      - name: semver release and publish to PyPI with cocogitto
+      - name: semver release with cocogitto
         uses: oknozor/cocogitto-action@v3
         id: release
         with:
@@ -64,6 +67,14 @@ jobs:
           check-latest-tag-only: true
           git-user: 'yoctoyotta1024'
           git-user-email: 'yoctoyotta1024@yahoo.com'
+
+      - name: Download cleopy python-package-distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+      - name: Publish cleopy distribution to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
 
       # The version number is accessible as a github action output
       - name: Print version
