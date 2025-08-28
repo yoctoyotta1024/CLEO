@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.57.17](https://github.com/yoctoyotta1024/CLEO/compare/b6b2b5e862cc6c0011513a637f511021ff4f4d8f..v0.57.17) - 2025-08-28
+#### Bug Fixes
+- trigger cleopy on push to main that chanegs CHANGELOG - ([7f4350b](https://github.com/yoctoyotta1024/CLEO/commit/7f4350b8a6722fb93e8ea678f71357d283b91d09)) - clara.bayley
+#### Refactoring
+- add name to cleopy - ([b6b2b5e](https://github.com/yoctoyotta1024/CLEO/commit/b6b2b5e862cc6c0011513a637f511021ff4f4d8f)) - clara.bayley
+
+- - -
+
 ## [v0.57.16](https://github.com/yoctoyotta1024/CLEO/compare/8b6d59cb7d9caf71d3feb049edcc058cc1daf25a..v0.57.16) - 2025-08-28
 #### Bug Fixes
 - move trigger-ypi-publish into workflow - ([8b6d59c](https://github.com/yoctoyotta1024/CLEO/commit/8b6d59cb7d9caf71d3feb049edcc058cc1daf25a)) - clara.bayley
