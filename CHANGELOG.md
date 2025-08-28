@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.57.20](https://github.com/yoctoyotta1024/CLEO/compare/c0a0ecc63219846ff9135efb183274acc9fadca0..v0.57.20) - 2025-08-28
+#### Bug Fixes
+- only run cleopy on pushes to main - ([66594bc](https://github.com/yoctoyotta1024/CLEO/commit/66594bc05945a008a219a501ef610e0bcb539fb3)) - clara.bayley
+#### Documentation
+- update on mpi4py installation on HPCs - ([c0a0ecc](https://github.com/yoctoyotta1024/CLEO/commit/c0a0ecc63219846ff9135efb183274acc9fadca0)) - clara.bayley
+
+- - -
+
 ## [v0.57.19](https://github.com/yoctoyotta1024/CLEO/compare/3536fbb158d890f690bf46db4e62c99bb79629f8..v0.57.19) - 2025-08-28
 #### Bug Fixes
 - only publish cleopy when CHANGELOG.md changes - ([e6104fc](https://github.com/yoctoyotta1024/CLEO/commit/e6104fcdab49b0ee8feb4afe78d898759df7bdb5)) - clara.bayley
