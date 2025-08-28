@@ -22,11 +22,23 @@ e.g. ``mamba create --file=environment.yml``). Using ``uv`` to setup python, sim
 
   $ uv sync --extra examples --extra yac
 
-*Note*: on Levante you may need to first load an openmpi package to install mpi4py, e.g. via
-```module load openmpi/4.1.2-gcc-11.2.0```
-
 Alternatively, to only install the python dependencies required by CLEO's python package,
 ``cleopy``, you can just do ``uv sync --no-dev``.
+
+*Note*: on Levante/HPCs you may need to set the paths to your mpi wrapper/libraries before
+installing mpi4py in order to be able to run MPI via mpi4py. On Levante if you want to use openMPI
+from ``module load openmpi/4.1.2-gcc-11.2.0``, you will need to uninstall the default
+``mpi4py`` installation from ``uv sync [...]`` and re-install with the correct paths, e.g.
+.. code-block:: console
+
+  $ uv pip uninstall mpi4py
+  $ export MPI4PY_BUILD_MPICC=/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpicc  # mpicc wrapper
+  $ export MPI4PY_BUILD_MPILD=/sw/spack-levante/openmpi-4.1.2-mnmady/lib  # path to mpi libraries (libmpi.so)
+  $ uv pip install --no-cache-dir --no-binary=mpi4py mpi4py
+  $ uv run python -c 'from mpi4py import MPI; print(f"MPI version: {MPI.Get_version()}")'  # check installation
+
+See the `mpi4py documentation <https://mpi4py.readthedocs.io/en/stable/install.html#build-backends>`_
+for more information
 
 For advanced users/developers, even if you already have ``uv`` installed elsewhere you may
 want to install CLEO's non-python dependencies sourced from conda-forge via our ``environment.yml``,
