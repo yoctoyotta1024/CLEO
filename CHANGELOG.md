@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file. See [conven
 - - -
 ## [v0.57.9](https://github.com/yoctoyotta1024/CLEO/compare/c290fe0f0c3c1f450a809d16183acd600bce1636..v0.57.9) - 2025-08-28
 #### Bug Fixes
+- perform upload with pypi action without uv - ([ca6690d](https://github.com/yoctoyotta1024/CLEO/commit/ca6690d81b4063c77347c78946a57955f5d68197)) - clara.bayley
+- add env name and pypi-publish - ([7aab2d8](https://github.com/yoctoyotta1024/CLEO/commit/7aab2d8247f56501803199075decd2df79e4fc8a)) - clara.bayley
+- perform publish via cocogitto - ([c290fe0](https://github.com/yoctoyotta1024/CLEO/commit/c290fe0f0c3c1f450a809d16183acd600bce1636)) - clara.bayley
+#### Miscellaneous Chores
+- **(version)** v0.57.9 - ([abee51f](https://github.com/yoctoyotta1024/CLEO/commit/abee51ff10cd3eac2ae221c9127b24a34e416ea2)) - yoctoyotta1024
+
+- - -
+
+## [v0.57.9](https://github.com/yoctoyotta1024/CLEO/compare/c290fe0f0c3c1f450a809d16183acd600bce1636..v0.57.9) - 2025-08-28
+#### Bug Fixes
 - perform publish via cocogitto - ([c290fe0](https://github.com/yoctoyotta1024/CLEO/commit/c290fe0f0c3c1f450a809d16183acd600bce1636)) - clara.bayley
 
 - - -
