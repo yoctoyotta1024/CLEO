@@ -70,12 +70,3 @@ jobs:
         with:
           body_path: GITHUB_CHANGELOG.md
           tag_name: ${{ steps.release.outputs.version }}
-
-      - name: Trigger cleopy publishing
-        run: |
-          echo "starting hack to trigger cleopy.yml(!)"
-          git tag -a trigger-pypi-publish -m "trigger-pypi-publish"
-          git push origin trigger-pypi-publish
-          echo "pushed new trigger-pypi-publish tag to trigger cleopy.yml(!)"
-          git tag -d trigger-pypi-publish
-          git push --delete origin trigger-pypi-publish

@@ -2,8 +2,10 @@ name: publish cleopy to PyPI
 
 on:
   push:
-    tags:
-      - trigger-pypi-publish
+    branch:
+      - main
+    paths:
+      - CHANGELOG.md
 
 jobs:
   pypi-publish:
