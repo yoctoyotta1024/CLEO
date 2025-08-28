@@ -17,6 +17,7 @@ source ${bashsrc}/levante_packages.sh
 if [ "${CLEO_COMPILERNAME}" == "gcc" ]
 then
   module load ${levante_gcc_openmpi}
+  export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${levante_gcc_libs}
   fyamllib=${levante_gcc_fyamllib}
 elif [ "${CLEO_COMPILERNAME}" == "intel" ]
 then
