@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.57.8](https://github.com/yoctoyotta1024/CLEO/compare/7db42f768c9dc2e98a70c7bb300fa3a42a397df2..v0.57.8) - 2025-08-28
+#### Bug Fixes
+- run on main push with tags - ([7db42f7](https://github.com/yoctoyotta1024/CLEO/commit/7db42f768c9dc2e98a70c7bb300fa3a42a397df2)) - clara.bayley
+
+- - -
+
 ## [v0.57.7](https://github.com/yoctoyotta1024/CLEO/compare/527b10650dcf2365e058f7278473a81391a56b70..v0.57.7) - 2025-08-28
 #### Bug Fixes
 - run on main push with tags - ([527b106](https://github.com/yoctoyotta1024/CLEO/commit/527b10650dcf2365e058f7278473a81391a56b70)) - clara.bayley
