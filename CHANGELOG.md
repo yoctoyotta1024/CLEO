@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file. See [conven
 - - -
 ## [v0.57.10](https://github.com/yoctoyotta1024/CLEO/compare/577c7bb1710f3444c95393e79c8981102046adaf..v0.57.10) - 2025-08-28
 #### Bug Fixes
+- missing origin - ([ae1ee2b](https://github.com/yoctoyotta1024/CLEO/commit/ae1ee2b58dd58d00a740590d1a5ed2628dd2c7cf)) - clara.bayley
+- try to trigger cleopy on tag push from cocogitto - ([577c7bb](https://github.com/yoctoyotta1024/CLEO/commit/577c7bb1710f3444c95393e79c8981102046adaf)) - clara.bayley
+#### Miscellaneous Chores
+- **(version)** v0.57.10 - ([b070c74](https://github.com/yoctoyotta1024/CLEO/commit/b070c744ebe8866533696c7ba5332daa41c5544b)) - yoctoyotta1024
+
+- - -
+
+## [v0.57.10](https://github.com/yoctoyotta1024/CLEO/compare/577c7bb1710f3444c95393e79c8981102046adaf..v0.57.10) - 2025-08-28
+#### Bug Fixes
 - try to trigger cleopy on tag push from cocogitto - ([577c7bb](https://github.com/yoctoyotta1024/CLEO/commit/577c7bb1710f3444c95393e79c8981102046adaf)) - clara.bayley
 
 - - -
