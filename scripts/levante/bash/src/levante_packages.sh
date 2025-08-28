@@ -2,6 +2,7 @@
 
 ### -------------- GCC compiler(s) Packages ------------ ###
 levante_gcc="gcc/11.2.0-gcc-11.2.0" # bcn7mbu # module load
+levante_gcc_libs="/sw/spack-levante/gcc-11.2.0-bcn7mb/lib64" # for libstdc++.so (hint with module show "...")
 levante_gcc_cmake="cmake@3.26.3%gcc@=11.2.0/fuvwuhz" # spack load
 levante_gcc_openmpi="openmpi/4.1.2-gcc-11.2.0" # module load
 levante_gxx_compiler="/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpic++"
