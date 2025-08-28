@@ -4,16 +4,16 @@ on:
     types:
       - completed
   push:
-    tags:
-      - v**
+    branches:
+      - main
 
 jobs:
   pypi-publish:
     name: upload release to PyPI
     runs-on: ubuntu-latest
     environment: release
-    # Only release new version when merging into `origin/main`.` (as in semver release with cocogitto)
-    if: "github.event_name == 'push' && github.ref == 'refs/heads/main'"
+    # Only release new version when push of tags into `origin/main`.` (as in semver release with cocogitto)
+    if: startsWith(github.ref, 'refs/tags/')  # only publish to PyPI on tag pushes
     permissions:
       id-token: write
     steps:
@@ -21,5 +21,11 @@ jobs:
         with:
             fetch-depth: 0
       - uses: astral-sh/setup-uv@v3
-      - run: uv build
-      - run: uv publish --trusted-publishing always
+      - name: Download cleopy python-package-distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: python-package-distributions
+          path: dist/
+      - run: |
+          ls dist
+          uv publish --trusted-publishing always
