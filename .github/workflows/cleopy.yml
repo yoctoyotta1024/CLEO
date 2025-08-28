@@ -3,14 +3,15 @@ on:
     workflows: ["cocogitto (and release)"]
     types:
       - completed
+  push:
+    branches:
+      - main
 
 jobs:
   pypi-publish:
     name: upload release to PyPI
     runs-on: ubuntu-latest
     environment: release
-    # Only release new version when merging into `origin/main`.`
-    if: "github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository_owner == 'yoctoyotta1024'"
     permissions:
       id-token: write
     steps:
