@@ -1,24 +1,21 @@
 on:
-  workflow_run:
-    workflows: ["cocogitto (and release)"]
-    types:
-      - completed
   push:
-    branches:
-      - main
+    tags:
+      - '*'
 
 jobs:
   print-branches:
+    name: print branches
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v3
 
       - name: print
         run: |
           echo "${{ github.event_name }}"
-          echo "github.event.action"
-          echo "github.event"
+          echo "${{ github.event.action }}"
+          echo "${{ github.event.comment }}"
+          echo "${{ github.event }}"
           echo "${{ github.ref }}"
 
   pypi-publish:
