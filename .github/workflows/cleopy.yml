@@ -7,7 +7,7 @@ on:
       - completed
   push:
     paths:
-      - '**CHANGELOG.md'
+      - 'CHANGELOG.md'
 
 jobs:
   pypi-publish:
