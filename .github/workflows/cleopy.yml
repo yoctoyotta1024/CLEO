@@ -1,11 +1,13 @@
 name: publish cleopy to PyPI
 
 on:
+  workflow_run:
+    workflows: ["cocogitto (and release)"]
+    types:
+      - completed
   push:
-    branch:
-      - main
     paths:
-      - CHANGELOG.md
+      - '**CHANGELOG.md'
 
 jobs:
   pypi-publish:
