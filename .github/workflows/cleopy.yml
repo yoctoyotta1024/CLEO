@@ -4,8 +4,6 @@ on:
     types:
       - completed
   push:
-    branches:
-      - main
     tags:
       - v**
 
