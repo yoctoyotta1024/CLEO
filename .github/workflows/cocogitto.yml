@@ -70,3 +70,20 @@ jobs:
         with:
           body_path: GITHUB_CHANGELOG.md
           tag_name: ${{ steps.release.outputs.version }}
+
+  pypi-publish:
+    needs: ["cog_check_job", "test_cleopy_build", "release"]
+    name: upload release to PyPI
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+            fetch-depth: 0
+      - uses: astral-sh/setup-uv@v3
+      - run: |
+          uv build
+          ls dist/
+          uv publish --trusted-publishing always
