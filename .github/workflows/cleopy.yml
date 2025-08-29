@@ -1,4 +1,4 @@
-name: publish cleopy to PyPI
+name: publish cleopy to PyPI (if CHANGELOG.md updated)
 
 on:
   workflow_run:
