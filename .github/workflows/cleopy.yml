@@ -5,17 +5,14 @@ on:
     workflows: ["cocogitto (and release)"]
     types:
       - completed
-  push:
-    branches:
-      - main
-    paths:
-      - 'CHANGELOG.md'
 
 jobs:
   pypi-publish:
     name: upload release to PyPI
     runs-on: ubuntu-latest
     environment: release
+    # Only release new version when merging into `origin/main`.` (same as cocogitto.yml release job)
+    if: "github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository_owner == 'yoctoyotta1024'"
     permissions:
       id-token: write
     steps:
@@ -23,7 +20,20 @@ jobs:
         with:
             fetch-depth: 0
       - uses: astral-sh/setup-uv@v3
-      - run: |
+      # Only release new version of cleopy when CHANGELOG.md changes (e.g. by cocogitto.yml)
+      - name: detect if CHANGELOG.md changed
+        id: changed
+        run: |
+          git diff --name-only ${{ github.sha }}^ ${{ github.sha }} > changed_files.txt
+          if grep -q '^CHANGELOG\.md$' changed_files.txt; then
+            echo "changed=true"  >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+      - name: publish cleopy
+        if: ${{ steps.changelog.outputs.changed == 'true' }}
+        run: |
+          echo "change in CHANGELOG.md detected"
           uv build
           ls dist/
           uv publish --trusted-publishing always

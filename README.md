@@ -1,3 +1,4 @@
+```
 /*
  * ----- CLEO -----
  * File: README.md
@@ -11,7 +12,7 @@
  * -----
  * Copyright (c) 2023 MPI-M, Clara Bayley
  */
-
+```
 
 # CLEO
 CLEO is a library for Super-Droplet Model microphysics.
