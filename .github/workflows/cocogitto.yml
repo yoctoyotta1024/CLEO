@@ -75,3 +75,6 @@ jobs:
         with:
           body_path: GITHUB_CHANGELOG.md
           tag_name: ${{ steps.release.outputs.version }}
+          files: |
+            CITATION.cff
+            CMakeLists.txt
