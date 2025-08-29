@@ -75,7 +75,7 @@ def main(
     )  # imports from example plots package
 
     from src import plot_output_thermo
-    from plotssrc import pltsds, pltmoms
+    from plotcleo import pltsds, pltmoms
     from cleopy.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
 
     # read in constants and intial setup from setup .txt file

@@ -75,7 +75,7 @@ def main(
         str(path2CLEO / "examples" / "exampleplotting")
     )  # imports from example plots package
 
-    from plotssrc import pltsds, pltmoms, animations
+    from plotcleo import pltsds, pltmoms, animations
     from cleopy.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
 
     # read in constants and intial setup from setup .txt file

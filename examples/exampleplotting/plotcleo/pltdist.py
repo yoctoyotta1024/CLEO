@@ -1,7 +1,7 @@
 """
 ----- CLEO -----
 File: pltdist.py
-Project: plotssrc
+Project: plotcleo
 Created Date: Thursday 23rd October 2023
 Author: Clara Bayley (CB)
 Additional Contributors:

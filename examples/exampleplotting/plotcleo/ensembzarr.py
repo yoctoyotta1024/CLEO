@@ -4,7 +4,7 @@ Copyright (c) 2025 MPI-M, Clara Bayley
 
 ----- CLEO -----
 File: ensembzarr.py
-Project: plotssrc
+Project: plotcleo
 Created Date: Friday 17th November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:

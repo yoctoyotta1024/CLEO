@@ -4,7 +4,7 @@ Copyright (c) 2024 MPI-M, Clara Bayley
 
 ----- CLEO -----
 File: animations.py
-Project: plotssrc
+Project: plotcleo
 Created Date: Wednesday 22nd November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:

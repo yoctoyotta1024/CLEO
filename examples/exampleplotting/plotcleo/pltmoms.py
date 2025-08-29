@@ -1,7 +1,7 @@
 """
 ----- CLEO -----
 File: pltmoms.py
-Project: plotssrc
+Project: plotcleo
 Created Date: Tuesday 21st November 2023
 Author: Clara Bayley (CB)
 Additional Contributors:
