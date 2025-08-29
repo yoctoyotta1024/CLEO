@@ -394,7 +394,12 @@ find more information about it from <a class="reference external" href="https://
 <section id="how-to-install-yac-and-yaxt">
 <h3>How to Install YAC (and YAXT)<a class="headerlink" href="#how-to-install-yac-and-yaxt" title="Link to this heading">¶</a></h3>
 <p>The easiest way (on Levante) to install YAXT and YAC is to run the <code class="docutils literal notranslate"><span class="pre">install_yac.sh</span></code> bash script found in
-<code class="docutils literal notranslate"><span class="pre">scripts/levante/bash/</span></code>. Note you will need to provide the path to the directory where you want
+<code class="docutils literal notranslate"><span class="pre">scripts/levante/bash/</span></code>. First you need to ensure your python version has pip installed first,
+e.g. with <code class="docutils literal notranslate"><span class="pre">uv</span></code> via</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>ensurepip<span class="w"> </span>--upgrade
+</pre></div>
+</div>
+<p>Then to use <code class="docutils literal notranslate"><span class="pre">install_yac.sh</span></code> you will need to provide the path to the directory where you want
 to put the installations, as well as the compiler type (<code class="docutils literal notranslate"><span class="pre">intel</span></code> or <code class="docutils literal notranslate"><span class="pre">gcc</span></code>), and the python
 interpreter you want to use for YAC’s python bindings. E.g.</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>scripts/levante/bash/install_yac.sh<span class="w"> </span>/work/bm1183/m300950/yacyaxt/intel/<span class="w"> </span>intel<span class="w"> </span>/home/m/m300950/CLEO/.venv/bin/python3

@@ -23,7 +23,14 @@ How to Install YAC (and YAXT)
 #############################
 
 The easiest way (on Levante) to install YAXT and YAC is to run the ``install_yac.sh`` bash script found in
-``scripts/levante/bash/``. Note you will need to provide the path to the directory where you want
+``scripts/levante/bash/``. First you need to ensure your python version has pip installed first,
+e.g. with ``uv`` via
+
+.. code-block:: console
+
+  $ uv run python -m ensurepip --upgrade
+
+Then to use ``install_yac.sh`` you will need to provide the path to the directory where you want
 to put the installations, as well as the compiler type (``intel`` or ``gcc``), and the python
 interpreter you want to use for YAC's python bindings. E.g.
 
