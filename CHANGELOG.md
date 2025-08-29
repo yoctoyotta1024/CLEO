@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.57.27](https://github.com/yoctoyotta1024/CLEO/compare/2a817b64635dd2d9aae5c4aacbda6de272caa01d..v0.57.27) - 2025-08-29
+#### Bug Fixes
+- correct use of diff to changelog step to publish cleopy - ([2a817b6](https://github.com/yoctoyotta1024/CLEO/commit/2a817b64635dd2d9aae5c4aacbda6de272caa01d)) - clara.bayley
+#### Refactoring
+- delete unused cmakelists edit - ([d9a5822](https://github.com/yoctoyotta1024/CLEO/commit/d9a5822e91899a4fbe7f930a388647b920257dac)) - clara.bayley
+
+- - -
+
 ## [v0.57.26](https://github.com/yoctoyotta1024/CLEO/compare/67748291bffa7c6d578e652e1a9bbe7d21d1f0b9..v0.57.26) - 2025-08-29
 #### Bug Fixes
 - publish cleopy when changelog changes - ([fb76522](https://github.com/yoctoyotta1024/CLEO/commit/fb765224c0fc0dcabd19318c63dc5ca86456cd4d)) - clara.bayley
