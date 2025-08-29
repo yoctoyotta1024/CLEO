@@ -1,3 +1,4 @@
+```
 /*
  * ----- CLEO -----
  * File: LICENSE.md
@@ -11,7 +12,7 @@
  * -----
  * Copyright (c) 2023 MPI-M, Clara Bayley
  */
-
+```
 
 BSD 3-Clause License
 
