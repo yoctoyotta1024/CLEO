@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.57.25](https://github.com/yoctoyotta1024/CLEO/compare/67bb2d647f306d17e8c8299aab41ecc2f239b69d..v0.57.25) - 2025-08-29
+#### Bug Fixes
+- upload edited CITATION.cff and CMakeLists.txt with release - ([7af612d](https://github.com/yoctoyotta1024/CLEO/commit/7af612de0e21efe7bb28760a99c91697cc029a89)) - clara.bayley
+#### Refactoring
+- temporary ci debugging statements - ([6e438e4](https://github.com/yoctoyotta1024/CLEO/commit/6e438e4668330f44667746f1e206a9ad1ca6e59b)) - clara.bayley
+- small ci notes - ([67bb2d6](https://github.com/yoctoyotta1024/CLEO/commit/67bb2d647f306d17e8c8299aab41ecc2f239b69d)) - clara.bayley
+
+- - -
+
 ## [v0.57.24](https://github.com/yoctoyotta1024/CLEO/compare/de699232a873cc1b204c8f554da4bae78f21ca03..v0.57.24) - 2025-08-29
 #### Bug Fixes
 - only trigger on main - ([de69923](https://github.com/yoctoyotta1024/CLEO/commit/de699232a873cc1b204c8f554da4bae78f21ca03)) - clara.bayley
