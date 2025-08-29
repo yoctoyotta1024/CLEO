@@ -33,6 +33,7 @@ jobs:
       - name: publish cleopy
         if: ${{ steps.changelog.outputs.changed == 'true' }}
         run: |
+          echo "change in CHANGELOG.md detected"
           uv build
           ls dist/
           uv publish --trusted-publishing always
