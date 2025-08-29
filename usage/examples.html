@@ -179,7 +179,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -210,12 +210,13 @@
 <li class="toctree-l2"><a class="reference internal" href="../intro/kokkos.html">Kokkos Thread Parallelism</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="extern.html">External Libraries</a></li>
-<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#running-the-examples-on-levante">Running the Examples on Levante</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../cleopy/cleopy.html">API: cleopy CLEO Python Package</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of API: cleopy CLEO Python Package</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extern.html">External Libraries</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../cleopy/cleopy.html">API: CLEO Python Package, cleopy</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of API: CLEO Python Package, cleopy</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../cleopy/gbxboundariesbinary_src/gbxboundariesbinary_src.html">GbxBoundariesBinary</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of GbxBoundariesBinary</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../cleopy/gbxboundariesbinary_src/create_gbxboundaries.html">CREATE_GBXBOUNDARIES</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../cleopy/gbxboundariesbinary_src/read_gbxboundaries.html">READ_GBXBOUNDARIES</a></li>
@@ -329,8 +330,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../libs/kokkosaliases.html">Kokkos Aliases</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ourdocs.html">Our Docs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/yoctoyotta1024/CLEO.git">GitHub Repo</a></li>
 <li class="toctree-l1"><a class="reference internal" href="good_coding.html">Good Coding Practices</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contact.html">Contact Us!</a></li>
@@ -369,7 +370,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -380,10 +381,21 @@
 <p>There are various examples of CLEO, with different build configurations, domains, microphysics,
 coupling, and super-droplet motion etc. They can be found in the <code class="docutils literal notranslate"><span class="pre">CLEO/examples</span></code> directory. If you
 would like to a copy of the reference solutions please <a class="reference internal" href="contact.html#contact"><span class="std std-ref">contact us</span></a>.</p>
+<p>Before being able to run the examples you will need to locally install the <code class="docutils literal notranslate"><span class="pre">plotcleo</span></code> python
+package from the <code class="docutils literal notranslate"><span class="pre">examples/exampleplotting/</span></code> directory. E.g.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>uv<span class="w"> </span>build<span class="w"> </span>examples/exampleplotting/plotcleo
+<span class="gp">$ </span>uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>examples/exampleplotting/plotcleo/dist/plotcleo-<span class="o">[</span>version<span class="o">]</span>.tar.gz
+<span class="gp">$ </span>uv<span class="w"> </span>run<span class="w"> </span>python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import plotcleo&quot;</span>
+</pre></div>
+</div>
 <p>Each example can be run by building CLEO, compiling the relevant executable, and then running the
-example’s Python script. There are bash helper scripts for you to do all this relatively smoothly on
-DKRZ’s Levante HPC. The following instructions are intended to guide you through running each
-example using their bash script.</p>
+example’s Python script. There are bash scripts to help you to do all this relatively smoothly on
+DKRZ’s Levante HPC.</p>
+</section>
+<section id="running-the-examples-on-levante">
+<h1>Running the Examples on Levante<a class="headerlink" href="#running-the-examples-on-levante" title="Link to this heading">¶</a></h1>
+<p>The following instructions are intended to guide you through running each example using the bash
+scripts in <code class="docutils literal notranslate"><span class="pre">scripts/levante/</span></code>.</p>
 <p>Please Note: the bash script for some of the examples chooses a build configuration which uses GPUs.
 To execute these scripts you will therefore need to be on a node in the GPU partition of Levante
 (<a class="reference external" href="https://docs.dkrz.de/doc/levante/running-jobs/partitions-and-limits.html">see here</a>
@@ -615,9 +627,9 @@ in <code class="docutils literal notranslate"><span class="pre">~/CLEO/examples/
 </section>
 <section id="extension">
 <h2>Extension<a class="headerlink" href="#extension" title="Link to this heading">¶</a></h2>
-<p>Explore the <code class="docutils literal notranslate"><span class="pre">examples/exampleplotting/plotssrc</span></code> Python module which gives examples of how to plot output
-from CLEO with <code class="docutils literal notranslate"><span class="pre">cleopy</span></code>, a few of which are demonstrated in the <code class="docutils literal notranslate"><span class="pre">examples/exampleplotting/exampleplotting.py</span></code>
-script.</p>
+<p>Explore <code class="docutils literal notranslate"><span class="pre">examples/exampleplotting</span></code> which gives examples of how to plot output from CLEO
+with <code class="docutils literal notranslate"><span class="pre">cleopy</span></code> and <code class="docutils literal notranslate"><span class="pre">plotcleo</span></code>, a few examples are demonstrated in the
+<code class="docutils literal notranslate"><span class="pre">examples/exampleplotting/exampleplotting.py</span></code> script.</p>
 </section>
 </section>
 
@@ -665,44 +677,8 @@ script.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Examples</a><ul>
-<li><a class="reference internal" href="#configure-the-bash-scripts">Configure the Bash Scripts</a></li>
-<li><a class="reference internal" href="#adiabatic-parcel">Adiabatic Parcel</a><ul>
-<li><a class="reference internal" href="#a-arabas-and-shima-2017">a) Arabas and Shima 2017</a></li>
-<li><a class="reference internal" href="#b-cusp-bifurcation">b) Cusp Bifurcation</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#box-model-collisions">Box Model Collisions</a><ul>
-<li><a class="reference internal" href="#the-collision-kernels">The Collision Kernels</a></li>
-<li><a class="reference internal" href="#running-the-box-model-collisions-examples">Running the Box Model Collisions Examples</a></li>
-<li><a class="reference internal" href="#a-shima-et-al-2009">a) Shima et al. 2009</a></li>
-<li><a class="reference internal" href="#b-breakup">b) Breakup</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#divergence-free-motion">Divergence Free Motion</a></li>
-<li><a class="reference internal" href="#d-rainshaft">1-D Rainshaft</a></li>
-<li><a class="reference internal" href="#constant-2-d-thermodynamics">Constant 2-D Thermodynamics</a></li>
-<li><a class="reference internal" href="#kokkos-tools-profiling-test">Kokkos Tools Profiling Test</a></li>
-<li><a class="reference internal" href="#extension">Extension</a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>
