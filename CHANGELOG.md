@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.57.26](https://github.com/yoctoyotta1024/CLEO/compare/67748291bffa7c6d578e652e1a9bbe7d21d1f0b9..v0.57.26) - 2025-08-29
+#### Bug Fixes
+- publish cleopy when changelog changes - ([fb76522](https://github.com/yoctoyotta1024/CLEO/commit/fb765224c0fc0dcabd19318c63dc5ca86456cd4d)) - clara.bayley
+- missing E in grep - ([aee7cfc](https://github.com/yoctoyotta1024/CLEO/commit/aee7cfc539141cad65314e3a6f801823b02eb0f7)) - clara.bayley
+#### Refactoring
+- list changed_files detected in cleopy ci - ([181a4e2](https://github.com/yoctoyotta1024/CLEO/commit/181a4e26ac492c7fd4cc88e733b21f1c086f2f88)) - clara.bayley
+- no version in citation and cmake - ([611f931](https://github.com/yoctoyotta1024/CLEO/commit/611f9315ee1fd59cea93a665ee63cbd4a721ab77)) - clara.bayley
+- remove temporary ci debugging statements - ([6774829](https://github.com/yoctoyotta1024/CLEO/commit/67748291bffa7c6d578e652e1a9bbe7d21d1f0b9)) - clara.bayley
+
+- - -
+
 ## [v0.57.25](https://github.com/yoctoyotta1024/CLEO/compare/67bb2d647f306d17e8c8299aab41ecc2f239b69d..v0.57.25) - 2025-08-29
 #### Bug Fixes
 - upload edited CITATION.cff and CMakeLists.txt with release - ([7af612d](https://github.com/yoctoyotta1024/CLEO/commit/7af612de0e21efe7bb28760a99c91697cc029a89)) - clara.bayley
