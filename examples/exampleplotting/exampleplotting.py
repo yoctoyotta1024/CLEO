@@ -21,7 +21,7 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 
 from cleopy.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
-from plotcleo import pltsds, pltdist
+from plotcleo.plotcleo import pltsds, pltdist
 
 # %%
 ### ---------------------- input parameters ------------------------ ###
