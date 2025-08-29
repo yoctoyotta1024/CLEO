@@ -97,13 +97,9 @@ def plot_onekernel_results(
     t2plts,
     savename,
 ):
-    import sys
     import matplotlib.pyplot as plt
 
-    sys.path.append(
-        str(path2CLEO / "examples" / "exampleplotting")
-    )  # imports from example plots package
-    from plotssrc import shima2009fig
+    from plotcleo import shima2009fig
     from cleopy.sdmout_src import pygbxsdat
 
     # read in data
@@ -138,14 +134,10 @@ def plot_onekernel_results(
 def plot_allkernels_results(
     path2CLEO, grid_filename, kernels, setupfiles, datasets, xlims, t2plts, savename
 ):
-    import sys
     import awkward as ak
     import matplotlib.pyplot as plt
 
-    sys.path.append(
-        str(path2CLEO / "examples" / "exampleplotting")
-    )  # imports from example plots package
-    from plotssrc import shima2009fig
+    from plotcleo import shima2009fig
     from cleopy.sdmout_src import pygbxsdat
 
     def blank_axis(ax, xlims, ylims):

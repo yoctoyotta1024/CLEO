@@ -1,0 +1,40 @@
+[project]
+name = "plotcleo"
+description = "Python package for help plotting output of CLEO SDM examples"
+dynamic = ["version"]
+authors = [
+	{name="Clara Bayley", email="yoctoyotta1024@yahoo.com"},
+]
+repository = "https://github.com/yoctoyotta1024/CLEO"
+license = "BSD-3-Clause"
+requires-python=">=3.13"
+
+dependencies = [
+  "awkward",
+  "cleopy",
+  "cython",
+  "datetime",
+  "isodate",
+  "netcdf4",
+  "numpy",
+  "matplotlib",
+  "mpi4py",
+  "ruamel.yaml",
+  "xarray",
+  "zarr",
+]
+
+[project.urls]
+Homepage = "https://github.com/yoctoyotta1024/CLEO"
+Website = "https://yoctoyotta1024.github.io/CLEO"
+Issues = "https://github.com/yoctoyotta1024/CLEO/issues"
+
+[build-system]
+requires=["hatchling >= 1.26", "uv-dynamic-versioning"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "uv-dynamic-versioning"
+
+[tool.uv-dynamic-versioning]
+fallback-version = "0.0.0"

@@ -30,17 +30,17 @@ Time to get involved! Start by :doc:`installing CLEO<usage/installation>` and ex
    :caption: Contents:
 
    intro/intro
-   usage/extern
-   usage/requirements
    usage/installation
    usage/examples
    usage/quickstart
+   usage/requirements
+   usage/extern
 
    cleopy/cleopy
    libs/libs
 
-   usage/contributing
    usage/ourdocs
+   usage/contributing
 
    GitHub Repo <https://github.com/yoctoyotta1024/CLEO.git>
    usage/good_coding

@@ -21,12 +21,13 @@ for bubble test case output
 ### -------------------------------- IMPORTS ------------------------------- ###
 import argparse
 import awkward as ak
-import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 from matplotlib.cm import ScalarMappable
 from pathlib import Path
+
+from cleopy.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
 
 
 # %%
@@ -279,14 +280,6 @@ def plot_2d_supers_contours(
 
     return fig, axs
 
-
-# %%
-### --------------- IMPORT cleopy AND CLEO PLOTTING MODULES ------------------ ###
-path2CLEO = parse_known_arguments()[0].path2CLEO
-sys.path.append(
-    str(path2CLEO / "examples" / "exampleplotting")
-)  # imports from example plots package
-from cleopy.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
 
 # %%
 ### -------------------------- INPUT PARAMETERS ---------------------------- ###

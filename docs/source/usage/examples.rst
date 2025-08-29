@@ -7,10 +7,25 @@ There are various examples of CLEO, with different build configurations, domains
 coupling, and super-droplet motion etc. They can be found in the ``CLEO/examples`` directory. If you
 would like to a copy of the reference solutions please :ref:`contact us <contact>`.
 
+Before being able to run the examples you will need to locally install the ``plotcleo`` python
+package from the ``examples/exampleplotting/`` directory. E.g.
+
+.. code-block:: console
+
+  $ uv build examples/exampleplotting/plotcleo
+  $ uv pip install examples/exampleplotting/plotcleo/dist/plotcleo-[version].tar.gz
+  $ uv run python -c "import plotcleo"
+
+
 Each example can be run by building CLEO, compiling the relevant executable, and then running the
-example's Python script. There are bash helper scripts for you to do all this relatively smoothly on
-DKRZ's Levante HPC. The following instructions are intended to guide you through running each
-example using their bash script.
+example's Python script. There are bash scripts to help you to do all this relatively smoothly on
+DKRZ's Levante HPC.
+
+Running the Examples on Levante
+===============================
+
+The following instructions are intended to guide you through running each example using the bash
+scripts in ``scripts/levante/``.
 
 Please Note: the bash script for some of the examples chooses a build configuration which uses GPUs.
 To execute these scripts you will therefore need to be on a node in the GPU partition of Levante
@@ -299,6 +314,6 @@ in ``~/CLEO/examples/kokkostools/spdtest_kpkerneltimer_example_solution``.
 
 Extension
 ---------
-Explore the ``examples/exampleplotting/plotssrc`` Python module which gives examples of how to plot output
-from CLEO with ``cleopy``, a few of which are demonstrated in the ``examples/exampleplotting/exampleplotting.py``
-script.
+Explore ``examples/exampleplotting`` which gives examples of how to plot output from CLEO
+with ``cleopy`` and ``plotcleo``, a few examples are demonstrated in the
+``examples/exampleplotting/exampleplotting.py`` script.

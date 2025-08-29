@@ -107,14 +107,10 @@ def get_results(path2CLEO, grid_filename, setupfile, dataset):
 # %%
 ### -------------------------------- MAIN ---------------------------------- ###
 def main(path2CLEO, savefigpath, grid_filename, setupfiles, datasets, runnums):
-    import sys
     import numpy as np
     import matplotlib.pyplot as plt
 
-    sys.path.append(
-        str(path2CLEO / "examples" / "exampleplotting")
-    )  # imports from example plots package
-    from plotssrc import as2017fig
+    from plotcleo import as2017fig
 
     assert (
         len(setupfiles) == len(runnums) and len(datasets) == len(runnums)
