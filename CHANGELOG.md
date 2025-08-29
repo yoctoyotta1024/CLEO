@@ -2,6 +2,21 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.58.0](https://github.com/yoctoyotta1024/CLEO/compare/8368705e15be212fb6ed7754290a86fd083d53df..v0.58.0) - 2025-08-29
+#### Documentation
+- add instructions on plotcleo installation - ([9bfa7d5](https://github.com/yoctoyotta1024/CLEO/commit/9bfa7d56e0a13d0d7b07f8b7a7f77ec0e4b76817)) - clara.bayley
+- reorder and naming for readability - ([3725d3b](https://github.com/yoctoyotta1024/CLEO/commit/3725d3bd71d49d44daf403e81252a97e33c90d7d)) - clara.bayley
+#### Features
+- minimum pyproject.toml to build examplesplotting locally - ([d29eda1](https://github.com/yoctoyotta1024/CLEO/commit/d29eda1e1685a93763404a3f8c4cf542bac6c478)) - clara.bayley
+#### Refactoring
+- delete redundant path append - ([f19e995](https://github.com/yoctoyotta1024/CLEO/commit/f19e995fcc185e30c7a518e47d269eff09fcd2cc)) - clara.bayley
+- package plotcleo inside plotcleo - ([2bc8bb2](https://github.com/yoctoyotta1024/CLEO/commit/2bc8bb24c9ac5ec39f5ae26e7c90ec25e266c4f2)) - clara.bayley
+- rename plotssrc -> plotcleo - ([5024eed](https://github.com/yoctoyotta1024/CLEO/commit/5024eedd4c4f4c587b006ca8d631f733d1b90229)) - clara.bayley
+- don't call error when eurec4a example fails to run - ([69f0b74](https://github.com/yoctoyotta1024/CLEO/commit/69f0b74954e44c4064bde238aacb968574d92552)) - clara.bayley
+- update yac and yaxt versions - ([8368705](https://github.com/yoctoyotta1024/CLEO/commit/8368705e15be212fb6ed7754290a86fd083d53df)) - clara.bayley
+
+- - -
+
 ## [v0.57.29](https://github.com/yoctoyotta1024/CLEO/compare/edc0392e7afbfe0c1e89f67188b158513e976b65..v0.57.29) - 2025-08-29
 #### Bug Fixes
 - correct syntax - ([c7aac60](https://github.com/yoctoyotta1024/CLEO/commit/c7aac6004c64acc1374d0c532ce95c40b9b5d4e5)) - clara.bayley
