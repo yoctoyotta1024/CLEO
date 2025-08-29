@@ -63,17 +63,9 @@ jobs:
           echo "current CLEO version: ${{ steps.release.outputs.version }}"
           export version=$(echo "${{ steps.release.outputs.version }}" | sed 's/^v//')
           export version_date=$(date)
-          echo "-- b4 --"
-          ls
-          echo "----"
-          cat CITATION.cff
-          echo "----"
           sed -i "s/^version: .*/version: ${version}/" CITATION.cff
           sed -i "s/^date-released: .*/date-released: ${version_date}/" CITATION.cff
           sed -i "s/^  VERSION .*/  VERSION ${version}/" CMakeLists.txt
-          echo "-- l8r --"
-          cat CITATION.cff
-          echo "----"
 
       - name: Generate Changelog
         run: cog changelog --at ${{ steps.release.outputs.version }} -t remote > GITHUB_CHANGELOG.md
