@@ -27,12 +27,12 @@ jobs:
           git diff --name-only ${{ github.sha }}^ ${{ github.sha }} > diff_files.txt
           cat diff_files.txt
           if grep -qE '^CHANGELOG\.md$' diff_files.txt; then
-            echo "is_diff=true"  >> "$GITHUB_OUTPUT"
+            echo "is_diff=true"  >> $GITHUB_OUTPUT
           else
-            echo "is_diff=false" >> "$GITHUB_OUTPUT"
+            echo "is_diff=false" >> $GITHUB_OUTPUT
           fi
       - name: publish cleopy
-        if: ${{ steps.check_changelog.outputs.is_diff }} == "true"
+        if: ${{ steps.check_changelog.outputs.is_diff == 'true' }}
         run: |
           echo "difference in CHANGELOG.md detected, publishing cleopy"
           uv build
