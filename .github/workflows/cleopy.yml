@@ -21,18 +21,18 @@ jobs:
             fetch-depth: 0
       - uses: astral-sh/setup-uv@v3
       # Only release new version of cleopy when CHANGELOG.md changes (e.g. by cocogitto.yml)
-      - name: detect if CHANGELOG.md changed
+      - name: is_changelog_changed
         id: changed
         run: |
           git diff --name-only ${{ github.sha }}^ ${{ github.sha }} > changed_files.txt
           cat changed_files.txt
-          if grep -q '^CHANGELOG\.md$' changed_files.txt; then
+          if grep -qE '^CHANGELOG\.md$' changed_files.txt; then
             echo "changed=true"  >> $GITHUB_OUTPUT
           else
             echo "changed=false" >> $GITHUB_OUTPUT
           fi
       - name: publish cleopy
-        if: ${{ steps.changelog.outputs.changed == 'true' }}
+        if: ${{ steps.is_changelog_changed.outputs.changed == 'true' }}
         run: |
           echo "change in CHANGELOG.md detected"
           uv build
