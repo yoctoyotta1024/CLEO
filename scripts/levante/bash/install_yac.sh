@@ -24,12 +24,12 @@ root4YAC=$1 # absolute path for YAC and YAXT installations
 compilername=$2 # compile yac and yaxt with "gcc" or "intel"
 python=$3 # name or absolute path to python to make YAC python bindngs with
 
-yaxt_tag=0.11.1
+yaxt_tag=0.11.4
 yaxt_version=yaxt-${yaxt_tag}
 yaxt_release_tag=release-${yaxt_tag}
 yaxt_source=https://gitlab.dkrz.de/dkrz-sw/yaxt/-/archive/$yaxt_release_tag/$yaxt_version.tar.gz
 
-yac_tag=v3.5.2
+yac_tag=v3.6.2
 yac_version=yac_$yac_tag
 yac_source=https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/$yac_tag/$yac_version.tar.gz
 
