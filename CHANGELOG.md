@@ -2,6 +2,19 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.57.22](https://github.com/yoctoyotta1024/CLEO/compare/17b94a21e80abe145ff301f043d49080a7411d40..v0.57.22) - 2025-08-29
+#### Bug Fixes
+- only run cleopy when push to main changes changelog - ([0ae816d](https://github.com/yoctoyotta1024/CLEO/commit/0ae816dd47d8f5453c4107684c26a6bdcb41b4d4)) - clara.bayley
+#### Continuous Integration
+- cocogitto ci updates hard-coded versions - ([2da6584](https://github.com/yoctoyotta1024/CLEO/commit/2da6584c5377130fad42065441c92a5c045ca314)) - clara.bayley
+#### Refactoring
+- add print statement - ([00811a2](https://github.com/yoctoyotta1024/CLEO/commit/00811a2042809dd7f053e12e4419c758a9d44e19)) - clara.bayley
+- delete copyright on citation and license files - ([28c61d5](https://github.com/yoctoyotta1024/CLEO/commit/28c61d510931edca58ab3d1d130a41775f07d560)) - clara.bayley
+- put headers in markdown files in code blocks - ([c50f03d](https://github.com/yoctoyotta1024/CLEO/commit/c50f03dce19275f987814fdc1584c6fa979dda75)) - clara.bayley
+- python_bindings example only works with gcc - ([17b94a2](https://github.com/yoctoyotta1024/CLEO/commit/17b94a21e80abe145ff301f043d49080a7411d40)) - clara.bayley
+
+- - -
+
 ## [v0.57.21](https://github.com/yoctoyotta1024/CLEO/compare/fad6ef76c34eeaf5010849641d8578386884a8fb..v0.57.21) - 2025-08-28
 #### Bug Fixes
 - missing path for libs in LD_LIBRARY_PATH at runtime - ([26c8ae4](https://github.com/yoctoyotta1024/CLEO/commit/26c8ae486f2457857952dbb78476b3dadb87a210)) - clara.bayley
