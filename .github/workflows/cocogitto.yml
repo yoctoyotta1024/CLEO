@@ -65,7 +65,6 @@ jobs:
           export version_date=$(date)
           sed -i "s/^version: .*/version: ${version}/" CITATION.cff
           sed -i "s/^date-released: .*/date-released: ${version_date}/" CITATION.cff
-          sed -i "s/^  VERSION .*/  VERSION ${version}/" CMakeLists.txt
 
       - name: Generate Changelog
         run: cog changelog --at ${{ steps.release.outputs.version }} -t remote > GITHUB_CHANGELOG.md
