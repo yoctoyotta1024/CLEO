@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: release
     # Only release new version when merging into `origin/main`.` (same as cocogitto.yml release job)
-    if: "github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository_owner == 'yoctoyotta1024'"
+    if: "github.event_name == 'push' && github.ref == 'refs/heads/main'"
     permissions:
       id-token: write
     steps:
