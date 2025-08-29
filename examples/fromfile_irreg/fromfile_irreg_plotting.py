@@ -67,12 +67,7 @@ def main(
     setupfile,
     dataset,
 ):
-    import sys
     import matplotlib.pyplot as plt
-
-    sys.path.append(
-        str(path2CLEO / "examples" / "exampleplotting")
-    )  # imports from example plots package
 
     from src import plot_output_thermo
     from plotcleo import pltsds, pltmoms

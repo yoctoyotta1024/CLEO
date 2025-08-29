@@ -67,13 +67,8 @@ def main(
     setupfile,
     dataset,
 ):
-    import sys
     import numpy as np
     import matplotlib.pyplot as plt
-
-    sys.path.append(
-        str(path2CLEO / "examples" / "exampleplotting")
-    )  # imports from example plots package
 
     from plotcleo import pltsds, pltmoms, animations
     from cleopy.sdmout_src import pyzarr, pysetuptxt, pygbxsdat

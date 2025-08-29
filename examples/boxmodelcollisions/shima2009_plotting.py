@@ -79,12 +79,8 @@ def plot_shima2009_plot_validation_figure(
     withgol,
     savename,
 ):
-    import sys
     import matplotlib.pyplot as plt
 
-    sys.path.append(
-        str(path2CLEO / "examples" / "exampleplotting")
-    )  # imports from example plots package
     from plotcleo import shima2009fig
     from cleopy.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
 
