@@ -31,8 +31,9 @@ jobs:
           else
             echo "is_diff=false" >> "$GITHUB_OUTPUT"
           fi
+          echo "changelog difference ${{ steps.check_changelog.outputs.is_diff }}"
       - name: publish cleopy
-        if: ${{ steps.check_changelog.outputs.is_diff == "true" }}
+        if: ${{ steps.check_changelog.outputs.is_diff }} == "true"
         run: |
           echo "difference in CHANGELOG.md detected, publishing cleopy"
           uv build
