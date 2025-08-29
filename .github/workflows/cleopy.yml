@@ -25,7 +25,7 @@ jobs:
         id: changed
         run: |
           git diff --name-only ${{ github.sha }}^ ${{ github.sha }} > changed_files.txt
-          if grep -q '^CHANGELOG\.md$' changed_files.txt; then
+          if grep -qE '^CHANGELOG\.md$' changed_files.txt; then
             echo "changed=true"  >> $GITHUB_OUTPUT
           else
             echo "changed=false" >> $GITHUB_OUTPUT
