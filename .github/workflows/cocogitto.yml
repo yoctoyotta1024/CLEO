@@ -58,7 +58,7 @@ jobs:
           git-user: 'yoctoyotta1024'
           git-user-email: 'yoctoyotta1024@yahoo.com'
 
-      - name: Print and update hard-coded versions
+      - name: Print and update hard-coded version for release
         run: |
           echo "current CLEO version: ${{ steps.release.outputs.version }}"
           export version=$(echo "${{ steps.release.outputs.version }}" | sed 's/^v//')
