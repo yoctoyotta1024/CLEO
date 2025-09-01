@@ -33,6 +33,7 @@
 
 #include "configuration/communicator.hpp"
 #include "configuration/config.hpp"
+#include "superdrops/state.hpp"
 
 /* contains 1-D vector for each (thermo)dynamic
 variable which is ordered by gridbox at every timestep
@@ -63,8 +64,11 @@ struct CartesianDynamics {
   // YAC field ids
   int pressure_yac_id;
   int temp_yac_id;
+  int temp_yac_id2;
   int qvap_yac_id;
+  int qvap_yac_id2;
   int qcond_yac_id;
+  int qcond_yac_id2;
   int eastward_wind_yac_id;
   int northward_wind_yac_id;
   int vertical_wind_yac_id;
@@ -125,6 +129,10 @@ struct CartesianDynamics {
                          std::vector<double> &target_array, const size_t ndims_north,
                          const size_t ndims_east, const size_t vertical_levels,
                          double conversion_factor) const;
+  void send_yac_field(double* field_data, double conversion_factor);
+  void send_fields_to_yac(double* temp_state,
+                          double* qvap_state,
+                          double* qcond_state);
 };
 
 /* type satisfying CoupledDyanmics solver concept
@@ -158,6 +166,8 @@ struct YacDynamics {
       run_dynamics(t_mdl);
     }
   }
+
+  const std::shared_ptr<CartesianDynamics>& get_dynvars() const { return dynvars; }
 
   double get_press(const size_t ii) const { return dynvars->get_press(ii); }
 
