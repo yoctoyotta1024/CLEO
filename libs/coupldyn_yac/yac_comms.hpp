@@ -39,8 +39,8 @@ struct YacComms {
   /* send information from Gridboxes' states
   to coupldyn is null for YacDynamics*/
   template <typename GbxMaps, typename CD = YacDynamics>
-  void send_dynamics(const GbxMaps &gbxmaps, const viewh_constgbx h_gbxs,
-                     YacDynamics &ffdyn) const {}
+  void send_dynamics(const GbxMaps&,
+    const viewh_constgbx, const YacDynamics &ffdyn) const;
 
   /* update Gridboxes' states using information
   received from YacDynamics solver for
