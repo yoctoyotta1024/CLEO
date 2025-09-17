@@ -13,8 +13,8 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Header file for members of Config struct which determine CLEO's optional configuration
- * parameters read from a config file.
+ * Header file for members of Config struct which determine CLEO's
+ * optional configuration parameters read from a config file.
  */
 
 #ifndef LIBS_CONFIGURATION_OPTIONAL_CONFIG_PARAMS_HPP_
@@ -38,12 +38,15 @@ inline size_t sizet() { return std::numeric_limits<size_t>::signaling_NaN(); };
 /**
  * @brief Struct storing optional configuration parameters for CLEO
  *
- * Optional means parameters have default values and therefore need not be set upon
- * construction. Default values are not intended to be used and may caused model errors at runtime.
+ * Optional means parameters have default values and therefore need not be set
+ * upon construction. Default values are not intended to be used and may caused
+ * model errors at runtime.
  *
  */
 struct OptionalConfigParams {
-  /* read configuration file given by config_filename to set members of required configuration */
+  /*
+   * read configuration file given by config_filename to set members of required configuration
+   */
   explicit OptionalConfigParams(const std::filesystem::path config_filename);
 
   void set_kokkos_settings(const YAML::Node& config);
