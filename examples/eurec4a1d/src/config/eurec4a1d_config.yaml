@@ -27,26 +27,26 @@ kokkos_settings:
 ### SDM Runtime Parameters ###
 domain:
   nspacedims : 1                                                 # no. of spatial dimensions to model
-  ngbxs : 60                                                     # total number of Gbxs
+  ngbxs : 128                                                    # total number of Gbxs
   maxnsupers: 32768                                              # maximum number of SDs
 
 timesteps:
   CONDTSTEP : 0.1                                                # time between SD condensation [s]
   COLLTSTEP : 1                                                  # time between SD collision [s]
-  MOTIONTSTEP : 2                                                # time between SDM motion [s]
-  COUPLTSTEP : 2400                                              # time between dynamic couplings [s]
-  OBSTSTEP : 5                                                   # time between SDM observations [s]
-  T_END : 2400                                                   # time span of integration from 0s to T_END [s]
+  MOTIONTSTEP : 1                                                # time between SDM motion [s]
+  COUPLTSTEP : 30                                                # time between dynamic couplings [s]
+  OBSTSTEP : 1                                                   # time between SDM observations [s]
+  T_END : 30                                                     # time span of integration from 0s to T_END [s]
 
 ### Initialisation Parameters ###
 inputfiles:
   constants_filename : ../libs/cleoconstants.hpp                 # name of file for values of physical constants
-  grid_filename : ./share/eurec4a1d_ddimlessGBxboundaries.dat    # binary filename for initialisation of GBxs / GbxMaps
+  grid_filename : ./share/eurec4a1d_dimlessGBxboundaries.dat     # binary filename for initialisation of GBxs / GbxMaps
 
 initsupers:
   type: frombinary                                               # type of initialisation of super-droplets
-  initsupers_filename : ./share/eurec4a1d_ddimlessSDsinit.dat    # binary filename for initialisation of SDs
-  initnsupers: 15360                                             # initial no. of super-droplets to initialise
+  initsupers_filename : ./share/eurec4a1d_dimlessSDsinit.dat     # binary filename for initialisation of SDs
+  initnsupers: 16384                                             # initial no. of super-droplets to initialise
 
 ### Output Parameters ###
 outputdata:
@@ -75,14 +75,14 @@ coupled_dynamics:
 ### Bounday Conditions Parameters ###
 boundary_conditions:
   type: addsupersatdomaintop
-  COORD3LIM: 800                                       # SDs added to domain with coord3 >= COORD3LIM [m]
-  newnsupers: 1024                                     # number SDs to add to each gridbox above COORD3LIM
-  DRYRADIUS: 1e-9                                      # dry radius of new super-droplets (for solute mass) [m]
-  MINRADIUS: 1e-8                                      # minimum radius of new super-droplets [m]
-  MAXRADIUS: 1e-4                                      # maximum radius of new super-droplets [m]
-  NUMCONC_a: 2e8                                       # number conc. of 1st droplet lognormal dist [m^-3]
-  GEOMEAN_a: 0.2e-6                                    # geometric mean radius of 1st lognormal dist [m]
-  geosigma_a: 2.3                                      # geometric standard deviation of 1st lognormal dist
-  NUMCONC_b: 4e8                                       # number conc. of 2nd droplet lognormal dist [m^-3]
-  GEOMEAN_b: 3.5e-6                                    # geometric mean radius of 2nd lognormal dist [m]
-  geosigma_b: 2.0                                      # geometric standard deviation of 2nd lognormal dist
+  COORD3LIM: 3000                                      # SDs added to domain with coord3 >= COORD3LIM [m]
+  newnsupers: 128                                      # number SDs to add to each gridbox above COORD3LIM
+  DRYRADIUS: 1.0                                       # max dry radius of new super-droplets (for solute mass) [m]
+  MINRADIUS: 0.5e-8                                    # minimum radius of new super-droplets [m]
+  MAXRADIUS: 2.5e-7                                    # maximum radius of new super-droplets [m]
+  NUMCONC_a: 25e6                                      # number conc. of 1st droplet lognormal dist [m^-3]
+  GEOMEAN_a: 0.04e-6                                   # geometric mean radius of 1st lognormal dist [m]
+  geosigma_a: 1.4                                      # geometric standard deviation of 1st lognormal dist
+  NUMCONC_b: 25e6                                      # number conc. of 2nd droplet lognormal dist [m^-3]
+  GEOMEAN_b: 0.04e-6                                   # geometric mean radius of 2nd lognormal dist [m]
+  geosigma_b: 1.4                                      # geometric standard deviation of 2nd lognormal dist
