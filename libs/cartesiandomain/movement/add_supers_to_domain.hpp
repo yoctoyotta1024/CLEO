@@ -62,7 +62,7 @@ class TwoLognormalsDistribution {
   LognormalDistribution dist_b; /**< 2nd lognormal distribution for creating superdroplet xi */
 
  public:
-  explicit TwoLognormalsDistribution(const OptionalConfigParams::AddSupersToDomainParams &config)
+  explicit TwoLognormalsDistribution(const OptionalConfigParams::AddSupersToDomainParams& config)
       : dist_a({config.NUMCONC_a * dlc::VOL0, config.GEOMEAN_a / dlc::R0,
                 std::log(config.geosigma_a)}),
         dist_b({config.NUMCONC_b * dlc::VOL0, config.GEOMEAN_b / dlc::R0,
@@ -85,7 +85,7 @@ struct CreateSuperdrop {
 
   /* create spatial coordinates for super-droplet by setting coord1 = coord2 = 0.0 and coord3 to
   a random value within the gridbox's bounds */
-  std::array<double, 3> create_superdrop_coords(const CartesianMaps &gbxmaps,
+  std::array<double, 3> create_superdrop_coords(const CartesianMaps& gbxmaps,
                                                 const unsigned int gbxindex) const;
 
   /* create attributes for a new super-droplet */
@@ -99,9 +99,9 @@ struct CreateSuperdrop {
 
  public:
   /* call to create a new superdroplet for gridbox with given gbxindex */
-  explicit CreateSuperdrop(const OptionalConfigParams::AddSupersToDomainParams &config);
+  explicit CreateSuperdrop(const OptionalConfigParams::AddSupersToDomainParams& config);
 
-  Superdrop operator()(const CartesianMaps &gbxmaps, const unsigned int gbxindex) const;
+  Superdrop operator()(const CartesianMaps& gbxmaps, const unsigned int gbxindex) const;
 };
 
 /*
@@ -115,20 +115,24 @@ struct AddSupersToDomain {
   CreateSuperdrop create_superdrop; /**< methods to create a new superdrop */
 
  public:
-  /* New super-droplets are added to domain with coord3 >= COORD3LIM [m]. Note generation of
-   * nextsdId assumes it is the only method creating super-droplets - otherwise created sdId may not
-   * be unique*/
-  explicit AddSupersToDomain(const OptionalConfigParams::AddSupersToDomainParams &config)
+  /* New super-droplets are added to domain with coord3 >= UPPER_COORD3LIM [m] and/or
+   * with coord3 < LOWER_COORD3LIM [m].
+   *
+   * _Note:_ generation of nextsdId assumes it is the only method creating super-droplets,
+   * otherwise created sdId may not be unique
+   *
+   * */
+  explicit AddSupersToDomain(const OptionalConfigParams::AddSupersToDomainParams& config)
       : newnsupers(config.newnsupers),
         coord3lim(config.COORD3LIM / dlc::COORD0),
         create_superdrop(config) {}
 
   /*
   Call to apply boundary conditions to remove and then add superdroplets to the top of the domain
-  abouve coord3lim.
+  above upper_coord3lim and/or to the bottom of the domain below lower_coord3lim.
   */
-  SupersInDomain apply(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
-                       SupersInDomain &allsupers) const;
+  SupersInDomain apply(const CartesianMaps& gbxmaps, viewd_gbx d_gbxs,
+                       SupersInDomain& allsupers) const;
 };
 
 #endif  // LIBS_CARTESIANDOMAIN_MOVEMENT_ADD_SUPERS_TO_DOMAIN_HPP_
