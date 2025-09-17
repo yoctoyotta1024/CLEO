@@ -13,7 +13,7 @@
 #SBATCH --output=./eurec4a1d_out.%j.out
 #SBATCH --error=./eurec4a1d_err.%j.out
 
-# TODO(ALL): python inputfiles and plotting script(s) for example
+# TODO(ALL): python plotting script for example
 
 ### ------------------ Input Parameters ---------------- ###
 ### ------ You MUST edit these lines to set your ------- ###
