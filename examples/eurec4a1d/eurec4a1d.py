@@ -169,7 +169,29 @@ def run_exectuable(path2build, config_filename):
 
 
 def plot_results(path2CLEO, config_filename, savefigpath):
-    print("TODO(ALL): create eurec4a1d_plotting.py script")
+    plotting_script = path2CLEO / "examples" / "eurec4a1d" / "eurec4a1d_plotting.py"
+    python = sys.executable
+
+    yaml = YAML()
+    with open(config_filename, "r") as file:
+        config = yaml.load(file)
+    grid_filename = Path(config["inputfiles"]["grid_filename"])
+    setupfile = Path(config["outputdata"]["setup_filename"])
+    dataset = Path(config["outputdata"]["zarrbasedir"])
+
+    # equivalent to ``import eurec4a1d_plotting`` followed by
+    # ``eurec4a1d_plotting.main(path2CLEO, savefigpath, ...)``
+    cmd = [
+        python,
+        plotting_script,
+        f"--path2CLEO={path2CLEO}",
+        f"--savefigpath={savefigpath}",
+        f"--grid_filename={grid_filename}",
+        f"--setupfile={setupfile}",
+        f"--dataset={dataset}",
+    ]
+    print(" ".join([str(c) for c in cmd]))
+    subprocess.run(cmd, check=True)
 
 
 # %%
