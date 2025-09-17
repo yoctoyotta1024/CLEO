@@ -110,8 +110,9 @@ struct CreateSuperdrop {
  */
 struct AddSupersToDomain {
  private:
-  size_t newnsupers; /**< number of superdroplets to add to gridboxes above coord3lim */
-  double coord3lim;  /**< gridboxes with upper bound > coord3lim get new super-droplets */
+  size_t newnsupers;      /**< number of superdroplets to add to gridboxes above coord3lim */
+  double lower_coord3lim; /**< gridboxes with lower bound < lower_coord3lim get new superdroplets */
+  double upper_coord3lim; /**< gridboxes with upper bound > upper_coord3lim get new superdroplets */
   CreateSuperdrop create_superdrop; /**< methods to create a new superdrop */
 
  public:
@@ -124,7 +125,8 @@ struct AddSupersToDomain {
    * */
   explicit AddSupersToDomain(const OptionalConfigParams::AddSupersToDomainParams& config)
       : newnsupers(config.newnsupers),
-        coord3lim(config.COORD3LIM / dlc::COORD0),
+        lower_coord3lim(config.LOWER_COORD3LIM / dlc::COORD0),
+        upper_coord3lim(config.UPPER_COORD3LIM / dlc::COORD0),
         create_superdrop(config) {}
 
   /*
