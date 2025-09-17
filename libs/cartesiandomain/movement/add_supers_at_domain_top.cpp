@@ -304,11 +304,12 @@ std::pair<size_t, double> CreateSuperdrop::new_xi_radius(const double gbxvolume)
 double CreateSuperdrop::new_msol(const double radius) const {
   constexpr double msolconst = 4.0 * std::numbers::pi * dlc::Rho_sol / 3.0;
 
+  auto new_dry = dryradius;
   if (radius < dryradius) {
-    throw std::invalid_argument("new radius cannot be < dry radius of droplet");
+    new_dry = radius;
   }
 
-  return msolconst * dryradius * dryradius * dryradius;
+  return msolconst * new_dry * new_dry * new_dry;
 }
 
 /* returns the droplet number concentration for a bin of width log10rlow -> log10rup

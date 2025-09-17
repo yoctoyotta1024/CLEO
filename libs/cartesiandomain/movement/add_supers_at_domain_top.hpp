@@ -80,7 +80,7 @@ struct CreateSuperdrop {
       sdIdGen;  /**< Pointer Superdrop::IDType object for super-droplet ID generation. */
   size_t nbins; /**< number of bins for sampling superdroplet radius */
   std::vector<double> log10redges; /**< edges of bins for superdroplet log_10(radius) */
-  double dryradius;                /**< dry radius of new superdrop */
+  double dryradius;                /**< (max) dry radius of new superdrop */
   TwoLognormalsDistribution dist;  /**< distribution for creating superdroplet xi */
 
   /* create spatial coordinates for super-droplet by setting coord1 = coord2 = 0.0 and coord3 to
