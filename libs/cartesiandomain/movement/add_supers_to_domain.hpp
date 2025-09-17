@@ -62,7 +62,7 @@ class TwoLognormalsDistribution {
   LognormalDistribution dist_b; /**< 2nd lognormal distribution for creating superdroplet xi */
 
  public:
-  explicit TwoLognormalsDistribution(const OptionalConfigParams::AddSupersAtDomainTopParams &config)
+  explicit TwoLognormalsDistribution(const OptionalConfigParams::AddSupersToDomainParams &config)
       : dist_a({config.NUMCONC_a * dlc::VOL0, config.GEOMEAN_a / dlc::R0,
                 std::log(config.geosigma_a)}),
         dist_b({config.NUMCONC_b * dlc::VOL0, config.GEOMEAN_b / dlc::R0,
@@ -99,7 +99,7 @@ struct CreateSuperdrop {
 
  public:
   /* call to create a new superdroplet for gridbox with given gbxindex */
-  explicit CreateSuperdrop(const OptionalConfigParams::AddSupersAtDomainTopParams &config);
+  explicit CreateSuperdrop(const OptionalConfigParams::AddSupersToDomainParams &config);
 
   Superdrop operator()(const CartesianMaps &gbxmaps, const unsigned int gbxindex) const;
 };
@@ -108,7 +108,7 @@ struct CreateSuperdrop {
  * struct satisfying BoundaryConditions concept for applying domain boundary conditions which
  * add superdroplets to gridboxes above a certain height.
  */
-struct AddSupersAtDomainTop {
+struct AddSupersToDomain {
  private:
   size_t newnsupers; /**< number of superdroplets to add to gridboxes above coord3lim */
   double coord3lim;  /**< gridboxes with upper bound > coord3lim get new super-droplets */
@@ -118,7 +118,7 @@ struct AddSupersAtDomainTop {
   /* New super-droplets are added to domain with coord3 >= COORD3LIM [m]. Note generation of
    * nextsdId assumes it is the only method creating super-droplets - otherwise created sdId may not
    * be unique*/
-  explicit AddSupersAtDomainTop(const OptionalConfigParams::AddSupersAtDomainTopParams &config)
+  explicit AddSupersToDomain(const OptionalConfigParams::AddSupersToDomainParams &config)
       : newnsupers(config.newnsupers),
         coord3lim(config.COORD3LIM / dlc::COORD0),
         create_superdrop(config) {}

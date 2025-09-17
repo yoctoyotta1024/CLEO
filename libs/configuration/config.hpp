@@ -99,8 +99,8 @@ struct Config {
 
   OptionalConfigParams::YacDynamicsParams get_yac_dynamics() const { return optional.yac_dynamics; }
 
-  OptionalConfigParams::AddSupersAtDomainTopParams get_addsupersatdomaintop() const {
-    return optional.addsupersatdomaintop;
+  OptionalConfigParams::AddSupersToDomainParams get_addsuperstodomain() const {
+    return optional.addsuperstodomain;
   }
 
   OptionalConfigParams::PythonBindingsParams get_python_bindings() const {

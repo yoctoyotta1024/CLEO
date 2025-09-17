@@ -74,7 +74,7 @@ coupled_dynamics:
 
 ### Bounday Conditions Parameters ###
 boundary_conditions:
-  type: addsupersatdomaintop
+  type: addsuperstodomain
   COORD3LIM: 3000                                      # SDs added to domain with coord3 >= COORD3LIM [m]
   newnsupers: 128                                      # number SDs to add to each gridbox above COORD3LIM
   DRYRADIUS: 1.0                                       # max dry radius of new super-droplets (for solute mass) [m]

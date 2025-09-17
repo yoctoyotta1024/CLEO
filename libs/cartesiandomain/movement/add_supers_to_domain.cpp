@@ -13,7 +13,7 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Implementation of AddSupersAtDomainTop type satisyfing the BoundaryConditions concept
+ * Implementation of AddSupersToDomain type satisyfing the BoundaryConditions concept
  * to use for a Cartesian Domain in MoveSupersInDomain.
  */
 
@@ -36,7 +36,7 @@ SupersInDomain move_supers_between_gridboxes_again(const viewd_gbx d_gbxs,
 Call to apply boundary conditions to remove and then add superdroplets to the top of the domain
 above coord3lim.
 */
-SupersInDomain AddSupersAtDomainTop::apply(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
+SupersInDomain AddSupersToDomain::apply(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
                                            SupersInDomain &allsupers) const {
   const auto gbxindexes_for_newsupers =
       remove_superdrops_from_gridboxes(gbxmaps, d_gbxs, allsupers.domain_supers(), coord3lim);
@@ -231,7 +231,7 @@ Kokkos::pair<double, double> hostcopy_coord3bounds(const CartesianMaps &gbxmaps,
 }
 
 /* call to create a new superdroplet for gridbox with given gbxindex */
-CreateSuperdrop::CreateSuperdrop(const OptionalConfigParams::AddSupersAtDomainTopParams &config)
+CreateSuperdrop::CreateSuperdrop(const OptionalConfigParams::AddSupersToDomainParams &config)
     : randgen(std::make_shared<std::mt19937>(std::random_device {}())),
       sdIdGen(std::make_shared<Superdrop::IDType::Gen>(config.initnsupers)),
       nbins(config.newnsupers),

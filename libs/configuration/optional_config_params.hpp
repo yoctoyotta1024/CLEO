@@ -136,7 +136,7 @@ struct OptionalConfigParams {
   } yac_dynamics;
 
   /*** Bounday Conditions Parameters ***/
-  struct AddSupersAtDomainTopParams {
+  struct AddSupersToDomainParams {
     void set_params(const YAML::Node& config);
     void print_params() const;
     size_t initnsupers = NaNVals::sizet(); /**< initial no. of super-droplets in domain */
@@ -151,7 +151,7 @@ struct OptionalConfigParams {
     double NUMCONC_b = NaNVals::dbl();  /**< number conc. of 2nd droplet lognormal dist [m^-3] */
     double GEOMEAN_b = NaNVals::dbl();  /**< geometric mean radius of 2nd lognormal dist [m] */
     double geosigma_b = NaNVals::dbl(); /**< geometric standard deviation of 2nd lognormal dist */
-  } addsupersatdomaintop;
+  } addsuperstodomain;
 
   /** CLEO Python Bindings Parameters */
   struct PythonBindingsParams {

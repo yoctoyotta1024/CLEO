@@ -130,9 +130,9 @@ void OptionalConfigParams::set_coupled_dynamics(const YAML::Node &config) {
 void OptionalConfigParams::set_boundary_conditions(const YAML::Node &config) {
   const auto type = config["boundary_conditions"]["type"].as<std::string>();
 
-  if (type == "addsupersatdomaintop") {
-    addsupersatdomaintop.set_params(config);
-    addsupersatdomaintop.print_params();
+  if (type == "addsuperstodomain") {
+    addsuperstodomain.set_params(config);
+    addsuperstodomain.print_params();
   } else {
     throw std::invalid_argument("unknown boundary_conditions 'type': " + type);
   }
@@ -271,7 +271,7 @@ void OptionalConfigParams::YacDynamicsParams::print_params() const {
             << "\n---------------------------------------------------------\n";
 }
 
-void OptionalConfigParams::AddSupersAtDomainTopParams::set_params(const YAML::Node &config) {
+void OptionalConfigParams::AddSupersToDomainParams::set_params(const YAML::Node &config) {
   const YAML::Node node = config["boundary_conditions"];
 
   if (config["initsupers"] && config["initsupers"]["initnsupers"]) {
@@ -292,8 +292,8 @@ void OptionalConfigParams::AddSupersAtDomainTopParams::set_params(const YAML::No
   geosigma_b = node["geosigma_b"].as<double>();
 }
 
-void OptionalConfigParams::AddSupersAtDomainTopParams::print_params() const {
-  std::cout << "\n-------- AddSupersAtDomainTop Configuration Parameters --------------"
+void OptionalConfigParams::AddSupersToDomainParams::print_params() const {
+  std::cout << "\n-------- AddSupersToDomain Configuration Parameters --------------"
             << "\ninitnsupers: " << initnsupers << "\nnewnsupers: " << newnsupers
             << "\nCOORD3LIM: " << COORD3LIM << "\nDRYRADIUS: " << DRYRADIUS
             << "\nMINRADIUS: " << MINRADIUS << "\nMAXRADIUS: " << MAXRADIUS

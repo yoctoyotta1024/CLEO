@@ -99,7 +99,7 @@ inline auto create_movement(const Config &config, const Timesteps &tsteps,
 
   // const BoundaryConditions<CartesianMaps> auto boundary_conditions = NullBoundaryConditions{};
   const BoundaryConditions<CartesianMaps> auto boundary_conditions =
-      AddSupersAtDomainTop(config.get_addsupersatdomaintop());
+      AddSupersToDomain(config.get_addsuperstodomain());
 
   return cartesian_movement(gbxmaps, motion, boundary_conditions);
 }

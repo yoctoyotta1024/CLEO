@@ -114,7 +114,7 @@ inline Motion<CartesianMaps> auto create_motion(const unsigned int motionstep) {
 }
 
 inline BoundaryConditions<CartesianMaps> auto create_boundary_conditions(const Config &config) {
-  // return AddSupersAtDomainTop(config.get_addsupersatdomaintop());
+  // return AddSupersToDomain(config.get_addsuperstodomain());
   return NullBoundaryConditions{};
 }
 
