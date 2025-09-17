@@ -371,6 +371,35 @@ class Superdrops(SuperdropProperties):
             sample_var, sample_values=sample_values, variables2sample=variables2sample
         )
 
+    def select_range(
+        self, var_for_range: str, range_values: list[int], variables2select="all"
+    ):
+        if isinstance(var_for_range, str):
+            var_for_range = self._raw_data[var_for_range]
+
+        if len(range_values) != 2 or range_values[0] > range_values[1]:
+            raise ValueError(
+                "range_values must be [min, max] of var_for_range to select"
+            )
+
+        if isinstance(variables2select, str) and variables2select == "all":
+            variables2select = self._variables
+        elif not isinstance(variables2select, list):
+            variables2select = [variables2select]
+
+        raw_data = {var: [] for var in variables2select}
+        mask = ak.Array(var_for_range > range_values[0])
+        mask = ak.where(var_for_range < range_values[1], mask, False)
+        for var in variables2select:
+            var_in_selection = ak.drop_none(self._raw_data[var].mask[mask])
+            raw_data[var] = var_in_selection
+
+        superdrops_sample = Superdrops(self)
+        superdrops_sample._variables = raw_data.keys()
+        superdrops_sample._raw_data = raw_data
+
+        return superdrops_sample
+
     def indexes_of_time_slices(self, time, times2select):
         if isinstance(time, list):
             time_indexes = []
