@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: add_supers_at_domain_top.hpp
+ * File: add_supers_to_domain.hpp
  * Project: movement
  * Created Date: Tuesday 16th April 2024
  * Author: Clara Bayley (CB)
@@ -17,8 +17,8 @@
  * to use for a Cartesian Domain in MoveSupersInDomain.
  */
 
-#ifndef LIBS_CARTESIANDOMAIN_MOVEMENT_ADD_SUPERS_AT_DOMAIN_TOP_HPP_
-#define LIBS_CARTESIANDOMAIN_MOVEMENT_ADD_SUPERS_AT_DOMAIN_TOP_HPP_
+#ifndef LIBS_CARTESIANDOMAIN_MOVEMENT_ADD_SUPERS_TO_DOMAIN_HPP_
+#define LIBS_CARTESIANDOMAIN_MOVEMENT_ADD_SUPERS_TO_DOMAIN_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <algorithm>
@@ -131,4 +131,4 @@ struct AddSupersAtDomainTop {
                        SupersInDomain &allsupers) const;
 };
 
-#endif  // LIBS_CARTESIANDOMAIN_MOVEMENT_ADD_SUPERS_AT_DOMAIN_TOP_HPP_
+#endif  // LIBS_CARTESIANDOMAIN_MOVEMENT_ADD_SUPERS_TO_DOMAIN_HPP_

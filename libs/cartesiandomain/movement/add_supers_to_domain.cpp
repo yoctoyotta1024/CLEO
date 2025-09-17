@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: add_supers_at_domain_top.cpp
+ * File: add_supers_to_domain.cpp
  * Project: movement
  * Created Date: Tuesday 16th April 2024
  * Author: Clara Bayley (CB)
@@ -17,7 +17,7 @@
  * to use for a Cartesian Domain in MoveSupersInDomain.
  */
 
-#include "./add_supers_at_domain_top.hpp"
+#include "./add_supers_to_domain.hpp"
 
 Kokkos::View<unsigned int *> remove_superdrops_from_gridboxes(const CartesianMaps &gbxmaps,
                                                               const viewd_gbx d_gbxs,
