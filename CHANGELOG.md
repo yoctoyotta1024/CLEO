@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.59.0](https://github.com/yoctoyotta1024/CLEO/compare/affe44880410175013db9dea4a688f3494d8f4ad..v0.59.0) - 2025-09-17
+#### Features
+- new function in python superdroplets to select superdroplets based on a range - ([affe448](https://github.com/yoctoyotta1024/CLEO/commit/affe44880410175013db9dea4a688f3494d8f4ad)) - clara.bayley
+
+- - -
+
 ## [v0.58.0](https://github.com/yoctoyotta1024/CLEO/compare/8368705e15be212fb6ed7754290a86fd083d53df..v0.58.0) - 2025-08-29
 #### Documentation
 - add instructions on plotcleo installation - ([9bfa7d5](https://github.com/yoctoyotta1024/CLEO/commit/9bfa7d56e0a13d0d7b07f8b7a7f77ec0e4b76817)) - clara.bayley
