@@ -143,13 +143,17 @@ struct OptionalConfigParams {
     void set_params(const YAML::Node& config);
     void print_params() const;
     size_t initnsupers = NaNVals::sizet(); /**< initial no. of super-droplets in domain */
-    size_t newnsupers = NaNVals::sizet();  /**< number SDs to add to each gridbox above COORD3LIM */
-    double COORD3LIM = NaNVals::dbl();     /**< SDs added to domain with coord3 >= COORD3LIM [m] */
-    double DRYRADIUS = NaNVals::dbl();     /**< dry radius of new super-droplets (for msol) [m] */
-    double MINRADIUS = NaNVals::dbl();     /**< minimum radius of new super-droplets [m] */
-    double MAXRADIUS = NaNVals::dbl();     /**< maximum radius of new super-droplets [m] */
-    double NUMCONC_a = NaNVals::dbl();     /**< number conc. of 1st droplet lognormal dist [m^-3] */
-    double GEOMEAN_a = NaNVals::dbl();     /**< geometric mean radius of 1st lognormal dist [m] */
+    // number SDs to add to each gridbox below/above LOWER/UPPER_COORD3LIM
+    size_t newnsupers = NaNVals::sizet();
+    // SDs added to domain with coord3 < LOWER_COORD3LIM [m]
+    double LOWER_COORD3LIM = NaNVals::dbl();
+    // SDs added to domain at coord3 >= UPPER_COORD3LIM [m]
+    double UPPER_COORD3LIM = NaNVals::dbl();
+    double DRYRADIUS = NaNVals::dbl();  /**< dry radius of new super-droplets (for msol) [m] */
+    double MINRADIUS = NaNVals::dbl();  /**< minimum radius of new super-droplets [m] */
+    double MAXRADIUS = NaNVals::dbl();  /**< maximum radius of new super-droplets [m] */
+    double NUMCONC_a = NaNVals::dbl();  /**< number conc. of 1st droplet lognormal dist [m^-3] */
+    double GEOMEAN_a = NaNVals::dbl();  /**< geometric mean radius of 1st lognormal dist [m] */
     double geosigma_a = NaNVals::dbl(); /**< geometric standard deviation of 1st lognormal dist */
     double NUMCONC_b = NaNVals::dbl();  /**< number conc. of 2nd droplet lognormal dist [m^-3] */
     double GEOMEAN_b = NaNVals::dbl();  /**< geometric mean radius of 2nd lognormal dist [m] */

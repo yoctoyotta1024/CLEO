@@ -281,7 +281,8 @@ void OptionalConfigParams::AddSupersToDomainParams::set_params(const YAML::Node&
     initnsupers = config["domain"]["maxnsupers"].as<size_t>();
   }
   newnsupers = node["newnsupers"].as<size_t>();
-  COORD3LIM = node["COORD3LIM"].as<double>();
+  LOWER_COORD3LIM = node["LOWER_COORD3LIM"].as<double>();
+  UPPER_COORD3LIM = node["UPPER_COORD3LIM"].as<double>();
   DRYRADIUS = node["DRYRADIUS"].as<double>();
   MINRADIUS = node["MINRADIUS"].as<double>();
   MAXRADIUS = node["MAXRADIUS"].as<double>();
@@ -296,11 +297,12 @@ void OptionalConfigParams::AddSupersToDomainParams::set_params(const YAML::Node&
 void OptionalConfigParams::AddSupersToDomainParams::print_params() const {
   std::cout << "\n-------- AddSupersToDomain Configuration Parameters --------------"
             << "\ninitnsupers: " << initnsupers << "\nnewnsupers: " << newnsupers
-            << "\nCOORD3LIM: " << COORD3LIM << "\nDRYRADIUS: " << DRYRADIUS
-            << "\nMINRADIUS: " << MINRADIUS << "\nMAXRADIUS: " << MAXRADIUS
-            << "\nNUMCONC_a: " << NUMCONC_a << "\nGEOMEAN_a: " << GEOMEAN_a
-            << "\ngeosigma_a: " << geosigma_a << "\nNUMCONC_b: " << NUMCONC_b
-            << "\nGEOMEAN_b: " << GEOMEAN_b << "\ngeosigma_b: " << geosigma_b
+            << "\nLOWER_COORD3LIM: " << LOWER_COORD3LIM << "\nUPPER_COORD3LIM: " << UPPER_COORD3LIM
+            << "\nDRYRADIUS: " << DRYRADIUS << "\nMINRADIUS: " << MINRADIUS
+            << "\nMAXRADIUS: " << MAXRADIUS << "\nNUMCONC_a: " << NUMCONC_a
+            << "\nGEOMEAN_a: " << GEOMEAN_a << "\ngeosigma_a: " << geosigma_a
+            << "\nNUMCONC_b: " << NUMCONC_b << "\nGEOMEAN_b: " << GEOMEAN_b
+            << "\ngeosigma_b: " << geosigma_b
             << "\n---------------------------------------------------------\n";
 }
 
