@@ -2,6 +2,28 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.60.0](https://github.com/yoctoyotta1024/CLEO/compare/54c898aa5aac74fa4aa6a2f13118cd15b2b7a1c3..v0.60.0) - 2025-09-18
+#### Features
+- function to plots superdroplet distributions with variable in specific range - ([2246018](https://github.com/yoctoyotta1024/CLEO/commit/2246018439af8f171bd7d0432dde0c13a6730b31)) - clara.bayley
+- plotting script for eurec4a 1-d example - ([6ae38de](https://github.com/yoctoyotta1024/CLEO/commit/6ae38de3dd96d65a75b99edecba11158c9b2a76d)) - clara.bayley
+- file for eurec4a test case input file generation - ([847208e](https://github.com/yoctoyotta1024/CLEO/commit/847208e5d5f8ed36738f41c47cd390b7c9775026)) - clara.bayley
+#### Miscellaneous Chores
+- formatting - ([d433346](https://github.com/yoctoyotta1024/CLEO/commit/d433346304c0715a1759d0cd5dc62d9ff8f0bacf)) - clara.bayley
+- formatting - ([d596c50](https://github.com/yoctoyotta1024/CLEO/commit/d596c508932aa879fdc70c07e371c92aa978a5b9)) - clara.bayley
+- formatting - ([9063ccc](https://github.com/yoctoyotta1024/CLEO/commit/9063ccc7dc718d997eda905cc9564d87a9757fe3)) - clara.bayley
+#### Refactoring
+- edit eure4ca boundary conditions - ([2cef27b](https://github.com/yoctoyotta1024/CLEO/commit/2cef27b8b5c2908742cee83845b52a3135ccb20d)) - clara.bayley
+- eurec4a example setup with only boundary conditions active - ([7c8c04d](https://github.com/yoctoyotta1024/CLEO/commit/7c8c04dafd67563bb097015d58579d21ea78487a)) - clara.bayley
+- add distributions plot to eurec4a plotting script - ([8e1d46b](https://github.com/yoctoyotta1024/CLEO/commit/8e1d46b143a8c8dc6edd24c57a5304fccdfe4bca)) - clara.bayley
+- add ability to add superdroplets to bottom of domain - ([3a98b6b](https://github.com/yoctoyotta1024/CLEO/commit/3a98b6baf060beb3b2042b430ef6c9e84f8f539a)) - clara.bayley
+- config params give upper and lower coord3 lims for BCs - ([b4575d1](https://github.com/yoctoyotta1024/CLEO/commit/b4575d1912681501cbb1329c003a2737d5cebf30)) - clara.bayley
+- rename AddSupersAtDomainTop to AddSupersToDomain - ([03fc929](https://github.com/yoctoyotta1024/CLEO/commit/03fc9292a85daa833b5901188481d79016fc2c8b)) - clara.bayley
+- rename add_supers_at_domain_top to add_supers_to_domain - ([0604bf3](https://github.com/yoctoyotta1024/CLEO/commit/0604bf3c7fcc7186209156a02308c3bf499c72b4)) - clara.bayley
+- dry radius can be set to radius when generating new superdroplets - ([78acc06](https://github.com/yoctoyotta1024/CLEO/commit/78acc06543ba93fa1c954d6b549ac805c4af9722)) - clara.bayley
+- edit eurec4a config params - ([54c898a](https://github.com/yoctoyotta1024/CLEO/commit/54c898aa5aac74fa4aa6a2f13118cd15b2b7a1c3)) - clara.bayley
+
+- - -
+
 ## [v0.59.0](https://github.com/yoctoyotta1024/CLEO/compare/affe44880410175013db9dea4a688f3494d8f4ad..v0.59.0) - 2025-09-17
 #### Features
 - new function in python superdroplets to select superdroplets based on a range - ([affe448](https://github.com/yoctoyotta1024/CLEO/commit/affe44880410175013db9dea4a688f3494d8f4ad)) - clara.bayley
