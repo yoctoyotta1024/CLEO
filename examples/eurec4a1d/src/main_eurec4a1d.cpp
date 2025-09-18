@@ -91,30 +91,33 @@ inline GridboxMaps auto create_gbxmaps(const Config& config) {
   return gbxmaps;
 }
 
-inline auto create_movement(const Config &config, const Timesteps &tsteps,
-                            const CartesianMaps &gbxmaps) {
-  const auto terminalv = RogersGKTerminalVelocity{};
+inline auto create_movement(const Config& config, const Timesteps& tsteps,
+                            const CartesianMaps& gbxmaps) {
+  // const auto terminalv = RogersGKTerminalVelocity{};
+  const auto terminalv = NullTerminalVelocity{};
   const Motion<CartesianMaps> auto motion =
       CartesianMotion(tsteps.get_motionstep(), &step2dimlesstime, terminalv);
 
-  // const BoundaryConditions<CartesianMaps> auto boundary_conditions = NullBoundaryConditions{};
   const BoundaryConditions<CartesianMaps> auto boundary_conditions =
       AddSupersToDomain(config.get_addsuperstodomain());
 
   return cartesian_movement(gbxmaps, motion, boundary_conditions);
 }
 
-inline MicrophysicalProcess auto create_microphysics(const Config &config,
-                                                     const Timesteps &tsteps) {
-  const auto c = config.get_condensation();
-  const MicrophysicalProcess auto cond =
-      Condensation(tsteps.get_condstep(), &step2dimlesstime, c.do_alter_thermo, c.maxniters, c.rtol,
-                   c.atol, c.MINSUBTSTEP, &realtime2dimless);
+inline MicrophysicalProcess auto create_microphysics(const Config& config,
+                                                     const Timesteps& tsteps) {
+  // const auto c = config.get_condensation();
+  // const MicrophysicalProcess auto cond =
+  //     Condensation(tsteps.get_condstep(), &step2dimlesstime, c.do_alter_thermo, c.maxniters,
+  //     c.rtol,
+  //                  c.atol, c.MINSUBTSTEP, &realtime2dimless);
 
-  const PairProbability auto coalprob = LongHydroProb(1.0);
-  const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime, coalprob);
+  // const PairProbability auto coalprob = LongHydroProb(1.0);
+  // const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime,
+  // coalprob);
 
-  return coal >> cond;
+  // return coal >> cond;
+  return NullMicrophysicalProcess{};
 }
 
 template <typename Dataset, typename Store>
