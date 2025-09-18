@@ -25,7 +25,6 @@
 #include "./cleo_python_bindings_aliases.hpp"
 #include "gridboxes/boundary_conditions.hpp"
 #include "gridboxes/gridbox.hpp"
-#include "gridboxes/movesupersindomain.hpp"
 #include "gridboxes/supersindomain.hpp"
 
 namespace py = pybind11;
@@ -33,10 +32,8 @@ namespace pyca = cleo_python_bindings_aliases;
 
 void pyNullBoundaryConditions(py::module& m);
 
-void pyCartesianNullMoveSupersInDomain(py::module &m);
+void pySupersInDomain(py::module& m);
 
-void pySupersInDomain(py::module &m);
-
-void pyGridboxesDualView(py::module &m);
+void pyGridboxesDualView(py::module& m);
 
 #endif  // LIBS_CLEO_PYTHON_BINDINGS_PY_GRIDBOXES_HPP_

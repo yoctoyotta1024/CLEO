@@ -29,6 +29,8 @@ namespace py = pybind11;
 
 void pyConfig(py::module& m);
 
-void pyInitSupersFromBinaryParams(py::module &m);
+void pyInitSupersFromBinaryParams(py::module& m);
+
+void pyAddSupersToDomainParams(py::module& m);
 
 #endif  // LIBS_CLEO_PYTHON_BINDINGS_PY_CONFIGURATION_HPP_

@@ -25,6 +25,7 @@
 #include "../kokkosaliases.hpp"
 #include "./cleo_python_bindings_aliases.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
+#include "cartesiandomain/movement/add_supers_to_domain.hpp"
 #include "cartesiandomain/movement/cartesian_transport_across_domain.hpp"
 #include "gridboxes/boundary_conditions.hpp"
 #include "gridboxes/gridboxmaps.hpp"

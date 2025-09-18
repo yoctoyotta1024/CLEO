@@ -29,7 +29,12 @@ void pycreate_cartesian_maps(py::module& m) {
         py::arg("ngbxs"), py::arg("nspacedims"), py::arg("grid_filename"));
 }
 
-void pyCartesianTransportAcrossDomain(py::module &m) {
+void pyAddSupersToDomain(py::module& m) {
+  py::class_<pyca::bcs_add>(m, "AddSupersToDomain")
+      .def(py::init<const OptionalConfigParams::AddSupersToDomainParams&>());
+}
+
+void pyCartesianTransportAcrossDomain(py::module& m) {
   py::class_<pyca::trans_cart>(m, "CartesianTransportAcrossDomain").def(py::init());
 }
 
@@ -57,7 +62,12 @@ void pycreate_cartesian_predcorr_motion(py::module& m) {
       "returns CartesianPredCorrMotion instance", py::arg("config"), py::arg("motionstep"));
 }
 
-void pyCartesianMoveSupersInDomain(py::module &m) {
+void pyCartesianNullMoveSupersInDomain(py::module& m) {
+  py::class_<pyca::move_cart_null>(m, "CartesianNullMoveSupersInDomain")
+      .def(py::init<pyca::mo_null, pyca::trans_cart, pyca::bcs_null>());
+}
+
+void pyCartesianMoveSupersInDomain(py::module& m) {
   py::class_<pyca::move_cart>(m, "CartesianMoveSupersInDomain")
-      .def(py::init<pyca::mo_cart_predcorr, pyca::trans_cart, pyca::bcs_null>());
+      .def(py::init<pyca::mo_cart_predcorr, pyca::trans_cart, pyca::bcs_add>());
 }

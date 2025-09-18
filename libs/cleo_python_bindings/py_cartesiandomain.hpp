@@ -27,6 +27,7 @@
 #include "./optional_terminal_velocity.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
+#include "cartesiandomain/movement/add_supers_to_domain.hpp"
 #include "cartesiandomain/movement/cartesian_motion.hpp"
 #include "cartesiandomain/movement/cartesian_transport_across_domain.hpp"
 #include "configuration/config.hpp"
@@ -34,6 +35,7 @@
 #include "gridboxes/movesupersindomain.hpp"
 #include "gridboxes/predcorrmotion.hpp"
 #include "initialise/timesteps.hpp"
+#include "superdrops/motion.hpp"
 
 namespace py = pybind11;
 namespace pyca = cleo_python_bindings_aliases;
@@ -41,11 +43,14 @@ namespace pyca = cleo_python_bindings_aliases;
 void pyCartesianMaps(py::module& m);
 void pycreate_cartesian_maps(py::module& m);
 
-void pyCartesianTransportAcrossDomain(py::module &m);
+void pyAddSupersToDomain(py::module& m);
 
-void pyCartesianPredCorrMotion(py::module &m);
-void pycreate_cartesian_predcorr_motion(py::module &m);
+void pyCartesianTransportAcrossDomain(py::module& m);
 
-void pyCartesianMoveSupersInDomain(py::module &m);
+void pyCartesianPredCorrMotion(py::module& m);
+void pycreate_cartesian_predcorr_motion(py::module& m);
+
+void pyCartesianNullMoveSupersInDomain(py::module& m);
+void pyCartesianMoveSupersInDomain(py::module& m);
 
 #endif  // LIBS_CLEO_PYTHON_BINDINGS_PY_CARTESIANDOMAIN_HPP_
