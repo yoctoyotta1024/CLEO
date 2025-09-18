@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.61.0](https://github.com/yoctoyotta1024/CLEO/compare/de13b39079cbd6d34498d4b6e4985872c3b144af..v0.61.0) - 2025-09-18
+#### Features
+- python bindings to cartesian sdm can have boundary conditions - ([f8ec597](https://github.com/yoctoyotta1024/CLEO/commit/f8ec597ed9037759c12b0e12b646fe680abcbab9)) - clara.bayley
+#### Miscellaneous Chores
+- formatting - ([de13b39](https://github.com/yoctoyotta1024/CLEO/commit/de13b39079cbd6d34498d4b6e4985872c3b144af)) - clara.bayley
+#### Refactoring
+- run example for both null and non-null sdm bindings - ([e229936](https://github.com/yoctoyotta1024/CLEO/commit/e22993680bdaffaf8372c974d5059cb903b5905f)) - clara.bayley
+- python bindings example uses updated boundary conditions - ([8b1c30e](https://github.com/yoctoyotta1024/CLEO/commit/8b1c30e8c836619dbbc096cf1f702d6854d69409)) - clara.bayley
+
+- - -
+
 ## [v0.60.1](https://github.com/yoctoyotta1024/CLEO/compare/2c4d0f55c35b95717650cb3f9a9c46b01284ebee..v0.60.1) - 2025-09-18
 #### Bug Fixes
 - error in reduction sumation of nsupers - ([c9b34cf](https://github.com/yoctoyotta1024/CLEO/commit/c9b34cf54de5b69e8a8ae4694f2ec8f825e3c89d)) - clara.bayley
