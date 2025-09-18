@@ -59,6 +59,86 @@ def parse_arguments():
 
 
 # %%
+def plot_droplet_distributions(config, gbxs, time, superdrops, savename=""):
+    import awkward as ak
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from plotcleo import pltdist
+
+    fig, axs = plt.subplots(nrows=3, ncols=3, figsize=(16, 12), sharex=True)
+
+    t2plts = [time.secs[0], time.secs[10], time.secs[-1]]
+
+    var_for_range = "coord3"
+    coordlims_0 = [config["UPPER_COORD3LIM"], np.amax(gbxs["zhalf"])]
+    coordlims_1 = [config["LOWER_COORD3LIM"], config["UPPER_COORD3LIM"]]
+    coordlims_2 = [np.amin(gbxs["zhalf"]), config["LOWER_COORD3LIM"]]
+
+    rspan = [ak.min(superdrops["radius"]) * 0.9, ak.max(superdrops["radius"]) * 1.1]
+    nbins = 100
+    smoothsig = False
+    perlogR = False
+    ylog_nsupers = False
+    ylog_num = False
+    ylog_mass = True
+
+    for r, coordlims in enumerate([coordlims_0, coordlims_1, coordlims_2]):
+        volume = (coordlims[1] - coordlims[0]) * gbxs["domainarea"]
+        pltdist.plot_distribs_in_select_range(
+            time,
+            pltdist.plot_domainnsupers_distribs,
+            var_for_range,
+            coordlims,
+            superdrops,
+            t2plts,
+            volume,
+            rspan,
+            nbins,
+            smoothsig=smoothsig,
+            perlogR=perlogR,
+            ylog=ylog_nsupers,
+            fig_ax=[fig, axs[r, 0]],
+        )
+        pltdist.plot_distribs_in_select_range(
+            time,
+            pltdist.plot_domainnumconc_distribs,
+            var_for_range,
+            coordlims,
+            superdrops,
+            t2plts,
+            volume,
+            rspan,
+            nbins,
+            smoothsig=smoothsig,
+            perlogR=perlogR,
+            ylog=ylog_num,
+            fig_ax=[fig, axs[r, 1]],
+        )
+        pltdist.plot_distribs_in_select_range(
+            time,
+            pltdist.plot_domainmass_distribs,
+            var_for_range,
+            coordlims,
+            superdrops,
+            t2plts,
+            volume,
+            rspan,
+            nbins,
+            smoothsig=smoothsig,
+            perlogR=perlogR,
+            ylog=ylog_mass,
+            fig_ax=[fig, axs[r, 2]],
+        )
+        for ax in axs[r, :]:
+            ax.set_title(f"distribution between {coordlims[0]} < z < {coordlims[1]}")
+
+    fig.tight_layout()
+    if savename != "":
+        fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
+        print("Figure .png saved as: " + str(savename))
+
+
+# %%
 ### -------------------------------- MAIN ---------------------------------- ###
 def main(
     path2CLEO,
@@ -94,6 +174,10 @@ def main(
     nsample = 500
     savename = savefigpath / "eurec4a1d_randomsample.png"
     pltsds.plot_randomsample_superdrops(time, superdrops, nsample, savename=savename)
+    plt.show()
+
+    savename = savefigpath / "eurec4a1d_droplet_distributions.png"
+    plot_droplet_distributions(config, gbxs, time, superdrops, savename=savename)
     plt.show()
 
 
