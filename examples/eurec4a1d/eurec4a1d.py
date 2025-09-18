@@ -165,7 +165,7 @@ def run_exectuable(path2build, config_filename):
     executable = path2build / "examples" / "eurec4a1d" / "src" / "eurec4a1d"
     cmd = [executable, config_filename]
     print(" ".join([str(c) for c in cmd]))
-    subprocess.run(cmd)  # subprocess.run(cmd, check=True)
+    subprocess.run(cmd, check=True)
 
 
 def plot_results(path2CLEO, config_filename, savefigpath):
