@@ -18,7 +18,7 @@
 
 #include "./py_gridboxes.hpp"
 
-void pyNullBoundaryConditions(py::module &m) {
+void pyNullBoundaryConditions(py::module& m) {
   py::class_<pyca::bcs_null>(m, "NullBoundaryConditions").def(py::init());
 }
 
@@ -32,6 +32,6 @@ void pySupersInDomain(py::module &m) {
       .def(py::init<const viewd_supers, const unsigned int>());
 }
 
-void pyGridboxesDualView(py::module &m) {
+void pyGridboxesDualView(py::module& m) {
   py::class_<dualview_gbx>(m, "Gridboxes").def(py::init());
 }

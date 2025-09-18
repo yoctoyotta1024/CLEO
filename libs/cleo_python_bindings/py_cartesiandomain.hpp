@@ -38,8 +38,8 @@
 namespace py = pybind11;
 namespace pyca = cleo_python_bindings_aliases;
 
-void pyCartesianMaps(py::module &m);
-void pycreate_cartesian_maps(py::module &m);
+void pyCartesianMaps(py::module& m);
+void pycreate_cartesian_maps(py::module& m);
 
 void pyCartesianTransportAcrossDomain(py::module &m);
 

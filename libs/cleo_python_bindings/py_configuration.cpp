@@ -19,7 +19,7 @@
 
 #include "./py_configuration.hpp"
 
-void pyConfig(py::module &m) {
+void pyConfig(py::module& m) {
   py::class_<Config>(m, "Config")
       .def(py::init<const std::filesystem::path>(), py::arg("config_filename"))
       .def("get_ngbxs", &Config::get_ngbxs)
@@ -29,6 +29,6 @@ void pyConfig(py::module &m) {
       .def("get_zarrbasedir", &Config::get_zarrbasedir);
 }
 
-void pyInitSupersFromBinaryParams(py::module &m) {
+void pyInitSupersFromBinaryParams(py::module& m) {
   py::class_<OptionalConfigParams::InitSupersFromBinaryParams>(m, "InitSupersFromBinaryParams");
 }

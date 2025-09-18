@@ -31,7 +31,7 @@
 namespace py = pybind11;
 namespace pyca = cleo_python_bindings_aliases;
 
-void pyNullBoundaryConditions(py::module &m);
+void pyNullBoundaryConditions(py::module& m);
 
 void pyCartesianNullMoveSupersInDomain(py::module &m);
 

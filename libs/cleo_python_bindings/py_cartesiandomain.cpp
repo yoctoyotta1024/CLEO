@@ -18,13 +18,13 @@
 
 #include "./py_cartesiandomain.hpp"
 
-void pyCartesianMaps(py::module &m) {
+void pyCartesianMaps(py::module& m) {
   py::class_<pyca::map_cart>(m, "CartesianMaps")
       .def(py::init())
       .def("get_local_ngridboxes_hostcopy", &pyca::map_cart::get_local_ngridboxes_hostcopy);
 }
 
-void pycreate_cartesian_maps(py::module &m) {
+void pycreate_cartesian_maps(py::module& m) {
   m.def("create_cartesian_maps", &create_cartesian_maps, "returns CartesianMaps instance",
         py::arg("ngbxs"), py::arg("nspacedims"), py::arg("grid_filename"));
 }
@@ -33,7 +33,7 @@ void pyCartesianTransportAcrossDomain(py::module &m) {
   py::class_<pyca::trans_cart>(m, "CartesianTransportAcrossDomain").def(py::init());
 }
 
-void pyCartesianPredCorrMotion(py::module &m) {
+void pyCartesianPredCorrMotion(py::module& m) {
   py::class_<pyca::mo_cart_predcorr>(m, "CartesianPredCorrMoveSupersInDomain")
       .def(py::init<unsigned int, std::function<double(unsigned int)>, OptionalTerminalVelocity,
                     CartesianCheckBounds>());
@@ -42,10 +42,10 @@ void pyCartesianPredCorrMotion(py::module &m) {
 /* NOTE: special case if motionstep given to this function is false (or 0), the returned
 CartestianMotion struct has a motionstep set to largest possible unsigned integer, so that
 motion never occurs in runtime. */
-void pycreate_cartesian_predcorr_motion(py::module &m) {
+void pycreate_cartesian_predcorr_motion(py::module& m) {
   m.def(
       "create_cartesian_predcorr_motion",
-      [](const Config &config, unsigned int motionstep) {
+      [](const Config& config, unsigned int motionstep) {
         if (!motionstep) {
           motionstep = LIMITVALUES::uintmax;
         }

@@ -55,11 +55,11 @@
 namespace py = pybind11;
 namespace pyca = cleo_python_bindings_aliases;
 
-void pycreate_supers_from_binary(py::module &m);
+void pycreate_supers_from_binary(py::module& m);
 
-void pycreate_gbxs_cartesian_null(py::module &m);
+void pycreate_gbxs_cartesian_null(py::module& m);
 
-void pyCartesianNullSDMMethods(py::module &m);
-void pyCartesianSDMMethods(py::module &m);
+void pyCartesianNullSDMMethods(py::module& m);
+void pyCartesianSDMMethods(py::module& m);
 
 #endif  // LIBS_CLEO_PYTHON_BINDINGS_PY_RUNCLEO_HPP_

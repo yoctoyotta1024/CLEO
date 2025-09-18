@@ -27,7 +27,7 @@
 
 namespace py = pybind11;
 
-void pyConfig(py::module &m);
+void pyConfig(py::module& m);
 
 void pyInitSupersFromBinaryParams(py::module &m);
 

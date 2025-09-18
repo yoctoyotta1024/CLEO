@@ -40,7 +40,7 @@ namespace py = pybind11;
 
 int test_cleo_python_bindings(const int i, const int j);
 
-void cleo_initialize(const Config &config);
+void cleo_initialize(const Config& config);
 
 void inline cleo_finalize() { Kokkos::finalize(); }
 
