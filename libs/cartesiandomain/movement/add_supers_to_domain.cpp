@@ -173,9 +173,9 @@ size_t total_newnsupers_to_create(Kokkos::View<unsigned int*> gbxindexes,
       "newnsupers_total", Kokkos::RangePolicy<ExecSpace>(0, gbxindexes.extent(0)),
       KOKKOS_LAMBDA(const size_t ii, size_t& nsupers) {
         if (gbxindexes(ii) != LIMITVALUES::oob_gbxindex) {
-          nsupers = newnsupers_pergbx;
+          nsupers += newnsupers_pergbx;
         } else {
-          nsupers = 0;
+          nsupers += 0;
         }
       },
       newnsupers_total);
