@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.60.1](https://github.com/yoctoyotta1024/CLEO/compare/2c4d0f55c35b95717650cb3f9a9c46b01284ebee..v0.60.1) - 2025-09-18
+#### Bug Fixes
+- error in reduction sumation of nsupers - ([c9b34cf](https://github.com/yoctoyotta1024/CLEO/commit/c9b34cf54de5b69e8a8ae4694f2ec8f825e3c89d)) - clara.bayley
+#### Refactoring
+- include check that eurec4a executable successfully runs - ([2c4d0f5](https://github.com/yoctoyotta1024/CLEO/commit/2c4d0f55c35b95717650cb3f9a9c46b01284ebee)) - clara.bayley
+
+- - -
+
 ## [v0.60.0](https://github.com/yoctoyotta1024/CLEO/compare/54c898aa5aac74fa4aa6a2f13118cd15b2b7a1c3..v0.60.0) - 2025-09-18
 #### Features
 - function to plots superdroplet distributions with variable in specific range - ([2246018](https://github.com/yoctoyotta1024/CLEO/commit/2246018439af8f171bd7d0432dde0c13a6730b31)) - clara.bayley
