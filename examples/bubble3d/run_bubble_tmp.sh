@@ -33,7 +33,8 @@ then
 
   cmake -S ${path2CLEO} -B ${path2build} -DCLEO_COUPLED_DYNAMICS="yac" \
     -DCLEO_YAC_MODULE_PATH="${path2CLEO}/libs/coupldyn_yac/cmake" \
-    -DCLEO_YAXT_ROOT=${path2yac}/yaxt -DCLEO_YAC_ROOT=${path2yac}/yac
+    -DCLEO_YAXT_ROOT=${path2yac}/yaxt -DCLEO_YAC_ROOT=${path2yac}/yac \
+    -DCLEO_NO_PYBINDINGS=true
 
 elif [ "${action}" == "compile" ]
 then
