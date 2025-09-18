@@ -12,7 +12,7 @@ set(LIB_BINARY_DIR ${CMAKE_BINARY_DIR}/lib)
 
 # Add executables and create library target
 set(SOURCES
-  "add_supers_at_domain_top.cpp"
+  "add_supers_to_domain.cpp"
   "cartesian_transport_across_domain.cpp"
 )
 # must use STATIC (not(!) SHARED) lib for linking to executable if build is CUDA enabled with Kokkos

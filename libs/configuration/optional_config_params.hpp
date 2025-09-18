@@ -13,8 +13,8 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Header file for members of Config struct which determine CLEO's optional configuration
- * parameters read from a config file.
+ * Header file for members of Config struct which determine CLEO's
+ * optional configuration parameters read from a config file.
  */
 
 #ifndef LIBS_CONFIGURATION_OPTIONAL_CONFIG_PARAMS_HPP_
@@ -38,12 +38,15 @@ inline size_t sizet() { return std::numeric_limits<size_t>::signaling_NaN(); };
 /**
  * @brief Struct storing optional configuration parameters for CLEO
  *
- * Optional means parameters have default values and therefore need not be set upon
- * construction. Default values are not intended to be used and may caused model errors at runtime.
+ * Optional means parameters have default values and therefore need not be set
+ * upon construction. Default values are not intended to be used and may caused
+ * model errors at runtime.
  *
  */
 struct OptionalConfigParams {
-  /* read configuration file given by config_filename to set members of required configuration */
+  /*
+   * read configuration file given by config_filename to set members of required configuration
+   */
   explicit OptionalConfigParams(const std::filesystem::path config_filename);
 
   void set_kokkos_settings(const YAML::Node& config);
@@ -136,22 +139,26 @@ struct OptionalConfigParams {
   } yac_dynamics;
 
   /*** Bounday Conditions Parameters ***/
-  struct AddSupersAtDomainTopParams {
+  struct AddSupersToDomainParams {
     void set_params(const YAML::Node& config);
     void print_params() const;
     size_t initnsupers = NaNVals::sizet(); /**< initial no. of super-droplets in domain */
-    size_t newnsupers = NaNVals::sizet();  /**< number SDs to add to each gridbox above COORD3LIM */
-    double COORD3LIM = NaNVals::dbl();     /**< SDs added to domain with coord3 >= COORD3LIM [m] */
-    double DRYRADIUS = NaNVals::dbl();     /**< dry radius of new super-droplets (for msol) [m] */
-    double MINRADIUS = NaNVals::dbl();     /**< minimum radius of new super-droplets [m] */
-    double MAXRADIUS = NaNVals::dbl();     /**< maximum radius of new super-droplets [m] */
-    double NUMCONC_a = NaNVals::dbl();     /**< number conc. of 1st droplet lognormal dist [m^-3] */
-    double GEOMEAN_a = NaNVals::dbl();     /**< geometric mean radius of 1st lognormal dist [m] */
+    // number SDs to add to each gridbox below/above LOWER/UPPER_COORD3LIM
+    size_t newnsupers = NaNVals::sizet();
+    // SDs added to domain with coord3 < LOWER_COORD3LIM [m]
+    double LOWER_COORD3LIM = NaNVals::dbl();
+    // SDs added to domain at coord3 >= UPPER_COORD3LIM [m]
+    double UPPER_COORD3LIM = NaNVals::dbl();
+    double DRYRADIUS = NaNVals::dbl();  /**< dry radius of new super-droplets (for msol) [m] */
+    double MINRADIUS = NaNVals::dbl();  /**< minimum radius of new super-droplets [m] */
+    double MAXRADIUS = NaNVals::dbl();  /**< maximum radius of new super-droplets [m] */
+    double NUMCONC_a = NaNVals::dbl();  /**< number conc. of 1st droplet lognormal dist [m^-3] */
+    double GEOMEAN_a = NaNVals::dbl();  /**< geometric mean radius of 1st lognormal dist [m] */
     double geosigma_a = NaNVals::dbl(); /**< geometric standard deviation of 1st lognormal dist */
     double NUMCONC_b = NaNVals::dbl();  /**< number conc. of 2nd droplet lognormal dist [m^-3] */
     double GEOMEAN_b = NaNVals::dbl();  /**< geometric mean radius of 2nd lognormal dist [m] */
     double geosigma_b = NaNVals::dbl(); /**< geometric standard deviation of 2nd lognormal dist */
-  } addsupersatdomaintop;
+  } addsuperstodomain;
 
   /** CLEO Python Bindings Parameters */
   struct PythonBindingsParams {

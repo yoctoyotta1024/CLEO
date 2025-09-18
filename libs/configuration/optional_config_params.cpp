@@ -48,7 +48,7 @@ OptionalConfigParams::OptionalConfigParams(const std::filesystem::path config_fi
   }
 }
 
-void OptionalConfigParams::set_kokkos_settings(const YAML::Node &config) {
+void OptionalConfigParams::set_kokkos_settings(const YAML::Node& config) {
   const YAML::Node node = config["kokkos_settings"];
 
   if (node["num_threads"]) {
@@ -85,7 +85,7 @@ void OptionalConfigParams::print_kokkos_settings() const {
   std::cout << "\n---------------------------------------------------------\n";
 }
 
-void OptionalConfigParams::set_microphysics(const YAML::Node &config) {
+void OptionalConfigParams::set_microphysics(const YAML::Node& config) {
   const YAML::Node node = config["microphysics"];
 
   if (node["condensation"]) {
@@ -99,7 +99,7 @@ void OptionalConfigParams::set_microphysics(const YAML::Node &config) {
   }
 }
 
-void OptionalConfigParams::set_initsupers(const YAML::Node &config) {
+void OptionalConfigParams::set_initsupers(const YAML::Node& config) {
   const auto type = config["initsupers"]["type"].as<std::string>();
 
   if (type == "frombinary") {
@@ -110,7 +110,7 @@ void OptionalConfigParams::set_initsupers(const YAML::Node &config) {
   }
 }
 
-void OptionalConfigParams::set_coupled_dynamics(const YAML::Node &config) {
+void OptionalConfigParams::set_coupled_dynamics(const YAML::Node& config) {
   const auto type = config["coupled_dynamics"]["type"].as<std::string>();
 
   if (type == "fromfile") {
@@ -127,25 +127,25 @@ void OptionalConfigParams::set_coupled_dynamics(const YAML::Node &config) {
   }
 }
 
-void OptionalConfigParams::set_boundary_conditions(const YAML::Node &config) {
+void OptionalConfigParams::set_boundary_conditions(const YAML::Node& config) {
   const auto type = config["boundary_conditions"]["type"].as<std::string>();
 
-  if (type == "addsupersatdomaintop") {
-    addsupersatdomaintop.set_params(config);
-    addsupersatdomaintop.print_params();
+  if (type == "addsuperstodomain") {
+    addsuperstodomain.set_params(config);
+    addsuperstodomain.print_params();
   } else {
     throw std::invalid_argument("unknown boundary_conditions 'type': " + type);
   }
 }
 
-void OptionalConfigParams::set_python_bindings(const YAML::Node &config) {
+void OptionalConfigParams::set_python_bindings(const YAML::Node& config) {
   const YAML::Node node = config["python_bindings"];
 
   python_bindings.set_params(config);
   python_bindings.print_params();
 }
 
-void OptionalConfigParams::CondensationParams::set_params(const YAML::Node &config) {
+void OptionalConfigParams::CondensationParams::set_params(const YAML::Node& config) {
   const YAML::Node node = config["microphysics"]["condensation"];
 
   do_alter_thermo = node["do_alter_thermo"].as<bool>();
@@ -162,7 +162,7 @@ void OptionalConfigParams::CondensationParams::print_params() const {
             << "\n---------------------------------------------------------\n";
 }
 
-void OptionalConfigParams::BreakupParams::set_params(const YAML::Node &config) {
+void OptionalConfigParams::BreakupParams::set_params(const YAML::Node& config) {
   const YAML::Node node = config["microphysics"]["breakup"]["constnfrags"];
   constnfrags.nfrags = node["nfrags"].as<double>();
 }
@@ -173,7 +173,7 @@ void OptionalConfigParams::BreakupParams::print_params() const {
             << "\n---------------------------------------------------------\n";
 }
 
-void OptionalConfigParams::InitSupersFromBinaryParams::set_params(const YAML::Node &config) {
+void OptionalConfigParams::InitSupersFromBinaryParams::set_params(const YAML::Node& config) {
   const YAML::Node node = config["initsupers"];
 
   assert((node["type"].as<std::string>() == "frombinary"));
@@ -189,19 +189,20 @@ void OptionalConfigParams::InitSupersFromBinaryParams::set_params(const YAML::No
 }
 
 void OptionalConfigParams::InitSupersFromBinaryParams::print_params() const {
-  std::cout << "\n-------- InitSupersFromBinary Configuration Parameters --------------"
+  std::cout << "\n-------- InitSupersFromBinary Configuration Parameters "
+               "--------------"
             << "\nmaxnsupers: " << maxnsupers << "\nnspacedims: " << nspacedims
             << "\ninitsupers_filename: " << initsupers_filename << "\ninitnsupers: " << initnsupers
             << "\n---------------------------------------------------------\n";
 }
 
-void OptionalConfigParams::FromFileDynamicsParams::set_params(const YAML::Node &config) {
+void OptionalConfigParams::FromFileDynamicsParams::set_params(const YAML::Node& config) {
   const YAML::Node node = config["coupled_dynamics"];
 
   assert((node["type"].as<std::string>() == "fromfile"));
 
   /* convert string to std::filesystem::path type */
-  auto fspath_from_yaml = [&node](const std::string &key) {
+  auto fspath_from_yaml = [&node](const std::string& key) {
     return std::filesystem::path(node[key].as<std::string>());
   };
 
@@ -230,7 +231,7 @@ void OptionalConfigParams::FromFileDynamicsParams::print_params() const {
             << "\n---------------------------------------------------------\n";
 }
 
-void OptionalConfigParams::CvodeDynamicsParams::set_params(const YAML::Node &config) {
+void OptionalConfigParams::CvodeDynamicsParams::set_params(const YAML::Node& config) {
   const YAML::Node node = config["coupled_dynamics"];
 
   assert((node["type"].as<std::string>() == "cvode"));
@@ -253,7 +254,7 @@ void OptionalConfigParams::CvodeDynamicsParams::print_params() const {
             << "\n---------------------------------------------------------\n";
 }
 
-void OptionalConfigParams::YacDynamicsParams::set_params(const YAML::Node &config) {
+void OptionalConfigParams::YacDynamicsParams::set_params(const YAML::Node& config) {
   const YAML::Node node = config["coupled_dynamics"];
 
   assert((node["type"].as<std::string>() == "yac"));
@@ -271,7 +272,7 @@ void OptionalConfigParams::YacDynamicsParams::print_params() const {
             << "\n---------------------------------------------------------\n";
 }
 
-void OptionalConfigParams::AddSupersAtDomainTopParams::set_params(const YAML::Node &config) {
+void OptionalConfigParams::AddSupersToDomainParams::set_params(const YAML::Node& config) {
   const YAML::Node node = config["boundary_conditions"];
 
   if (config["initsupers"] && config["initsupers"]["initnsupers"]) {
@@ -280,7 +281,8 @@ void OptionalConfigParams::AddSupersAtDomainTopParams::set_params(const YAML::No
     initnsupers = config["domain"]["maxnsupers"].as<size_t>();
   }
   newnsupers = node["newnsupers"].as<size_t>();
-  COORD3LIM = node["COORD3LIM"].as<double>();
+  LOWER_COORD3LIM = node["LOWER_COORD3LIM"].as<double>();
+  UPPER_COORD3LIM = node["UPPER_COORD3LIM"].as<double>();
   DRYRADIUS = node["DRYRADIUS"].as<double>();
   MINRADIUS = node["MINRADIUS"].as<double>();
   MAXRADIUS = node["MAXRADIUS"].as<double>();
@@ -292,18 +294,19 @@ void OptionalConfigParams::AddSupersAtDomainTopParams::set_params(const YAML::No
   geosigma_b = node["geosigma_b"].as<double>();
 }
 
-void OptionalConfigParams::AddSupersAtDomainTopParams::print_params() const {
-  std::cout << "\n-------- AddSupersAtDomainTop Configuration Parameters --------------"
+void OptionalConfigParams::AddSupersToDomainParams::print_params() const {
+  std::cout << "\n-------- AddSupersToDomain Configuration Parameters --------------"
             << "\ninitnsupers: " << initnsupers << "\nnewnsupers: " << newnsupers
-            << "\nCOORD3LIM: " << COORD3LIM << "\nDRYRADIUS: " << DRYRADIUS
-            << "\nMINRADIUS: " << MINRADIUS << "\nMAXRADIUS: " << MAXRADIUS
-            << "\nNUMCONC_a: " << NUMCONC_a << "\nGEOMEAN_a: " << GEOMEAN_a
-            << "\ngeosigma_a: " << geosigma_a << "\nNUMCONC_b: " << NUMCONC_b
-            << "\nGEOMEAN_b: " << GEOMEAN_b << "\ngeosigma_b: " << geosigma_b
+            << "\nLOWER_COORD3LIM: " << LOWER_COORD3LIM << "\nUPPER_COORD3LIM: " << UPPER_COORD3LIM
+            << "\nDRYRADIUS: " << DRYRADIUS << "\nMINRADIUS: " << MINRADIUS
+            << "\nMAXRADIUS: " << MAXRADIUS << "\nNUMCONC_a: " << NUMCONC_a
+            << "\nGEOMEAN_a: " << GEOMEAN_a << "\ngeosigma_a: " << geosigma_a
+            << "\nNUMCONC_b: " << NUMCONC_b << "\nGEOMEAN_b: " << GEOMEAN_b
+            << "\ngeosigma_b: " << geosigma_b
             << "\n---------------------------------------------------------\n";
 }
 
-void OptionalConfigParams::PythonBindingsParams::set_params(const YAML::Node &config) {
+void OptionalConfigParams::PythonBindingsParams::set_params(const YAML::Node& config) {
   const YAML::Node node = config["python_bindings"];
   const YAML::Node mphys_node = config["microphysics"];
 

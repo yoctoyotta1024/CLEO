@@ -13,7 +13,7 @@ License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
-Script for 1-D "EUREC4A" rainshaft example with constant thermodynamics
+Script for 1-D "EUREC4A" rainshaft (test) example with constant thermodynamics
 read from binary files.
 """
 
@@ -22,6 +22,7 @@ read from binary files.
 import argparse
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 from ruamel.yaml import YAML
 
@@ -131,7 +132,25 @@ def inputfiles(
         file.unlink(missing_ok=True)
 
     ### --- input binary files generation --- ###
-    print("TODO(ALL): create eurec4a1d_inputfiles.py script")
+    # equivalent to ``import eurec4a1d_inputfiles.py `` followed by
+    # ``eurec4a1d_inputfiles.main(path2CLEO, path2build, ...)``
+    inputfiles_script = path2CLEO / "examples" / "eurec4a1d" / "eurec4a1d_inputfiles.py"
+    python = sys.executable
+    cmd = [
+        python,
+        inputfiles_script,
+        path2CLEO,
+        path2build,
+        config_filename,
+        thermofiles,
+    ]
+    if isfigures[0]:
+        cmd.append("--show_figures")
+    if isfigures[1]:
+        cmd.append("--save_figures")
+        cmd.append(f"--savefigpath={savefigpath}")
+    print(" ".join([str(c) for c in cmd]))
+    subprocess.run(cmd, check=True)
 
 
 def run_exectuable(path2build, config_filename):
@@ -150,7 +169,29 @@ def run_exectuable(path2build, config_filename):
 
 
 def plot_results(path2CLEO, config_filename, savefigpath):
-    print("TODO(ALL): create eurec4a1d_plotting.py script")
+    plotting_script = path2CLEO / "examples" / "eurec4a1d" / "eurec4a1d_plotting.py"
+    python = sys.executable
+
+    yaml = YAML()
+    with open(config_filename, "r") as file:
+        config = yaml.load(file)
+    grid_filename = Path(config["inputfiles"]["grid_filename"])
+    setupfile = Path(config["outputdata"]["setup_filename"])
+    dataset = Path(config["outputdata"]["zarrbasedir"])
+
+    # equivalent to ``import eurec4a1d_plotting`` followed by
+    # ``eurec4a1d_plotting.main(path2CLEO, savefigpath, ...)``
+    cmd = [
+        python,
+        plotting_script,
+        f"--path2CLEO={path2CLEO}",
+        f"--savefigpath={savefigpath}",
+        f"--grid_filename={grid_filename}",
+        f"--setupfile={setupfile}",
+        f"--dataset={dataset}",
+    ]
+    print(" ".join([str(c) for c in cmd]))
+    subprocess.run(cmd, check=True)
 
 
 # %%

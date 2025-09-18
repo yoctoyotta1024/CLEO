@@ -28,7 +28,7 @@
 
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
-#include "cartesiandomain/movement/add_supers_at_domain_top.hpp"
+#include "cartesiandomain/movement/add_supers_to_domain.hpp"
 #include "cartesiandomain/movement/cartesian_motion.hpp"
 #include "cartesiandomain/movement/cartesian_movement.hpp"
 #include "configuration/communicator.hpp"
@@ -66,7 +66,7 @@
 #include "zarr/fsstore.hpp"
 #include "zarr/simple_dataset.hpp"
 
-inline CoupledDynamics auto create_coupldyn(const Config &config, const CartesianMaps &gbxmaps,
+inline CoupledDynamics auto create_coupldyn(const Config& config, const CartesianMaps& gbxmaps,
                                             const unsigned int couplstep,
                                             const unsigned int t_end) {
   const auto h_ndims = gbxmaps.get_global_ndims_hostcopy();
@@ -78,48 +78,51 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
 }
 
 template <GridboxMaps GbxMaps>
-inline InitialConditions auto create_initconds(const Config &config, const GbxMaps &gbxmaps) {
+inline InitialConditions auto create_initconds(const Config& config, const GbxMaps& gbxmaps) {
   const auto initsupers = InitSupersFromBinary(config.get_initsupersfrombinary(), gbxmaps);
   const auto initgbxs = InitGbxsNull(gbxmaps.get_local_ngridboxes_hostcopy());
 
   return InitConds(initsupers, initgbxs);
 }
 
-inline GridboxMaps auto create_gbxmaps(const Config &config) {
+inline GridboxMaps auto create_gbxmaps(const Config& config) {
   const auto gbxmaps = create_cartesian_maps(config.get_ngbxs(), config.get_nspacedims(),
                                              config.get_grid_filename());
   return gbxmaps;
 }
 
-inline auto create_movement(const Config &config, const Timesteps &tsteps,
-                            const CartesianMaps &gbxmaps) {
-  const auto terminalv = RogersGKTerminalVelocity{};
+inline auto create_movement(const Config& config, const Timesteps& tsteps,
+                            const CartesianMaps& gbxmaps) {
+  // const auto terminalv = RogersGKTerminalVelocity{};
+  const auto terminalv = NullTerminalVelocity{};
   const Motion<CartesianMaps> auto motion =
       CartesianMotion(tsteps.get_motionstep(), &step2dimlesstime, terminalv);
 
-  // const BoundaryConditions<CartesianMaps> auto boundary_conditions = NullBoundaryConditions{};
   const BoundaryConditions<CartesianMaps> auto boundary_conditions =
-      AddSupersAtDomainTop(config.get_addsupersatdomaintop());
+      AddSupersToDomain(config.get_addsuperstodomain());
 
   return cartesian_movement(gbxmaps, motion, boundary_conditions);
 }
 
-inline MicrophysicalProcess auto create_microphysics(const Config &config,
-                                                     const Timesteps &tsteps) {
-  const auto c = config.get_condensation();
-  const MicrophysicalProcess auto cond =
-      Condensation(tsteps.get_condstep(), &step2dimlesstime, c.do_alter_thermo, c.maxniters, c.rtol,
-                   c.atol, c.MINSUBTSTEP, &realtime2dimless);
+inline MicrophysicalProcess auto create_microphysics(const Config& config,
+                                                     const Timesteps& tsteps) {
+  // const auto c = config.get_condensation();
+  // const MicrophysicalProcess auto cond =
+  //     Condensation(tsteps.get_condstep(), &step2dimlesstime, c.do_alter_thermo, c.maxniters,
+  //     c.rtol,
+  //                  c.atol, c.MINSUBTSTEP, &realtime2dimless);
 
-  const PairProbability auto coalprob = LongHydroProb(1.0);
-  const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime, coalprob);
+  // const PairProbability auto coalprob = LongHydroProb(1.0);
+  // const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime,
+  // coalprob);
 
-  return coal >> cond;
+  // return coal >> cond;
+  return NullMicrophysicalProcess{};
 }
 
 template <typename Dataset, typename Store>
-inline Observer auto create_superdrops_observer(const unsigned int interval, Dataset &dataset,
-                                                Store &store, const int maxchunk) {
+inline Observer auto create_superdrops_observer(const unsigned int interval, Dataset& dataset,
+                                                Store& store, const int maxchunk) {
   CollectDataForDataset<Dataset> auto sdid = CollectSdId(dataset, maxchunk);
   CollectDataForDataset<Dataset> auto sdgbxindex = CollectSdgbxindex(dataset, maxchunk);
   CollectDataForDataset<Dataset> auto xi = CollectXi(dataset, maxchunk);
@@ -132,7 +135,7 @@ inline Observer auto create_superdrops_observer(const unsigned int interval, Dat
 }
 
 template <typename Dataset>
-inline Observer auto create_gridboxes_observer(const unsigned int interval, Dataset &dataset,
+inline Observer auto create_gridboxes_observer(const unsigned int interval, Dataset& dataset,
                                                const int maxchunk, const size_t ngbxs) {
   const CollectDataForDataset<Dataset> auto thermo = CollectThermo(dataset, maxchunk, ngbxs);
   const CollectDataForDataset<Dataset> auto wvel =
@@ -145,8 +148,8 @@ inline Observer auto create_gridboxes_observer(const unsigned int interval, Data
 }
 
 template <typename Dataset, typename Store>
-inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
-                                     Dataset &dataset, Store &store) {
+inline Observer auto create_observer(const Config& config, const Timesteps& tsteps,
+                                     Dataset& dataset, Store& store) {
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
   const auto ngbxs = config.get_ngbxs();
@@ -172,8 +175,8 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
 }
 
 template <typename Dataset, typename Store>
-inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset &dataset,
-                       Store &store) {
+inline auto create_sdm(const Config& config, const Timesteps& tsteps, Dataset& dataset,
+                       Store& store) {
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps = create_gbxmaps(config);
   const MicrophysicalProcess auto microphys = create_microphysics(config, tsteps);
@@ -183,7 +186,7 @@ inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset &d
   return SDMMethods(couplstep, gbxmaps, microphys, movesupers, obs);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   if (argc < 2) {
     throw std::invalid_argument("configuration file(s) not specified");
   }

@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: add_supers_at_domain_top.cpp
+ * File: add_supers_to_domain.cpp
  * Project: movement
  * Created Date: Tuesday 16th April 2024
  * Author: Clara Bayley (CB)
@@ -13,33 +13,34 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * Implementation of AddSupersAtDomainTop type satisyfing the BoundaryConditions concept
+ * Implementation of AddSupersToDomain type satisyfing the BoundaryConditions concept
  * to use for a Cartesian Domain in MoveSupersInDomain.
  */
 
-#include "./add_supers_at_domain_top.hpp"
+#include "./add_supers_to_domain.hpp"
 
-Kokkos::View<unsigned int *> remove_superdrops_from_gridboxes(const CartesianMaps &gbxmaps,
-                                                              const viewd_gbx d_gbxs,
-                                                              const subviewd_supers domainsupers,
-                                                              const double coord3lim);
-viewd_supers create_newsupers_for_gridboxes(const CartesianMaps &gbxmaps,
-                                            const CreateSuperdrop &create_superdrop,
-                                            Kokkos::View<unsigned int *> gbxindexes,
+Kokkos::View<unsigned int*> remove_superdrops_from_gridboxes(const CartesianMaps& gbxmaps,
+                                                             const viewd_gbx d_gbxs,
+                                                             const subviewd_supers domainsupers,
+                                                             const double lower_coord3lim,
+                                                             const double upper_coord3lim);
+viewd_supers create_newsupers_for_gridboxes(const CartesianMaps& gbxmaps,
+                                            const CreateSuperdrop& create_superdrop,
+                                            Kokkos::View<unsigned int*> gbxindexes,
                                             const size_t newnsupers_pergbx);
-void add_superdrops_for_gridboxes(const SupersInDomain &allsupers,
+void add_superdrops_for_gridboxes(const SupersInDomain& allsupers,
                                   const viewd_constsupers newsupers);
 SupersInDomain move_supers_between_gridboxes_again(const viewd_gbx d_gbxs,
-                                                   SupersInDomain &allsupers);
+                                                   SupersInDomain& allsupers);
 
 /*
 Call to apply boundary conditions to remove and then add superdroplets to the top of the domain
-above coord3lim.
+above upper_coord3lim and/or to the bottom of the domain below lower_coord3lim.
 */
-SupersInDomain AddSupersAtDomainTop::apply(const CartesianMaps &gbxmaps, viewd_gbx d_gbxs,
-                                           SupersInDomain &allsupers) const {
-  const auto gbxindexes_for_newsupers =
-      remove_superdrops_from_gridboxes(gbxmaps, d_gbxs, allsupers.domain_supers(), coord3lim);
+SupersInDomain AddSupersToDomain::apply(const CartesianMaps& gbxmaps, viewd_gbx d_gbxs,
+                                        SupersInDomain& allsupers) const {
+  const auto gbxindexes_for_newsupers = remove_superdrops_from_gridboxes(
+      gbxmaps, d_gbxs, allsupers.domain_supers(), lower_coord3lim, upper_coord3lim);
 
   auto newsupers_for_gridboxes = create_newsupers_for_gridboxes(
       gbxmaps, create_superdrop, gbxindexes_for_newsupers, newnsupers);
@@ -51,68 +52,105 @@ SupersInDomain AddSupersAtDomainTop::apply(const CartesianMaps &gbxmaps, viewd_g
   return allsupers;
 }
 
-/* (re)sorting supers based on their gbxindexes and then updating the span (gbx refs) for each
-gridbox accordingly.
-
-_Note:_ totsupers is view of all superdrops (both in and out of bounds of domain).
-
-Kokkos::parallel_for([...]) is equivalent in serial to:
-for (size_t ii(0); ii < d_gbxs.extent(0); ++ii){[...]}.
-*/
+/*
+ * (re)sorting supers based on their gbxindexes and then updating the span (gbx refs) for each
+ * gridbox accordingly.
+ *
+ * _Note:_ functionality is copy of ``move_supers_between_gridboxes`` from
+ * ``movesupersindomain.hpp`` when using cartesian domain and 1 MPI process => Beware! Movement of
+ * SDs assumed to stay on single process and be complete by sorting + reference updates.
+ *
+ * _Note:_ totsupers is view of all superdrops (both in and out of bounds of domain).
+ *
+ * Kokkos::parallel_for([...]) is equivalent in serial to:
+ * for (size_t ii(0); ii < d_gbxs.extent(0); ++ii){[...]}.
+ *
+ */
 SupersInDomain move_supers_between_gridboxes_again(const viewd_gbx d_gbxs,
-                                                   SupersInDomain &allsupers) {
-  allsupers.sort_totsupers(d_gbxs);
+                                                   SupersInDomain& allsupers) {
+  allsupers.sort_totsupers(d_gbxs);  // assumes no MPI particle transport required(!)
 
   const auto domainsupers = allsupers.domain_supers();
   const size_t ngbxs(d_gbxs.extent(0));
   Kokkos::parallel_for(
-      "move_supers_between_gridboxes_again", Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
+      "set_gridboxes_refs_again", Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
       KOKKOS_LAMBDA(const size_t ii) { d_gbxs(ii).supersingbx.set_refs(domainsupers); });
 
   return allsupers;
 }
 
-/* set super-droplet sdgbxindex to out of bounds value if superdrop coord3 > coord3lim.
-Kokkos::parallel_for([...]) is equivalent in serial to:
-for (size_t kk(0); kk < supers.extent(0); ++kk){[...]}.
-*/
+/*
+ * set super-droplet sdgbxindex to out of bounds value if superdrop coord3 > upper_coord3lim.
+ *
+ * Kokkos::parallel_for([...]) is equivalent in serial to:
+ * for (size_t kk(0); kk < supers.extent(0); ++kk){[...]}.
+ */
 KOKKOS_FUNCTION
-void remove_superdrop_above_coord3lim(const TeamMember &team_member,
-                                      const subviewd_supers domainsupers, const Gridbox &gbx,
-                                      const double coord3lim) {
+void remove_superdrop_above_coord3lim(const TeamMember& team_member,
+                                      const subviewd_supers domainsupers, const Gridbox& gbx,
+                                      const double upper_coord3lim) {
   const auto supers = gbx.supersingbx(domainsupers);
   Kokkos::parallel_for(
-      Kokkos::TeamThreadRange(team_member, supers.extent(0)), [supers, coord3lim](const size_t kk) {
-        if (supers(kk).get_coord3() >= coord3lim) {
+      Kokkos::TeamThreadRange(team_member, supers.extent(0)),
+      [supers, upper_coord3lim](const size_t kk) {
+        if (supers(kk).get_coord3() >= upper_coord3lim) {
           supers(kk).set_sdgbxindex(LIMITVALUES::oob_gbxindex);  // remove super-droplet from domain
         }
       });
 }
 
-/* for gridboxes with coordinates above coord3lim, set super-droplet sdgbxindex to out of bounds
-value if superdrop coord3 > coord3lim.
+/*
+ * set super-droplet sdgbxindex to out of bounds value if superdrop coord3 < lower_coord3lim.
+ *
+ * Kokkos::parallel_for([...]) is equivalent in serial to:
+ * for (size_t kk(0); kk < supers.extent(0); ++kk){[...]}.
+ */
+KOKKOS_FUNCTION
+void remove_superdrop_below_coord3lim(const TeamMember& team_member,
+                                      const subviewd_supers domainsupers,
+                                      const double lower_coord3lim, const Gridbox& gbx) {
+  const auto supers = gbx.supersingbx(domainsupers);
+  Kokkos::parallel_for(
+      Kokkos::TeamThreadRange(team_member, supers.extent(0)),
+      [supers, lower_coord3lim](const size_t kk) {
+        if (supers(kk).get_coord3() < lower_coord3lim) {
+          supers(kk).set_sdgbxindex(LIMITVALUES::oob_gbxindex);  // remove super-droplet from domain
+        }
+      });
+}
 
-Kokkos::parallel_for([...]) is equivalent in serial to:
-for (size_t ii(0); ii < d_gbxs.extent(0); ++ii){[...]}.
-
-Function returns view of all the gridboxes indexes in d_gbxs where the value of the gridbox index
-has been replaced by outofbounds_gbxindex unless superdrops were removed from that gridbox.
-*/
-Kokkos::View<unsigned int *> remove_superdrops_from_gridboxes(const CartesianMaps &gbxmaps,
-                                                              const viewd_gbx d_gbxs,
-                                                              const subviewd_supers domainsupers,
-                                                              const double coord3lim) {
+/*
+ * for gridboxes with coordinates above upper_coord3lim, set super-droplet sdgbxindex to out
+ * of bounds value if superdrop coord3 > upper_coord3lim. Likewise for superdroplets with
+ * coord3 < lower_coord3lim in gridboxes with coordinates less than lower_coord3lim.
+ *
+ * Kokkos::parallel_for([...]) is equivalent in serial to:
+ * for (size_t ii(0); ii < d_gbxs.extent(0); ++ii){[...]}.
+ *
+ * Function returns view of all the gridboxes indexes in d_gbxs where the value of the gridbox index
+ * has been replaced by outofbounds_gbxindex unless superdrops were removed from that gridbox.
+ */
+Kokkos::View<unsigned int*> remove_superdrops_from_gridboxes(const CartesianMaps& gbxmaps,
+                                                             const viewd_gbx d_gbxs,
+                                                             const subviewd_supers domainsupers,
+                                                             const double lower_coord3lim,
+                                                             const double upper_coord3lim) {
   const size_t ngbxs(d_gbxs.extent(0));
-  auto gbxindexes_of_removedsupers = Kokkos::View<unsigned int *>("gbxs_of_removedsupers", ngbxs);
+  auto gbxindexes_of_removedsupers = Kokkos::View<unsigned int*>("gbxs_of_removedsupers", ngbxs);
   Kokkos::parallel_for(
       "remove_superdrops", TeamPolicy(ngbxs, Kokkos::AUTO()),
-      KOKKOS_LAMBDA(const TeamMember &team_member) {
+      KOKKOS_LAMBDA(const TeamMember& team_member) {
         const auto ii = team_member.league_rank();
+        const auto& gbx = d_gbxs(ii);
 
-        const auto ubound = gbxmaps.coord3bounds(d_gbxs(ii).get_gbxindex()).second;
-        if (ubound > coord3lim) {
-          remove_superdrop_above_coord3lim(team_member, domainsupers, d_gbxs(ii), coord3lim);
-          gbxindexes_of_removedsupers(ii) = d_gbxs(ii).get_gbxindex();  // add newsupers
+        const auto lbound = gbxmaps.coord3bounds(gbx.get_gbxindex()).first;
+        const auto ubound = gbxmaps.coord3bounds(gbx.get_gbxindex()).second;
+        if (ubound > upper_coord3lim) {
+          remove_superdrop_above_coord3lim(team_member, domainsupers, gbx, upper_coord3lim);
+          gbxindexes_of_removedsupers(ii) = gbx.get_gbxindex();  // add newsupers
+        } else if (lbound < lower_coord3lim) {
+          remove_superdrop_below_coord3lim(team_member, domainsupers, lower_coord3lim, gbx);
+          gbxindexes_of_removedsupers(ii) = gbx.get_gbxindex();  // add newsupers
         } else {
           gbxindexes_of_removedsupers(ii) = LIMITVALUES::oob_gbxindex;  // don't add newsupers
         }
@@ -128,12 +166,12 @@ count the total number of new superdroplets to create.
 Kokkos::parallel_reduce([...]) is equivalent in serial to suming up newnsupers_total in loop:
 for (size_t ii(0); ii < d_gbxs.extent(0); ++ii){[...]}.
 */
-size_t total_newnsupers_to_create(Kokkos::View<unsigned int *> gbxindexes,
+size_t total_newnsupers_to_create(Kokkos::View<unsigned int*> gbxindexes,
                                   const size_t newnsupers_pergbx) {
   auto newnsupers_total = size_t{0};
   Kokkos::parallel_reduce(
       "newnsupers_total", Kokkos::RangePolicy<ExecSpace>(0, gbxindexes.extent(0)),
-      KOKKOS_LAMBDA(const size_t ii, size_t &nsupers) {
+      KOKKOS_LAMBDA(const size_t ii, size_t& nsupers) {
         if (gbxindexes(ii) != LIMITVALUES::oob_gbxindex) {
           nsupers = newnsupers_pergbx;
         } else {
@@ -150,9 +188,9 @@ outofbounds_gbxindex unless superdrops should be added to that gridbox, function
 new superdroplets per gridbox by calling the create_superdrop function on host and then
 copies resultant view to device memory.
 */
-viewd_supers create_newsupers_for_gridboxes(const CartesianMaps &gbxmaps,
-                                            const CreateSuperdrop &create_superdrop,
-                                            Kokkos::View<unsigned int *> gbxindexes,
+viewd_supers create_newsupers_for_gridboxes(const CartesianMaps& gbxmaps,
+                                            const CreateSuperdrop& create_superdrop,
+                                            Kokkos::View<unsigned int*> gbxindexes,
                                             const size_t newnsupers_pergbx) {
   auto newsupers =
       viewd_supers("newsupers", total_newnsupers_to_create(gbxindexes, newnsupers_pergbx));
@@ -191,7 +229,7 @@ viewh_constgbx hostcopy_one_gridbox(const viewd_constgbx d_gbxs, const size_t ii
 }
 
 /* throws error if the size of newnsupers + oldnsupers > total space in totsupers view */
-size_t check_space_in_totsupers(const SupersInDomain &allsupers,
+size_t check_space_in_totsupers(const SupersInDomain& allsupers,
                                 const viewd_constsupers newsupers) {
   const auto totsupers = allsupers.get_totsupers_readonly();
   const auto oldnsupers = allsupers.domain_nsupers();
@@ -207,7 +245,7 @@ size_t check_space_in_totsupers(const SupersInDomain &allsupers,
 
 /* check there is space in totsupers for newsupers, then append superdrops in newsupers to end of
 totsupers view */
-void add_superdrops_for_gridboxes(const SupersInDomain &allsupers,
+void add_superdrops_for_gridboxes(const SupersInDomain& allsupers,
                                   const viewd_constsupers newsupers) {
   const auto totsupers = allsupers.get_totsupers();
   const auto og_ntotsupers = check_space_in_totsupers(allsupers, newsupers);
@@ -218,7 +256,7 @@ void add_superdrops_for_gridboxes(const SupersInDomain &allsupers,
 }
 
 /* returns host copy of {lower, upper} coord3 boundaries from gbxmaps for 'gbxindex' on device */
-Kokkos::pair<double, double> hostcopy_coord3bounds(const CartesianMaps &gbxmaps,
+Kokkos::pair<double, double> hostcopy_coord3bounds(const CartesianMaps& gbxmaps,
                                                    const unsigned int gbxindex) {
   const Kokkos::View<Kokkos::pair<double, double>[1]> d_bound("d_bound");
   Kokkos::parallel_for(
@@ -231,7 +269,7 @@ Kokkos::pair<double, double> hostcopy_coord3bounds(const CartesianMaps &gbxmaps,
 }
 
 /* call to create a new superdroplet for gridbox with given gbxindex */
-CreateSuperdrop::CreateSuperdrop(const OptionalConfigParams::AddSupersAtDomainTopParams &config)
+CreateSuperdrop::CreateSuperdrop(const OptionalConfigParams::AddSupersToDomainParams& config)
     : randgen(std::make_shared<std::mt19937>(std::random_device {}())),
       sdIdGen(std::make_shared<Superdrop::IDType::Gen>(config.initnsupers)),
       nbins(config.newnsupers),
@@ -247,7 +285,7 @@ CreateSuperdrop::CreateSuperdrop(const OptionalConfigParams::AddSupersAtDomainTo
 }
 
 /* call to create a new superdroplet for gridbox with given gbxindex */
-Superdrop CreateSuperdrop::operator()(const CartesianMaps &gbxmaps,
+Superdrop CreateSuperdrop::operator()(const CartesianMaps& gbxmaps,
                                       const unsigned int gbxindex) const {
   const auto sdgbxindex = gbxindex;
   const auto coords312 = create_superdrop_coords(gbxmaps, gbxindex);
@@ -259,7 +297,7 @@ Superdrop CreateSuperdrop::operator()(const CartesianMaps &gbxmaps,
 
 /* create spatial coordinates for super-droplet by setting coord1 = coord2 = 0.0 and coord3 to a
 random value within the gridbox's bounds */
-std::array<double, 3> CreateSuperdrop::create_superdrop_coords(const CartesianMaps &gbxmaps,
+std::array<double, 3> CreateSuperdrop::create_superdrop_coords(const CartesianMaps& gbxmaps,
                                                                const unsigned int gbxindex) const {
   const auto bounds = hostcopy_coord3bounds(gbxmaps, gbxindex);
   auto dist = std::uniform_real_distribution<double>(bounds.first, bounds.second);
@@ -304,11 +342,12 @@ std::pair<size_t, double> CreateSuperdrop::new_xi_radius(const double gbxvolume)
 double CreateSuperdrop::new_msol(const double radius) const {
   constexpr double msolconst = 4.0 * std::numbers::pi * dlc::Rho_sol / 3.0;
 
+  auto new_dry = dryradius;
   if (radius < dryradius) {
-    throw std::invalid_argument("new radius cannot be < dry radius of droplet");
+    new_dry = radius;
   }
 
-  return msolconst * dryradius * dryradius * dryradius;
+  return msolconst * new_dry * new_dry * new_dry;
 }
 
 /* returns the droplet number concentration for a bin of width log10rlow -> log10rup

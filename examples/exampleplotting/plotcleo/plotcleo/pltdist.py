@@ -142,9 +142,13 @@ def plot_domainmass_distribs(
     smoothsig=False,
     perlogR=True,
     ylog=False,
+    fig_ax=None,
     savename="",
 ):
-    fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
+    if fig_ax is None:
+        fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
+    else:
+        fig, ax = fig_ax
 
     variables2slice = ["time", "radius", "xi", "msol"]
     superdrops_timeslice = superdrops.time_slice(
@@ -188,9 +192,13 @@ def plot_domainnsupers_distribs(
     smoothsig=False,
     perlogR=True,
     ylog=False,
+    fig_ax=None,
     savename="",
 ):
-    fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
+    if fig_ax is None:
+        fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
+    else:
+        fig, ax = fig_ax
 
     variables2slice = ["time", "radius", "xi", "msol"]
     superdrops_timeslice = superdrops.time_slice(
@@ -233,9 +241,13 @@ def plot_domainnumconc_distribs(
     smoothsig=False,
     perlogR=True,
     ylog=False,
+    fig_ax=None,
     savename="",
 ):
-    fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
+    if fig_ax is None:
+        fig, ax = plt.subplots(ncols=1, nrows=1, figsize=(8, 6))
+    else:
+        fig, ax = fig_ax
 
     variables2slice = ["time", "radius", "xi", "msol"]
     superdrops_timeslice = superdrops.time_slice(
@@ -265,4 +277,41 @@ def plot_domainnumconc_distribs(
         fig.savefig(savename, dpi=400, bbox_inches="tight", facecolor="w", format="png")
         print("Figure .png saved as: " + str(savename))
 
+    return fig, ax
+
+
+def plot_distribs_in_select_range(
+    time,
+    plot_xxx_distribs,
+    var_for_range,
+    range_values,
+    superdrops,
+    t2plts,
+    volume,
+    rspan,
+    nbins,
+    smoothsig=False,
+    perlogR=True,
+    ylog=False,
+    fig_ax=[],
+    savename="",
+):
+    superdrops.detach_time()
+    variables2select = ["radius", "xi", "msol"]
+    select_superdrops = superdrops.select_range(
+        var_for_range, range_values, variables2select
+    )
+    fig, ax = plot_xxx_distribs(
+        time,
+        select_superdrops,
+        t2plts,
+        volume,
+        rspan,
+        nbins,
+        smoothsig=smoothsig,
+        perlogR=perlogR,
+        ylog=ylog,
+        fig_ax=fig_ax,
+        savename=savename,
+    )
     return fig, ax
