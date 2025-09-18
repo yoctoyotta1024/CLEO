@@ -66,7 +66,9 @@ def create_sdm(cleo, cleo_config, tsteps, is_sdm_null):
         )
         # motion = cleo.create_cartesian_predcorr_motion(cleo_config, False)
         transport = cleo.CartesianTransportAcrossDomain()
-        boundary_conditions = cleo.NullBoundaryConditions()
+        boundary_conditions = cleo.AddSupersToDomain(
+            cleo_config.get_addsuperstodomain()
+        )
         move = cleo.CartesianMoveSupersInDomain(motion, transport, boundary_conditions)
 
         print("CLEO STATUS: creating SDM Methods")

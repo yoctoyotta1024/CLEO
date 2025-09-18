@@ -24,6 +24,7 @@
 
 #include "./optional_terminal_velocity.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
+#include "cartesiandomain/movement/add_supers_to_domain.hpp"
 #include "cartesiandomain/movement/cartesian_motion.hpp"
 #include "cartesiandomain/movement/cartesian_transport_across_domain.hpp"
 #include "gridboxes/boundary_conditions.hpp"
@@ -151,15 +152,16 @@ using mo_null = NullMotion;
 using mo_cart_predcorr =
     PredCorrMotion<CartesianMaps, OptionalTerminalVelocity, CartesianCheckBounds>;
 using bcs_null = NullBoundaryConditions;
+using bcs_add = AddSupersToDomain;
 using trans_cart = CartesianTransportAcrossDomain;
 using move_cart_null = MoveSupersInDomain<map_cart, mo_null, trans_cart, bcs_null>;
-using move_cart = MoveSupersInDomain<map_cart, mo_cart_predcorr, trans_cart, bcs_null>;
+using move_cart = MoveSupersInDomain<map_cart, mo_cart_predcorr, trans_cart, bcs_add>;
 
 using obs_null = NullObserver;
 
 using sdm_cart_null = SDMMethods<map_cart, micro_null, mo_null, trans_cart, bcs_null, obs_null>;
 using sdm_cart_all =
-    SDMMethods<map_cart, micro_all, mo_cart_predcorr, trans_cart, bcs_null, pyobserver::obs>;
+    SDMMethods<map_cart, micro_all, mo_cart_predcorr, trans_cart, bcs_add, pyobserver::obs>;
 }  // namespace cleo_python_bindings_aliases
 
 #endif  // LIBS_CLEO_PYTHON_BINDINGS_CLEO_PYTHON_BINDINGS_ALIASES_HPP_

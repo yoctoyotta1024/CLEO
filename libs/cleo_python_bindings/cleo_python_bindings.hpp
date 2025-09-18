@@ -40,7 +40,7 @@ namespace py = pybind11;
 
 int test_cleo_python_bindings(const int i, const int j);
 
-void cleo_initialize(const Config &config);
+void cleo_initialize(const Config& config);
 
 void inline cleo_finalize() { Kokkos::finalize(); }
 
@@ -65,6 +65,7 @@ PYBIND11_MODULE(cleo_python_bindings, m) {
   pyrealtime2step(m);
   pyInitSupersFromBinary(m);
   pyInitSupersFromBinaryParams(m);
+  pyAddSupersToDomainParams(m);
   pyInitGbxsNull(m);
 
   /* superdroplets */
@@ -91,6 +92,7 @@ PYBIND11_MODULE(cleo_python_bindings, m) {
 
   /* boundary conditions */
   pyNullBoundaryConditions(m);
+  pyAddSupersToDomain(m);
 
   /* transport */
   pyCartesianTransportAcrossDomain(m);

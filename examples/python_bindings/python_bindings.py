@@ -204,7 +204,7 @@ def timestep_example(t_mdl, t_end, timestep, thermo, cleo_sdm):
         t_mdl += timestep
 
 
-def cleo_sdm_example(cleo, python_config, cleo_config):
+def cleo_sdm_example(cleo, python_config, cleo_config, is_sdm_null):
     t_mdl, t_end = 0, python_config["timesteps"]["T_END"]  # [s]
     timestep = python_config["timesteps"]["COUPLTSTEP"]  # [s]
 
@@ -222,7 +222,7 @@ def cleo_sdm_example(cleo, python_config, cleo_config):
         wvel,
         uvel,
         vvel,
-        is_sdm_null=False,
+        is_sdm_null=is_sdm_null,
     )
 
     timestep_example(t_mdl, t_end, timestep, thermo, cleo_sdm)
@@ -231,7 +231,9 @@ def cleo_sdm_example(cleo, python_config, cleo_config):
 def run_sdm_example(cleo, python_config, config_filename):
     cleo_config = cleo.Config(config_filename)
     cleo.cleo_initialize(cleo_config)
-    cleo_sdm_example(cleo, python_config, cleo_config)
+    for is_sdm_null in [True, False]:
+        cleo_sdm_example(cleo, python_config, cleo_config, is_sdm_null)
+        cleo_sdm_example(cleo, python_config, cleo_config, is_sdm_null)
 
 
 def run_exectuable(path2build, config_filename):
