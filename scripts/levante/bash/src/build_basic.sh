@@ -19,8 +19,8 @@ if [ "${CLEO_COMPILERNAME}" == "intel" ]
 then
   module load ${levante_intel} ${levante_intel_openmpi}
   spack load ${levante_intel_cmake}
-  export CLEO_CXX_COMPILER=${levante_icpc_compiler}
-  export CLEO_CC_COMPILER=${levante_icc_compiler}
+  export CLEO_CXX_COMPILER="$(command -v mpic++)"
+  export CLEO_CC_COMPILER="$(command -v mpicc)"
 
   if [ "${CLEO_ENABLEDEBUG}" == "true" ]
   then
@@ -36,8 +36,8 @@ elif [ "${CLEO_COMPILERNAME}" == "gcc" ]
 then
   module load ${levante_gcc} ${levante_gcc_openmpi}
   spack load ${levante_gcc_cmake}
-  export CLEO_CXX_COMPILER=${levante_gxx_compiler}
-  export CLEO_CC_COMPILER=${levante_gcc_compiler}
+  export CLEO_CXX_COMPILER="$(command -v mpic++)"
+  export CLEO_CC_COMPILER="$(command -v mpicc)"
 
   if [ "${CLEO_ENABLEDEBUG}" == "true" ]
   then
