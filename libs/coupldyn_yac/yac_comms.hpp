@@ -36,6 +36,8 @@ struct YacComms {
   void update_gridbox_state(const YacDynamics &ffdyn, const size_t ii, Gridbox &gbx) const;
 
  public:
+  static int get_counter;
+  static int put_counter;
   /* send information from Gridboxes' states
   to coupldyn is null for YacDynamics*/
   template <typename GbxMaps, typename CD = YacDynamics>
