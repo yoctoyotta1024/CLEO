@@ -33,7 +33,7 @@ extern "C" {
 enum { VERTICAL = 0, EASTWARD = 1, NORTHWARD = 2 };
 
 namespace dlc = dimless_constants;
-
+int YacDynamics::get_counter = 1;
 /* return (k,i,j) indicies from idx for a flattened 3D array
 with ndims [nz, nx, ny]. kij is useful for then getting
 position in of a variable in a flattened array defined on
@@ -131,14 +131,16 @@ void create_grid_and_points_definitions(const Config &config, const std::array<s
 /*
 fill's target_array with values from yac_raw_data at multiplied by their conversion factor
 */
+
 void CartesianDynamics::receive_yac_field(unsigned int yac_field_id, double **yac_raw_data,
                                           std::vector<double> &target_array,
                                           const size_t ndims_north, const size_t ndims_east,
                                           const size_t vertical_levels,
                                           double conversion_factor = 1.0) const {
   int info, error;
+  int action;
+  yac_cget_action(yac_field_id, &action);
   yac_cget(yac_field_id, vertical_levels, yac_raw_data, &info, &error);
-
   for (size_t j = 0; j < ndims_north; j++) {
     for (size_t i = 0; i < ndims_east; i++) {
       for (size_t k = 0; k < vertical_levels; k++) {
@@ -149,8 +151,6 @@ void CartesianDynamics::receive_yac_field(unsigned int yac_field_id, double **ya
       }
     }
   }
-
-  std::cout << "Received from ICON" <<std::endl;
 }
 
 /* This subroutine is the main entry point for receiving data from YAC.
@@ -175,37 +175,55 @@ void CartesianDynamics::receive_fields_from_yac() {
                     ndims[EASTWARD], ndims[VERTICAL], dlc::W0);
 }
 
-void CartesianDynamics::send_yac_field(double* field_data, double conversion_factor = 1.0) {
+void CartesianDynamics::send_yac_field(int field_id, double* field_data,
+    double conversion_factor = 1.0) {
   auto ndims_vertical = ndims[VERTICAL];
   auto ndims_north = ndims[NORTHWARD];
   auto ndims_east = ndims[EASTWARD];
-  // auto ncells = ndims_north * ndims_east;
+  auto ncells = ndims_north * ndims_east;
 
-  // put_buffer(ncells, std::vector(ndims_vertical, 0.0));
   int info, ierror;
-  std::cout << "Field data: \n";
+  auto field_size = ncells*ndims_vertical;
+  double **collection_data;
+
+  send_buffer = new double **[ndims_vertical];
+
+  for (int j = 0; j < ndims_vertical; ++j) {
+      send_buffer[j] = new double*[1];
+      send_buffer[j][0] = new double[ncells];
+  }
 
   for (size_t j = 0; j < ndims_north; j++) {
     for (size_t i = 0; i < ndims_east; i++) {
       for (size_t k = 0; k < ndims_vertical; k++) {
-      // auto vertical_idx = k;
-      // auto source_idx = j * ndims_east + i;
-      // auto ii = (ndims_east * j + i) * ndims_vertical + k;
-      // std::cout << field_data[ii] * conversion_factor;
+        auto ii = (ndims_east * j + i) * ndims_vertical + k;
+        auto vertical_idx = k;
+        auto source_idx = j * ndims_east + i;
+        send_buffer[vertical_idx][0][source_idx] = field_data[ii] * conversion_factor;
       }
     }
   }
-  yac_cput_(temp_yac_id, ndims_vertical, field_data, &info, &ierror);  // needs modification
+
+  // for (size_t i = 0; i < field_size; i++) {
+  //  field_data[i] = field_data[i]*conversion_factor;
+  // }
+  yac_cput(field_id, ndims_vertical, send_buffer, &info, &ierror);
 
   std::cout << "yac_cput_ completed with info as: " << info << std::endl;
+
+  for (int j = 0; j < ndims_vertical; ++j) {
+      delete send_buffer[j][0];
+      delete send_buffer[j];
+  }
+  delete[] send_buffer;
 }
 void CartesianDynamics::send_fields_to_yac(double* h_temp,
                                double* h_qvap,
                                double* h_qcond) {
-  double* temp_field = h_temp;
-  send_yac_field(temp_field, dlc::TEMP0);
-  // send_yac_field(h_qcond);
-  // send_yac_field(h_qvap);
+  // double temp_field = h_temp;
+  send_yac_field(temp_yac_id2, h_temp, dlc::TEMP0);
+  send_yac_field(qvap_yac_id2, h_qvap);
+  send_yac_field(qcond_yac_id2, h_qcond);
 }
 
 CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
@@ -359,7 +377,7 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   wvel = std::vector<double>(horizontal_cell_number * (ndims[VERTICAL] + 1), 0);
 
   // Calls the first data retrieval from YAC to have thermodynamic data for first timestep
-  receive_fields_from_yac();
+  // receive_fields_from_yac();
 
   std::cout << "Finished setting up YAC for receiving:\n"
                "  pressure,\n  temperature,\n"
