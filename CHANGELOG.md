@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.61.1](https://github.com/yoctoyotta1024/CLEO/compare/db047615ddabddc2eb784b906410d85c66d2baeb..v0.61.1) - 2025-09-24
+#### Bug Fixes
+- handle zero or unspecified numconc - ([65081ab](https://github.com/yoctoyotta1024/CLEO/commit/65081ab749300842f94baf764b71eb676344cbd3)) - clara.bayley
+- fig_ax is None by default - ([3b7fb46](https://github.com/yoctoyotta1024/CLEO/commit/3b7fb46e500db95380c22e6a180c9ea261bc2a64)) - clara.bayley
+#### Refactoring
+- load compilers compatible with loaded modules - ([db04761](https://github.com/yoctoyotta1024/CLEO/commit/db047615ddabddc2eb784b906410d85c66d2baeb)) - clara.bayley
+
+- - -
+
 ## [v0.61.0](https://github.com/yoctoyotta1024/CLEO/compare/de13b39079cbd6d34498d4b6e4985872c3b144af..v0.61.0) - 2025-09-18
 #### Features
 - python bindings to cartesian sdm can have boundary conditions - ([f8ec597](https://github.com/yoctoyotta1024/CLEO/commit/f8ec597ed9037759c12b0e12b646fe680abcbab9)) - clara.bayley
