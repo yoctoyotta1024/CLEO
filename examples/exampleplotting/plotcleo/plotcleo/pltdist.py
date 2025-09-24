@@ -293,7 +293,7 @@ def plot_distribs_in_select_range(
     smoothsig=False,
     perlogR=True,
     ylog=False,
-    fig_ax=[],
+    fig_ax=None,
     savename="",
 ):
     superdrops.detach_time()
