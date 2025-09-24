@@ -116,6 +116,7 @@ def generate_thermodynamics_conditions_fromfile(
     isfigures=[False, False],
     savefigpath=None,
     savelabel="",
+    press_ref=None,
 ):
     """write thermodynamics binaries. [shows, saves] figures if isfigures = [True, True]"""
     from .thermobinary_src import create_thermodynamics as cthermo
@@ -138,6 +139,7 @@ def generate_thermodynamics_conditions_fromfile(
             savefig=isfigures[1],
             savefigpath=savefigpath,
             savelabel=savelabel,
+            press_ref=press_ref,
         )
         if isfigures[0]:
             plt.show()
