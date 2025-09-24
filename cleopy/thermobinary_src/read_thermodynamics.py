@@ -203,6 +203,7 @@ def plot_thermodynamics(
     savefig=False,
     savefigpath=None,
     savelabel="",
+    press_ref=None,
 ):
     plt.rcParams.update({"font.size": 14})
 
@@ -225,6 +226,7 @@ def plot_thermodynamics(
         savefigpath,
         savefig,
         savelabel=savelabel,
+        press_ref=press_ref,
     )
 
     if inputs["nspacedims"] > 1:
@@ -266,7 +268,9 @@ def try1dplot(ax, nplots, data, zfull, label):
     return nplots + 1
 
 
-def plot_1dthermodynamics(axs, n, zfull, thermodata, Mr_ratio, RGAS_DRY, CP_DRY):
+def plot_1dthermodynamics(
+    axs, n, zfull, thermodata, Mr_ratio, RGAS_DRY, CP_DRY, press_ref=None
+):
     vars = ["press", "temp", "qvap", "qcond"]
     units = [" /Pa", " /K", "", ""]
 
@@ -283,7 +287,8 @@ def plot_1dthermodynamics(axs, n, zfull, thermodata, Mr_ratio, RGAS_DRY, CP_DRY)
     label = "supersaturation"
     n = try1dplot(axs[n], n, supersat.T, zfull[None, :].T, label)
 
-    press_ref = pressxy[0, 0]
+    if press_ref is None:
+        press_ref = pressxy[0, 0]
     theta = potential_temperature(pressxy, tempxy, press_ref, RGAS_DRY, CP_DRY)
     label = "\u03F4 /K"
     n = try1dplot(axs[n], n, theta.T, zfull[None, :].T, label)
@@ -305,13 +310,28 @@ def plot_1dwindprofiles(axs, n, zfull, thermodata):
 
 
 def plot_1dprofiles(
-    zfull, thermodata, Mr_ratio, RGAS_DRY, CP_DRY, savefigpath, savefig, savelabel=""
+    zfull,
+    thermodata,
+    Mr_ratio,
+    RGAS_DRY,
+    CP_DRY,
+    savefigpath,
+    savefig,
+    savelabel="",
+    press_ref=None,
 ):
     fig, axs = plt.subplots(nrows=3, ncols=3, figsize=(16, 8))
     axs = axs.flatten()
 
     nplots = plot_1dthermodynamics(
-        axs, 0, zfull, thermodata, Mr_ratio, RGAS_DRY, CP_DRY
+        axs,
+        0,
+        zfull,
+        thermodata,
+        Mr_ratio,
+        RGAS_DRY,
+        CP_DRY,
+        press_ref=press_ref,
     )
     nplots = plot_1dwindprofiles(axs, nplots, zfull, thermodata)
 

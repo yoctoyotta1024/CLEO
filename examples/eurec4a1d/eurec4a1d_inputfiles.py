@@ -171,6 +171,7 @@ def main(
         grid_filename,
         isfigures=isfigures,
         savefigpath=savefigpath,
+        press_ref=100000,
     )
 
     ### ----- write initial superdroplets binary ----- ###
