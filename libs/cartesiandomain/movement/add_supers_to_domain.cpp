@@ -370,7 +370,11 @@ double LognormalDistribution::lognormal_pdf(double radius) const {
 from a Lognormal distribution centered on the radius at log10r. */
 double LognormalDistribution::droplet_numconc_distribution(double log10r, double log10rup,
                                                            double log10rlow) const {
-  double delta_radius = std::pow(10.0, log10rup) - std::pow(10.0, log10rlow);
-  double dnumconc_dradius = numconc * lognormal_pdf(std::pow(10.0, log10r));
-  return dnumconc_dradius * delta_radius;  // number of droplets per unit volume for bin
+  if (numconc == 0.0) {
+    return 0.0;
+  } else {
+    double delta_radius = std::pow(10.0, log10rup) - std::pow(10.0, log10rlow);
+    double dnumconc_dradius = numconc * lognormal_pdf(std::pow(10.0, log10r));
+    return dnumconc_dradius * delta_radius;  // number of droplets per unit volume for bin
+  }
 }
