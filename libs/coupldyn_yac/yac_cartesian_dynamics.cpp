@@ -47,7 +47,29 @@ std::array<size_t, 3> kijfromindex(const std::array<size_t, 3> &ndims, const siz
   return std::array<size_t, 3>{k, i, j};
 }
 
-void create_vertex_coordinates(const Config &config, const std::array<size_t, 3> ndims,
+double get_radians_from_metres(const double lower_latitude,
+    double delta_east = 0.0, double delta_north = 0.0) {
+  constexpr double EarthRadiusMeters = 6378137.0;          // semi‑major axis a
+  double dLon = 0.0;
+  double dLat = 0.0;
+
+  if (delta_east != 0.0) {
+    double cosLat = std::cos(lower_latitude);
+    dLon = (delta_east*1000.0) / (EarthRadiusMeters * cosLat);
+    return dLon;
+  }
+
+  if (delta_north != 0.0) {
+    dLat = (delta_north*1000.0) / EarthRadiusMeters;
+    return dLat;
+  }
+
+  return 0.0;
+}
+
+
+void create_vertex_coordinates(const Config &config, const std::array<size_t, 3> partition_size,
+                               std::vector<std::vector<double>> gridbox_bounds,
                                std::vector<double> &vertex_longitudes,
                                std::vector<double> &vertex_latitudes) {
   const auto lower_longitude = config.get_yac_dynamics().lower_longitude;
@@ -55,40 +77,87 @@ void create_vertex_coordinates(const Config &config, const std::array<size_t, 3>
   const auto lower_latitude = config.get_yac_dynamics().lower_latitude;
   const auto upper_latitude = config.get_yac_dynamics().upper_latitude;
 
+  auto vertex_longitudes_new = std::vector<double>(partition_size[EASTWARD] + 1, 0);
+  auto vertex_latitudes_new = std::vector<double>(partition_size[NORTHWARD] + 1, 0);
+
+  constexpr double RadToDeg = 180.0 / M_PI;
+  constexpr double DegToRad = M_PI / 180.0;
+
+  // use partition_origins and partition_sizes
   // Defines the vertex longitude and latitude values in radians for grid creation
   // The values are later permuted by YAC to generate all vertex coordinates
+
+  // ********* 1 process ***************
+
   for (size_t i = 0; i < vertex_longitudes.size(); i++)
     vertex_longitudes[i] =
-        lower_longitude + i * ((upper_longitude - lower_longitude) / ndims[EASTWARD]);
+        lower_longitude + i * ((upper_longitude - lower_longitude) / partition_size[EASTWARD]);
 
   for (size_t i = 0; i < vertex_latitudes.size(); i++)
     vertex_latitudes[i] =
-        lower_latitude + i * ((upper_latitude - lower_latitude) / ndims[NORTHWARD]);
+        lower_latitude + i * ((upper_latitude - lower_latitude) / partition_size[NORTHWARD]);
+
+  // ***** multiprocess **********
+  for (size_t i = 0; i < vertex_longitudes.size(); i++) {
+    auto dLon = get_radians_from_metres(lower_latitude,
+        (gridbox_bounds[EASTWARD][i] - gridbox_bounds[EASTWARD].front()));
+
+// auto dLon = ((gridbox_bounds[EASTWARD][i] - gridbox_bounds[EASTWARD].front())
+// *1000.0*DegToRad)/111111.0;
+    vertex_longitudes_new[i] = lower_longitude + dLon;
+    std::cout << "dLon : " << dLon <<std::endl;
+  }
+
+  for (size_t i = 0; i < vertex_latitudes.size(); i++) {
+    auto dLat = get_radians_from_metres(lower_latitude,
+         0.0, (gridbox_bounds[NORTHWARD][i] - gridbox_bounds[NORTHWARD].front()));
+
+// auto dLat = ((gridbox_bounds[NORTHWARD][i] - gridbox_bounds[NORTHWARD].front())
+// *1000.0*DegToRad)/111111.0;
+    vertex_latitudes_new[i] = lower_latitude + dLat;
+    std::cout << "dLat : " << dLat <<std::endl;
+  }
+
+  for (size_t i = 0; i < vertex_longitudes.size(); i++)
+    std::cout << "vertex_lon old vs new " << vertex_longitudes[i] << " vs "
+      << vertex_longitudes_new[i] << std::endl;
+
+  for (size_t i = 0; i < vertex_latitudes.size(); i++)
+    std::cout << "vertex_lat old vs new " << vertex_latitudes[i] << " vs "
+      << vertex_latitudes_new[i] << std::endl;
 }
 
 /* Creates the YAC grid and defines the cell and edge points based on ndims data */
 void create_grid_and_points_definitions(const Config &config, const std::array<size_t, 3> ndims,
                                         const std::string grid_name, int &grid_id,
-                                        int &cell_point_id, int &edge_point_id) {
+                                        int &cell_point_id, int &edge_point_id,
+                                        std::array<size_t, 3> partition_size,
+                                        std::array<size_t, 3> partition_origin,
+                                        std::vector<std::vector<double>> gridbox_bounds) {
   int cyclic_dimension[2] = {0, 0};
-  int total_cells[2] = {static_cast<int>(ndims[EASTWARD]), static_cast<int>(ndims[NORTHWARD])};
-  int total_vertices[2] = {static_cast<int>(ndims[EASTWARD] + 1),
-                           static_cast<int>(ndims[NORTHWARD] + 1)};
-  int total_edges[2] = {static_cast<int>(ndims[EASTWARD] * (ndims[NORTHWARD] + 1)),
-                        static_cast<int>(ndims[NORTHWARD] * (ndims[EASTWARD] + 1))};
+  int total_cells[2] = {static_cast<int>(partition_size[EASTWARD]),
+                        static_cast<int>(partition_size[NORTHWARD])};
+  int total_vertices[2] = {static_cast<int>(partition_size[EASTWARD] + 1),
+                           static_cast<int>(partition_size[NORTHWARD] + 1)};
+  int total_edges[2] = {static_cast<int>(partition_size[EASTWARD] *
+                        (partition_size[NORTHWARD] + 1)),
+                        static_cast<int>(partition_size[NORTHWARD] *
+                        (partition_size[EASTWARD] + 1))};
 
-  auto vertex_longitudes = std::vector<double>(ndims[EASTWARD] + 1, 0);
-  auto vertex_latitudes = std::vector<double>(ndims[NORTHWARD] + 1, 0);
-  auto cell_center_longitudes = std::vector<double>(ndims[EASTWARD]);
-  auto cell_center_latitudes = std::vector<double>(ndims[NORTHWARD]);
+  auto vertex_longitudes = std::vector<double>(partition_size[EASTWARD] + 1, 0);
+  auto vertex_latitudes = std::vector<double>(partition_size[NORTHWARD] + 1, 0);
+  auto cell_center_longitudes = std::vector<double>(partition_size[EASTWARD]);
+  auto cell_center_latitudes = std::vector<double>(partition_size[NORTHWARD]);
+
   std::vector<double> edge_centers_longitudes;
   std::vector<double> edge_centers_latitudes;
 
-  create_vertex_coordinates(config, ndims, vertex_longitudes, vertex_latitudes);
+  create_vertex_coordinates(config, partition_size, gridbox_bounds,
+                            vertex_longitudes, vertex_latitudes);
 
   // Defines a regular 2D grid
-  yac_cdef_grid_reg2d(grid_name.c_str(), total_vertices, cyclic_dimension, vertex_longitudes.data(),
-                      vertex_latitudes.data(), &grid_id);
+  yac_cdef_grid_reg2d(grid_name.c_str(), total_vertices, cyclic_dimension,
+      vertex_longitudes.data(), vertex_latitudes.data(), &grid_id);
 
   // --- Point definitions ---
   // Defines the cell center longitude and latitude values in radians
@@ -183,8 +252,6 @@ void CartesianDynamics::send_yac_field(int field_id, double* field_data,
   auto ncells = ndims_north * ndims_east;
 
   int info, ierror;
-  // auto field_size = ncells*ndims_vertical;
-  // double **collection_data;
 
   send_buffer = new double **[ndims_vertical];
 
@@ -204,12 +271,9 @@ void CartesianDynamics::send_yac_field(int field_id, double* field_data,
     }
   }
 
-  // for (size_t i = 0; i < field_size; i++) {
-  //  field_data[i] = field_data[i]*conversion_factor;
-  // }
   yac_cput(field_id, ndims_vertical, send_buffer, &info, &ierror);
 
-  std::cout << "yac_cput_ completed with info as: " << info << std::endl;
+  std::cout << "yac_cput completed with info as: " << info << std::endl;
 
   for (size_t j = 0; j < ndims_vertical; ++j) {
     delete send_buffer[j][0];
@@ -227,7 +291,7 @@ void CartesianDynamics::send_fields_to_yac(double* h_temp,
 }
 
 CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
-                                     const unsigned int nsteps)
+                              const unsigned int nsteps, const CartesianDecomposition& decomp)
     : ndims(i_ndims),
       config(config),
       get_wvel(nullwinds()),
@@ -244,8 +308,33 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   int edge_point_id = -1;
   std::string grid_name = "cleo_grid";
 
+  partition_size = decomp.get_local_partition_size();
+  partition_origin = decomp.get_local_partition_origin();
+  gridbox_bounds = decomp.get_local_gridbox_bounds();
+  domain_bounds = decomp.get_domain_bounds();
+
+  std::cout << "Partition Size in z:" << partition_size[0] << std::endl;
+  std::cout << "Partition Size in x:" << partition_size[1] << std::endl;
+  std::cout << "Partition Size in y:" << partition_size[2] << std::endl;
+
+  std::cout << "ndims Size in z:" << ndims[0] << std::endl;
+  std::cout << "ndims Size in x:" << ndims[1] << std::endl;
+  std::cout << "ndims Size in y:" << ndims[2] << std::endl;
+
+
+  std::cout << "gridbox_bounds in z direction: " << gridbox_bounds[0].front() << " ; "
+            << gridbox_bounds[0].back() <<std::endl;
+  std::cout << "gridbox_bounds in x direction: " << gridbox_bounds[1].front() << " ; "
+            << gridbox_bounds[1].back() <<std::endl;
+  std::cout << "gridbox_bounds in y direction: " << gridbox_bounds[2].front() << " ; "
+            << gridbox_bounds[2].back() <<std::endl;
+
+  std::cout << "Domain_bounds in z direction: " << domain_bounds[0][0] << " ; "
+            << domain_bounds[1][0] <<std::endl;
+
   create_grid_and_points_definitions(config, ndims, grid_name, grid_id, cell_point_id,
-                                     edge_point_id);
+                                     edge_point_id, partition_size, partition_origin,
+                                     gridbox_bounds);
 
   // --- Interpolation stack ---
   int interp_stack_id;
