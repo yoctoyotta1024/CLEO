@@ -37,6 +37,13 @@ std::array<size_t, 3> CartesianDecomposition::get_local_partition_size() const {
   return partition_sizes[my_rank];
 };
 
+std::vector<std::vector<double>> CartesianDecomposition::get_local_gridbox_bounds() const {
+  return gridbox_bounds;
+};
+std::array<std::array<double, 3>, 2> CartesianDecomposition::get_domain_bounds() const {
+  return domain_bounds;
+};
+
 void CartesianDecomposition::set_gridbox_bounds(GbxBoundsFromBinary gfb) {
   // Function to store gridbox bounds in an array
   // Array contains lower (i) and upper bounds (i+1) of all the local gridboxes
