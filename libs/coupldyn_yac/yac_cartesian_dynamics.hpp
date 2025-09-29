@@ -31,9 +31,11 @@
 #include <utility>
 #include <vector>
 
+#include "cartesiandomain/cartesian_decomposition.hpp"
 #include "configuration/communicator.hpp"
 #include "configuration/config.hpp"
 #include "superdrops/state.hpp"
+
 /* contains 1-D vector for each (thermo)dynamic
 variable which is ordered by gridbox at every timestep
 e.g. press = [p_gbx0(t0), p_gbx1(t0), ,... , p_gbxN(t0),
@@ -79,6 +81,12 @@ struct CartesianDynamics {
 
   // Container to send the data to YAC
   double ***send_buffer;
+
+  std::array<size_t, 3> partition_origin;
+  std::array<size_t, 3> partition_size;
+  std::vector<std::vector<double>> gridbox_bounds;
+  std::array<std::array<double, 3>, 2> domain_bounds;
+
   /* --- Private functions --- */
 
   /* depending on nspacedims, read in data
@@ -108,7 +116,7 @@ struct CartesianDynamics {
 
  public:
   CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
-                    const unsigned int nsteps);
+                    const unsigned int nsteps, const CartesianDecomposition& decomp);
   ~CartesianDynamics();
 
   get_winds_func get_wvel;  // funcs to get velocity defined in construction of class
@@ -153,10 +161,10 @@ struct YacDynamics {
 
  public:
   YacDynamics(const Config &config, const unsigned int couplstep, const std::array<size_t, 3> ndims,
-              const unsigned int nsteps)
+              const unsigned int nsteps, const CartesianDecomposition& decomp)
       : interval(couplstep),
         end_time(config.get_timesteps().T_END),
-        dynvars(std::make_shared<CartesianDynamics>(config, ndims, nsteps)) {}
+        dynvars(std::make_shared<CartesianDynamics>(config, ndims, nsteps, decomp)) {}
 
   auto get_couplstep() const { return interval; }
 
