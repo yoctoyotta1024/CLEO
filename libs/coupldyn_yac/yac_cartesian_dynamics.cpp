@@ -188,9 +188,9 @@ void CartesianDynamics::send_yac_field(int field_id, double* field_data,
 
   send_buffer = new double **[ndims_vertical];
 
-  for (int j = 0; j < ndims_vertical; ++j) {
-      send_buffer[j] = new double*[1];
-      send_buffer[j][0] = new double[ncells];
+  for (size_t j = 0; j < ndims_vertical; ++j) {
+    send_buffer[j] = new double*[1];
+    send_buffer[j][0] = new double[ncells];
   }
 
   for (size_t j = 0; j < ndims_north; j++) {
@@ -211,9 +211,9 @@ void CartesianDynamics::send_yac_field(int field_id, double* field_data,
 
   std::cout << "yac_cput_ completed with info as: " << info << std::endl;
 
-  for (int j = 0; j < ndims_vertical; ++j) {
-      delete send_buffer[j][0];
-      delete send_buffer[j];
+  for (size_t j = 0; j < ndims_vertical; ++j) {
+    delete send_buffer[j][0];
+    delete send_buffer[j];
   }
   delete[] send_buffer;
 }
