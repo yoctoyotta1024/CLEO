@@ -183,8 +183,8 @@ void CartesianDynamics::send_yac_field(int field_id, double* field_data,
   auto ncells = ndims_north * ndims_east;
 
   int info, ierror;
-  auto field_size = ncells*ndims_vertical;
-  double **collection_data;
+  // auto field_size = ncells*ndims_vertical;
+  // double **collection_data;
 
   send_buffer = new double **[ndims_vertical];
 
