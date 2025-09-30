@@ -75,8 +75,8 @@ config_params = {
     "initsupers_filename": str(sharepath / "bubble3d_dimlessSDsinit.dat"),
     "setup_filename": str(binpath / "bubble3d_setup.txt"),
     "zarrbasedir": str(binpath / "bubble3d_sol.zarr"),
-    "orginal_icon_grid_file": "/work/bm1183/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc",
-    "orginal_icon_data_file": "/work/bm1183/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc",
+    "orginal_icon_grid_file": "/work/bm1183/m300950/icon-mpim/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc",
+    "orginal_icon_data_file": "/work/bm1183/m300950/icon-mpim/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc",
 }
 
 isfigures = [False, True]  # booleans for [showing, saving] initialisation figures
