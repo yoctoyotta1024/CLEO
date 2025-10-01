@@ -29,7 +29,7 @@ icon_yac_config:
 
 ### Kokkos Initialization Parameters ###
 kokkos_settings:
-  num_threads: 32                                          # number of threads for host parallel backend
+  num_threads: 1                                          # number of threads for host parallel backend
 
 ### SDM Runtime Parameters ###
 domain:
