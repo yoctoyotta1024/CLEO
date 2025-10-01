@@ -33,7 +33,7 @@ template <typename GbxMaps, typename CD>
 void YacComms::receive_dynamics(const GbxMaps &gbxmaps, const YacDynamics &ffdyn,
                                 const viewh_gbx h_gbxs) const {
   const size_t ngbxs(h_gbxs.extent(0));
-  if (get_counter < 240) {
+  if (get_counter <= 240) {
   ffdyn.get_dynvars()->receive_fields_from_yac();
   get_counter += 1;
   std::cout << " Get counter right now: " << get_counter << std::endl;
@@ -60,7 +60,7 @@ void YacComms::send_dynamics(const GbxMaps &gbxmaps, const viewh_constgbx h_gbxs
       qvap_state[ii] = state.qvap;
       qcond_state[ii] = state.qcond;
       });
-  if (put_counter < 240) {
+  if (put_counter <= 240) {
   ffdyn.get_dynvars()->send_fields_to_yac(temp_state.data(), qvap_state.data(), qcond_state.data());
   put_counter += 1;
   std::cout << " Put counter right now: " << put_counter << std::endl;
