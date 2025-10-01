@@ -32,6 +32,7 @@ from functools import wraps
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -40,8 +41,7 @@ import json
 import datetime
 
 MASS_CONSERVATION_THRESHOLD = 1e-10
-
-# load thermodynamic variables
+DOMAIN_SIZE = 100.0  # [km]
 
 from moist_thermodynamics.constants_icon import (
     Tmelt,
@@ -62,9 +62,8 @@ lf = ls - lv
 lvc = lv - (cpv - clw) * Tmelt
 lsc = ls - (cpv - ci) * Tmelt
 
+
 # %%
-
-
 def add_half_levels(ds):
     nlev = ds.sizes["height"]
     zh = xr.DataArray(
@@ -135,10 +134,9 @@ def read_bubble(expdir: Path, expname: str):
 
 
 def get_crossection(ds):
-    domain_size = 100.0
     zg = (ds.zg[:, 0] / 1000).assign_attrs({"long_name": "altitude", "units": "km"})
     xg = xr.DataArray(
-        ds.clon_bnds[:, 2] / np.pi / 2.0 * domain_size,
+        ds.clon_bnds[:, 2] / np.pi / 2.0 * DOMAIN_SIZE,
         dims="ncells",
         attrs={"long_name": "x", "units": "km"},
     )
@@ -246,27 +244,24 @@ def plot_temperature(ds, ax):
 def plot_winds(ds, t0):
     @timestepped_plot
     def plot_wa(ds, ax):
-        ds.wa.plot.contourf(
-            ax=ax, cmap="bwr", levels=np.arange(-3, 3, 0.5), add_colorbar=False
-        )
+        w = ds.wa.sortby(ds.wa.x)
+        w.plot.pcolormesh(ax=ax, cmap="bwr", vmin=-3, vmax=3, add_colorbar=False)
 
     @timestepped_plot
     def plot_ua(ds, ax):
-        ds.ua.plot.contourf(
-            ax=ax, cmap="bwr", levels=np.arange(-3, 3, 0.5), add_colorbar=False
-        )
+        u = ds.ua.sortby(ds.ua.x)
+        u.plot.pcolormesh(ax=ax, cmap="bwr", vmin=-3, vmax=3, add_colorbar=False)
 
     @timestepped_plot
     def plot_va(ds, ax):
-        ds.va.plot.contourf(
-            ax=ax, cmap="bwr", levels=np.arange(-3, 3, 0.5), add_colorbar=False
-        )
+        v = ds.va.sortby(ds.va.x)
+        v.plot.pcolormesh(ax=ax, cmap="bwr", vmin=-3, vmax=3, add_colorbar=False)
 
     fig, axs = plt.subplots(
         3,
         len(ds.time),
         sharey=True,
-        figsize=(12, 8),
+        figsize=(16, 12),
         constrained_layout=True,
     )
     plot_wa(ds, t0, fig_axs=[fig, axs[0, :]])
@@ -274,6 +269,80 @@ def plot_winds(ds, t0):
     plot_va(ds, t0, fig_axs=[fig, axs[2, :]])
     for ax in axs.flatten():
         ax.set_xlim(-50.0, 50.0)
+        ax.set_ylim(0, 3.0)
+
+    return fig
+
+
+def plot_thermo(ds, t0):
+    @timestepped_plot
+    def plot_press(ds, ax):
+        dp = (ds.pfull - ds.pfull.mean(dim="x")).sortby(ds.pfull.x)
+        dp.plot.pcolormesh(ax=ax, cmap="plasma", vmin=-50, vmax=50, add_colorbar=False)
+
+    @timestepped_plot
+    def plot_temp(ds, ax):
+        # dt = (ds.ta - ds.ta.mean(dim="x")).sortby(ds.ta.x)
+        # dt.plot.pcolormesh(ax=ax, cmap="PuRd", vmin=-3, vmax=3, add_colorbar=False)
+        ta = ds.ta.sortby(ds.ta.x)
+        ta.plot.pcolormesh(ax=ax, cmap="PuRd", vmin=270, vmax=290, add_colorbar=False)
+
+    @timestepped_plot
+    def plot_relh(ds, ax):
+        relh = ds.hus.sortby(ds.hus.x)
+        relh.plot.pcolormesh(
+            ax=ax, cmap="PuBuGn", vmin=0.002, vmax=0.012, add_colorbar=False
+        )
+
+    fig, axs = plt.subplots(
+        3,
+        len(ds.time),
+        sharey=True,
+        figsize=(16, 12),
+        constrained_layout=True,
+    )
+    plot_press(ds, t0, fig_axs=[fig, axs[0, :]])
+    plot_temp(ds, t0, fig_axs=[fig, axs[1, :]])
+    plot_relh(ds, t0, fig_axs=[fig, axs[2, :]])
+    for ax in axs.flatten():
+        ax.set_xlim(-50.0, 50.0)
+        ax.set_ylim(0, 3.0)
+
+    return fig
+
+
+def plot_liquid_water(ds, t0):
+    @timestepped_plot
+    def plot_water(ds, ax):
+        norm = mcolors.LogNorm(vmin=0.001, vmax=10)
+        qx = (ds.qr + ds.clw).sortby(ds.qr.x) * 1000
+        qx.plot.pcolormesh(ax=ax, cmap="GnBu", norm=norm, add_colorbar=False)
+
+    @timestepped_plot
+    def plot_cloud(ds, ax):
+        norm = mcolors.LogNorm(vmin=0.001, vmax=10)
+        qc = ds.clw.sortby(ds.clw.x) * 1000
+        qc.plot.pcolormesh(ax=ax, cmap="GnBu", norm=norm, add_colorbar=False)
+
+    @timestepped_plot
+    def plot_rain(ds, ax):
+        norm = mcolors.LogNorm(vmin=0.001, vmax=10)
+        qr = ds.qr.sortby(ds.qr.x) * 1000
+        qr.plot.pcolormesh(ax=ax, cmap="GnBu", norm=norm, add_colorbar=False)
+
+    fig, axs = plt.subplots(
+        3,
+        len(ds.time),
+        sharey=True,
+        figsize=(16, 12),
+        constrained_layout=True,
+    )
+    plot_water(ds, t0, fig_axs=[fig, axs[0, :]])
+    plot_cloud(ds, t0, fig_axs=[fig, axs[1, :]])
+    plot_rain(ds, t0, fig_axs=[fig, axs[2, :]])
+    for ax in axs.flatten():
+        ax.set_xlim(-50.0, 50.0)
+        ax.set_ylim(0, 3.0)
 
     return fig
 
@@ -391,17 +460,18 @@ def plot_energy(ds):
 
 
 # %%
-def make_plots(ds: xr.Dataset, outdir: Path):
-    time_values = pd.date_range(
-        start="2008-08-01 00:30:00", end="2008-08-01 02:00:00", freq="10min"
-    )
+def make_plots(
+    ds: xr.Dataset, outdir: Path, label: str = "", time_values: pd.DatetimeIndex = None
+):
     sub_ds = ds.pipe(get_crossection).sel(time=time_values)
 
-    plot_condensate(sub_ds, ds.time[0]).savefig(outdir / "condensate.png")
-    plot_temperature(sub_ds, ds.time[0]).savefig(outdir / "temperature.png")
-    plot_winds(sub_ds, ds.time[0]).savefig(outdir / "winds.png")
-    plot_mass(ds).savefig(outdir / "mass.png")
-    plot_energy(ds).savefig(outdir / "energy.png")
+    plot_winds(sub_ds, ds.time[0]).savefig(outdir / f"winds{label}.png")
+    plot_thermo(sub_ds, ds.time[0]).savefig(outdir / f"thermo{label}.png")
+    plot_liquid_water(sub_ds, ds.time[0]).savefig(outdir / f"liquid_water{label}.png")
+    plot_condensate(sub_ds, ds.time[0]).savefig(outdir / f"condensate{label}.png")
+    plot_temperature(sub_ds, ds.time[0]).savefig(outdir / f"temperature{label}.png")
+    plot_mass(ds).savefig(outdir / f"mass{label}.png")
+    plot_energy(ds).savefig(outdir / f"energy{label}.png")
 
 
 def get_metrics(ds):
@@ -414,9 +484,9 @@ def get_metrics(ds):
     return metrics
 
 
-def write_metrics(ds, outdir):
+def write_metrics(ds: xr.Dataset, outdir: Path, label: str = ""):
     metrics = get_metrics(ds)
-    with open(outdir / "metrics.json", "w") as outfile:
+    with open(outdir / f"metrics{label}.json", "w") as outfile:
         json.dump(metrics, outfile, indent=4)
 
 
@@ -429,6 +499,18 @@ outdir.mkdir(exist_ok=True)
 
 ds = read_bubble(expdir, expname)
 # %%
-make_plots(ds, outdir)
 write_metrics(ds, outdir)
+
+# %%
+time_values = pd.date_range(
+    start="2008-08-01 00:30:00", end="2008-08-01 02:00:00", freq="10min"
+)
+make_plots(ds, outdir, time_values=time_values)
+
+# %%
+time_values = pd.date_range(
+    start="2008-08-01 00:00:00", end="2008-08-01 00:05:00", freq="30s"
+)
+make_plots(ds, outdir, label="_1", time_values=time_values)
+
 # %%
