@@ -45,8 +45,8 @@ void CartesianDecomposition::set_gridbox_bounds(GbxBoundsFromBinary gfb) {
   auto partition_origin = partition_origins[my_rank];
 
   // To get global gridbox index provided local gridbox index coordinates
-  global_gbx_idx = get_index_from_coordinates(ndims, partition_origin[0],
-            partition_origin[1], partition_origin[2]);
+  global_gbx_idx = get_index_from_coordinates(ndims, partition_origin[0], partition_origin[1],
+                                              partition_origin[2]);
 
   gridbox_bounds.push_back({gfb.get_coord3gbxbounds(global_gbx_idx).first});
   gridbox_bounds.push_back({gfb.get_coord1gbxbounds(global_gbx_idx).first});
@@ -57,19 +57,19 @@ void CartesianDecomposition::set_gridbox_bounds(GbxBoundsFromBinary gfb) {
       // z-dimension
       if (dimension == 0) {
         global_gbx_idx = get_index_from_coordinates(ndims, i + partition_origin[0],
-            partition_origin[1], partition_origin[2]);
+                                                    partition_origin[1], partition_origin[2]);
         gridbox_bounds[dimension].push_back(gfb.get_coord3gbxbounds(global_gbx_idx).second);
       }
       // x-dimension
       if (dimension == 1) {
         global_gbx_idx = get_index_from_coordinates(ndims, partition_origin[0],
-            i + partition_origin[1], partition_origin[2]);
+                                                    i + partition_origin[1], partition_origin[2]);
         gridbox_bounds[dimension].push_back(gfb.get_coord1gbxbounds(global_gbx_idx).second);
       }
       // y-dimension
       if (dimension == 2) {
-        global_gbx_idx = get_index_from_coordinates(ndims, partition_origin[0],
-            partition_origin[1], i + partition_origin[2]);
+        global_gbx_idx = get_index_from_coordinates(ndims, partition_origin[0], partition_origin[1],
+                                                    i + partition_origin[2]);
         gridbox_bounds[dimension].push_back(gfb.get_coord2gbxbounds(global_gbx_idx).second);
       }
     }
@@ -107,7 +107,7 @@ bool CartesianDecomposition::check_indices_inside_partition(std::array<size_t, 3
 }
 
 unsigned int CartesianDecomposition::get_local_bounding_gridbox_index(
-  std::array<double, 3> &coordinates) const {
+    std::array<double, 3>& coordinates) const {
   // Spatial index coordinate of gridbox in each dimension given the superdroplet coordinates
   std::array<size_t, 3> bounding_gridbox_index_coordinates;
 
@@ -115,8 +115,7 @@ unsigned int CartesianDecomposition::get_local_bounding_gridbox_index(
   bool local_coordinate = true;
   auto partition_size = partition_sizes[my_rank];
 
-
-  for (auto dimension : {0 , 1 , 2}) {
+  for (auto dimension : {0, 1, 2}) {
     // Tests whether the coordinate in that dimension is smaller than the
     // beginning of the partition
     if (coordinates[dimension] < gridbox_bounds[dimension].front()) {
@@ -146,8 +145,8 @@ unsigned int CartesianDecomposition::get_local_bounding_gridbox_index(
       // If none of the tests above pass then the coordinate is inside of the
       // partition in that dimension
     } else if (local_coordinate) {
-      bounding_gridbox_index_coordinates[dimension] = binary_search(coordinates, dimension,
-          partition_size, gridbox_bounds);
+      bounding_gridbox_index_coordinates[dimension] =
+          binary_search(coordinates, dimension, partition_size, gridbox_bounds);
     }
   }
   // If the coordinate is inside of the partition in all dimensions, returns the
@@ -166,12 +165,10 @@ unsigned int CartesianDecomposition::get_local_bounding_gridbox_index(
       // Since the finite dimensions have already been checked before,
       // if the coordinate is outside of the domain for a dimension correct it to go around
       if (coordinates[dimension] < domain_bounds[0][dimension]) {
-        coordinates[dimension] +=
-          (domain_bounds[1][dimension] - domain_bounds[0][dimension]);
+        coordinates[dimension] += (domain_bounds[1][dimension] - domain_bounds[0][dimension]);
         corrected = true;
       } else if (coordinates[dimension] > domain_bounds[1][dimension]) {
-        coordinates[dimension] -=
-          (domain_bounds[1][dimension] - domain_bounds[0][dimension]);
+        coordinates[dimension] -= (domain_bounds[1][dimension] - domain_bounds[0][dimension]);
         corrected = true;
       }
     }
@@ -392,7 +389,7 @@ int get_multiplications_to_turn_int(double entry_value) {
   return total_multiplications;
 }
 
-void permute_and_trim_factorizations(std::vector<std::vector<size_t>> &factorizations,
+void permute_and_trim_factorizations(std::vector<std::vector<size_t>>& factorizations,
                                      const std::vector<size_t> ndims) {
   int original_factors_size = factorizations.size();
 
@@ -413,7 +410,7 @@ void permute_and_trim_factorizations(std::vector<std::vector<size_t>> &factoriza
   }
 }
 
-int find_best_decomposition(std::vector<std::vector<size_t>> &factors,
+int find_best_decomposition(std::vector<std::vector<size_t>>& factors,
                             const std::vector<size_t> ndims) {
   std::array<size_t, 3> partition_origin, partition_size;
   int comm_size, best_factorization = -1;
@@ -447,8 +444,8 @@ int find_best_decomposition(std::vector<std::vector<size_t>> &factors,
 }
 
 void construct_partition(const std::vector<size_t> ndims, std::vector<size_t> decomposition,
-                         int partition_index, std::array<size_t, 3> &partition_origin,
-                         std::array<size_t, 3> &partition_size) {
+                         int partition_index, std::array<size_t, 3>& partition_origin,
+                         std::array<size_t, 3>& partition_size) {
   // Finds the slice index in each dimension for the partition index
   std::array<size_t, 3> slice_indices = {partition_index / (decomposition[1] * decomposition[2]),
                                          (partition_index / decomposition[2]) % decomposition[1],
@@ -470,14 +467,14 @@ void construct_partition(const std::vector<size_t> ndims, std::vector<size_t> de
 
 // Returns the index of a gridbox inside a domain of arbitrary size given the
 // gridbox coordinate indices
-size_t get_index_from_coordinates(const std::vector<size_t> &ndims, const size_t k, const size_t i,
+size_t get_index_from_coordinates(const std::vector<size_t>& ndims, const size_t k, const size_t i,
                                   const size_t j) {
   return k + ndims[0] * (i + ndims[1] * j);
 }
 
 // Returns the coordinate indices of a gridbox inside a domain of arbitrary size
 // given the gridbox index
-std::array<size_t, 3> get_coordinates_from_index(const std::vector<size_t> &ndims,
+std::array<size_t, 3> get_coordinates_from_index(const std::vector<size_t>& ndims,
                                                  const size_t index) {
   const size_t j = index / (ndims[0] * ndims[1]);
   const size_t k = index % ndims[0];
@@ -495,8 +492,8 @@ std::vector<std::vector<size_t>> factorize(int n) {
 }
 
 // Helper function for the integer factorization
-void factorize_helper(int n, int start, std::vector<size_t> &current,
-                      std::vector<std::vector<size_t>> &result) {
+void factorize_helper(int n, int start, std::vector<size_t>& current,
+                      std::vector<std::vector<size_t>>& result) {
   if (n == 1) {
     if (!current.empty()) {  // We want to consider all factorizations including those with 1
       result.push_back(current);
@@ -515,7 +512,7 @@ void factorize_helper(int n, int start, std::vector<size_t> &current,
 
 // Implements the heap permutation algorithm (https://en.wikipedia.org/wiki/Heap%27s_algorithm)
 // It is used to permute the factorizations through the dimensions
-void heap_permutation(std::vector<std::vector<size_t>> &results, std::vector<size_t> arr,
+void heap_permutation(std::vector<std::vector<size_t>>& results, std::vector<size_t> arr,
                       int size) {
   if (size == 1) {
     for (auto i : results)
@@ -536,23 +533,23 @@ void heap_permutation(std::vector<std::vector<size_t>> &results, std::vector<siz
   }
 }
 
-int binary_search(std::array<double, 3> &coordinates,
-  int dimension, std::array<size_t, 3> partition_size,
-  std::vector<std::vector<double>> gridbox_bounds ) {
+int binary_search(std::array<double, 3>& coordinates, int dimension,
+                  std::array<size_t, 3> partition_size,
+                  std::vector<std::vector<double>> gridbox_bounds) {
   int left = 0;
-  int right = partition_size[dimension] -1;
+  int right = partition_size[dimension] - 1;
   while (left <= right) {
     int mid = (left + (right - left) / 2);
-        if ( (coordinates[dimension] >= gridbox_bounds[dimension][mid])
-            && (coordinates[dimension] < gridbox_bounds[dimension][mid+1])) {
-            return mid;
-        }
-        if (coordinates[dimension] >= gridbox_bounds[dimension][mid+1]) {
-            left = mid+1;
-        } else if (coordinates[dimension] < gridbox_bounds[dimension][mid]) {
-            right = mid;
-        }
+    if ((coordinates[dimension] >= gridbox_bounds[dimension][mid]) &&
+        (coordinates[dimension] < gridbox_bounds[dimension][mid + 1])) {
+      return mid;
     }
-    // If target is not found
-    return -1;
+    if (coordinates[dimension] >= gridbox_bounds[dimension][mid + 1]) {
+      left = mid + 1;
+    } else if (coordinates[dimension] < gridbox_bounds[dimension][mid]) {
+      right = mid;
+    }
+  }
+  // If target is not found
+  return -1;
 }
