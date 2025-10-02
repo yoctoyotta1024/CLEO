@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
 
   const auto ttot = double{kokkostimer.seconds()};
   std::cout << "-------------------------------\n"
-               "Total Program Duration: "
+               "CLEO Total Program Duration: "
             << ttot << "s \n-------------------------------\n";
 
   return 0;

@@ -220,7 +220,7 @@ int main(int argc, char *argv[]) {
   Kokkos::finalize();
 
   const auto ttot = double{kokkostimer.seconds()};
-  std::cout << "-----\n Total Program Duration: " << ttot << "s \n-----\n";
+  std::cout << "-----\n CLEO Total Program Duration: " << ttot << "s \n-----\n";
 
   return 0;
 }

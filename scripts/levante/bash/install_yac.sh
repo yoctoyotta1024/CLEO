@@ -29,7 +29,7 @@ yaxt_version=yaxt-${yaxt_tag}
 yaxt_release_tag=release-${yaxt_tag}
 yaxt_source=https://gitlab.dkrz.de/dkrz-sw/yaxt/-/archive/$yaxt_release_tag/$yaxt_version.tar.gz
 
-yac_tag=v3.6.2
+yac_tag=v3.9.2
 yac_version=yac_$yac_tag
 yac_source=https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/$yac_tag/$yac_version.tar.gz
 

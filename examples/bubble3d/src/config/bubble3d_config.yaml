@@ -21,8 +21,8 @@
 ### ICON-YAC initialisation parameters ###
 ### Note: yac_bubble_data_reader.py reads icon_yac_config, including orginal_icon_[XXX] files ###
 icon_yac_config:
-  orginal_icon_grid_file: /work/bm1183/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc
-  orginal_icon_data_file: /work/bm1183/m300950/icon/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc
+  orginal_icon_grid_file: /work/bm1183/m300950/icon-mpim/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc
+  orginal_icon_data_file: /work/bm1183/m300950/icon-mpim/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc
   icon_grid_name: icon_atmos_grid                         # must match CLEO (see yac_cartesian_dynamics.cpp)
   icon_data_timestep: 30                                  # must match ICON data file [seconds]
   num_vertical_levels: 24                                 # number of vertical levels in CLEO (<= ICON)
