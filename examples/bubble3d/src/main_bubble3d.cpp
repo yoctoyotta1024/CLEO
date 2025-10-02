@@ -109,8 +109,8 @@ inline Observer auto create_superdrops_observer(const unsigned int interval, Dat
   CollectDataForDataset<Dataset> auto radius = CollectRadius(dataset, maxchunk);
   CollectDataForDataset<Dataset> auto msol = CollectMsol(dataset, maxchunk);
 
-  const auto collect_sddata =
-      coord2 >> coord1 >> coord3 >> sdgbxindex >> sdid >> xi >> radius >> msol;
+  const auto collect_sddata = sdid >> coord2 >> coord1 >> coord3 >> xi >> radius >> msol;
+  // sdid >> sdgbxindex >> coord2 >> coord1 >> coord3 >> xi >> radius >> msol;
   return SuperdropsObserver(interval, dataset, store, maxchunk, collect_sddata);
 }
 
