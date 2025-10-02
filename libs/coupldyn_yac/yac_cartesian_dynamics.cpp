@@ -84,9 +84,6 @@ void create_vertex_coordinates(const Config &config, const std::array<size_t, 3>
   auto vertex_longitudes_new = std::vector<double>(partition_size[EASTWARD] + 1, 0);
   auto vertex_latitudes_new = std::vector<double>(partition_size[NORTHWARD] + 1, 0);
 
-  constexpr double RadToDeg = 180.0 / M_PI;
-  constexpr double DegToRad = M_PI / 180.0;
-
   // Defines the vertex longitude and latitude values in radians for grid creation
   // The values are later permuted by YAC to generate all vertex coordinates
 
@@ -209,8 +206,6 @@ void CartesianDynamics::receive_yac_field(unsigned int yac_field_id, double **ya
   int info, error;
   int action;
   yac_cget_action(yac_field_id, &action);
-  // std::cout << "Action: " << action << std::endl;
-  // yac_cget(yac_field_id, vertical_levels, yac_raw_data, &info, &error);
 
   if (action != YAC_ACTION_GET_FOR_RESTART) {
     std::cout << "Get Action: " << action << std::endl;
@@ -280,9 +275,6 @@ void CartesianDynamics::send_yac_field(int field_id, double* field_data,
     }
   }
   yac_cget_action(field_id, &action);
-
-  // std::cout << " Put Action: " << action << std::endl;
-  // yac_cput(field_id, ndims_vertical, send_buffer, &info, &ierror);
 
   if (action != YAC_ACTION_PUT_FOR_RESTART) {
     std::cout << "Put Action: " << action << std::endl;
@@ -359,8 +351,13 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
 
   // --- Interpolation stack ---
   int interp_stack_id;
-  yac_cget_interp_stack_config(&interp_stack_id);
-  yac_cadd_interp_stack_config_nnn(interp_stack_id, YAC_NNN_AVG, 1, 0.0, 1.0);
+  // yac_cget_interp_stack_config(&interp_stack_id);
+  // yac_cadd_interp_stack_config_nnn(interp_stack_id, YAC_NNN_AVG, 1, 0.0, 1.0);
+  yac_cget_interp_stack_config_from_string_yaml(
+    "[{\"nnn\":"
+    "  {\"n\": 1,"
+    "   \"weighted\": \"arithmetic_average\"}}]",
+    &interp_stack_id);
 
   // --- Field definitions ---
   int num_point_sets = 1;
