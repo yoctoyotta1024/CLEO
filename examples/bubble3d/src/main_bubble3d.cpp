@@ -101,7 +101,7 @@ template <typename Dataset, typename Store>
 inline Observer auto create_superdrops_observer(const unsigned int interval, Dataset& dataset,
                                                 Store& store, const int maxchunk) {
   CollectDataForDataset<Dataset> auto sdid = CollectSdId(dataset, maxchunk);
-  CollectDataForDataset<Dataset> auto sdgbxindex = CollectSdgbxindex(dataset, maxchunk);
+  // CollectDataForDataset<Dataset> auto sdgbxindex = CollectSdgbxindex(dataset, maxchunk);
   CollectDataForDataset<Dataset> auto coord3 = CollectCoord3(dataset, maxchunk);
   CollectDataForDataset<Dataset> auto coord1 = CollectCoord1(dataset, maxchunk);
   CollectDataForDataset<Dataset> auto coord2 = CollectCoord2(dataset, maxchunk);
@@ -130,17 +130,20 @@ inline Observer auto create_observer(const Config& config, const Timesteps& tste
   const Observer auto obs3 =
       StateObserver(obsstep, dataset, maxchunk, gbxmaps.get_total_global_ngridboxes());
 
-  const Observer auto obs4 = MassMomentsObserver(obsstep, dataset, store, maxchunk, ngbxs);
+  // const Observer auto obs4 = MassMomentsObserver(obsstep, dataset, store, maxchunk, ngbxs);
 
-  const Observer auto obs5 = MassMomentsRaindropsObserver(obsstep, dataset, store, maxchunk, ngbxs);
+  // const Observer auto obs5 = MassMomentsRaindropsObserver(obsstep, dataset, store, maxchunk,
+  // ngbxs);
 
-  const Observer auto obs6 = MonitorPrecipitationObserver(obsstep, dataset, store, maxchunk, ngbxs);
+  // const Observer auto obs6 = MonitorPrecipitationObserver(obsstep, dataset, store, maxchunk,
+  // ngbxs);
 
-  const Observer auto obs7 = TotNsupersObserver(obsstep, dataset, store, maxchunk);
+  // const Observer auto obs7 = TotNsupersObserver(obsstep, dataset, store, maxchunk);
 
   const Observer auto obssd = create_superdrops_observer(obsstep, dataset, store, maxchunk);
 
-  return obssd >> obs7 >> obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
+  return obssd >> obs3 >> obs2 >> obs1 >> obs0;
+  // return obssd >> obs7 >> obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
 }
 
 template <typename Dataset, typename Store>
