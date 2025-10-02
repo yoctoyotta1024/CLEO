@@ -289,9 +289,21 @@ bool CartesianDecomposition::create(std::vector<size_t> ndims, GbxBoundsFromBina
       factorization++;
     }
 
+  for (size_t factorization = 0; factorization < factorizations.size();) {
+    std::cout << "pre-permute_and_trim factorization = ( " << factorizations[factorization][0]
+              << ", " << factorizations[factorization][1] << ", "
+              << factorizations[factorization][2] << " )" << std::endl;
+  }
+
   // Gets all the permutations of the factorizations and removes the ones that
   // do not fit the global domain
   permute_and_trim_factorizations(factorizations, ndims);
+
+  for (size_t factorization = 0; factorization < factorizations.size();) {
+    std::cout << "post-permute_and_trim factorization = ( " << factorizations[factorization][0]
+              << ", " << factorizations[factorization][1] << ", "
+              << factorizations[factorization][2] << " )" << std::endl;
+  }
 
   // Raise an error if there are no decompositions left after trimming
   assert(!factorizations.empty() &&
@@ -302,6 +314,9 @@ bool CartesianDecomposition::create(std::vector<size_t> ndims, GbxBoundsFromBina
 
   decomposition = {factorizations[decomposition_index][0], factorizations[decomposition_index][1],
                    factorizations[decomposition_index][2]};
+
+  std::cout << "decomposition = { " << decomposition[0] << ", " << decomposition[0] << ", "
+            << decomposition[0] << " }" << std::endl;
 
   // Saves the origin and sizes of the partitions of all processes
   for (int process = 0; process < comm_size; process++) {
@@ -316,6 +331,14 @@ bool CartesianDecomposition::create(std::vector<size_t> ndims, GbxBoundsFromBina
   // Sets the number of local gridboxes for convenience
   total_local_gridboxes =
       partition_sizes[my_rank][0] * partition_sizes[my_rank][1] * partition_sizes[my_rank][2];
+
+  std::cout << "partition_sizes[my_rank] = { " << my_rank << " : " << partition_sizes[my_rank][0]
+            << ", " << partition_sizes[my_rank][1] << ", " << partition_sizes[my_rank][2] << " }"
+            << std::endl;
+
+  std::cout << "partition_origins[my_rank] = { " << my_rank << " : "
+            << partition_origins[my_rank][0] << ", " << partition_origins[my_rank][1] << ", "
+            << partition_origins[my_rank][2] << " }" << std::endl;
 
   set_gridbox_bounds(gfb);
   calculate_partition_coordinates();

@@ -108,11 +108,18 @@ viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
   }
   local_superdrops = superdrop_index + 1;
 
+  if (total_superdrops_to_send > 0) {
+    std::cout << "total_superdrops_to_send: " << total_superdrops_to_send << std::endl;
+  }
   // Share how many superdrops each process will send and receive to/from the others
   MPI_Alltoall(per_process_send_superdrops.data(), 1, MPI_INT, per_process_recv_superdrops.data(),
                1, MPI_INT, MPI_COMM_WORLD);
   total_superdrops_to_recv =
       std::accumulate(per_process_recv_superdrops.begin(), per_process_recv_superdrops.end(), 0);
+
+  if (total_superdrops_to_recv > 0) {
+    std::cout << "total_superdrops_to_recv: " << total_superdrops_to_recv << std::endl;
+  }
 
   assert((local_superdrops + total_superdrops_to_recv <= totsupers.extent(0)) &&
          "must have enough space in supers view to receive superdroplets");
