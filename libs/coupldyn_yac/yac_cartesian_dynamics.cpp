@@ -33,7 +33,7 @@ extern "C" {
 enum { VERTICAL = 0, EASTWARD = 1, NORTHWARD = 2 };
 
 namespace dlc = dimless_constants;
-
+int YacDynamics::get_counter = 1;
 /* return (k,i,j) indicies from idx for a flattened 3D array
 with ndims [nz, nx, ny]. kij is useful for then getting
 position in of a variable in a flattened array defined on
@@ -47,7 +47,29 @@ std::array<size_t, 3> kijfromindex(const std::array<size_t, 3> &ndims, const siz
   return std::array<size_t, 3>{k, i, j};
 }
 
-void create_vertex_coordinates(const Config &config, const std::array<size_t, 3> ndims,
+double get_radians_from_metres(const double lower_latitude,
+    double delta_east = 0.0, double delta_north = 0.0) {
+  constexpr double EarthRadiusMeters = 6378137.0;          // semi‑major axis a
+  double dLon = 0.0;
+  double dLat = 0.0;
+
+  if (delta_east != 0.0) {
+    double cosLat = std::cos(lower_latitude);
+    dLon = (delta_east*1000.0) / (EarthRadiusMeters * cosLat);
+    return dLon;
+  }
+
+  if (delta_north != 0.0) {
+    dLat = (delta_north*1000.0) / EarthRadiusMeters;
+    return dLat;
+  }
+
+  return 0.0;
+}
+
+
+void create_vertex_coordinates(const Config &config, const std::array<size_t, 3> partition_size,
+                               std::vector<std::vector<double>> gridbox_bounds,
                                std::vector<double> &vertex_longitudes,
                                std::vector<double> &vertex_latitudes) {
   const auto lower_longitude = config.get_yac_dynamics().lower_longitude;
@@ -55,40 +77,87 @@ void create_vertex_coordinates(const Config &config, const std::array<size_t, 3>
   const auto lower_latitude = config.get_yac_dynamics().lower_latitude;
   const auto upper_latitude = config.get_yac_dynamics().upper_latitude;
 
+  auto vertex_longitudes_new = std::vector<double>(partition_size[EASTWARD] + 1, 0);
+  auto vertex_latitudes_new = std::vector<double>(partition_size[NORTHWARD] + 1, 0);
+
+  constexpr double RadToDeg = 180.0 / M_PI;
+  constexpr double DegToRad = M_PI / 180.0;
+
+  // use partition_origins and partition_sizes
   // Defines the vertex longitude and latitude values in radians for grid creation
   // The values are later permuted by YAC to generate all vertex coordinates
+
+  // ********* 1 process ***************
+
   for (size_t i = 0; i < vertex_longitudes.size(); i++)
     vertex_longitudes[i] =
-        lower_longitude + i * ((upper_longitude - lower_longitude) / ndims[EASTWARD]);
+        lower_longitude + i * ((upper_longitude - lower_longitude) / partition_size[EASTWARD]);
 
   for (size_t i = 0; i < vertex_latitudes.size(); i++)
     vertex_latitudes[i] =
-        lower_latitude + i * ((upper_latitude - lower_latitude) / ndims[NORTHWARD]);
+        lower_latitude + i * ((upper_latitude - lower_latitude) / partition_size[NORTHWARD]);
+
+  // ***** multiprocess **********
+  for (size_t i = 0; i < vertex_longitudes.size(); i++) {
+    auto dLon = get_radians_from_metres(lower_latitude,
+        (gridbox_bounds[EASTWARD][i] - gridbox_bounds[EASTWARD].front()));
+
+// auto dLon = ((gridbox_bounds[EASTWARD][i] - gridbox_bounds[EASTWARD].front())
+// *1000.0*DegToRad)/111111.0;
+    vertex_longitudes_new[i] = lower_longitude + dLon;
+    std::cout << "dLon : " << dLon <<std::endl;
+  }
+
+  for (size_t i = 0; i < vertex_latitudes.size(); i++) {
+    auto dLat = get_radians_from_metres(lower_latitude,
+         0.0, (gridbox_bounds[NORTHWARD][i] - gridbox_bounds[NORTHWARD].front()));
+
+// auto dLat = ((gridbox_bounds[NORTHWARD][i] - gridbox_bounds[NORTHWARD].front())
+// *1000.0*DegToRad)/111111.0;
+    vertex_latitudes_new[i] = lower_latitude + dLat;
+    std::cout << "dLat : " << dLat <<std::endl;
+  }
+
+  for (size_t i = 0; i < vertex_longitudes.size(); i++)
+    std::cout << "vertex_lon old vs new " << vertex_longitudes[i] << " vs "
+      << vertex_longitudes_new[i] << std::endl;
+
+  for (size_t i = 0; i < vertex_latitudes.size(); i++)
+    std::cout << "vertex_lat old vs new " << vertex_latitudes[i] << " vs "
+      << vertex_latitudes_new[i] << std::endl;
 }
 
 /* Creates the YAC grid and defines the cell and edge points based on ndims data */
 void create_grid_and_points_definitions(const Config &config, const std::array<size_t, 3> ndims,
                                         const std::string grid_name, int &grid_id,
-                                        int &cell_point_id, int &edge_point_id) {
+                                        int &cell_point_id, int &edge_point_id,
+                                        std::array<size_t, 3> partition_size,
+                                        std::array<size_t, 3> partition_origin,
+                                        std::vector<std::vector<double>> gridbox_bounds) {
   int cyclic_dimension[2] = {0, 0};
-  int total_cells[2] = {static_cast<int>(ndims[EASTWARD]), static_cast<int>(ndims[NORTHWARD])};
-  int total_vertices[2] = {static_cast<int>(ndims[EASTWARD] + 1),
-                           static_cast<int>(ndims[NORTHWARD] + 1)};
-  int total_edges[2] = {static_cast<int>(ndims[EASTWARD] * (ndims[NORTHWARD] + 1)),
-                        static_cast<int>(ndims[NORTHWARD] * (ndims[EASTWARD] + 1))};
+  int total_cells[2] = {static_cast<int>(partition_size[EASTWARD]),
+                        static_cast<int>(partition_size[NORTHWARD])};
+  int total_vertices[2] = {static_cast<int>(partition_size[EASTWARD] + 1),
+                           static_cast<int>(partition_size[NORTHWARD] + 1)};
+  int total_edges[2] = {static_cast<int>(partition_size[EASTWARD] *
+                        (partition_size[NORTHWARD] + 1)),
+                        static_cast<int>(partition_size[NORTHWARD] *
+                        (partition_size[EASTWARD] + 1))};
 
-  auto vertex_longitudes = std::vector<double>(ndims[EASTWARD] + 1, 0);
-  auto vertex_latitudes = std::vector<double>(ndims[NORTHWARD] + 1, 0);
-  auto cell_center_longitudes = std::vector<double>(ndims[EASTWARD]);
-  auto cell_center_latitudes = std::vector<double>(ndims[NORTHWARD]);
+  auto vertex_longitudes = std::vector<double>(partition_size[EASTWARD] + 1, 0);
+  auto vertex_latitudes = std::vector<double>(partition_size[NORTHWARD] + 1, 0);
+  auto cell_center_longitudes = std::vector<double>(partition_size[EASTWARD]);
+  auto cell_center_latitudes = std::vector<double>(partition_size[NORTHWARD]);
+
   std::vector<double> edge_centers_longitudes;
   std::vector<double> edge_centers_latitudes;
 
-  create_vertex_coordinates(config, ndims, vertex_longitudes, vertex_latitudes);
+  create_vertex_coordinates(config, partition_size, gridbox_bounds,
+                            vertex_longitudes, vertex_latitudes);
 
   // Defines a regular 2D grid
-  yac_cdef_grid_reg2d(grid_name.c_str(), total_vertices, cyclic_dimension, vertex_longitudes.data(),
-                      vertex_latitudes.data(), &grid_id);
+  yac_cdef_grid_reg2d(grid_name.c_str(), total_vertices, cyclic_dimension,
+      vertex_longitudes.data(), vertex_latitudes.data(), &grid_id);
 
   // --- Point definitions ---
   // Defines the cell center longitude and latitude values in radians
@@ -131,14 +200,16 @@ void create_grid_and_points_definitions(const Config &config, const std::array<s
 /*
 fill's target_array with values from yac_raw_data at multiplied by their conversion factor
 */
+
 void CartesianDynamics::receive_yac_field(unsigned int yac_field_id, double **yac_raw_data,
                                           std::vector<double> &target_array,
                                           const size_t ndims_north, const size_t ndims_east,
                                           const size_t vertical_levels,
                                           double conversion_factor = 1.0) const {
   int info, error;
+  int action;
+  yac_cget_action(yac_field_id, &action);
   yac_cget(yac_field_id, vertical_levels, yac_raw_data, &info, &error);
-
   for (size_t j = 0; j < ndims_north; j++) {
     for (size_t i = 0; i < ndims_east; i++) {
       for (size_t k = 0; k < vertical_levels; k++) {
@@ -173,8 +244,54 @@ void CartesianDynamics::receive_fields_from_yac() {
                     ndims[EASTWARD], ndims[VERTICAL], dlc::W0);
 }
 
+void CartesianDynamics::send_yac_field(int field_id, double* field_data,
+    double conversion_factor = 1.0) {
+  auto ndims_vertical = ndims[VERTICAL];
+  auto ndims_north = ndims[NORTHWARD];
+  auto ndims_east = ndims[EASTWARD];
+  auto ncells = ndims_north * ndims_east;
+
+  int info, ierror;
+
+  send_buffer = new double **[ndims_vertical];
+
+  for (size_t j = 0; j < ndims_vertical; ++j) {
+    send_buffer[j] = new double*[1];
+    send_buffer[j][0] = new double[ncells];
+  }
+
+  for (size_t j = 0; j < ndims_north; j++) {
+    for (size_t i = 0; i < ndims_east; i++) {
+      for (size_t k = 0; k < ndims_vertical; k++) {
+        auto ii = (ndims_east * j + i) * ndims_vertical + k;
+        auto vertical_idx = k;
+        auto source_idx = j * ndims_east + i;
+        send_buffer[vertical_idx][0][source_idx] = field_data[ii] * conversion_factor;
+      }
+    }
+  }
+
+  yac_cput(field_id, ndims_vertical, send_buffer, &info, &ierror);
+
+  std::cout << "yac_cput completed with info as: " << info << std::endl;
+
+  for (size_t j = 0; j < ndims_vertical; ++j) {
+    delete send_buffer[j][0];
+    delete send_buffer[j];
+  }
+  delete[] send_buffer;
+}
+void CartesianDynamics::send_fields_to_yac(double* h_temp,
+                               double* h_qvap,
+                               double* h_qcond) {
+  // double temp_field = h_temp;
+  send_yac_field(temp_yac_id2, h_temp, dlc::TEMP0);
+  send_yac_field(qvap_yac_id2, h_qvap);
+  send_yac_field(qcond_yac_id2, h_qcond);
+}
+
 CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
-                                     const unsigned int nsteps)
+                              const unsigned int nsteps, const CartesianDecomposition& decomp)
     : ndims(i_ndims),
       config(config),
       get_wvel(nullwinds()),
@@ -184,7 +301,6 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
 
   // Get YAC Component id from the communicator init class
   int component_id = init_communicator::get_yac_comp_id();
-  std::cout << "yac comp id in cart_dyn:" << component_id << std::endl;
 
   // --- Grid definition ---
   int grid_id = -1;
@@ -192,8 +308,33 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   int edge_point_id = -1;
   std::string grid_name = "cleo_grid";
 
+  partition_size = decomp.get_local_partition_size();
+  partition_origin = decomp.get_local_partition_origin();
+  gridbox_bounds = decomp.get_local_gridbox_bounds();
+  domain_bounds = decomp.get_domain_bounds();
+
+  std::cout << "Partition Size in z:" << partition_size[0] << std::endl;
+  std::cout << "Partition Size in x:" << partition_size[1] << std::endl;
+  std::cout << "Partition Size in y:" << partition_size[2] << std::endl;
+
+  std::cout << "ndims Size in z:" << ndims[0] << std::endl;
+  std::cout << "ndims Size in x:" << ndims[1] << std::endl;
+  std::cout << "ndims Size in y:" << ndims[2] << std::endl;
+
+
+  std::cout << "gridbox_bounds in z direction: " << gridbox_bounds[0].front() << " ; "
+            << gridbox_bounds[0].back() <<std::endl;
+  std::cout << "gridbox_bounds in x direction: " << gridbox_bounds[1].front() << " ; "
+            << gridbox_bounds[1].back() <<std::endl;
+  std::cout << "gridbox_bounds in y direction: " << gridbox_bounds[2].front() << " ; "
+            << gridbox_bounds[2].back() <<std::endl;
+
+  std::cout << "Domain_bounds in z direction: " << domain_bounds[0][0] << " ; "
+            << domain_bounds[1][0] <<std::endl;
+
   create_grid_and_points_definitions(config, ndims, grid_name, grid_id, cell_point_id,
-                                     edge_point_id);
+                                     edge_point_id, partition_size, partition_origin,
+                                     gridbox_bounds);
 
   // --- Interpolation stack ---
   int interp_stack_id;
@@ -205,8 +346,10 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   int horizontal_fields_collection_size = ndims[VERTICAL];
   int vertical_winds_collection_size = ndims[VERTICAL] + 1;
 
-  const char coupling_timestep[6] = "PT60S";  // TODO(CB): move these variables to config
+  const char coupling_timestep[6] = "PT30S";  // TODO(CB): move these variables to config
   const char coupldyn_grid_name[16] = "icon_atmos_grid";
+
+  // --- Field definitions for recieving data from ICON ---
 
   yac_cdef_field("pressure", component_id, &cell_point_id, num_point_sets,
                  horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
@@ -236,7 +379,21 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
                  vertical_winds_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
                  &vertical_wind_yac_id);
 
-  // --- Field coupling definitions ---
+  // --- Field definitions for sending data to ICON ---
+
+  yac_cdef_field("temperature_send", component_id, &cell_point_id, num_point_sets,
+                 horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
+                 &temp_yac_id2);
+
+  yac_cdef_field("qvap_send", component_id, &cell_point_id, num_point_sets,
+                 horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
+                 &qvap_yac_id2);
+
+  yac_cdef_field("qcond_send", component_id, &cell_point_id, num_point_sets,
+                 horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
+                 &qcond_yac_id2);
+
+  // --- Field coupling definitions for receiving from ICON ---
   yac_cdef_couple("atm", coupldyn_grid_name, "pressure", "cleo", "cleo_grid", "pressure",
                   coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
                   interp_stack_id, 0, 0);
@@ -264,6 +421,23 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
                   coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
                   interp_stack_id, 0, 0);
 
+  // --- Field coupling definitions for sending to ICON ---
+
+  yac_cdef_couple("cleo", "cleo_grid", "temperature_send", "atm", coupldyn_grid_name,
+                  "temperature_receive", coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
+                  YAC_REDUCTION_TIME_NONE, interp_stack_id, 0, 0);
+  yac_cdef_couple("cleo", "cleo_grid", "qvap_send", "atm", coupldyn_grid_name, "qvap_receive",
+                  coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, 0, 0);
+  yac_cdef_couple("cleo", "cleo_grid", "qcond_send", "atm", coupldyn_grid_name, "qcond_receive",
+                  coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, 0, 0);
+
+  // ---------------------------------------------------------
+
+  yac_cset_config_output_file(
+  "coupling_debug.yaml", YAC_CONFIG_OUTPUT_FORMAT_YAML,
+  YAC_CONFIG_OUTPUT_SYNC_LOC_ENDDEF, 1);
   // --- End of YAC definitions ---
   yac_cenddef();
 
@@ -292,7 +466,7 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   wvel = std::vector<double>(horizontal_cell_number * (ndims[VERTICAL] + 1), 0);
 
   // Calls the first data retrieval from YAC to have thermodynamic data for first timestep
-  receive_fields_from_yac();
+  // receive_fields_from_yac();
 
   std::cout << "Finished setting up YAC for receiving:\n"
                "  pressure,\n  temperature,\n"
@@ -302,7 +476,6 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   // Defines the functions that will be used to retrieve data from the containers
   // (Can probably be simplified)
   set_winds(config);
-
   std::cout << "--- cartesian dynamics from YAC: success ---\n";
 }
 
@@ -311,7 +484,6 @@ CartesianDynamics::~CartesianDynamics() {
     delete yac_raw_cell_data[i];
     delete yac_raw_edge_data[i];
   }
-
   for (size_t i = 0; i < ndims[VERTICAL] + 1; i++) delete yac_raw_vertical_wind_data[i];
 
   delete[] yac_raw_cell_data;
