@@ -76,12 +76,16 @@ sharepath = path2build / "share"
 binpath = path2build / "bin" / f"ntasks{ntasks}"
 savefigpath = binpath
 
+path2bubble_share = Path("/home/m/m300950/CLEO/build_bubble3d/share")
+
 config_filename = path2build / "tmp" / "fromfile_irreg_config.yaml"
 thermofiles = sharepath / "fromfile_irreg_dimlessthermo.dat"
 config_params = {
     "constants_filename": str(path2CLEO / "libs" / "cleoconstants.hpp"),
-    "grid_filename": str(sharepath / "fromfile_irreg_dimlessGBxboundaries.dat"),
-    "initsupers_filename": str(sharepath / "fromfile_irreg_dimlessSDsinit.dat"),
+    # "grid_filename": str(sharepath / "fromfile_irreg_dimlessGBxboundaries.dat"),
+    # "initsupers_filename": str(sharepath / "fromfile_irreg_dimlessSDsinit.dat"),
+    "grid_filename": str(path2bubble_share / "bubble3d_dimlessGBxboundaries.dat"),
+    "initsupers_filename": str(path2bubble_share / "bubble3d_dimlessSDsinit.dat"),
     "setup_filename": str(binpath / "fromfile_irreg_setup.txt"),
     "zarrbasedir": str(binpath / "fromfile_irreg_sol.zarr"),
 }
@@ -129,11 +133,11 @@ def inputfiles(
     editconfigfile.edit_config_params(config_filename, config_params)
 
     ### --- delete any existing initial conditions --- ###
-    yaml = YAML()
-    with open(config_filename, "r") as file:
-        config = yaml.load(file)
-    Path(config["inputfiles"]["grid_filename"]).unlink(missing_ok=True)
-    Path(config["initsupers"]["initsupers_filename"]).unlink(missing_ok=True)
+    # yaml = YAML()
+    # with open(config_filename, "r") as file:
+    #     config = yaml.load(file)
+    # Path(config["inputfiles"]["grid_filename"]).unlink(missing_ok=True)
+    # Path(config["initsupers"]["initsupers_filename"]).unlink(missing_ok=True)
     all_thermofiles = thermofiles.parent.glob(
         f"{thermofiles.stem}*{thermofiles.suffix}"
     )
