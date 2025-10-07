@@ -401,7 +401,7 @@ int find_best_decomposition(std::vector<std::vector<size_t>> &factors,
                             const std::vector<size_t> ndims) {
   std::array<size_t, 3> partition_origin, partition_size;
   int comm_size, best_factorization = -1;
-  double vertical_split_penalization = 1.0;
+  double vertical_split_penalization = 100.0;
   comm_size = init_communicator::get_comm_size();
 
   // Calculates the ideal (most even possible) division and initializes the minimum error
