@@ -24,7 +24,7 @@
 
 #include <cmath>
 #include <iostream>
-
+#include <cstring>
 #include "cleoconstants.hpp"
 extern "C" {
 #include "yac.h"
@@ -33,7 +33,6 @@ extern "C" {
 enum { VERTICAL = 0, EASTWARD = 1, NORTHWARD = 2 };
 
 namespace dlc = dimless_constants;
-int YacDynamics::get_counter = 1;
 /* return (k,i,j) indicies from idx for a flattened 3D array
 with ndims [nz, nx, ny]. kij is useful for then getting
 position in of a variable in a flattened array defined on
@@ -49,25 +48,38 @@ std::array<size_t, 3> kijfromindex(const std::array<size_t, 3> &ndims, const siz
 
 double get_dlon_from_metres(const double lower_latitude,
     double delta_east) {
+  // double EarthRadiusMeters = 6378137.0;
   double EarthRadiusMeters = (100000)/ (2 * M_PI);   // semi‑major axis a
   double dLon = 0.0;
+
+  double MetresToRadians = (2*M_PI)/(100000);
+
+  // dLon = (delta_east*dlc::COORD0)*MetresToRadians;
+
   if (delta_east != 0.0) {
     double cosLat = std::cos(lower_latitude);
     dLon = (delta_east*dlc::COORD0) / (EarthRadiusMeters * cosLat);
     return dLon;
   }
   return 0.0;
+
+  // return dLon;
 }
 double get_dlat_from_metres(const double lower_latitude,
                             double delta_north) {
+  // double EarthRadiusMeters = 6378137.0;
   double EarthRadiusMeters = (100000)/ (2 * M_PI);   // semi‑major axis a
   double dLat = 0.0;
+  double MetresToRadians = (2*M_PI)/(100000);
+  // dLat = (delta_north*dlc::COORD0)*MetresToRadians;
 
   if (delta_north != 0.0) {
     dLat = (delta_north*dlc::COORD0) / EarthRadiusMeters;
     return dLat;
   }
   return 0.0;
+
+  // return dLat;
 }
 
 
@@ -462,6 +474,25 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
 
   // yac_cset_grid_output_file(grid_name.c_str(), "cleo_grid_vis.nc" );
   yac_cenddef();
+
+  int yac_instance_id = yac_cget_default_instance_id();
+  std::cout << "YAC instance id: " << yac_instance_id << std::endl;
+  auto comp_metadata = yac_cget_component_metadata_instance(yac_instance_id, "cleo");
+  std::cout << "Component Metadata:" << comp_metadata << std::endl;
+
+  const char* string_onewaycoupling = "oneway_coupling";
+  const char* string_twowaycoupling = "twoway_coupling";
+
+  if (std::strcmp(comp_metadata, string_onewaycoupling) == 0) {
+    yac_coupling_flag = 1;
+    std::cout << "coupling_flag = " << yac_coupling_flag << std::endl;
+  }
+
+  if (std::strcmp(comp_metadata, string_twowaycoupling) == 0) {
+    yac_coupling_flag = 2;
+    std::cout << "coupling_flag = " << yac_coupling_flag << std::endl;
+  }
+
 
   size_t horizontal_cell_number = yac_cget_grid_size(YAC_LOCATION_CELL, grid_id);
   size_t horizontal_edge_number = yac_cget_grid_size(YAC_LOCATION_EDGE, grid_id);
