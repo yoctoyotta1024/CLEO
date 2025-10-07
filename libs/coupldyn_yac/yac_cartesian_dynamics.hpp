@@ -49,6 +49,7 @@ struct CartesianDynamics {
   // number of (centres of) gridboxes in [coord3, coord1, coord2] directions
   const std::array<size_t, 3> ndims;
   const Config &config;
+  int yac_coupling_flag;
 
   /* --- (thermo)dynamic variables received from YAC --- */
 
@@ -123,6 +124,8 @@ struct CartesianDynamics {
   get_winds_func get_uvel;  // warning: these functions are not const member funcs by default
   get_winds_func get_vvel;
 
+  int get_yac_coupling_flag() const {return yac_coupling_flag;}
+
   double get_press(const size_t ii) const { return press.at(ii); }
 
   double get_temp(const size_t ii) const { return temp.at(ii); }
@@ -151,7 +154,6 @@ struct YacDynamics {
  private:
   const unsigned int interval;
   const unsigned int end_time;
-  static int get_counter;
   std::shared_ptr<CartesianDynamics> dynvars;  // pointer to (thermo)dynamic variables
 
   /* Calls the get operations to receive data from YAC for each of the fields of interest */
@@ -180,6 +182,8 @@ struct YacDynamics {
   }
 
   const std::shared_ptr<CartesianDynamics>& get_dynvars() const { return dynvars; }
+
+  const int get_yac_coupling_flag() const {return dynvars->get_yac_coupling_flag();}
 
   double get_press(const size_t ii) const { return dynvars->get_press(ii); }
 
