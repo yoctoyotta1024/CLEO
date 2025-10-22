@@ -280,14 +280,14 @@ class SDMMethods {
   void run_step(const unsigned int t_mdl, const unsigned int t_mdl_next, viewd_gbx d_gbxs,
                 SupersInDomain &allsupers) const {
     const SDMMonitor auto mo = obs.get_sdmmonitor();
-
+    std::cout << "At Run step!" << std::endl;
     unsigned int t_sdm(t_mdl);
     while (t_sdm < t_mdl_next) {
       const auto t_sdm_next = next_sdmstep(t_sdm, t_mdl_next);
-
+      std::cout << "Inside Loop before superdrops_movement!" << std::endl;
       superdrops_movement(t_sdm, d_gbxs, allsupers, mo);           // on host and device
       sdm_microphysics(t_sdm, t_sdm_next, d_gbxs, allsupers, mo);  // on device
-
+      std::cout << "Inside Loop after superdrops_movement!" << std::endl;
       t_sdm = t_sdm_next;
     }
   }

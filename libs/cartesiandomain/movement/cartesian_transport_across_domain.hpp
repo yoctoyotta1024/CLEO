@@ -100,6 +100,7 @@ viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
   while (drop.get_sdgbxindex() >= ngbxs) {
     if (drop.get_sdgbxindex() < LIMITVALUES::oob_gbxindex) {
       int target_process = (LIMITVALUES::oob_gbxindex - drop.get_sdgbxindex()) - 1;
+      std::cout << "Target process: " << target_process << std::endl;
       per_process_send_superdrops[target_process]++;
       superdrops_indices_per_process[target_process].push_back(superdrop_index);
       total_superdrops_to_send++;

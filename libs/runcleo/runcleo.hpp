@@ -130,13 +130,15 @@ class RunCLEO {
     while (t_mdl <= t_end) {
       /* start step (in general involves coupling) */
       const auto t_next = (unsigned int)start_step(t_mdl, gbxs, allsupers);
+      std::cout << "Calling coupldyn_step" << std::endl;
 
       /* advance dynamics solver (optionally concurrent to SDM) */
       coupldyn_step(t_mdl, t_next);
+      std::cout << "Calling sdmstep" << std::endl;
 
       /* advance SDM (optionally concurrent to dynamics solver) */
       sdm_step(t_mdl, t_next, gbxs, allsupers);
-
+      std::cout << "Calling proceed2nextstep" << std::endl;
       /* proceed to next step (in general involves coupling) */
       t_mdl = proceed_to_next_step(t_next, gbxs);
     }
@@ -256,6 +258,7 @@ class RunCLEO {
   unsigned int proceed_to_next_step(unsigned int t_next, dualview_gbx gbxs) const {
     if (t_next % sdm.get_couplstep() == 0) {
       gbxs.sync_host();
+      std::cout << "Calling Send Dynamics!" << std::endl;
       comms.send_dynamics(sdm.gbxmaps, gbxs.view_host(), coupldyn);
     }
 
