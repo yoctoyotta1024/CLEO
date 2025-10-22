@@ -48,12 +48,10 @@ std::array<size_t, 3> kijfromindex(const std::array<size_t, 3> &ndims, const siz
 
 double get_dlon_from_metres(const double lower_latitude,
     double delta_east) {
-  // double EarthRadiusMeters = 6378137.0;
   double EarthRadiusMeters = (100000)/ (2 * M_PI);   // semi‑major axis a
   double dLon = 0.0;
 
   double MetresToRadians = (2*M_PI)/(100000);
-
   // dLon = (delta_east*dlc::COORD0)*MetresToRadians;
 
   if (delta_east != 0.0) {
@@ -67,7 +65,6 @@ double get_dlon_from_metres(const double lower_latitude,
 }
 double get_dlat_from_metres(const double lower_latitude,
                             double delta_north) {
-  // double EarthRadiusMeters = 6378137.0;
   double EarthRadiusMeters = (100000)/ (2 * M_PI);   // semi‑major axis a
   double dLat = 0.0;
   double MetresToRadians = (2*M_PI)/(100000);
@@ -124,6 +121,7 @@ void create_vertex_coordinates(const Config &config, const std::array<size_t, 3>
     std::cout << "dLat : " << dLat <<std::endl;
     }
 
+  /*
   for (size_t i = 0; i < vertex_longitudes.size(); i++)
     std::cout << "vertex_lon old vs new " << vertex_longitudes[i] << " vs "
       << vertex_longitudes_new[i] << std::endl;
@@ -131,6 +129,7 @@ void create_vertex_coordinates(const Config &config, const std::array<size_t, 3>
   for (size_t i = 0; i < vertex_latitudes.size(); i++)
     std::cout << "vertex_lat old vs new " << vertex_latitudes[i] << " vs "
       << vertex_latitudes_new[i] << std::endl;
+  */
 }
 
 /* Creates the YAC grid and defines the cell and edge points based on ndims data */

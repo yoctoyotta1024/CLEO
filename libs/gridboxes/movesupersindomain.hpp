@@ -210,9 +210,9 @@ class MoveSupersInDomain {
   SupersInDomain move_supers_between_gridboxes(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
                                                SupersInDomain &allsupers) const {
     Kokkos::Profiling::ScopedRegion region("sdm_movement_between_gridboxes");
-
+    std::cout << "Reaching transport function !" << std::endl;
     allsupers = transport_across_domain(gbxmaps, d_gbxs, allsupers);
-
+    std::cout << "Exiting Transport function !" << std::endl;
     set_gridboxes_refs(d_gbxs, allsupers.domain_supers());
 
     /* optional (expensive!) test if superdrops' gbxindex doesn't match gridbox's gbxindex */
