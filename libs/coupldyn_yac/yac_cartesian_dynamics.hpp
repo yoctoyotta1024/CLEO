@@ -64,16 +64,16 @@ struct CartesianDynamics {
   std::vector<double> wvel;
 
   // YAC field ids
-  int pressure_yac_id_recv;
-  int temp_yac_id_recv;
-  int temp_yac_id_send;
-  int qvap_yac_id_recv;
-  int qvap_yac_id_send;
-  int qcond_yac_id_recv;
-  int qcond_yac_id_send;
-  int eastward_wind_yac_id_recv;
-  int northward_wind_yac_id_recv;
-  int vertical_wind_yac_id_recv;
+  int pressure_yac_id;
+  int temp_yac_id;
+  int temp_yac_id2;
+  int qvap_yac_id;
+  int qvap_yac_id2;
+  int qcond_yac_id;
+  int qcond_yac_id2;
+  int eastward_wind_yac_id;
+  int northward_wind_yac_id;
+  int vertical_wind_yac_id;
 
   // Containers to receive data from YAC
   double **yac_raw_cell_data;
