@@ -41,7 +41,9 @@ import json
 import datetime
 
 MASS_CONSERVATION_THRESHOLD = 1e-10
-DOMAIN_SIZE = 100.0  # [km]
+DOMAIN_RESOLUTION_X = 5  # [km]
+DOMAIN_SIZE = 100.0  # [km] (5km resolution => 40 triangles per latitude band)
+DOMAIN_SIZE_Y = (DOMAIN_RESOLUTION_X * np.sqrt(3) / 2) * 4  # [km] (4 latitude bands)
 
 from moist_thermodynamics.constants_icon import (
     Tmelt,
@@ -491,7 +493,7 @@ def write_metrics(ds: xr.Dataset, outdir: Path, label: str = ""):
 
 
 # %%
-expname = "aes_bubble_cleo"
+expname = "aes_bubble_cleo"  # probably "aes_bubble" or "aes_bubble_cleo"
 expdir = Path("/work/bm1183/m300950/icon-mpim/build/experiments/") / expname
 outdir = expdir / "plots"
 assert expdir.is_dir(), "expdir must be existing directory"
@@ -514,3 +516,20 @@ time_values = pd.date_range(
 make_plots(ds, outdir, label="_1", time_values=time_values)
 
 # %%
+print("longitudes: max, min, delta/(2*pi) <=> DOMAIN_SIZE / km")
+print(
+    ds.clon.max().values,
+    ds.clon.min().values,
+    (ds.clon.max().values - ds.clon.min().values) / (2 * np.pi),
+    "*2 pi <=>",
+    DOMAIN_SIZE,
+)
+print("4 latitude bands, ")
+print("latitudes: max, min, delta/(2*pi) <=> DOMAIN_SIZE_Y / km")
+print(
+    ds.clat.max().values,
+    ds.clat.min().values,
+    (ds.clat.max().values - ds.clat.min().values) / (2 * np.pi),
+    "*2 pi <=>",
+    DOMAIN_SIZE_Y,
+)
