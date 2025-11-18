@@ -130,8 +130,9 @@ def dimless_superdropsattrs(
     xi, radius, msol = initattrsgen.generate_attributes(
         nsupers,
         inputs["RHO_SOL"],
-        NUMCONC,
+        gbxindex,
         gridboxbounds,
+        NUMCONC,
         numconc_tolerance=numconc_tolerance,
         isprint=isprint,
     )
