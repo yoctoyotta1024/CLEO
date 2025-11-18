@@ -48,7 +48,7 @@ std::array<size_t, 3> kijfromindex(const std::array<size_t, 3>& ndims, const siz
 }
 
 double get_dlon_from_metres(const double lower_latitude, double delta_east) {
-  double EarthRadiusMeters = (100000) / (2 * M_PI);  // semi‑major axis a
+  // double EarthRadiusMeters = (100000) / (2 * M_PI);  // semi‑major axis a
   double dLon = 0.0;
 
   double MetresToRadians = (2 * M_PI) / (100000);
@@ -65,7 +65,7 @@ double get_dlon_from_metres(const double lower_latitude, double delta_east) {
   return dLon;
 }
 double get_dlat_from_metres(const double lower_latitude, double delta_north) {
-  double EarthRadiusMeters = (100000) / (2 * M_PI);  // semi‑major axis a
+  // double EarthRadiusMeters = (100000) / (2 * M_PI);  // semi‑major axis a
   double dLat = 0.0;
   double MetresToRadians = (2 * M_PI) / (100000);
   dLat = (delta_north * dlc::COORD0) * MetresToRadians;
@@ -85,9 +85,9 @@ void create_vertex_coordinates(const Config& config, const std::array<size_t, 3>
                                std::vector<double>& vertex_longitudes,
                                std::vector<double>& vertex_latitudes) {
   const auto lower_longitude = config.get_yac_dynamics().lower_longitude;
-  const auto upper_longitude = config.get_yac_dynamics().upper_longitude;
+  // const auto upper_longitude = config.get_yac_dynamics().upper_longitude;
   const auto lower_latitude = config.get_yac_dynamics().lower_latitude;
-  const auto upper_latitude = config.get_yac_dynamics().upper_latitude;
+  // const auto upper_latitude = config.get_yac_dynamics().upper_latitude;
 
   auto vertex_longitudes_new = std::vector<double>(partition_size[EASTWARD] + 1, 0);
   auto vertex_latitudes_new = std::vector<double>(partition_size[NORTHWARD] + 1, 0);
@@ -143,7 +143,7 @@ void create_grid_and_points_definitions(const Config& config, const std::array<s
 
   std::vector<double> edge_centers_longitudes;
   std::vector<double> edge_centers_latitudes;
-  int* global_cell_ids;
+  int* global_cell_ids = nullptr;
   create_vertex_coordinates(config, partition_size, gridbox_bounds, domain_bounds,
                             vertex_longitudes, vertex_latitudes);
 
