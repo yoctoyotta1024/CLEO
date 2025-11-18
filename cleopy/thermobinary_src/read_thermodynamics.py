@@ -195,6 +195,36 @@ def get_thermodynamics_from_thermofiles(
     return thermodata  # data with units in 4D arrays with dims [time, y, x, z]
 
 
+def read_initial_pressure_into_dict(
+    grid_filename, thermofiles, inputs=False, constants_filename="", config_filename=""
+):
+    if not inputs:
+        inputs = thermoinputsdict(config_filename, constants_filename)
+
+    gbxbounds, ndims = rgrid.read_dimless_gbxboundaries_binary(
+        grid_filename, COORD0=inputs["COORD0"], return_ndims=True, isprint=False
+    )
+
+    var = "press"
+    datatype = np.double
+    cen = [
+        inputs["ntime"],
+        int(np.prod(ndims)),
+    ]  # expected lengths of data defined on gridbox centres
+    dimless_press = thermovar_from_binary(
+        var, thermofiles, cen, inputs["ntime"], ndims, datatype, isprint=False
+    )
+    initial_press = (
+        dimless_press[0, :] * inputs["P0"]
+    )  # re-dimensionalise and take first time
+
+    assert len(initial_press) == len(
+        gbxbounds.keys()
+    ), "number of gbxindexes and number of initial pressure values are not equal"
+
+    return dict(zip(gbxbounds.keys(), initial_press))
+
+
 def plot_thermodynamics(
     constants_filename,
     config_filename,
