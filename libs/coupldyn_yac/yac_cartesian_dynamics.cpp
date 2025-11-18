@@ -143,14 +143,12 @@ void create_grid_and_points_definitions(const Config& config, const std::array<s
 
   std::vector<double> edge_centers_longitudes;
   std::vector<double> edge_centers_latitudes;
-  int* global_cell_ids = nullptr;
   create_vertex_coordinates(config, partition_size, gridbox_bounds, domain_bounds,
                             vertex_longitudes, vertex_latitudes);
 
   // Defines a regular 2D grid
   yac_cdef_grid_reg2d(grid_name.c_str(), total_vertices, cyclic_dimension, vertex_longitudes.data(),
                       vertex_latitudes.data(), &grid_id);
-  yac_cset_global_index(global_cell_ids, YAC_LOCATION_CELL, grid_id);
   // --- Point definitions ---
   // Defines the cell center longitude and latitude values in radians
   // The values are later permuted by YAC to generate all cell center coordinates
