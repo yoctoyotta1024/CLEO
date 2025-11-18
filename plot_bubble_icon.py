@@ -533,3 +533,6 @@ print(
     "*2 pi <=>",
     DOMAIN_SIZE_Y,
 )
+
+# %%
+### TODO: plot ICON z-y plane and compare to CLEO plots, esp. for u-wind
