@@ -380,6 +380,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..gbxboundariesbinary_src</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_gbxboundaries</span> <span class="k">as</span> <span class="n">rgrid</span>
 
@@ -393,7 +394,16 @@
 <span class="sd">    of class&quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">radiigen</span><span class="p">,</span> <span class="n">dryradiigen</span><span class="p">,</span> <span class="n">xiprobdist</span><span class="p">,</span> <span class="n">coord3gen</span><span class="p">,</span> <span class="n">coord1gen</span><span class="p">,</span> <span class="n">coord2gen</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">radiigen</span><span class="p">,</span>
+        <span class="n">dryradiigen</span><span class="p">,</span>
+        <span class="n">xiprobdist</span><span class="p">,</span>
+        <span class="n">coord3gen</span><span class="p">,</span>
+        <span class="n">coord1gen</span><span class="p">,</span>
+        <span class="n">coord2gen</span><span class="p">,</span>
+        <span class="n">xi_by_pressure</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">press</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">press_ref</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">radiigen</span> <span class="o">=</span> <span class="n">radiigen</span>  <span class="c1"># generates radius (solute + water)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dryradiigen</span> <span class="o">=</span> <span class="n">dryradiigen</span>  <span class="c1"># generates dry radius (-&gt; solute mass)</span>
@@ -404,6 +414,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">coord2gen</span> <span class="o">=</span> <span class="n">coord2gen</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ncoordsgen</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">[</span><span class="n">coord3gen</span><span class="p">,</span> <span class="n">coord2gen</span><span class="p">,</span> <span class="n">coord1gen</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">xi_by_pressure</span> <span class="o">=</span> <span class="n">xi_by_pressure</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">xi_by_pressure</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">press</span> <span class="o">=</span> <span class="n">press</span>
+            <span class="k">if</span> <span class="n">press_ref</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+                <span class="c1"># take first value for pressure as reference value</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">press_ref</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">press</span><span class="o">.</span><span class="n">values</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">press_ref</span> <span class="o">=</span> <span class="n">press_ref</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">press</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">press_ref</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="AttrsGenerator.mass_solutes">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/attrsgen.html#cleopy.initsuperdropsbinary_src.attrsgen.AttrsGenerator.mass_solutes">[docs]</a>
@@ -420,14 +442,19 @@
 
 <div class="viewcode-block" id="AttrsGenerator.multiplicities">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/attrsgen.html#cleopy.initsuperdropsbinary_src.attrsgen.AttrsGenerator.multiplicities">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">multiplicities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">NUMCONC</span><span class="p">,</span> <span class="n">samplevol</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">multiplicities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">NUMCONC</span><span class="p">,</span> <span class="n">samplevol</span><span class="p">,</span> <span class="n">gbxindex</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate the multiplicity of the dry radius of each</span>
 <span class="sd">        superdroplet given it&#39;s probability such that the total number</span>
 <span class="sd">        concentration [m^-3] of real droplets in the volume, vol, [m^3]</span>
 <span class="sd">        is about &#39;numconc&#39;. Raise an error if any of the calculated</span>
 <span class="sd">        mulitiplicities are zero&quot;&quot;&quot;</span>
 
-        <span class="n">totxi</span> <span class="o">=</span> <span class="n">NUMCONC</span> <span class="o">*</span> <span class="n">samplevol</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">xi_by_pressure</span><span class="p">:</span>
+            <span class="n">gbxnumconc</span> <span class="o">=</span> <span class="n">NUMCONC</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">press</span><span class="p">[</span><span class="n">gbxindex</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">press_ref</span>  <span class="c1"># [m^-3]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">gbxnumconc</span> <span class="o">=</span> <span class="n">NUMCONC</span>  <span class="c1"># [m^-3]</span>
+
+        <span class="n">totxi</span> <span class="o">=</span> <span class="n">gbxnumconc</span> <span class="o">*</span> <span class="n">samplevol</span>
         <span class="n">prob</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xiprobdist</span><span class="p">(</span><span class="n">radii</span><span class="p">,</span> <span class="n">totxi</span><span class="p">)</span>  <span class="c1"># normalised prob distrib</span>
         <span class="n">xi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">prob</span> <span class="o">*</span> <span class="n">totxi</span><span class="p">)</span>
 
@@ -444,7 +471,7 @@
             <span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">errmsg</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xi</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint</span><span class="p">),</span> <span class="n">gbxnumconc</span>  <span class="c1"># [dimless], [m^-3]</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">check_coordsgen_matches_modeldimension</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nspacedims</span><span class="p">):</span>
@@ -462,7 +489,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">check_totalnumconc</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">multiplicities</span><span class="p">,</span>
-        <span class="n">NUMCONC</span><span class="p">,</span>
+        <span class="n">gbxnumconc</span><span class="p">,</span>
         <span class="n">samplevol</span><span class="p">,</span>
         <span class="n">numconc_tolerance</span><span class="p">,</span>
     <span class="p">):</span>
@@ -471,15 +498,15 @@
 <span class="sd">        given by the numconc_tolerance.</span>
 <span class="sd">        Also check the total number of real droplets lies within 0.1% or more</span>
 <span class="sd">        of the expected value given the input number conc and sample volume&quot;&quot;&quot;</span>
-        <span class="n">nreals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">NUMCONC</span> <span class="o">*</span> <span class="n">samplevol</span><span class="p">)</span>
+        <span class="n">nreals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">gbxnumconc</span> <span class="o">*</span> <span class="n">samplevol</span><span class="p">)</span>
         <span class="n">calcnreals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">multiplicities</span><span class="p">))</span>
         <span class="n">calcnumconc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">calcnreals</span> <span class="o">/</span> <span class="n">samplevol</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">NUMCONC</span><span class="p">)</span> <span class="o">-</span> <span class="n">calcnumconc</span><span class="p">)</span> <span class="o">/</span> <span class="n">NUMCONC</span> <span class="o">&gt;</span> <span class="n">numconc_tolerance</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">gbxnumconc</span><span class="p">)</span> <span class="o">-</span> <span class="n">calcnumconc</span><span class="p">)</span> <span class="o">/</span> <span class="n">gbxnumconc</span> <span class="o">&gt;</span> <span class="n">numconc_tolerance</span><span class="p">:</span>
             <span class="n">errmsg</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="s2">&quot;total real droplet concentration&quot;</span>
                 <span class="o">+</span> <span class="s2">&quot; </span><span class="si">{:0g}</span><span class="s2"> != numconc, </span><span class="si">{:0g}</span><span class="s2"> within error tolerance&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">calcnumconc</span><span class="p">,</span> <span class="n">NUMCONC</span>
+                    <span class="n">calcnumconc</span><span class="p">,</span> <span class="n">gbxnumconc</span>
                 <span class="p">)</span>
             <span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">errmsg</span><span class="p">)</span>
@@ -527,8 +554,9 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">nsupers</span><span class="p">,</span>
         <span class="n">RHO_SOL</span><span class="p">,</span>
-        <span class="n">NUMCONC</span><span class="p">,</span>
+        <span class="n">gbxindex</span><span class="p">,</span>
         <span class="n">gridboxbounds</span><span class="p">,</span>
+        <span class="n">NUMCONC</span><span class="p">,</span>
         <span class="n">numconc_tolerance</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
         <span class="n">isprint</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
@@ -542,10 +570,14 @@
 
         <span class="n">mass_solutes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mass_solutes</span><span class="p">(</span><span class="n">radii</span><span class="p">,</span> <span class="n">RHO_SOL</span><span class="p">)</span>  <span class="c1"># [Kg]</span>
 
-        <span class="n">multiplicities</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiplicities</span><span class="p">(</span><span class="n">radii</span><span class="p">,</span> <span class="n">NUMCONC</span><span class="p">,</span> <span class="n">gbxvol</span><span class="p">)</span>
+        <span class="n">multiplicities</span><span class="p">,</span> <span class="n">gbxnumconc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiplicities</span><span class="p">(</span>
+            <span class="n">radii</span><span class="p">,</span> <span class="n">NUMCONC</span><span class="p">,</span> <span class="n">gbxvol</span><span class="p">,</span> <span class="n">gbxindex</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">nsupers</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">check_totalnumconc</span><span class="p">(</span><span class="n">multiplicities</span><span class="p">,</span> <span class="n">NUMCONC</span><span class="p">,</span> <span class="n">gbxvol</span><span class="p">,</span> <span class="n">numconc_tolerance</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">check_totalnumconc</span><span class="p">(</span>
+                <span class="n">multiplicities</span><span class="p">,</span> <span class="n">gbxnumconc</span><span class="p">,</span> <span class="n">gbxvol</span><span class="p">,</span> <span class="n">numconc_tolerance</span>
+            <span class="p">)</span>
             <span class="k">if</span> <span class="n">isprint</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">print_totalconc</span><span class="p">(</span>
                     <span class="n">multiplicities</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">mass_solutes</span><span class="p">,</span> <span class="n">RHO_SOL</span><span class="p">,</span> <span class="n">gbxvol</span>
@@ -606,7 +638,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 02 October 2025</div>
+              Last updated on 18 November 2025</div>
           </div>
           <div class="right-details">
             

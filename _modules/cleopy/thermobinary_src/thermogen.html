@@ -725,17 +725,17 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">config_filename</span><span class="p">,</span>
         <span class="n">constants_filename</span><span class="p">,</span>
-        <span class="n">PRESS0</span><span class="p">,</span>
-        <span class="n">TEMP0</span><span class="p">,</span>
-        <span class="n">qvap0</span><span class="p">,</span>
+        <span class="n">PRESSz0</span><span class="p">,</span>
+        <span class="n">TEMPz0</span><span class="p">,</span>
+        <span class="n">qvapz0</span><span class="p">,</span>
         <span class="n">Zbase</span><span class="p">,</span>
         <span class="n">TEMPlapses</span><span class="p">,</span>
         <span class="n">qvaplapses</span><span class="p">,</span>
         <span class="n">qcond</span><span class="p">,</span>
     <span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">PRESS0</span> <span class="o">=</span> <span class="n">PRESS0</span>  <span class="c1"># surface pressure [Pa]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">TEMP0</span> <span class="o">=</span> <span class="n">TEMP0</span>  <span class="c1"># surface temperature [T]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">qvap0</span> <span class="o">=</span> <span class="n">qvap0</span>  <span class="c1"># surface water vapour content [Kg/Kg]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">PRESSz0</span> <span class="o">=</span> <span class="n">PRESSz0</span>  <span class="c1"># surface pressure [Pa]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TEMPz0</span> <span class="o">=</span> <span class="n">TEMPz0</span>  <span class="c1"># surface temperature [T]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qvapz0</span> <span class="o">=</span> <span class="n">qvapz0</span>  <span class="c1"># surface water vapour content [Kg/Kg]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Zbase</span> <span class="o">=</span> <span class="n">Zbase</span>  <span class="c1"># cloud base height [m]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">TEMPlapses</span> <span class="o">=</span> <span class="n">TEMPlapses</span>  <span class="c1"># temp lapse rates [below, above] Zbase [K km^-1]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">qvaplapses</span> <span class="o">=</span> <span class="p">(</span>
@@ -754,7 +754,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">temp1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;note unit conversion of input lapse rates:</span>
 <span class="sd">        templapse rate = -dT/dz [K km^-1]  --&gt;  [K m^-1]&quot;&quot;&quot;</span>
-        <span class="n">temp1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEMP0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEMPlapses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">z</span>
+        <span class="n">temp1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEMPz0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEMPlapses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">z</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">temp1</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">)):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;TEMP &gt; 0.0K&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">temp1</span></div>
@@ -780,7 +780,7 @@
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/thermogen.html#cleopy.thermobinary_src.thermogen.HydrostaticLapseRates.press1">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">press1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;hydrostatic pressure for value z where z &lt;= self.Zbase&quot;&quot;&quot;</span>
-        <span class="n">P0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PRESS0</span>
+        <span class="n">P0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PRESSz0</span>
         <span class="n">integral</span> <span class="o">=</span> <span class="n">integrate</span><span class="o">.</span><span class="n">quad</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp1</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">z</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">hydrostatic_pressure</span><span class="p">(</span><span class="n">P0</span><span class="p">,</span> <span class="n">integral</span><span class="p">)</span></div>
 
@@ -804,7 +804,7 @@
             <span class="n">sratio</span> <span class="o">=</span> <span class="mf">1.001</span>
             <span class="n">qvap1</span> <span class="o">=</span> <span class="n">sratio2qvap</span><span class="p">(</span><span class="n">sratio</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">press2</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp2</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mr_ratio</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">qvap1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvap0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvaplapses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e6</span> <span class="o">*</span> <span class="n">z</span>
+            <span class="n">qvap1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvapz0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvaplapses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e6</span> <span class="o">*</span> <span class="n">z</span>
 
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">qvap1</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">)):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;TEMP &gt; 0.0K&quot;</span><span class="p">)</span>
@@ -893,7 +893,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 02 October 2025</div>
+              Last updated on 18 November 2025</div>
           </div>
           <div class="right-details">
             
