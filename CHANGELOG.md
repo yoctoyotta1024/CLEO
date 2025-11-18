@@ -2,6 +2,22 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.62.0](https://github.com/yoctoyotta1024/CLEO/compare/36324932d6881e25171cbf2da29d117c684991dc..v0.62.0) - 2025-11-18
+#### Features
+- new function to get pressure into dictionary form from thermofiles - ([8b1ea83](https://github.com/yoctoyotta1024/CLEO/commit/8b1ea837b436b87f5dd7ad023fe8339708cdb253)) - clara.bayley
+- option to initialise superdroplet number concentration as function of pressure - ([ec7f043](https://github.com/yoctoyotta1024/CLEO/commit/ec7f043a4e5b6eb03d610edbdc7ac9ee059f17c5)) - clara.bayley
+#### Miscellaneous Chores
+- rename variable - ([1fc5de3](https://github.com/yoctoyotta1024/CLEO/commit/1fc5de377702938438a1dfb05dd719a11d550887)) - clara.bayley
+- update yac version - ([06574a3](https://github.com/yoctoyotta1024/CLEO/commit/06574a39d8247c27ce5d68146ca29cbbe43cc822)) - clara.bayley
+#### Refactoring
+- const2dthermo example uses pressure initialisation - ([2803127](https://github.com/yoctoyotta1024/CLEO/commit/2803127c9f4ef5f84ef13c5cd015a2b9980abb8b)) - clara.bayley
+- print with CLEO name - ([23fafd3](https://github.com/yoctoyotta1024/CLEO/commit/23fafd3d8b865726a671f0b2f0c72a99353be661)) - clara.bayley
+- change location of icon build - ([e7502a8](https://github.com/yoctoyotta1024/CLEO/commit/e7502a83a1a4c50878ea4b299f4d50359b8f9bc8)) - clara.bayley
+- don't compile python bindings with bubble tmp - ([9f70bf8](https://github.com/yoctoyotta1024/CLEO/commit/9f70bf8946cdbcc63182bde65dceb5da3d550dc7)) - clara.bayley
+- add option to specify reference pressure in initial conditions of theta plot - ([3632493](https://github.com/yoctoyotta1024/CLEO/commit/36324932d6881e25171cbf2da29d117c684991dc)) - clara.bayley
+
+- - -
+
 ## [v0.61.1](https://github.com/yoctoyotta1024/CLEO/compare/db047615ddabddc2eb784b906410d85c66d2baeb..v0.61.1) - 2025-09-24
 #### Bug Fixes
 - handle zero or unspecified numconc - ([65081ab](https://github.com/yoctoyotta1024/CLEO/commit/65081ab749300842f94baf764b71eb676344cbd3)) - clara.bayley
