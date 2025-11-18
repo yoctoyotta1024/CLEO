@@ -82,6 +82,9 @@ def main(
         attrsgen,
     )
     from cleopy.thermobinary_src import thermogen, thermodyngen
+    from cleopy.thermobinary_src.read_thermodynamics import (
+        read_initial_pressure_into_dict,
+    )
 
     if path2CLEO == path2build:
         raise ValueError("build directory cannot be CLEO")
@@ -187,8 +190,22 @@ def main(
     radiigen = rgens.SampleLog10RadiiGen(rspan)  # randomly sample radii from rspan [m]
     dryradiigen = dryrgens.ScaledRadiiGen(1.0)
 
+    press = read_initial_pressure_into_dict(
+        grid_filename,
+        thermofiles,
+        constants_filename=constants_filename,
+        config_filename=config_filename,
+    )
+
     initattrsgen = attrsgen.AttrsGenerator(
-        radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
+        radiigen,
+        dryradiigen,
+        xiprobdist,
+        coord3gen,
+        coord1gen,
+        coord2gen,
+        xi_by_pressure=True,
+        press=press,
     )
     geninitconds.generate_initial_superdroplet_conditions(
         initattrsgen,
