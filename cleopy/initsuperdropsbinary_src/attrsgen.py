@@ -17,6 +17,7 @@ attributes given individual generators
 """
 
 import numpy as np
+from typing import Optional
 
 from ..gbxboundariesbinary_src import read_gbxboundaries as rgrid
 
@@ -28,7 +29,16 @@ class AttrsGenerator:
     of class"""
 
     def __init__(
-        self, radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
+        self,
+        radiigen,
+        dryradiigen,
+        xiprobdist,
+        coord3gen,
+        coord1gen,
+        coord2gen,
+        xi_by_pressure: Optional[bool] = False,
+        press: Optional[dict] = None,
+        press_ref: Optional[float] = 0.0,
     ):
         self.radiigen = radiigen  # generates radius (solute + water)
         self.dryradiigen = dryradiigen  # generates dry radius (-> solute mass)
@@ -40,6 +50,18 @@ class AttrsGenerator:
 
         self.ncoordsgen = sum(x is not None for x in [coord3gen, coord2gen, coord1gen])
 
+        self.xi_by_pressure = xi_by_pressure
+        if self.xi_by_pressure:
+            self.press = press
+            if press_ref == 0.0:
+                # take first value for pressure as reference value
+                self.press_ref = list(self.press.values())[0]
+            else:
+                self.press_ref = press_ref
+        else:
+            self.press = None
+            self.press_ref = None
+
     def mass_solutes(self, radii, RHO_SOL):
         """return the mass [Kg] of the solute in superdroplets given their
         dry radii [m] and solute density [Kg m^3]"""
@@ -50,14 +72,19 @@ class AttrsGenerator:
 
         return msols  # [Kg]
 
-    def multiplicities(self, radii, NUMCONC, samplevol):
+    def multiplicities(self, radii, NUMCONC, samplevol, gbxindex):
         """Calculate the multiplicity of the dry radius of each
         superdroplet given it's probability such that the total number
         concentration [m^-3] of real droplets in the volume, vol, [m^3]
         is about 'numconc'. Raise an error if any of the calculated
         mulitiplicities are zero"""
 
-        totxi = NUMCONC * samplevol
+        if self.xi_by_pressure:
+            gbxnumconc = NUMCONC * self.press[gbxindex] / self.press_ref  # [m^-3]
+        else:
+            gbxnumconc = NUMCONC  # [m^-3]
+
+        totxi = gbxnumconc * samplevol
         prob = self.xiprobdist(radii, totxi)  # normalised prob distrib
         xi = np.rint(prob * totxi)
 
@@ -74,7 +101,7 @@ class AttrsGenerator:
             )
             raise ValueError(errmsg)
 
-        return np.array(xi, dtype=np.uint)
+        return np.array(xi, dtype=np.uint), gbxnumconc  # [dimless], [m^-3]
 
     def check_coordsgen_matches_modeldimension(self, nspacedims):
         if nspacedims != self.ncoordsgen:
@@ -89,7 +116,7 @@ class AttrsGenerator:
     def check_totalnumconc(
         self,
         multiplicities,
-        NUMCONC,
+        gbxnumconc,
         samplevol,
         numconc_tolerance,
     ):
@@ -98,15 +125,15 @@ class AttrsGenerator:
         given by the numconc_tolerance.
         Also check the total number of real droplets lies within 0.1% or more
         of the expected value given the input number conc and sample volume"""
-        nreals = np.rint(NUMCONC * samplevol)
+        nreals = np.rint(gbxnumconc * samplevol)
         calcnreals = np.rint(np.sum(multiplicities))
         calcnumconc = np.rint(calcnreals / samplevol)
 
-        if abs(np.rint(NUMCONC) - calcnumconc) / NUMCONC > numconc_tolerance:
+        if abs(np.rint(gbxnumconc) - calcnumconc) / gbxnumconc > numconc_tolerance:
             errmsg = (
                 "total real droplet concentration"
                 + " {:0g} != numconc, {:0g} within error tolerance".format(
-                    calcnumconc, NUMCONC
+                    calcnumconc, gbxnumconc
                 )
             )
             raise ValueError(errmsg)
@@ -148,8 +175,9 @@ class AttrsGenerator:
         self,
         nsupers,
         RHO_SOL,
-        NUMCONC,
+        gbxindex,
         gridboxbounds,
+        NUMCONC,
         numconc_tolerance=0.0,
         isprint=False,
     ):
@@ -163,10 +191,14 @@ class AttrsGenerator:
 
         mass_solutes = self.mass_solutes(radii, RHO_SOL)  # [Kg]
 
-        multiplicities = self.multiplicities(radii, NUMCONC, gbxvol)
+        multiplicities, gbxnumconc = self.multiplicities(
+            radii, NUMCONC, gbxvol, gbxindex
+        )
 
         if nsupers > 0:
-            self.check_totalnumconc(multiplicities, NUMCONC, gbxvol, numconc_tolerance)
+            self.check_totalnumconc(
+                multiplicities, gbxnumconc, gbxvol, numconc_tolerance
+            )
             if isprint:
                 self.print_totalconc(
                     multiplicities, radii, mass_solutes, RHO_SOL, gbxvol

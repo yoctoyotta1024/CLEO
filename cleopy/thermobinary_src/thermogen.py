@@ -333,17 +333,17 @@ class HydrostaticLapseRates:
         self,
         config_filename,
         constants_filename,
-        PRESS0,
-        TEMP0,
-        qvap0,
+        PRESSz0,
+        TEMPz0,
+        qvapz0,
         Zbase,
         TEMPlapses,
         qvaplapses,
         qcond,
     ):
-        self.PRESS0 = PRESS0  # surface pressure [Pa]
-        self.TEMP0 = TEMP0  # surface temperature [T]
-        self.qvap0 = qvap0  # surface water vapour content [Kg/Kg]
+        self.PRESSz0 = PRESSz0  # surface pressure [Pa]
+        self.TEMPz0 = TEMPz0  # surface temperature [T]
+        self.qvapz0 = qvapz0  # surface water vapour content [Kg/Kg]
         self.Zbase = Zbase  # cloud base height [m]
         self.TEMPlapses = TEMPlapses  # temp lapse rates [below, above] Zbase [K km^-1]
         self.qvaplapses = (
@@ -360,7 +360,7 @@ class HydrostaticLapseRates:
     def temp1(self, z):
         """note unit conversion of input lapse rates:
         templapse rate = -dT/dz [K km^-1]  -->  [K m^-1]"""
-        temp1 = self.TEMP0 - self.TEMPlapses[0] / 1000 * z
+        temp1 = self.TEMPz0 - self.TEMPlapses[0] / 1000 * z
         if np.any((temp1 <= 0.0)):
             raise ValueError("TEMP > 0.0K")
         return temp1
@@ -380,7 +380,7 @@ class HydrostaticLapseRates:
 
     def press1(self, z):
         """hydrostatic pressure for value z where z <= self.Zbase"""
-        P0 = self.PRESS0
+        P0 = self.PRESSz0
         integral = integrate.quad(lambda x: 1 / self.temp1(x), 0.0, z)[0]
         return self.hydrostatic_pressure(P0, integral)
 
@@ -398,7 +398,7 @@ class HydrostaticLapseRates:
             sratio = 1.001
             qvap1 = sratio2qvap(sratio, self.press2(z), self.temp2(z), self.Mr_ratio)
         else:
-            qvap1 = self.qvap0 - self.qvaplapses[0] / 1e6 * z
+            qvap1 = self.qvapz0 - self.qvaplapses[0] / 1e6 * z
 
         if np.any((qvap1 <= 0.0)):
             raise ValueError("TEMP > 0.0K")
