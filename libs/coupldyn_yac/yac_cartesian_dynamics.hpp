@@ -183,7 +183,7 @@ struct YacDynamics {
 
   const std::shared_ptr<CartesianDynamics>& get_dynvars() const { return dynvars; }
 
-  const int get_yac_coupling_flag() const {return dynvars->get_yac_coupling_flag();}
+  int get_yac_coupling_flag() const { return dynvars->get_yac_coupling_flag(); }
 
   double get_press(const size_t ii) const { return dynvars->get_press(ii); }
 
