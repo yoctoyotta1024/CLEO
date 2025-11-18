@@ -110,9 +110,9 @@ def main(
     ygrid = np.array([0, 10])  # array of yhalf coords [m]
 
     ### --- settings for 1-D Thermodynamics --- ###
-    PRESS0 = 101315  # [Pa]
-    TEMP0 = 297.9  # [K]
-    qvap0 = 0.016  # [Kg/Kg]
+    PRESSz0 = 101315  # [Pa]
+    TEMPz0 = 297.9  # [K]
+    qvapz0 = 0.016  # [Kg/Kg]
     Zbase = 800  # [m]
     TEMPlapses = [9.8, 6.5]  # -dT/dz [K/km]
     qvaplapses = [2.97, "saturated"]  # -dvap/dz [g/Kg km^-1]
@@ -153,9 +153,9 @@ def main(
     thermog = thermogen.HydrostaticLapseRates(
         config_filename,
         constants_filename,
-        PRESS0,
-        TEMP0,
-        qvap0,
+        PRESSz0,
+        TEMPz0,
+        qvapz0,
         Zbase,
         TEMPlapses,
         qvaplapses,
