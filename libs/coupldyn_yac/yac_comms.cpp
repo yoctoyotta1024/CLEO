@@ -20,6 +20,9 @@
 
 #include "coupldyn_yac/yac_comms.hpp"
 
+int YacComms::get_counter = 0;
+int YacComms::put_counter = 0;
+
 /* update Gridboxes' states using information received
 from YacDynamics solver for 1-way coupling to CLEO SDM.
 Kokkos::parallel_for([...]) (on host) is equivalent to:
@@ -33,9 +36,12 @@ void YacComms::receive_dynamics(const GbxMaps &gbxmaps, const YacDynamics &ffdyn
                                 const viewh_gbx h_gbxs) const {
   const size_t ngbxs(h_gbxs.extent(0));
   const int coupling_flag = ffdyn.get_dynvars()->get_yac_coupling_flag();
+  std::cout << "coupling_flag inside receive dynamics: " << coupling_flag << std::endl;
 
   if ((coupling_flag ==2) || (coupling_flag ==1)) {
   ffdyn.get_dynvars()->receive_fields_from_yac();
+  get_counter += 1;
+  std::cout << " Get counter right now: " << get_counter << std::endl;
   }
   Kokkos::parallel_for(
       "receive_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
@@ -51,6 +57,7 @@ void YacComms::send_dynamics(const GbxMaps &gbxmaps, const viewh_constgbx h_gbxs
   Kokkos::View<double*, HostSpace> qvap_state("qvap_state", ngbxs);
   Kokkos::View<double*, HostSpace> qcond_state("qcond_state", ngbxs);
 
+  std::cout << "Inside send_dynamics!" << std::endl;
   Kokkos::parallel_for(
       "send_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
       [=, *this](const size_t ii) {
@@ -62,7 +69,10 @@ void YacComms::send_dynamics(const GbxMaps &gbxmaps, const viewh_constgbx h_gbxs
   const int coupling_flag = ffdyn.get_dynvars()->get_yac_coupling_flag();
 
   if (coupling_flag ==2) {
+  std::cout << "Calling send_fields_to_yac!" << std::endl;
   ffdyn.get_dynvars()->send_fields_to_yac(temp_state.data(), qvap_state.data(), qcond_state.data());
+  put_counter += 1;
+  std::cout << " Put counter right now: " << put_counter << std::endl;
   }
 }
 
