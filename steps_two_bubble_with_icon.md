@@ -6,7 +6,7 @@ git clone --recursive git@gitlab.dkrz.de:icon/icon-mpim.git
 
 ### Switch to CLEO two-way coupling branch
 ```
-git switch cleo-twoway-coupling
+git switch cleo-twoway-branch2
 ```
 
 ### Build ICON in build directory
@@ -26,9 +26,10 @@ cd /work/bm1183/m300950/icon-mpim/build
 ./make_runscripts aes_bubble
 ```
 
-### Change account in ``exp.aes_bubble.run``
+### Change account in ``exp.aes_bubble.run`` and maybe output directory
 ```
 #SBATCH --account=bm1183
+#SBATCH --output=/work/bm1183/m300950/icon-mpim/build/run/LOG.exp.aes_bubble.run.%j.o
 ```
 
 ### run ICON
@@ -38,11 +39,11 @@ sbatch ./exp.aes_bubble.run
 ```
 
 
-# Steps to run ICON bubble with CLEO microphysics
+# Steps to run ICON bubble with CLEO microphysics (default one-way coupling)
 
 ### Build CLEO bubble3d executable and create CLEO input files
-``
-git switch mpi_yac_step3_twoway_step1
+```
+git switch mpi_yac_step3_twoway_step2-withmpi-bubble_helping
 ```
 
 edit ``path2build=${HOME}/CLEO/build_bubble3d/`` and
@@ -57,6 +58,10 @@ run script bubble3d script,
 ```
 
 ### Copy ICON CLEO-bubble run script
+
+_hint_: ``exp.aes_bubble_cleo_iconopenmp.run`` and ``exp.aes_bubble_cleo_iconopenmp.run`` are
+possible drafts you could use for ``exp.aes_bubble_cleo.run``.
+
 ```
 cp /path/to/your/copy/exp.aes_bubble_cleo.run /work/bm1183/m300950/icon-mpim/build/run/exp.aes_bubble_cleo.run
 ```
@@ -99,3 +104,46 @@ START_MODEL="${START_MODEL:=$START $MODEL : $START_MODEL_CLEO}"
 cd /work/bm1183/m300950/icon-mpim/build/run
 sbatch ./exp.aes_bubble_cleo.run
 ```
+
+
+# Steps to run ICON bubble with CLEO microphysics, two-way coupling
+
+### Edit ICON source code to activate two-way coupling
+
+Edit ``oneway_coupling`` --> ``twoway_coupling`` at TWO locations of ICON source code
+
+In ``icon-mpim/src/coupling/mo_atmo_coupling_frame.f90``:
+
+```
+CALL construct_atmo_cleo_coupling_post_sync(p_patch(jg),
+  comp_id, cell_point_id(1), patch_horz%n_patch_cells, timestepstring,
+  twoway_coupling)
+```
+
+In ``icon-mpim/src/atm_phy_aes/mo_aes_phy_main.f90``:
+```
+if(is_coupled_to_cleo()) CALL interface_cleo(jg, twoway_coupling)
+```
+
+Then (Re-)Compile and follow steps to run ICON bubble with CLEO microphysics as above.
+
+Note: This test of coupling uses CLEO by default with NullMicrophysicalProcess. Two-way coupling
+with CLEO's microphysical procsses enabled (i.e. not Null) would need to first
+de-activate one-moment scheme...
+
+
+# Steps to run ICON bubble with CLEO microphysics, one/two-way coupling > 1 MPI process
+
+in your ``exp.aes_bubble_cloe.run`` run script, simply edit ``--ntasks=X+1`` and
+``START_MODEL_CLEO="-n X [...]`` to the number of desired MPI processes for CLEO, ``X``:
+
+```
+#SBATCH --ntasks=X+1 (one extra for ICON)
+
+[...]
+
+START_MODEL_CLEO="-n 1 $CLEO_MODEL $CLEO_CONFIGFILE"
+```
+
+Note: you may also need to comment out the MassMomentsObservers (``obs4`` and ``obs5``)
+in ``main_bubble3d.cpp``
