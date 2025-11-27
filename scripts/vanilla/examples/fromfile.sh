@@ -1,16 +1,4 @@
 #!/bin/bash
-#SBATCH --job-name=fromfile
-#SBATCH --partition=compute
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=4
-#SBATCH --cpus-per-task=16
-#SBATCH --mem=10G
-#SBATCH --time=00:05:00
-#SBATCH --mail-user=clara.bayley@mpimet.mpg.de
-#SBATCH --mail-type=FAIL
-#SBATCH --account=bm1183
-#SBATCH --output=./fromfile_out.%j.out
-#SBATCH --error=./fromfile_err.%j.out
 
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###

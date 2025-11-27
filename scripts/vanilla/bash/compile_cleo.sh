@@ -1,14 +1,4 @@
 #!/bin/bash
-#SBATCH --job-name=compile_cleo
-#SBATCH --partition=gpu
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=128
-#SBATCH --mem=940M
-#SBATCH --time=00:05:00
-#SBATCH --account=bm1183
-#SBATCH --output=./build/bin/compile_cleo_out.%j.out
-#SBATCH --error=./build/bin/compile_cleo_err.%j.out
 
 ### Please note: script may assume required CLEO_[XXX]
 ### variables have already exported (!)
