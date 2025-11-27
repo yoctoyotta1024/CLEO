@@ -76,3 +76,22 @@ add_custom_target(distclean
 add_custom_target("dist-clean"
   COMMAND ${CMAKE_COMMAND} --build "${CLEO_BINARY_DIR}" --target distclean
 )
+
+# "make wipeclean" / "make wipe-clean" target to remove any extra files from CLEO output in
+# tmp, bin and share directories, and then perform actions of distclean target
+add_custom_target(wipeclean
+  COMMAND ${CMAKE_COMMAND} -E echo "CLEO: performing wipeclean and distclean in ${CLEO_BINARY_DIR}"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${CLEO_BINARY_DIR}/tmp"
+  COMMAND ${CMAKE_COMMAND} -E make_directory "${CLEO_BINARY_DIR}/tmp"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${CLEO_BINARY_DIR}/bin"
+  COMMAND ${CMAKE_COMMAND} -E make_directory "${CLEO_BINARY_DIR}/bin"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${CLEO_BINARY_DIR}/share"
+  COMMAND ${CMAKE_COMMAND} -E make_directory "${CLEO_BINARY_DIR}/share"
+  COMMAND ${CMAKE_COMMAND} --build "${CLEO_BINARY_DIR}" --target distclean
+  WORKING_DIRECTORY "${CLEO_BINARY_DIR}"
+  COMMENT "wipeclean: remove all files in tmp, bin and share, then perform actions of distclean target"
+)
+# add an alternate name for convenience
+add_custom_target("wipe-clean"
+  COMMAND ${CMAKE_COMMAND} --build "${CLEO_BINARY_DIR}" --target wipeclean
+)
