@@ -56,3 +56,23 @@ if(CLEO_NO_ROUGHPAPER)
 else()
   add_subdirectory(roughpaper EXCLUDE_FROM_ALL)
 endif()
+
+# "make distclean" / "make dist-clean" target to perform `make clean`
+# and then remove generated build files and third-party build dirs
+add_custom_target(distclean
+  COMMAND "${CMAKE_MAKE_PROGRAM}" clean
+  COMMAND ${CMAKE_COMMAND} -E echo "CLEO: performing make clean and distclean in ${CLEO_BINARY_DIR}"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${CLEO_BINARY_DIR}/CMakeFiles"
+  COMMAND ${CMAKE_COMMAND} -E remove "${CLEO_BINARY_DIR}/CMakeCache.txt"
+  COMMAND ${CMAKE_COMMAND} -E remove "${CLEO_BINARY_DIR}/cmake_install.cmake"
+  COMMAND ${CMAKE_COMMAND} -E remove "${CLEO_BINARY_DIR}/Makefile"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${CLEO_BINARY_DIR}/kokkos"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${CLEO_BINARY_DIR}/yaml-cpp"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${CLEO_BINARY_DIR}/_deps"
+  WORKING_DIRECTORY "${CLEO_BINARY_DIR}"
+  COMMENT "distclean: perform `make clean` and then remove CMake cache/files, vendored build output"
+)
+# add an alternate name for convenience
+add_custom_target("dist-clean"
+  COMMAND ${CMAKE_COMMAND} --build "${CLEO_BINARY_DIR}" --target distclean
+)
