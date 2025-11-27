@@ -1,16 +1,4 @@
 #!/bin/bash
-#SBATCH --job-name=pythonbindings
-#SBATCH --partition=compute
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=128
-#SBATCH --mem=10G
-#SBATCH --time=00:05:00
-#SBATCH --mail-user=clara.bayley@mpimet.mpg.de
-#SBATCH --mail-type=FAIL
-#SBATCH --account=bm1183
-#SBATCH --output=./pythonbindings_out.%j.out
-#SBATCH --error=./pythonbindings_err.%j.out
 
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###

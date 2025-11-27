@@ -1,16 +1,4 @@
 #!/bin/bash
-#SBATCH --job-name=rshaft1d
-#SBATCH --partition=compute
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=256
-#SBATCH --mem=10G
-#SBATCH --time=00:10:00
-#SBATCH --mail-user=clara.bayley@mpimet.mpg.de
-#SBATCH --mail-type=FAIL
-#SBATCH --account=bm1183
-#SBATCH --output=./rshaft1d_out.%j.out
-#SBATCH --error=./rshaft1d_err.%j.out
 
 ### ------------------ Input Parameters ---------------- ###
 ### ------ You MUST edit these lines to set your ------- ###

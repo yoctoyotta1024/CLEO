@@ -1,17 +1,4 @@
 #!/bin/bash
-#SBATCH --job-name=eurec4a1d
-#SBATCH --partition=gpu
-#SBATCH --nodes=1
-#SBATCH --gpus=4
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=128
-#SBATCH --mem=10G
-#SBATCH --time=00:10:00
-#SBATCH --mail-user=clara.bayley@mpimet.mpg.de
-#SBATCH --mail-type=FAIL
-#SBATCH --account=bm1183
-#SBATCH --output=./eurec4a1d_out.%j.out
-#SBATCH --error=./eurec4a1d_err.%j.out
 
 ### ------------------ Input Parameters ---------------- ###
 ### ------ You MUST edit these lines to set your ------- ###

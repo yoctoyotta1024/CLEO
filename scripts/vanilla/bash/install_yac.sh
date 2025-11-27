@@ -1,14 +1,4 @@
 #!/bin/bash
-#SBATCH --job-name=install_yac
-#SBATCH --partition=compute
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=940M
-#SBATCH --time=00:10:00
-#SBATCH --account=bm1183
-#SBATCH --output=./build/bin/install_yac_out.%j.out
-#SBATCH --error=./build/bin/install_yac_err.%j.out
 
 ### ------------------------------------------------------- ###
 ### running script sucessfully installs YAC and YAXT for

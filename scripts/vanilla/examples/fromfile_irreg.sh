@@ -1,16 +1,4 @@
 #!/bin/bash
-#SBATCH --job-name=irreg_fromfile_irreg
-#SBATCH --partition=compute
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=4
-#SBATCH --cpus-per-task=16
-#SBATCH --mem=10G
-#SBATCH --time=00:05:00
-#SBATCH --mail-user=clara.bayley@mpimet.mpg.de
-#SBATCH --mail-type=FAIL
-#SBATCH --account=bm1183
-#SBATCH --output=./fromfile_irreg_out.%j.out
-#SBATCH --error=./fromfile_irreg_err.%j.out
 
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###

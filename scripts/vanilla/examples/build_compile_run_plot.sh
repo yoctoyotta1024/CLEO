@@ -1,16 +1,4 @@
 #!/bin/bash
-#SBATCH --job-name=runexample
-#SBATCH --partition=compute
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=940MB
-#SBATCH --time=00:10:00
-#SBATCH --mail-user=clara.bayley@mpimet.mpg.de
-#SBATCH --mail-type=FAIL
-#SBATCH --account=bm1183
-#SBATCH --output=./runexample_out.%j.out
-#SBATCH --error=./runexample_err.%j.out
 
 ### ------ Generic script to build CLEO, compile  ------ ###
 ### ----- some of its executables and run a python ----- ###

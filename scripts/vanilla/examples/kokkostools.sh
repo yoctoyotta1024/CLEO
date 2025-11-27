@@ -1,17 +1,4 @@
 #!/bin/bash
-#SBATCH --job-name=kokkostools
-#SBATCH --partition=gpu
-#SBATCH --nodes=1
-#SBATCH --gpus=4
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=256
-#SBATCH --mem=10G
-#SBATCH --time=00:30:00
-#SBATCH --mail-user=clara.bayley@mpimet.mpg.de
-#SBATCH --mail-type=FAIL
-#SBATCH --account=bm1183
-#SBATCH --output=./kokkostools_out.%j.out
-#SBATCH --error=./kokkostools_err.%j.out
 
 ### ------------------ Input Parameters ---------------- ###
 ### ------ You MUST edit these lines to set your ------- ###

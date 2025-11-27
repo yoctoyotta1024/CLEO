@@ -1,16 +1,4 @@
 #!/bin/bash
-#SBATCH --job-name=bubble3d
-#SBATCH --partition=compute
-#SBATCH --nodes=1
-#SBATCH --ntasks-per-node=2
-#SBATCH --cpus-per-task=32
-#SBATCH --mem=10G
-#SBATCH --time=00:05:00
-#SBATCH --mail-user=clara.bayley@mpimet.mpg.de
-#SBATCH --mail-type=FAIL
-#SBATCH --account=bm1183
-#SBATCH --output=./bubble3d_out.%j.out
-#SBATCH --error=./bubble3d_err.%j.out
 
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
