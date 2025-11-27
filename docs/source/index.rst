@@ -22,19 +22,17 @@ The name, Cleo, is a tribute to
 `Cleopatra <https://www.britannica.com/biography/Cleopatra-queen-of-Egypt>`_ as well as the
 anonymous mathematician `Cleo <https://en.wikipedia.org/wiki/Cleo_(mathematician)>`_.
 
-Time to get involved! Start by :doc:`installing CLEO<usage/installation>` and exploring some
-:doc:`examples<usage/examples>`. Or jump straight in with the :doc:`quickstart<usage/quickstart>`.
+Time to get involved! Start with CLEO's :doc:`installation<usage/installation/installation>` and
+then exploring some :doc:`examples<usage/examples/examples>`. Or jump straight in with the :doc:`quickstart<usage/quickstart>`.
 
 .. toctree::
    :maxdepth: 1
    :caption: Contents:
 
    intro/intro
-   usage/installation
-   usage/examples
+   usage/installation/installation
+   usage/examples/examples
    usage/quickstart
-   usage/requirements
-   usage/extern
 
    cleopy/cleopy
    libs/libs

@@ -1,7 +1,7 @@
 Quickstart
 ==========
 
-Start by following the steps to :doc:`install Cleo <installation>`.
+Start by following the steps to :doc:`install Cleo <installation/installation>`.
 
 To use Cleo as an SDM coupled to a dynamics solver, essentially your task is to contruct a
 ``main.cpp`` file.
