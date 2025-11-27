@@ -1,25 +1,4 @@
-.. _examples:
-
-Examples
-========
-
-There are various examples of CLEO, with different build configurations, domains, microphysics,
-coupling, and super-droplet motion etc. They can be found in the ``CLEO/examples`` directory. If you
-would like to a copy of the reference solutions please :ref:`contact us <contact>`.
-
-Before being able to run the examples you will need to locally install the ``plotcleo`` python
-package from the ``examples/exampleplotting/`` directory. E.g.
-
-.. code-block:: console
-
-  $ uv build examples/exampleplotting/plotcleo
-  $ uv pip install examples/exampleplotting/plotcleo/dist/plotcleo-[version].tar.gz
-  $ uv run python -c "import plotcleo"
-
-
-Each example can be run by building CLEO, compiling the relevant executable, and then running the
-example's Python script. There are bash scripts to help you to do all this relatively smoothly on
-DKRZ's Levante HPC.
+.. _examples_levante:
 
 Running the Examples on Levante
 ===============================
@@ -27,12 +6,12 @@ Running the Examples on Levante
 The following instructions are intended to guide you through running each example using the bash
 scripts in ``scripts/levante/``.
 
-Please Note: the bash script for some of the examples chooses a build configuration which uses GPUs.
+*Note*: the bash script for some of the examples chooses a build configuration which uses GPUs.
 To execute these scripts you will therefore need to be on a node in the GPU partition of Levante
 (`see here <https://docs.dkrz.de/doc/levante/running-jobs/partitions-and-limits.html>`_
 for documentation on Levante's partitions), or change the build configuration.
 
-.. _configurebash:
+.. _configurebash_levante:
 
 Configure the Bash Scripts
 --------------------------
@@ -66,14 +45,14 @@ in the following ways:
 * Choose your build configuration:
 
   choose which parallelism to utilise by modifying the ``buildtype`` parameter. The options are
-  ``cuda``,  ``openmp`` or ``serial``. Note that ``buildtype="cuda"`` requires you to execute the
-  script on a node in the GPU partition of Levante and may also include OpenMP parallelism.
+  ``cuda``,  ``openmp`` or ``serial``. *Note*: setting ``buildtype="cuda"`` requires you to execute
+  the script on a node in the GPU partition of Levante and may also include OpenMP parallelism.
 
 * Choose your compiler:
 
   choose which compilers to use via the ``compilername`` parameter. The options are
-  ``intel`` or  ``gcc`` (both via MPI wrappers). Note that the bubble3d example requires you use
-  the ``gcc`` compiler.
+  ``intel`` or  ``gcc`` (both via MPI wrappers). *Note*: the bubble3d example requires
+  you use the ``gcc`` compiler.
 
 * Choose your build directory:
 
@@ -89,13 +68,13 @@ Adiabatic Parcel
 The examples, ``as2017.py`` and ``cuspbifurc.py``, in ``examples/adiabaticparcel/`` are for a
 0-D model of a parcel of air expanding and contracting adiabatically with a two-way coupling between
 the SDM microphysics and the thermodynamics. The setup mimics that in Arabas and Shima 2017
-section 7 :cite:`arabasshima2017`. Note that due to numerical differences, the conditions for cusp
+section 7 :cite:`arabasshima2017`. *Note*: due to numerical differences, the conditions for cusp
 bifurcation and the plots will not be exactly identical to this reference.
 
 a) Arabas and Shima 2017
 ########################
 
-1. :ref:`Configure the bash scripts<configurebash>`, ``scripts/levante/examples/build_compile_run_plot.sh``
+1. :ref:`Configure the bash scripts<configurebash_levante>`, ``scripts/levante/examples/build_compile_run_plot.sh``
 and ``scripts/levante/examples/as2017.sh``.
 
 2. Execute the bash script ``as2017.sh``, e.g. from your CLEO directory:
@@ -110,7 +89,7 @@ similar to figure 5 from Arabas and Shima 2017 :cite:`arabasshima2017`.
 b) Cusp Bifurcation
 ###################
 
-1. :ref:`Configure the bash scripts<configurebash>`, ``scripts/levante/examples/build_compile_run_plot.sh``
+1. :ref:`Configure the bash scripts<configurebash_levante>`, ``scripts/levante/examples/build_compile_run_plot.sh``
 and ``scripts/levante/examples/cuspbifurc.sh``.
 
 2. Execute the bash script ``cuspbifurc.sh``, e.g. from your CLEO directory:
@@ -128,7 +107,7 @@ Box Model Collisions
 --------------------
 These examples, ``shima2009.py`` and ``breakup.py``, in ``examples/boxmodelcollisions/`` are for a
 0-D box model with various collision kernels. The setup mimics that in Shima et al. 2009
-section 5.1.4 :cite:`shima2009`. Note that due to the randomness of the initial super-droplet
+section 5.1.4 :cite:`shima2009`. *Note*: due to the randomness of the initial super-droplet
 conditions and the collision algorithm, each run of these examples will not be completely identical,
 but they should be reasonably similar, and have the same mean behaviour.
 
@@ -186,7 +165,7 @@ Running the Box Model Collisions Examples
 a) Shima et al. 2009
 ####################
 
-1. :ref:`Configure the bash scripts<configurebash>`, ``scripts/levante/examples/build_compile_run_plot.sh``
+1. :ref:`Configure the bash scripts<configurebash_levante>`, ``scripts/levante/examples/build_compile_run_plot.sh``
 and ``scripts/levante/examples/shima2009.sh``.
 
 2. Execute the bash script ``shima2009.sh``, e.g.  from your CLEO directory:
@@ -218,7 +197,7 @@ Fig.2(b) and Fig.2(c) of Shima et al. 2009 :cite:p:`shima2009`.
 b) Breakup
 ##########
 
-1. :ref:`Configure the bash scripts<configurebash>`, ``scripts/levante/examples/build_compile_run_plot.sh``
+1. :ref:`Configure the bash scripts<configurebash_levante>`, ``scripts/levante/examples/build_compile_run_plot.sh``
 and ``scripts/levante/examples/breakup.sh``.
 
 2. Execute the bash script ``breakup.sh``, e.g. from your CLEO directory:
@@ -236,7 +215,7 @@ Divergence Free Motion
 
 This example is runs from the ``examples/divfreemotion/divfree2d.py`` script.
 
-1. :ref:`Configure the bash scripts<configurebash>`, ``scripts/levante/examples/build_compile_run_plot.sh``
+1. :ref:`Configure the bash scripts<configurebash_levante>`, ``scripts/levante/examples/build_compile_run_plot.sh``
 and ``scripts/levante/examples/divfree2d.sh``.
 
 2. Execute the bash script ``divfree2d.sh``, e.g. from your CLEO directory:
@@ -257,7 +236,7 @@ should remain constant over time, as shown in the plot produced and by default c
 
 This example is runs from the ``examples/rainshaft1d/rainshaft1d.py`` script.
 
-1. :ref:`Configure the bash scripts<configurebash>`, ``scripts/levante/examples/build_compile_run_plot.sh``
+1. :ref:`Configure the bash scripts<configurebash_levante>`, ``scripts/levante/examples/build_compile_run_plot.sh``
 and ``scripts/levante/examples/rainshaft1d.sh``.
 
 2. Execute the bash script ``rainshaft1d.sh``, e.g. from your CLEO directory:
@@ -275,7 +254,7 @@ Constant 2-D Thermodynamics
 
 This example is runs from the ``examples/constthermo2d/constthermo2d.py`` script.
 
-1. :ref:`Configure the bash scripts<configurebash>`, ``scripts/levante/examples/build_compile_run_plot.sh``
+1. :ref:`Configure the bash scripts<configurebash_levante>`, ``scripts/levante/examples/build_compile_run_plot.sh``
 and ``scripts/levante/examples/constthermo2d.sh``
 
 2. Execute the bash script ``constthermo2d.sh``, e.g.
@@ -297,7 +276,7 @@ parallelism, and (4) "serial" without parallelism. Using the (pre-installed) Kok
 Kernel Timer profiler, this example then outputs the time taken for each run in various ones of
 CLEO's kernels.
 
-1. :ref:`Configure the bash scripts<configurebash>`, ``scripts/levante/examples/build_compile_run_plot.sh``
+1. :ref:`Configure the bash scripts<configurebash_levante>`, ``scripts/levante/examples/build_compile_run_plot.sh``
 and ``scripts/levante/examples/kokkostools.sh``.
 
 2. Execute the bash script ``kokkostools.sh``, e.g.
