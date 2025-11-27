@@ -16,6 +16,11 @@ find_package(MPI REQUIRED COMPONENTS C)
 message(STATUS "CLEO source from CLEO_SOURCE_DIR: ${CLEO_SOURCE_DIR}")
 message(STATUS "CLEO build in CLEO_BINARY_DIR: ${CLEO_BINARY_DIR}")
 
+### ensure these directories exist (it's a good idea for later use)
+file(MAKE_DIRECTORY ${CLEO_BINARY_DIR}/tmp)
+file(MAKE_DIRECTORY ${CLEO_BINARY_DIR}/bin)
+file(MAKE_DIRECTORY ${CLEO_BINARY_DIR}/share)
+
 # ensure C++ compiler uses certain settings
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 set(CMAKE_CXX_STANDARD "20")
