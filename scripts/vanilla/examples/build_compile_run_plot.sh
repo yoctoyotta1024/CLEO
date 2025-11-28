@@ -1,8 +1,7 @@
 #!/bin/bash
 
-### ------ Generic script to build CLEO, compile  ------ ###
-### ----- some of its executables and run a python ----- ###
-### ------  script e.g. for example(s) on Levante. ----- ###
+### ------ Generic script to build CLEO, compile some ------ ###
+### ----- of its executables and run a python scripts  ----- ###
 
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
@@ -21,24 +20,11 @@ executables="$7"
 pythonscript=$8
 script_args="$9"
 
-python=/home/m/m300950/CLEO/.venv/bin/python3
+python=${CLEO_PYTHON}
+yacyaxtroot=${CLEO_YACYAXTROOT}
+
 enabledebug=false
 make_clean=false
-
-if [[ "${buildtype}" == "cuda" && "${compilername}" != "gcc" ]];
-then
-  echo "CUDA build on Levante currently only compatible with gcc compiler"
-  echo "-> please use compilername=gcc"
-  exit 1
-fi
-
-if [[ "${compilername}" == "gcc" ]]
-then
-  yacyaxtroot=/work/bm1183/m300950/yacyaxt/gcc
-elif [[ "${compilername}" == "intel" ]]
-then
-  yacyaxtroot=/work/bm1183/m300950/yacyaxt/intel
-fi
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
@@ -60,7 +46,7 @@ echo "---------------------------"
 ### --------------- build and compile CLEO ------------- ###
 if [ "${do_build}" == "true" ]
 then
-  cmd="${path2CLEO}/scripts/levante/build_compile_cleo.sh \
+  cmd="${path2CLEO}/scripts/vanilla/build_compile_cleo.sh \
     ${buildtype}
     ${compilername}
     ${path2CLEO}
@@ -80,7 +66,7 @@ export CLEO_PATH2CLEO=${path2CLEO}
 export CLEO_BUILDTYPE=${buildtype}
 export CLEO_COMPILERNAME=${compilername}
 export CLEO_YACYAXTROOT=${yacyaxtroot}
-source ${path2CLEO}/scripts/levante/bash/src/runtime_settings.sh
+source ${path2CLEO}/scripts/vanilla/bash/src/runtime_settings.sh
 
 # TODO(ALL): split python scripts away from running executable
 ${python} ${pythonscript} ${path2CLEO} ${path2build} ${script_args}
