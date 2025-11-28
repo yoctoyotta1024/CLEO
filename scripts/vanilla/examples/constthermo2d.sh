@@ -8,9 +8,9 @@
 ### ---------------------------------------------------- ###
 do_build="true"
 buildtype="threads"
-compilername="intel"
-path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_const2d/
+compilername="gcc"
+path2CLEO=${CLEO_PATH2CLEO}
+path2build=${path2CLEO}/build_const2d/
 build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
 executables="const2d"
@@ -24,7 +24,7 @@ script_args="${src_config_filename} \
 ### ---------------------------------------------------- ###
 
 ### ---------- build, compile and run example ---------- ###
-${path2CLEO}/scripts/levante/examples/build_compile_run_plot.sh ${do_build} \
+${path2CLEO}/scripts/vanilla/examples/build_compile_run_plot.sh ${do_build} \
   ${buildtype} ${compilername} ${path2CLEO} ${path2build} "${build_flags}" \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###
