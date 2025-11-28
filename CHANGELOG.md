@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.63.0](https://github.com/yoctoyotta1024/CLEO/compare/8660fcf30a2d9fba719ee521fa8d6c8ca33b2eef..v0.63.0) - 2025-11-28
+#### Features
+- option for wipe clean added to cmake - ([c0cd96d](https://github.com/yoctoyotta1024/CLEO/commit/c0cd96de0a1282da6794ce51991652a3b0128fe0)) - clara.bayley
+- option for dist clean added to cmake - ([1b4175c](https://github.com/yoctoyotta1024/CLEO/commit/1b4175c3b25aac90b89d5d9047578344616b6954)) - clara.bayley
+#### Refactoring
+- make tmp, bin and share folders during build - ([8660fcf](https://github.com/yoctoyotta1024/CLEO/commit/8660fcf30a2d9fba719ee521fa8d6c8ca33b2eef)) - clara.bayley
+
+- - -
+
 ## [v0.62.0](https://github.com/yoctoyotta1024/CLEO/compare/36324932d6881e25171cbf2da29d117c684991dc..v0.62.0) - 2025-11-18
 #### Features
 - new function to get pressure into dictionary form from thermofiles - ([8b1ea83](https://github.com/yoctoyotta1024/CLEO/commit/8b1ea837b436b87f5dd7ad023fe8339708cdb253)) - clara.bayley
