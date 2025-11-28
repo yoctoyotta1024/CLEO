@@ -4,9 +4,6 @@
 ### variables have already exported (!)
 
 set -e
-source /etc/profile
-module purge
-spack unload --all
 
 executables=$1                     # if == "NONE" only libraries built
 make_clean=$2
@@ -22,24 +19,6 @@ check_args_not_empty "${CLEO_BUILDTYPE}" "${CLEO_COMPILERNAME}" \
 check_source_and_build_paths
 check_buildtype
 check_compilername
-### ---------------------------------------------------- ###
-
-### ----------------- load compiler(s) ----------------- ###
-source ${bashsrc}/levante_packages.sh
-
-if [ "${CLEO_COMPILERNAME}" == "intel" ]
-then
-  module load ${levante_intel} ${levante_intel_openmpi}
-  spack load ${levante_intel_cmake}
-elif [ "${CLEO_COMPILERNAME}" == "gcc" ]
-then
-  module load ${levante_gcc} ${levante_gcc_openmpi}
-  spack load ${levante_gcc_cmake}
-  if [ "${CLEO_BUILDTYPE}" == "cuda" ]
-  then
-    spack load ${levante_gcc_cuda}
-  fi
-fi
 ### ---------------------------------------------------- ###
 
 ### ---------------- compile executables --------------- ###

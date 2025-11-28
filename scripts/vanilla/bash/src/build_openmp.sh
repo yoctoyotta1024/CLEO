@@ -8,9 +8,9 @@ bashsrc=${SCRIPT_DIR}
 source ${bashsrc}/check_inputs.sh
 check_args_not_empty "${CLEO_BUILDTYPE}"
 
-if [[ "${CLEO_BUILDTYPE}" != "openmp" && "${CLEO_BUILDTYPE}" != "cuda" ]];
+if [[ "${CLEO_BUILDTYPE}" != "openmp" ]];
 then
-  echo "Bad inputs, build type for enabling openmp on host must be 'openmp' or 'cuda'"
+  echo "Bad inputs, build type for enabling openmp on host must be 'openmp'"
   exit 1
 fi
 ### --------------------------------------------------- ###

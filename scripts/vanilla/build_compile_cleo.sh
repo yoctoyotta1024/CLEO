@@ -1,21 +1,17 @@
 #!/bin/bash
 
 set -e
-source /etc/profile
-module purge
-spack unload --all
 
 ### ------------------ input parameters ---------------- ###
 ### ----- You need to edit these lines to specify ------ ###
 ### ----- your build configuration and executables ----- ###
 ### ---------------------------------------------------- ###
-buildtype=$1                                   # "serial", "threads", "openmp" or "cuda"
-compilername=${2:-intel}                       # "intel" or "gcc"
-path2CLEO=${3:-${HOME}/CLEO}                   # must be absolute path
+buildtype=$1                                   # "serial", "threads", or "openmp"
+compilername=${2:-gcc}                         # "gcc"
+path2CLEO=${3:-${CLEO_PATH2CLEO}}              # must be absolute path
 path2build=${4:-${path2CLEO}/build}            # should be absolute path
-yacyaxtroot=${5:-/work/bm1183/m300950/yacyaxt/${compilername}} # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
-build_flags=${6:-"-DCLEO_COUPLED_DYNAMICS="" \
-  -DCLEO_PYTHON=/home/m/m300950/CLEO/.venv/bin/python3"} # CLEO_BUILD_FLAGS
+yacyaxtroot=${5:-${CLEO_YACYAXTROOT}}          # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
+build_flags=${6:-"-DCLEO_COUPLED_DYNAMICS="" -DCLEO_PYTHON=${CLEO_PYTHON}"} # CLEO_BUILD_FLAGS
 executables=${7:-"cleocoupledsdm"}             # list of executables to compile or "NONE"
 enabledebug=${8:-false}                        # == "true" or otherwise false
 make_clean=${9:-true}                          # == "true" or otherwise false
@@ -27,7 +23,7 @@ then
   echo "Please provide path to CLEO source directory"
   exit 1
 fi
-source ${path2CLEO}/scripts/levante/bash/src/check_inputs.sh
+source ${path2CLEO}/scripts/vanilla/bash/src/check_inputs.sh
 check_args_not_empty "${buildtype}" "${path2CLEO}" "${path2build}"
 check_args_not_empty "${compilername}" "${yacyaxtroot}" "${enabledebug}"
 ### ---------------------------------------------------- ###
@@ -63,13 +59,13 @@ echo "### ------------------------------------------- ###"
 ### ---------------------------------------------------- ###
 
 ### --------------------- build CLEO ------------------- ###
-buildcmd="${CLEO_PATH2CLEO}/scripts/levante/bash/build_cleo.sh"
+buildcmd="${CLEO_PATH2CLEO}/scripts/vanilla/bash/build_cleo.sh"
 echo ${buildcmd}
 eval ${buildcmd}
 ### ---------------------------------------------------- ###
 
 ### ---------------- compile executables --------------- ###
-compilecmd="${CLEO_PATH2CLEO}/scripts/levante/bash/compile_cleo.sh \"${executables}\" ${make_clean}"
+compilecmd="${CLEO_PATH2CLEO}/scripts/vanilla/bash/compile_cleo.sh \"${executables}\" ${make_clean}"
 echo ${compilecmd}
 eval ${compilecmd}
 ### ---------------------------------------------------- ###
