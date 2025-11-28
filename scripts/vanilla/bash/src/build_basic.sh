@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -e
-source /etc/profile
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 bashsrc=${SCRIPT_DIR}
 
@@ -13,29 +12,10 @@ check_compilername
 ### ---------------------------------------------------- ###
 
 ### -------- choose compiler(s) and their flags -------- ###
-source ${bashsrc}/levante_packages.sh
+source ${bashsrc}/vanilla_packages.sh
 
-if [ "${CLEO_COMPILERNAME}" == "intel" ]
+if [ "${CLEO_COMPILERNAME}" == "gcc" ]
 then
-  module load ${levante_intel} ${levante_intel_openmpi}
-  spack load ${levante_intel_cmake}
-  export CLEO_CXX_COMPILER="$(command -v mpic++)"
-  export CLEO_CC_COMPILER="$(command -v mpicc)"
-
-  if [ "${CLEO_ENABLEDEBUG}" == "true" ]
-  then
-    ### for correctness and debugging (note -gdwarf-4 not possible for nvc++) use:
-    export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wall -Wextra \
-      -pedantic -Wno-unused-parameter -g -gdwarf-4 -O0" # correctness and debugging
-  else
-    ### for performance use:
-    export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wall -Wextra \
-      -pedantic -Wno-unused-parameter -O3 -fma"
-  fi
-elif [ "${CLEO_COMPILERNAME}" == "gcc" ]
-then
-  module load ${levante_gcc} ${levante_gcc_openmpi}
-  spack load ${levante_gcc_cmake}
   export CLEO_CXX_COMPILER="$(command -v mpic++)"
   export CLEO_CC_COMPILER="$(command -v mpicc)"
 
@@ -47,7 +27,7 @@ then
   else
     ### for performance use:
     export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wall -Wextra \
-      -pedantic -Wno-unused-parameter -O3 -mfma"
+      -pedantic -Wno-unused-parameter -O3" # -mfma" # (mfma not compatible with apple silicon arch)
   fi
 fi
 ### ---------------------------------------------------- ###
