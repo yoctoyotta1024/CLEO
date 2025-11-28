@@ -6,9 +6,9 @@
 ### -------- to compile, and your python script -------- ###
 ### ---------------------------------------------------- ###
 do_build="true"
-compilername="gcc"  # must be gcc for buildtype=cuda
-path2CLEO=${HOME}/CLEO/
-path2build_parent=${HOME}/CLEO/build_spdtest/
+compilername="gcc"
+path2CLEO=${CLEO_PATH2CLEO}
+path2build_parent=${path2CLEO}/build_spdtest/
 build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
 path2kokkostools=/work/bm1183/m300950/kokkos_tools_lib/lib64/
@@ -25,7 +25,7 @@ postproc_filedirectory=${path2build_parent}/bin
 mkdir -p ${path2build_parent}
 
 ### ---- run test for different types of parallelism ---- ###
-buildtypes=("cuda" "openmp" "threads" "serial")
+buildtypes=("openmp" "threads" "serial")
 for buildtype in "${buildtypes[@]}"
 do
   path2build="${path2build_parent}/${buildtype}"
@@ -37,7 +37,7 @@ do
   echo "path2build: ${path2build}"
 
   ### ---------- build, compile and run example ---------- ###
-  ${path2CLEO}/scripts/levante/examples/build_compile_run_plot.sh ${do_build} \
+  ${path2CLEO}/scripts/vanilla/examples/build_compile_run_plot.sh ${do_build} \
     ${buildtype} ${compilername} ${path2CLEO} ${path2build} "${build_flags}" \
     "${executables}" ${pythonscript} "${script_args}"
   ### ---------------------------------------------------- ###

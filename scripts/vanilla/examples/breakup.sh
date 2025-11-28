@@ -8,9 +8,9 @@
 ### ---------------------------------------------------- ###
 do_build="true"
 buildtype="openmp"
-compilername="intel"
-path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_colls0d/breakup/
+compilername="gcc"
+path2CLEO=${CLEO_PATH2CLEO}
+path2build=${path2CLEO}/build_colls0d/breakup/
 build_flags="-DCLEO_COUPLED_DYNAMICS=null -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
 executables="longcolls lowlistcolls szakallurbichcolls testikstraubcolls"
@@ -24,7 +24,7 @@ script_args="${src_config_filename} --kernels long lowlist szakallurbich testiks
 ### ---------------------------------------------------- ###
 
 ### ---------- build, compile and run example ---------- ###
-${path2CLEO}/scripts/levante/examples/build_compile_run_plot.sh ${do_build} \
+${path2CLEO}/scripts/vanilla/examples/build_compile_run_plot.sh ${do_build} \
   ${buildtype} ${compilername} ${path2CLEO} ${path2build} "${build_flags}" \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###
