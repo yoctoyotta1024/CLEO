@@ -76,9 +76,4 @@ cmake -DCMAKE_CXX_COMPILER=${CLEO_CXX_COMPILER} \
     -S ${CLEO_PATH2CLEO} -B ${CLEO_PATH2BUILD} \
     ${CLEO_KOKKOS_BASIC_FLAGS} ${CLEO_KOKKOS_HOST_FLAGS} ${CLEO_KOKKOS_DEVICE_FLAGS} \
     ${CLEO_BUILD_FLAGS} ${CLEO_YAC_FLAGS}
-
-### ensure these directories exist (it's a good idea for later use)
-mkdir -p ${CLEO_PATH2BUILD}/tmp
-mkdir -p ${CLEO_PATH2BUILD}/bin
-mkdir -p ${CLEO_PATH2BUILD}/share
 ### ---------------------------------------------------- ###

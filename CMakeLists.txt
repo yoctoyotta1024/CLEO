@@ -16,6 +16,11 @@ find_package(MPI REQUIRED COMPONENTS C)
 message(STATUS "CLEO source from CLEO_SOURCE_DIR: ${CLEO_SOURCE_DIR}")
 message(STATUS "CLEO build in CLEO_BINARY_DIR: ${CLEO_BINARY_DIR}")
 
+### ensure these directories exist (it's a good idea for later use)
+file(MAKE_DIRECTORY ${CLEO_BINARY_DIR}/tmp)
+file(MAKE_DIRECTORY ${CLEO_BINARY_DIR}/bin)
+file(MAKE_DIRECTORY ${CLEO_BINARY_DIR}/share)
+
 # ensure C++ compiler uses certain settings
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 set(CMAKE_CXX_STANDARD "20")
@@ -51,3 +56,42 @@ if(CLEO_NO_ROUGHPAPER)
 else()
   add_subdirectory(roughpaper EXCLUDE_FROM_ALL)
 endif()
+
+# "make distclean" / "make dist-clean" target to perform `make clean`
+# and then remove generated build files and third-party build dirs
+add_custom_target(distclean
+  COMMAND "${CMAKE_MAKE_PROGRAM}" clean
+  COMMAND ${CMAKE_COMMAND} -E echo "CLEO: performing make clean and distclean in ${CLEO_BINARY_DIR}"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${CLEO_BINARY_DIR}/CMakeFiles"
+  COMMAND ${CMAKE_COMMAND} -E remove "${CLEO_BINARY_DIR}/CMakeCache.txt"
+  COMMAND ${CMAKE_COMMAND} -E remove "${CLEO_BINARY_DIR}/cmake_install.cmake"
+  COMMAND ${CMAKE_COMMAND} -E remove "${CLEO_BINARY_DIR}/Makefile"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${CLEO_BINARY_DIR}/kokkos"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${CLEO_BINARY_DIR}/yaml-cpp"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${CLEO_BINARY_DIR}/_deps"
+  WORKING_DIRECTORY "${CLEO_BINARY_DIR}"
+  COMMENT "distclean: perform `make clean` and then remove CMake cache/files, vendored build output"
+)
+# add an alternate name for convenience
+add_custom_target("dist-clean"
+  COMMAND ${CMAKE_COMMAND} --build "${CLEO_BINARY_DIR}" --target distclean
+)
+
+# "make wipeclean" / "make wipe-clean" target to remove any extra files from CLEO output in
+# tmp, bin and share directories, and then perform actions of distclean target
+add_custom_target(wipeclean
+  COMMAND ${CMAKE_COMMAND} -E echo "CLEO: performing wipeclean and distclean in ${CLEO_BINARY_DIR}"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${CLEO_BINARY_DIR}/tmp"
+  COMMAND ${CMAKE_COMMAND} -E make_directory "${CLEO_BINARY_DIR}/tmp"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${CLEO_BINARY_DIR}/bin"
+  COMMAND ${CMAKE_COMMAND} -E make_directory "${CLEO_BINARY_DIR}/bin"
+  COMMAND ${CMAKE_COMMAND} -E remove_directory "${CLEO_BINARY_DIR}/share"
+  COMMAND ${CMAKE_COMMAND} -E make_directory "${CLEO_BINARY_DIR}/share"
+  COMMAND ${CMAKE_COMMAND} --build "${CLEO_BINARY_DIR}" --target distclean
+  WORKING_DIRECTORY "${CLEO_BINARY_DIR}"
+  COMMENT "wipeclean: remove all files in tmp, bin and share, then perform actions of distclean target"
+)
+# add an alternate name for convenience
+add_custom_target("wipe-clean"
+  COMMAND ${CMAKE_COMMAND} --build "${CLEO_BINARY_DIR}" --target wipeclean
+)
