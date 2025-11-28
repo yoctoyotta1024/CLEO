@@ -26,6 +26,7 @@ examples = [
   "mpi4py",
 ]
 yac = [
+  "setuptools",
   "cython",
   "datetime",
   "isodate",
