@@ -8,9 +8,9 @@ bashsrc=${SCRIPT_DIR}
 source ${bashsrc}/check_inputs.sh
 check_args_not_empty "${CLEO_BUILDTYPE}"
 
-if [[ "${CLEO_BUILDTYPE}" != "threads" && "${CLEO_BUILDTYPE}" != "cuda" ]];
+if [[ "${CLEO_BUILDTYPE}" != "threads" ]];
 then
-  echo "Bad inputs, build type for enabling C++ threads on host must be 'threads' or 'cuda'"
+  echo "Bad inputs, build type for enabling C++ threads on host must be 'threads'"
   exit 1
 fi
 ### --------------------------------------------------- ###

@@ -2,17 +2,13 @@
 
 ### ------------------------------------------------------- ###
 ### running script sucessfully installs YAC and YAXT for
-### gcc 11.2.0 compiler with openmpi 4.1.2 on Levante
-### and intel 2023.2.1 and openmpi 4.1.5 on Levante
+### a gcc compiler with openmpi on a "vanilla" computer
 ### ------------------------------------------------------- ###
-source /etc/profile
-module purge
-spack unload --all
 
 ### Note: python version used to install yac must match version used to run model
 root4YAC=$1 # absolute path for YAC and YAXT installations
-compilername=$2 # compile yac and yaxt with "gcc" or "intel"
-python=$3 # name or absolute path to python to make YAC python bindngs with
+compilername=${2:-gcc} # compile yac and yaxt with "gcc"
+python=${3:-${CLEO_PYTHON}} # name or absolute path to python to make YAC python bindngs with
 
 yaxt_tag=0.11.4
 yaxt_version=yaxt-${yaxt_tag}
@@ -25,7 +21,7 @@ yac_source=https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/$yac_tag/$yac_version.ta
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 bashsrc=${SCRIPT_DIR}/src
-source ${bashsrc}/levante_packages.sh
+source ${bashsrc}/vanilla_packages.sh
 
 if [ "${compilername}" == "" ]
 then
@@ -33,18 +29,8 @@ then
   exit 1
 elif [ "${compilername}" == "gcc" ]
 then
-  compiler=${levante_gcc}
-  openmpi=${levante_gcc_openmpi}
-  netcdf=${levante_gcc_netcdf_yac}
-  netcdf_root=${levante_gcc_netcdf_root}
-  fyaml_root=${levante_gcc_fyaml_root}
-elif [ "${compilername}" == "intel" ]
-then
-  compiler=${levante_intel}
-  openmpi=${levante_intel_openmpi}
-  netcdf=${levante_intel_netcdf_yac}
-  netcdf_root=${levante_intel_netcdf_root}
-  fyaml_root=${levante_intel_fyaml_root}
+  netcdf_root=${vanilla_gcc_netcdf_root}
+  fyaml_root=${vanilla_gcc_fyaml_root}
 else
   echo "Bad input, unrecognised compiler name"
   exit 1
@@ -55,7 +41,6 @@ then
   echo "Bad input, please specify absolute path for where you want to install YAC and python to use to make bindings"
 else
   mkdir ${root4YAC}
-  module load ${compiler} ${openmpi} ${netcdf}
 
   CC="$(command -v mpicc)"
   FC="$(command -v mpifort)"

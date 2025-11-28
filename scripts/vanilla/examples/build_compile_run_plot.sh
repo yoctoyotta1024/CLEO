@@ -24,7 +24,6 @@ script_args="$9"
 python=/home/m/m300950/CLEO/.venv/bin/python3
 enabledebug=false
 make_clean=false
-stacksize_limit=204800 # ulimit -s [stacksize_limit] (kB)
 
 if [[ "${buildtype}" == "cuda" && "${compilername}" != "gcc" ]];
 then
@@ -81,7 +80,7 @@ export CLEO_PATH2CLEO=${path2CLEO}
 export CLEO_BUILDTYPE=${buildtype}
 export CLEO_COMPILERNAME=${compilername}
 export CLEO_YACYAXTROOT=${yacyaxtroot}
-source ${path2CLEO}/scripts/levante/bash/src/runtime_settings.sh ${stacksize_limit}
+source ${path2CLEO}/scripts/levante/bash/src/runtime_settings.sh
 
 # TODO(ALL): split python scripts away from running executable
 ${python} ${pythonscript} ${path2CLEO} ${path2build} ${script_args}

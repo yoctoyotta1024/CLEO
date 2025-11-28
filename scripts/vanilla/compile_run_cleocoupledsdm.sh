@@ -1,23 +1,19 @@
 #!/bin/bash
 
 set -e
-source /etc/profile
-module purge
-spack unload --all
 
 ### ------------------ input parameters ---------------- ###
 ### ----- You need to edit these lines to specify ------ ###
 ### ----- your build configuration and executables ----- ###
 ### ---------------------------------------------------- ###
-buildtype=$1                                                     # "serial", "threads", "openmp" or "cuda"
-compilername=${2:-intel}                                         # "intel" or "gcc"
-path2CLEO=${3:-${HOME}/CLEO}                                     # must be absolute path
+buildtype=$1                                                     # "serial", "threads", or "openmp"
+compilername=${2:-gcc}                                           # "gcc"
+path2CLEO=${3:-${CLEO_PATH2CLEO}}                                # must be absolute path
 path2build=${4:-${path2CLEO}/build}                              # should be absolute path
-yacyaxtroot=${5:-/work/bm1183/m300950/yacyaxt/${compilername}}   # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
+yacyaxtroot=${5:-${CLEO_YACYAXTROOT}}                            # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
 executables=${6:-"cleocoupledsdm"}                               # executable(s) to compile or "NONE"
 executable2run=${7:-${path2build}/roughpaper/src/${executables}} # path to executable to run
 configfile=${8:-${path2CLEO}/roughpaper/src/config/config.yaml}  # configuration to run
-stacksize_limit=${9:-204800}                                     # ulimit -s [stacksize_limit] (kB)
 ### ---------------------------------------------------- ###
 
 ### -------------------- check inputs ------------------ ###
@@ -36,10 +32,9 @@ fi
 
 if [ "${buildtype}" != "serial" ] &&
    [ "${buildtype}" != "openmp" ] &&
-   [ "${buildtype}" != "threads" ] &&
-   [ "${buildtype}" != "cuda" ];
+   [ "${buildtype}" != "threads" ];
 then
-  echo "Bad inputs, build type must be 'serial', 'openmp', 'threads' or 'cuda'"
+  echo "Bad inputs, build type must be 'serial', 'openmp', or 'threads'"
   exit 1
 fi
 ### ---------------------------------------------------- ###
@@ -64,7 +59,7 @@ echo "### ------------------------------------------- ###"
 ### ---------------- compile executables --------------- ###
 make_clean=false
 rm -f ${executable2run}
-compilecmd="${CLEO_PATH2CLEO}/scripts/levante/bash/compile_cleo.sh ${executables} ${make_clean}"
+compilecmd="${CLEO_PATH2CLEO}/scripts/vanilla/bash/compile_cleo.sh ${executables} ${make_clean}"
 echo ${compilecmd}
 eval ${compilecmd}
 ### ---------------------------------------------------- ###
@@ -80,7 +75,7 @@ echo "### ------------------------------------------- ###"
 
 ### ------------------- run executable ----------------- ###
 cd ${CLEO_PATH2BUILD} && pwd
-runcmd="${CLEO_PATH2CLEO}/scripts/levante/bash/run_cleo.sh ${executable2run} ${configfile} ${stacksize_limit}"
+runcmd="${CLEO_PATH2CLEO}/scripts/vanilla/bash/run_cleo.sh ${executable2run} ${configfile}"
 echo ${runcmd}
 eval ${runcmd}
 ### -------------------------------------------------- ###

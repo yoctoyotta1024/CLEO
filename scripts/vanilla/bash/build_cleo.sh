@@ -4,9 +4,6 @@
 ### variables have already exported (!)
 
 set -e
-source /etc/profile
-module purge
-spack unload --all
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 bashsrc=${SCRIPT_DIR}/src
@@ -32,10 +29,6 @@ then
 elif [[ "${CLEO_BUILDTYPE}" == "threads" ]];
 then
   source ${bashsrc}/build_threads.sh
-elif [[ "${CLEO_BUILDTYPE}" == "cuda" ]];
-then
-  source ${bashsrc}/build_openmp.sh
-  source ${bashsrc}/build_cuda.sh
 fi
 ### ---------------------------------------------------- ###
 
