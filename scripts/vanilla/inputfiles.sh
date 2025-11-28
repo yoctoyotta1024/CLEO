@@ -4,11 +4,11 @@
 ### ----- default compiler and python environment   ---- ###
 ### ----  and paths for CLEO and build directories  ---- ###
 configfile=$1
-path2CLEO=${2:-${HOME}/CLEO}
+path2CLEO=${2:-${CLEO_PATH2CLEO}}
 path2build=${3:-${path2CLEO}/build}
+python=${4:-${CLEO_PYTHON}}
 
 path2scripts=${path2CLEO}/scripts
-python=/home/m/m300950/CLEO/.venv/bin/python3
 ### ---------------------------------------------------- ###
 
 if [ "${configfile}" == "" ]
