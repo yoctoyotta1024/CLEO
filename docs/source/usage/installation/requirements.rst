@@ -1,23 +1,25 @@
 Requirements
 ============
 
-The following requirements ensure CLEO's build, compilation and execution on DKRZ's Levante HPC.
-If they do not work, please :ref:`contact us <contact>` or `open a new
-issue <https://github.com/yoctoyotta1024/CLEO/issues/new>`_ on our GitHub repository.
+The following requirements ensure CLEO's build, compilation and execute CLEO, with examples given
+for DKRZ's Levante HPC. If they do not work or you need further assistance, please
+:ref:`contact us <contact>` or `open a new issue <https://github.com/yoctoyotta1024/CLEO/issues/new>`_
+on our GitHub repository.
 
 Of course other architectures, other compilers, versions etc. are possible, but we leave this for
 you to discover.
-
 
 The full list of packages CLEO uses for builds using the intel or gcc compiler
 on Levante can be found in our
 `levante packages script <https://github.com/yoctoyotta1024/CLEO/blob/main/scripts/levante/bash/src/levante_packages.sh>`_
 and similarly for JUWELS in our
-`juwels packages script <https://github.com/yoctoyotta1024/CLEO/blob/main/scripts/juwels/bash/src/juwels_packages.sh>`_
+`juwels packages script <https://github.com/yoctoyotta1024/CLEO/blob/main/scripts/juwels/bash/src/juwels_packages.sh>`_.
+For a generic/arbitrary, so-called "vanilla", computer please refer to our
+`vanilla packages script <https://github.com/yoctoyotta1024/CLEO/blob/main/scripts/vanilla/bash/src/vanilla_packages.sh>`_
 
-Compilers
----------
-A C++ compiler with the C++20 standard library and MPI is the absolute minimum.
+Compilers and MPI
+-----------------
+A C++ compiler with the C++20 standard library and MPI libraries is the absolute minimum.
 
 On Levante you can use the latest MPI compiler wrappers for the gcc or intel compilers.
 At the time of writing for gcc 11.2.0, these are:
@@ -33,7 +35,7 @@ To compile with C++ and CUDA, use Levante's nvhpc compilers too, e.g.
   $ module load gcc/11.2.0-gcc-11.2.0 openmpi/4.1.2-gcc-11.2.0
   $ spack load cuda@12.2.0%gcc@=11.2.0
 
-(Note you still need to use the gcc openmpi library as opposed to the cuda (nvhpc)
+(*Note*: you still need to use the gcc openmpi library as opposed to the cuda (nvhpc)
 ones because CLEO uses gcc not nvhpc where this is relevant).
 
 CMake
@@ -50,7 +52,7 @@ On Levante it's best to use version 3.26.3 which can be loaded e.g. for gcc 11.2
 YAC
 ---
 
-YAC is one of the :doc:`external libraries<extern>` which CLEO requires for its configuration
+YAC is one of the external libraries which CLEO requires for its configuration
 library (for MPI domain decomposition with/without YAC) and in order to couple to dynamics via YAC.
 
 YAC (and its YAXT dependency) need to be installed manually before you can build CLEO with them.
@@ -58,7 +60,7 @@ Please refer to the instructions on how to do install YAC (and YAXT) in our
 :doc:`external libraries<extern>` page.
 
 YAC also requires some additional MPI, NetCDF and yaml libraries alongside the compatible gcc/intel
-compiler. For example for gcc 11.2.0, you can load these on Levante via:
+compiler. E.g. On Levante with gcc 11.2.0:
 
 .. code-block:: console
 
@@ -66,7 +68,7 @@ compiler. For example for gcc 11.2.0, you can load these on Levante via:
   $ spack load openblas@0.3.18%gcc@=11.2.0
 
 When you want to run CLEO, you will also need to export the fyaml library and python bindings paths,
-e.g.
+e.g. On Levante:
 
 .. code-block:: console
 
