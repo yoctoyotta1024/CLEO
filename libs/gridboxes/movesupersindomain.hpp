@@ -35,6 +35,7 @@
 #include "mpi.h"
 #include "superdrops/motion.hpp"
 #include "superdrops/sdmmonitor.hpp"
+#include "superdrops/thermodynamic_equations.hpp"
 
 namespace dlc = dimless_constants;
 namespace KCS = KokkosCleoSettings;
@@ -107,7 +108,8 @@ struct EffectOnHydrometeorStatesFunctor {
     KOKKOS_INLINE_FUNCTION void operator()(State& state) const {
       constexpr double R0cubed_VOL0 = dlc::R0 * dlc::R0 * dlc::R0 / dlc::VOL0;
       const auto rho_cond = totmass_cond / state.get_volume() * R0cubed_VOL0;  // rho_condensed
-      state.qcond = rho_cond / dlc::Rho_dry;
+      const auto rho_dry = dry_air_density(state.press, state.temp, state.qvap);
+      state.qcond = rho_cond / rho_dry;
     }
   };
 

@@ -125,13 +125,14 @@ double SuperdropletsChangeFunctor::superdrop_mass_change(Superdrop& drop, const 
  */
 KOKKOS_FUNCTION State EffectOnThermodynamicStateFunctor::state_change(const double totrho_condensed,
                                                                       State& state) const {
-  const auto delta_qcond = double{totrho_condensed / dlc::Rho_dry};
-  const auto delta_temp =
-      double{(dlc::Latent_v / moist_specifc_heat(state.qvap, state.qcond)) * delta_qcond};
-
-  state.temp += delta_temp;
+  const auto rho_dry = dry_air_density(state.press, state.temp, state.qvap);
+  const auto delta_qcond = double{totrho_condensed / rho_dry};
   state.qvap -= delta_qcond;
   state.qcond += delta_qcond;
+
+  const auto delta_temp =
+      double{(dlc::Latent_v / moist_specifc_heat(state.qvap, state.qcond)) * delta_qcond};
+  state.temp += delta_temp;
 
   return state;
 }
