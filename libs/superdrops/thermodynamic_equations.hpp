@@ -75,7 +75,7 @@ double supersaturation_ratio(const double press, const double qvap, const double
  * @return A Kokkos pair containing 'a' and 'b' factors in that order.
  */
 KOKKOS_INLINE_FUNCTION
-Kokkos::pair<double, double> kohler_factors(const Superdrop &drop, const double temp) {
+Kokkos::pair<double, double> kohler_factors(const Superdrop& drop, const double temp) {
   constexpr double akoh_constant = 3.3e-7 / (dlc::TEMP0 * dlc::R0);
   const auto akoh = akoh_constant / temp;  // dimensionless version of eqn [6.24]
 
