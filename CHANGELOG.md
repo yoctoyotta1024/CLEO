@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.64.0](https://github.com/yoctoyotta1024/CLEO/compare/06ac74d21ef29190297484338b28f7482a4c0c3f..v0.64.0) - 2025-12-12
+#### Features
+- replace constant dry air density with formula for calculing dry air density - ([897eca7](https://github.com/yoctoyotta1024/CLEO/commit/897eca77982835a4f9e1a25212501e08a5b30d0a)) - clara.bayley
+#### Miscellaneous Chores
+- formatting - ([2e98bc2](https://github.com/yoctoyotta1024/CLEO/commit/2e98bc2e34996b2b5faa457d04a752a5eb490076)) - clara.bayley
+#### Refactoring
+- remove RHO_DRY from python constants - ([06ac74d](https://github.com/yoctoyotta1024/CLEO/commit/06ac74d21ef29190297484338b28f7482a4c0c3f)) - clara.bayley
+
+- - -
+
 ## [v0.63.0](https://github.com/yoctoyotta1024/CLEO/compare/8660fcf30a2d9fba719ee521fa8d6c8ca33b2eef..v0.63.0) - 2025-11-28
 #### Features
 - option for wipe clean added to cmake - ([c0cd96d](https://github.com/yoctoyotta1024/CLEO/commit/c0cd96de0a1282da6794ce51991652a3b0128fe0)) - clara.bayley
