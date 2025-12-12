@@ -1,4 +1,7 @@
 """
+Copyright (c) 2025 MPI-M, Clara Bayley
+
+
 ----- CLEO -----
 File: create_thermodynamics.py
 Project: thermobinary_src
@@ -8,8 +11,6 @@ Additional Contributors:
 -----
 License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
------
-Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
 """
@@ -35,7 +36,6 @@ def thermoinputsdict(config_filename, constants_filename):
         # for creating thermodynamic profiles
         "G": consts["G"],
         "CP_DRY": consts["CP_DRY"],
-        "RHO_DRY": consts["RHO_DRY"],  # dry air density [Kg/m^3]
         "RGAS_DRY": mconsts["RGAS_DRY"],
         "RGAS_V": mconsts["RGAS_V"],
         "Mr_ratio": mconsts["Mr_ratio"],

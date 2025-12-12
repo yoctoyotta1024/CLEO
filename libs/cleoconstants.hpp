@@ -46,7 +46,6 @@ constexpr double CP_V = 1865.01;
 constexpr double C_L = 4192.664;
 /**< Specific heat capacity of liquid water[J/Kg/K] (ICON c_l = (3.1733 + 1.0) * cp_dry). */
 
-constexpr double RHO_DRY = 1.177; /**< Density of dry air [Kg/m^3] (at 300K). */
 constexpr double RHO_L = 998.203;
 /**< Density of liquid water condensing [kg/m^3] (water at 293K from SCALE-SDM). */
 constexpr double DYNVISC = 18.45 * 1e-6; /**< dynamic viscosity of air [Pa s] (at 300K). */
@@ -95,7 +94,6 @@ constexpr double C_l = DC::C_L / CP0;                  /**< Dimensionless C_L. *
 constexpr double Latent_v = DC::LATENT_V / (TEMP0 * CP0); /**< Dimensionless LATENT_V. */
 constexpr double Rgas_dry = DC::RGAS_DRY / CP0;           /**< Dimensionless RGAS_DRY. */
 constexpr double Rgas_v = DC::RGAS_V / CP0;               /**< Dimensionless RGAS_V. */
-constexpr double Rho_dry = DC::RHO_DRY / RHO0;            /**< Dimensionless RHO_DRY. */
 constexpr double Rho_l = DC::RHO_L / RHO0;                /**< Dimensionless RHO_L. */
 constexpr double Rho_sol = DC::RHO_SOL / RHO0;            /**< Dimensionless RHO_SOL. */
 constexpr double Mr_sol = DC::MR_SOL / MR0;               /**< Dimensionless MR_SOL. */
