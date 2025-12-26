@@ -6,22 +6,22 @@ Good Coding Practices
 Packages and Environment
 ------------------------
 We provide a ``pyproject.toml`` file for creating the python version and all the pip-installable
-packages you need to use CLEO (e.g to use ``cleopy`` python package, to run the examples,
+packages you need to use Cleo (e.g to use ``cleopy`` python package, to run the examples,
 to build the documentation, or to run pre-commit etc.).
 
 The easiest way to setup your environment is with `uv <https://docs.astral.sh/uv/>`_ so you will
 need to install ``uv`` before continuing. If you want, you can do that within our
 Conda/Micromamba environment e.g. via ``mamba create --file=environment.yml``, which addionally
-installs CLEO's non-python dependencies available on conda-forge, e.g. doxygen.
+installs Cleo's non-python dependencies available on conda-forge, e.g. doxygen.
 
-Via ``uv`` you can then install python for CLEO and the required dependencies.
+Via ``uv`` you can then install python for Cleo and the required dependencies.
 For only the dependencies required by ``cleopy`` you can do
 
 .. code-block:: console
 
   $ uv sync --no-dev
 
-Or, if you would like to have the dependencies CLEO's examples and for CLEO's development
+Or, if you would like to have the dependencies Cleo's examples and for Cleo's development
 (e.g. for ``pre-commit`` and documentation), you can do
 
 .. code-block:: console

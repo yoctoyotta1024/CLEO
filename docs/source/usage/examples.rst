@@ -3,7 +3,7 @@
 Examples
 ========
 
-There are various examples of CLEO, with different build configurations, domains, microphysics,
+There are various examples of Cleo, with different build configurations, domains, microphysics,
 coupling, and super-droplet motion etc. They can be found in the ``CLEO/examples`` directory. If you
 would like to a copy of the reference solutions please :ref:`contact us <contact>`.
 
@@ -17,7 +17,7 @@ package from the ``examples/exampleplotting/`` directory. E.g.
   $ uv run python -c "import plotcleo"
 
 
-Each example can be run by building CLEO, compiling the relevant executable, and then running the
+Each example can be run by building Cleo, compiling the relevant executable, and then running the
 example's Python script. There are bash scripts to help you to do all this relatively smoothly on
 DKRZ's Levante HPC.
 
@@ -41,7 +41,7 @@ The bash script for every example in ``scripts/levante/examples/`` provides comm
 arguments to ``scripts/levante/examples/build_compile_run_plot.sh``. This script has
 two steps:
 
-1) It builds and compiles the specified exectuable(s) of CLEO by running ``scripts/levante/build_compile_cleo.sh [args]``
+1) It builds and compiles the specified exectuable(s) of Cleo by running ``scripts/levante/build_compile_cleo.sh [args]``
 
 2) It generates input files, runs the exectuable(s), and plots the results by calling the example's Python script.
 
@@ -51,7 +51,7 @@ You will need to configure ``build_compile_run_plot.sh`` in the following ways:
 * Use your Python version:
 
   replace the path in the line stating ``python=[...]`` with the path to your Python interpreter.
-  (*hint*: if you used ``uv`` to install python for CLEO, you can find the interpreter path
+  (*hint*: if you used ``uv`` to install python for Cleo, you can find the interpreter path
   via ``uv python find``.)
 
 * Set the path to your YAC and YAXT installations
@@ -79,7 +79,7 @@ in the following ways:
 
   replace the path in the line stating ``path2build=[...]`` with the path you desire.
 
-* If you did not install CLEO in your home directory:
+* If you did not install Cleo in your home directory:
 
   Ensure the lines which state the ``path2CLEO`` and ``path2build`` to reflect this.
 
@@ -98,7 +98,7 @@ a) Arabas and Shima 2017
 1. :ref:`Configure the bash scripts<configurebash>`, ``scripts/levante/examples/build_compile_run_plot.sh``
 and ``scripts/levante/examples/as2017.sh``.
 
-2. Execute the bash script ``as2017.sh``, e.g. from your CLEO directory:
+2. Execute the bash script ``as2017.sh``, e.g. from your Cleo directory:
 
 .. code-block:: console
 
@@ -113,7 +113,7 @@ b) Cusp Bifurcation
 1. :ref:`Configure the bash scripts<configurebash>`, ``scripts/levante/examples/build_compile_run_plot.sh``
 and ``scripts/levante/examples/cuspbifurc.sh``.
 
-2. Execute the bash script ``cuspbifurc.sh``, e.g. from your CLEO directory:
+2. Execute the bash script ``cuspbifurc.sh``, e.g. from your Cleo directory:
 
 .. code-block:: console
 
@@ -189,7 +189,7 @@ a) Shima et al. 2009
 1. :ref:`Configure the bash scripts<configurebash>`, ``scripts/levante/examples/build_compile_run_plot.sh``
 and ``scripts/levante/examples/shima2009.sh``.
 
-2. Execute the bash script ``shima2009.sh``, e.g.  from your CLEO directory:
+2. Execute the bash script ``shima2009.sh``, e.g.  from your Cleo directory:
 
 .. code-block:: console
 
@@ -221,7 +221,7 @@ b) Breakup
 1. :ref:`Configure the bash scripts<configurebash>`, ``scripts/levante/examples/build_compile_run_plot.sh``
 and ``scripts/levante/examples/breakup.sh``.
 
-2. Execute the bash script ``breakup.sh``, e.g. from your CLEO directory:
+2. Execute the bash script ``breakup.sh``, e.g. from your Cleo directory:
 
 .. code-block:: console
 
@@ -239,7 +239,7 @@ This example is runs from the ``examples/divfreemotion/divfree2d.py`` script.
 1. :ref:`Configure the bash scripts<configurebash>`, ``scripts/levante/examples/build_compile_run_plot.sh``
 and ``scripts/levante/examples/divfree2d.sh``.
 
-2. Execute the bash script ``divfree2d.sh``, e.g. from your CLEO directory:
+2. Execute the bash script ``divfree2d.sh``, e.g. from your Cleo directory:
 
 .. code-block:: console
 
@@ -260,7 +260,7 @@ This example is runs from the ``examples/rainshaft1d/rainshaft1d.py`` script.
 1. :ref:`Configure the bash scripts<configurebash>`, ``scripts/levante/examples/build_compile_run_plot.sh``
 and ``scripts/levante/examples/rainshaft1d.sh``.
 
-2. Execute the bash script ``rainshaft1d.sh``, e.g. from your CLEO directory:
+2. Execute the bash script ``rainshaft1d.sh``, e.g. from your Cleo directory:
 
 .. code-block:: console
 
@@ -295,7 +295,7 @@ exectuable ``spdtest`` for four different build configurations, (1) "cuda" with 
 parallelism, (2) "openmp" with only OpenMP parallelism, (3) "threads" with only C++ threads
 parallelism, and (4) "serial" without parallelism. Using the (pre-installed) Kokkos tooks'
 Kernel Timer profiler, this example then outputs the time taken for each run in various ones of
-CLEO's kernels.
+Cleo's kernels.
 
 1. :ref:`Configure the bash scripts<configurebash>`, ``scripts/levante/examples/build_compile_run_plot.sh``
 and ``scripts/levante/examples/kokkostools.sh``.
@@ -314,6 +314,6 @@ in ``~/CLEO/examples/kokkostools/spdtest_kpkerneltimer_example_solution``.
 
 Extension
 ---------
-Explore ``examples/exampleplotting`` which gives examples of how to plot output from CLEO
+Explore ``examples/exampleplotting`` which gives examples of how to plot output from Cleo
 with ``cleopy`` and ``plotcleo``, a few examples are demonstrated in the
 ``examples/exampleplotting/exampleplotting.py`` script.

@@ -1,4 +1,4 @@
-Motivation for CLEO
+Motivation for Cleo
 ===================
 
 In light of :ref:`such attractive properties<sdmadvatages>`, a natural
@@ -31,6 +31,6 @@ assessment.
 It therefore seems apparent that a new implementation of SDM is required;
 capable of modelling warm rain in LES with realistic boundary
 conditions and large scale forcings, and capable of application
-in large regional domains, with horizontal extents O(100km). CLEO is
+in large regional domains, with horizontal extents O(100km). Cleo is
 an attempt to build such a SDM. It strives to be a library for SDM
 to model warm clouds with exceptional computational performance.

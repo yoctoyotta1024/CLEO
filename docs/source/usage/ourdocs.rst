@@ -9,7 +9,7 @@ We use Sphinx to build our documentation. Through the Breathe extension we integ
 C++ documentation created using Doxygen. You can build our documentation locally by building
 the Doxygen .xml files followed by the Sphinx .html files, which you can then view
 in your preferred browser. E.g. With ``uv`` and ``doxygen`` installed you can do the following
-(*hint*: you may first want to see how to setup an `environment<environment>` for CLEO
+(*hint*: you may first want to see how to setup an `environment<environment>` for Cleo
 development which has ``uv`` and ``doxygen`` installed):
 
 .. code-block:: console

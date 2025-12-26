@@ -1,17 +1,17 @@
 Timestepping
 ============
 
-The core elements of CLEO's routine calling is summarised below.
+The core elements of Cleo's routine calling is summarised below.
 
 .. figure:: ./figs/timestepping.png
-   :alt: Diagram for CLEO's timestepping routine
+   :alt: Diagram for Cleo's timestepping routine
    :align: right
 
-   A schematic for the order of CLEO's routine calling. Steps on the same level can be
+   A schematic for the order of Cleo's routine calling. Steps on the same level can be
    executed in any order. A change in colour indicates the steps to the right-hand side
    are nested within the differently coloured step to its left-hand side.
 
-The important part of CLEO's routine calling occurs in the timestepping loop within the timestepping
+The important part of Cleo's routine calling occurs in the timestepping loop within the timestepping
 call of RunCLEO. Here the timestep taken by the model is adapted to always satisfy the timestep
 of the coupling and observations. Similar adaptive-timestepping logic occurs during the sub-timestepping
 loop for SDM, ensuring the individual timestep for each microphysical process and for
