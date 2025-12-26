@@ -4,7 +4,7 @@ SDMOut
 ======
 
 SDMOut is a submodule of ``cleopy`` used for helpful functions related to
-post-processing and plotting output data from CLEO SDM.
+post-processing and plotting output data from Cleo SDM.
 
 .. toctree::
    :maxdepth: 1

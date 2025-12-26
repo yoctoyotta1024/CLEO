@@ -3,7 +3,7 @@ Monoids
 
 Concepts for Templated-Types
 --------------------------------
-C++ concepts are used abundantly in CLEO. At its simplest, a C++ concept is used to define a set
+C++ concepts are used abundantly in Cleo. At its simplest, a C++ concept is used to define a set
 of constraints on a template. If a certain type satisfies these constraints, it can be called one
 possible type of that concept. For example, if a class “Cond” is created to model condensation and
 it satisfies the concept of a microphysical process, then “Cond” is a microphysical process.
@@ -28,7 +28,7 @@ their specific definition of these three properties. For example a monoid used t
 member of) the milkshakes to (1)"be created", (2)"be combined" and (3)"be nothing" is not the same
 as what it means for (a member of) the melted chocolate.
 
-In CLEO, we make monoids for various different things such as microphysics and observers. We use C++
+In Cleo, we make monoids for various different things such as microphysics and observers. We use C++
 concepts to ensure only certain types can declare themselves as a member of a particular monoid
 (rule(1)); we use some function or structure to define how types which are members of a particular
 monoid get combined with one another to produce another member (rule(2)); and we create a null
