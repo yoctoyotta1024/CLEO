@@ -1,18 +1,18 @@
 Quickstart
 ==========
 
-Start by following the steps to :doc:`install CLEO <installation>`.
+Start by following the steps to :doc:`install Cleo <installation>`.
 
-To use CLEO as an SDM coupled to a dynamics solver, essentially your task is to contruct a
+To use Cleo as an SDM coupled to a dynamics solver, essentially your task is to contruct a
 ``main.cpp`` file.
 
 Have a look at ``roughpaper/src/main.cpp`` and ``roughpaper/src/main_impl.hpp`` for inspiration.
 Depending on the setup you desire, you need to include different instantiations of the core concepts
-of CLEO in your main.cpp. For example for the SDM part of CLEO you need to specify the coupling
+of Cleo in your main.cpp. For example for the SDM part of Cleo you need to specify the coupling
 timestep, the gridbox maps for the domain, and the type of super-droplet motion, microphysics and
 observer.
 
-Once you’ve done that, your should have constructed all the necesary ingredients for CLEO so that
+Once you’ve done that, your should have constructed all the necesary ingredients for Cleo so that
 the end of your ``main.cpp`` contains a main function that looks something like this:
 
 .. code-block:: c++

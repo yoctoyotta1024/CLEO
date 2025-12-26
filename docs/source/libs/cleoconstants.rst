@@ -1,4 +1,4 @@
-CLEO Constants
+Cleo Constants
 ==============
 
 Header file: ``<libs/cleoconstants.hpp>``

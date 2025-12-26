@@ -13,7 +13,7 @@ License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
-Various ways of generating fields for Temp, Pressure, Qvap and Qcond to read into CLEO
+Various ways of generating fields for Temp, Pressure, Qvap and Qcond to read into Cleo
 """
 
 import numpy as np

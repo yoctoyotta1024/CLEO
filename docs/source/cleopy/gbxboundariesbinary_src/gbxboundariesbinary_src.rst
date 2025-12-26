@@ -6,7 +6,7 @@ GbxBoundariesBinary
    and our documentation is a work in progress.
 
 GbxBoundariesBinary is a submodule of ``cleopy`` used for generating an input
-binary file for CLEO which contains the gridbox boundaries of
+binary file for Cleo which contains the gridbox boundaries of
 a 0-D, 1-D, 2-D or 3-D cartesian domain.
 
 .. toctree::

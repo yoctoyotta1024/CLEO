@@ -6,8 +6,8 @@
 RunCLEO Module
 ==============
 
-This module of CLEO contains the types and functions used to
-construct initial conditions for CLEO as a Super-Droplet Model (SDM)
+This module of Cleo contains the types and functions used to
+construct initial conditions for Cleo as a Super-Droplet Model (SDM)
 coupled to a Dynamics Solver.
 
 .. toctree::

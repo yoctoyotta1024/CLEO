@@ -14,7 +14,7 @@ https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
 Thermodyanmics generator to generate winds, temperature, pressure, qvap and qcond fields
-from thermo and winds generators in order to create files which CLEO can read for fromfile dynamics.
+from thermo and winds generators in order to create files which Cleo can read for fromfile dynamics.
 """
 
 

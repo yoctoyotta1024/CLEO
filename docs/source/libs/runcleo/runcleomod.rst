@@ -6,8 +6,8 @@
 RunCLEO Module
 ==============
 
-This module of CLEO contains the most generic templated types used to
-construct and run CLEO as a Super-Droplet Model (SDM) coupled to a Dynamics Solver.
+This module of Cleo contains the most generic templated types used to
+construct and run Cleo as a Super-Droplet Model (SDM) coupled to a Dynamics Solver.
 
 .. toctree::
    :maxdepth: 1

@@ -1,6 +1,6 @@
 [project]
 name = "cleopy"
-description = "Python package for generating input and processing output of CLEO SDM"
+description = "Python package for generating input and processing output of Cleo SDM"
 dynamic = ["version"]
 authors = [
 	{name="Clara Bayley", email="yoctoyotta1024@yahoo.com"},

@@ -6,7 +6,7 @@
 Observers Module
 ================
 
-This module of CLEO contains the all the implementation of observers for outputing data from CLEO,
+This module of Cleo contains the all the implementation of observers for outputing data from Cleo,
 e.g. to a dataset or to a computer screen.
 
 .. toctree::
