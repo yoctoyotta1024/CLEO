@@ -12,6 +12,8 @@
 #SBATCH --output=./fromfile_irreg_out.%j.out
 #SBATCH --error=./fromfile_irreg_err.%j.out
 
+### TODO(CB): vanilla script for fromfile_irreg example
+
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
 ### ------ You MUST edit these lines to set your ------- ###

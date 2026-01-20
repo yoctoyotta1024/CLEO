@@ -12,6 +12,8 @@
 #SBATCH --output=./bubble3d_out.%j.out
 #SBATCH --error=./bubble3d_err.%j.out
 
+### TODO(CB): vanilla script for bubble example
+
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
 ### ------ You MUST edit these lines to set your ------- ###
