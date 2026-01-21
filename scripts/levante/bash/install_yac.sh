@@ -65,7 +65,13 @@ then
   echo "Bad input, please specify absolute path for where you want to install YAC and python to use to make bindings"
   exit 1
 else
-  mkdir ${root4YAC}
+  mkdir -p ${root4YAC}
+  if [ ! -d ${root4YAC} ]
+  then
+    echo "ERROR: YAC build directory not found, please make sure it exists"
+    exit 1
+  fi
+
   module load ${compiler} ${openmpi} ${netcdf}
 
   CC="$(command -v mpicc)"

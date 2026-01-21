@@ -49,7 +49,13 @@ else
     exit 1
   fi
 
-  mkdir ${root4tools}
+  mkdir -p ${root4tools}
+  if [ ! -d ${root4tools} ]
+  then
+    echo "ERROR: kokkos-tools build directory not found, please make sure it exists" >&2
+    exit 1
+  fi
+
   cd ./kokkos-tools && mkdir ./myBuild
   cmake -DCMAKE_CXX_COMPILER=${CXX} \
       -S ./ -B ./myBuild \
