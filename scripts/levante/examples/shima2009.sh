@@ -9,7 +9,7 @@
 #SBATCH --time=00:20:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
-#SBATCH --account=bm1183
+#SBATCH --account=mh0731
 #SBATCH --output=./shima2009_out.%j.out
 #SBATCH --error=./shima2009_err.%j.out
 

@@ -9,7 +9,7 @@
 #SBATCH --time=00:30:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
-#SBATCH --account=bm1183
+#SBATCH --account=mh0731
 #SBATCH --output=./compile_run_cleo_out.%j.out
 #SBATCH --error=./compile_run_cleo_err.%j.out
 
@@ -26,7 +26,7 @@ buildtype=$1                                                     # "serial", "th
 compilername=${2:-intel}                                         # "intel" or "gcc"
 path2CLEO=${3:-${HOME}/CLEO}                                     # must be absolute path
 path2build=${4:-${path2CLEO}/build}                              # should be absolute path
-yacyaxtroot=${5:-/work/bm1183/m300950/yacyaxt/${compilername}}   # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
+yacyaxtroot=${5:-/work/mh0731/m300950/yacyaxt/${compilername}}   # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
 executables=${6:-"cleocoupledsdm"}                               # executable(s) to compile or "NONE"
 executable2run=${7:-${path2build}/roughpaper/src/${executables}} # path to executable to run
 configfile=${8:-${path2CLEO}/roughpaper/src/config/config.yaml}  # configuration to run

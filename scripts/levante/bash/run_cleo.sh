@@ -7,7 +7,7 @@
 #SBATCH --cpus-per-task=128
 #SBATCH --mem=940M
 #SBATCH --time=00:30:00
-#SBATCH --account=bm1183
+#SBATCH --account=mh0731
 #SBATCH --output=./run_cleo_out.%j.out
 #SBATCH --error=./run_cleo_err.%j.out
 

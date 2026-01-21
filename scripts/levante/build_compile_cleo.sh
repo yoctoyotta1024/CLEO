@@ -9,7 +9,7 @@
 #SBATCH --time=00:15:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
-#SBATCH --account=bm1183
+#SBATCH --account=mh0731
 #SBATCH --output=./build/bin/build_compile_cleo_out.%j.out
 #SBATCH --error=./build/bin/build_compile_cleo_err.%j.out
 
@@ -26,7 +26,7 @@ buildtype=$1                                   # "serial", "threads", "openmp" o
 compilername=${2:-intel}                       # "intel" or "gcc"
 path2CLEO=${3:-${HOME}/CLEO}                   # must be absolute path
 path2build=${4:-${path2CLEO}/build}            # should be absolute path
-yacyaxtroot=${5:-/work/bm1183/m300950/yacyaxt/${compilername}} # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
+yacyaxtroot=${5:-/work/mh0731/m300950/yacyaxt/${compilername}} # yac and yaxt in yacyaxtroot/yac and yacyaxtroot/yaxt
 build_flags=${6:-"-DCLEO_COUPLED_DYNAMICS="" \
   -DCLEO_PYTHON=/home/m/m300950/CLEO/.venv/bin/python3"} # CLEO_BUILD_FLAGS
 executables=${7:-"cleocoupledsdm"}             # list of executables to compile or "NONE"

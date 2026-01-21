@@ -9,7 +9,7 @@
 #SBATCH --time=00:30:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
-#SBATCH --account=bm1183
+#SBATCH --account=mh0731
 #SBATCH --output=./kokkostools_out.%j.out
 #SBATCH --error=./kokkostools_err.%j.out
 
@@ -24,7 +24,7 @@ path2CLEO=${HOME}/CLEO/
 path2build_parent=${HOME}/CLEO/build_kokkostools/
 build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
-path2kokkostools=/work/bm1183/m300950/kokkos_tools_lib/lib64/
+path2kokkostools=/work/mh0731/m300950/kokkostools
 executables="kokkostools"
 
 pythonscript=${path2CLEO}/examples/kokkostools/kokkostools.py

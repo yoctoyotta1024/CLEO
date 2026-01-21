@@ -9,7 +9,7 @@
 #SBATCH --time=00:10:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
-#SBATCH --account=bm1183
+#SBATCH --account=mh0731
 #SBATCH --output=./divfree2d_out.%j.out
 #SBATCH --error=./divfree2d_err.%j.out
 

@@ -6,7 +6,7 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=940M
 #SBATCH --time=00:10:00
-#SBATCH --account=bm1183
+#SBATCH --account=mh0731
 #SBATCH --output=./build/bin/install_yac_out.%j.out
 #SBATCH --error=./build/bin/install_yac_err.%j.out
 
