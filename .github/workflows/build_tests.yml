@@ -100,6 +100,7 @@ jobs:
           -DKokkos_ENABLE_SERIAL=ON \
           -DCLEO_COUPLED_DYNAMICS=all \
           -DCLEO_DOMAIN=cartesian \
+          -DCLEO_FYAMLLIB=/usr/lib/x86_64-linux-gnu \
           -DCLEO_YAXT_ROOT=${{ runner.temp }}/yaxt \
           -DCLEO_YAC_ROOT=${{ runner.temp }}/yac \
           -DCMAKE_MODULE_PATH=${PWD}/libs/coupldyn_yac/cmake
@@ -148,6 +149,7 @@ jobs:
           -DKokkos_ENABLE_SERIAL=ON \
           -DCLEO_COUPLED_DYNAMICS=fromfile \
           -DCLEO_DOMAIN=cartesian \
+          -DCLEO_FYAMLLIB=/usr/lib/x86_64-linux-gnu \
           -DCLEO_YAXT_ROOT=${{ runner.temp }}/yaxt \
           -DCLEO_YAC_ROOT=${{ runner.temp }}/yac \
           -DCMAKE_MODULE_PATH=${PWD}/libs/coupldyn_yac/cmake
