@@ -39,6 +39,7 @@ fi
 if [[ "${root4YAC}" == "" || "${python}" == "" ]]
 then
   echo "Bad input, please specify absolute path for where you want to install YAC and python to use to make bindings"
+  exit 1
 else
   mkdir ${root4YAC}
 
