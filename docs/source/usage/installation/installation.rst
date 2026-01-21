@@ -54,7 +54,7 @@ Finally we suggest you use pre-commit. You can install our hooks via:
 
 .. code-block:: console
 
-  $ pre-commit install
+  $ uv run pre-commit install
 
 
 That's it, you're done!
