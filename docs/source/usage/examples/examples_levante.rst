@@ -277,7 +277,8 @@ Kernel Timer profiler, this example then outputs the time taken for each run in 
 Cleo's kernels.
 
 1. :ref:`Configure the bash scripts<configurebash_levante>`, ``scripts/levante/examples/build_compile_run_plot.sh``
-and ``scripts/levante/examples/kokkostools.sh``.
+and ``scripts/levante/examples/kokkostools.sh``. You will need to set the
+``path2kokkostools`` variable to the path where you installed your Kokkos tools libraries.
 
 2. Execute the bash script ``kokkostools.sh``, e.g.
 
