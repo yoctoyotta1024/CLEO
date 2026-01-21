@@ -28,21 +28,30 @@ from pathlib import Path
 # %%
 ### --------------------- KOKKOS PROFILER DEFINITION ----------------------- ###
 class KpKernelTimer:
-    def __init__(self, kokkos_tools_lib: Path):
-        self.kokkos_tools_lib = kokkos_tools_lib
-        self.kp_reader = self.kokkos_tools_lib / ".." / "bin" / "kp_reader"
+    def __init__(self, path2kokkostools: Path):
+        print("---------------------------------------------------")
+        print(f"Using Kokkos Tools in: {path2kokkostools}")
+        assert path2kokkostools.is_dir(), "path2kokkostools doesn't exist"
 
-        os.environ["KOKKOS_TOOLS_LIBS"] = str(
-            self.kokkos_tools_lib / "libkp_kernel_timer.so"
-        )
+        kokkostools_lib = glob.glob(os.path.join(path2kokkostools, "lib*/"))[0]
+        self.kokkostools_lib = Path(kokkostools_lib)
+
+        kp_kernel_timer = glob.glob(
+            os.path.join(self.kokkostools_lib, "libkp_kernel_timer.*")
+        )[0]
+        os.environ["KOKKOS_TOOLS_LIBS"] = str(kp_kernel_timer)
+
+        self.kp_reader = path2kokkostools / "bin" / "kp_reader"
+
+        print("Using Kokkos Tool libs:", self.kokkostools_lib)
+        print("Using Kokkos Profiling Tool:", os.environ["KOKKOS_TOOLS_LIBS"])
+        print("Using Kokkos Tool Reader:", self.kp_reader)
+        print("---------------------------------------------------")
 
         assert Path(
             os.environ["KOKKOS_TOOLS_LIBS"]
         ).exists(), "kp_kernel_timer lib doesn't exist"
         assert self.kp_reader.exists(), "kp_reader doesn't exist"
-
-        print("Using Kokkos Profiling Tool", os.environ["KOKKOS_TOOLS_LIBS"])
-        print("Using Kokkos Tool Reader", self.kp_reader)
 
     def postprocess(self, data_filespath: Path, txt_filename: Path):
         assert (
@@ -50,9 +59,12 @@ class KpKernelTimer:
         ).is_dir(), "profiler data output directory doesn't exist"
         assert txt_filename.suffix == ".txt", "profiler data output must be .txt file"
 
-        # Add kokkos_tools_lib to LD_LIBRARY_PATH
-        ld_lib_path = os.environ.get("LD_LIBRARY_PATH", "")
-        os.environ["LD_LIBRARY_PATH"] = f"{self.kokkos_tools_lib}:{ld_lib_path}"
+        # Add kokkostools_lib to LD_LIBRARY_PATH
+        assert self.kokkostools_lib.is_dir(), "kokkostools_lib doesn't exist"
+        ld_lib_path = os.environ.get("LD_LIBRARY_PATH", "")  # linux systems
+        os.environ["LD_LIBRARY_PATH"] = f"{self.kokkostools_lib}:{ld_lib_path}"
+        dyld_lib_path = os.environ.get("DYLD_LIBRARY_PATH", "")  # macOS systems
+        os.environ["DYLD_LIBRARY_PATH"] = f"{self.kokkostools_lib}:{dyld_lib_path}"
 
         # Use glob to find all .dat data files in the specified directory
         datfiles = glob.glob(os.path.join(data_filespath, "*.dat"))

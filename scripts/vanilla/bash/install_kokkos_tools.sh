@@ -57,17 +57,17 @@ else
 fi
 
 ### ------------ Notes on using profiler for executable ------------ ###
-# example for for tools installed in /path/to/tools/kokkos_tools_lib/:
-# A) see tool libraries installed in /path/to/tools/kokkos_tools_lib/lib64/
+# example for for tools installed in /path/to/tools/kokkostools/ on macOS:
+# A) see tool libraries installed in /path/to/tools/kokkostools/lib/
 # B) export required tool library, e.g.
-#     e.g. export KOKKOS_TOOLS_LIBS=/path/to/tools/kokkos_tools_lib/lib64/libkp_kernel_timer.so
-#      or  export KOKKOS_TOOLS_LIBS=/path/to/tools/kokkos_tools_lib/lib64/libkp_space_time_stack.so
+#     e.g. export KOKKOS_TOOLS_LIBS=/path/to/tools/kokkostools/lib/libkp_kernel_timer.dylib
+#      or  export KOKKOS_TOOLS_LIBS=/path/to/tools/kokkostools/lib/libkp_space_time_stack.dylib
 # C) run executable ./[exec].exe (kokkos initialise loads dynamic library pointers)
 # D) read *.dat output
 #     e.g. with kp reader
-#          export LD_LIBRARY_PATH=/path/to/tools/kokkos_tools_lib/lib64/:$LD_LIBRARY_PATH
-#          /path/to/tools/kokkos_tools_lib/bin/kp_reader *.dat > ./bin/kp_kernel_timer.txt
+#          export DYLD_LIBRARY_PATH=/path/to/tools/kokkostools/lib/:$LD_LIBRARY_PATH
+#          /path/to/tools/kokkostools/bin/kp_reader *.dat > ./bin/kp_kernel_timer.txt
 #    or pipe kp_space_time_stack output durign runtime: ./[exec].exe > runtime_output.txt
 # E) Also note useful debugging tool to find where program crashed (e.g. inside kernel):
-#   export KOKKOS_TOOLS_LIBS=/path/to/tools/kokkos_tools_lib/lib64/libkp_kernel_logger.so
+#   export KOKKOS_TOOLS_LIBS=/path/to/tools/kokkostools/lib/libkp_kernel_logger.dylib
 ### ---------------------------------------------------------------- ###

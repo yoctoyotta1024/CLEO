@@ -40,7 +40,7 @@ parser.add_argument("path2build", type=Path, help="Absolute path to build direct
 parser.add_argument(
     "path2kokkostools",
     type=Path,
-    help="Absolute path to kokkos tools installation libkp_[XXX]",
+    help="Absolute path to kokkos tools installation (lib/ or lib64/ for libkp_[XXX], and bin/)",
 )
 parser.add_argument(
     "src_config_filename",

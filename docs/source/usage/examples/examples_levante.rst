@@ -284,12 +284,13 @@ E.g. with a gcc/intel compiler:
 .. code-block:: console
 
   $ cd /your/path/to/kokkos-tools-repo/ && git clone git@github.com:kokkos/kokkos-tools.git
-  $ scripts/levante/bash/install_kokkos_tools.sh /your/path/to/kokkos-tools-repo/ [gcc/intel] /path/to/install/kokkos-tools/[gcc/intel]/kokkos_tools_lib
+  $ scripts/levante/bash/install_kokkos_tools.sh /your/path/to/kokkos-tools-repo/ [gcc/intel] /path/to/install/kokkos-tools/[gcc/intel]/kokkostools
 
 
 1. :ref:`Configure the bash scripts<configurebash_levante>`, ``scripts/levante/examples/build_compile_run_plot.sh``
 and ``scripts/levante/examples/kokkostools.sh``. You will need to set the
-``path2kokkostools`` variable to the path where you installed your Kokkos tools libraries.
+``path2kokkostools`` variable to the path where you installed your Kokkos tools
+(path to ``lib`` or ``lib64`` and ``bin``).
 
 2. Execute the bash script ``kokkostools.sh``, e.g.
 

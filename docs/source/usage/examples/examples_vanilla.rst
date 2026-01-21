@@ -302,7 +302,8 @@ bash script ``scripts/vanilla/bash/install_kokkos_tools.sh`` to help you. E.g. w
 
 1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
 and ``scripts/vanilla/examples/kokkostools.sh``. You will need to set the
-``path2kokkostools`` variable to the path where you installed your Kokkos tools libraries.
+``path2kokkostools`` variable to the path where you installed your Kokkos tools
+(path to ``lib`` or ``lib64`` and ``bin``).
 
 2. Execute the bash script ``kokkostools.sh``, e.g.
 
