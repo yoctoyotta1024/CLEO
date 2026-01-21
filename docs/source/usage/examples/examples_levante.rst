@@ -276,6 +276,17 @@ parallelism, and (4) "serial" without parallelism. Using the (pre-installed) Kok
 Kernel Timer profiler, this example then outputs the time taken for each run in various ones of
 Cleo's kernels.
 
+Before running this example, you must first install the Kokkos tools libraries. You can use the
+bash script ``scripts/levante/bash/install_kokkos_tools.sh`` to help you.
+
+E.g. with a gcc/intel compiler:
+
+.. code-block:: console
+
+  $ cd /your/path/to/kokkos-tools-repo/ && git clone git@github.com:kokkos/kokkos-tools.git
+  $ scripts/levante/bash/install_kokkos_tools.sh /your/path/to/kokkos-tools-repo/ [gcc/intel] /path/to/install/kokkos-tools/[gcc/intel]/kokkos_tools_lib
+
+
 1. :ref:`Configure the bash scripts<configurebash_levante>`, ``scripts/levante/examples/build_compile_run_plot.sh``
 and ``scripts/levante/examples/kokkostools.sh``. You will need to set the
 ``path2kokkostools`` variable to the path where you installed your Kokkos tools libraries.

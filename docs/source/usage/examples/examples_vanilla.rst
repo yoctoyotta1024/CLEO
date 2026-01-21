@@ -286,11 +286,19 @@ reference solutions please :ref:`contact us <contact>`.
 Kokkos Tools Profiling Test
 ---------------------------
 This example, ``kokkostools.py``, in ``examples/kokkostools/`` compiles and runs the same
-executable ``kokkostools`` for four different build configurations, (1) "cuda" with CUDA and OpenMP
-parallelism, (2) "openmp" with only OpenMP parallelism, (3) "threads" with only C++ threads
-parallelism, and (4) "serial" without parallelism. Using the (pre-installed) Kokkos tooks'
-Kernel Timer profiler, this example then outputs the time taken for each run in various ones of
-Cleo's kernels.
+executable ``kokkostools`` for three different build configurations, (1) "openmp" with only OpenMP
+parallelism, (2) "threads" with only C++ threads parallelism, and (3) "serial" without parallelism.
+Using the (pre-installed) Kokkos tooks' Kernel Timer profiler, this example then outputs the time
+taken for each run in various ones of Cleo's kernels.
+
+Before running this example, you must first install the Kokkos tools libraries. You can use the
+bash script ``scripts/vanilla/bash/install_kokkos_tools.sh`` to help you. E.g. with a gcc compiler:
+
+.. code-block:: console
+
+  $ cd /your/path/to/kokkos-tools-repo/ && git clone git@github.com:kokkos/kokkos-tools.git
+  $ scripts/vanilla/bash/install_kokkos_tools.sh /your/path/to/kokkos-tools-repo/ gcc ${CLEO_KOKKOSTOOLS}
+
 
 1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
 and ``scripts/vanilla/examples/kokkostools.sh``. You will need to set the

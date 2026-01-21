@@ -34,13 +34,13 @@ interpreter you want to use for YAC's python bindings.
 
   .. code-block:: console
 
-    $ scripts/levante/bash/install_yac.sh /work/bm1183/m300950/yacyaxt/intel/ intel /home/m/m300950/CLEO/.venv/bin/python3
+    $ scripts/levante/bash/install_yac.sh /work/mh0731/m300950/yacyaxt/intel/ intel /home/m/m300950/CLEO/.venv/bin/python3
 
   for gcc:
 
   .. code-block:: console
 
-    $ scripts/levante/bash/install_yac.sh /work/bm1183/m300950/yacyaxt/gcc/ gcc /home/m/m300950/CLEO/.venv/bin/python3
+    $ scripts/levante/bash/install_yac.sh /work/mh0731/m300950/yacyaxt/gcc/ gcc /home/m/m300950/CLEO/.venv/bin/python3
 
 
 .. admonition:: E.g. On "vanilla" computer
