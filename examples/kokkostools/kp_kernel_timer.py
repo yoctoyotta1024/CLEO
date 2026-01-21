@@ -35,6 +35,12 @@ class KpKernelTimer:
         os.environ["KOKKOS_TOOLS_LIBS"] = str(
             self.kokkos_tools_lib / "libkp_kernel_timer.so"
         )
+
+        assert Path(
+            os.environ["KOKKOS_TOOLS_LIBS"]
+        ).exists(), "kp_kernel_timer lib doesn't exist"
+        assert self.kp_reader.exists(), "kp_reader doesn't exist"
+
         print("Using Kokkos Profiling Tool", os.environ["KOKKOS_TOOLS_LIBS"])
         print("Using Kokkos Tool Reader", self.kp_reader)
 

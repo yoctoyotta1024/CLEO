@@ -187,6 +187,9 @@ def inputfiles(
 
 
 def run_exectuable(path2kokkostools, path2build, config_filename, postproc_filename):
+    ### --- check for directory (that should contain tools) --- ###
+    assert path2kokkostools.is_dir(), "path2kokkostools doesn't exist"
+
     ### --- delete any existing output dataset and setup files --- ###
     ### --- Note: profiler and post-processes data is not deleted --- ###
     yaml = YAML()
