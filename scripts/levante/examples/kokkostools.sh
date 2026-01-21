@@ -24,7 +24,7 @@ path2CLEO=${HOME}/CLEO/
 path2build_parent=${HOME}/CLEO/build_kokkostools/
 build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
-path2kokkostools=/work/mh0731/m300950/kokkostools
+path2kokkostools=/work/mh0731/m300950/kokkostools/${compilername}
 executables="kokkostools"
 
 pythonscript=${path2CLEO}/examples/kokkostools/kokkostools.py
