@@ -32,6 +32,7 @@ yac = [
   "isodate",
   "netcdf4",
   "mpi4py",
+  "pip",
 ]
 
 [dependency-groups]
