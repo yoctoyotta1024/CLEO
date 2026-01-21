@@ -12,7 +12,7 @@ Additional Contributors:
 License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
-Script generates input files, runs program with "spdtest" executable, and post-processes
+Script generates input files, runs program with "kokkostools" executable, and post-processes
 kokkos tools kernel timer profiling outful to test performance of CLEO using Kokkos tools
 for a particular buildtype
 """
@@ -203,7 +203,7 @@ def run_exectuable(path2kokkostools, path2build, config_filename, postproc_filen
     ### --- run exectuable with given config file --- ###
     os.chdir(path2build / "bin")
     profiler = KpKernelTimer(path2kokkostools)
-    executable = path2build / "examples" / "kokkostools" / "src" / "spdtest"
+    executable = path2build / "examples" / "kokkostools" / "src" / "kokkostools"
     cmd = [executable, config_filename]
     print(" ".join([str(c) for c in cmd]))
     subprocess.run(cmd, check=True)

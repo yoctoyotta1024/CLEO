@@ -8,11 +8,11 @@
 do_build="true"
 compilername="gcc"
 path2CLEO=${CLEO_PATH2CLEO}
-path2build_parent=${path2CLEO}/build_spdtest/
+path2build_parent=${path2CLEO}/build_kokkostools/
 build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
 path2kokkostools=/work/bm1183/m300950/kokkos_tools_lib/lib64/
-executables="spdtest"
+executables="kokkostools"
 
 pythonscript=${path2CLEO}/examples/kokkostools/kokkostools.py
 src_config_filename=${path2CLEO}/examples/kokkostools/src/config/kokkostools_config.yaml

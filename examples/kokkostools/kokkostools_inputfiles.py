@@ -13,7 +13,7 @@ License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
-Script generates input files for running program with "spdtest" executable
+Script generates input files for running program with "kokkostools" executable
 to profile performance of CLEO using Kokkos tools
 """
 
