@@ -203,6 +203,10 @@ def timestep_example(t_mdl, t_end, timestep, thermo, cleo_sdm):
 
         t_mdl += timestep
 
+    print(
+        f"CLEO STATUS: completed timestepping SDM from {t_mdl}s to {t_end}s (timestep = {timestep}s)"
+    )
+
 
 def cleo_sdm_example(cleo, python_config, cleo_config, is_sdm_null):
     t_mdl, t_end = 0, python_config["timesteps"]["T_END"]  # [s]
