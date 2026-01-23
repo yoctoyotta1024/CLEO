@@ -2,6 +2,47 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.65.0](https://github.com/yoctoyotta1024/CLEO/compare/12ada9a667b02f89a540a4cd0c3559a66fd8ed90..v0.65.0) - 2026-01-23
+#### Bug Fixes
+- missing pip requirement - ([a66f056](https://github.com/yoctoyotta1024/CLEO/commit/a66f05632ddda74ffa32464de19ae7da30f8a90f)) - clara.bayley
+- prevent bad directories at root of installations - ([2b850f0](https://github.com/yoctoyotta1024/CLEO/commit/2b850f0ada99b02bc78c2f01fcf3a98750e28f7f)) - clara.bayley
+- missing yac python dependency - ([0a719f8](https://github.com/yoctoyotta1024/CLEO/commit/0a719f8b89df3c0bba07380a773aaacda9827dd6)) - clara.bayley
+#### Continuous Integration
+- missing uv sync to build docs - ([06c925a](https://github.com/yoctoyotta1024/CLEO/commit/06c925a6d23620b7d65f793844292c5763cec0cf)) - clara.bayley
+- add fyamllib path for cmake - ([70c7191](https://github.com/yoctoyotta1024/CLEO/commit/70c7191c778580fe70cfae89298150120f3f52db)) - clara.bayley
+#### Documentation
+- reformat toctree captions - ([03a353c](https://github.com/yoctoyotta1024/CLEO/commit/03a353c049fa47090f263cfa4ffb6661b3c815f2)) - clara.bayley
+- use dropdowns for examples - ([f735e44](https://github.com/yoctoyotta1024/CLEO/commit/f735e44069c800f4ed909e610ee3f7123de9d252)) - clara.bayley
+- notes on eurec4a1d and python bindings examples - ([7980799](https://github.com/yoctoyotta1024/CLEO/commit/7980799de27a6764834ff4177be8514d97df5296)) - clara.bayley
+- update pre-commit hooks install - ([5ccf8c0](https://github.com/yoctoyotta1024/CLEO/commit/5ccf8c0499a0b8e01289cc263f73082aa8d3ea64)) - clara.bayley
+- don't specify CLEO version on doxygen and conf - ([972fd83](https://github.com/yoctoyotta1024/CLEO/commit/972fd8368f703dd61882442509deda61bc45a87f)) - clara.bayley
+- update documentation on running examples - ([5e34e50](https://github.com/yoctoyotta1024/CLEO/commit/5e34e50f91ff722ca21f0e6a1044b1be7ac809b4)) - clara.bayley
+#### Features
+- new helper scripts to install kokkos tools - ([b7457e8](https://github.com/yoctoyotta1024/CLEO/commit/b7457e84cf4c2612a32ddf7f3bb2fa7204b42348)) - clara.bayley
+- new build, compile and run scripts for arbitrary 'vanilla' computer - ([59ef893](https://github.com/yoctoyotta1024/CLEO/commit/59ef893d573974448bfe466378347540e6bdad7c)) - clara.bayley
+#### Miscellaneous Chores
+- CLEO -> Cleo - ([12ada9a](https://github.com/yoctoyotta1024/CLEO/commit/12ada9a667b02f89a540a4cd0c3559a66fd8ed90)) - clara.bayley
+#### Performance Improvements
+- missing exit - ([07c347c](https://github.com/yoctoyotta1024/CLEO/commit/07c347c41c6358ba2e499bd406be11db5fd848c7)) - clara.bayley
+- formatting - ([4da61e0](https://github.com/yoctoyotta1024/CLEO/commit/4da61e0c4f8162623fa97d88ae0eb667a7586bce)) - clara.bayley
+#### Refactoring
+- add print after timestepping - ([54a9566](https://github.com/yoctoyotta1024/CLEO/commit/54a95661806bcd1dae49a5daf6c46533a777c831)) - clara.bayley
+- include making directory in instructions - ([808c891](https://github.com/yoctoyotta1024/CLEO/commit/808c891cbcc78d6e4e3f415d1b1ac7ee19d1edcd)) - clara.bayley
+- path2kokkostools and kokkos_tools_lib are different - ([3e6ac82](https://github.com/yoctoyotta1024/CLEO/commit/3e6ac82363c106e61b19eef14f7d7ac44f7e10e2)) - clara.bayley
+- assert that tools exist in kokkostools example - ([c119c6b](https://github.com/yoctoyotta1024/CLEO/commit/c119c6bba969651b3833f7cd4c9b6a950e61fcd6)) - clara.bayley
+- explicitly mention path to kokkostools example - ([9b8e787](https://github.com/yoctoyotta1024/CLEO/commit/9b8e787050679a3a931777aa5f6481027ef913e4)) - clara.bayley
+- rename spdtest to kokkostools - ([d9541f4](https://github.com/yoctoyotta1024/CLEO/commit/d9541f4f061b8f1b719b04b0c5ea28a5c028a1e1)) - clara.bayley
+- modularise pytests from build tests - ([b3af67e](https://github.com/yoctoyotta1024/CLEO/commit/b3af67e03bdad495eb2b96f2d81c980d958cf644)) - clara.bayley
+- delete scripts for work-in-progress examples in vanilla - ([2cec9bf](https://github.com/yoctoyotta1024/CLEO/commit/2cec9bfd078d554cb3b594d860328b669f782637)) - clara.bayley
+- make examples scripts work - ([8e898ed](https://github.com/yoctoyotta1024/CLEO/commit/8e898ed464429db981a3262af2b2e2a50c8c1b17)) - clara.bayley
+- generalise vanilla scripts - ([5ecc245](https://github.com/yoctoyotta1024/CLEO/commit/5ecc245cf31f1d799031c925c41d03752767975d)) - clara.bayley
+- adapt inputfiles vanilla script - ([144506e](https://github.com/yoctoyotta1024/CLEO/commit/144506e93cb6f1c4bd81e7aea3c027c269dca9d4)) - clara.bayley
+- delete sbatch commands - ([d94460e](https://github.com/yoctoyotta1024/CLEO/commit/d94460e717fdaf2be824836ab1eb206bc4674812)) - clara.bayley
+- move fyamllib path into cmake flag during build - ([5651c4c](https://github.com/yoctoyotta1024/CLEO/commit/5651c4c478ab102b2578d2f7047a463a195d3adc)) - clara.bayley
+- add developer credit - ([9c359fa](https://github.com/yoctoyotta1024/CLEO/commit/9c359fadcaf0e54f6206d98580f3ad0e045f50fe)) - clara.bayley
+
+- - -
+
 ## [v0.64.0](https://github.com/yoctoyotta1024/CLEO/compare/06ac74d21ef29190297484338b28f7482a4c0c3f..v0.64.0) - 2025-12-12
 #### Features
 - replace constant dry air density with formula for calculing dry air density - ([897eca7](https://github.com/yoctoyotta1024/CLEO/commit/897eca77982835a4f9e1a25212501e08a5b30d0a)) - clara.bayley
