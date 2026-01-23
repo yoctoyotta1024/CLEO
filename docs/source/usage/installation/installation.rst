@@ -64,11 +64,11 @@ Completing The Installation
 ---------------------------
 
 If you want to actually use Cleo, you will of course need to make sure you have the right
-requirements and dependencies as well. The following pages will guide you through these:
+requirements and dependencies as well. The following pages will guide you through these.
 
 .. toctree::
    :maxdepth: 1
-   :caption: Requirements of Cleo and its external dependencies:
+   :caption: Up-Next:
 
    requirements
    extern

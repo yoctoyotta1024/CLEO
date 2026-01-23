@@ -7,6 +7,12 @@ There are various examples of Cleo, with different build configurations, domains
 coupling, and super-droplet motion etc. They can be found in the ``CLEO/examples`` directory. If you
 would like to a copy of the reference solutions please :ref:`contact us <contact>`.
 
+
+.. _install_plotcleo:
+
+Installing ``plotcleo``:
+------------------------
+
 Before being able to run the examples you will need to locally install the ``plotcleo`` python
 package from the ``examples/exampleplotting/`` directory. E.g.
 
@@ -17,13 +23,15 @@ package from the ``examples/exampleplotting/`` directory. E.g.
   $ uv run python -c "import plotcleo"
 
 
+Running Examples on Different Computers:
+----------------------------------------
+
 Each example can be run by building Cleo, compiling the relevant executable, and then running the
 example's Python script. There are bash scripts to help you to do all this relatively smoothly on
 DKRZ's Levante HPC or on a generic/arbitrary, so-called "vanilla", computer:
 
 .. toctree::
    :maxdepth: 1
-   :caption: Running Examples on Different Computers:
 
    examples_vanilla
    examples_levante

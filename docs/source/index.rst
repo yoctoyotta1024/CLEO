@@ -25,9 +25,12 @@ anonymous mathematician `Cleo <https://en.wikipedia.org/wiki/Cleo_(mathematician
 Time to get involved! Start with CLEO's :doc:`installation<usage/installation/installation>` and
 then exploring some :doc:`examples<usage/examples/examples>`. Or jump straight in with the :doc:`quickstart<usage/quickstart>`.
 
+
+Contents:
+---------
+
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
 
    intro/intro
    usage/installation/installation
@@ -45,13 +48,14 @@ then exploring some :doc:`examples<usage/examples/examples>`. Or jump straight i
    usage/contact
    references
 
+
 Questions?
 ----------
 Yes please! Simply :ref:`contact us! <contact>`
 
-Indices and tables
-==================
+
+Indices and Tables
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`

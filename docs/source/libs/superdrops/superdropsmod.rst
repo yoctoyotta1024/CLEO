@@ -11,9 +11,12 @@ Model (SDM) that is domain/Gridbox independent, e.g. the definition of a super-d
 it's attriibutes, a super-droplet's terminal velocity, condensation/evaporation
 and collision-coalescence.
 
+
+Contents:
+---------
+
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
 
    collisions/collisionsmod
    condensation

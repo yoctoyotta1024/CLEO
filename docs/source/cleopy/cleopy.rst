@@ -14,9 +14,12 @@ API: Cleo Python Package, cleopy
 input files and processing and plotting the output from Cleo
 (Zarr datasets with ragged arrays of superdroplets and a setup .txt file).
 
+
+Contents:
+---------
+
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
 
    gbxboundariesbinary_src/gbxboundariesbinary_src
    initsuperdropsbinary_src/initsuperdropsbinary_src
@@ -33,4 +36,3 @@ Indices and tables
 
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`

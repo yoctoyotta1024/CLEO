@@ -1,10 +1,10 @@
 .. _examples_vanilla:
 
-Running the Examples on "Vanilla" Computers
-===========================================
+Examples on "Vanilla" Computers
+===============================
 
-The following instructions are intended to guide you through running each example using the bash
-scripts in ``scripts/vanilla/``.
+Having :ref:`installed plotcleo<install_plotcleo>`, the following instructions are intended to guide you
+through running each example using the bash scripts in ``scripts/vanilla/``.
 
 .. _configurebash_vanilla:
 

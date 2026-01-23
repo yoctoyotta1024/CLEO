@@ -59,9 +59,10 @@ Kokkos' macros and functions are littered throughout our code and many of our ke
 for example Gridboxes and super-droplets, are contained within Kokkos Views. For those seeking
 advanced understanding, we defer to Kokkos' GitHub repositories and documentation therein.
 
+In More Detail:
+---------------
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
 
    background
    motivation

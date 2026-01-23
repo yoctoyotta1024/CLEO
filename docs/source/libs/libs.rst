@@ -13,9 +13,12 @@ API: Cleo C++ Library
 This is the API for Cleo's various C++ modules for making
 a SDM coupled to a Dynamics Solver.
 
+
+Contents:
+---------
+
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
 
    runcleo/runcleomod
    superdrops/superdropsmod
@@ -30,4 +33,3 @@ Indices and tables
 
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`
