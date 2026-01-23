@@ -69,8 +69,6 @@ The Examples
 .. dropdown:: Adiabatic Parcel
   :animate: fade-in
 
-  Adiabatic Parcel
-  ----------------
   The examples, ``as2017.py`` and ``cuspbifurc.py``, in ``examples/adiabaticparcel/`` are for a
   0-D model of a parcel of air expanding and contracting adiabatically with a two-way coupling between
   the SDM microphysics and the thermodynamics. The setup mimics that in Arabas and Shima 2017
@@ -79,9 +77,6 @@ The Examples
 
   .. dropdown:: a) Arabas and Shima 2017
     :animate: fade-in-slide-down
-
-    Arabas and Shima 2017
-    #####################
 
     1. :ref:`Configure the bash scripts<configurebash_levante>`, ``scripts/levante/examples/build_compile_run_plot.sh``
     and ``scripts/levante/examples/as2017.sh``.
@@ -97,9 +92,6 @@ The Examples
 
   .. dropdown:: b) Cusp Bifurcation
     :animate: fade-in-slide-down
-
-    Cusp Bifurcation
-    ################
 
     1. :ref:`Configure the bash scripts<configurebash_levante>`, ``scripts/levante/examples/build_compile_run_plot.sh``
     and ``scripts/levante/examples/cuspbifurc.sh``.
@@ -118,25 +110,24 @@ The Examples
 .. dropdown:: Box Model Collisions
   :animate: fade-in
 
-  Box Model Collisions
-  --------------------
   These examples, ``shima2009.py`` and ``breakup.py``, in ``examples/boxmodelcollisions/`` are for a
   0-D box model with various collision kernels. The setup mimics that in Shima et al. 2009
   section 5.1.4 :cite:`shima2009`. *Note*: due to the randomness of the initial super-droplet
   conditions and the collision algorithm, each run of these examples will not be completely identical,
   but they should be reasonably similar, and have the same mean behaviour.
 
-  The Collision Kernels
-  #####################
+  .. container:: large-text
 
-  **Golovin**
+    **The Collision Kernels:**
+
+  *Golovin*
 
   The ``shima2009.py`` example models collision-coalescence using Golovin's kernel.
 
   The plot produced, by default called ``~/CLEO/build_colls0d/[...]/bin/golovin_validation.png``,
   should be similar to Fig.2(a) of Shima et al. 2009 :cite:p:`shima2009`.
 
-  **Long**
+  *Long*
 
   The ``shima2009.py`` example models collision-coalescence using Long's collision efficiency as
   given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`.
@@ -144,7 +135,7 @@ The Examples
   The plot produced, by default called ``~/CLEO/build_colls0d/[...]/bin/long_validation_[X].png``,
   should be similar to Fig.2(b) of Shima et al. 2009 :cite:p:`shima2009`.
 
-  **Low and List**
+  *Low and List*
 
   The ``breakup.py`` example models collision-coalescence-rebound-breakup using the hydrodynamic
   kernel with Long's collision efficiency as given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`,
@@ -154,7 +145,7 @@ The Examples
 
   This example produces a plot, by default called ``~/CLEO/build_colls0d/[...]/bin/lowlist_validation.png``.
 
-  **Szakáll and Urbich**
+  *Szakáll and Urbich*
 
   The ``breakup.py`` example models collision-coalescence-rebound-breakup using the hydrodynamic kernel with Long's
   collision efficiency as given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`, and the
@@ -163,7 +154,7 @@ The Examples
 
   This example produces a plot, by default called ``~/CLEO/build_colls0d/[...]/bin/szakallurbich_validation.png``.
 
-  **Testik and Straub**
+  *Testik and Straub*
 
   The ``breakup.py`` example models collision-coalescence-rebound-breakup using the hydrodynamic kernel with Long's
   collision efficiency as given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`, and the
@@ -173,15 +164,12 @@ The Examples
 
   This example produces a plot, by default called ``~/CLEO/build_colls0d/[...]/bin/testikstraub_validation.png``.
 
+  .. container:: large-text
 
-  Running the Box Model Collisions Examples
-  ##########################################
+    **Running the Box Model Collisions Examples:**
 
   .. dropdown:: a) Shima et al. 2009
     :animate: fade-in-slide-down
-
-    Shima et al. 2009
-    #################
 
     1. :ref:`Configure the bash scripts<configurebash_levante>`, ``scripts/levante/examples/build_compile_run_plot.sh``
     and ``scripts/levante/examples/shima2009.sh``.
@@ -215,9 +203,6 @@ The Examples
   .. dropdown:: b) Breakup
     :animate: fade-in-slide-down
 
-    Breakup
-    #######
-
     1. :ref:`Configure the bash scripts<configurebash_levante>`, ``scripts/levante/examples/build_compile_run_plot.sh``
     and ``scripts/levante/examples/breakup.sh``.
 
@@ -233,9 +218,6 @@ The Examples
 
 .. dropdown:: Divergence Free Motion
   :animate: fade-in
-
-  Divergence Free Motion
-  ----------------------
 
   This example is runs from the ``examples/divfreemotion/divfree2d.py`` script.
 
@@ -261,9 +243,6 @@ The Examples
   .. dropdown:: The Original 1-D Rainshaft
     :animate: fade-in-slide-down
 
-    Rainshaft 1-D
-    -------------
-
     This example is runs from the ``examples/rainshaft1d/rainshaft1d.py`` script.
 
     1. :ref:`Configure the bash scripts<configurebash_levante>`, ``scripts/levante/examples/build_compile_run_plot.sh``
@@ -281,18 +260,12 @@ The Examples
   .. dropdown:: The EUREC4A 1-D Rainshaft
     :animate: fade-in-slide-down
 
-    EUREC4A 1-D
-    -----------
-
     This example is a variant on the 1-d rainshaft, it runs analagously but with different inputs,
     outputs, microphysics and boundary conditions, and it produces some different plots.
 
 
 .. dropdown:: Constant 2-D Thermodynamics
   :animate: fade-in
-
-  Constant 2-D Thermodynamics
-  ---------------------------
 
   This example is runs from the ``examples/constthermo2d/constthermo2d.py`` script.
 
@@ -311,8 +284,6 @@ The Examples
 .. dropdown:: Kokkos Tools Profiling Test
   :animate: fade-in
 
-  Kokkos Tools Profiling Test
-  ---------------------------
   This example, ``kokkostools.py``, in ``examples/kokkostools/`` compiles and runs the same
   executable ``kokkostools`` for four different build configurations, (1) "cuda" with CUDA and OpenMP
   parallelism, (2) "openmp" with only OpenMP parallelism, (3) "threads" with only C++ threads
@@ -351,9 +322,6 @@ The Examples
 
 .. dropdown:: Python Bindings
   :animate: fade-in
-
-  Python Bindings
-  ---------------
 
   This example is runs from the ``examples/python_bindings/python_bindings.py`` script.
 
