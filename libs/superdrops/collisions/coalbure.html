@@ -6,10 +6,11 @@
 <link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html"><link rel="next" title="Thread-Safe Superdroplet Shuffling Algorithms" href="shuffle.html"><link rel="prev" title="Coalescence" href="coalescence.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Coalescence-Breakup-Rebound - CLEO 0.64.0 documentation</title>
+        <title>Coalescence-Breakup-Rebound - CLEO 0.X.Y documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
     
     
@@ -162,7 +163,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">CLEO 0.64.0 documentation</div></a>
+      <a href="../../../index.html"><div class="brand">CLEO 0.X.Y documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +184,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
-  <span class="sidebar-brand-text">CLEO 0.64.0 documentation</span>
+  <span class="sidebar-brand-text">CLEO 0.X.Y documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -191,8 +192,7 @@
   <input type="hidden" name="area" value="default">
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
-  <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+  <ul class="current">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../intro/intro.html">Programming Guide</a><input aria-label="Toggle navigation of Programming Guide" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../intro/background.html">Background to the Super-Droplet Model (SDM)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../intro/motivation.html">Motivation for Cleo</a></li>
@@ -203,19 +203,24 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../intro/kokkos.html">Kokkos Thread Parallelism</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../usage/installation.html">Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../usage/examples.html">Examples</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../usage/examples.html#running-the-examples-on-levante">Running the Examples on Levante</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../usage/installation/installation.html">Installation</a><input aria-label="Toggle navigation of Installation" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/installation/requirements.html">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/installation/extern.html">External Libraries</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../usage/examples/examples.html">Examples</a><input aria-label="Toggle navigation of Examples" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/examples/examples_vanilla.html">Examples on “Vanilla” Computers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/examples/examples_levante.html">Examples on Levante</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="../../../usage/quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../usage/requirements.html">Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../usage/extern.html">External Libraries</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cleopy/cleopy.html">API: Cleo Python Package, cleopy</a><input aria-label="Toggle navigation of API: Cleo Python Package, cleopy" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/gbxboundariesbinary_src/gbxboundariesbinary_src.html">GbxBoundariesBinary</a><input aria-label="Toggle navigation of GbxBoundariesBinary" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cleopy/cleopy.html">API: Cleo Python Package, cleopy</a><input aria-label="Toggle navigation of API: Cleo Python Package, cleopy" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/gbxboundariesbinary_src/gbxboundariesbinary_src.html">GbxBoundariesBinary</a><input aria-label="Toggle navigation of GbxBoundariesBinary" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../cleopy/gbxboundariesbinary_src/create_gbxboundaries.html">CREATE_GBXBOUNDARIES</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cleopy/gbxboundariesbinary_src/read_gbxboundaries.html">READ_GBXBOUNDARIES</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/initsuperdropsbinary_src.html">InitSuperdropsBinary</a><input aria-label="Toggle navigation of InitSuperdropsBinary" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/initsuperdropsbinary_src.html">InitSuperdropsBinary</a><input aria-label="Toggle navigation of InitSuperdropsBinary" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/create_initsuperdrops.html">CREATE_INITSUPERDROPS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/read_initsuperdrops.html">READ_INITSUPERDROPS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/attrsgen.html">ATTRSGEN</a></li>
@@ -225,7 +230,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/dryrgens.html">DRYRGENS</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/thermobinary_src/thermobinary_src.html">ThermoBinary</a><input aria-label="Toggle navigation of ThermoBinary" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/thermobinary_src/thermobinary_src.html">ThermoBinary</a><input aria-label="Toggle navigation of ThermoBinary" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/create_thermodynamics.html">CREATE_THERMODYNAMICS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/read_thermodynamics.html">READ_THERMODYNAMICS</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/thermodyngen.html">THERMODYNGEN</a></li>
@@ -233,7 +238,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/windsgen.html">WINDSGEN</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/sdmout_src/sdmout_src.html">SDMOut</a><input aria-label="Toggle navigation of SDMOut" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/sdmout_src/sdmout_src.html">SDMOut</a><input aria-label="Toggle navigation of SDMOut" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/pyzarr.html">PYZARR</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/pysetuptxt.html">PYSETUPTXT</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/pygbxsdat.html">PYGBXSDAT</a></li>
@@ -251,8 +256,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../cleopy/writebinary.html">WRITEBINARY</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current has-children"><a class="reference internal" href="../../libs.html">API: Cleo C++ Library</a><input aria-label="Toggle navigation of API: Cleo C++ Library" checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../runcleo/runcleomod.html">RunCLEO Module</a><input aria-label="Toggle navigation of RunCLEO Module" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../../libs.html">API: Cleo C++ Library</a><input aria-label="Toggle navigation of API: Cleo C++ Library" checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../runcleo/runcleomod.html">RunCLEO Module</a><input aria-label="Toggle navigation of RunCLEO Module" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../runcleo/coupleddynamics.html">CoupledDynamics</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../runcleo/couplingcomms.html">CouplingComms</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../runcleo/creategbxs.html">Create Gridboxes Sub-Module</a></li>
@@ -261,8 +266,8 @@
 <li class="toctree-l3"><a class="reference internal" href="../../runcleo/sdmmethods.html">SDMMethods</a></li>
 </ul>
 </li>
-<li class="toctree-l2 current has-children"><a class="reference internal" href="../superdropsmod.html">Superdrops Module</a><input aria-label="Toggle navigation of Superdrops Module" checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
-<li class="toctree-l3 current has-children"><a class="reference internal" href="collisionsmod.html">Collisions Module</a><input aria-label="Toggle navigation of Collisions Module" checked="" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="../superdropsmod.html">Superdrops Module</a><input aria-label="Toggle navigation of Superdrops Module" checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3 current has-children"><a class="reference internal" href="collisionsmod.html">Collisions Module</a><input aria-label="Toggle navigation of Collisions Module" checked="" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="collisions.html">Collisions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="collisionkinetics.html">Collision Kinetics</a></li>
 <li class="toctree-l4"><a class="reference internal" href="coalescence.html">Coalescence</a></li>
@@ -283,7 +288,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../thermodynamic_equations.html">Thermodynamic Equations</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../zarr/zarrmod.html">Zarr Module</a><input aria-label="Toggle navigation of Zarr Module" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../zarr/zarrmod.html">Zarr Module</a><input aria-label="Toggle navigation of Zarr Module" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../zarr/buffer.html">Buffer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../zarr/chunks.html">Chunks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../zarr/dataset.html">Dataset</a></li>
@@ -296,7 +301,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../zarr/zarr_group.html">ZarrGroup</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../observers/observersmod.html">Observers Module</a><input aria-label="Toggle navigation of Observers Module" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../observers/observersmod.html">Observers Module</a><input aria-label="Toggle navigation of Observers Module" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../observers/observers.html">Observers</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../observers/streamout_observer.html">StreamOut Observer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../observers/consttstep_observer.html">Constant Time Step Observers</a></li>
@@ -315,7 +320,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../observers/massmoments_observer.html">Massmoments Observer</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../initialise/initialisemod.html">RunCLEO Module</a><input aria-label="Toggle navigation of RunCLEO Module" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../initialise/initialisemod.html">Initialisation Module</a><input aria-label="Toggle navigation of Initialisation Module" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../initialise/initialconditions.html">InitialConditions</a></li>
 </ul>
 </li>
@@ -575,7 +580,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 21 January 2026</div>
+              Last updated on 23 January 2026</div>
           </div>
           <div class="right-details">
             
@@ -620,11 +625,12 @@
       
     </aside>
   </div>
-</div><script src="../../../_static/documentation_options.js?v=e210be20"></script>
+</div><script src="../../../_static/documentation_options.js?v=7e333e1e"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
     </body>
 </html>
