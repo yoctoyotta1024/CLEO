@@ -79,272 +79,313 @@ in the following ways:
   Ensure the lines which state the ``path2CLEO`` and ``path2build`` to reflect this.
 
 
-Adiabatic Parcel
-----------------
-The examples, ``as2017.py`` and ``cuspbifurc.py``, in ``examples/adiabaticparcel/`` are for a
-0-D model of a parcel of air expanding and contracting adiabatically with a two-way coupling between
-the SDM microphysics and the thermodynamics. The setup mimics that in Arabas and Shima 2017
-section 7 :cite:`arabasshima2017`. *Note*: due to numerical differences, the conditions for cusp
-bifurcation and the plots will not be exactly identical to this reference.
+The Examples
+------------
 
-a) Arabas and Shima 2017
-########################
+.. dropdown:: Adiabatic Parcel
+  :animate: fade-in
 
-1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
-and ``scripts/vanilla/examples/as2017.sh``.
+  Adiabatic Parcel
+  ----------------
+  The examples, ``as2017.py`` and ``cuspbifurc.py``, in ``examples/adiabaticparcel/`` are for a
+  0-D model of a parcel of air expanding and contracting adiabatically with a two-way coupling between
+  the SDM microphysics and the thermodynamics. The setup mimics that in Arabas and Shima 2017
+  section 7 :cite:`arabasshima2017`. *Note*: due to numerical differences, the conditions for cusp
+  bifurcation and the plots will not be exactly identical to this reference.
 
-2. Execute the bash script ``as2017.sh``, e.g. from your Cleo directory:
+  .. dropdown:: a) Arabas and Shima 2017
+    :animate: fade-in-slide-down
 
-.. code-block:: console
+    Arabas and Shima 2017
+    #####################
 
-  $ scripts/vanilla/examples/as2017.sh
+    1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
+    and ``scripts/vanilla/examples/as2017.sh``.
 
-The plot produced, by default called ``~/CLEO/build_adia0d/bin/as2017fig.png``, should be
-similar to figure 5 from Arabas and Shima 2017 :cite:`arabasshima2017`.
+    2. Execute the bash script ``as2017.sh``, e.g. from your Cleo directory:
 
-b) Cusp Bifurcation
-###################
+    .. code-block:: console
 
-1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
-and ``scripts/vanilla/examples/cuspbifurc.sh``.
+      $ scripts/vanilla/examples/as2017.sh
 
-2. Execute the bash script ``cuspbifurc.sh``, e.g. from your Cleo directory:
+    The plot produced, by default called ``~/CLEO/build_adia0d/bin/as2017fig.png``, should be
+    similar to figure 5 from Arabas and Shima 2017 :cite:`arabasshima2017`.
 
-.. code-block:: console
+  .. dropdown:: b) Cusp Bifurcation
+    :animate: fade-in-slide-down
 
-  $ scripts/vanilla/examples/cuspbifurc.sh
+    Cusp Bifurcation
+    ################
 
-The plots produced, by default called ``~/CLEO/build_adia0d/bin/cuspbifurc_validation.png`` and
-``~/CLEO/build_adia0d/bin/cuspbifurc_SDgrowth.png`` illustrate an example of cusp bifurcation, analagous
-to the third column of figure 5 from Arabas and Shima 2017 :cite:`arabasshima2017`.
+    1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
+    and ``scripts/vanilla/examples/cuspbifurc.sh``.
 
+    2. Execute the bash script ``cuspbifurc.sh``, e.g. from your Cleo directory:
 
-Box Model Collisions
---------------------
-These examples, ``shima2009.py`` and ``breakup.py``, in ``examples/boxmodelcollisions/`` are for a
-0-D box model with various collision kernels. The setup mimics that in Shima et al. 2009
-section 5.1.4 :cite:`shima2009`. *Note*: due to the randomness of the initial super-droplet
-conditions and the collision algorithm, each run of these examples will not be completely identical,
-but they should be reasonably similar, and have the same mean behaviour.
+    .. code-block:: console
 
-The Collision Kernels
-#####################
+      $ scripts/vanilla/examples/cuspbifurc.sh
 
-**Golovin**
+    The plots produced, by default called ``~/CLEO/build_adia0d/bin/cuspbifurc_validation.png`` and
+    ``~/CLEO/build_adia0d/bin/cuspbifurc_SDgrowth.png`` illustrate an example of cusp bifurcation, analagous
+    to the third column of figure 5 from Arabas and Shima 2017 :cite:`arabasshima2017`.
 
-The ``shima2009.py`` example models collision-coalescence using Golovin's kernel.
 
-The plot produced, by default called ``~/CLEO/build_colls0d/[...]/bin/golovin_validation.png``,
-should be similar to Fig.2(a) of Shima et al. 2009 :cite:p:`shima2009`.
+.. dropdown:: Box Model Collisions
+  :animate: fade-in
 
-**Long**
+  Box Model Collisions
+  --------------------
+  These examples, ``shima2009.py`` and ``breakup.py``, in ``examples/boxmodelcollisions/`` are for a
+  0-D box model with various collision kernels. The setup mimics that in Shima et al. 2009
+  section 5.1.4 :cite:`shima2009`. *Note*: due to the randomness of the initial super-droplet
+  conditions and the collision algorithm, each run of these examples will not be completely identical,
+  but they should be reasonably similar, and have the same mean behaviour.
 
-The ``shima2009.py`` example models collision-coalescence using Long's collision efficiency as
-given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`.
+  The Collision Kernels
+  #####################
 
-The plot produced, by default called ``~/CLEO/build_colls0d/[...]/bin/long_validation_[X].png``,
-should be similar to Fig.2(b) of Shima et al. 2009 :cite:p:`shima2009`.
+  **Golovin**
 
-**Low and List**
+  The ``shima2009.py`` example models collision-coalescence using Golovin's kernel.
 
-The ``breakup.py`` example models collision-coalescence-rebound-breakup using the hydrodynamic
-kernel with Long's collision efficiency as given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`,
-and the coalescence/breakup/rebound probability from Low and List 1982(a) :cite:`lowlist1982a`
-(see also McFarquhar 2004 :cite:`mcfarquhar2004`). If breakup occurs, a constant
-number of fragments is produced.
+  The plot produced, by default called ``~/CLEO/build_colls0d/[...]/bin/golovin_validation.png``,
+  should be similar to Fig.2(a) of Shima et al. 2009 :cite:p:`shima2009`.
 
-This example produces a plot, by default called ``~/CLEO/build_colls0d/[...]/bin/lowlist_validation.png``.
+  **Long**
 
-**Szakáll and Urbich**
+  The ``shima2009.py`` example models collision-coalescence using Long's collision efficiency as
+  given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`.
 
-The ``breakup.py`` example models collision-coalescence-rebound-breakup using the hydrodynamic kernel with Long's
-collision efficiency as given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`, and the
-coalescence/breakup/rebound probability from Szakáll and Urbich 2018 :cite:`szakall2018`.
-If breakup occurs, a constant number of fragments is produced.
+  The plot produced, by default called ``~/CLEO/build_colls0d/[...]/bin/long_validation_[X].png``,
+  should be similar to Fig.2(b) of Shima et al. 2009 :cite:p:`shima2009`.
 
-This example produces a plot, by default called ``~/CLEO/build_colls0d/[...]/bin/szakallurbich_validation.png``.
+  **Low and List**
 
-**Testik and Straub**
+  The ``breakup.py`` example models collision-coalescence-rebound-breakup using the hydrodynamic
+  kernel with Long's collision efficiency as given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`,
+  and the coalescence/breakup/rebound probability from Low and List 1982(a) :cite:`lowlist1982a`
+  (see also McFarquhar 2004 :cite:`mcfarquhar2004`). If breakup occurs, a constant
+  number of fragments is produced.
 
-The ``breakup.py`` example models collision-coalescence-rebound-breakup using the hydrodynamic kernel with Long's
-collision efficiency as given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`, and the
-coalescence/breakup/rebound probability based on section 4 of Testik et al. 2011 (figure 12)
-:cite:`testik2011` as well as coalescence efficiency and number of fragements produced from
-Straub et al. 2010 and Schlottke et al. 2010 respectively (:cite:`schlottke2010`, :cite:`straub2010`).
+  This example produces a plot, by default called ``~/CLEO/build_colls0d/[...]/bin/lowlist_validation.png``.
 
-This example produces a plot, by default called ``~/CLEO/build_colls0d/[...]/bin/testikstraub_validation.png``.
+  **Szakáll and Urbich**
 
+  The ``breakup.py`` example models collision-coalescence-rebound-breakup using the hydrodynamic kernel with Long's
+  collision efficiency as given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`, and the
+  coalescence/breakup/rebound probability from Szakáll and Urbich 2018 :cite:`szakall2018`.
+  If breakup occurs, a constant number of fragments is produced.
 
-Running the Box Model Collisions Examples
-##########################################
+  This example produces a plot, by default called ``~/CLEO/build_colls0d/[...]/bin/szakallurbich_validation.png``.
 
-a) Shima et al. 2009
-####################
+  **Testik and Straub**
 
-1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
-and ``scripts/vanilla/examples/shima2009.sh``.
+  The ``breakup.py`` example models collision-coalescence-rebound-breakup using the hydrodynamic kernel with Long's
+  collision efficiency as given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`, and the
+  coalescence/breakup/rebound probability based on section 4 of Testik et al. 2011 (figure 12)
+  :cite:`testik2011` as well as coalescence efficiency and number of fragements produced from
+  Straub et al. 2010 and Schlottke et al. 2010 respectively (:cite:`schlottke2010`, :cite:`straub2010`).
 
-2. Execute the bash script ``shima2009.sh``, e.g.  from your Cleo directory:
+  This example produces a plot, by default called ``~/CLEO/build_colls0d/[...]/bin/testikstraub_validation.png``.
 
-.. code-block:: console
 
-  $ scripts/vanilla/examples/shima2009.sh
+  Running the Box Model Collisions Examples
+  ##########################################
 
-By default the golovin exectuable and two examples using the long executable will be compiled and
-run. You can change this by editing ``script_args="[...] golovin long1 long2`` in ``shima2009.sh``.
+  .. dropdown:: a) Shima et al. 2009
+    :animate: fade-in-slide-down
 
-**Golovin**
+    Shima et al. 2009
+    #################
 
-This example models collision-coalescence using Golovin's kernel.
+    1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
+    and ``scripts/vanilla/examples/shima2009.sh``.
 
-The plot produced, by default called ``~/CLEO/build_colls0d/bin/golovin_validation.png``, should be
-comparable to Fig.2(a) of Shima et al. 2009 :cite:p:`shima2009`.
+    2. Execute the bash script ``shima2009.sh``, e.g.  from your Cleo directory:
 
-**Long1 and Long2**
+    .. code-block:: console
 
-These examples model collision-coalescence using Long's collision efficiency as given by equation
-13 of Simmel et al. 2002 :cite:`simmel2002`. The two examples use almost identical initial
-conditions and collision timesteps, as in Shima et al. 2009 :cite:p:`shima2009`.
+      $ scripts/vanilla/examples/shima2009.sh
 
-The plots produced, by default called ``~/CLEO/build_colls0d/bin/long_validation_1.png`` and
-``~/CLEO/build_colls0d/bin/long_validation_2.png``, should be comparable to
-Fig.2(b) and Fig.2(c) of Shima et al. 2009 :cite:p:`shima2009`.
+    By default the golovin exectuable and two examples using the long executable will be compiled and
+    run. You can change this by editing ``script_args="[...] golovin long1 long2`` in ``shima2009.sh``.
 
-b) Breakup
-##########
+    **Golovin**
 
-1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
-and ``scripts/vanilla/examples/breakup.sh``.
+    This example models collision-coalescence using Golovin's kernel.
 
-2. Execute the bash script ``breakup.sh``, e.g. from your Cleo directory:
+    The plot produced, by default called ``~/CLEO/build_colls0d/bin/golovin_validation.png``, should be
+    comparable to Fig.2(a) of Shima et al. 2009 :cite:p:`shima2009`.
 
-.. code-block:: console
+    **Long1 and Long2**
 
-  $ scripts/vanilla/examples/breakup.sh
+    These examples model collision-coalescence using Long's collision efficiency as given by equation
+    13 of Simmel et al. 2002 :cite:`simmel2002`. The two examples use almost identical initial
+    conditions and collision timesteps, as in Shima et al. 2009 :cite:p:`shima2009`.
 
-By default kernels including collision-coalescence, breakup and rebound will be compiled and
-run. You can change this by editing ``script_args="[...] lowlist etc.`` in ``breakup.sh``.
+    The plots produced, by default called ``~/CLEO/build_colls0d/bin/long_validation_1.png`` and
+    ``~/CLEO/build_colls0d/bin/long_validation_2.png``, should be comparable to
+    Fig.2(b) and Fig.2(c) of Shima et al. 2009 :cite:p:`shima2009`.
 
+  .. dropdown:: b) Breakup
+    :animate: fade-in-slide-down
 
-Divergence Free Motion
-----------------------
+    Breakup
+    #######
 
-This example is runs from the ``examples/divfreemotion/divfree2d.py`` script.
+    1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
+    and ``scripts/vanilla/examples/breakup.sh``.
 
-1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
-and ``scripts/vanilla/examples/divfree2d.sh``.
+    2. Execute the bash script ``breakup.sh``, e.g. from your Cleo directory:
 
-2. Execute the bash script ``divfree2d.sh``, e.g. from your Cleo directory:
+    .. code-block:: console
 
-.. code-block:: console
+      $ scripts/vanilla/examples/breakup.sh
 
-  $ scripts/vanilla/examples/divfree2d.sh
+    By default kernels including collision-coalescence, breakup and rebound will be compiled and
+    run. You can change this by editing ``script_args="[...] lowlist etc.`` in ``breakup.sh``.
 
-This example plots the motion of super-droplets without a terminal velocity in a 2-D divergence
-free wind field. It produces a plot showing the motion of a sample of super-droplets, by default
-called ``~/CLEO/build_divfree2D/bin/divfree2d_motion2d_validation.png``. The number of super-droplets in the domain
-should remain constant over time, as shown in the plot produced and by default called
-``~/CLEO/build_divfree2D/bin/divfree2d_totnsupers_validation.png``.
+.. dropdown:: Divergence Free Motion
+  :animate: fade-in
 
+  Divergence Free Motion
+  ----------------------
 
-1-D Rainshaft
--------------
+  This example is runs from the ``examples/divfreemotion/divfree2d.py`` script.
 
-This example is runs from the ``examples/rainshaft1d/rainshaft1d.py`` script.
+  1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
+  and ``scripts/vanilla/examples/divfree2d.sh``.
 
-1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
-and ``scripts/vanilla/examples/rainshaft1d.sh``.
+  2. Execute the bash script ``divfree2d.sh``, e.g. from your Cleo directory:
 
-2. Execute the bash script ``rainshaft1d.sh``, e.g. from your Cleo directory:
+  .. code-block:: console
 
-.. code-block:: console
+    $ scripts/vanilla/examples/divfree2d.sh
 
-  $ scripts/vanilla/examples/rainshaft1d.sh
+  This example plots the motion of super-droplets without a terminal velocity in a 2-D divergence
+  free wind field. It produces a plot showing the motion of a sample of super-droplets, by default
+  called ``~/CLEO/build_divfree2D/bin/divfree2d_motion2d_validation.png``. The number of super-droplets in the domain
+  should remain constant over time, as shown in the plot produced and by default called
+  ``~/CLEO/build_divfree2D/bin/divfree2d_totnsupers_validation.png``.
 
-Several plots and animations are produced by this example. If you would like to compare to our
-reference solutions please :ref:`contact us <contact>`.
 
+.. dropdown:: 1-D Rainshafts
+  :animate: fade-in
 
-EUREC4A 1-D
------------
+  .. dropdown:: The Original 1-D Rainshaft
+    :animate: fade-in-slide-down
 
-This example is a variant on the 1-d rainshaft, it runs analagously but with different inputs,
-outputs, microphysics and boundary conditions, and it produces some different plots.
+    Rainshaft 1-D
+    -------------
 
+    This example is runs from the ``examples/rainshaft1d/rainshaft1d.py`` script.
 
-Constant 2-D Thermodynamics
----------------------------
+    1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
+    and ``scripts/vanilla/examples/rainshaft1d.sh``.
 
-This example is runs from the ``examples/constthermo2d/constthermo2d.py`` script.
+    2. Execute the bash script ``rainshaft1d.sh``, e.g. from your Cleo directory:
 
-1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
-and ``scripts/vanilla/examples/constthermo2d.sh``
+    .. code-block:: console
 
-2. Execute the bash script ``constthermo2d.sh``, e.g.
+      $ scripts/vanilla/examples/rainshaft1d.sh
 
-.. code-block:: console
+    Several plots and animations are produced by this example. If you would like to compare to our
+    reference solutions please :ref:`contact us <contact>`.
 
-  $ scripts/vanilla/examples/constthermo2d.sh
 
-Several plots and animations are produced by this example. If you would like to compare to our
-reference solutions please :ref:`contact us <contact>`.
+  .. dropdown:: The EUREC4A 1-D Rainshaft
+    :animate: fade-in-slide-down
 
+    EUREC4A 1-D
+    -----------
 
-Kokkos Tools Profiling Test
----------------------------
-This example, ``kokkostools.py``, in ``examples/kokkostools/`` compiles and runs the same
-executable ``kokkostools`` for three different build configurations, (1) "openmp" with only OpenMP
-parallelism, (2) "threads" with only C++ threads parallelism, and (3) "serial" without parallelism.
-Using the (pre-installed) Kokkos tooks' Kernel Timer profiler, this example then outputs the time
-taken for each run in various ones of Cleo's kernels.
+    This example is a variant on the 1-d rainshaft, it runs analagously but with different inputs,
+    outputs, microphysics and boundary conditions, and it produces some different plots.
 
-Before running this example, you must first install the Kokkos tools libraries. You can use the
-bash script ``scripts/vanilla/bash/install_kokkos_tools.sh`` to help you. E.g. with a gcc compiler:
 
-.. code-block:: console
+.. dropdown:: Constant 2-D Thermodynamics
+  :animate: fade-in
 
-  $ cd /your/path/to/kokkos-tools-repo/ && git clone git@github.com:kokkos/kokkos-tools.git
-  $ scripts/vanilla/bash/install_kokkos_tools.sh /your/path/to/kokkos-tools-repo/ gcc ${CLEO_KOKKOSTOOLS}
+  Constant 2-D Thermodynamics
+  ---------------------------
 
+  This example is runs from the ``examples/constthermo2d/constthermo2d.py`` script.
 
-1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
-and ``scripts/vanilla/examples/kokkostools.sh``. You will need to set the
-``path2kokkostools`` variable to the path where you installed your Kokkos tools
-(path to ``lib`` or ``lib64`` and ``bin``).
+  1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
+  and ``scripts/vanilla/examples/constthermo2d.sh``
 
-2. Execute the bash script ``kokkostools.sh``, e.g.
+  2. Execute the bash script ``constthermo2d.sh``, e.g.
 
-.. code-block:: console
+  .. code-block:: console
 
-  $ scripts/vanilla/examples/kokkostools.sh
+    $ scripts/vanilla/examples/constthermo2d.sh
 
-By default, a .txt file with Kokkos' simple kernel timer profiling tool data for two runs of each
-of the four different build configurations is written to
-``~/CLEO/build_kokkostools/bin/[build_type]_[run_number]_[process_info].txt``.
-The time spent in the "timestep" region can be compared with the ones
-in ``~/CLEO/examples/kokkostools/kokkostools_kpkerneltimer_example_solution``.
+  Several plots and animations are produced by this example. If you would like to compare to our
+  reference solutions please :ref:`contact us <contact>`.
 
 
-Python Bindings
---------------------
+.. dropdown:: Kokkos Tools Profiling Test
+  :animate: fade-in
 
-This example is runs from the ``examples/python_bindings/python_bindings.py`` script.
+  Kokkos Tools Profiling Test
+  ---------------------------
+  This example, ``kokkostools.py``, in ``examples/kokkostools/`` compiles and runs the same
+  executable ``kokkostools`` for three different build configurations, (1) "openmp" with only OpenMP
+  parallelism, (2) "threads" with only C++ threads parallelism, and (3) "serial" without parallelism.
+  Using the (pre-installed) Kokkos tooks' Kernel Timer profiler, this example then outputs the time
+  taken for each run in various ones of Cleo's kernels.
 
-1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
-and ``scripts/vanilla/examples/python_bindings.sh``
+  Before running this example, you must first install the Kokkos tools libraries. You can use the
+  bash script ``scripts/vanilla/bash/install_kokkos_tools.sh`` to help you. E.g. with a gcc compiler:
 
-2. Execute the bash script ``python_bindings.sh``, e.g.
+  .. code-block:: console
 
-.. code-block:: console
+    $ cd /your/path/to/kokkos-tools-repo/ && git clone git@github.com:kokkos/kokkos-tools.git
+    $ scripts/vanilla/bash/install_kokkos_tools.sh /your/path/to/kokkos-tools-repo/ gcc ${CLEO_KOKKOSTOOLS}
 
-  $ scripts/vanilla/examples/python_bindings.sh
 
-*Note*: you may have issues with python versions >= 3.14, please
-see :ref:`this note<pybind11>` for details.
+  1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
+  and ``scripts/vanilla/examples/kokkostools.sh``. You will need to set the
+  ``path2kokkostools`` variable to the path where you installed your Kokkos tools
+  (path to ``lib`` or ``lib64`` and ``bin``).
 
-No plots are produced by this example but it should run sucessfully multiple times and produce
-``no plotting script for python bindings example`` messages. Please note the output during
-time-stepping may not be ordered due to parallel execution.
+  2. Execute the bash script ``kokkostools.sh``, e.g.
+
+  .. code-block:: console
+
+    $ scripts/vanilla/examples/kokkostools.sh
+
+  By default, a .txt file with Kokkos' simple kernel timer profiling tool data for two runs of each
+  of the four different build configurations is written to
+  ``~/CLEO/build_kokkostools/bin/[build_type]_[run_number]_[process_info].txt``.
+  The time spent in the "timestep" region can be compared with the ones
+  in ``~/CLEO/examples/kokkostools/kokkostools_kpkerneltimer_example_solution``.
+
+
+.. dropdown:: Python Bindings
+  :animate: fade-in
+
+  Python Bindings
+  ---------------
+
+  This example is runs from the ``examples/python_bindings/python_bindings.py`` script.
+
+  1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
+  and ``scripts/vanilla/examples/python_bindings.sh``
+
+  2. Execute the bash script ``python_bindings.sh``, e.g.
+
+  .. code-block:: console
+
+    $ scripts/vanilla/examples/python_bindings.sh
+
+  *Note*: you may have issues with python versions >= 3.14, please
+  see :ref:`this note<pybind11>` for details.
+
+  No plots are produced by this example but it should run sucessfully multiple times and produce
+  ``no plotting script for python bindings example`` messages. Please note the output during
+  time-stepping may not be ordered due to parallel execution.
 
 
 Extension

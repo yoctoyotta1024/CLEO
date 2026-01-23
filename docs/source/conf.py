@@ -55,6 +55,7 @@ extensions = [
     "sphinxcontrib.bibtex",
     "breathe",
     "sphinx.ext.viewcode",
+    "sphinx_design",
 ]
 
 # configuration of citations using bibtex file(s)

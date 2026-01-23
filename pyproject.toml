@@ -51,6 +51,7 @@ docs = [
     "breathe",
     "furo",
     "sphinx",
+    "sphinx-design",
     "sphinx_copybutton",
     "sphinxcontrib-applehelp",
     "sphinxcontrib-bibtex",
