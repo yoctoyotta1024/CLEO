@@ -249,6 +249,13 @@ Several plots and animations are produced by this example. If you would like to 
 reference solutions please :ref:`contact us <contact>`.
 
 
+EUREC4A 1-D
+-----------
+
+This example is a variant on the 1-d rainshaft, it runs analagously but with different inputs,
+outputs, microphysics and boundary conditions, and it produces some different plots.
+
+
 Constant 2-D Thermodynamics
 ---------------------------
 
@@ -303,6 +310,29 @@ of the four different build configurations is written to
 ``~/CLEO/build_kokkostools/bin/[build_type]_[run_number]_[process_info].txt``.
 The time spent in the "timestep" region can be compared with the ones
 in ``~/CLEO/examples/kokkostools/kokkostools_kpkerneltimer_example_solution``.
+
+
+Python Bindings
+--------------------
+
+This example is runs from the ``examples/python_bindings/python_bindings.py`` script.
+
+1. :ref:`Configure the bash scripts<configurebash_levante>`, ``scripts/levante/examples/build_compile_run_plot.sh``
+and ``scripts/levante/examples/python_bindings.sh``
+
+2. Execute the bash script ``python_bindings.sh``, e.g.
+
+.. code-block:: console
+
+  $ scripts/levante/examples/python_bindings.sh
+
+*Note*: you may have issues with python versions >= 3.14, please
+see :ref:`this note<pybind11>` for details.
+
+No plots are produced by this example but it should run sucessfully multiple times and produce
+``no plotting script for python bindings example`` messages. Please note the output during
+time-stepping may not be ordered due to parallel execution.
+
 
 Extension
 ---------
