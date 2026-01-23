@@ -39,7 +39,7 @@ project = "CLEO"
 license = "BSD 3-Clause"
 copyright = "(2023) MPI-M, Clara Bayley"
 author = "Clara Bayley & Other Developers"
-release = "0.64.0"
+release = "0.X.Y"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -55,6 +55,7 @@ extensions = [
     "sphinxcontrib.bibtex",
     "breathe",
     "sphinx.ext.viewcode",
+    "sphinx_design",
 ]
 
 # configuration of citations using bibtex file(s)
@@ -92,7 +93,7 @@ html_theme = "furo"
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ["_static"]
+html_static_path = [""]
 
 # To include the date of the last visit in Sphinx documentation, use the last
 # updated feature of Sphinx. This feature automatically adds the last modification

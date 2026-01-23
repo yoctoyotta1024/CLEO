@@ -1,10 +1,6 @@
 Our Docs
 ========
 
-.. note::
-   Please consider that this project is under active development
-   and our documentation is a work in progress.
-
 We use Sphinx to build our documentation. Through the Breathe extension we integrate
 C++ documentation created using Doxygen. You can build our documentation locally by building
 the Doxygen .xml files followed by the Sphinx .html files, which you can then view

@@ -57,7 +57,7 @@ then install the pre-commit hooks, e.g.
 
 .. code-block:: console
 
-  $ pre-commit install
+  $ uv run pre-commit install
 
 Pre-commit should then run automatically upon ```git commit``.
 

@@ -26,11 +26,13 @@ examples = [
   "mpi4py",
 ]
 yac = [
+  "setuptools",
   "cython",
   "datetime",
   "isodate",
   "netcdf4",
   "mpi4py",
+  "pip",
 ]
 
 [dependency-groups]
@@ -49,6 +51,7 @@ docs = [
     "breathe",
     "furo",
     "sphinx",
+    "sphinx-design",
     "sphinx_copybutton",
     "sphinxcontrib-applehelp",
     "sphinxcontrib-bibtex",

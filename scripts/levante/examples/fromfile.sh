@@ -12,6 +12,8 @@
 #SBATCH --output=./fromfile_out.%j.out
 #SBATCH --error=./fromfile_err.%j.out
 
+### TODO(CB): vanilla script for fromfile example
+
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###
 ### ------ You MUST edit these lines to set your ------- ###

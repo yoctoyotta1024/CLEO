@@ -3,15 +3,18 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-RunCLEO Module
-==============
+Initialisation Module
+=====================
 
 This module of Cleo contains the types and functions used to
 construct initial conditions for Cleo as a Super-Droplet Model (SDM)
 coupled to a Dynamics Solver.
 
+
+Contents:
+---------
+
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
 
    initialconditions
