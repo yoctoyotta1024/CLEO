@@ -234,7 +234,7 @@ The Examples
 .. dropdown:: Divergence Free Motion
   :animate: fade-in
 
-  This example is runs from the ``examples/divfreemotion/divfree2d.py`` script.
+  This example is run from the ``examples/divfreemotion/divfree2d.py`` script.
 
   1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
   and ``scripts/vanilla/examples/divfree2d.sh``.
@@ -258,7 +258,7 @@ The Examples
   .. dropdown:: The Original 1-D Rainshaft
     :animate: fade-in-slide-down
 
-    This example is runs from the ``examples/rainshaft1d/rainshaft1d.py`` script.
+    This example is run from the ``examples/rainshaft1d/rainshaft1d.py`` script.
 
     1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
     and ``scripts/vanilla/examples/rainshaft1d.sh``.
@@ -283,7 +283,7 @@ The Examples
 .. dropdown:: Constant 2-D Thermodynamics
   :animate: fade-in
 
-  This example is runs from the ``examples/constthermo2d/constthermo2d.py`` script.
+  This example is run from the ``examples/constthermo2d/constthermo2d.py`` script.
 
   1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
   and ``scripts/vanilla/examples/constthermo2d.sh``
@@ -337,7 +337,7 @@ The Examples
 .. dropdown:: Python Bindings
   :animate: fade-in
 
-  This example is runs from the ``examples/python_bindings/python_bindings.py`` script.
+  This example is run from the ``examples/python_bindings/python_bindings.py`` script.
 
   1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
   and ``scripts/vanilla/examples/python_bindings.sh``
