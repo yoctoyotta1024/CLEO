@@ -33,7 +33,7 @@
 
 #include "configuration/communicator.hpp"
 #include "configuration/config.hpp"
-
+#include "superdrops/state.hpp"
 /* contains 1-D vector for each (thermo)dynamic
 variable which is ordered by gridbox at every timestep
 e.g. press = [p_gbx0(t0), p_gbx1(t0), ,... , p_gbxN(t0),
@@ -63,8 +63,11 @@ struct CartesianDynamics {
   // YAC field ids
   int pressure_yac_id;
   int temp_yac_id;
+  int temp_yac_id2;
   int qvap_yac_id;
+  int qvap_yac_id2;
   int qcond_yac_id;
+  int qcond_yac_id2;
   int eastward_wind_yac_id;
   int northward_wind_yac_id;
   int vertical_wind_yac_id;
@@ -74,6 +77,8 @@ struct CartesianDynamics {
   double **yac_raw_edge_data;
   double **yac_raw_vertical_wind_data;
 
+  // Container to send the data to YAC
+  double ***send_buffer;
   /* --- Private functions --- */
 
   /* depending on nspacedims, read in data
@@ -125,6 +130,10 @@ struct CartesianDynamics {
                          std::vector<double> &target_array, const size_t ndims_north,
                          const size_t ndims_east, const size_t vertical_levels,
                          double conversion_factor) const;
+  void send_yac_field(int field_id, double* field_data, double conversion_factor);
+  void send_fields_to_yac(double* temp_state,
+                          double* qvap_state,
+                          double* qcond_state);
 };
 
 /* type satisfying CoupledDyanmics solver concept
@@ -134,10 +143,13 @@ struct YacDynamics {
  private:
   const unsigned int interval;
   const unsigned int end_time;
+  static int get_counter;
   std::shared_ptr<CartesianDynamics> dynvars;  // pointer to (thermo)dynamic variables
 
   /* Calls the get operations to receive data from YAC for each of the fields of interest */
-  void run_dynamics(const unsigned int t_mdl) const { dynvars->receive_fields_from_yac(); }
+  void run_dynamics(const unsigned int t_mdl) const {
+     // dynvars->receive_fields_from_yac();
+  }
 
  public:
   YacDynamics(const Config &config, const unsigned int couplstep, const std::array<size_t, 3> ndims,
@@ -159,6 +171,8 @@ struct YacDynamics {
     }
   }
 
+  const std::shared_ptr<CartesianDynamics>& get_dynvars() const { return dynvars; }
+
   double get_press(const size_t ii) const { return dynvars->get_press(ii); }
 
   double get_temp(const size_t ii) const { return dynvars->get_temp(ii); }
@@ -173,5 +187,8 @@ struct YacDynamics {
 
   std::pair<double, double> get_vvel(const size_t ii) const { return dynvars->get_vvel(ii); }
 };
+
+// int YacDynamics::get_counter = 1;
+
 
 #endif  // LIBS_COUPLDYN_YAC_YAC_CARTESIAN_DYNAMICS_HPP_
