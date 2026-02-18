@@ -2,6 +2,19 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.65.1](https://github.com/yoctoyotta1024/CLEO/compare/7caad851999035354b0be0a1f6d97b94a598cf56..v0.65.1) - 2026-02-18
+#### Bug Fixes
+- typos in examples_levante.rst - ([ce5fee3](https://github.com/yoctoyotta1024/CLEO/commit/ce5fee315a2e81f017c5f4c145a1022463ed194f)) - Sylwester Arabas
+- typos in examples_vanilla.rst - ([b6361fa](https://github.com/yoctoyotta1024/CLEO/commit/b6361fade74b9210003d333f5767d58cb61b08a1)) - Sylwester Arabas
+#### Miscellaneous Chores
+- update levante account - ([17f26e6](https://github.com/yoctoyotta1024/CLEO/commit/17f26e6e4c6cf4bfae8561c9d8098b1ce800d467)) - clara.bayley
+#### Refactoring
+- execute examples - ([0c85ec2](https://github.com/yoctoyotta1024/CLEO/commit/0c85ec2aabce21ebbad5f00e0493e8ad7a5f4712)) - clara.bayley
+- update levante account on bubble scripts - ([b10c192](https://github.com/yoctoyotta1024/CLEO/commit/b10c1923bde9aac4904f6b44282431ea5596966e)) - clara.bayley
+- delete unnecesary titles with dropdowns - ([7caad85](https://github.com/yoctoyotta1024/CLEO/commit/7caad851999035354b0be0a1f6d97b94a598cf56)) - clara.bayley
+
+- - -
+
 ## [v0.65.0](https://github.com/yoctoyotta1024/CLEO/compare/12ada9a667b02f89a540a4cd0c3559a66fd8ed90..v0.65.0) - 2026-01-23
 #### Bug Fixes
 - missing pip requirement - ([a66f056](https://github.com/yoctoyotta1024/CLEO/commit/a66f05632ddda74ffa32464de19ae7da30f8a90f)) - clara.bayley
