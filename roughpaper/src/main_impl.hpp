@@ -140,6 +140,9 @@ inline MicrophysicalProcess auto config_collisions(const Config &config, const T
   // const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
   // // const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag{};
   // const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
+  // // const CoalBuReFlag auto coalbure_flag = StraubCoalBuReFlag(RogersGKTerminalVelocity{});
+  // // const CoalBuReFlag auto coalbure_flag =
+  // //     ConstCoalBuReFlag{config.get_coalescence().constcoaleff.coaleff};
   // const MicrophysicalProcess auto colls = CoalBuRe(tsteps.get_collstep(),
   //                                                  &step2realtime,
   //                                                  collprob,
