@@ -100,4 +100,25 @@ struct TSCoalBuReFlag {
   unsigned int operator()(const double phi, const Superdrop& drop1, const Superdrop& drop2) const;
 };
 
+struct ConstCoalBuReFlag {
+ private:
+  double coaleff;  // flag indicating whether coalescence, breakup or rebound should occur
+ public:
+  explicit ConstCoalBuReFlag(const double coaleff) : coaleff(coaleff) {}
+
+  /* function returns flag indicating coalescence or breakup (never rebound).
+   * If flag = 1 -> coalescence. If flag = 2 -> breakup.
+   * Flag decided based on constant coalescence efficiency compared to random number "phi"
+   * function signature matches conditions to satisfy CoalBuReFlag concept
+   * */
+  KOKKOS_FUNCTION
+  unsigned int operator()(const double phi, const Superdrop& drop1, const Superdrop& drop2) const {
+    if (phi < coaleff) {
+      return 1;  // coalescence
+    } else {
+      return 2;  // breakup
+    }
+  }
+};
+
 #endif  // LIBS_SUPERDROPS_COLLISIONS_COALBURE_FLAG_HPP_
