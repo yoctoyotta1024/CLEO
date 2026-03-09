@@ -78,6 +78,14 @@ struct OptionalConfigParams {
     double atol = NaNVals::dbl();        /**< absolute tolerance for implicit Euler integration */
   } condensation;
 
+  struct CoalescenceParams {
+    void set_params(const YAML::Node& config);
+    void print_params() const;
+    struct ConstCoalEffParams {
+      double coaleff = NaNVals::dbl(); /**< constant coalescence efficiency */
+    } constcoaleff;
+  } coalescence;
+
   struct BreakupParams {
     void set_params(const YAML::Node& config);
     void print_params() const;
