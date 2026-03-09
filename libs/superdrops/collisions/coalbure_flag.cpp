@@ -67,29 +67,12 @@ KOKKOS_FUNCTION unsigned int TSCoalBuReFlag::operator()(const double phi, const 
   }
 }
 
-/* coalescence efficency given a collision occurs
-according to parameterisation from Straub et al. 2010
-section 3, equation 5 and Schlottke et al. 2010
-section 4a equation 11 */
-KOKKOS_FUNCTION double TSCoalBuReFlag::coalescence_efficiency(const Superdrop &drop1,
-                                                              const Superdrop &drop2,
-                                                              const double cke) const {
-  constexpr double beta = -1.15;
-
-  const auto surf_c = coal_surfenergy(drop1.get_radius(),
-                                      drop2.get_radius());  // [J] S_c
-  const auto weber = double{cke / surf_c};
-  const auto ecoal = double{Kokkos::exp(beta * weber)};
-
-  return ecoal;
-}
-
 /* returns truw if comparison of random numnber
 with coalescence efficiency from Straub et al. 2010
 indicates coalescence should occur */
 KOKKOS_FUNCTION bool TSCoalBuReFlag::is_coalescence(const Superdrop& drop1, const Superdrop& drop2,
                                                     const double phi, const double cke) const {
-  const auto ecoal = coalescence_efficiency(drop1, drop2, cke);
+  const auto ecoal = coalescence_efficiency_straub2010(drop1, drop2, cke);
 
   if (phi < ecoal) {
     return true;
