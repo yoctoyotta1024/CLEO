@@ -93,6 +93,37 @@ struct TSCoalBuReFlag {
   unsigned int operator()(const double phi, const Superdrop& drop1, const Superdrop& drop2) const;
 };
 
+template <VelocityFormula TerminalVelocity>
+struct StraubCoalBuReFlag {
+ private:
+  TerminalVelocity terminalv;
+
+ public:
+  explicit StraubCoalBuReFlag(TerminalVelocity tv) : terminalv(tv) {}
+
+  /* function returns flag indicating coalescence or breakup (never rebound).
+   * If flag = 1 -> coalescence. If flag = 2 -> breakup.
+   * Flag decided based on Straub et al. 2010 coalescence efficiency equation 3
+   * (with definition of terms from Schlottle et al. 2010) compared to random number "phi"
+   * function signature matches conditions to satisfy CoalBuReFlag concept
+   * */
+  KOKKOS_INLINE_FUNCTION
+  unsigned int operator()(const double phi, const Superdrop& drop1, const Superdrop& drop2) const {
+    const auto r1 = drop1.get_radius();
+    const auto r2 = drop2.get_radius();
+    const auto cke = collision_kinetic_energy(r1, r2, terminalv(drop1),
+                                              terminalv(drop2));  // [J]
+
+    const auto ecoal = coalescence_efficiency_straub2010(drop1, drop2, cke);
+
+    if (phi < ecoal) {
+      return 1;  // coalescence
+    } else {
+      return 2;  // breakup
+    }
+  }
+};
+
 struct ConstCoalBuReFlag {
  private:
   double coaleff;  // flag indicating whether coalescence, breakup or rebound should occur
@@ -104,7 +135,7 @@ struct ConstCoalBuReFlag {
    * Flag decided based on constant coalescence efficiency compared to random number "phi"
    * function signature matches conditions to satisfy CoalBuReFlag concept
    * */
-  KOKKOS_FUNCTION
+  KOKKOS_INLINE_FUNCTION
   unsigned int operator()(const double phi, const Superdrop& drop1, const Superdrop& drop2) const {
     if (phi < coaleff) {
       return 1;  // coalescence
