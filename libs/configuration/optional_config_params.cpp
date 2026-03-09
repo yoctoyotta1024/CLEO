@@ -93,6 +93,11 @@ void OptionalConfigParams::set_microphysics(const YAML::Node& config) {
     condensation.print_params();
   }
 
+  if (node["coalescence"]) {
+    coalescence.set_params(config);
+    coalescence.print_params();
+  }
+
   if (node["breakup"]) {
     breakup.set_params(config);
     breakup.print_params();
@@ -159,6 +164,17 @@ void OptionalConfigParams::CondensationParams::print_params() const {
   std::cout << "\n-------- Condensation Configuration Parameters --------------"
             << "\ndo_alter_thermo: " << do_alter_thermo << "\nmaxniters: " << maxniters
             << "\nMINSUBSTEP: " << MINSUBTSTEP << "\nrtol: " << rtol << "\natol: " << atol
+            << "\n---------------------------------------------------------\n";
+}
+
+void OptionalConfigParams::CoalescenceParams::set_params(const YAML::Node& config) {
+  const YAML::Node node = config["microphysics"]["coalescence"]["constcoaleff"];
+  constcoaleff.coaleff = node["coaleff"].as<double>();
+}
+
+void OptionalConfigParams::CoalescenceParams::print_params() const {
+  std::cout << "\n-------- Coalescence Configuration Parameters --------------"
+            << "\nConstCoalEff coaleff: " << constcoaleff.coaleff
             << "\n---------------------------------------------------------\n";
 }
 
