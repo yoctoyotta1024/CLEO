@@ -84,7 +84,7 @@ def condensation_validation_subplots(
     col_a, lstyle_a = "k", "-"
 
     lab_b = "descent"
-    col_b, lstyle_b = "orange", "--"
+    col_b, lstyle_b = "firebrick", "--"
 
     l1 = axs[0].plot(
         supersat[:hlf] * 100,
