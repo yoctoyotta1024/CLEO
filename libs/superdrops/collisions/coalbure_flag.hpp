@@ -28,6 +28,7 @@
 
 #include "../superdrop.hpp"
 #include "../terminalvelocity.hpp"
+#include "./coalescence_efficiency.hpp"
 #include "./collisionkinetics.hpp"
 
 /* operator returns flag indicating rebound or
@@ -78,14 +79,6 @@ struct TSCoalBuReFlag {
   indicates coalescence should occur */
   KOKKOS_FUNCTION bool is_coalescence(const Superdrop& drop1, const Superdrop& drop2,
                                       const double phi, const double cke) const;
-
-  /* coalescence efficency given a collision occurs
-  according to parameterisation from Straub et al. 2010
-  section 3, equation 5 and Schlottke et al. 2010
-  section 4a equation 11 */
-  KOKKOS_FUNCTION
-  double coalescence_efficiency(const Superdrop& drop1, const Superdrop& drop2,
-                                const double cke) const;
 
  public:
   TSCoalBuReFlag() {}
