@@ -46,7 +46,7 @@ namespace dlc = dimless_constants;
  * @tparam P The type representing the pair probability object.
  */
 template <typename P>
-concept PairProbability = requires(P p, Superdrop &drop, double d) {
+concept PairProbability = requires(P p, Superdrop& drop, double d) {
   { p(drop, drop, d, d) } -> std::convertible_to<double>;
 };
 
@@ -61,7 +61,7 @@ concept PairProbability = requires(P p, Superdrop &drop, double d) {
  * @tparam X The type representing the pair enactment object.
  */
 template <typename X>
-concept PairEnactX = requires(X x, Superdrop &drop, double d) {
+concept PairEnactX = requires(X x, Superdrop& drop, double d) {
   { x(drop, drop, d, d) } -> std::convertible_to<bool>;
 };
 
@@ -72,8 +72,8 @@ other members of DoCollisions coincidentally
 */
 template <PairProbability Probability, PairEnactX EnactCollision>
 struct CollideSupersFunctor {
-  const Probability &probability;        /**< Object for calculating collision probabilities. */
-  const EnactCollision &enact_collision; /**< Enactment object for enacting collision events. */
+  const Probability& probability;        /**< Object for calculating collision probabilities. */
+  const EnactCollision& enact_collision; /**< Enactment object for enacting collision events. */
   const GenRandomPool genpool;           /**< Kokkos thread-safe random number generator pool.*/
   const subviewd_supers supers;          /**< The randomly shuffled view of super-droplets. */
   const double scale_p;                  /**< The probability scaling factor. */
@@ -90,8 +90,8 @@ struct CollideSupersFunctor {
    * @param dropB The second super-droplet.
    * @return A pair of references to super-droplets ordered by descending xi value.
    */
-  KOKKOS_INLINE_FUNCTION Kokkos::pair<Superdrop &, Superdrop &> assign_drops(
-      Superdrop &dropA, Superdrop &dropB) const {
+  KOKKOS_INLINE_FUNCTION Kokkos::pair<Superdrop&, Superdrop&> assign_drops(Superdrop& dropA,
+                                                                           Superdrop& dropB) const {
     if (!(dropA.get_xi() < dropB.get_xi())) {
       return {dropA, dropB};
     } else {
@@ -113,7 +113,7 @@ struct CollideSupersFunctor {
    * @param VOLUME The volume [m^-3].
    * @return The scaled probability of the collision.
    */
-  KOKKOS_INLINE_FUNCTION double scaled_probability(const Superdrop &drop1, const Superdrop &drop2,
+  KOKKOS_INLINE_FUNCTION double scaled_probability(const Superdrop& drop1, const Superdrop& drop2,
                                                    const double scale_p,
                                                    const double VOLUME) const {
     const auto prob_jk = double{probability(drop1, drop2, DELT, VOLUME)};
@@ -136,7 +136,7 @@ struct CollideSupersFunctor {
    * @param VOLUME The volume [m^-3].
    * @return True if the collision event results in null superdrops with xi=0), otherwise false.
    */
-  KOKKOS_INLINE_FUNCTION void collide_superdroplet_pair(Superdrop &dropA, Superdrop &dropB,
+  KOKKOS_INLINE_FUNCTION void collide_superdroplet_pair(Superdrop& dropA, Superdrop& dropB,
                                                         const double scale_p,
                                                         const double VOLUME) const {
     /* 1. assign references to each superdrop in pair that will collide
@@ -197,7 +197,7 @@ struct DoCollisions {
    * @param volume The volume in which to calculate the probability of collisions.
    * @return The number of null (xi=0) superdrops.
    */
-  KOKKOS_INLINE_FUNCTION void collide_supers(const TeamMember &team_member, subviewd_supers supers,
+  KOKKOS_INLINE_FUNCTION void collide_supers(const TeamMember& team_member, subviewd_supers supers,
                                              const double volume) const {
     const auto nsupers = static_cast<size_t>(supers.extent(0));
     const auto npairs = size_t{nsupers / 2};  // no. pairs of superdrops (=floor() for nsupers > 0)
@@ -223,7 +223,7 @@ struct DoCollisions {
    * @param volume The volume in which to calculate the probability of collisions.
    * @return The updated superdroplets.
    */
-  KOKKOS_INLINE_FUNCTION void do_collisions(const TeamMember &team_member, subviewd_supers supers,
+  KOKKOS_INLINE_FUNCTION void do_collisions(const TeamMember& team_member, subviewd_supers supers,
                                             const double volume) const {
     /* Randomly shuffle order of superdroplet objects
     in supers in order to generate random pairs */
@@ -265,8 +265,8 @@ struct DoCollisions {
    * @param mo Monitor of SDM processes.
    * @return The updated superdroplets.
    */
-  KOKKOS_INLINE_FUNCTION void operator()(const TeamMember &team_member, const unsigned int subt,
-                                         subviewd_supers supers, const State &state,
+  KOKKOS_INLINE_FUNCTION void operator()(const TeamMember& team_member, const unsigned int subt,
+                                         subviewd_supers supers, const State& state,
                                          const SDMMonitor auto mo) const {
     do_collisions(team_member, supers, state.get_volume());
   }

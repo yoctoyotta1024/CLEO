@@ -123,8 +123,8 @@ struct DoCoalBuRe {
    * @return True if the resulting superdroplet is null, otherwise false.
    */
   KOKKOS_FUNCTION
-  bool coalesce_breakup_or_rebound(const uint64_t gamma, const double phi, Superdrop &drop1,
-                                   Superdrop &drop2) const;
+  bool coalesce_breakup_or_rebound(const uint64_t gamma, const double phi, Superdrop& drop1,
+                                   Superdrop& drop2) const;
 
  public:
   /**
@@ -233,8 +233,8 @@ KOKKOS_FUNCTION bool DoCoalBuRe<NFrags, Flag>::operator()(Superdrop &drop1, Supe
 template <NFragments NFrags, CoalBuReFlag Flag>
 KOKKOS_FUNCTION bool DoCoalBuRe<NFrags, Flag>::coalesce_breakup_or_rebound(const uint64_t gamma,
                                                                            const double phi,
-                                                                           Superdrop &drop1,
-                                                                           Superdrop &drop2) const {
+                                                                           Superdrop& drop1,
+                                                                           Superdrop& drop2) const {
   const auto flag = coalbure_flag(phi, drop1, drop2);
 
   bool is_null(0);

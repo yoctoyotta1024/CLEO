@@ -39,7 +39,7 @@
  * @param drop A reference to the `Superdrop` object to be checked.
  * @return Always returns 0 (=false).
  */
-KOKKOS_INLINE_FUNCTION bool is_null_superdrop(const Superdrop &drop) {
+KOKKOS_INLINE_FUNCTION bool is_null_superdrop(const Superdrop& drop) {
   assert((drop.get_xi() > 0) && "superdrop xi < 1, null drop in coalescence");
   return 0;
 }
@@ -62,8 +62,8 @@ struct DoCoalescence {
    * @param drop1 The first superdroplet.
    * @param drop2 The second superdroplet.
    */
-  KOKKOS_FUNCTION void twin_superdroplet_coalescence(const uint64_t gamma, Superdrop &drop1,
-                                                     Superdrop &drop2) const;
+  KOKKOS_FUNCTION void twin_superdroplet_coalescence(const uint64_t gamma, Superdrop& drop1,
+                                                     Superdrop& drop2) const;
 
   /**
    * @brief Coalesces a pair of superdroplets where xi1 > gamma*xi2.
@@ -78,8 +78,8 @@ struct DoCoalescence {
    * @param drop1 The first superdroplet.
    * @param drop2 The second superdroplet.
    */
-  KOKKOS_FUNCTION void different_superdroplet_coalescence(const uint64_t gamma, Superdrop &drop1,
-                                                          Superdrop &drop2) const;
+  KOKKOS_FUNCTION void different_superdroplet_coalescence(const uint64_t gamma, Superdrop& drop1,
+                                                          Superdrop& drop2) const;
 
  public:
   /**
@@ -123,8 +123,8 @@ struct DoCoalescence {
    * @param drop2 The second superdroplet.
    * @return True if coalescence results in a null superdroplet, false otherwise.
    */
-  KOKKOS_FUNCTION bool coalesce_superdroplet_pair(const uint64_t gamma, Superdrop &drop1,
-                                                  Superdrop &drop2) const;
+  KOKKOS_FUNCTION bool coalesce_superdroplet_pair(const uint64_t gamma, Superdrop& drop1,
+                                                  Superdrop& drop2) const;
 };
 
 /**

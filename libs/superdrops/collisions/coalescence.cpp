@@ -85,8 +85,8 @@ KOKKOS_FUNCTION uint64_t DoCoalescence::coalescence_gamma(const uint64_t xi1, co
  * @return True if coalescence results in a null superdroplet, false otherwise.
  */
 KOKKOS_FUNCTION bool DoCoalescence::coalesce_superdroplet_pair(const uint64_t gamma,
-                                                               Superdrop &drop1,
-                                                               Superdrop &drop2) const {
+                                                               Superdrop& drop1,
+                                                               Superdrop& drop2) const {
   const auto xi1 = drop1.get_xi();
   const auto xi2 = drop2.get_xi();
 
@@ -123,8 +123,8 @@ KOKKOS_FUNCTION bool DoCoalescence::coalesce_superdroplet_pair(const uint64_t ga
  * @param drop2 The second superdroplet.
  */
 KOKKOS_FUNCTION void DoCoalescence::twin_superdroplet_coalescence(const uint64_t gamma,
-                                                                  Superdrop &drop1,
-                                                                  Superdrop &drop2) const {
+                                                                  Superdrop& drop1,
+                                                                  Superdrop& drop2) const {
   assert((drop1.get_xi() == gamma * drop2.get_xi()) && "condition for twin coalescence not met");
 
   const auto old_xi = drop2.get_xi();  // = drop1.xi
@@ -161,8 +161,8 @@ KOKKOS_FUNCTION void DoCoalescence::twin_superdroplet_coalescence(const uint64_t
  * @param drop2 The second superdroplet.
  */
 KOKKOS_FUNCTION void DoCoalescence::different_superdroplet_coalescence(const uint64_t gamma,
-                                                                       Superdrop &drop1,
-                                                                       Superdrop &drop2) const {
+                                                                       Superdrop& drop1,
+                                                                       Superdrop& drop2) const {
   assert((drop1.get_xi() > gamma * drop2.get_xi()) && "condition on xis for coalescence not met");
 
   const auto new_xi = drop1.get_xi() - gamma * drop2.get_xi();
