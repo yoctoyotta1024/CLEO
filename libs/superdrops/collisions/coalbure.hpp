@@ -57,31 +57,6 @@ struct DoCoalBuRe {
   DoBreakup<NFrags> bu; /**< Instance of DoBreakup with specified no. of fragments calculation. */
   Flag coalbure_flag;   /**< Instance of CoalBuReFlag indicating the action to perform. */
 
-  /*
-  rescale random number phi be in desired range of [0, 1] to account for fact that if a
-  collision occurs (i.e. if gamma != 0) then phi lies in range [0, prob - floor(prob)] rather than
-  [0, 1].
-  * _Note:_ This function is assumed to be consitent with collision_gamma(...) and must be.
-  */
-
-  /**
-   * @brief Rescales a random number phi to be in the desired range [0, 1].
-   *
-   * This function adjusts the value of phi to account for the fact that if a collision occurs
-   * (i.e., if gamma != 0), then phi lies in the range [0, prob - floor(prob)] instead of [0, 1].
-   *
-   * @note This function is assumed to be consistent with collision_gamma(...) and must be.
-   *
-   * @param prob The probability of collision.
-   * @param phi Random number, assumed to be in the range [0.0, prob - floor(prob)].
-   *
-   * @return The rescaled value of phi as a uint64_t.
-   */
-  KOKKOS_FUNCTION
-  uint64_t rescale_phi(const double prob, const double phi) const {
-    return phi / (prob - Kokkos::floor(prob));
-  }
-
   /**
    * @brief Calculates the value of the gamma factor in Monte Carlo collision.
    *
@@ -148,11 +123,14 @@ struct DoCoalBuRe {
    * @param drop1 First superdroplet.
    * @param drop2 Second superdroplet.
    * @param prob Probability of collision.
-   * @param phi Phi value.
+   * @param phi_coll Random number in the range [0.0, 1.0] for collision.
+   * @param phi_out Random number in the range [0.0, 1.0] for outcome of collision as breakup,
+   * rebound or coalescence.
    * @return True if the resulting superdroplet is null, otherwise false.
    */
   KOKKOS_INLINE_FUNCTION
-  bool operator()(Superdrop &drop1, Superdrop &drop2, const double prob, const double phi) const;
+  bool operator()(Superdrop& drop1, Superdrop& drop2, const double prob, const double phi_coll,
+                  const double phi_out) const;
 };
 
 /**
@@ -197,23 +175,24 @@ inline MicrophysicalProcess auto CoalBuRe(const unsigned int interval,
  * @param drop1 First superdroplet.
  * @param drop2 Second superdroplet.
  * @param prob Probability of collision.
- * @param phi Phi value.
+ * @param phi_coll Random number in the range [0.0, 1.0] for collision.
+ * @param phi_out Random number in the range [0.0, 1.0] for outcome of collision as breakup,
+ * rebound or coalescence.
  * @return True if the resulting superdroplet is null, otherwise false.
  */
 template <NFragments NFrags, CoalBuReFlag Flag>
-KOKKOS_FUNCTION bool DoCoalBuRe<NFrags, Flag>::operator()(Superdrop &drop1, Superdrop &drop2,
-                                                          const double prob,
-                                                          const double phi) const {
+KOKKOS_FUNCTION bool DoCoalBuRe<NFrags, Flag>::operator()(Superdrop& drop1, Superdrop& drop2,
+                                                          const double prob, const double phi_coll,
+                                                          const double phi_out) const {
   /* 1. calculate gamma factor for collision  */
   const auto xi1 = drop1.get_xi();
   const auto xi2 = drop2.get_xi();
-  const auto gamma = collision_gamma(xi1, xi2, prob, phi);
+  const auto gamma = collision_gamma(xi1, xi2, prob, phi_coll);
 
   /* 2. enact collision between pair
   of superdroplets if gamma is not zero */
   if (gamma != 0) {
-    const double phi_collision = rescale_phi(prob, phi);
-    return coalesce_breakup_or_rebound(gamma, phi_collision, drop1, drop2);
+    return coalesce_breakup_or_rebound(gamma, phi_out, drop1, drop2);
   }
 
   return 0;

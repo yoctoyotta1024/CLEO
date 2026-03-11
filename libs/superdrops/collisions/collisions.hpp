@@ -64,8 +64,8 @@ concept PairProbability = requires(P p, Superdrop &drop, double d) {
  * @tparam X The type representing the pair enactment object.
  */
 template <typename X>
-concept PairEnactX = requires(X x, Superdrop &drop, double d) {
-  { x(drop, drop, d, d) } -> std::convertible_to<bool>;
+concept PairEnactX = requires(X x, Superdrop& drop, double d) {
+  { x(drop, drop, d, d, d) } -> std::convertible_to<bool>;
 };
 
 /*
@@ -150,11 +150,12 @@ struct CollideSupersFunctor {
     const auto prob = scaled_probability(drops.first, drops.second, scale_p, VOLUME);
 
     /* 3. Monte Carlo Step: use random number to enact (or not) collision of superdroplets pair */
-    URBG<ExecSpace> urbg{genpool.get_state()};  // thread safe random number generator
-    const auto phi = urbg.drand(0.0, 1.0);      // random number in range [0.0, 1.0]
+    URBG<ExecSpace> urbg{genpool.get_state()};   // thread safe random number generator
+    const auto phi_coll = urbg.drand(0.0, 1.0);  // random number in range [0.0, 1.0] for collision
+    const auto phi_out = urbg.drand(0.0, 1.0);  // for outcome of collisions extended algorithm only
     genpool.free_state(urbg.gen);
 
-    enact_collision(drops.first, drops.second, prob, phi);
+    enact_collision(drops.first, drops.second, prob, phi_coll, phi_out);
   }
 
   /*

@@ -32,15 +32,17 @@
  * @param drop1 The first super-droplet.
  * @param drop2 The second super-droplet.
  * @param prob The probability of collision-coalescence.
- * @param phi Random number in the range [0.0, 1.0].
+ * @param phi_coll Random number in the range [0.0, 1.0] for collision.
+ * @param phi_out Random number in the range [0.0, 1.0] for outcome of collision (not used).
  * @return boolean=true if collision-coalescence resulted in null superdrops.
  */
-KOKKOS_FUNCTION bool DoCoalescence::operator()(Superdrop &drop1, Superdrop &drop2,
-                                               const double prob, const double phi) const {
+KOKKOS_FUNCTION bool DoCoalescence::operator()(Superdrop& drop1, Superdrop& drop2,
+                                               const double prob, const double phi_coll,
+                                               const double phi_out) const {
   /* 1. calculate gamma factor for collision-coalescence  */
   const auto xi1 = drop1.get_xi();
   const auto xi2 = drop2.get_xi();
-  const auto gamma = coalescence_gamma(xi1, xi2, prob, phi);
+  const auto gamma = coalescence_gamma(xi1, xi2, prob, phi_coll);
 
   /* 2. enact collision-coalescence on pair
   of superdroplets if gamma is not zero */

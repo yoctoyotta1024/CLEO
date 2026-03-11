@@ -94,11 +94,13 @@ struct DoCoalescence {
    * @param drop1 The first super-droplet.
    * @param drop2 The second super-droplet.
    * @param prob The probability of collision-coalescence.
-   * @param phi Random number in the range [0.0, 1.0].
+   * @param phi_coll Random number in the range [0.0, 1.0] for collision.
+   * @param phi_out Random number in the range [0.0, 1.0] for outcome of collision (not used).
    * @return boolean=true if collision-coalescence resulted in null superdrops.
    */
   KOKKOS_FUNCTION
-  bool operator()(Superdrop &drop1, Superdrop &drop2, const double prob, const double phi) const;
+  bool operator()(Superdrop& drop1, Superdrop& drop2, const double prob, const double phi_coll,
+                  const double phi_out) const;
 
   /**
    * @brief Calculates the value of the gamma factor in Monte Carlo collision-coalescence.
