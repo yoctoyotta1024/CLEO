@@ -49,13 +49,13 @@ struct DoBreakup {
   superdroplets produces (non-identical) twin superdroplets.
   Similar to Shima et al. 2009 Section 5.1.3. part (5) option (b).
   Note implicit assumption that gamma factor = 1. */
-  KOKKOS_FUNCTION void twin_superdroplet_breakup(Superdrop &drop1, Superdrop &drop2) const;
+  KOKKOS_FUNCTION void twin_superdroplet_breakup(Superdrop& drop1, Superdrop& drop2) const;
 
   /* if xi1 > gamma*xi2 breakup alters drop2 radius and
   mass via decreasing multiplicity of drop1. Similar to
   Shima et al. 2009 Section 5.1.3. part (5) option (a).
   Note implicit assumption that gamma factor = 1. */
-  KOKKOS_FUNCTION void different_superdroplet_breakup(Superdrop &drop1, Superdrop &drop2) const;
+  KOKKOS_FUNCTION void different_superdroplet_breakup(Superdrop& drop1, Superdrop& drop2) const;
 
  public:
   explicit DoBreakup(const NFrags nfrags) : nfrags(nfrags) {}
@@ -69,18 +69,20 @@ struct DoBreakup {
    * @param drop1 First superdroplet.
    * @param drop2 Second superdroplet.
    * @param prob Probability of collision.
-   * @param phi Phi value.
+   * @param phi_coll Random number in the range [0.0, 1.0] for collision.
+   * @param phi_out Random number in the range [0.0, 1.0] for outcome of collision (not used).
    * @return True if the resulting superdroplet is null, otherwise false.
    */
   KOKKOS_FUNCTION
-  bool operator()(Superdrop &drop1, Superdrop &drop2, const double prob, const double phi) const;
+  bool operator()(Superdrop& drop1, Superdrop& drop2, const double prob, const double phi_coll,
+                  const double phi_out) const;
 
   /* enact collisional-breakup of droplets by changing
   multiplicity, radius and solute mass of each
   superdroplet in a pair. Method created by Author
   (no citation yet available). Note implicit assumption
   that gamma factor = 1. */
-  KOKKOS_FUNCTION void breakup_superdroplet_pair(Superdrop &drop1, Superdrop &drop2) const;
+  KOKKOS_FUNCTION void breakup_superdroplet_pair(Superdrop& drop1, Superdrop& drop2) const;
 };
 
 /* constructs Microphysical Process for collision-breakup
@@ -108,15 +110,17 @@ inline MicrophysicalProcess auto CollBu(const unsigned int interval,
  * @param drop1 First superdroplet.
  * @param drop2 Second superdroplet.
  * @param prob Probability of collision.
- * @param phi Phi value.
+ * @param phi_coll Random number in the range [0.0, 1.0] for collision.
+ * @param phi_out Random number in the range [0.0, 1.0] for outcome of collision (not used).
  * @return True if the resulting superdroplet is null, otherwise false.
  */
 template <NFragments NFrags>
-KOKKOS_FUNCTION bool DoBreakup<NFrags>::operator()(Superdrop &drop1, Superdrop &drop2,
-                                                   const double prob, const double phi) const {
+KOKKOS_FUNCTION bool DoBreakup<NFrags>::operator()(Superdrop& drop1, Superdrop& drop2,
+                                                   const double prob, const double phi_coll,
+                                                   const double phi_out) const {
   /* enact collision-breakup on pair of superdroplets if
   gamma factor for collision-breakup is not zero */
-  if (breakup_gamma(prob, phi) != 0) {
+  if (breakup_gamma(prob, phi_coll) != 0) {
     breakup_superdroplet_pair(drop1, drop2);
   }
 
@@ -144,8 +148,8 @@ superdroplet in a pair. Method created by Author
 (no citation yet available). Note implicit assumption
 that gamma factor = 1. */
 template <NFragments NFrags>
-KOKKOS_FUNCTION void DoBreakup<NFrags>::breakup_superdroplet_pair(Superdrop &drop1,
-                                                                  Superdrop &drop2) const {
+KOKKOS_FUNCTION void DoBreakup<NFrags>::breakup_superdroplet_pair(Superdrop& drop1,
+                                                                  Superdrop& drop2) const {
   if (drop1.get_xi() == drop2.get_xi()) {
     twin_superdroplet_breakup(drop1, drop2);
   } else {
@@ -159,8 +163,8 @@ Similar to Shima et al. 2009 Section 5.1.3. part (5) option (b).
 Note implicit assumption that gamma factor = 1.
 _Note:_ Implicit casting of xi from uint64_t to double. */
 template <NFragments NFrags>
-KOKKOS_FUNCTION void DoBreakup<NFrags>::twin_superdroplet_breakup(Superdrop &drop1,
-                                                                  Superdrop &drop2) const {
+KOKKOS_FUNCTION void DoBreakup<NFrags>::twin_superdroplet_breakup(Superdrop& drop1,
+                                                                  Superdrop& drop2) const {
   const auto old_xi = drop2.get_xi();  // = drop1.xi
   const auto totnfrags = double{nfrags(drop1, drop2) * old_xi};
   assert(((totnfrags / old_xi) > 2.5) && "nfrags must be > 2.5");
@@ -194,8 +198,8 @@ Shima et al. 2009 Section 5.1.3. part (5) option (a).
 Note implicit assumption that gamma factor = 1.
 _Note:_ Implicit casting of xi from uint64_t to double. */
 template <NFragments NFrags>
-KOKKOS_FUNCTION void DoBreakup<NFrags>::different_superdroplet_breakup(Superdrop &drop1,
-                                                                       Superdrop &drop2) const {
+KOKKOS_FUNCTION void DoBreakup<NFrags>::different_superdroplet_breakup(Superdrop& drop1,
+                                                                       Superdrop& drop2) const {
   const auto old_xi1 = drop1.get_xi();
   const auto old_xi2 = drop2.get_xi();
 

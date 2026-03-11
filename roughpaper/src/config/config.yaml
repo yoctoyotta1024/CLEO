@@ -62,6 +62,9 @@ microphysics:
     MINSUBTSTEP : 0.01                                 # minimum subtimestep in cases of substepping [s]
     rtol : 0.0                                         # relative tolerance for implicit Euler integration
     atol : 0.001                                       # absolute tolerance for implicit Euler integration
+  coalescence:
+    constcoaleff:
+      coaleff: 0.95                                    # constant coalescence efficiency
   # breakup:
   #   constnfrags:
   #     nfrags: 5.0                                      # average no. of fragments per droplet breakup
