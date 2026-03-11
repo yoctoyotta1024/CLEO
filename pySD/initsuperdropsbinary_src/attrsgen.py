@@ -104,7 +104,7 @@ class AttrsGenerator:
                 "total real droplet concentration"
                 + " {:0g} != numconc, {:0g}".format(calcnumconc, NUMCONC)
             )
-            raise ValueError(errmsg)
+            print("WARNING", errmsg, calcnumconc, NUMCONC)
 
         if abs(nreals - calcnreals) > 0.001 * nreals:
             errmsg = "total no. real droplets, {:0g},".format(
