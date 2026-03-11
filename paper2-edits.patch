@@ -1,0 +1,548 @@
+diff --git a/examples/exampleplotting/plotssrc/as2017fig.py b/examples/exampleplotting/plotssrc/as2017fig.py
+index 800c7af3d..e0a7abe59 100644
+--- a/examples/exampleplotting/plotssrc/as2017fig.py
++++ b/examples/exampleplotting/plotssrc/as2017fig.py
+@@ -84,7 +84,7 @@ def condensation_validation_subplots(
+     col_a, lstyle_a = "k", "-"
+
+     lab_b = "descent"
+-    col_b, lstyle_b = "orange", "--"
++    col_b, lstyle_b = "firebrick", "--"
+
+     l1 = axs[0].plot(
+         supersat[:hlf] * 100,
+diff --git a/libs/initialise/config.hpp b/libs/initialise/config.hpp
+index a1dc37236..7a060374c 100644
+--- a/libs/initialise/config.hpp
++++ b/libs/initialise/config.hpp
+@@ -86,6 +86,8 @@ struct Config {
+     return optional.condensation;
+   }
+
++  OptionalConfigParams::CoalescenceParams get_coalescence() const { return optional.coalescence; }
++
+   OptionalConfigParams::BreakupParams get_breakup() const { return optional.breakup; }
+
+   OptionalConfigParams::InitSupersFromBinaryParams get_initsupersfrombinary() const {
+diff --git a/libs/initialise/optional_config_params.cpp b/libs/initialise/optional_config_params.cpp
+index 6cda4bed8..05aa9f3ab 100644
+--- a/libs/initialise/optional_config_params.cpp
++++ b/libs/initialise/optional_config_params.cpp
+@@ -92,6 +92,11 @@ void OptionalConfigParams::set_microphysics(const YAML::Node &config) {
+     condensation.print_params();
+   }
+
++  if (node["coalescence"]) {
++    coalescence.set_params(config);
++    coalescence.print_params();
++  }
++
+   if (node["breakup"]) {
+     breakup.set_params(config);
+     breakup.print_params();
+@@ -154,7 +159,18 @@ void OptionalConfigParams::CondensationParams::print_params() const {
+             << "\n---------------------------------------------------------\n";
+ }
+
+-void OptionalConfigParams::BreakupParams::set_params(const YAML::Node &config) {
++void OptionalConfigParams::CoalescenceParams::set_params(const YAML::Node& config) {
++  const YAML::Node node = config["microphysics"]["coalescence"]["constcoaleff"];
++  constcoaleff.coaleff = node["coaleff"].as<double>();
++}
++
++void OptionalConfigParams::CoalescenceParams::print_params() const {
++  std::cout << "\n-------- Coalescence Configuration Parameters --------------"
++            << "\nConstCoalEff coaleff: " << constcoaleff.coaleff
++            << "\n---------------------------------------------------------\n";
++}
++
++void OptionalConfigParams::BreakupParams::set_params(const YAML::Node& config) {
+   const YAML::Node node = config["microphysics"]["breakup"]["constnfrags"];
+   constnfrags.nfrags = node["nfrags"].as<double>();
+ }
+diff --git a/libs/initialise/optional_config_params.hpp b/libs/initialise/optional_config_params.hpp
+index 898b5cee2..175595c18 100644
+--- a/libs/initialise/optional_config_params.hpp
++++ b/libs/initialise/optional_config_params.hpp
+@@ -78,6 +78,14 @@ struct OptionalConfigParams {
+     double atol = NaNVals::dbl();        /**< absolute tolerance for implicit Euler integration */
+   } condensation;
+
++  struct CoalescenceParams {
++    void set_params(const YAML::Node& config);
++    void print_params() const;
++    struct ConstCoalEffParams {
++      double coaleff = NaNVals::dbl(); /**< constant coalescence efficiency */
++    } constcoaleff;
++  } coalescence;
++
+   struct BreakupParams {
+     void set_params(const YAML::Node& config);
+     void print_params() const;
+diff --git a/libs/superdrops/collisions/CMakeLists.txt b/libs/superdrops/collisions/CMakeLists.txt
+index faa0b453c..16c5cc530 100644
+--- a/libs/superdrops/collisions/CMakeLists.txt
++++ b/libs/superdrops/collisions/CMakeLists.txt
+@@ -14,6 +14,7 @@ set(LIB_BINARY_DIR ${CMAKE_BINARY_DIR}/lib)
+ set(SOURCES
+   "shuffle.cpp"
+   "coalbure_flag.cpp"
++  "coalescence_efficiency.cpp"
+   "coalescence.cpp"
+   "collisionkinetics.cpp"
+   "golovinprob.cpp"
+diff --git a/libs/superdrops/collisions/breakup.hpp b/libs/superdrops/collisions/breakup.hpp
+index 064ba4237..94b1a7dba 100644
+--- a/libs/superdrops/collisions/breakup.hpp
++++ b/libs/superdrops/collisions/breakup.hpp
+@@ -72,11 +72,13 @@ struct DoBreakup {
+    * @param drop1 First superdroplet.
+    * @param drop2 Second superdroplet.
+    * @param prob Probability of collision.
+-   * @param phi Phi value.
++   * @param phi_coll Random number in the range [0.0, 1.0] for collision.
++   * @param phi_out Random number in the range [0.0, 1.0] for outcome of collision (not used).
+    * @return True if the resulting superdroplet is null, otherwise false.
+    */
+   KOKKOS_FUNCTION
+-  bool operator()(Superdrop &drop1, Superdrop &drop2, const double prob, const double phi) const;
++  bool operator()(Superdrop& drop1, Superdrop& drop2, const double prob, const double phi_coll,
++                  const double phi_out) const;
+
+   /* enact collisional-breakup of droplets by changing
+   multiplicity, radius and solute mass of each
+@@ -111,15 +113,17 @@ inline MicrophysicalProcess auto CollBu(const unsigned int interval,
+  * @param drop1 First superdroplet.
+  * @param drop2 Second superdroplet.
+  * @param prob Probability of collision.
+- * @param phi Phi value.
++ * @param phi_coll Random number in the range [0.0, 1.0] for collision.
++ * @param phi_out Random number in the range [0.0, 1.0] for outcome of collision (not used).
+  * @return True if the resulting superdroplet is null, otherwise false.
+  */
+ template <NFragments NFrags>
+-KOKKOS_FUNCTION bool DoBreakup<NFrags>::operator()(Superdrop &drop1, Superdrop &drop2,
+-                                                   const double prob, const double phi) const {
++KOKKOS_FUNCTION bool DoBreakup<NFrags>::operator()(Superdrop& drop1, Superdrop& drop2,
++                                                   const double prob, const double phi_coll,
++                                                   const double phi_out) const {
+   /* enact collision-breakup on pair of superdroplets if
+   gamma factor for collision-breakup is not zero */
+-  if (breakup_gamma(prob, phi) != 0) {
++  if (breakup_gamma(prob, phi_coll) != 0) {
+     breakup_superdroplet_pair(drop1, drop2);
+   }
+
+diff --git a/libs/superdrops/collisions/coalbure.hpp b/libs/superdrops/collisions/coalbure.hpp
+index e8df00648..df3fdd91a 100644
+--- a/libs/superdrops/collisions/coalbure.hpp
++++ b/libs/superdrops/collisions/coalbure.hpp
+@@ -57,31 +57,6 @@ struct DoCoalBuRe {
+   DoBreakup<NFrags> bu; /**< Instance of DoBreakup with specified no. of fragments calculation. */
+   Flag coalbure_flag;   /**< Instance of CoalBuReFlag indicating the action to perform. */
+
+-  /*
+-  rescale random number phi be in desired range of [0, 1] to account for fact that if a
+-  collision occurs (i.e. if gamma != 0) then phi lies in range [0, prob - floor(prob)] rather than
+-  [0, 1].
+-  * _Note:_ This function is assumed to be consitent with collision_gamma(...) and must be.
+-  */
+-
+-  /**
+-   * @brief Rescales a random number phi to be in the desired range [0, 1].
+-   *
+-   * This function adjusts the value of phi to account for the fact that if a collision occurs
+-   * (i.e., if gamma != 0), then phi lies in the range [0, prob - floor(prob)] instead of [0, 1].
+-   *
+-   * @note This function is assumed to be consistent with collision_gamma(...) and must be.
+-   *
+-   * @param prob The probability of collision.
+-   * @param phi Random number, assumed to be in the range [0.0, prob - floor(prob)].
+-   *
+-   * @return The rescaled value of phi as a uint64_t.
+-   */
+-  KOKKOS_FUNCTION
+-  uint64_t rescale_phi(const double prob, const double phi) const {
+-    return phi / (prob - Kokkos::floor(prob));
+-  }
+-
+   /**
+    * @brief Calculates the value of the gamma factor in Monte Carlo collision.
+    *
+@@ -148,11 +123,14 @@ struct DoCoalBuRe {
+    * @param drop1 First superdroplet.
+    * @param drop2 Second superdroplet.
+    * @param prob Probability of collision.
+-   * @param phi Phi value.
++   * @param phi_coll Random number in the range [0.0, 1.0] for collision.
++   * @param phi_out Random number in the range [0.0, 1.0] for outcome of collision as breakup,
++   * rebound or coalescence.
+    * @return True if the resulting superdroplet is null, otherwise false.
+    */
+   KOKKOS_INLINE_FUNCTION
+-  bool operator()(Superdrop &drop1, Superdrop &drop2, const double prob, const double phi) const;
++  bool operator()(Superdrop& drop1, Superdrop& drop2, const double prob, const double phi_coll,
++                  const double phi_out) const;
+ };
+
+ /**
+@@ -197,23 +175,24 @@ inline MicrophysicalProcess auto CoalBuRe(const unsigned int interval,
+  * @param drop1 First superdroplet.
+  * @param drop2 Second superdroplet.
+  * @param prob Probability of collision.
+- * @param phi Phi value.
++ * @param phi_coll Random number in the range [0.0, 1.0] for collision.
++ * @param phi_out Random number in the range [0.0, 1.0] for outcome of collision as breakup,
++ * rebound or coalescence.
+  * @return True if the resulting superdroplet is null, otherwise false.
+  */
+ template <NFragments NFrags, CoalBuReFlag Flag>
+-KOKKOS_FUNCTION bool DoCoalBuRe<NFrags, Flag>::operator()(Superdrop &drop1, Superdrop &drop2,
+-                                                          const double prob,
+-                                                          const double phi) const {
++KOKKOS_FUNCTION bool DoCoalBuRe<NFrags, Flag>::operator()(Superdrop& drop1, Superdrop& drop2,
++                                                          const double prob, const double phi_coll,
++                                                          const double phi_out) const {
+   /* 1. calculate gamma factor for collision  */
+   const auto xi1 = drop1.get_xi();
+   const auto xi2 = drop2.get_xi();
+-  const auto gamma = collision_gamma(xi1, xi2, prob, phi);
++  const auto gamma = collision_gamma(xi1, xi2, prob, phi_coll);
+
+   /* 2. enact collision between pair
+   of superdroplets if gamma is not zero */
+   if (gamma != 0) {
+-    const double phi_collision = rescale_phi(prob, phi);
+-    return coalesce_breakup_or_rebound(gamma, phi_collision, drop1, drop2);
++    return coalesce_breakup_or_rebound(gamma, phi_out, drop1, drop2);
+   }
+
+   return 0;
+diff --git a/libs/superdrops/collisions/coalbure_flag.cpp b/libs/superdrops/collisions/coalbure_flag.cpp
+index 0140be932..4bff20837 100644
+--- a/libs/superdrops/collisions/coalbure_flag.cpp
++++ b/libs/superdrops/collisions/coalbure_flag.cpp
+@@ -70,29 +70,12 @@ KOKKOS_FUNCTION unsigned int TSCoalBuReFlag::operator()(const double phi, const
+   }
+ }
+
+-/* coalescence efficency given a collision occurs
+-according to parameterisation from Straub et al. 2010
+-section 3, equation 5 and Schlottke et al. 2010
+-section 4a equation 11 */
+-KOKKOS_FUNCTION double TSCoalBuReFlag::coalescence_efficiency(const Superdrop &drop1,
+-                                                              const Superdrop &drop2,
+-                                                              const double cke) const {
+-  constexpr double beta = -1.15;
+-
+-  const auto surf_c = coal_surfenergy(drop1.get_radius(),
+-                                      drop2.get_radius());  // [J] S_c
+-  const auto weber = double{cke / surf_c};
+-  const auto ecoal = double{Kokkos::exp(beta * weber)};
+-
+-  return ecoal;
+-}
+-
+ /* returns truw if comparison of random numnber
+ with coalescence efficiency from Straub et al. 2010
+ indicates coalescence should occur */
+ KOKKOS_FUNCTION bool TSCoalBuReFlag::is_coalescence(const Superdrop &drop1, const Superdrop &drop2,
+                                                     const double phi, const double cke) const {
+-  const auto ecoal = coalescence_efficiency(drop1, drop2, cke);
++  const auto ecoal = coalescence_efficiency_straub2010(drop1, drop2, cke);
+
+   if (phi < ecoal) {
+     return true;
+diff --git a/libs/superdrops/collisions/coalbure_flag.hpp b/libs/superdrops/collisions/coalbure_flag.hpp
+index 7093e233f..25c9648bb 100644
+--- a/libs/superdrops/collisions/coalbure_flag.hpp
++++ b/libs/superdrops/collisions/coalbure_flag.hpp
+@@ -31,6 +31,7 @@
+
+ #include "../superdrop.hpp"
+ #include "../terminalvelocity.hpp"
++#include "./coalescence_efficiency.hpp"
+ #include "./collisionkinetics.hpp"
+
+ /* operator returns flag indicating rebound or
+@@ -82,14 +83,6 @@ struct TSCoalBuReFlag {
+   KOKKOS_FUNCTION bool is_coalescence(const Superdrop &drop1, const Superdrop &drop2,
+                                       const double phi, const double cke) const;
+
+-  /* coalescence efficency given a collision occurs
+-  according to parameterisation from Straub et al. 2010
+-  section 3, equation 5 and Schlottke et al. 2010
+-  section 4a equation 11 */
+-  KOKKOS_FUNCTION
+-  double coalescence_efficiency(const Superdrop &drop1, const Superdrop &drop2,
+-                                const double cke) const;
+-
+  public:
+   TSCoalBuReFlag() {}
+
+@@ -100,7 +93,59 @@ struct TSCoalBuReFlag {
+   section 4 of Testik et al. 2011 (figure 12) as well
+   as coalescence efficiency from Straub et al. 2010 */
+   KOKKOS_FUNCTION
+-  unsigned int operator()(const double phi, const Superdrop &drop1, const Superdrop &drop2) const;
++  unsigned int operator()(const double phi, const Superdrop& drop1, const Superdrop& drop2) const;
++};
++
++template <VelocityFormula TerminalVelocity>
++struct StraubCoalBuReFlag {
++ private:
++  TerminalVelocity terminalv;
++
++ public:
++  explicit StraubCoalBuReFlag(TerminalVelocity tv) : terminalv(tv) {}
++
++  /* function returns flag indicating coalescence or breakup (never rebound).
++   * If flag = 1 -> coalescence. If flag = 2 -> breakup.
++   * Flag decided based on Straub et al. 2010 coalescence efficiency equation 3
++   * (with definition of terms from Schlottle et al. 2010) compared to random number "phi"
++   * function signature matches conditions to satisfy CoalBuReFlag concept
++   * */
++  KOKKOS_INLINE_FUNCTION
++  unsigned int operator()(const double phi, const Superdrop& drop1, const Superdrop& drop2) const {
++    const auto r1 = drop1.get_radius();
++    const auto r2 = drop2.get_radius();
++    const auto cke = collision_kinetic_energy(r1, r2, terminalv(drop1),
++                                              terminalv(drop2));  // [J]
++
++    const auto ecoal = coalescence_efficiency_straub2010(drop1, drop2, cke);
++
++    if (phi < ecoal) {
++      return 1;  // coalescence
++    } else {
++      return 2;  // breakup
++    }
++  }
++};
++
++struct ConstCoalBuReFlag {
++ private:
++  double coaleff;  // flag indicating whether coalescence, breakup or rebound should occur
++ public:
++  explicit ConstCoalBuReFlag(const double coaleff) : coaleff(coaleff) {}
++
++  /* function returns flag indicating coalescence or breakup (never rebound).
++   * If flag = 1 -> coalescence. If flag = 2 -> breakup.
++   * Flag decided based on constant coalescence efficiency compared to random number "phi"
++   * function signature matches conditions to satisfy CoalBuReFlag concept
++   * */
++  KOKKOS_INLINE_FUNCTION
++  unsigned int operator()(const double phi, const Superdrop& drop1, const Superdrop& drop2) const {
++    if (phi < coaleff) {
++      return 1;  // coalescence
++    } else {
++      return 2;  // breakup
++    }
++  }
+ };
+
+ #endif  // LIBS_SUPERDROPS_COLLISIONS_COALBURE_FLAG_HPP_
+diff --git a/libs/superdrops/collisions/coalescence.cpp b/libs/superdrops/collisions/coalescence.cpp
+index 5835a170d..f783c7e58 100644
+--- a/libs/superdrops/collisions/coalescence.cpp
++++ b/libs/superdrops/collisions/coalescence.cpp
+@@ -32,15 +32,17 @@
+  * @param drop1 The first super-droplet.
+  * @param drop2 The second super-droplet.
+  * @param prob The probability of collision-coalescence.
+- * @param phi Random number in the range [0.0, 1.0].
++ * @param phi_coll Random number in the range [0.0, 1.0] for collision.
++ * @param phi_out Random number in the range [0.0, 1.0] for outcome of collision (not used).
+  * @return boolean=true if collision-coalescence resulted in null superdrops.
+  */
+-KOKKOS_FUNCTION bool DoCoalescence::operator()(Superdrop &drop1, Superdrop &drop2,
+-                                               const double prob, const double phi) const {
++KOKKOS_FUNCTION bool DoCoalescence::operator()(Superdrop& drop1, Superdrop& drop2,
++                                               const double prob, const double phi_coll,
++                                               const double phi_out) const {
+   /* 1. calculate gamma factor for collision-coalescence  */
+   const auto xi1 = drop1.get_xi();
+   const auto xi2 = drop2.get_xi();
+-  const auto gamma = coalescence_gamma(xi1, xi2, prob, phi);
++  const auto gamma = coalescence_gamma(xi1, xi2, prob, phi_coll);
+
+   /* 2. enact collision-coalescence on pair
+   of superdroplets if gamma is not zero */
+diff --git a/libs/superdrops/collisions/coalescence.hpp b/libs/superdrops/collisions/coalescence.hpp
+index c83a0da23..270339b3e 100644
+--- a/libs/superdrops/collisions/coalescence.hpp
++++ b/libs/superdrops/collisions/coalescence.hpp
+@@ -94,11 +94,13 @@ struct DoCoalescence {
+    * @param drop1 The first super-droplet.
+    * @param drop2 The second super-droplet.
+    * @param prob The probability of collision-coalescence.
+-   * @param phi Random number in the range [0.0, 1.0].
++   * @param phi_coll Random number in the range [0.0, 1.0] for collision.
++   * @param phi_out Random number in the range [0.0, 1.0] for outcome of collision (not used).
+    * @return boolean=true if collision-coalescence resulted in null superdrops.
+    */
+   KOKKOS_FUNCTION
+-  bool operator()(Superdrop &drop1, Superdrop &drop2, const double prob, const double phi) const;
++  bool operator()(Superdrop& drop1, Superdrop& drop2, const double prob, const double phi_coll,
++                  const double phi_out) const;
+
+   /**
+    * @brief Calculates the value of the gamma factor in Monte Carlo collision-coalescence.
+diff --git a/libs/superdrops/collisions/coalescence_efficiency.cpp b/libs/superdrops/collisions/coalescence_efficiency.cpp
+new file mode 100644
+index 000000000..7680f1c40
+--- /dev/null
++++ b/libs/superdrops/collisions/coalescence_efficiency.cpp
+@@ -0,0 +1,38 @@
++/*
++ * Copyright (c) 2026 MPI-M, Clara Bayley
++ *
++ *
++ * ----- CLEO -----
++ * File: coalescence_efficiency.cpp
++ * Project: collisions
++ * Created Date: Monday 9th March 2026
++ * Author: Clara Bayley (CB)
++ * Additional Contributors:
++ * -----
++ * License: BSD 3-Clause "New" or "Revised" License
++ * https://opensource.org/licenses/BSD-3-Clause
++ * -----
++ * File Description:
++ * various parameterisations of the coalescence efficiency
++ */
++
++#include "./coalescence_efficiency.hpp"
++
++/*
++ * coalescence efficency given a collision occurs according to parameterisation from
++ * Straub et al. 2010 section 3, equation 5
++ * and Schlottke et al. 2010 section 4a equation 11
++ * cke == collision_kinetic_energy
++ * */
++KOKKOS_FUNCTION
++double coalescence_efficiency_straub2010(const Superdrop& drop1, const Superdrop& drop2,
++                                         const double cke) {
++  constexpr double beta = -1.15;
++
++  const auto surf_c = coal_surfenergy(drop1.get_radius(),
++                                      drop2.get_radius());  // [J] S_c
++  const auto weber = double{cke / surf_c};
++  const auto ecoal = double{Kokkos::exp(beta * weber)};
++
++  return ecoal;
++}
+diff --git a/libs/superdrops/collisions/coalescence_efficiency.hpp b/libs/superdrops/collisions/coalescence_efficiency.hpp
+new file mode 100644
+index 000000000..53a6b6a9f
+--- /dev/null
++++ b/libs/superdrops/collisions/coalescence_efficiency.hpp
+@@ -0,0 +1,37 @@
++/*
++ * Copyright (c) 2026 MPI-M, Clara Bayley
++ *
++ *
++ * ----- CLEO -----
++ * File: coalescence_efficiency.hpp
++ * Project: collisions
++ * Created Date: Monday 9th March 2026
++ * Author: Clara Bayley (CB)
++ * Additional Contributors:
++ * -----
++ * License: BSD 3-Clause "New" or "Revised" License
++ * https://opensource.org/licenses/BSD-3-Clause
++ * -----
++ * File Description:
++ * various parameterisations of the coalescence efficiency
++ */
++
++#ifndef LIBS_SUPERDROPS_COLLISIONS_COALESCENCE_EFFICIENCY_HPP_
++#define LIBS_SUPERDROPS_COLLISIONS_COALESCENCE_EFFICIENCY_HPP_
++
++#include <Kokkos_Core.hpp>
++
++#include "../superdrop.hpp"
++#include "./collisionkinetics.hpp"
++
++/*
++ * coalescence efficency given a collision occurs according to parameterisation from
++ * Straub et al. 2010 section 3, equation 5
++ * and Schlottke et al. 2010 section 4a equation 11
++ * cke == collision_kinetic_energy
++ * */
++KOKKOS_FUNCTION
++double coalescence_efficiency_straub2010(const Superdrop& drop1, const Superdrop& drop2,
++                                         const double cke);
++
++#endif  // LIBS_SUPERDROPS_COLLISIONS_COALESCENCE_EFFICIENCY_HPP_
+diff --git a/libs/superdrops/collisions/collisions.hpp b/libs/superdrops/collisions/collisions.hpp
+index d88970661..a58c8655d 100644
+--- a/libs/superdrops/collisions/collisions.hpp
++++ b/libs/superdrops/collisions/collisions.hpp
+@@ -64,8 +64,8 @@ concept PairProbability = requires(P p, Superdrop &drop, double d) {
+  * @tparam X The type representing the pair enactment object.
+  */
+ template <typename X>
+-concept PairEnactX = requires(X x, Superdrop &drop, double d) {
+-  { x(drop, drop, d, d) } -> std::convertible_to<bool>;
++concept PairEnactX = requires(X x, Superdrop& drop, double d) {
++  { x(drop, drop, d, d, d) } -> std::convertible_to<bool>;
+ };
+
+ /*
+@@ -150,11 +150,12 @@ struct CollideSupersFunctor {
+     const auto prob = scaled_probability(drops.first, drops.second, scale_p, VOLUME);
+
+     /* 3. Monte Carlo Step: use random number to enact (or not) collision of superdroplets pair */
+-    URBG<ExecSpace> urbg{genpool.get_state()};  // thread safe random number generator
+-    const auto phi = urbg.drand(0.0, 1.0);      // random number in range [0.0, 1.0]
++    URBG<ExecSpace> urbg{genpool.get_state()};   // thread safe random number generator
++    const auto phi_coll = urbg.drand(0.0, 1.0);  // random number in range [0.0, 1.0] for collision
++    const auto phi_out = urbg.drand(0.0, 1.0);  // for outcome of collisions extended algorithm only
+     genpool.free_state(urbg.gen);
+
+-    enact_collision(drops.first, drops.second, prob, phi);
++    enact_collision(drops.first, drops.second, prob, phi_coll, phi_out);
+   }
+
+   /*
+diff --git a/pySD/initsuperdropsbinary_src/attrsgen.py b/pySD/initsuperdropsbinary_src/attrsgen.py
+index 89d30fded..0c90bebdc 100644
+--- a/pySD/initsuperdropsbinary_src/attrsgen.py
++++ b/pySD/initsuperdropsbinary_src/attrsgen.py
+@@ -104,7 +104,7 @@ class AttrsGenerator:
+                 "total real droplet concentration"
+                 + " {:0g} != numconc, {:0g}".format(calcnumconc, NUMCONC)
+             )
+-            raise ValueError(errmsg)
++            print("WARNING", errmsg, calcnumconc, NUMCONC)
+
+         if abs(nreals - calcnreals) > 0.001 * nreals:
+             errmsg = "total no. real droplets, {:0g},".format(
+diff --git a/roughpaper/src/config/config.yaml b/roughpaper/src/config/config.yaml
+index 0faecce3a..eb900f742 100644
+--- a/roughpaper/src/config/config.yaml
++++ b/roughpaper/src/config/config.yaml
+@@ -66,6 +66,9 @@ microphysics:
+     MINSUBTSTEP : 0.01                                 # minimum subtimestep in cases of substepping [s]
+     rtol : 0.0                                         # relative tolerance for implicit Euler integration
+     atol : 0.001                                       # absolute tolerance for implicit Euler integration
++  coalescence:
++    constcoaleff:
++      coaleff: 0.95                                    # constant coalescence efficiency
+   # breakup:
+   #   constnfrags:
+   #     nfrags: 5.0                                      # average no. of fragments per droplet breakup
+diff --git a/roughpaper/src/main_impl.hpp b/roughpaper/src/main_impl.hpp
+index 619f17fd3..77c5b63ad 100644
+--- a/roughpaper/src/main_impl.hpp
++++ b/roughpaper/src/main_impl.hpp
+@@ -140,6 +140,9 @@ inline MicrophysicalProcess auto config_collisions(const Config &config, const T
+   // const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
+   // // const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag{};
+   // const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
++  // // const CoalBuReFlag auto coalbure_flag = StraubCoalBuReFlag(RogersGKTerminalVelocity{});
++  // // const CoalBuReFlag auto coalbure_flag =
++  // //     ConstCoalBuReFlag{config.get_coalescence().constcoaleff.coaleff};
+   // const MicrophysicalProcess auto colls = CoalBuRe(tsteps.get_collstep(),
+   //                                                  &step2realtime,
+   //                                                  collprob,
