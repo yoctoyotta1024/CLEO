@@ -301,13 +301,29 @@ def plot_radiusdistrib(ax, hedgs, radius, xi):
 def plot_numconcdistrib(ax, hedgs, xi, radius, vol):
     """get and plot frequency of real droplets in each log10(r) bin"""
 
-    wghts = xi / vol / 1e6  # [cm^-3]
-    hist, hedgs, hwdths, hcens = log10r_frequency_distribution(radius, hedgs, wghts)
+    wghts = xi / vol  # [m^-3]
 
-    line = ax.step(hcens, hist, label="binned distribution", where="mid")
-    ax.set_xscale("log")
-    ax.set_xlabel("radius, r, /\u03BCm")
-    ax.set_ylabel("real droplet number\nconcentration / cm$^{-3}$")
+    nbins = 64
+    mind, maxd = [2e-6, 8e-3]
+    hedgs = np.linspace(mind, maxd, nbins + 1)
+
+    hist, hedgs = np.histogram(
+        radius * 2,
+        bins=hedgs,
+        weights=wghts,
+    )
+    hwdths = hedgs[1:] - hedgs[:-1]
+    hcens = (hedgs[1:] + hedgs[:-1]) / 2
+
+    diam_mm = hcens * 1e3
+    dist = hist / (hwdths * 1000)  # [m^-3 mm^-1]
+
+    line = ax.step(diam_mm, dist, label="binned distribution", where="mid")
+    ax.set_xlabel("diam /mm")
+    ax.set_ylabel("N(v) / m$^{-3}$ m$^{-1}$")
+    ax.set_yscale("log")
+    ax.set_ylim([4, 2e4])
+    ax.set_xlim([0, 10])
 
     if not ax.get_legend():
         ax.legend(loc="lower left")
