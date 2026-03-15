@@ -41,11 +41,14 @@
 #include "initialise/timesteps.hpp"
 #include "observers/collect_data_for_simple_dataset.hpp"
 #include "observers/gbxindex_observer.hpp"
+#include "observers/massmoments_observer.hpp"
 #include "observers/observers.hpp"
+#include "observers/sdmmonitor/monitor_precipitation_observer.hpp"
 #include "observers/state_observer.hpp"
 #include "observers/streamout_observer.hpp"
 #include "observers/superdrops_observer.hpp"
 #include "observers/time_observer.hpp"
+#include "observers/totnsupers_observer.hpp"
 #include "runcleo/coupleddynamics.hpp"
 #include "runcleo/couplingcomms.hpp"
 #include "runcleo/runcleo.hpp"
@@ -62,8 +65,8 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
   const std::array<size_t, 3> ndims({h_ndims(0), h_ndims(1), h_ndims(2)});
 
   const auto nsteps = (unsigned int)(std::ceil(t_end / couplstep) + 1);
-
-  return YacDynamics(config, couplstep, ndims, nsteps);
+  const CartesianDecomposition& decomp = gbxmaps.get_domain_decomposition();
+  return YacDynamics(config, couplstep, ndims, nsteps, decomp);
 }
 
 template <GridboxMaps GbxMaps>
@@ -84,11 +87,17 @@ inline MicrophysicalProcess auto create_microphysics(const Config &config,
                                                      const Timesteps &tsteps) {
   return NullMicrophysicalProcess{};
 }
+// inline auto create_movement(const unsigned int motionstep, const CartesianMaps &gbxmaps) {
+//   const Motion<CartesianMaps> auto motion = NullMotion{};
+//   const BoundaryConditions<CartesianMaps> auto boundary_conditions = NullBoundaryConditions{};
+
+//  return cartesian_movement(gbxmaps, motion, boundary_conditions);
+// }
 
 inline auto create_movement(const unsigned int motionstep, const CartesianMaps &gbxmaps) {
   const auto terminalv = NullTerminalVelocity{};
   const Motion<CartesianMaps> auto motion =
-      CartesianMotion(motionstep, &step2dimlesstime, terminalv);
+       CartesianMotion(motionstep, &step2dimlesstime, terminalv);
 
   const BoundaryConditions<CartesianMaps> auto boundary_conditions = NullBoundaryConditions{};
 
@@ -127,9 +136,17 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
 
   const Observer auto obs3 = StateObserver(obsstep, dataset, maxchunk, ngbxs);
 
+  const Observer auto obs4 = MassMomentsObserver(obsstep, dataset, store, maxchunk, ngbxs);
+
+  const Observer auto obs5 = MassMomentsRaindropsObserver(obsstep, dataset, store, maxchunk, ngbxs);
+
+  const Observer auto obs6 = MonitorPrecipitationObserver(obsstep, dataset, store, maxchunk, ngbxs);
+
+  const Observer auto obs7 = TotNsupersObserver(obsstep, dataset, store, maxchunk);
+
   const Observer auto obssd = create_superdrops_observer(obsstep, dataset, store, maxchunk);
 
-  return obssd >> obs3 >> obs2 >> obs1 >> obs0;
+  return obssd >> obs7 >> obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
 }
 
 template <typename Dataset, typename Store>
