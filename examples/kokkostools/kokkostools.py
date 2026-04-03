@@ -12,7 +12,7 @@ Additional Contributors:
 License: BSD 3-Clause "New" or "Revised" License
 https://opensource.org/licenses/BSD-3-Clause
 -----
-Script generates input files, runs program with "spdtest" executable, and post-processes
+Script generates input files, runs program with "kokkostools" executable, and post-processes
 kokkos tools kernel timer profiling outful to test performance of CLEO using Kokkos tools
 for a particular buildtype
 """
@@ -40,7 +40,7 @@ parser.add_argument("path2build", type=Path, help="Absolute path to build direct
 parser.add_argument(
     "path2kokkostools",
     type=Path,
-    help="Absolute path to kokkos tools installation libkp_[XXX]",
+    help="Absolute path to kokkos tools installation (lib/ or lib64/ for libkp_[XXX], and bin/)",
 )
 parser.add_argument(
     "src_config_filename",
@@ -187,6 +187,9 @@ def inputfiles(
 
 
 def run_exectuable(path2kokkostools, path2build, config_filename, postproc_filename):
+    ### --- check for directory (that should contain tools) --- ###
+    assert path2kokkostools.is_dir(), "path2kokkostools doesn't exist"
+
     ### --- delete any existing output dataset and setup files --- ###
     ### --- Note: profiler and post-processes data is not deleted --- ###
     yaml = YAML()
@@ -203,7 +206,7 @@ def run_exectuable(path2kokkostools, path2build, config_filename, postproc_filen
     ### --- run exectuable with given config file --- ###
     os.chdir(path2build / "bin")
     profiler = KpKernelTimer(path2kokkostools)
-    executable = path2build / "examples" / "kokkostools" / "src" / "spdtest"
+    executable = path2build / "examples" / "kokkostools" / "src" / "kokkostools"
     cmd = [executable, config_filename]
     print(" ".join([str(c) for c in cmd]))
     subprocess.run(cmd, check=True)

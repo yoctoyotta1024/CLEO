@@ -1,17 +1,17 @@
 Memory Layout
 =============
 
-The key structures which compose CLEO and their memory layout are shown schematically below.
+The key structures which compose Cleo and their memory layout are shown schematically below.
 
 .. figure:: ./figs/cleomemlayout1.png
-   :alt: Schematic for CLEO's memory layout part 1
+   :alt: Schematic for Cleo's memory layout part 1
    :align: center
 
 .. figure:: ./figs/cleomemlayout2.png
-   :alt: Schematic for CLEO's memory layout part 2
+   :alt: Schematic for Cleo's memory layout part 2
    :align: center
 
-   A schematic for memory layout of CLEO's key structures. The superdroplets follow on
+   A schematic for memory layout of Cleo's key structures. The superdroplets follow on
    in the bottom panel from the right-hand side of the figure above.
 
 Each node of a computer allocated to the program contains a portion of the simulated domain
@@ -25,10 +25,10 @@ get instantiated at compilation, for example as `ICON <https://www.icon-model.or
 Each gridbox is composed of certain elements:
 
 .. figure:: ./figs/gridbox.png
-   :alt: Schematic showing the elements of a gridbox in CLEO
+   :alt: Schematic showing the elements of a gridbox in Cleo
    :align: center
 
-   Schematic showing the elements of a gridbox in CLEO
+   Schematic showing the elements of a gridbox in Cleo
 
 For reasons of computational efficiency, superdroplets are not stored within gridboxes. Instead all
 the superdroplets whose positions lie within the portion of the domain on that node at a given timestep
@@ -46,7 +46,7 @@ multiplicity). Additionally, to aid analysis involving Lagrangian particle track
 can optionally be given a unique identifier. This is illustrated in the schematic below.
 
 .. figure:: ./figs/superdroplet.png
-   :alt: Schematic showing the elements of a superdroplet in CLEO
+   :alt: Schematic showing the elements of a superdroplet in Cleo
    :align: center
 
-   Schematic showing the elements of a superdroplet in CLEO
+   Schematic showing the elements of a superdroplet in Cleo

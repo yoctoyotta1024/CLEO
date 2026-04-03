@@ -3,7 +3,7 @@
  *
  *
  * ----- CLEO -----
- * File: main_spdtest.cpp
+ * File: main_kokkostools.cpp
  * Project: src
  * Created Date: Thursday 12th October 2023
  * Author: Clara Bayley (CB)
@@ -15,7 +15,7 @@
  * File Description:
  * runs the CLEO super-droplet model (SDM) for kokkostools profiling example.
  * After make/compiling, execute for example via:
- * ./src/spdtest ../src/config/config.yaml
+ * ./src/kokkostools ../src/config/config.yaml
  */
 
 #include <Kokkos_Core.hpp>

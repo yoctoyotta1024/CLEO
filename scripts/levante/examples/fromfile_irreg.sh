@@ -8,9 +8,11 @@
 #SBATCH --time=00:05:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
-#SBATCH --account=bm1183
+#SBATCH --account=mh0731
 #SBATCH --output=./fromfile_irreg_out.%j.out
 #SBATCH --error=./fromfile_irreg_err.%j.out
+
+### TODO(CB): vanilla script for fromfile_irreg example
 
 ### ---------------------------------------------------- ###
 ### ------------------ Input Parameters ---------------- ###

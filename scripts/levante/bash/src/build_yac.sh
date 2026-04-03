@@ -8,7 +8,8 @@ cleo_yac_module_path="${CLEO_PATH2CLEO}/libs/coupldyn_yac/cmake"
 
 ### -------------------- check inputs ------------------ ###
 source ${bashsrc}/check_inputs.sh
-check_args_not_empty "${CLEO_PATH2CLEO}" "${CLEO_COMPILERNAME}" "${CLEO_CXX_COMPILER}" "${CLEO_YACYAXTROOT}"
+check_args_not_empty "${CLEO_PATH2CLEO}" "${CLEO_COMPILERNAME}" \
+  "${CLEO_CXX_COMPILER}" "${CLEO_YACYAXTROOT}"
 
 if  [[ "${CLEO_COMPILERNAME}" == "gcc" &&
        "${CLEO_CXX_COMPILER}" != "/sw/spack-levante/openmpi-4.1.2-mnmady/bin/mpic++" ]]
@@ -30,12 +31,17 @@ if  [ "${CLEO_COMPILERNAME}" == "gcc" ]
 then
   module load ${levante_gcc_netcdf_yac}
   spack load ${levante_gcc_openblas_yac}
+  CLEO_FYAMLLIB=${levante_gcc_fyamllib}
 elif  [ "${CLEO_COMPILERNAME}" == "intel" ]
 then
   module load ${levante_intel_netcdf_yac}
   spack load ${levante_intel_openblas_yac}
+  CLEO_FYAMLLIB=${levante_intel_fyamllib}
 fi
+check_args_not_empty "${CLEO_FYAMLLIB}"
+
 export CLEO_YAC_FLAGS="-DCLEO_YAC_MODULE_PATH="${cleo_yac_module_path}" \
+  -DCLEO_FYAMLLIB=${CLEO_FYAMLLIB} \
   -DCLEO_YAXT_ROOT=${CLEO_YACYAXTROOT}/yaxt \
   -DCLEO_YAC_ROOT=${CLEO_YACYAXTROOT}/yac"
 ### ---------------------------------------------------- ###

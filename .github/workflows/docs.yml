@@ -30,6 +30,7 @@ jobs:
           mamba list
           which doxygen && doxygen --version
           which uv && uv --version
+          uv sync
           uv run which python && uv run python --version
 
       - name: Generate Doxygen Documentation

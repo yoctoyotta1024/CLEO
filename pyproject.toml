@@ -1,6 +1,6 @@
 [project]
 name = "cleopy"
-description = "Python package for generating input and processing output of CLEO SDM"
+description = "Python package for generating input and processing output of Cleo SDM"
 dynamic = ["version"]
 authors = [
 	{name="Clara Bayley", email="yoctoyotta1024@yahoo.com"},
@@ -26,11 +26,13 @@ examples = [
   "mpi4py",
 ]
 yac = [
+  "setuptools",
   "cython",
   "datetime",
   "isodate",
   "netcdf4",
   "mpi4py",
+  "pip",
 ]
 
 [dependency-groups]
@@ -49,6 +51,7 @@ docs = [
     "breathe",
     "furo",
     "sphinx",
+    "sphinx-design",
     "sphinx_copybutton",
     "sphinxcontrib-applehelp",
     "sphinxcontrib-bibtex",

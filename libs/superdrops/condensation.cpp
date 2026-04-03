@@ -41,9 +41,9 @@
  * @return The total change in liquid water mass.
  */
 KOKKOS_FUNCTION
-double DoCondensation::superdroplets_change(const TeamMember &team_member,
+double DoCondensation::superdroplets_change(const TeamMember& team_member,
                                             const subviewd_supers supers,
-                                            const State &state) const {
+                                            const State& state) const {
   const auto nsupers = static_cast<size_t>(supers.extent(0));
 
   const auto psat = saturation_pressure(state.temp);
@@ -70,9 +70,9 @@ double DoCondensation::superdroplets_change(const TeamMember &team_member,
  * (prior to condensation / evaporation).
  */
 KOKKOS_FUNCTION
-void DoCondensation::effect_on_thermodynamic_state(const TeamMember &team_member,
+void DoCondensation::effect_on_thermodynamic_state(const TeamMember& team_member,
                                                    const double totmass_condensed,
-                                                   State &state) const {
+                                                   State& state) const {
   if (do_alter_thermo) {
     const auto functor = EffectOnThermodynamicStateFunctor{totmass_condensed};
     Kokkos::single(Kokkos::PerTeam(team_member), functor, state);
@@ -96,7 +96,7 @@ void DoCondensation::effect_on_thermodynamic_state(const TeamMember &team_member
  * @return The mass of liquid condensed or evaporated.
  */
 KOKKOS_FUNCTION
-double SuperdropletsChangeFunctor::superdrop_mass_change(Superdrop &drop, const double temp,
+double SuperdropletsChangeFunctor::superdrop_mass_change(Superdrop& drop, const double temp,
                                                          const double s_ratio,
                                                          const double ffactor) const {
   const double old_m_cond = drop.condensate_mass();
@@ -124,14 +124,15 @@ double SuperdropletsChangeFunctor::superdrop_mass_change(Superdrop &drop, const 
  * @return The updated State.
  */
 KOKKOS_FUNCTION State EffectOnThermodynamicStateFunctor::state_change(const double totrho_condensed,
-                                                                      State &state) const {
-  const auto delta_qcond = double{totrho_condensed / dlc::Rho_dry};
-  const auto delta_temp =
-      double{(dlc::Latent_v / moist_specifc_heat(state.qvap, state.qcond)) * delta_qcond};
-
-  state.temp += delta_temp;
+                                                                      State& state) const {
+  const auto rho_dry = dry_air_density(state.press, state.temp, state.qvap);
+  const auto delta_qcond = double{totrho_condensed / rho_dry};
   state.qvap -= delta_qcond;
   state.qcond += delta_qcond;
+
+  const auto delta_temp =
+      double{(dlc::Latent_v / moist_specifc_heat(state.qvap, state.qcond)) * delta_qcond};
+  state.temp += delta_temp;
 
   return state;
 }

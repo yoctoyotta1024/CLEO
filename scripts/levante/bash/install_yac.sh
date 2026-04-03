@@ -6,7 +6,7 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=940M
 #SBATCH --time=00:10:00
-#SBATCH --account=bm1183
+#SBATCH --account=mh0731
 #SBATCH --output=./build/bin/install_yac_out.%j.out
 #SBATCH --error=./build/bin/install_yac_err.%j.out
 
@@ -63,8 +63,15 @@ fi
 if [[ "${root4YAC}" == "" || "${python}" == "" ]]
 then
   echo "Bad input, please specify absolute path for where you want to install YAC and python to use to make bindings"
+  exit 1
 else
-  mkdir ${root4YAC}
+  mkdir -p ${root4YAC}
+  if [ ! -d ${root4YAC} ]
+  then
+    echo "ERROR: YAC build directory not found, please make sure it exists"
+    exit 1
+  fi
+
   module load ${compiler} ${openmpi} ${netcdf}
 
   CC="$(command -v mpicc)"

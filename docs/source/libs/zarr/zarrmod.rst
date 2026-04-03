@@ -6,12 +6,15 @@
 Zarr Module
 ===========
 
-This module of CLEO contains the all the implementation of writing Zarr arrays to a dataset in
+This module of Cleo contains the all the implementation of writing Zarr arrays to a dataset in
 a store which can be Xarray and NetCDF compatible.
+
+
+Contents:
+---------
 
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
 
    buffer
    chunks

@@ -8,7 +8,7 @@
 #SBATCH --time=00:10:00
 #SBATCH --mail-user=clara.bayley@mpimet.mpg.de
 #SBATCH --mail-type=FAIL
-#SBATCH --account=bm1183
+#SBATCH --account=mh0731
 #SBATCH --output=./runexample_out.%j.out
 #SBATCH --error=./runexample_err.%j.out
 
@@ -47,10 +47,10 @@ fi
 
 if [[ "${compilername}" == "gcc" ]]
 then
-  yacyaxtroot=/work/bm1183/m300950/yacyaxt/gcc
+  yacyaxtroot=/work/mh0731/m300950/yacyaxt/gcc
 elif [[ "${compilername}" == "intel" ]]
 then
-  yacyaxtroot=/work/bm1183/m300950/yacyaxt/intel
+  yacyaxtroot=/work/mh0731/m300950/yacyaxt/intel
 fi
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
