@@ -3,6 +3,8 @@ if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
   cmake_minimum_required(VERSION 3.18.0)
 endif()
 
+set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+
 # fetch and make yaml-cpp library available
 include(FetchContent)
 FetchContent_Declare(
