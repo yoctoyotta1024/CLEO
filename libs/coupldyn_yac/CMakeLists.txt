@@ -13,16 +13,17 @@ message(STATUS "CLEO ${LIBNAME} enabling C language")
 # explicitly set library executables path to /lib in top level of build tree
 set(LIB_BINARY_DIR ${CLEO_BINARY_DIR}/lib)
 
+
+# require MPI and YAC explicitly for this library
+find_package(MPI REQUIRED COMPONENTS C)
+find_package(YAC REQUIRED)
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CLEO_YAC_MODULE_PATH})
 message(STATUS "CMAKE_MODULE_PATH: ${CMAKE_MODULE_PATH}")
 message(STATUS "Using YAC pre-installed in: ${CLEO_YAC_ROOT}")
 message(STATUS "Using YAXT pre-installed in: ${CLEO_YAXT_ROOT}")
 set(YAC_ROOT ${CLEO_YAC_ROOT})
 set(YAXT_ROOT ${CLEO_YAXT_ROOT})
-
-# require MPI and YAC explicitly for this library
-find_package(MPI REQUIRED COMPONENTS C)
-find_package(YAC REQUIRED)
 
 # Add executables and create library target
 set(SOURCES
