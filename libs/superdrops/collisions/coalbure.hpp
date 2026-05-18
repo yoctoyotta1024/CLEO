@@ -9,8 +9,8 @@
  * Author: Clara Bayley (CB)
  * Additional Contributors:
  * -----
- * Last Modified: Friday 21st June 2024
- * Modified By: CB
+ * Last Modified: Mon May 18 2026
+ * Modified By: Clara Bayley
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
@@ -57,13 +57,6 @@ struct DoCoalBuRe {
   DoBreakup<NFrags> bu; /**< Instance of DoBreakup with specified no. of fragments calculation. */
   Flag coalbure_flag;   /**< Instance of CoalBuReFlag indicating the action to perform. */
 
-  /*
-  rescale random number phi be in desired range of [0, 1] to account for fact that if a
-  collision occurs (i.e. if gamma != 0) then phi lies in range [0, prob - floor(prob)] rather than
-  [0, 1].
-  * _Note:_ This function is assumed to be consitent with collision_gamma(...) and must be.
-  */
-
   /**
    * @brief Rescales a random number phi to be in the desired range [0, 1].
    *
@@ -79,7 +72,12 @@ struct DoCoalBuRe {
    */
   KOKKOS_FUNCTION
   uint64_t rescale_phi(const double prob, const double phi) const {
-    return phi / (prob - Kokkos::floor(prob));
+    const auto denom = prob - Kokkos::floor(prob);
+    if (phi < denom) {
+      return phi / (prob - Kokkos::floor(prob));
+    } else {
+      return (1.0 - phi) / (prob - Kokkos::floor(prob));
+    }
   }
 
   /**
@@ -126,8 +124,8 @@ struct DoCoalBuRe {
    * @return True if the resulting superdroplet is null, otherwise false.
    */
   KOKKOS_FUNCTION
-  bool coalesce_breakup_or_rebound(const uint64_t gamma, const double phi, Superdrop &drop1,
-                                   Superdrop &drop2) const;
+  bool coalesce_breakup_or_rebound(const uint64_t gamma, const double phi, Superdrop& drop1,
+                                   Superdrop& drop2) const;
 
  public:
   /**
@@ -152,7 +150,7 @@ struct DoCoalBuRe {
    * @return True if the resulting superdroplet is null, otherwise false.
    */
   KOKKOS_INLINE_FUNCTION
-  bool operator()(Superdrop &drop1, Superdrop &drop2, const double prob, const double phi) const;
+  bool operator()(Superdrop& drop1, Superdrop& drop2, const double prob, const double phi) const;
 };
 
 /**
@@ -201,7 +199,7 @@ inline MicrophysicalProcess auto CoalBuRe(const unsigned int interval,
  * @return True if the resulting superdroplet is null, otherwise false.
  */
 template <NFragments NFrags, CoalBuReFlag Flag>
-KOKKOS_FUNCTION bool DoCoalBuRe<NFrags, Flag>::operator()(Superdrop &drop1, Superdrop &drop2,
+KOKKOS_FUNCTION bool DoCoalBuRe<NFrags, Flag>::operator()(Superdrop& drop1, Superdrop& drop2,
                                                           const double prob,
                                                           const double phi) const {
   /* 1. calculate gamma factor for collision  */
@@ -236,8 +234,8 @@ KOKKOS_FUNCTION bool DoCoalBuRe<NFrags, Flag>::operator()(Superdrop &drop1, Supe
 template <NFragments NFrags, CoalBuReFlag Flag>
 KOKKOS_FUNCTION bool DoCoalBuRe<NFrags, Flag>::coalesce_breakup_or_rebound(const uint64_t gamma,
                                                                            const double phi,
-                                                                           Superdrop &drop1,
-                                                                           Superdrop &drop2) const {
+                                                                           Superdrop& drop1,
+                                                                           Superdrop& drop2) const {
   const auto flag = coalbure_flag(phi, drop1, drop2);
 
   bool is_null(0);
