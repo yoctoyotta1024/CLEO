@@ -243,6 +243,7 @@ The Examples
   .. dropdown:: The Original 1-D Rainshaft
     :animate: fade-in-slide-down
 
+    Simulation setup based on :cite:`shipway2012diagnosis`.
     This example is run from the ``examples/rainshaft1d/rainshaft1d.py`` script.
 
     1. :ref:`Configure the bash scripts<configurebash_levante>`, ``scripts/levante/examples/build_compile_run_plot.sh``
