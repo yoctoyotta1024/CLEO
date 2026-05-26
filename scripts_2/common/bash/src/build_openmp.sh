@@ -4,7 +4,7 @@ set -e
 COMMON_BASH_SRC="${CLEO_PATH2CLEO}/scripts_2/common/bash/src"
 ### -------------------- check inputs ------------------ ###
 
-if [ -f "{COMMON_BASH_SRC}/check_inputs.sh" ]; then
+if [ -f "${COMMON_BASH_SRC}/check_inputs.sh" ]; then
   source ${COMMON_BASH_SRC}/check_inputs.sh
 fi
 check_args_not_empty "${CLEO_BUILDTYPE}"
