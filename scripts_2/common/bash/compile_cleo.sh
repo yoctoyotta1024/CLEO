@@ -9,6 +9,7 @@ set -e
 
 executables=$1   # space-separated list, or "NONE" to build all libraries
 make_clean=$2
+make_jobs=${CLEO_MAKE_JOBS:-8}  # override by setting CLEO_MAKE_JOBS (e.g. 128 on Levante)
 
 ### ---------------------------------------------------- ###
 
@@ -23,9 +24,9 @@ if [ "${make_clean}" == "true" ]; then
 fi
 
 if [ "${executables}" == "NONE" ]; then
-  cmd="make -j 8"
+  cmd="make -j ${make_jobs}"
 else
-  cmd="make -j 8 ${executables}"
+  cmd="make -j ${make_jobs} ${executables}"
 fi
 echo ${cmd}
 eval ${cmd}

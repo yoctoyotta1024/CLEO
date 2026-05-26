@@ -78,13 +78,13 @@ if [ ! -f "${buildcmd}" ]; then
   exit 1
 fi
 echo "${buildcmd}"
-eval "${buildcmd}"
+source "${buildcmd}"
 ### ---------------------------------------------------- ###
 
 ### ---------------- compile experiment --------------- ###
-compilecmd="${CLEO_PATH2CLEO}/scripts_2/common/bash/compile_cleo.sh \"${executables}\" ${make_clean}"
-echo ${compilecmd}
-eval ${compilecmd}
+compilecmd="${CLEO_PATH2CLEO}/scripts_2/common/bash/compile_cleo.sh"
+echo "${compilecmd} \"${executables}\" ${make_clean}"
+source "${compilecmd}" "${executables}" "${make_clean}"
 ### ---------------------------------------------------- ###
 
 ### ----------- run Python plot/analysis script -------- ###
