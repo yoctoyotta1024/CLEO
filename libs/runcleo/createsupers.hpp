@@ -146,10 +146,8 @@ SupersInDomain create_supers(const SuperdropInitConds &sdic, const unsigned int 
  */
 template <typename SuperdropInitConds>
 viewd_supers initialise_supers(const SuperdropInitConds &sdic) {
-  GenSuperdrop gen(sdic);
-
   // create superdrops view on device
-  auto totsupers = viewd_supers("totsupers", gen.get_maxnsupers());
+  auto totsupers = viewd_supers("totsupers", sdic.get_maxnsupers());
 
   // initialise a mirror of superdrops view on host
   auto h_totsupers = initialise_supers_on_host(sdic, totsupers);
