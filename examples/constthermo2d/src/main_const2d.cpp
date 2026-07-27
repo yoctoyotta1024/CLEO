@@ -44,6 +44,7 @@
 #include "observers/massmoments_observer.hpp"
 #include "observers/nsupers_observer.hpp"
 #include "observers/observers.hpp"
+#include "observers/state_observer.hpp"
 #include "observers/streamout_observer.hpp"
 #include "observers/superdrops_observer.hpp"
 #include "observers/time_observer.hpp"
@@ -152,7 +153,9 @@ inline Observer auto create_observer(const Config& config, const Timesteps& tste
 
   const Observer auto obssd = create_superdrops_observer(obsstep, dataset, store, maxchunk);
 
-  return obssd >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
+  const Observer auto obsstate = StateObserver(obsstep, dataset, maxchunk, ngbxs);
+
+  return obsstate >> obssd >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
 }
 
 template <typename Dataset, typename Store>
