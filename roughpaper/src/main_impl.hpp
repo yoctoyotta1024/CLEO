@@ -147,6 +147,10 @@ inline MicrophysicalProcess auto config_condensation(const Config& config,
 //   const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime,
 //   coalprob);
 
+//   // const auto seed = config.get_collisions().seed;
+//   // const MicrophysicalProcess auto coal =
+//   //     CollCoal(tsteps.get_collstep(), &step2realtime, coalprob, seed);
+
 //   return coal;
 // }
 
