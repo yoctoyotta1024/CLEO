@@ -120,12 +120,16 @@ SupersInDomain create_supers(const SuperdropInitConds &sdic, const unsigned int 
   std::cout << "sorting and finding superdrops in domain\n";
   auto allsupers = SupersInDomain(totsupers, gbxindex_max);
 
+#ifndef NDEBUG
+
   // Log message and perform checks on the initialisation of superdrops
   std::cout << "checking initialisation\n";
   is_sdsinit_complete(allsupers);
 
-  // // Print information about the created superdrops
-  // print_supers(totsupers);
+  // Print information about the created superdrops
+  print_supers(totsupers);
+
+#endif
 
   // Log message indicating the successful creation of superdrops
   std::cout << "--- create superdrops: success ---\n";
