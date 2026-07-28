@@ -93,6 +93,11 @@ void OptionalConfigParams::set_microphysics(const YAML::Node& config) {
     condensation.print_params();
   }
 
+  if (node["collisions"]) {
+    collisions.set_params(config);
+    collisions.print_params();
+  }
+
   if (node["coalescence"]) {
     coalescence.set_params(config);
     coalescence.print_params();
@@ -164,6 +169,17 @@ void OptionalConfigParams::CondensationParams::print_params() const {
   std::cout << "\n-------- Condensation Configuration Parameters --------------"
             << "\ndo_alter_thermo: " << do_alter_thermo << "\nmaxniters: " << maxniters
             << "\nMINSUBSTEP: " << MINSUBTSTEP << "\nrtol: " << rtol << "\natol: " << atol
+            << "\n---------------------------------------------------------\n";
+}
+
+void OptionalConfigParams::CollisionsParams::set_params(const YAML::Node& config) {
+  const YAML::Node node = config["microphysics"]["collisions"];
+  seed = node["seed"].as<uint64_t>();
+}
+
+void OptionalConfigParams::CollisionsParams::print_params() const {
+  std::cout << "\n-------- Collisions Configuration Parameters --------------"
+            << "\nseed: " << seed
             << "\n---------------------------------------------------------\n";
 }
 
