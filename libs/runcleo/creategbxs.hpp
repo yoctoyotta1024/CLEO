@@ -265,12 +265,16 @@ dualview_gbx create_gbxs(const GbxMaps &gbxmaps, const GbxInitConds &gbxic,
   const auto domainsupers = allsupers.domain_supers_readonly();
   const auto gbxs = initialise_gbxs(gbxmaps, gbxic, domainsupers);
 
+#ifndef NDEBUG
+
   std::cout << "checking initialisation\n";
   is_gbxinit_complete(gbxmaps.get_local_ngridboxes_hostcopy(), gbxs,
                       allsupers.get_totsupers_readonly());
 
-  // // Print information about the created superdrops
-  // print_gbxs(gbxs.view_host());
+  // Print information about the created superdrops
+  print_gbxs(gbxs.view_host());
+
+#endif
 
   std::cout << "--- create gridboxes: success ---\n";
 
