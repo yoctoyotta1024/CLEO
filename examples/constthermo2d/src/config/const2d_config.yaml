@@ -59,6 +59,9 @@ microphysics:
     MINSUBTSTEP : 0.001                                         # minimum subtimestep in cases of substepping [s]
     rtol : 0.0                                                # relative tolerance for implicit Euler integration
     atol : 0.01                                               # absolute tolerance for implicit Euler integration
+  breakup:
+      constnfrags:
+        nfrags: 8.0                                             # average no. of fragments per droplet breakup
 
 ### Coupled Dynamics Parameters ###
 coupled_dynamics:
