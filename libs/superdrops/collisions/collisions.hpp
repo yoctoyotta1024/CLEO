@@ -251,6 +251,15 @@ struct DoCollisions {
       : DELT(DELT), probability(p), enact_collision(x), genpool(std::random_device{}()) {}
 
   /**
+   * @brief Constructs a DoCollisions object with a fixed seed for the random number generator.
+   *
+   * same as DoCollisions constructor above, except that genpool is initialised
+   * with a fixed seed for the random number generator (for reproducibility).
+   */
+  DoCollisions(const double DELT, Probability p, EnactCollision x, const uint64_t seed)
+      : DELT(DELT), probability(p), enact_collision(x), genpool(seed) {}
+
+  /**
    * @brief Operator used as an "adaptor" for using collisions as the MicrophysicsFunction type for
    * a ConstTstepMicrophysics instance (*hint* which itself satsifies the MicrophysicalProcess
    * concept).

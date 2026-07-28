@@ -141,7 +141,7 @@ struct DoCoalBuRe {
  *
  * This function constructs a Microphysical Process for collision-coalescence, breakup, or rebound
  * of superdroplets with a constant timestep 'interval' and probability of collision determined by
- * 'collprob'.
+ * 'collprob' and a random seed for the random number generator.
  *
  * @tparam Probability Type of PairProbability.
  * @tparam NFrags Number of fragments for breakup.
@@ -163,6 +163,23 @@ inline MicrophysicalProcess auto CoalBuRe(const unsigned int interval,
   const DoCoalBuRe<NFrags, Flag> coalbure(nfrags, coalbure_flag);
   const MicrophysicsFunc auto colls =
       DoCollisions<Probability, DoCoalBuRe<NFrags, Flag>>(DELT, collprob, coalbure);
+
+  return ConstTstepMicrophysics(interval, colls);
+}
+
+/**
+ * same as CoalBuRe above but with fixed seed
+ */
+template <PairProbability Probability, NFragments NFrags, CoalBuReFlag Flag>
+inline MicrophysicalProcess auto CoalBuRe(const unsigned int interval,
+                                          const std::function<double(unsigned int)> int2realtime,
+                                          const Probability collprob, const NFrags nfrags,
+                                          const Flag coalbure_flag, const uint64_t seed) {
+  const auto DELT = double{int2realtime(interval)};
+
+  const DoCoalBuRe<NFrags, Flag> coalbure(nfrags, coalbure_flag);
+  const MicrophysicsFunc auto colls =
+      DoCollisions<Probability, DoCoalBuRe<NFrags, Flag>>(DELT, collprob, coalbure, seed);
 
   return ConstTstepMicrophysics(interval, colls);
 }

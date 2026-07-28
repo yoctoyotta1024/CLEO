@@ -136,7 +136,8 @@ struct DoCoalescence {
  * @brief Constructs a microphysical process for collision-coalescence of superdroplets.
  *
  * This function constructs a microphysical process for collision-coalescence of superdroplets with
- * a constant timestep and probability of collision-coalescence determined by 'collcoalprob'.
+ * a constant timestep and probability of collision-coalescence determined by 'collcoalprob'
+ * and a random seed for the random number generator.
  *
  * @tparam Probability Type satisfying the PairProbability concept.
  * @param interval The constant timestep interval.
@@ -153,6 +154,22 @@ inline MicrophysicalProcess auto CollCoal(const unsigned int interval,
   const DoCoalescence coal{};
   const MicrophysicsFunc auto colls =
       DoCollisions<Probability, DoCoalescence>(DELT, collcoalprob, coal);
+
+  return ConstTstepMicrophysics(interval, colls);
+}
+
+/**
+ * same as CollCoal above but with fixed seed
+ */
+template <PairProbability Probability>
+inline MicrophysicalProcess auto CollCoal(const unsigned int interval,
+                                          const std::function<double(unsigned int)> int2realtime,
+                                          const Probability collcoalprob, const uint64_t seed) {
+  const auto DELT = int2realtime(interval);
+
+  const DoCoalescence coal{};
+  const MicrophysicsFunc auto colls =
+      DoCollisions<Probability, DoCoalescence>(DELT, collcoalprob, coal, seed);
 
   return ConstTstepMicrophysics(interval, colls);
 }

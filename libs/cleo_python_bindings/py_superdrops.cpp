@@ -65,7 +65,7 @@ pyca::micro_all create_microphysical_process(const Config& config, const Timeste
       DoCollisions<LongHydroProb, DoCoalescence>(0.0, collcoalprob, DoCoalescence{});
   MicrophysicalProcess auto colls = ConstTstepMicrophysics(LIMITVALUES::uintmax, no_colls);
   if (python_bindings_config.enable_collisions) {
-    std::cout << "Adding collision-coalescence to microphysical process\n";
+    std::cout << "Adding collision-coalescence (with random seed) to microphysical process\n";
     colls = CollCoal(tsteps.get_collstep(), &step2realtime, collcoalprob);
   }
 
