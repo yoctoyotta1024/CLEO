@@ -87,9 +87,8 @@ struct DoBreakup {
   KOKKOS_FUNCTION void breakup_superdroplet_pair(Superdrop& drop1, Superdrop& drop2) const;
 };
 
-/* constructs Microphysical Process for collision-breakup
-of superdroplets with a constant timestep 'interval' and
-probability of collision-breakup determined by 'collbuprob' */
+/* constructs Microphysical Process for collision-breakup of superdroplets with a constant timestep
+'interval' and probability of collision-breakup determined by 'collbuprob' with random seed */
 template <PairProbability Probability, NFragments NFrags>
 inline MicrophysicalProcess auto CollBu(const unsigned int interval,
                                         const std::function<double(unsigned int)> int2realtime,
