@@ -83,12 +83,10 @@ struct TSCoalBuReFlag {
  public:
   TSCoalBuReFlag() {}
 
-  /* function returns flag indicating rebound or
-  coalescence or breakup. If flag = 1 -> coalescence.
-  If flag = 2 -> breakup. Otherwise -> rebound.
-  Flag decided based on the kinetic arguments from
-  section 4 of Testik et al. 2011 (figure 12) as well
-  as coalescence efficiency from Straub et al. 2010 */
+  /* function returns flag indicating rebound or coalescence or breakup. If flag = 1 -> coalescence.
+  If flag = 2 -> breakup. Otherwise -> rebound. Flag decided based on the kinetic arguments from
+  section 4 of Testik et al. 2011 (figure 12; first proposed in Testik 2009) as well as the
+  coalescence efficiency from Straub et al. 2010 */
   KOKKOS_FUNCTION
   unsigned int operator()(const double phi, const Superdrop& drop1, const Superdrop& drop2) const;
 };
