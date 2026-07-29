@@ -117,6 +117,11 @@ struct DoCoalBuRe {
    * This operator calls functions to enact the collision- coalescence, breakup or rebound of
    * two super-droplets.
    *
+   * *NOTE:* phi_out is used here for (second) Monte Carlo step, to determine if outcome of a
+   * collision is coalescene, rebound or breakup. (re-scaling could instead be implemented to use
+   * phi_coll for both collision and outcome of collision but this is not done
+   * here).
+   *
    * @param drop1 First superdroplet.
    * @param drop2 Second superdroplet.
    * @param prob Probability of collision.
@@ -168,6 +173,11 @@ inline MicrophysicalProcess auto CoalBuRe(const unsigned int interval,
  *
  * This operator calls functions to enact the collision- coalescence, breakup or rebound of
  * two super-droplets.
+ *
+ * *NOTE:* phi_out is used here for (second) Monte Carlo step, to determine if outcome of a
+ * collision is coalescene, rebound or breakup. (re-scaling could instead be implemented to use
+ * phi_coll for both collision and outcome of collision but this is not done
+ * here).
  *
  * @param drop1 First superdroplet.
  * @param drop2 Second superdroplet.

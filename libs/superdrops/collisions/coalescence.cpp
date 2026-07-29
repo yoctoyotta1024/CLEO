@@ -26,6 +26,9 @@
  *
  * This operator calls functions to enact the collision-coalescence of two super-droplets.
  *
+ * *NOTE:* phi_out is not used since outcome of collision is already pre-determined to be
+ * coalescence.
+ *
  * @param drop1 The first super-droplet.
  * @param drop2 The second super-droplet.
  * @param prob The probability of collision-coalescence.
