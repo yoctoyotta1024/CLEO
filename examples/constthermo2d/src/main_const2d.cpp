@@ -111,7 +111,7 @@ inline MicrophysicalProcess auto config_condensation(const Config& config,
 
 // inline MicrophysicalProcess auto config_collisions(const Config& config, const Timesteps& tsteps)
 // {
-//   const PairProbability auto prob = LongHydroProb();
+//   const PairProbability auto prob = LongHydroProb();  // assumes coaleff = 1.0
 //   const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(), &step2realtime, prob);
 //   return colls;
 // }
@@ -121,7 +121,7 @@ inline MicrophysicalProcess auto config_collisions(const Config& config, const T
 
   const PairProbability auto collprob = LongHydroProb();
   const NFragments auto nfrags = ConstNFrags(c.constnfrags.nfrags);
-  const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag{};
+  const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag(RogersGKTerminalVelocity{});
   const MicrophysicalProcess auto colls =
       CoalBuRe(tsteps.get_collstep(), &step2realtime, collprob, nfrags, coalbure_flag);
   return colls;
@@ -131,12 +131,12 @@ inline MicrophysicalProcess auto config_collisions(const Config& config, const T
 // {
 //   const auto c = config.get_breakup();
 
-//   const PairProbability auto buprob = LowListBuProb();
+//   const PairProbability auto buprob = LowListBuProb(RogersGKTerminalVelocity{});
 //   const NFragments auto nfrags = ConstNFrags(c.constnfrags.nfrags);
 //   const MicrophysicalProcess auto bu =
 //       CollBu(tsteps.get_collstep(), &step2realtime, buprob, nfrags);
 
-//   const PairProbability auto coalprob = LowListCoalProb();
+//   const PairProbability auto coalprob = LowListCoalProb(RogersGKTerminalVelocity{});
 //   const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime,
 //   coalprob);
 
@@ -146,8 +146,8 @@ inline MicrophysicalProcess auto config_collisions(const Config& config, const T
 // inline MicrophysicalProcess auto config_collisions(const Config& config, const Timesteps& tsteps)
 // {
 //   const PairProbability auto collprob = LongHydroProb();
-//   const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
-//   const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
+//   const NFragments auto nfrags = CollisionKineticEnergyNFrags(RogersGKTerminalVelocity{});
+//   const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag(RogersGKTerminalVelocity{});
 //   const MicrophysicalProcess auto colls =
 //       CoalBuRe(tsteps.get_collstep(), &step2realtime, collprob, nfrags, coalbure_flag);
 //   return colls;
