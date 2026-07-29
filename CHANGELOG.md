@@ -2,6 +2,24 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.65.2](https://github.com/yoctoyotta1024/CLEO/compare/b3688572967ff34c044588c0066c97ddc2ff1f3a..v0.65.2) - 2026-07-29
+#### Bug Fixes
+- download yac and yaxt from owncloud servers - ([9033bf1](https://github.com/yoctoyotta1024/CLEO/commit/9033bf18c2a5c7424ce58228c9e6e0ae2614f09e)) - clara.bayley
+- update yac and yaxt versions - ([2ff3d03](https://github.com/yoctoyotta1024/CLEO/commit/2ff3d038e8045221925b49d79c25dcfc475b3721)) - clara.bayley
+#### Continuous Integration
+- update setup python - ([eaad482](https://github.com/yoctoyotta1024/CLEO/commit/eaad48290e3cca6f92cf775b9d4b32d2de04d0a7)) - clara.bayley
+- update artifacts - ([560e885](https://github.com/yoctoyotta1024/CLEO/commit/560e8856595b45260f01ff498cb3c1143a8875b7)) - clara.bayley
+- update miniconda setup - ([55cd573](https://github.com/yoctoyotta1024/CLEO/commit/55cd573d3fc49eadacd01e5da05c62cae8a86145)) - clara.bayley
+- update action-gh-release - ([83693f4](https://github.com/yoctoyotta1024/CLEO/commit/83693f44c6f2eef984d5b162ced2aabae6119e1c)) - clara.bayley
+- fix missing python in mamba environment setup - ([03ce75f](https://github.com/yoctoyotta1024/CLEO/commit/03ce75f2214b48c53317dac0ce60efa59810915b)) - clara.bayley
+- update checkout - ([f91250a](https://github.com/yoctoyotta1024/CLEO/commit/f91250ad8229620021a049d349a90ada79f00f19)) - clara.bayley
+#### Miscellaneous Chores
+- update version of yaml-cpp - ([4e3c4a4](https://github.com/yoctoyotta1024/CLEO/commit/4e3c4a41f04c85dd866ab085367ff6710c1fc8bc)) - clara.bayley
+#### Refactoring
+- change color in plot - ([b368857](https://github.com/yoctoyotta1024/CLEO/commit/b3688572967ff34c044588c0066c97ddc2ff1f3a)) - clara.bayley
+
+- - -
+
 ## [v0.65.1](https://github.com/yoctoyotta1024/CLEO/compare/7caad851999035354b0be0a1f6d97b94a598cf56..v0.65.1) - 2026-02-18
 #### Bug Fixes
 - typos in examples_levante.rst - ([ce5fee3](https://github.com/yoctoyotta1024/CLEO/commit/ce5fee315a2e81f017c5f4c145a1022463ed194f)) - Sylwester Arabas
