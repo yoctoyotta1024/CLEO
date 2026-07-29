@@ -26,11 +26,11 @@ then
   then
     ### for correctness and debugging (note -gdwarf-4 not possible for nvc++) use:
     export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wall -Wextra \
-      -pedantic -Wno-unused-parameter -g -gdwarf-4 -O0" # correctness and debugging
+      -pedantic -Wno-unused-parameter -g -gdwarf-4 -O0 -DCMAKE_BUILD_TYPE=Debug" # correctness and debugging
   else
     ### for performance use:
     export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wall -Wextra \
-      -pedantic -Wno-unused-parameter -O3 -fma"
+      -pedantic -Wno-unused-parameter -O3 -fma -DCMAKE_BUILD_TYPE=Release"
   fi
 elif [ "${CLEO_COMPILERNAME}" == "gcc" ]
 then
@@ -44,11 +44,11 @@ then
   then
     ### for correctness and debugging (note -gdwarf-4 not possible for nvc++) use:
     export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wno-unused-parameter -Wall -Wextra \
-      -pedantic -g -gdwarf-4 -O0 -mpc64"
+      -pedantic -g -gdwarf-4 -O0 -mpc64 -DCMAKE_BUILD_TYPE=Debug" # correctness and debugging
   else
     ### for performance use:
     export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wall -Wextra \
-      -pedantic -Wno-unused-parameter -O3 -mfma"
+      -pedantic -Wno-unused-parameter -O3 -mfma -DCMAKE_BUILD_TYPE=Release"
   fi
 fi
 ### ---------------------------------------------------- ###
