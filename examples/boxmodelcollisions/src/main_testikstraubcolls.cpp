@@ -29,7 +29,7 @@
 #include "superdrops/collisions/longhydroprob.hpp"
 
 struct TestikStraubCreateMicrophysics {
-  MicrophysicalProcess auto operator()(const Config &config, const Timesteps &tsteps) const {
+  MicrophysicalProcess auto operator()(const Config& config, const Timesteps& tsteps) const {
     const PairProbability auto collprob = LongHydroProb();
     const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
     const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
@@ -39,6 +39,6 @@ struct TestikStraubCreateMicrophysics {
   }
 };
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   return generic_microphysics_main(argc, argv, TestikStraubCreateMicrophysics{});
 }
