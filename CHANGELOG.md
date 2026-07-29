@@ -2,6 +2,34 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.67.0](https://github.com/yoctoyotta1024/CLEO/compare/2d5ee9e9a36bce65fb7d1244437cc4af300a25aa..v0.67.0) - 2026-07-29
+#### Bug Fixes
+- remove stray creation of terminalv from RogersGKTerminalVelocity - ([b409aef](https://github.com/yoctoyotta1024/CLEO/commit/b409aefe56d52f8c72fb1a705601c70c6b412735)) - clara.bayley
+#### Continuous Integration
+- compile two more breakup example executables - ([7f0dc05](https://github.com/yoctoyotta1024/CLEO/commit/7f0dc0543175d5089bba0ca599b6d839d2e9a98e)) - clara.bayley
+#### Features
+- new breakup examples for other flag options - ([e76556c](https://github.com/yoctoyotta1024/CLEO/commit/e76556c33a539e33fb31064fc28e1f62f0e7bfb3)) - clara.bayley
+#### Miscellaneous Chores
+- **(version)** v0.66.1 - ([2d5ee9e](https://github.com/yoctoyotta1024/CLEO/commit/2d5ee9e9a36bce65fb7d1244437cc4af300a25aa)) - yoctoyotta1024
+- add note on use of phi_out - ([bd4d4f2](https://github.com/yoctoyotta1024/CLEO/commit/bd4d4f2ade65a125c8473cacf9c5a1ba489bf561)) - clara.bayley
+- formatting for robustness - ([0a41043](https://github.com/yoctoyotta1024/CLEO/commit/0a41043a984d4c97461f764a441287424be348a2)) - clara.bayley
+#### Refactoring
+- change colours - ([5f52cfd](https://github.com/yoctoyotta1024/CLEO/commit/5f52cfdb0bfeeac8b1a4f54a865493e3a9f8aed7)) - clara.bayley
+- make examples compatible with changes to TSCoalBuReFlag - ([3ee27bf](https://github.com/yoctoyotta1024/CLEO/commit/3ee27bfd196795c6221d5ed02ad4742bbcaedfc4)) - clara.bayley
+- make examples compatible with changes to SUCoalBuReFlag - ([764c9e9](https://github.com/yoctoyotta1024/CLEO/commit/764c9e9a12a12da0acde66d9d8de1c5ef01e02d8)) - clara.bayley
+- make examples compatible with changes to LowListCoalProb and LowListBuProb - ([bb52c12](https://github.com/yoctoyotta1024/CLEO/commit/bb52c121620c9c500489aed152fdefef060de7a6)) - clara.bayley
+- make examples compatible with changes for CollisionKineticEnergyNFrags - ([0918b01](https://github.com/yoctoyotta1024/CLEO/commit/0918b01dad1a8b42911f6ae968c0ee425600cdcc)) - clara.bayley
+- remove deleted files from cmake - ([ba90725](https://github.com/yoctoyotta1024/CLEO/commit/ba90725a6b5fc87adbafeab2fb08787c52825515)) - clara.bayley
+- remove contrained RogersGKTerminalVelocity from TSCoalBuReFlag - ([9f1563b](https://github.com/yoctoyotta1024/CLEO/commit/9f1563bfdec4beb162a938e014412326873d3e4f)) - clara.bayley
+- remove contrained RogersGKTerminalVelocity from SUCoalBuReFlag - ([efa2a4d](https://github.com/yoctoyotta1024/CLEO/commit/efa2a4d67146759582e378dfd9c97e23f0b6e427)) - clara.bayley
+- remove contrained RogersGKTerminalVelocity from LowListCoalProb - ([b016ca3](https://github.com/yoctoyotta1024/CLEO/commit/b016ca3ceb13878c5cffabfed2bb28a5a4c4604c)) - clara.bayley
+- remove contrained RogersGKTerminalVelocity from CollisionKineticEnergyNFrags - ([f5d5ed4](https://github.com/yoctoyotta1024/CLEO/commit/f5d5ed4ea96fd1e24657290b9663b3a6e5056e5e)) - clara.bayley
+- add comment on examples with E_coal = 1.0 - ([d7bfe30](https://github.com/yoctoyotta1024/CLEO/commit/d7bfe301eb6cc80eb276a29b53675a45e0d834ab)) - clara.bayley
+- add note clarifying coaleff in example of LongHydroProb box model - ([476e745](https://github.com/yoctoyotta1024/CLEO/commit/476e745d6d8d40ddf49a628d5b8fe8e6c42d034c)) - clara.bayley
+- show possible collision configurations more clearly - ([9d86190](https://github.com/yoctoyotta1024/CLEO/commit/9d86190a8905aeab44bdaa007cd969604e69577f)) - clara.bayley
+
+- - -
+
 ## [v0.66.1](https://github.com/yoctoyotta1024/CLEO/compare/1a493246e3c9edf6c1e6ee64603803a4de56b388..v0.66.1) - 2026-07-29
 #### Bug Fixes
 - remove redundant initialisation of supers - ([65bbf47](https://github.com/yoctoyotta1024/CLEO/commit/65bbf473d38acb8d34a85b9b426f4ac8c0aab0c3)) - Harshada Balasubramanian
