@@ -78,37 +78,73 @@ struct SUCoalBuReFlag {
   }
 };
 
+template <VelocityFormula TerminalVelocity>
 struct TSCoalBuReFlag {
  private:
-  /* returns flag that indicates coalescence (flag=1)
-  or rebound (flag=0) based on coalescence efficiency
-  from Straub et al. 2010 */
+  TerminalVelocity terminalv;
+
+  /* returns flag that indicates coalescence (flag=1) or rebound (flag=0)
+  based on coalescence efficiency from Straub et al. 2010 */
   KOKKOS_FUNCTION
   unsigned int rebound_or_coalescence(const Superdrop& drop1, const Superdrop& drop2,
-                                      const double phi, const double cke) const;
+                                      const double phi, const double cke) const {
+    if (is_coalescence(drop1, drop2, phi, cke)) {
+      return 1;  // coalescence
+    } else {
+      return 0;  // rebound
+    }
+  }
 
-  /* returns flag that indicates coalescence (flag=1)
-  or breakup (flag=2) based on coalescence efficiency
-  from Straub et al. 2010 */
+  /* returns flag that indicates coalescence (flag=1) or breakup (flag=2)
+  based on coalescence efficiency from Straub et al. 2010 */
   KOKKOS_FUNCTION
   unsigned int coalescence_or_breakup(const Superdrop& drop1, const Superdrop& drop2,
-                                      const double phi, const double cke) const;
+                                      const double phi, const double cke) const {
+    if (is_coalescence(drop1, drop2, phi, cke)) {
+      return 1;  // coalescence
+    } else {
+      return 2;  // breakup
+    }
+  }
 
-  /* returns truw if comparison of random numnber
-  with coalescence efficiency from Straub et al. 2010
-  indicates coalescence should occur */
+  /* returns true if comparison of random number with coalescence efficiency from
+  Straub et al. 2010 indicates coalescence should occur */
   KOKKOS_FUNCTION bool is_coalescence(const Superdrop& drop1, const Superdrop& drop2,
-                                      const double phi, const double cke) const;
+                                      const double phi, const double cke) const {
+    const auto ecoal = coalescence_efficiency_straub2010(drop1, drop2, cke);
+
+    if (phi < ecoal) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
  public:
-  TSCoalBuReFlag() {}
+  explicit TSCoalBuReFlag(TerminalVelocity tv) : terminalv(tv) {}
 
-  /* function returns flag indicating rebound or coalescence or breakup. If flag = 1 -> coalescence.
-  If flag = 2 -> breakup. Otherwise -> rebound. Flag decided based on the kinetic arguments from
-  section 4 of Testik et al. 2011 (figure 12; first proposed in Testik 2009) as well as the
-  coalescence efficiency from Straub et al. 2010 */
+  /* function returns flag indicating rebound or coalescence or breakup.
+  If flag = 1 -> coalescence.
+  If flag = 2 -> breakup.
+  Otherwise -> rebound.
+  Flag decided based on the kinetic arguments from section 4 of Testik et al. 2011 (figure 12;
+  first proposed in Testik 2009) as well as the coalescence efficiency from Straub et al. 2010 */
   KOKKOS_FUNCTION
-  unsigned int operator()(const double phi, const Superdrop& drop1, const Superdrop& drop2) const;
+  unsigned int operator()(const double phi, const Superdrop& drop1, const Superdrop& drop2) const {
+    const auto r1 = drop1.get_radius();
+    const auto r2 = drop2.get_radius();
+    const auto terminalv = RogersGKTerminalVelocity{};
+
+    const auto cke = collision_kinetic_energy(r1, r2, terminalv(drop1), terminalv(drop2));
+
+    if (cke < surfenergy(Kokkos::fmin(r1, r2))) {             // cke < surface energy of small drop
+      return rebound_or_coalescence(drop1, drop2, phi, cke);  // below DE2 boundary
+    } else if (cke < surfenergy(Kokkos::fmax(r1, r2))) {      // cke < surface energy of large drop
+      return coalescence_or_breakup(drop1, drop2, phi, cke);  // below DE1 boundary
+    } else {                                                  // above DE1 boundary
+      return 2;                                               // breakup
+    }
+  }
 };
 
 template <VelocityFormula TerminalVelocity>
