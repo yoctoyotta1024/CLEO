@@ -92,6 +92,7 @@ then
   cmake -DCMAKE_CXX_COMPILER=${CXX} \
       -DCMAKE_C_COMPILER=${CC} \
       -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS}" \
+      -DCMAKE_BUILD_TYPE=Release \
       -S ${path2CLEO} -B ${path2build} \
       ${kokkosflags} ${kokkosdevice} ${kokkoshost} && \
       cmake --build ${path2build} --target test --parallel

@@ -23,11 +23,11 @@ then
   then
     ### for correctness and debugging (note -gdwarf-4 not possible for nvc++) use:
     export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wno-unused-parameter -Wall -Wextra \
-      -pedantic -g -gdwarf-4 -O0 -mpc64 -DCMAKE_BUILD_TYPE=Debug" # correctness and debugging
+      -pedantic -g -gdwarf-4 -O0 -mpc64" # correctness and debugging
   else
     ### for performance use:
     export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wall -Wextra \
-      -pedantic -Wno-unused-parameter -O3 -DCMAKE_BUILD_TYPE=Release" # -mfma" # (mfma not compatible with apple silicon arch)
+      -pedantic -Wno-unused-parameter -O3" # -mfma" # (mfma not compatible with apple silicon arch)
   fi
 fi
 ### ---------------------------------------------------- ###
