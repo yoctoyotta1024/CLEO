@@ -27,12 +27,12 @@
 struct LowListCreateMicrophysics {
   MicrophysicalProcess auto operator()(const Config &config, const Timesteps &tsteps) const {
     const auto c = config.get_breakup();
-    const PairProbability auto buprob = LowListBuProb();
+    const PairProbability auto buprob = LowListBuProb(RogersGKTerminalVelocity{});
     const NFragments auto nfrags = ConstNFrags(c.constnfrags.nfrags);
     const MicrophysicalProcess auto bu =
         CollBu(tsteps.get_collstep(), &step2realtime, buprob, nfrags);
 
-    const PairProbability auto coalprob = LowListCoalProb();
+    const PairProbability auto coalprob = LowListCoalProb(RogersGKTerminalVelocity{});
     const MicrophysicalProcess auto coal =
         CollCoal(tsteps.get_collstep(), &step2realtime, coalprob);
 

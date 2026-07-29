@@ -37,38 +37,73 @@ with efficiency, eff = colleff * coaleff and
 - coaleff = Low and List 1982(a), equations (4.5)
   and (4.6) (see also McFarquhar 2004).
 */
+template <VelocityFormula TerminalVelocity>
 struct LowListCoalProb {
  private:
   LongHydroProb longprob;
+  TerminalVelocity terminalv;
 
   /* returns coaleff, the coalescence efficiency
   of two droplets (given that they have collided)
   according to equations (4.5) and (4.6)
   Low and List 1982(a) */
   KOKKOS_FUNCTION
-  double coaleff(const Superdrop &drop1, const Superdrop &drop2) const;
+  double coaleff(const Superdrop& drop1, const Superdrop& drop2) const {
+    constexpr double aconst = 0.778;
+    constexpr double elim = 5e-6;  // total energy limit [J]
+
+    const auto r1 = double{drop1.get_radius()};
+    const auto r2 = double{drop2.get_radius()};
+
+    const auto cke = double{collision_kinetic_energy(r1, r2, terminalv(drop1), terminalv(drop2))};
+    const auto surf_t = double{total_surfenergy(r1, r2)};  // [J] S_t
+    const auto surf_c = double{coal_surfenergy(r1, r2)};   // [J] S_c
+    const auto etot = double{cke + surf_t - surf_c};       // [J] total energy
+
+    if (etot < elim) {
+      const auto radiiratio = sizeratio_factor(r1, r2);
+      const auto coaleff = double{aconst * radiiratio * expon(etot, surf_c)};
+
+      return coaleff;
+    } else {  // coaleff = 0.0
+      return 0.0;
+    }
+  }
 
   /* returns the exponential factor in eqn 4.5
   Low and List 1982(a) given the total collision energy,
   etot [J] and equivalent surface energy, surf_c [J] */
   KOKKOS_FUNCTION
-  double expon(const double etot, const double surf_c) const;
+  double expon(const double etot, const double surf_c) const {
+    constexpr double bconst = -2.62e6;  // [J^-2]
+    constexpr double sigma = 7.28e-2;   // [J/m^-2]
+
+    const auto exponent = double{bconst * sigma * etot * etot / surf_c};
+
+    return Kokkos::exp(exponent);
+  }
 
   /* returns factor that takes into account the size
   ratio of droplets in eqn 4.5 Low and List 1982(a). */
   KOKKOS_FUNCTION
-  double sizeratio_factor(const double r1, const double r2) const;
+  double sizeratio_factor(const double r1, const double r2) const {
+    const auto rsmall = double{Kokkos::fmin(r1, r2)};
+    const auto rbig = double{Kokkos::fmax(r1, r2)};
+    const auto alpha = double{1 + rsmall / rbig};  // alpha = 1 + Ds/Dl
+
+    return 1.0 / (alpha * alpha);  // alpha^(-2)
+  }
 
  public:
-  LowListCoalProb() : longprob() {}
+  explicit LowListCoalProb(TerminalVelocity tv) : longprob(), terminalv(tv) {}
 
   KOKKOS_FUNCTION
-  double get_coaleff(const Superdrop &drop1, const Superdrop &drop2) const {
+  double get_coaleff(const Superdrop& drop1, const Superdrop& drop2) const {
     return coaleff(drop1, drop2);
   }
 
   KOKKOS_FUNCTION
-  double get_longprob(const Superdrop &drop1, const Superdrop &drop2, const double DELT,
+  double get_longprob(const Superdrop& drop1, const Superdrop& drop2, const double DELT,
                       const double VOLUME) const {
     return longprob(drop1, drop2, DELT, VOLUME);
   }
@@ -78,7 +113,7 @@ struct LowListCoalProb {
   hydrodynamic kernel for the collision probability modified
   by the coalescence efficiency from Low and List 1982(a). */
   KOKKOS_FUNCTION
-  double operator()(const Superdrop &drop1, const Superdrop &drop2, const double DELT,
+  double operator()(const Superdrop& drop1, const Superdrop& drop2, const double DELT,
                     const double VOLUME) const {
     return longprob(drop1, drop2, DELT, VOLUME) * coaleff(drop1, drop2);
   }
@@ -96,19 +131,20 @@ with efficiency, eff = colleff * coaleff and
   (4.6) of  Low and List 1982(a)
   (see also McFarquhar 2004).
 */
+template <VelocityFormula TerminalVelocity>
 struct LowListBuProb {
  private:
-  LowListCoalProb ll;
+  LowListCoalProb<TerminalVelocity> ll;
 
  public:
-  LowListBuProb() : ll() {}
+  explicit LowListBuProb(TerminalVelocity tv) : ll(tv) {}
 
   /* returns probability of collision-coalescence for a
   pair of droplets according to Long's formulation of the
   hydrodynamic kernel for the collision probability modified
   by the coalescence efficiency from Low and List 1982(a). */
   KOKKOS_FUNCTION
-  double operator()(const Superdrop &drop1, const Superdrop &drop2, const double DELT,
+  double operator()(const Superdrop& drop1, const Superdrop& drop2, const double DELT,
                     const double VOLUME) const {
     const auto bueff = double{1.0 - ll.get_coaleff(drop1, drop2)};
     const auto longprob = double{ll.get_longprob(drop1, drop2, DELT, VOLUME)};

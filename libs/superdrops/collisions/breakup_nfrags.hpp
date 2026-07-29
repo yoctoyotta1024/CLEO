@@ -51,8 +51,14 @@ struct ConstNFrags {
 
 /* operator returns number of fragments based on collision
 kinetic energy. Struct obeys NFragments concept  */
+template <VelocityFormula TerminalVelocity>
 struct CollisionKineticEnergyNFrags {
+ private:
+  TerminalVelocity terminalv;
+
  public:
+  explicit CollisionKineticEnergyNFrags(TerminalVelocity tv) : terminalv(tv) {}
+
   /* returns number of fragments 'nfrags' based on collision
   kinetic energy of droplets according to parameterisation of total
   number of outcomes from Schlottke et al. 2010 (figure 13) using
@@ -67,13 +73,12 @@ struct CollisionKineticEnergyNFrags {
   parameterisation still reasonably fitted to observations in
   figure 13 of Schlottke et al. 2010 (within their error bars) */
   KOKKOS_INLINE_FUNCTION
-  double operator()(const Superdrop &drop1, const Superdrop &drop2) const {
+  double operator()(const Superdrop& drop1, const Superdrop& drop2) const {
     constexpr double alpha = 1.5;
     constexpr double beta = 0.135;
     constexpr double ckemax = 16.49789599 / 1000000;  // [J]
     constexpr double epsilon = 11.0 / 6.0;            // = 2.5 - 2/3
 
-    const auto terminalv = RogersGKTerminalVelocity{};
     const auto cke = collision_kinetic_energy(drop1.get_radius(), drop2.get_radius(),
                                               terminalv(drop1), terminalv(drop2));
 

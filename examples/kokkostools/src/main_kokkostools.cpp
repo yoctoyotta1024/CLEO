@@ -105,8 +105,8 @@ inline MicrophysicalProcess auto config_condensation(const Config &config,
                       c.rtol, c.atol, c.MINSUBTSTEP, &realtime2dimless);
 }
 
-inline MicrophysicalProcess auto config_collisions(const Config &config, const Timesteps &tsteps) {
-  const PairProbability auto coalprob = LongHydroProb(1.0);
+inline MicrophysicalProcess auto config_collisions(const Config& config, const Timesteps& tsteps) {
+  const PairProbability auto coalprob = LongHydroProb();  // assumes coaleff = 1.0
   const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime, coalprob);
 
   return coal;

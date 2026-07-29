@@ -53,6 +53,9 @@ outputdata:
 
 ### Microphysics Parameters ###
 microphysics:
+  coalescence:
+    constcoaleff:
+      coaleff: 0.85                                           # constant coalescence efficiency
   breakup:
     constnfrags:
       nfrags: 5.0                                             # average no. of fragments per droplet breakup

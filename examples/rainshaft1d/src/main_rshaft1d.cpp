@@ -102,7 +102,8 @@ inline MicrophysicalProcess auto create_microphysics(const Config &config,
       Condensation(tsteps.get_condstep(), &step2dimlesstime, c.do_alter_thermo, c.maxniters, c.rtol,
                    c.atol, c.MINSUBTSTEP, &realtime2dimless);
 
-  const PairProbability auto coalprob = LongHydroProb(1.0);
+  const PairProbability auto coalprob =
+      LongHydroProb(config.get_coalescence().constcoaleff.coaleff);
   const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(), &step2realtime, coalprob);
   return cond >> colls;
 }

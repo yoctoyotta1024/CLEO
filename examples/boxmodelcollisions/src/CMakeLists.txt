@@ -12,28 +12,36 @@ message(STATUS "CLEO including ${PROJECT_NAME} with PROJECT_SOURCE_DIR: ${PROJEC
 set(CLEOLIBS configuration gridboxes initialise observers runcleo superdrops zarr)
 
 # create primary executable for CLEO uncoupled model golovin kernel box model setup
+add_executable(constcoalcolls EXCLUDE_FROM_ALL "main_constcoalcolls.cpp")
 add_executable(golcolls EXCLUDE_FROM_ALL "main_golcolls.cpp")
 add_executable(longcolls EXCLUDE_FROM_ALL "main_longcolls.cpp")
 add_executable(lowlistcolls EXCLUDE_FROM_ALL "main_lowlistcolls.cpp")
+add_executable(straubcolls EXCLUDE_FROM_ALL "main_straubcolls.cpp")
 add_executable(szakallurbichcolls EXCLUDE_FROM_ALL "main_szakallurbichcolls.cpp")
 add_executable(testikstraubcolls EXCLUDE_FROM_ALL "main_testikstraubcolls.cpp")
 
 # Add directories and link libraries to target
+target_link_libraries(constcoalcolls PRIVATE cartesiandomain "${CLEOLIBS}")
 target_link_libraries(golcolls PRIVATE cartesiandomain "${CLEOLIBS}")
 target_link_libraries(longcolls PRIVATE cartesiandomain "${CLEOLIBS}")
 target_link_libraries(lowlistcolls PRIVATE cartesiandomain "${CLEOLIBS}")
+target_link_libraries(straubcolls PRIVATE cartesiandomain "${CLEOLIBS}")
 target_link_libraries(szakallurbichcolls PRIVATE cartesiandomain "${CLEOLIBS}")
 target_link_libraries(testikstraubcolls PRIVATE cartesiandomain "${CLEOLIBS}")
 
+target_link_libraries(constcoalcolls PUBLIC Kokkos::kokkos)
 target_link_libraries(golcolls PUBLIC Kokkos::kokkos)
 target_link_libraries(longcolls PUBLIC Kokkos::kokkos)
 target_link_libraries(lowlistcolls PUBLIC Kokkos::kokkos)
+target_link_libraries(straubcolls PUBLIC Kokkos::kokkos)
 target_link_libraries(szakallurbichcolls PUBLIC Kokkos::kokkos)
 target_link_libraries(testikstraubcolls PUBLIC Kokkos::kokkos)
 
+target_include_directories(constcoalcolls PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
 target_include_directories(golcolls PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
 target_include_directories(longcolls PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
 target_include_directories(lowlistcolls PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
+target_include_directories(straubcolls PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
 target_include_directories(szakallurbichcolls PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
 target_include_directories(testikstraubcolls PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
 
@@ -41,6 +49,10 @@ target_include_directories(testikstraubcolls PRIVATE "${CLEO_SOURCE_DIR}/libs") 
 #target_compile_options([target] PRIVATE)
 
 # set compiler properties for target(s)
+set_target_properties(constcoalcolls PROPERTIES
+  CMAKE_CXX_STANDARD_REQUIRED ON
+  CMAKE_CXX_EXTENSIONS ON
+  CXX_STANDARD 20)
 set_target_properties(golcolls PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
@@ -50,6 +62,10 @@ set_target_properties(longcolls PROPERTIES
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)
 set_target_properties(lowlistcolls PROPERTIES
+  CMAKE_CXX_STANDARD_REQUIRED ON
+  CMAKE_CXX_EXTENSIONS ON
+  CXX_STANDARD 20)
+set_target_properties(straubcolls PROPERTIES
   CMAKE_CXX_STANDARD_REQUIRED ON
   CMAKE_CXX_EXTENSIONS ON
   CXX_STANDARD 20)

@@ -23,13 +23,13 @@
 #include "superdrops/collisions/longhydroprob.hpp"
 
 struct LongHydroCreateMicrophysics {
-  inline MicrophysicalProcess auto operator()(const Config &config, const Timesteps &tsteps) const {
-    const PairProbability auto prob = LongHydroProb();
+  inline MicrophysicalProcess auto operator()(const Config& config, const Timesteps& tsteps) const {
+    const PairProbability auto prob = LongHydroProb();  // assumes coaleff = 1.0
     const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(), &step2realtime, prob);
     return colls;
   }
 };
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   return generic_microphysics_main(argc, argv, LongHydroCreateMicrophysics{});
 }

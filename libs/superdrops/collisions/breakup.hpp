@@ -66,6 +66,8 @@ struct DoBreakup {
    *
    * This operator calls functions to enact the collision-breakup of two super-droplets.
    *
+   * *NOTE:* phi_out is not used since outcome of collision is already pre-determined to be breakup.
+   *
    * @param drop1 First superdroplet.
    * @param drop2 Second superdroplet.
    * @param prob Probability of collision.
@@ -106,6 +108,8 @@ inline MicrophysicalProcess auto CollBu(const unsigned int interval,
  * and so can be used as the EnactCollision function-like object in the DoCollisions struct.
  *
  * This operator calls functions to enact the collision-breakup of two super-droplets.
+ *
+ * *NOTE:* phi_out is not used since outcome of collision is already pre-determined to be breakup.
  *
  * @param drop1 First superdroplet.
  * @param drop2 Second superdroplet.
