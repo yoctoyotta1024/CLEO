@@ -175,8 +175,8 @@ The Examples
   The ``breakup.py`` example models collision-coalescence-rebound-breakup using the hydrodynamic kernel with Long's
   collision efficiency as given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`, and the
   coalescence/breakup/rebound probability based on section 4 of Testik et al. 2011 (figure 12)
-  :cite:`testik2011` as well as coalescence efficiency and number of fragements produced from
-  Straub et al. 2010 and Schlottke et al. 2010 respectively (:cite:`schlottke2010`, :cite:`straub2010`).
+  :cite:`testik2011` (first proposed in :cite:`testik2009`), as well as coalescence efficiency and number of fragements
+  produced from Straub et al. 2010 and Schlottke et al. 2010 respectively (:cite:`schlottke2010`, :cite:`straub2010`).
 
   This example produces a plot, by default called ``~/CLEO/build_colls0d/[...]/bin/testikstraub_validation.png``.
 

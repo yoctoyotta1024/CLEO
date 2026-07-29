@@ -29,15 +29,17 @@
  * @param drop1 The first super-droplet.
  * @param drop2 The second super-droplet.
  * @param prob The probability of collision-coalescence.
- * @param phi Random number in the range [0.0, 1.0].
+ * @param phi_coll Random number in the range [0.0, 1.0] for collision.
+ * @param phi_out Random number in the range [0.0, 1.0] for outcome of collision (not used).
  * @return boolean=true if collision-coalescence resulted in null superdrops.
  */
-KOKKOS_FUNCTION bool DoCoalescence::operator()(Superdrop &drop1, Superdrop &drop2,
-                                               const double prob, const double phi) const {
+KOKKOS_FUNCTION bool DoCoalescence::operator()(Superdrop& drop1, Superdrop& drop2,
+                                               const double prob, const double phi_coll,
+                                               const double phi_out) const {
   /* 1. calculate gamma factor for collision-coalescence  */
   const auto xi1 = drop1.get_xi();
   const auto xi2 = drop2.get_xi();
-  const auto gamma = coalescence_gamma(xi1, xi2, prob, phi);
+  const auto gamma = coalescence_gamma(xi1, xi2, prob, phi_coll);
 
   /* 2. enact collision-coalescence on pair
   of superdroplets if gamma is not zero */
@@ -85,8 +87,8 @@ KOKKOS_FUNCTION uint64_t DoCoalescence::coalescence_gamma(const uint64_t xi1, co
  * @return True if coalescence results in a null superdroplet, false otherwise.
  */
 KOKKOS_FUNCTION bool DoCoalescence::coalesce_superdroplet_pair(const uint64_t gamma,
-                                                               Superdrop &drop1,
-                                                               Superdrop &drop2) const {
+                                                               Superdrop& drop1,
+                                                               Superdrop& drop2) const {
   const auto xi1 = drop1.get_xi();
   const auto xi2 = drop2.get_xi();
 
@@ -123,8 +125,8 @@ KOKKOS_FUNCTION bool DoCoalescence::coalesce_superdroplet_pair(const uint64_t ga
  * @param drop2 The second superdroplet.
  */
 KOKKOS_FUNCTION void DoCoalescence::twin_superdroplet_coalescence(const uint64_t gamma,
-                                                                  Superdrop &drop1,
-                                                                  Superdrop &drop2) const {
+                                                                  Superdrop& drop1,
+                                                                  Superdrop& drop2) const {
   assert((drop1.get_xi() == gamma * drop2.get_xi()) && "condition for twin coalescence not met");
 
   const auto old_xi = drop2.get_xi();  // = drop1.xi
@@ -161,8 +163,8 @@ KOKKOS_FUNCTION void DoCoalescence::twin_superdroplet_coalescence(const uint64_t
  * @param drop2 The second superdroplet.
  */
 KOKKOS_FUNCTION void DoCoalescence::different_superdroplet_coalescence(const uint64_t gamma,
-                                                                       Superdrop &drop1,
-                                                                       Superdrop &drop2) const {
+                                                                       Superdrop& drop1,
+                                                                       Superdrop& drop2) const {
   assert((drop1.get_xi() > gamma * drop2.get_xi()) && "condition on xis for coalescence not met");
 
   const auto new_xi = drop1.get_xi() - gamma * drop2.get_xi();
