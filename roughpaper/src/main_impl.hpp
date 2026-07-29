@@ -155,7 +155,7 @@ inline MicrophysicalProcess auto config_collisions(const Config& config, const T
   const PairProbability auto collprob = LongHydroProb();
 
   const NFragments auto nfrags = ConstNFrags(config.get_breakup().constnfrags.nfrags);
-  // const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
+  // const NFragments auto nfrags = CollisionKineticEnergyNFrags(RogersGKTerminalVelocity{});
 
   const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
   // const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag{};

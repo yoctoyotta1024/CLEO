@@ -30,7 +30,7 @@
 struct ConstCoalCreateMicrophysics {
   MicrophysicalProcess auto operator()(const Config& config, const Timesteps& tsteps) const {
     const PairProbability auto collprob = LongHydroProb();
-    const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
+    const NFragments auto nfrags = CollisionKineticEnergyNFrags(RogersGKTerminalVelocity{});
     const CoalBuReFlag auto coalbure_flag =
         ConstCoalBuReFlag{config.get_coalescence().constcoaleff.coaleff};
     const MicrophysicalProcess auto colls =
