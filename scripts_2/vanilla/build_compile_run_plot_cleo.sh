@@ -7,12 +7,12 @@ set -e
 ### ============================================================ ###
 ###
 ### Usage:
-###   ./build_run_cleo.sh [experiment] [buildtype] [compilername] \
-###                       [path2CLEO] [path2build] [yacyaxtroot] [build_flags] \
-###                       [enabledebug] [make_clean]
+###   ./build_compile_run_plot_cleo.sh [experiment] [buildtype] [compilername] \
+###                                    [path2CLEO] [path2build] [build_flags] \
+###                                    [yacyaxtroot] [enabledebug] [make_clean]
 ###
 ###   All arguments are optional — defaults come from environment variables
-###   and example_params.sh.
+###   and experiments.sh.
 ###
 ### Arguments:
 ###   $1  experiment     Name of experiment to run       (default: set below)
@@ -20,12 +20,12 @@ set -e
 ###   $3  compilername   gcc                             (default: from experiment)
 ###   $4  path2CLEO      Absolute path to CLEO source    (default: $CLEO_PATH2CLEO)
 ###   $5  path2build     Absolute path for build dir     (default: build_<experiment>)
-###   $6  build_flags    Extra CMake flags                (default: from experiment)
+###   $6  build_flags    Extra CMake flags               (default: from experiment)
 ###   $7  yacyaxtroot    Path to YAC+YAXT install        (default: $CLEO_YACYAXTROOT)
 ###   $8  enabledebug    true | false                    (default: false)
-###   $9  make_clean     true | false                    (default: true)
+###   $9  make_clean     true | false                    (default: false)
 ###
-### Available examples (see common/examples/example_params.sh for full details):
+### Available examples (see common/experiments.sh for full details):
 ###   as2017  cuspbifurc  breakup  shima2009  constthermo2d  divfree2d
 ###   eurec4a1d  rainshaft1d  python_bindings  kokkostools
 ###   fromfile  fromfile_irreg  bubble3d
@@ -44,8 +44,13 @@ if [ "${path2CLEO}" == "" ]; then
   exit 1
 fi
 
-[ -f "${path2CLEO}/scripts_2/common/examples/example_params.sh" ] && \
-  source ${path2CLEO}/scripts_2/common/examples/example_params.sh  "$5" "$6" "${experiment}"
+experiments_script="${path2CLEO}/scripts_2/common/experiments.sh"
+if [ ! -f "${experiments_script}" ]; then
+  echo "Error: experiments script not found at ${experiments_script}"
+  exit 1
+fi
+source "${experiments_script}"
+load_experiment_config "$5" "$6" "${experiment}"
 
 yacyaxtroot=${7:-${CLEO_YACYAXTROOT}}
 enabledebug=${8:-false}
@@ -60,7 +65,7 @@ export CLEO_ENABLEDEBUG=${enabledebug}
 ### ---------------------------------------------------- ###
 
 ### -------------------- check inputs ------------------ ###
-source ${path2CLEO}/scripts_2/common/bash/src/check_inputs.sh
+source "${path2CLEO}/scripts_2/common/check_inputs.sh"
 
 check_args_not_empty "${CLEO_BUILDTYPE}" "${CLEO_COMPILERNAME}" "${CLEO_PATH2CLEO}" \
                      "${CLEO_PATH2BUILD}" "${CLEO_BUILD_FLAGS}" "${CLEO_YACYAXTROOT}" \
@@ -68,23 +73,28 @@ check_args_not_empty "${CLEO_BUILDTYPE}" "${CLEO_COMPILERNAME}" "${CLEO_PATH2CLE
 
 ### ---------------------------------------------------- ###
 
-[ -f "${path2CLEO}/scripts_2/common/bash/src/print_configuration.sh" ] && \
-  source "${path2CLEO}/scripts_2/common/bash/src/print_configuration.sh" "${experiment}"
+print_config_script="${path2CLEO}/scripts_2/common/print_configuration.sh"
+if [ -f "${print_config_script}" ]; then
+  source "${print_config_script}"
+  print_configuration "${experiment}"
+fi
 
 ### --------------------- build CLEO ------------------- ###
-buildcmd="${CLEO_PATH2CLEO}/scripts_2/common/bash/build_cleo.sh"
+buildcmd="${CLEO_PATH2CLEO}/scripts_2/common/build_cleo.sh"
 if [ ! -f "${buildcmd}" ]; then
   echo "Error: build script not found at ${buildcmd}"
   exit 1
 fi
 echo "${buildcmd}"
 source "${buildcmd}"
+build_cleo
 ### ---------------------------------------------------- ###
 
 ### ---------------- compile experiment --------------- ###
-compilecmd="${CLEO_PATH2CLEO}/scripts_2/common/bash/compile_cleo.sh"
+compilecmd="${CLEO_PATH2CLEO}/scripts_2/common/compile_cleo.sh"
 echo "${compilecmd} \"${executables}\" ${make_clean}"
-source "${compilecmd}" "${executables}" "${make_clean}"
+source "${compilecmd}"
+compile_cleo "${executables}" "${make_clean}"
 ### ---------------------------------------------------- ###
 
 ### ----------- run Python plot/analysis script -------- ###
