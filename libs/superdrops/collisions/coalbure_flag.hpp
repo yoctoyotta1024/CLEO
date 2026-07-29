@@ -39,18 +39,38 @@ concept CoalBuReFlag = requires(F f, const double phi, const Superdrop& d1, cons
   { f(phi, d1, d2) } -> std::convertible_to<unsigned int>;
 };
 
+template <VelocityFormula TerminalVelocity>
 struct SUCoalBuReFlag {
  private:
-  /* function returns flag indicating rebound or
-  coalescence or breakup. If flag = 1 -> coalescence.
-  If flag = 2 -> breakup. Otherwise -> rebound.
-  Flag decided based on the kinetic arguments in
-  section 2.2 of Szakáll and Urbich 2018
-  (neglecting grazing angle considerations) */
+  TerminalVelocity terminalv;
+
+  /* function returns flag indicating rebound or coalescence or breakup.
+  If flag = 1 -> coalescence.
+  If flag = 2 -> breakup.
+  Otherwise -> rebound.
+  Flag decided based on the kinetic arguments in section 2.2 of
+  Szakáll and Urbich 2018 (neglecting grazing angle considerations) */
   KOKKOS_FUNCTION
-  unsigned int operator()(const Superdrop& drop1, const Superdrop& drop2) const;
+  unsigned int operator()(const Superdrop& drop1, const Superdrop& drop2) const {
+    const auto r1 = drop1.get_radius();
+    const auto r2 = drop2.get_radius();
+    const auto terminalv = RogersGKTerminalVelocity{};
+
+    const auto cke = collision_kinetic_energy(r1, r2, terminalv(drop1),
+                                              terminalv(drop2));  // [J]
+
+    if (cke < surfenergy(Kokkos::fmin(r1, r2))) {  // cke < surface energy of small drop
+      return 0;                                    // rebound
+    } else if (cke < coal_surfenergy(r1, r2)) {    // Weber number < 1
+      return 1;                                    // coalescence
+    } else {                                       // Weber number > 1
+      return 2;                                    // breakup
+    }
+  }
 
  public:
+  explicit SUCoalBuReFlag(TerminalVelocity tv) : terminalv(tv) {}
+
   /* adaptor of operator to satisfy CoalBuReFlag concept */
   KOKKOS_FUNCTION
   unsigned int operator()(const double phi, const Superdrop& drop1, const Superdrop& drop2) const {

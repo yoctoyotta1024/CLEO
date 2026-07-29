@@ -19,31 +19,6 @@
 
 #include "./coalbure_flag.hpp"
 
-/*
-function returns flag indicating rebound or coalescence or breakup.
-If flag = 1 -> coalescence.
-If flag = 2 -> breakup. Otherwise -> rebound.
-Flag decided based on the kinetic arguments in section 2.2 of Szakáll and Urbich 2018 (neglecting
-grazing angle considerations)
-*/
-KOKKOS_FUNCTION unsigned int SUCoalBuReFlag::operator()(const Superdrop& drop1,
-                                                        const Superdrop& drop2) const {
-  const auto r1 = drop1.get_radius();
-  const auto r2 = drop2.get_radius();
-  const auto terminalv = RogersGKTerminalVelocity{};
-
-  const auto cke = collision_kinetic_energy(r1, r2, terminalv(drop1),
-                                            terminalv(drop2));  // [J]
-
-  if (cke < surfenergy(Kokkos::fmin(r1, r2))) {  // cke < surface energy of small drop
-    return 0;                                    // rebound
-  } else if (cke < coal_surfenergy(r1, r2)) {    // Weber number < 1
-    return 1;                                    // coalescence
-  } else {                                       // Weber number > 1
-    return 2;                                    // breakup
-  }
-}
-
 /* function returns flag indicating rebound or coalescence or breakup. If flag = 1 -> coalescence.
 If flag = 2 -> breakup. Otherwise -> rebound. Flag decided based on the kinetic arguments from
 section 4 of Testik et al. 2011 (figure 12; first proposed in Testik 2009) as well as the
