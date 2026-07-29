@@ -158,7 +158,7 @@ inline MicrophysicalProcess auto config_collisions(const Config& config, const T
   // const NFragments auto nfrags = CollisionKineticEnergyNFrags(RogersGKTerminalVelocity{});
 
   const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
-  // const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag{};
+  // const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag(RogersGKTerminalVelocity{});
   // const CoalBuReFlag auto coalbure_flag = StraubCoalBuReFlag(RogersGKTerminalVelocity{});
   // const CoalBuReFlag auto coalbure_flag =
   //     ConstCoalBuReFlag{config.get_coalescence().constcoaleff.coaleff};

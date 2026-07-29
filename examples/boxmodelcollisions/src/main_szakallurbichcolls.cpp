@@ -28,18 +28,18 @@
 #include "superdrops/collisions/longhydroprob.hpp"
 
 struct SzakallUrbichCreateMicrophysics {
-  MicrophysicalProcess auto operator()(const Config &config, const Timesteps &tsteps) const {
+  MicrophysicalProcess auto operator()(const Config& config, const Timesteps& tsteps) const {
     const auto c = config.get_breakup();
 
     const PairProbability auto collprob = LongHydroProb();
     const NFragments auto nfrags = ConstNFrags(c.constnfrags.nfrags);
-    const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag{};
+    const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag(RogersGKTerminalVelocity{});
     const MicrophysicalProcess auto colls =
         CoalBuRe(tsteps.get_collstep(), &step2realtime, collprob, nfrags, coalbure_flag);
     return colls;
   }
 };
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   return generic_microphysics_main(argc, argv, SzakallUrbichCreateMicrophysics{});
 }
