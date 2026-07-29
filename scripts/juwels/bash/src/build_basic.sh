@@ -26,7 +26,7 @@ then
   then
     ### for correctness and debugging (note -gdwarf-4 not possible for nvc++) use:
     export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wall -Wextra \
-      -pedantic -Wno-unused-parameter -g -gdwarf-4 -O0" # correctness and debugging
+      -pedantic -Wno-unused-parameter -g -gdwarf-4 -O0"
   else
     ### for performance use:
     export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wall -Wextra \
@@ -44,7 +44,7 @@ then
   then
     ### for correctness and debugging (note -gdwarf-4 not possible for nvc++) use:
     export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wno-unused-parameter -Wall -Wextra \
-      -pedantic -g -gdwarf-4 -O0 -mpc64" # correctness and debugging
+      -pedantic -g -gdwarf-4 -O0 -mpc64"
   else
     ### for performance use:
     export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wall -Wextra \
