@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 ### ------------------------------------------------------- ###
 ### running script sucessfully installs YAC and YAXT for
 ### a gcc compiler with openmpi on a "vanilla" computer
@@ -12,18 +10,18 @@ root4YAC=$1 # absolute path for YAC and YAXT installations
 compilername=${2:-gcc} # compile yac and yaxt with "gcc"
 python=${3:-${CLEO_PYTHON}} # name or absolute path to python to make YAC python bindngs with
 
-yaxt_tag=0.12.1
+yaxt_tag=0.11.4
 yaxt_version=yaxt-${yaxt_tag}
 yaxt_release_tag=release-${yaxt_tag}
 yaxt_source=https://gitlab.dkrz.de/dkrz-sw/yaxt/-/archive/$yaxt_release_tag/$yaxt_version.tar.gz
 
-yac_tag=v3.20.2
+yac_tag=v3.9.2
 yac_version=yac_$yac_tag
 yac_source=https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/$yac_tag/$yac_version.tar.gz
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-bashsrc=${SCRIPT_DIR}
-source "${bashsrc}/vanilla_packages.sh"
+bashsrc=${SCRIPT_DIR}/src
+source ${bashsrc}/vanilla_packages.sh
 
 if [ "${compilername}" == "" ]
 then
