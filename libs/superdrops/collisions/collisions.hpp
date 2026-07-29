@@ -248,7 +248,7 @@ struct DoCollisions {
    * @param x The enactment object for enacting collision events.
    */
   DoCollisions(const double DELT, Probability p, EnactCollision x)
-      : DELT(DELT), probability(p), enact_collision(x), genpool(std::random_device{}()) {}
+      : DELT(DELT), probability(p), enact_collision(x), genpool(std::random_device {}()) {}
 
   /**
    * @brief Constructs a DoCollisions object with a fixed seed for the random number generator.
