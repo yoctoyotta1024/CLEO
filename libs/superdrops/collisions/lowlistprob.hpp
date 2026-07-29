@@ -54,7 +54,6 @@ struct LowListCoalProb {
 
     const auto r1 = double{drop1.get_radius()};
     const auto r2 = double{drop2.get_radius()};
-    const auto terminalv = RogersGKTerminalVelocity{};
 
     const auto cke = double{collision_kinetic_energy(r1, r2, terminalv(drop1), terminalv(drop2))};
     const auto surf_t = double{total_surfenergy(r1, r2)};  // [J] S_t

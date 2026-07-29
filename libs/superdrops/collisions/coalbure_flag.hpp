@@ -54,7 +54,6 @@ struct SUCoalBuReFlag {
   unsigned int operator()(const Superdrop& drop1, const Superdrop& drop2) const {
     const auto r1 = drop1.get_radius();
     const auto r2 = drop2.get_radius();
-    const auto terminalv = RogersGKTerminalVelocity{};
 
     const auto cke = collision_kinetic_energy(r1, r2, terminalv(drop1),
                                               terminalv(drop2));  // [J]
@@ -133,7 +132,6 @@ struct TSCoalBuReFlag {
   unsigned int operator()(const double phi, const Superdrop& drop1, const Superdrop& drop2) const {
     const auto r1 = drop1.get_radius();
     const auto r2 = drop2.get_radius();
-    const auto terminalv = RogersGKTerminalVelocity{};
 
     const auto cke = collision_kinetic_energy(r1, r2, terminalv(drop1), terminalv(drop2));
 
