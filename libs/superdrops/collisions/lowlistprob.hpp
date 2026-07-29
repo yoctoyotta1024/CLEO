@@ -132,12 +132,13 @@ with efficiency, eff = colleff * coaleff and
   (4.6) of  Low and List 1982(a)
   (see also McFarquhar 2004).
 */
+template <VelocityFormula TerminalVelocity>
 struct LowListBuProb {
  private:
-  LowListCoalProb ll;
+  LowListCoalProb<TerminalVelocity> ll;
 
  public:
-  LowListBuProb() : ll() {}
+  explicit LowListBuProb(TerminalVelocity tv) : ll(tv) {}
 
   /* returns probability of collision-coalescence for a
   pair of droplets according to Long's formulation of the

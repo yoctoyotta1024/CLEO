@@ -139,7 +139,7 @@ inline MicrophysicalProcess auto config_condensation(const Config& config,
 // inline MicrophysicalProcess auto config_collisions(const Config& config, const Timesteps& tsteps)
 // {
 //   // const PairProbability auto coalprob = GolovinProb();
-//   // const PairProbability auto coalprob = LowListCoalProb();
+//   // const PairProbability auto coalprob = LowListCoalProb(RogersGKTerminalVelocity{});
 //   // const PairProbability auto coalprob = LongHydroProb();  // assumes coaleff = 1.0
 //   const PairProbability auto coalprob =
 //       LongHydroProb(config.get_coalescence().constcoaleff.coaleff);
@@ -171,12 +171,12 @@ inline MicrophysicalProcess auto config_collisions(const Config& config, const T
 // /* examples of possible configurations for coalescence and breakup seperately */
 // inline MicrophysicalProcess auto config_collisions(const Config& config, const Timesteps& tsteps)
 // {
-//   const PairProbability auto buprob = LowListBuProb();
+//   const PairProbability auto buprob = LowListBuProb(RogersGKTerminalVelocity{});
 //   const NFragments auto nfrags = ConstNFrags(config.get_breakup().constnfrags.nfrags);
 //   const MicrophysicalProcess auto bu =
 //       CollBu(tsteps.get_collstep(), &step2realtime, buprob, nfrags);
 
-//   const PairProbability auto coalprob = LowListCoalProb();
+//   const PairProbability auto coalprob = LowListCoalProb(RogersGKTerminalVelocity{});
 //   const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime,
 //   coalprob);
 
