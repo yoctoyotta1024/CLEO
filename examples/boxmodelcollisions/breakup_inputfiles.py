@@ -38,7 +38,14 @@ def parse_arguments():
     parser.add_argument(
         "kernel",
         type=str,
-        choices=["long", "lowlist", "szakallurbich", "testikstraub"],
+        choices=[
+            "constcoal",
+            "long",
+            "lowlist",
+            "straub",
+            "szakallurbich",
+            "testikstraub",
+        ],
         help="kernel example to run",
     )
     parser.add_argument(
