@@ -72,7 +72,7 @@ then
   eval ${cmd}
 fi
 
-if [ ${executables} == "NONE" ]
+if [ "${executables}" == "NONE" ]
 then
   cmd="make -j 128"
 else
