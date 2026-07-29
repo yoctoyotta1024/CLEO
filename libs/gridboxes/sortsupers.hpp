@@ -149,8 +149,10 @@ struct SortSupersBySdgbxindex {
     Kokkos::parallel_for("counting_sort", Kokkos::RangePolicy<ExecSpace>(0, ntotsupers), functor);
 
     /* assertion for debugging only works for hostspace cumlcounts */
-    // assert((cumlcounts(counts.extent(0) - 1) == totsupers_tmp.extent(0)) &&
-    //        "last cumulative sum of totsupers count should equal expected number of totsupers");
+#ifndef NDEBUG
+    assert((cumlcounts(counts.extent(0) - 1) == totsupers_tmp.extent(0)) &&
+           "last cumulative sum of totsupers count should equal expected number of totsupers");
+#endif
 
     return totsupers_tmp;
   }
@@ -178,8 +180,10 @@ struct SortSupersBySdgbxindex {
     Kokkos::parallel_for("counting_sort_oob", Kokkos::RangePolicy<ExecSpace>(0, noobs), functor);
 
     /* assertion for debugging only works for hostspace cumlcounts */
-    // assert((cumlcounts(counts.extent(0) - 1) == totsupers_tmp.extent(0)) &&
-    //        "last cumulative sum of totsupers count should equal expected number of totsupers");
+#ifndef NDEBUG
+    assert((cumlcounts(counts.extent(0) - 1) == totsupers_tmp.extent(0)) &&
+           "last cumulative sum of totsupers count should equal expected number of totsupers");
+#endif
 
     return totsupers_tmp;
   }
