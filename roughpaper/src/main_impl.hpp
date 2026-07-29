@@ -135,50 +135,64 @@ inline MicrophysicalProcess auto config_condensation(const Config& config,
                       c.rtol, c.atol, c.MINSUBTSTEP, &realtime2dimless);
 }
 
+// /* examples of possible configurations for collision-coalescence */
+// inline MicrophysicalProcess auto config_collisions(const Config& config, const Timesteps& tsteps)
+// {
+//   // const PairProbability auto coalprob = GolovinProb();
+//   // const PairProbability auto coalprob = LowListCoalProb();
+//   // const PairProbability auto coalprob = LongHydroProb();  // assumes coaleff = 1.0
+//   const PairProbability auto coalprob =
+//       LongHydroProb(config.get_coalescence().constcoaleff.coaleff);
+
+//   const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime,
+//   coalprob);
+
+//   return coal;
+// }
+
+/* examples of possible configurations for coalescence, rebound and breakup */
 inline MicrophysicalProcess auto config_collisions(const Config& config, const Timesteps& tsteps) {
-  // const PairProbability auto collprob = LongHydroProb();
-  // // const NFragments auto nfrags = ConstNFrags(config.get_breakup().constnfrags.nfrags);
+  const PairProbability auto collprob = LongHydroProb();
+
+  const NFragments auto nfrags = ConstNFrags(config.get_breakup().constnfrags.nfrags);
   // const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
-  // // const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag{};
-  // const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
-  // // const CoalBuReFlag auto coalbure_flag = StraubCoalBuReFlag(RogersGKTerminalVelocity{});
-  // // const CoalBuReFlag auto coalbure_flag =
-  // //     ConstCoalBuReFlag{config.get_coalescence().constcoaleff.coaleff};
-  // const MicrophysicalProcess auto colls = CoalBuRe(tsteps.get_collstep(),
-  //                                                  &step2realtime,
-  //                                                  collprob,
-  //                                                  nfrags,
-  //                                                  coalbure_flag);
-  // return colls;
 
-  // const PairProbability auto buprob = LowListBuProb();
-  // const NFragments auto nfrags = ConstNFrags(config.get_breakup().constnfrags.nfrags);
-  // const MicrophysicalProcess auto bu = CollBu(tsteps.get_collstep(),
-  //                                             &step2realtime,
-  //                                             buprob,
-  //                                             nfrags);
+  const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
+  // const CoalBuReFlag auto coalbure_flag = SUCoalBuReFlag{};
+  // const CoalBuReFlag auto coalbure_flag = StraubCoalBuReFlag(RogersGKTerminalVelocity{});
+  // const CoalBuReFlag auto coalbure_flag =
+  //     ConstCoalBuReFlag{config.get_coalescence().constcoaleff.coaleff};
 
-  // const PairProbability auto coalprob = LowListCoalProb();
-  // const PairProbability auto coalprob = GolovinProb();
-  // const PairProbability auto coalprob = LongHydroProb(1.0);
-  const PairProbability auto coalprob =
-      LongHydroProb(config.get_coalescence().constcoaleff.coaleff);
-  const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime, coalprob);
-
-  return coal;
-  // return coal >> bu;
+  const MicrophysicalProcess auto colls =
+      CoalBuRe(tsteps.get_collstep(), &step2realtime, collprob, nfrags, coalbure_flag);
+  return colls;
 }
+
+// /* examples of possible configurations for coalescence and breakup seperately */
+// inline MicrophysicalProcess auto config_collisions(const Config& config, const Timesteps& tsteps)
+// {
+//   const PairProbability auto buprob = LowListBuProb();
+//   const NFragments auto nfrags = ConstNFrags(config.get_breakup().constnfrags.nfrags);
+//   const MicrophysicalProcess auto bu =
+//       CollBu(tsteps.get_collstep(), &step2realtime, buprob, nfrags);
+
+//   const PairProbability auto coalprob = LowListCoalProb();
+//   const MicrophysicalProcess auto coal = CollCoal(tsteps.get_collstep(), &step2realtime,
+//   coalprob);
+
+//   return coal >> bu;
+// }
 
 inline MicrophysicalProcess auto create_microphysics(const Config& config,
                                                      const Timesteps& tsteps) {
   const MicrophysicalProcess auto cond = config_condensation(config, tsteps);
-  // const MicrophysicalProcess auto colls = config_collisions(config, tsteps);
-  // return colls >> cond;
+  // return cond;
+
+  const MicrophysicalProcess auto colls = config_collisions(config, tsteps);
+  return colls >> cond;
 
   // const MicrophysicalProcess auto null = NullMicrophysicalProcess{};
   // return null;
-
-  return cond;
 }
 
 template <typename Dataset, typename Store>
