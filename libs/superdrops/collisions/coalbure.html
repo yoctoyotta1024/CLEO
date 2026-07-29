@@ -406,8 +406,8 @@
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK10DoCoalBuReclER9SuperdropR9SuperdropKdKd">
-<span id="_CPPv3NK10DoCoalBuReclER9SuperdropR9SuperdropKdKd"></span><span id="_CPPv2NK10DoCoalBuReclER9SuperdropR9SuperdropKdKd"></span><span id="DoCoalBuRe::call-operator__SuperdropR.SuperdropR.doubleC.doubleCC"></span><span class="target" id="structDoCoalBuRe_1ae38d27725bebebb61de9163855a6fc61"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop1</span></span>, <a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop2</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">prob</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">phi</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10DoCoalBuReclER9SuperdropR9SuperdropKdKd" title="Link to this definition">¶</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4NK10DoCoalBuReclER9SuperdropR9SuperdropKdKdKd">
+<span id="_CPPv3NK10DoCoalBuReclER9SuperdropR9SuperdropKdKdKd"></span><span id="_CPPv2NK10DoCoalBuReclER9SuperdropR9SuperdropKdKdKd"></span><span id="DoCoalBuRe::call-operator__SuperdropR.SuperdropR.doubleC.doubleC.doubleCC"></span><span class="target" id="structDoCoalBuRe_1a376b706893a2c47a8b8786337a423567"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop1</span></span>, <a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop2</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">prob</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">phi_coll</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">phi_out</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10DoCoalBuReclER9SuperdropR9SuperdropKdKdKd" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Operator used as an adaptor such that <a class="reference internal" href="#structDoCoalBuRe"><span class="std std-ref">DoCoalBuRe</span></a> satisfies the <a class="reference internal" href="collisions.html#conceptPairEnactX"><span class="std std-ref">PairEnactX</span></a> concept and so can be used as the EnactCollision function-like object in the <a class="reference internal" href="collisions.html#structDoCollisions"><span class="std std-ref">DoCollisions</span></a> struct. </p>
 <p>This operator calls functions to enact the collision- coalescence, breakup or rebound of two super-droplets.</p>
 <dl class="field-list simple">
@@ -416,7 +416,8 @@
 <li><p><strong>drop1</strong> – First superdroplet. </p></li>
 <li><p><strong>drop2</strong> – Second superdroplet. </p></li>
 <li><p><strong>prob</strong> – Probability of collision. </p></li>
-<li><p><strong>phi</strong> – Phi value. </p></li>
+<li><p><strong>phi_coll</strong> – Random number in the range [0.0, 1.0] for collision. </p></li>
+<li><p><strong>phi_out</strong> – Random number in the range [0.0, 1.0] for outcome of collision as breakup, rebound or coalescence. </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -428,28 +429,6 @@
 </div>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-functions">Private Functions</p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4NK10DoCoalBuRe11rescale_phiEKdKd">
-<span id="_CPPv3NK10DoCoalBuRe11rescale_phiEKdKd"></span><span id="_CPPv2NK10DoCoalBuRe11rescale_phiEKdKd"></span><span id="DoCoalBuRe::rescale_phi__doubleC.doubleCC"></span><span class="target" id="structDoCoalBuRe_1a229ac456ce833a15017b14941cf45666"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rescale_phi</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">prob</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">phi</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10DoCoalBuRe11rescale_phiEKdKd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Rescales a random number phi to be in the desired range [0, 1]. </p>
-<p>This function adjusts the value of phi to account for the fact that if a collision occurs (i.e., if gamma != 0), then phi lies in the range [0, prob - floor(prob)] instead of [0, 1].</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This function is assumed to be consistent with collision_gamma(…) and must be.</p>
-</div>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>prob</strong> – The probability of collision. </p></li>
-<li><p><strong>phi</strong> – Random number, assumed to be in the range [0.0, prob - floor(prob)].</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The rescaled value of phi as a uint64_t. </p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK10DoCoalBuRe15collision_gammaEK8uint64_tK8uint64_tKdKd">
 <span id="_CPPv3NK10DoCoalBuRe15collision_gammaEK8uint64_tK8uint64_tKdKd"></span><span id="_CPPv2NK10DoCoalBuRe15collision_gammaEK8uint64_tK8uint64_tKdKd"></span><span id="DoCoalBuRe::collision_gamma__uint64_tC.uint64_tC.doubleC.doubleCC"></span><span class="target" id="structDoCoalBuRe_1ae9c85450322c4c9f37d6f3dea47f74a6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">collision_gamma</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">xi1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">xi2</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">prob</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">phi</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK10DoCoalBuRe15collision_gammaEK8uint64_tK8uint64_tKdKd" title="Link to this definition">¶</a><br /></dt>
@@ -604,8 +583,7 @@
 <li><a class="reference internal" href="#">Coalescence-Breakup-Rebound</a><ul>
 <li><a class="reference internal" href="#_CPPv4I_10NFragments_12CoalBuReFlagE10DoCoalBuRe"><code class="docutils literal notranslate"><span class="pre">DoCoalBuRe</span></code></a><ul>
 <li><a class="reference internal" href="#_CPPv4N10DoCoalBuRe10DoCoalBuReEK6NFragsK4Flag"><code class="docutils literal notranslate"><span class="pre">DoCoalBuRe()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10DoCoalBuReclER9SuperdropR9SuperdropKdKd"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv4NK10DoCoalBuRe11rescale_phiEKdKd"><code class="docutils literal notranslate"><span class="pre">rescale_phi()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK10DoCoalBuReclER9SuperdropR9SuperdropKdKdKd"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK10DoCoalBuRe15collision_gammaEK8uint64_tK8uint64_tKdKd"><code class="docutils literal notranslate"><span class="pre">collision_gamma()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK10DoCoalBuRe27coalesce_breakup_or_reboundEK8uint64_tKdR9SuperdropR9Superdrop"><code class="docutils literal notranslate"><span class="pre">coalesce_breakup_or_rebound()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N10DoCoalBuRe4coalE"><code class="docutils literal notranslate"><span class="pre">coal</span></code></a></li>
