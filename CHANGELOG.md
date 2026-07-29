@@ -2,6 +2,22 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.66.1](https://github.com/yoctoyotta1024/CLEO/compare/1a493246e3c9edf6c1e6ee64603803a4de56b388..v0.66.1) - 2026-07-29
+#### Bug Fixes
+- remove redundant initialisation of supers - ([65bbf47](https://github.com/yoctoyotta1024/CLEO/commit/65bbf473d38acb8d34a85b9b426f4ac8c0aab0c3)) - Harshada Balasubramanian
+- YAC issues with netcdf dependencies - ([ee938c5](https://github.com/yoctoyotta1024/CLEO/commit/ee938c570f1289a28631d4332b8eb416d82315cc)) - Harshada Balasubramanian
+- resolve yaml-cpp cmake version compatibility - ([1a49324](https://github.com/yoctoyotta1024/CLEO/commit/1a493246e3c9edf6c1e6ee64603803a4de56b388)) - Harshada Balasubramanian
+#### Build system
+- **(deps)** upgrade yaml-cpp to  0.9.0 - ([62a1e16](https://github.com/yoctoyotta1024/CLEO/commit/62a1e162e91e5ff4437f02799ee7afd90548e8bf)) - Harshada Balasubramanian
+#### Documentation
+- update documentation for netcdf dependency - ([d8bd50d](https://github.com/yoctoyotta1024/CLEO/commit/d8bd50d793b89ffdf41d784a953a4b8e77c1d8a4)) - Harshada Balasubramanian
+#### Miscellaneous Chores
+- extend logic for gridbox - ([e12080a](https://github.com/yoctoyotta1024/CLEO/commit/e12080a8f454259d638d983d52951c6e75a5d8df)) - Harshada Balasubramanian
+-  wrap sdinit check inside NDEBUG macro - ([2cf9149](https://github.com/yoctoyotta1024/CLEO/commit/2cf9149cbad65fdb0d9fce78c0135dbaf3840072)) - Harshada Balasubramanian
+- use yaml-cpp CMakeLists from main - ([e689c00](https://github.com/yoctoyotta1024/CLEO/commit/e689c00523e6a1c24616d9dc6cf41c76a8cfd014)) - Harshada Balasubramanian
+
+- - -
+
 ## [v0.66.0](https://github.com/yoctoyotta1024/CLEO/compare/4be7e09846e5be8fa3b5bbba70c4c9f3b09c0715..v0.66.0) - 2026-07-29
 #### Bug Fixes
 - replace rescaling phi with drawing independent random number for coalbure algorithm - ([f5b04fb](https://github.com/yoctoyotta1024/CLEO/commit/f5b04fba45d19fadd5d4c08523c725a680807380)) - clara.bayley
