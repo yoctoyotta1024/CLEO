@@ -158,8 +158,8 @@ def plot_allkernels_results(
         ax.set_yticklabels([])  # Remove y-axis tick labels
 
     styles = {
-        "constcoal": ["Const E_coal", "black", 1.0],
-        "long": ["Long (coal only)", "grey", 0.8],
+        "constcoal": ["Const E_coal", "grey", 1.0],
+        "long": ["Long (coal only)", "black", 0.8],
         "lowlist": ["Low & List", "blue", 1.0],
         "szakallurbich": ["Szakall & Urbich", "green", 1.0],
         "straub": ["Straub", "maroon", 1.0],
