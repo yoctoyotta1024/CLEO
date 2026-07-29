@@ -60,7 +60,7 @@ pyca::micro_all create_microphysical_process(const Config &config, const Timeste
                         c.rtol, c.atol, c.MINSUBTSTEP, &realtime2dimless);
   }
 
-  const PairProbability auto collcoalprob = LongHydroProb();
+  const PairProbability auto collcoalprob = LongHydroProb();  // assumes coaleff = 1.0
   const MicrophysicsFunc auto no_colls =
       DoCollisions<LongHydroProb, DoCoalescence>(0.0, collcoalprob, DoCoalescence{});
   MicrophysicalProcess auto colls = ConstTstepMicrophysics(LIMITVALUES::uintmax, no_colls);
