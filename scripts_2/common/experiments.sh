@@ -8,6 +8,7 @@
 ###   $3 = experiment  name     (optional, overrides the 'experiment' variable)
 ###
 
+load_experiment_config() {
 path2build_override=${1:-""}
 build_flags_override=${2:-""}
 experiment=${3:-${experiment}}
@@ -18,7 +19,7 @@ if [[ -z "${path2CLEO}" ]]; then
 fi
 
 if [[ -z "${experiment}" ]]; then
-  echo "Error: 'experiment' must be set before sourcing experiment_params.sh (or passed as \$3)"
+  echo "Error: 'experiment' must be set before sourcing experiments.sh (or passed as \$3)"
   exit 1
 fi
 
@@ -187,3 +188,8 @@ esac
 
 export CLEO_PATH2BUILD="${path2build}"
 export CLEO_BUILD_FLAGS="${build_flags}"
+}
+
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+  load_experiment_config "$@"
+fi
