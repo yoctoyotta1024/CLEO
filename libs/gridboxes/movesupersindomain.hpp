@@ -218,7 +218,9 @@ class MoveSupersInDomain {
     set_gridboxes_refs(d_gbxs, allsupers.domain_supers());
 
     /* optional (expensive!) test if superdrops' gbxindex doesn't match gridbox's gbxindex */
-    // check_sdgbxindex_during_motion(d_gbxs, allsupers.get_totsupers_readonly());
+#ifndef NDEBUG
+    check_sdgbxindex_during_motion(d_gbxs, allsupers.get_totsupers_readonly());
+#endif
 
     return allsupers;
   }
