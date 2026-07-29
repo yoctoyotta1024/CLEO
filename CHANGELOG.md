@@ -2,6 +2,28 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.66.0](https://github.com/yoctoyotta1024/CLEO/compare/4be7e09846e5be8fa3b5bbba70c4c9f3b09c0715..v0.66.0) - 2026-07-29
+#### Bug Fixes
+- replace rescaling phi with drawing independent random number for coalbure algorithm - ([f5b04fb](https://github.com/yoctoyotta1024/CLEO/commit/f5b04fba45d19fadd5d4c08523c725a680807380)) - clara.bayley
+#### Documentation
+- mention testik 2009 as well as testik et al. 2011 - ([c341d0b](https://github.com/yoctoyotta1024/CLEO/commit/c341d0b57f139600848b74832a7214f8a2457137)) - clara.bayley
+#### Features
+- option to use only straub2010 for coalescence or breakup - ([76cb1df](https://github.com/yoctoyotta1024/CLEO/commit/76cb1dfa5df9d6a0bd76d3762c5e18af14ee908d)) - clara.bayley
+- option for constant coaleff coalescence or breakup - ([f60b8b0](https://github.com/yoctoyotta1024/CLEO/commit/f60b8b0ddac53a9e5ff5ba0b4c861f339da337db)) - clara.bayley
+- new optional configuration to set coaleff - ([4be7e09](https://github.com/yoctoyotta1024/CLEO/commit/4be7e09846e5be8fa3b5bbba70c4c9f3b09c0715)) - clara.bayley
+#### Miscellaneous Chores
+- formatting - ([439ad5a](https://github.com/yoctoyotta1024/CLEO/commit/439ad5afa2b557e15f6ffb154678d4f9054b4e00)) - clara.bayley
+- formatting - ([f2b45d4](https://github.com/yoctoyotta1024/CLEO/commit/f2b45d4e41b1d5d8de2fd4fa6c9ca4e502aa4fe8)) - clara.bayley
+- formatting - ([9ce1a91](https://github.com/yoctoyotta1024/CLEO/commit/9ce1a91c0c4c1a4b19a9ae6cf181df00a71844b2)) - clara.bayley
+- formatting - ([f65fceb](https://github.com/yoctoyotta1024/CLEO/commit/f65fceb72475ae2b9b0453382b51273ea09f88ae)) - clara.bayley
+#### Refactoring
+- add Testik 2009 reference in comments - ([d37edf3](https://github.com/yoctoyotta1024/CLEO/commit/d37edf3defc8d1997226bc1bae59b0eec3d328c7)) - clara.bayley
+- demonstrate use of new coalbure flags in roughpaper - ([8dedc7b](https://github.com/yoctoyotta1024/CLEO/commit/8dedc7bfd98388c2b5844508124f98c7c5cbfa6f)) - clara.bayley
+- move straub collision eff calc into seperate file - ([9e29cee](https://github.com/yoctoyotta1024/CLEO/commit/9e29cee62782e7ce528971d074e38a0927dbd158)) - clara.bayley
+- demonstrate const coaleff usage in roughpaper main - ([3cd9bb7](https://github.com/yoctoyotta1024/CLEO/commit/3cd9bb71da858fa46a5b2d417575d185d6609031)) - clara.bayley
+
+- - -
+
 ## [v0.65.2](https://github.com/yoctoyotta1024/CLEO/compare/b3688572967ff34c044588c0066c97ddc2ff1f3a..v0.65.2) - 2026-07-29
 #### Bug Fixes
 - download yac and yaxt from owncloud servers - ([9033bf1](https://github.com/yoctoyotta1024/CLEO/commit/9033bf18c2a5c7424ce58228c9e6e0ae2614f09e)) - clara.bayley
