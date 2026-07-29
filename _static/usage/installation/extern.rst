@@ -28,6 +28,11 @@ Then to use ``install_yac.sh`` you will need to provide the path to the director
 to put the installations, as well as the compiler type (e.g. ``intel`` or ``gcc``), and the python
 interpreter you want to use for YAC's python bindings.
 
+.. note::
+   **Dependency Requirement: NetCDF & LAPACK**
+
+   YAC requires **NetCDF** (C and Fortran) and **LAPACK** to be installed on your system.
+
 .. admonition:: E.g. On Levante
 
   for intel:
