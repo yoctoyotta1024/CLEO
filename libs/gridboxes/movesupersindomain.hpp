@@ -22,7 +22,6 @@
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Profiling_ScopedRegion.hpp>
-#include <cassert>
 #include <concepts>
 
 #include "../cleoconstants.hpp"
@@ -147,7 +146,7 @@ template <GridboxMaps GbxMaps, Motion<GbxMaps> M, TransportAcrossDomain<GbxMaps>
 class MoveSupersInDomain {
  public:
   /* (expensive!) test if superdrops' gbxindex doesn't match gridbox's gbxindex,
-  raise error is assertion fails */
+  raise error if assertion fails */
   void check_sdgbxindex_during_motion(const viewd_constgbx d_gbxs,
                                       const viewd_constsupers totsupers) const {
     const auto ngbxs = d_gbxs.extent(0);

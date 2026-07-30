@@ -21,7 +21,6 @@
 #define LIBS_SUPERDROPS_COLLISIONS_COALESCENCE_HPP_
 
 #include <Kokkos_Core.hpp>
-#include <cassert>
 #include <cstdint>
 #include <functional>
 
@@ -33,8 +32,8 @@
  * @brief Raises an error if the multiplicity of the super-droplet is 0.
  *
  * This function checks if the given superdrop is null by verifying its multiplicity.
- * It asserts that the multiplicity (`xi`) of the superdrop is greater than 0.
- * If the multiplicity is 0, an assertion error is raised.
+ * It ensures that the multiplicity (`xi`) of the superdrop is greater than 0.
+ * If the multiplicity is 0, a runtime error is raised.
  *
  * @param drop A reference to the `Superdrop` object to be checked.
  * @return Always returns 0 (=false).

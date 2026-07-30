@@ -22,7 +22,6 @@
 #define LIBS_SUPERDROPS_COLLISIONS_BREAKUP_HPP_
 
 #include <Kokkos_Core.hpp>
-#include <cassert>
 #include <concepts>
 #include <cstdint>
 #include <functional>

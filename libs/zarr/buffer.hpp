@@ -140,7 +140,7 @@ struct Buffer {
   /**
    * @brief Copies maximum of 1 element of data to buffer.
    *
-   * Assert that there is space in the buffer, then copy 1 element of data to
+   * Ensure that there is space in the buffer, then copy 1 element of data to
    * the buffer.
    *
    * @param data Data element to copy.

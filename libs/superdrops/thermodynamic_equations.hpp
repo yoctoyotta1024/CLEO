@@ -22,7 +22,6 @@
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
-#include <cassert>
 
 #include "../cleoconstants.hpp"
 #include "superdrop.hpp"

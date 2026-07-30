@@ -23,7 +23,6 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
 #include <algorithm>
-#include <cassert>
 #include <cmath>
 #include <iostream>
 #include <stdexcept>
@@ -124,8 +123,7 @@ class ZarrArray {
     arrayshape.at(0) = whole_shape0 + remainder_shape0;
 
     if (totndata > vec_product(arrayshape)) {
-      throw std::runtime_error(
-          "elements of data must not be hiddden by array shape");
+      throw std::runtime_error("elements of data must not be hiddden by array shape");
     }
     return arrayshape;
   }
@@ -166,7 +164,7 @@ class ZarrArray {
    * @brief Constructs a ZarrArray object.
    *
    * Initializes an empty Zarr array in the provided store in order to writes chunks of an array to
-   * the store via a buffer. The assertions in this constructor ensure chunks have the same
+   * the store via a buffer. The checks in this constructor ensure chunks have the same
    * number of dimensions for the array. The buffer is the size of exactly 1 chunk, and chunks'
    * shape is restricted such that the final array dimensions are exactly integer multiples of its
    * chunks along all but the outermost (0th) dimension of the array. Order of data written to
@@ -257,13 +255,13 @@ class ZarrArray {
    * @brief Write the array shape to the store.
    *
    * This function writes the given array shape to the store as part of the metadata in the Zarr
-   * .zarray json file. Function also asserts that the number of dimensions of the given arrayshape
+   * .zarray json file. Function also tests that the number of dimensions of the given arrayshape
    * is consitent with number of dimensions provided by the shape of each chunk.
    *
    * @param arrayshape The array shape to be written.
    *
    * @pre The number of dimensions of the provided array shape must be equal to that of the chunk
-   *      shape. Otherwise, an assertion error is triggered.
+   *      shape. Otherwise, a runtime error is triggered.
    */
   void write_arrayshape(const std::vector<size_t>& arrayshape) {
     if (arrayshape.size() != chunks.get_chunkshape().size()) {
@@ -280,7 +278,7 @@ class ZarrArray {
    * buffer = chunksize). Second writes any whole chunks of the array into a store. Thirdly updates
    * the .zarray json file for the Zarr metadata about the shape of the array accordingly. Finally
    * copies any leftover data, number of elements < chunksize, into the buffer.
-   * Assertion checks there is no remainng data unattended to.
+   * Error checks there is no remainng data unattended to.
    *
    * @param h_data The data in a Kokkos view in host memory which should be written to the array in
    * a store.
@@ -305,7 +303,7 @@ class ZarrArray {
    * First copies some data from the view to a buffer (until number of elements in
    * buffer = chunksize), then writes any whole chunks of the array into a store. Finally
    * copies any leftover data, number of elements < chunksize, into the buffer.
-   * Assertion checks there is no remainng data unattended to. Function useful when using zarr array
+   * Error checks there is no remainng data unattended to. Function useful when using zarr array
    * as backend of a dataset and/or you do not want to write metadata for the array when writing
    * data elements.
    *

@@ -25,7 +25,6 @@
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
-#include <cassert>
 #include <functional>
 
 #include "../kokkosaliases.hpp"
@@ -58,7 +57,7 @@ struct PredCorr {
   defined on coord3 faces of a gridbox to a superdroplet's
   coordinates at (coord3, coord1, coord2) */
   KOKKOS_INLINE_FUNCTION
-  double interp_wvel(const unsigned int gbxindex, const GbxMaps &gbxmaps, const State &state,
+  double interp_wvel(const unsigned int gbxindex, const GbxMaps& gbxmaps, const State& state,
                      const double coord3) const {
     return interpolation(gbxmaps.coord3bounds(gbxindex), state.wvel, coord3);
   }
@@ -67,7 +66,7 @@ struct PredCorr {
   defined on coord1 faces of a gridbox to a superdroplet's
   coordinates at (coord3, coord1, coord2) */
   KOKKOS_INLINE_FUNCTION
-  double interp_uvel(const unsigned int gbxindex, const GbxMaps &gbxmaps, const State &state,
+  double interp_uvel(const unsigned int gbxindex, const GbxMaps& gbxmaps, const State& state,
                      const double coord1) const {
     return interpolation(gbxmaps.coord1bounds(gbxindex), state.uvel, coord1);
   }
@@ -76,14 +75,14 @@ struct PredCorr {
   defined on coord2 faces of a gridbox to a superdroplet's
   coordinates at (coord3, coord1, coord2) */
   KOKKOS_FUNCTION
-  double interp_vvel(const unsigned int gbxindex, const GbxMaps &gbxmaps, const State &state,
+  double interp_vvel(const unsigned int gbxindex, const GbxMaps& gbxmaps, const State& state,
                      const double coord2) const {
     return interpolation(gbxmaps.coord2bounds(gbxindex), state.vvel, coord2);
   }
 
   KOKKOS_FUNCTION
-  double delta_coord3(const unsigned int gbxindex, const GbxMaps &gbxmaps, const State &state,
-                      const Superdrop &drop) const {
+  double delta_coord3(const unsigned int gbxindex, const GbxMaps& gbxmaps, const State& state,
+                      const Superdrop& drop) const {
     auto coord3 = drop.get_coord3();
 
     const auto terminal = terminalv(drop);
@@ -106,8 +105,8 @@ struct PredCorr {
   }
 
   KOKKOS_FUNCTION
-  double delta_coord1(const unsigned int gbxindex, const GbxMaps &gbxmaps, const State &state,
-                      const Superdrop &drop) const {
+  double delta_coord1(const unsigned int gbxindex, const GbxMaps& gbxmaps, const State& state,
+                      const Superdrop& drop) const {
     auto coord1 = drop.get_coord1();
 
     /* corrector velocities based on predicted coords */
@@ -126,8 +125,8 @@ struct PredCorr {
   }
 
   KOKKOS_FUNCTION
-  double delta_coord2(const unsigned int gbxindex, const GbxMaps &gbxmaps, const State &state,
-                      const Superdrop &drop) const {
+  double delta_coord2(const unsigned int gbxindex, const GbxMaps& gbxmaps, const State& state,
+                      const Superdrop& drop) const {
     auto coord2 = drop.get_coord2();
 
     /* corrector velocities based on predicted coords */
@@ -155,8 +154,8 @@ struct PredCorr {
   a superdroplet's coordinates from a forward timestep of motion using the
   interpolated wind velocity from a gridbox's state */
   KOKKOS_FUNCTION
-  Superdrop operator()(const unsigned int gbxindex, const GbxMaps &gbxmaps, const State &state,
-                       Superdrop &drop) const {
+  Superdrop operator()(const unsigned int gbxindex, const GbxMaps& gbxmaps, const State& state,
+                       Superdrop& drop) const {
     /* Use predictor-corrector method to get change in SD coords */
     const auto delta3 = delta_coord3(gbxindex, gbxmaps, state, drop);
     const auto delta1 = delta_coord1(gbxindex, gbxmaps, state, drop);

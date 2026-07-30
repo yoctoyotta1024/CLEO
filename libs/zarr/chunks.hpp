@@ -23,11 +23,10 @@
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
-#include <cassert>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <vector>
-#include <stdexcept>
 
 #include "configuration/communicator.hpp"
 #include "zarr/buffer.hpp"

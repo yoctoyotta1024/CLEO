@@ -26,8 +26,8 @@
 #include <cstdint>
 #include <iostream>
 #include <numeric>
-#include <vector>
 #include <stdexcept>
+#include <vector>
 
 #include "../../cleoconstants.hpp"
 #include "../../kokkosaliases.hpp"
@@ -44,7 +44,7 @@ function to move super-droplets between MPI processes, e.g. for superdroplets
 which move to/from gridboxes on different nodes.
 */
 template <GridboxMaps GbxMaps>
-viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
+viewd_supers sendrecv_supers(const GbxMaps& gbxmaps, const viewd_gbx d_gbxs,
                              viewd_supers totsupers);
 
 /*
@@ -55,8 +55,8 @@ struct CartesianTransportAcrossDomain {
   /* (re)sorting supers based on their gbxindexes as step to 'move' superdroplets across the domain.
   May also include MPI communication with moves superdroplets away from/into a node's domain
   */
-  SupersInDomain operator()(const CartesianMaps &gbxmaps, const viewd_gbx d_gbxs,
-                            SupersInDomain &allsupers) const;
+  SupersInDomain operator()(const CartesianMaps& gbxmaps, const viewd_gbx d_gbxs,
+                            SupersInDomain& allsupers) const;
 };
 
 /*
@@ -64,7 +64,7 @@ function to move super-droplets between MPI processes, e.g. for superdroplets
 which move to/from gridboxes on different nodes.
 */
 template <GridboxMaps GbxMaps>
-viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
+viewd_supers sendrecv_supers(const GbxMaps& gbxmaps, const viewd_gbx d_gbxs,
                              viewd_supers totsupers) {
   int comm_size, my_rank;
   comm_size = init_communicator::get_comm_size();
@@ -94,7 +94,7 @@ viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
   size_t total_superdrops_to_recv = 0;
   size_t local_superdrops = 0;
   size_t superdrop_index = totsupers.extent(0) - 1;
-  Superdrop &drop = totsupers(superdrop_index);
+  Superdrop& drop = totsupers(superdrop_index);
 
   // Go through superdrops from back to front and find how many should be sent and their indices
   const auto ngbxs = d_gbxs.extent(0);
@@ -116,8 +116,7 @@ viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
       std::accumulate(per_process_recv_superdrops.begin(), per_process_recv_superdrops.end(), 0);
 
   if (local_superdrops + total_superdrops_to_recv > totsupers.extent(0)) {
-    throw std::runtime_error(
-        "must have enough space in supers view to receive superdroplets");
+    throw std::runtime_error("must have enough space in supers view to receive superdroplets");
   }
   if (local_superdrops + total_superdrops_to_recv > totsupers.extent(0)) {
     std::cout << "MAXIMUM NUMBER OF LOCAL SUPERDROPLETS EXCEEDED" << std::endl;

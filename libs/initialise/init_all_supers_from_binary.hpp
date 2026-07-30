@@ -21,7 +21,6 @@
 #ifndef LIBS_INITIALISE_INIT_ALL_SUPERS_FROM_BINARY_HPP_
 #define LIBS_INITIALISE_INIT_ALL_SUPERS_FROM_BINARY_HPP_
 
-#include <cassert>
 #include <cstdint>
 #include <filesystem>
 #include <fstream>
@@ -37,7 +36,7 @@
 
 /* check all the vectors in the initdata struct all have sizes consistent with one another
 and with maxnsupers. Include coords data in check if nspacedims > 0 */
-void check_initdata_sizes(const InitSupersData &in, const size_t maxnsupers,
+void check_initdata_sizes(const InitSupersData& in, const size_t maxnsupers,
                           const size_t nspacedims);
 
 /* struct containing functions which return data
@@ -51,18 +50,18 @@ struct InitAllSupersFromBinary {
 
   /* sets initial data for solutes as
   a single SoluteProprties instance */
-  void initdata_for_solutes(InitSupersData &initdata) const;
+  void initdata_for_solutes(InitSupersData& initdata) const;
 
   /* sets initial data for sdIds using its generator */
-  void initdata_for_sdIds(InitSupersData &initdata) const;
+  void initdata_for_sdIds(InitSupersData& initdata) const;
 
   /* sets initial data in initdata using data read
   from a binary file called initsupers_filename */
-  void initdata_from_binary(InitSupersData &initdata) const;
+  void initdata_from_binary(InitSupersData& initdata) const;
 
   /* copy data for vectors from binary file to initdata struct */
-  void read_initdata_binary(InitSupersData &initdata, std::ifstream &file,
-                            const std::vector<VarMetadata> &meta) const;
+  void read_initdata_binary(InitSupersData& initdata, std::ifstream& file,
+                            const std::vector<VarMetadata>& meta) const;
 
   /* data size returned is number of variables as
   declared by the metadata for the first variable
@@ -79,11 +78,11 @@ struct InitAllSupersFromBinary {
    * @param config Configuration for member variables.
    *
    */
-  explicit InitAllSupersFromBinary(const OptionalConfigParams::InitSupersFromBinaryParams &config)
+  explicit InitAllSupersFromBinary(const OptionalConfigParams::InitSupersFromBinaryParams& config)
       : InitAllSupersFromBinary(config.maxnsupers, config.initsupers_filename, config.nspacedims) {
     if (config.maxnsupers != config.initnsupers) {
       throw std::runtime_error(
-            "configuration parameter not consistent with initialising all supers from binary");
+          "configuration parameter not consistent with initialising all supers from binary");
     }
   }
 

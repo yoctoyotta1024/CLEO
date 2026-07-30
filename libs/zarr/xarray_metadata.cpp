@@ -84,8 +84,8 @@ std::string xarray_metadata_for_floats(const std::string_view units, const doubl
  * @brief Make string of array attributes metadata for .zattrs json which is used to make zarr array
  * compatible with Xarray and NetCDF.
  *
- * Metadata for integer types (e.g. dtype "u") doesn't include scale_factor so assertion
- * checks scale_factor is equal to 1.0.
+ * Metadata for integer types (e.g. dtype "u") doesn't include scale_factor so error-test included
+ * to check scale_factor is equal to 1.0.
  *
  * @param units The units of the array's coordinates.
  * @param scale_factor The scale factor of data, must equal 1.0.
@@ -146,8 +146,8 @@ std::string raggedarray_xarray_metadata_for_floats(const std::string_view units,
  * @brief Make string of array attributes metadata for .zattrs json which is used to make array for
  * a raggedcount variable in Zarr compatible with Xarray and NetCDF.
  *
- * Metadata for integer types (e.g. dtype "u") doesn't include scale_factor so assertion
- * checks scale_factor is equal to 1.0.
+ * Metadata for integer types (e.g. dtype "u") doesn't include scale_factor so error-test included
+ * to check scale_factor is equal to 1.0.
  *
  * @param units The units of the array's coordinates.
  * @param scale_factor The scale factor of data.

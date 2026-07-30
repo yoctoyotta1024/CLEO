@@ -25,12 +25,11 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
 #include <algorithm>
-#include <cassert>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <unordered_map>
 #include <vector>
-#include <stdexcept>
 
 #include "configuration/communicator.hpp"
 #include "zarr/xarray_metadata.hpp"

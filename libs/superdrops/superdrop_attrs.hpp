@@ -23,7 +23,6 @@
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_MathematicalConstants.hpp>  // for pi
-#include <cassert>
 #include <cstdint>
 
 #include "../cleoconstants.hpp"
@@ -135,7 +134,7 @@ struct SuperdropAttrs {
   /**
    * @brief Set the multiplicity of superdroplet.
    *
-   * Set the multiplicity 'xi' of the superdroplet with assert that new xi >= 1.
+   * Set the multiplicity 'xi' of the superdroplet with assurance that new xi >= 1.
    *
    * @param i_xi The multiplicity to set.
    */
@@ -152,7 +151,7 @@ struct SuperdropAttrs {
    * @brief Set the radius of the super-droplet.
    *
    * This function sets the value of the super-droplet's radius to the specified value
-   * with assert that new radius >= dry radius within 10^(-6) micron tolerance.
+   * with check that new radius >= dry radius within 10^(-6) micron tolerance.
    *
    * _Note:_ See also change_radius which limits super-droplet radius to its dry radius.
    *
@@ -161,8 +160,7 @@ struct SuperdropAttrs {
   KOKKOS_FUNCTION
   void set_radius(const double i_radius) {
     if (i_radius - dryradius() <= -1e-12 / dlc::R0) {
-      Kokkos::abort(
-        "radius cannot be less than dry radius (within 1e-6 micron tolerance)");
+      Kokkos::abort("radius cannot be less than dry radius (within 1e-6 micron tolerance)");
     }
 
     radius = i_radius;
@@ -196,7 +194,7 @@ struct SuperdropAttrs {
     auto m_cond = mass() - msol;
     if (m_cond <= -0.0001 * msol) {
       Kokkos::abort(
-        "condensate mass cannot be less than 0.0 (within 0.0001 of dry mass tolerance)");
+          "condensate mass cannot be less than 0.0 (within 0.0001 of dry mass tolerance)");
     }
 
     m_cond = Kokkos::fmax(0.0, m_cond);  // Kokkos version of std::max() for floats (gpu compatible)
