@@ -24,6 +24,7 @@
 #include <cmath>
 
 #include "../cleoconstants.hpp"
+#include <Kokkos_Core.hpp>
 
 namespace dlc = dimless_constants;
 namespace DC = dimmed_constants;
