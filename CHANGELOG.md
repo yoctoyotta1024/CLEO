@@ -2,6 +2,23 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.68.0](https://github.com/yoctoyotta1024/CLEO/compare/1901abf456a060b443332db225f7ee03b8718b88..v0.68.0) - 2026-07-30
+#### Bug Fixes
+- errors in rebase conflicts corrected - ([cf9a67d](https://github.com/yoctoyotta1024/CLEO/commit/cf9a67d84f2211d9076d247fba9cb1874a41a4fd)) - clara.bayley
+#### Features
+- collisions struct can take a fixed seed for the random number generator pool - ([5d005a2](https://github.com/yoctoyotta1024/CLEO/commit/5d005a21d8fbb530a985720c5a78ed74527b3e5c)) - clara.bayley
+- configuration allows option fixed seed for collisions - ([de0cb18](https://github.com/yoctoyotta1024/CLEO/commit/de0cb18d1a5d6d9e1d51d5b06a9e6f2cc14df9cf)) - clara.bayley
+#### Miscellaneous Chores
+- comment out seed in roughpaper - ([7b4c2bd](https://github.com/yoctoyotta1024/CLEO/commit/7b4c2bd7e2a80efe5dd848ef232f1d2cdb19a85b)) - clara.bayley
+- formatting - ([ad633ea](https://github.com/yoctoyotta1024/CLEO/commit/ad633ea75c0f58d3be757508b6a6a3ab2d3e0af4)) - clara.bayley
+- formatting - ([1901abf](https://github.com/yoctoyotta1024/CLEO/commit/1901abf456a060b443332db225f7ee03b8718b88)) - clara.bayley
+#### Refactoring
+- add clearer note on seed in configs - ([0406ed3](https://github.com/yoctoyotta1024/CLEO/commit/0406ed33f957f14dfb905d70517a086cdd852331)) - clara.bayley
+- show example with fixed seed in roughpaper - ([5c9627e](https://github.com/yoctoyotta1024/CLEO/commit/5c9627ec5fbe3d952f4a4a4ede787d577373bc8b)) - clara.bayley
+- use fixed seed for golovin kernel in shima2009 example - ([f11160a](https://github.com/yoctoyotta1024/CLEO/commit/f11160a2d8884576576e7286c736f849f4846692)) - clara.bayley
+
+- - -
+
 ## [v0.67.0](https://github.com/yoctoyotta1024/CLEO/compare/2d5ee9e9a36bce65fb7d1244437cc4af300a25aa..v0.67.0) - 2026-07-29
 #### Bug Fixes
 - remove stray creation of terminalv from RogersGKTerminalVelocity - ([b409aef](https://github.com/yoctoyotta1024/CLEO/commit/b409aefe56d52f8c72fb1a705601c70c6b412735)) - clara.bayley
