@@ -63,7 +63,7 @@ microphysics:
     rtol : 0.0                                         # relative tolerance for implicit Euler integration
     atol : 0.001                                       # absolute tolerance for implicit Euler integration
   collisions:
-    seed: 1023                                         # fixed seed for random number generator (for reproducibility)
+    seed: 1023                                         # fixed seed for random number generator in collisions (for reproducibility of serial builds only)
   coalescence:
     constcoaleff:
       coaleff: 0.95                                    # constant coalescence efficiency

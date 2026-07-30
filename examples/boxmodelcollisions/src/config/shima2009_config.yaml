@@ -54,4 +54,4 @@ outputdata:
 ### Microphysics Parameters ###
 microphysics:
   collisions:
-    seed: 100                                                   # fixed seed for random number generator (for reproducibility)
+    seed: 10                                                    # fixed seed for random number generator in collisions (for reproducibility of serial builds only)
