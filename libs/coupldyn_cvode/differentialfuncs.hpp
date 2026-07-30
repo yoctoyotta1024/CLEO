@@ -20,11 +20,10 @@
 
 #include <nvector/nvector_serial.h> /* access to serial N_Vector            */
 
-#include <cassert>
 #include <cmath>
+#include <stdexcept>
 
 #include "../cleoconstants.hpp"
-#include <Kokkos_Core.hpp>
 
 namespace dlc = dimless_constants;
 namespace DC = dimmed_constants;

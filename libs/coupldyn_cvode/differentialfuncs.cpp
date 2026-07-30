@@ -31,7 +31,7 @@ with conversion to real temp /K = T*Temp0 and from real psat
 to dimensionless psat = psat/P0. */
 double cvode_saturationpressure(const double temp) {
   if (temp <= 0) {
-    Kokkos::abort("psat ERROR: temperature must be larger than 0K.");
+    throw std::runtime_error("psat ERROR: temperature must be larger than 0K.");
   }
 
   constexpr double A = 17.4146;     // constants from Bjorn Gitlab originally from paper
