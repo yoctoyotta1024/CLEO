@@ -80,6 +80,12 @@ struct OptionalConfigParams {
     double atol = NaNVals::dbl();        /**< absolute tolerance for implicit Euler integration */
   } condensation;
 
+  struct CollisionsParams {
+    void set_params(const YAML::Node& config);
+    void print_params() const;
+    uint64_t seed = NaNVals::sizet(); /**< fixed seed for collision probability generator pool */
+  } collisions;
+
   struct CoalescenceParams {
     void set_params(const YAML::Node& config);
     void print_params() const;

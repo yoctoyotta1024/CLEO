@@ -83,6 +83,8 @@ struct Config {
     return optional.condensation;
   }
 
+  OptionalConfigParams::CollisionsParams get_collisions() const { return optional.collisions; }
+
   OptionalConfigParams::CoalescenceParams get_coalescence() const { return optional.coalescence; }
 
   OptionalConfigParams::BreakupParams get_breakup() const { return optional.breakup; }
