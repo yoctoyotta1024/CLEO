@@ -31,14 +31,14 @@ struct NullDynComms {
   /* receive information from NullDynamics
   solver if null for no coupling to CLEO SDM */
   template <typename GbxMaps, typename CD = NullDynComms>
-  KOKKOS_INLINE_FUNCTION void receive_dynamics(const GbxMaps &gbxmaps, const NullDynamics &nulldyn,
+  KOKKOS_INLINE_FUNCTION void receive_dynamics(const GbxMaps& gbxmaps, const NullDynamics& nulldyn,
                                                const viewh_gbx h_gbxs) const {}
 
   /* send information from Gridboxes' states
   to coupldyn is null for NullDynamics */
   template <typename GbxMaps, typename CD = NullDynComms>
-  KOKKOS_INLINE_FUNCTION void send_dynamics(const GbxMaps &gbxmaps, const viewh_constgbx h_gbxs,
-                                            const NullDynamics &nulldyn) const {}
+  KOKKOS_INLINE_FUNCTION void send_dynamics(const GbxMaps& gbxmaps, const viewh_constgbx h_gbxs,
+                                            const NullDynamics& nulldyn) const {}
 };
 
 #endif  // LIBS_COUPLDYN_NULL_NULLDYNCOMMS_HPP_

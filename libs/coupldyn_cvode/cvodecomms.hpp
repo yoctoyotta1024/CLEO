@@ -31,12 +31,12 @@ struct CvodeComms {
  private:
   /* get change in state since
   previous time step to current one */
-  std::array<double, 4> state_change(CvodeDynamics &cvode, const viewh_constgbx h_gbxs,
+  std::array<double, 4> state_change(CvodeDynamics& cvode, const viewh_constgbx h_gbxs,
                                      const size_t ii) const;
 
   /* change is_delta_y = false to is_delta_y = true
   if delta contains non-zero elements */
-  bool is_state_change(const std::array<double, 4> &delta, bool is_delta_y) const;
+  bool is_state_change(const std::array<double, 4>& delta, bool is_delta_y) const;
 
  public:
   /*
@@ -45,11 +45,11 @@ struct CvodeComms {
   Note: ii indexing for cvode isn't compatible with MPI domain decompositon.
   */
   template <typename GbxMaps, typename CD = CvodeDynamics>
-  void receive_dynamics(const GbxMaps &gbxmaps, const CvodeDynamics &cvode,
+  void receive_dynamics(const GbxMaps& gbxmaps, const CvodeDynamics& cvode,
                         const viewh_gbx h_gbxs) const {
     const size_t ngbxs(h_gbxs.extent(0));
     for (size_t ii(0); ii < ngbxs; ++ii) {
-      State &state(h_gbxs(ii).state);
+      State& state(h_gbxs(ii).state);
       const auto cvodestate(cvode.get_current_state(ii));  // ii'th states' [p, t, qv, qc]
 
       state.press = cvodestate.at(0);
@@ -65,8 +65,8 @@ struct CvodeComms {
   Note: ii indexing for cvode isn't compatible with MPI domain decompositon.
   */
   template <typename GbxMaps, typename CD = CvodeDynamics>
-  void send_dynamics(const GbxMaps &gbxmaps, const viewh_constgbx h_gbxs,
-                     CvodeDynamics &cvode) const {
+  void send_dynamics(const GbxMaps& gbxmaps, const viewh_constgbx h_gbxs,
+                     CvodeDynamics& cvode) const {
     std::vector<double> delta_y;
     bool is_delta_y(false);
 

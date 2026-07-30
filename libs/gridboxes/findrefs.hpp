@@ -33,7 +33,7 @@ view which has matching sdgbxindex to idx */
 struct Ref0 {
   unsigned int idx;
 
-  KOKKOS_INLINE_FUNCTION bool operator()(const Superdrop &op) const {
+  KOKKOS_INLINE_FUNCTION bool operator()(const Superdrop& op) const {
     return op.get_sdgbxindex() < idx;
   }
 };
@@ -43,7 +43,7 @@ view which has matching sdgbxindex to idx */
 struct Ref1 {
   unsigned int idx;
 
-  KOKKOS_INLINE_FUNCTION bool operator()(const Superdrop &op) const {
+  KOKKOS_INLINE_FUNCTION bool operator()(const Superdrop& op) const {
     return op.get_sdgbxindex() <= idx;
   }
 };
@@ -64,7 +64,7 @@ KOKKOS_INLINE_FUNCTION kkpair_size_t find_refs(const ViewSupers totsupers, unsig
 ie. that has sdgbxindex == idx. Function works within 1st layer of heirarchal
 parallelism for a team_member of a league */
 template <typename TeamMemberType, typename ViewSupers>
-KOKKOS_INLINE_FUNCTION kkpair_size_t find_refs(const TeamMemberType &team_member,
+KOKKOS_INLINE_FUNCTION kkpair_size_t find_refs(const TeamMemberType& team_member,
                                                const ViewSupers totsupers, unsigned int idx) {
   namespace SRP = SetRefPreds;
   const auto ref0 = size_t{find_ref(team_member, totsupers, SRP::Ref0{idx})};
@@ -101,7 +101,7 @@ return makeref(start, iter);
 ```
 */
 template <typename Pred, typename TeamMemberType, typename ViewSupers>
-KOKKOS_INLINE_FUNCTION size_t find_ref(const TeamMemberType &team_member,
+KOKKOS_INLINE_FUNCTION size_t find_ref(const TeamMemberType& team_member,
                                        const ViewSupers totsupers, const Pred pred) {
   return find_partition_point(totsupers, pred, 0, totsupers.extent(0));
 }
@@ -153,7 +153,7 @@ inline kkpair_size_t find_domainrefs(
 be at 0th position. Last is position of last superdrop with sdgbxindex < gbxindex_max.
 Function valid in outermost level (outside) of parallelism default implementation valid on host. */
 template <typename ViewSupers>
-inline kkpair_size_t find_domainrefs(const Kokkos::HostSpace &ex, const ViewSupers totsupers,
+inline kkpair_size_t find_domainrefs(const Kokkos::HostSpace& ex, const ViewSupers totsupers,
                                      const unsigned int gbxindex_max) {
   namespace SRP = SetRefPreds;
   const auto ref1 = size_t{find_ref(totsupers, SRP::Ref1{gbxindex_max})};
@@ -165,7 +165,7 @@ inline kkpair_size_t find_domainrefs(const Kokkos::HostSpace &ex, const ViewSupe
 be at 0th position. Last is position of last superdrop with sdgbxindex < gbxindex_max.
 Function valid in outermost level (outside) of parallelism valid for CUDA devices. */
 template <class ExecutionSpace, typename ViewSupers>
-inline kkpair_size_t find_domainrefs(const ExecutionSpace &ex, const ViewSupers totsupers,
+inline kkpair_size_t find_domainrefs(const ExecutionSpace& ex, const ViewSupers totsupers,
                                      const unsigned int gbxindex_max) {
   namespace SRP = SetRefPreds;
   auto ref1 = Kokkos::View<size_t[1]>("domainref1");

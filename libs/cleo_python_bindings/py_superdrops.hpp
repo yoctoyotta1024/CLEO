@@ -38,10 +38,10 @@
 namespace py = pybind11;
 namespace pyca = cleo_python_bindings_aliases;
 
-void pyNullMicrophysicalProcess(py::module &m);
-void pyAllMicrophysicalProcess(py::module &m);
-void pycreate_microphysical_process(py::module &m);
+void pyNullMicrophysicalProcess(py::module& m);
+void pyAllMicrophysicalProcess(py::module& m);
+void pycreate_microphysical_process(py::module& m);
 
-void pyNullMotion(py::module &m);
+void pyNullMotion(py::module& m);
 
 #endif  // LIBS_CLEO_PYTHON_BINDINGS_PY_SUPERDROPS_HPP_

@@ -25,7 +25,7 @@ are converted into integer values of model timesteps using
 model_step and secd template functions created using std::chrono library.
 Throw error if after convertion into model timestep, any
 timestep = 0. Substeps for sdmprocess must be larger than steps! */
-Timesteps::Timesteps(const RequiredConfigParams::TimestepsParams &config)
+Timesteps::Timesteps(const RequiredConfigParams::TimestepsParams& config)
     : condstep(realtime2step(config.CONDTSTEP)),
       collstep(realtime2step(config.COLLTSTEP)),
       motionstep(realtime2step(config.MOTIONTSTEP)),

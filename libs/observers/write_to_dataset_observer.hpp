@@ -107,7 +107,7 @@ inline Observer auto WriteToDatasetObserver(const unsigned int interval,
  * @return Constructed observer.
  */
 template <typename Dataset, CollectDataForDataset<Dataset> CollectData>
-inline Observer auto WriteToDatasetObserver(const unsigned int interval, const Dataset &dataset,
+inline Observer auto WriteToDatasetObserver(const unsigned int interval, const Dataset& dataset,
                                             CollectData collect_data) {
   const auto parallel_write =
       ParallelWriteGridboxes(ParallelGridboxesRangePolicyFunc{}, dataset, collect_data);
@@ -127,7 +127,7 @@ inline Observer auto WriteToDatasetObserver(const unsigned int interval, const D
  */
 template <typename Dataset, CollectDataForDataset<Dataset> CollectData,
           CollectRaggedCount<Dataset> RaggedCount>
-inline Observer auto WriteToDatasetObserver(const unsigned int interval, const Dataset &dataset,
+inline Observer auto WriteToDatasetObserver(const unsigned int interval, const Dataset& dataset,
                                             CollectData collect_data, RaggedCount ragged_count) {
   const auto parallel_write = ParallelWriteSupers(dataset, collect_data, ragged_count);
   return ConstTstepObserver(interval, DoWriteToDataset(parallel_write));

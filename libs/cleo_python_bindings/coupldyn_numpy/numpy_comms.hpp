@@ -26,19 +26,19 @@
 #include "./numpy_dynamics.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 
-void pyNumpyComms(py::module &m);
+void pyNumpyComms(py::module& m);
 
 /* coupling of NumpyDynamics to CLEO's gridboxes. Struct obeys coupling comms concept */
 struct NumpyComms {
   /* receive information from NumpyDynamics solver to CLEO SDM */
   template <typename GbxMaps, typename CD = NumpyComms>
-  KOKKOS_FUNCTION void receive_dynamics(const GbxMaps &gbxmaps, const NumpyDynamics &numpydyn,
+  KOKKOS_FUNCTION void receive_dynamics(const GbxMaps& gbxmaps, const NumpyDynamics& numpydyn,
                                         const viewh_gbx h_gbxs) const;
 
   /* send information from Gridboxes' states to NumpyDynamics */
   template <typename GbxMaps, typename CD = NumpyComms>
-  KOKKOS_FUNCTION void send_dynamics(const GbxMaps &gbxmaps, const viewh_constgbx h_gbxs,
-                                     NumpyDynamics &numpydyn) const;
+  KOKKOS_FUNCTION void send_dynamics(const GbxMaps& gbxmaps, const viewh_constgbx h_gbxs,
+                                     NumpyDynamics& numpydyn) const;
 };
 
 #endif  // LIBS_CLEO_PYTHON_BINDINGS_COUPLDYN_NUMPY_NUMPY_COMMS_HPP_

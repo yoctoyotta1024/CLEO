@@ -18,37 +18,37 @@
 
 #include "./py_observers.hpp"
 
-pyobserver::obs create_observer(const Config &config, const Timesteps &tsteps,
-                                SimpleDataset<FSStore> &dataset, FSStore &store);
+pyobserver::obs create_observer(const Config& config, const Timesteps& tsteps,
+                                SimpleDataset<FSStore>& dataset, FSStore& store);
 
 pyobserver::gridboxes create_gridboxes_observer(const unsigned int interval,
-                                                SimpleDataset<FSStore> &dataset,
+                                                SimpleDataset<FSStore>& dataset,
                                                 const size_t maxchunk, const size_t ngbxs);
 
 pyobserver::superdrops create_superdrops_observer(const unsigned int interval,
-                                                  SimpleDataset<FSStore> &dataset, FSStore &store,
+                                                  SimpleDataset<FSStore>& dataset, FSStore& store,
                                                   const size_t maxchunk);
 
-void pyNullObserver(py::module &m) {
+void pyNullObserver(py::module& m) {
   py::class_<pyca::obs_null>(m, "NullObserver")
       .def(py::init())
       .def("next_obs", &pyca::obs_null::next_obs, py::arg("t_mdl"));
 }
 
-void pyObserver(py::module &m) {
+void pyObserver(py::module& m) {
   py::class_<pyobserver::obs>(m, "Observer")
       .def(py::init<pyobserver::obs0123456, pyobserver::obs7, pyobserver::mo01234567>())
       .def("next_obs", &pyobserver::obs::next_obs, py::arg("t_mdl"));
 }
 
-void pycreate_observer(py::module &m) {
+void pycreate_observer(py::module& m) {
   m.def("pycreate_observer", &create_observer,
         "returns type of Observer suitable for KiD test case", py::arg("config"), py::arg("tsteps"),
         py::arg("dataset"), py::arg("store"));
 }
 
-pyobserver::obs create_observer(const Config &config, const Timesteps &tsteps,
-                                SimpleDataset<FSStore> &dataset, FSStore &store) {
+pyobserver::obs create_observer(const Config& config, const Timesteps& tsteps,
+                                SimpleDataset<FSStore>& dataset, FSStore& store) {
   const auto enable_observers = config.get_python_bindings().enable_observers;
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
@@ -111,7 +111,7 @@ pyobserver::obs create_observer(const Config &config, const Timesteps &tsteps,
 }
 
 pyobserver::gridboxes create_gridboxes_observer(const unsigned int interval,
-                                                SimpleDataset<FSStore> &dataset,
+                                                SimpleDataset<FSStore>& dataset,
                                                 const size_t maxchunk, const size_t ngbxs) {
   const CollectDataForDataset<SimpleDataset<FSStore>> auto thermo =
       CollectThermo(dataset, maxchunk, ngbxs);
@@ -126,7 +126,7 @@ pyobserver::gridboxes create_gridboxes_observer(const unsigned int interval,
 }
 
 pyobserver::superdrops create_superdrops_observer(const unsigned int interval,
-                                                  SimpleDataset<FSStore> &dataset, FSStore &store,
+                                                  SimpleDataset<FSStore>& dataset, FSStore& store,
                                                   const size_t maxchunk) {
   CollectDataForDataset<SimpleDataset<FSStore>> auto sdid = CollectSdId(dataset, maxchunk);
   CollectDataForDataset<SimpleDataset<FSStore>> auto sdgbxindex =

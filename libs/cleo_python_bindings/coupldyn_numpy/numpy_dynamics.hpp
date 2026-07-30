@@ -28,7 +28,7 @@
 
 namespace py = pybind11;
 
-void pyNumpyDynamics(py::module &m);
+void pyNumpyDynamics(py::module& m);
 
 struct NumpyDynamics {
  private:

@@ -30,7 +30,7 @@
  */
 template <typename T, typename GbxMaps>
 concept TransportAcrossDomain =
-    requires(T t, const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, SupersInDomain &allsupers) {
+    requires(T t, const GbxMaps& gbxmaps, const viewd_gbx d_gbxs, SupersInDomain& allsupers) {
       { t(gbxmaps, d_gbxs, allsupers) } -> std::convertible_to<SupersInDomain>;
     };
 

@@ -116,7 +116,7 @@ struct EmptyID {
  * @param id SD identity to print.
  * @return Reference to the output stream.
  */
-inline std::ostream &operator<<(std::ostream &os, const IntID &id) {
+inline std::ostream& operator<<(std::ostream& os, const IntID& id) {
   os << id.value;
   return os;
 }
@@ -132,7 +132,7 @@ inline std::ostream &operator<<(std::ostream &os, const IntID &id) {
  * @param id SD identity to print.
  * @return Reference to the output stream.
  */
-inline std::ostream &operator<<(std::ostream &os, const EmptyID &id) {
+inline std::ostream& operator<<(std::ostream& os, const EmptyID& id) {
   os << "(Undefined) No ID";
   return os;
 }

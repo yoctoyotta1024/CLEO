@@ -51,7 +51,7 @@ struct CvodeDynamics {
   SUNContext sunctx;
   SUNMatrix A;
   SUNLinearSolver LS;
-  void *cvode_mem;
+  void* cvode_mem;
   int retval;
 
   /* ODE problem stuff */
@@ -75,7 +75,7 @@ struct CvodeDynamics {
   for thermodynamic variables (p, temp, qv, qc) to
   initialise cvode thermodynamics solver */
   std::vector<double> initial_conditions(
-      const OptionalConfigParams::CvodeDynamicsParams &config) const;
+      const OptionalConfigParams::CvodeDynamicsParams& config) const;
 
   /* set values in UserData structure for odes_func */
   void init_userdata(const size_t neq, const double wmax, const double tauhalf);
@@ -85,12 +85,12 @@ struct CvodeDynamics {
   int setup_ODE_solver(const double i_rtol, const double i_atol);
 
   /* Check function return value for memory or sundials CVODE error */
-  int check_retval(void *returnvalue, const char *funcname, int opt);
+  int check_retval(void* returnvalue, const char* funcname, int opt);
 
  public:
   /* construct instance of CVODE ODE
   solver with initial conditions */
-  CvodeDynamics(const OptionalConfigParams::CvodeDynamicsParams &config,
+  CvodeDynamics(const OptionalConfigParams::CvodeDynamicsParams& config,
                 const unsigned int couplstep,
                 const std::function<double(unsigned int)> step2dimlesstime);
 
@@ -130,7 +130,7 @@ struct CvodeDynamics {
 
   /* Reinitialize the solver after discontinuous change
   in temp, qv and qc (e.g. due to condensation) */
-  int reinitialise(const double next_t, const std::vector<double> &delta_y);
+  int reinitialise(const double next_t, const std::vector<double>& delta_y);
 
   /* checks initial y has been set and then
   prints statement about cvode ODEs configuration */

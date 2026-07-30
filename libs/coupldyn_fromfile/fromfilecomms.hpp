@@ -33,20 +33,20 @@ struct FromFileComms {
   /* updates the state of a gridbox using information
   received from FromFileDynamics solver for 1-way
   coupling to CLEO SDM */
-  void update_gridbox_state(const FromFileDynamics &ffdyn, const size_t ii, Gridbox &gbx) const;
+  void update_gridbox_state(const FromFileDynamics& ffdyn, const size_t ii, Gridbox& gbx) const;
 
  public:
   /* send information from Gridboxes' states
   to coupldyn is null for FromFileDynamics*/
   template <typename GbxMaps, typename CD = FromFileDynamics>
-  void send_dynamics(const GbxMaps &gbxmaps, const viewh_constgbx h_gbxs,
-                     FromFileDynamics &ffdyn) const {}
+  void send_dynamics(const GbxMaps& gbxmaps, const viewh_constgbx h_gbxs,
+                     FromFileDynamics& ffdyn) const {}
 
   /* update Gridboxes' states using information
   received from FromFileDynamics solver for
   1-way coupling to CLEO SDM */
   template <typename GbxMaps, typename CD = FromFileDynamics>
-  void receive_dynamics(const GbxMaps &gbxmaps, const FromFileDynamics &ffdyn,
+  void receive_dynamics(const GbxMaps& gbxmaps, const FromFileDynamics& ffdyn,
                         const viewh_gbx h_gbxs) const;
 };
 
