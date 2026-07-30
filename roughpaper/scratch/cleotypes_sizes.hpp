@@ -61,7 +61,7 @@ struct SuperdropAttrs2 {
   double msol;
 };
 
-void print_type_sizes(int argc, char *argv[]) {
+void print_type_sizes(int argc, char* argv[]) {
   Kokkos::initialize();
   {
     std::cout << "GBx: " << sizeof(Gridbox) << "\n";

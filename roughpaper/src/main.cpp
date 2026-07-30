@@ -20,7 +20,7 @@
 
 #include "./main_impl.hpp"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   if (argc < 2) {
     throw std::invalid_argument("configuration file(s) not specified");
   }
