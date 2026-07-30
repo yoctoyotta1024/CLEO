@@ -27,6 +27,7 @@
 #include <string>
 #include <string_view>
 #include <vector>
+#include <stdexcept>
 
 #include "configuration/communicator.hpp"
 #include "zarr/buffer.hpp"
@@ -123,11 +124,13 @@ class Chunks {
     // Since only process 0 writes the data, only it should check the sizes
     int my_rank;
     my_rank = init_communicator::get_comm_rank();
-
-    if (my_rank == 0)
-      assert((reduced_arrayshape.size() == chunkshape.size() - 1) &&
-             "number of dimensions of reduced array must be "
-             "1 less than that of chunks (i.e. array)");
+    if (my_rank == 0) {
+      if (reduced_arrayshape.size() != chunkshape.size() - 1) {
+        throw std::runtime_error(
+            "number of dimensions of reduced array must be 1 "
+            "less than that of chunks (i.e. array)");
+      }
+    }
 
     /* set number of chunks along all but array's outermost dimension given
     the shape of each chunk and expected shape of final array along those dimensions */

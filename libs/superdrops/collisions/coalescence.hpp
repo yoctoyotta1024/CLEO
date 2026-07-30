@@ -40,7 +40,9 @@
  * @return Always returns 0 (=false).
  */
 KOKKOS_INLINE_FUNCTION bool is_null_superdrop(const Superdrop& drop) {
-  assert((drop.get_xi() > 0) && "superdrop xi < 1, null drop in coalescence");
+  if (drop.get_xi() <= 0) {
+    Kokkos::abort("superdrop xi < 1, null drop in coalescence");
+  }
   return 0;
 }
 

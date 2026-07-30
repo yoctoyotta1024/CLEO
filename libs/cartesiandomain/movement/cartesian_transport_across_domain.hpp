@@ -27,6 +27,7 @@
 #include <iostream>
 #include <numeric>
 #include <vector>
+#include <stdexcept>
 
 #include "../../cleoconstants.hpp"
 #include "../../kokkosaliases.hpp"
@@ -114,8 +115,10 @@ viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
   total_superdrops_to_recv =
       std::accumulate(per_process_recv_superdrops.begin(), per_process_recv_superdrops.end(), 0);
 
-  assert((local_superdrops + total_superdrops_to_recv <= totsupers.extent(0)) &&
-         "must have enough space in supers view to receive superdroplets");
+  if (local_superdrops + total_superdrops_to_recv > totsupers.extent(0)) {
+    throw std::runtime_error(
+        "must have enough space in supers view to receive superdroplets");
+  }
   if (local_superdrops + total_superdrops_to_recv > totsupers.extent(0)) {
     std::cout << "MAXIMUM NUMBER OF LOCAL SUPERDROPLETS EXCEEDED" << std::endl;
     return totsupers;
@@ -210,15 +213,19 @@ viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
     // Get the local gridbox index which contains the superdroplet
     auto drop_coords = std::array<double, 3>{totsupers(i).get_coord3(), totsupers(i).get_coord1(),
                                              totsupers(i).get_coord2()};
-    const auto b4 = std::array<double, 3>{drop_coords[0], drop_coords[1], drop_coords[2]};
     const auto gbxindex =
         (unsigned int)gbxmaps.get_domain_decomposition().get_local_bounding_gridbox_index(
             drop_coords);  // TODO(ALL): access through gbxmaps (note error in conversions?)
 
     // Since the coordinates have already been corrected in the sending
     // process here just the gridbox index update is necessary
-    assert((drop_coords[0] == b4[0]) && (drop_coords[1] == b4[1]) && (drop_coords[2] == b4[2]) &&
-           "drop coordinates should have already been corrected and so shoudn't have changed here");
+#ifndef NDEBUG
+    const auto b4 = std::array<double, 3>{drop_coords[0], drop_coords[1], drop_coords[2]};
+    if ((drop_coords[0] != b4[0]) || (drop_coords[1] != b4[1]) || (drop_coords[2] != b4[2])) {
+      throw std::runtime_error(
+          "drop coordinates should have already been corrected and so shoudn't have changed here");
+    }
+#endif
     totsupers(i).set_sdgbxindex(gbxindex);
   }
 

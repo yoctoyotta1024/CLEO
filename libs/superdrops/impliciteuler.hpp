@@ -321,8 +321,9 @@ class ImplicitEuler {
   ImplicitEuler(const double delt, const size_t maxniters, const double rtol, const double atol,
                 const double minsubdelt)
       : delt(delt), minsubdelt(minsubdelt), implit(maxniters, rtol, atol) {
-    assert((delt >= minsubdelt) &&
-           "timestep must be as least as large as subtimestep for implicit method");
+        if (delt < minsubdelt) {
+          Kokkos::abort("timestep must be as least as large as subtimestep for implicit method");
+        }
   }
 
   /**

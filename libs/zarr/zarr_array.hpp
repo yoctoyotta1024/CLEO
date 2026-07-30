@@ -26,6 +26,7 @@
 #include <cassert>
 #include <cmath>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -122,8 +123,10 @@ class ZarrArray {
     const auto remainder_shape0 = std::min(remainder_ndata, chunkshape.at(0));
     arrayshape.at(0) = whole_shape0 + remainder_shape0;
 
-    assert((totndata <= vec_product(arrayshape)) &&
-           "elements of data must not be hiddden by array shape");
+    if (totndata > vec_product(arrayshape)) {
+      throw std::runtime_error(
+          "elements of data must not be hiddden by array shape");
+    }
     return arrayshape;
   }
 
@@ -186,8 +189,10 @@ class ZarrArray {
         buffer(vec_product(chunks.get_chunkshape())),
         zarr_metadata(chunkshape),
         is_backend(is_backend) {
-    assert((chunkshape.size() == reduced_arrayshape.size() + 1) &&
-           "number of dimensions of chunks must match number of dimensions of array");
+    if (chunkshape.size() != reduced_arrayshape.size() + 1) {
+      throw std::runtime_error(
+          "number of dimensions of chunks must match number of dimensions of array");
+    }
 
     /* Initial array shape is [0,0,0,...,0] (initially empty array along all dimensions) */
     write_arrayshape(get_arrayshape());
@@ -261,8 +266,9 @@ class ZarrArray {
    *      shape. Otherwise, an assertion error is triggered.
    */
   void write_arrayshape(const std::vector<size_t>& arrayshape) {
-    assert((arrayshape.size() == chunks.get_chunkshape().size()) &&
-           "number of dimensions of array must not change");
+    if (arrayshape.size() != chunks.get_chunkshape().size()) {
+      throw std::runtime_error("number of dimensions of array must not change");
+    }
     write_zarray_json(store, name, zarr_metadata(arrayshape));
   }
 
@@ -287,7 +293,9 @@ class ZarrArray {
 
     h_data_rem = buffer.copy_to_buffer(h_data_rem);
 
-    assert((h_data_rem.extent(0) == 0) && "there is leftover data remaining after writing array");
+    if (h_data_rem.extent(0) != 0) {
+      throw std::runtime_error("there is leftover data remaining after writing array");
+    }
   }
 
   /**
@@ -311,7 +319,9 @@ class ZarrArray {
 
     h_data_rem = buffer.copy_to_buffer(h_data_rem);
 
-    assert((h_data_rem.extent(0) == 0) && "there is leftover data remaining after writing array");
+    if (h_data_rem.extent(0) != 0) {
+      throw std::runtime_error("there is leftover data remaining after writing array");
+    }
   }
 
   /**

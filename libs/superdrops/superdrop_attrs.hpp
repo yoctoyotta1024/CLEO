@@ -141,7 +141,9 @@ struct SuperdropAttrs {
    */
   KOKKOS_FUNCTION
   void set_xi(const uint64_t i_xi) {
-    assert((i_xi > 0) && "xi should not be less than 1");
+    if (i_xi <= 0) {
+      Kokkos::abort("xi should not be less than 1");
+    }
 
     xi = i_xi;
   }
@@ -158,8 +160,10 @@ struct SuperdropAttrs {
    */
   KOKKOS_FUNCTION
   void set_radius(const double i_radius) {
-    assert((i_radius - dryradius() > -1e-12 / dlc::R0) &&
-           "radius cannot be less than dry radius (within 1e-6 micron tolerance)");
+    if (i_radius - dryradius() <= -1e-12 / dlc::R0) {
+      Kokkos::abort(
+        "radius cannot be less than dry radius (within 1e-6 micron tolerance)");
+    }
 
     radius = i_radius;
   }
@@ -190,8 +194,10 @@ struct SuperdropAttrs {
    */
   KOKKOS_INLINE_FUNCTION double condensate_mass() const {
     auto m_cond = mass() - msol;
-    assert((m_cond > -0.0001 * msol) &&
-           "condensate mass cannot be less than 0.0 (within 0.0001 of dry mass tolerance)");
+    if (m_cond <= -0.0001 * msol) {
+      Kokkos::abort(
+        "condensate mass cannot be less than 0.0 (within 0.0001 of dry mass tolerance)");
+    }
 
     m_cond = Kokkos::fmax(0.0, m_cond);  // Kokkos version of std::max() for floats (gpu compatible)
 

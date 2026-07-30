@@ -146,7 +146,9 @@ struct Buffer {
    * @param data Data element to copy.
    */
   void copy_to_buffer(const T data) {
-    assert((get_space() > 0) && "buffer must have space to copy element");
+    if (get_space() <= 0) {
+      Kokkos::abort("buffer must have space to copy element");
+    }
     buffer(fill) = data;
     ++fill;
   }

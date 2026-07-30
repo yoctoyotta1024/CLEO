@@ -171,13 +171,19 @@ KOKKOS_FUNCTION void DoBreakup<NFrags>::twin_superdroplet_breakup(Superdrop& dro
                                                                   Superdrop& drop2) const {
   const auto old_xi = drop2.get_xi();  // = drop1.xi
   const auto totnfrags = double{nfrags(drop1, drop2) * old_xi};
-  assert(((totnfrags / old_xi) > 2.5) && "nfrags must be > 2.5");
+  if ((totnfrags / old_xi) <= 2.5) {
+    Kokkos::abort("nfrags must be > 2.5");
+  }
 
   const auto new_xi1 = static_cast<uint64_t>(Kokkos::round(totnfrags / 2));
   const auto new_xi2 = static_cast<uint64_t>(Kokkos::round(totnfrags - new_xi1));
   const auto new_xitot = new_xi1 + new_xi2;
-  assert((new_xi2 > old_xi) && "nfrags must increase the drop2's multiplicity during breakup");
-  assert((new_xitot > (old_xi * 2)) && "nfrags must increase total multiplicity during breakup");
+  if (new_xi2 <= old_xi) {
+    Kokkos::abort("nfrags must increase the drop2's multiplicity during breakup");
+  }
+  if (new_xitot <= (old_xi * 2)) {
+    Kokkos::abort("nfrags must increase total multiplicity during breakup");
+  }
 
   const auto sum_rcubed = double{drop1.rcubed() + drop2.rcubed()};
   const auto new_rcubed = double{sum_rcubed * old_xi / new_xitot};
@@ -212,11 +218,16 @@ KOKKOS_FUNCTION void DoBreakup<NFrags>::different_superdroplet_breakup(Superdrop
 
   const auto totnfrags = double{nfrags(drop1, drop2) * old_xi2};
   const auto new_xi2 = static_cast<uint64_t>(Kokkos::round(totnfrags));
-  assert(((totnfrags / old_xi2) > 2.5) && "nfrags must be > 2.5");
+  if ((totnfrags / old_xi2) <= 2.5) {
+    Kokkos::abort("nfrags must be > 2.5");
+  }
 
-  assert((new_xi2 > old_xi2) && "nfrags must increase the drop2's multiplicity during breakup");
-  assert(((new_xi1 + new_xi2) > (old_xi1 + old_xi2)) &&
-         "nfrags must increase the total multiplicity during breakup");
+  if (new_xi2 <= old_xi2) {
+    Kokkos::abort("nfrags must increase the drop2's multiplicity during breakup");
+  }
+  if ((new_xi1 + new_xi2) <= (old_xi1 + old_xi2)) {
+    Kokkos::abort("nfrags must increase the total multiplicity during breakup");
+  }
 
   const auto sum_rcubed = double{drop1.rcubed() + drop2.rcubed()};
   const auto new_rcubed = double{sum_rcubed * old_xi2 / new_xi2};

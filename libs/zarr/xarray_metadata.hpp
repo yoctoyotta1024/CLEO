@@ -27,6 +27,7 @@
 #include <string>
 #include <string_view>
 #include <vector>
+#include <stdexcept>
 
 /**
  * @brief Make string of array attributes metadata for .zattrs json which is used to make zarr array

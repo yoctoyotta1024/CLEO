@@ -192,7 +192,9 @@ void OptionalConfigParams::BreakupParams::print_params() const {
 void OptionalConfigParams::InitSupersFromBinaryParams::set_params(const YAML::Node& config) {
   const YAML::Node node = config["initsupers"];
 
-  assert((node["type"].as<std::string>() == "frombinary"));
+  if (node["type"].as<std::string>() != "frombinary") {
+    throw std::runtime_error("configuration type must be 'frombinary'");
+  }
 
   maxnsupers = config["domain"]["maxnsupers"].as<size_t>();
   initsupers_filename = std::filesystem::path(node["initsupers_filename"].as<std::string>());
@@ -215,7 +217,9 @@ void OptionalConfigParams::InitSupersFromBinaryParams::print_params() const {
 void OptionalConfigParams::FromFileDynamicsParams::set_params(const YAML::Node& config) {
   const YAML::Node node = config["coupled_dynamics"];
 
-  assert((node["type"].as<std::string>() == "fromfile"));
+  if (node["type"].as<std::string>() != "fromfile") {
+    throw std::runtime_error("configuration type must be 'fromfile'");
+  }
 
   /* convert string to std::filesystem::path type */
   auto fspath_from_yaml = [&node](const std::string& key) {
@@ -250,7 +254,9 @@ void OptionalConfigParams::FromFileDynamicsParams::print_params() const {
 void OptionalConfigParams::CvodeDynamicsParams::set_params(const YAML::Node& config) {
   const YAML::Node node = config["coupled_dynamics"];
 
-  assert((node["type"].as<std::string>() == "cvode"));
+  if (node["type"].as<std::string>() != "cvode") {
+    throw std::runtime_error("configuration type must be 'cvode'");
+  }
 
   ngbxs = config["domain"]["ngbxs"].as<unsigned int>();
   P_init = node["P_init"].as<double>();
@@ -273,7 +279,9 @@ void OptionalConfigParams::CvodeDynamicsParams::print_params() const {
 void OptionalConfigParams::YacDynamicsParams::set_params(const YAML::Node& config) {
   const YAML::Node node = config["coupled_dynamics"];
 
-  assert((node["type"].as<std::string>() == "yac"));
+  if (node["type"].as<std::string>() != "yac") {
+    throw std::runtime_error("configuration type must be 'yac'");
+  }
 
   lower_longitude = node["lower_longitude"].as<double>();
   upper_longitude = node["upper_longitude"].as<double>();

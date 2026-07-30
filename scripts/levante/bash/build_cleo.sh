@@ -70,7 +70,7 @@ echo "CLEO_YACYAXTROOT: ${CLEO_YACYAXTROOT}"
 echo "CLEO_YAC_FLAGS: ${CLEO_YAC_FLAGS}"
 echo "### ------------------------------------------- ###"
 
-if [ "${CLEO_ENABLEDEBUG}" = "yes" ]; then
+if [ "${CLEO_ENABLEDEBUG}" = "true" ]; then
     BUILD_TYPE="Debug"
 else
     BUILD_TYPE="Release"

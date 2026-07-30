@@ -81,9 +81,10 @@ struct InitAllSupersFromBinary {
    */
   explicit InitAllSupersFromBinary(const OptionalConfigParams::InitSupersFromBinaryParams &config)
       : InitAllSupersFromBinary(config.maxnsupers, config.initsupers_filename, config.nspacedims) {
-    assert((config.maxnsupers == config.initnsupers) &&
-           "configuration parameter not consistent with "
-           "initialising all super-droplets from binary");
+    if (config.maxnsupers != config.initnsupers) {
+      throw std::runtime_error(
+            "configuration parameter not consistent with initialising all supers from binary");
+    }
   }
 
   /**
@@ -115,8 +116,9 @@ struct InitAllSupersFromBinary {
           std::to_string(maxnsupers) + " > " + std::to_string(size));
       throw std::invalid_argument(err);
     }
-
-    assert((maxnsupers == size) && "size of data not the same as the number of superdroplets");
+    if (maxnsupers != size) {
+      throw std::runtime_error("size of data not the same as the number of superdroplets");
+    }
   }
 
   auto get_maxnsupers() const { return maxnsupers; }

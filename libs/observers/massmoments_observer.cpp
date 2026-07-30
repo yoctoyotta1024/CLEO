@@ -50,9 +50,11 @@ void calculate_massmoments(const TeamMember &team_member, const viewd_constsuper
       Kokkos::TeamThreadRange(team_member, nsupers),
       KOKKOS_LAMBDA(const size_t kk, uint64_t &m0, float &m1, float &m2) {
         const auto &drop(supers(kk));
-
-        assert((drop.get_xi() < LIMITVALUES::uint64_t_max) &&
-               "superdroplet mulitiplicy too large to represent with 4 byte unsigned integer");
+        if (drop.get_xi() >= LIMITVALUES::uint64_t_max) {
+          Kokkos::abort(
+            "superdroplet multiplicity too large to represent "
+            "with 8 byte unsigned integer");
+        }
         m0 += static_cast<uint64_t>(drop.get_xi());
 
         const auto mass = drop.mass();
@@ -98,9 +100,11 @@ void calculate_rainmassmoments(const TeamMember &team_member, const viewd_consts
       KOKKOS_LAMBDA(const size_t kk, uint64_t &m0, float &m1, float &m2) {
         const auto &drop(supers(kk));
         const auto binary = bool{drop.get_radius() >= rlim};  // 1 if droplet is raindrop, else 0
-
-        assert((drop.get_xi() < LIMITVALUES::uint64_t_max) &&
-               "superdroplet mulitiplicy too large to represent with 4 byte unsigned integer");
+        if (drop.get_xi() >= LIMITVALUES::uint64_t_max) {
+          Kokkos::abort(
+            "superdroplet multiplicity too large to represent "
+            "with 8 byte unsigned integer");
+        }
         m0 += static_cast<uint64_t>(drop.get_xi() * binary);
 
         const auto mass = drop.mass();

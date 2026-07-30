@@ -94,7 +94,9 @@ std::string xarray_metadata_for_floats(const std::string_view units, const doubl
  */
 std::string xarray_metadata_for_ints(const std::string_view units, const double scale_factor,
                                      const std::vector<std::string>& dimnames) {
-  assert((scale_factor == 1.0) && "scale_factor cannot be used on non-floating point type");
+  if (scale_factor != 1.0) {
+    throw std::runtime_error("scale_factor cannot be used on non-floating point type");
+  }
   const auto zattrs = std::string(
       "{\n"
       "  \"_ARRAY_DIMENSIONS\": " +
@@ -157,7 +159,9 @@ std::string raggedarray_xarray_metadata_for_ints(const std::string_view units,
                                                  const double scale_factor,
                                                  const std::vector<std::string>& dimnames,
                                                  const std::string_view sampledimname) {
-  assert((scale_factor == 1.0) && "scale_factor cannot be used on non-floating point type");
+  if (scale_factor != 1.0) {
+    throw std::runtime_error("scale_factor cannot be used on non-floating point type");
+  }
   const auto zattrs = std::string(
       "{\n"
       "  \"_ARRAY_DIMENSIONS\": " +

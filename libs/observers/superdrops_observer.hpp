@@ -228,8 +228,11 @@ struct XiFunc {
   KOKKOS_INLINE_FUNCTION
   void operator()(const size_t kk, viewd_constgbx d_gbxs, const subviewd_constsupers d_supers,
                   Buffer<uint64_t>::mirrorviewd_buffer d_data) const {
-    assert((d_supers(kk).get_xi() < LIMITVALUES::uint64_t_max) &&
-           "superdroplet mulitiplicy too large to represent with 4 byte unsigned integer");
+    if (d_supers(kk).get_xi() >= LIMITVALUES::uint64_t_max) {
+      Kokkos::abort(
+        "superdroplet multiplicity too large to "
+        "represent with 8 byte unsigned integer");
+    }
     auto xi = static_cast<uint64_t>(d_supers(kk).get_xi());
     d_data(kk) = xi;
   }

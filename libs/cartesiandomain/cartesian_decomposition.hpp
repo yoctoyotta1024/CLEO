@@ -24,7 +24,7 @@
 
 #include <algorithm>
 #include <array>
-#include <cassert>
+#include <stdexcept>
 #include <cmath>
 #include <cstddef>
 #include <iostream>

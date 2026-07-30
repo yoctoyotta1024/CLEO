@@ -21,8 +21,7 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Sort.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
-// #include <cassert>
-
+#include <stdexcept>
 #include "../kokkosaliases.hpp"
 #include "superdrops/superdrop.hpp"
 
@@ -148,10 +147,12 @@ struct SortSupersBySdgbxindex {
     const auto functor = CountingSortFunctor{gbxindex_max, totsupers, totsupers_tmp, cumlcounts};
     Kokkos::parallel_for("counting_sort", Kokkos::RangePolicy<ExecSpace>(0, ntotsupers), functor);
 
-    /* assertion for debugging only works for hostspace cumlcounts */
+    /* runtime error check for debugging only works for hostspace cumlcounts */
 #ifndef NDEBUG
-    assert((cumlcounts(counts.extent(0) - 1) == totsupers_tmp.extent(0)) &&
-           "last cumulative sum of totsupers count should equal expected number of totsupers");
+    if (cumlcounts(counts.extent(0) - 1) != totsupers_tmp.extent(0)) {
+      throw std::runtime_error(
+          "last cumulative sum of totsupers count should equal expected number of totsupers");
+    }
 #endif
 
     return totsupers_tmp;
@@ -179,10 +180,12 @@ struct SortSupersBySdgbxindex {
     const auto functor = CountingSortFunctor{gbxindex_max, oob_supers, totsupers_tmp, cumlcounts};
     Kokkos::parallel_for("counting_sort_oob", Kokkos::RangePolicy<ExecSpace>(0, noobs), functor);
 
-    /* assertion for debugging only works for hostspace cumlcounts */
+    /* runtime error check for debugging only works for hostspace cumlcounts */
 #ifndef NDEBUG
-    assert((cumlcounts(counts.extent(0) - 1) == totsupers_tmp.extent(0)) &&
-           "last cumulative sum of totsupers count should equal expected number of totsupers");
+    if (cumlcounts(counts.extent(0) - 1) != totsupers_tmp.extent(0)) {
+      throw std::runtime_error(
+          "last cumulative sum of totsupers count should equal expected number of totsupers");
+    }
 #endif
 
     return totsupers_tmp;
