@@ -210,8 +210,9 @@ viewd_supers create_newsupers_for_gridboxes(const CartesianMaps& gbxmaps,
   }
   Kokkos::deep_copy(newsupers, h_newsupers);
 
-  assert((newsupers.extent(0) == nn) &&
-         "total number of superdrops created must equal newsupers view size");
+  if (newsupers.extent(0) != nn) {
+    Kokkos::abort("total number of superdrops created must equal newsupers view size");
+  }
 
   return newsupers;
 }

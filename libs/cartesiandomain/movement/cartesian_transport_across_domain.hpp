@@ -26,6 +26,7 @@
 #include <cstdint>
 #include <iostream>
 #include <numeric>
+#include <stdexcept>
 #include <vector>
 
 #include "../../cleoconstants.hpp"
@@ -43,7 +44,7 @@ function to move super-droplets between MPI processes, e.g. for superdroplets
 which move to/from gridboxes on different nodes.
 */
 template <GridboxMaps GbxMaps>
-viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
+viewd_supers sendrecv_supers(const GbxMaps& gbxmaps, const viewd_gbx d_gbxs,
                              viewd_supers totsupers);
 
 /*
@@ -54,8 +55,8 @@ struct CartesianTransportAcrossDomain {
   /* (re)sorting supers based on their gbxindexes as step to 'move' superdroplets across the domain.
   May also include MPI communication with moves superdroplets away from/into a node's domain
   */
-  SupersInDomain operator()(const CartesianMaps &gbxmaps, const viewd_gbx d_gbxs,
-                            SupersInDomain &allsupers) const;
+  SupersInDomain operator()(const CartesianMaps& gbxmaps, const viewd_gbx d_gbxs,
+                            SupersInDomain& allsupers) const;
 };
 
 /*
@@ -63,7 +64,7 @@ function to move super-droplets between MPI processes, e.g. for superdroplets
 which move to/from gridboxes on different nodes.
 */
 template <GridboxMaps GbxMaps>
-viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
+viewd_supers sendrecv_supers(const GbxMaps& gbxmaps, const viewd_gbx d_gbxs,
                              viewd_supers totsupers) {
   int comm_size, my_rank;
   comm_size = init_communicator::get_comm_size();
@@ -93,7 +94,7 @@ viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
   size_t total_superdrops_to_recv = 0;
   size_t local_superdrops = 0;
   size_t superdrop_index = totsupers.extent(0) - 1;
-  Superdrop &drop = totsupers(superdrop_index);
+  Superdrop& drop = totsupers(superdrop_index);
 
   // Go through superdrops from back to front and find how many should be sent and their indices
   const auto ngbxs = d_gbxs.extent(0);
@@ -114,8 +115,9 @@ viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
   total_superdrops_to_recv =
       std::accumulate(per_process_recv_superdrops.begin(), per_process_recv_superdrops.end(), 0);
 
-  assert((local_superdrops + total_superdrops_to_recv <= totsupers.extent(0)) &&
-         "must have enough space in supers view to receive superdroplets");
+  if (local_superdrops + total_superdrops_to_recv > totsupers.extent(0)) {
+    throw std::runtime_error("must have enough space in supers view to receive superdroplets");
+  }
   if (local_superdrops + total_superdrops_to_recv > totsupers.extent(0)) {
     std::cout << "MAXIMUM NUMBER OF LOCAL SUPERDROPLETS EXCEEDED" << std::endl;
     return totsupers;
@@ -210,15 +212,22 @@ viewd_supers sendrecv_supers(const GbxMaps &gbxmaps, const viewd_gbx d_gbxs,
     // Get the local gridbox index which contains the superdroplet
     auto drop_coords = std::array<double, 3>{totsupers(i).get_coord3(), totsupers(i).get_coord1(),
                                              totsupers(i).get_coord2()};
+#ifndef NDEBUG
+    // see use of b4 in NDEBUG after call to get_local_bounding_gridbox_index
     const auto b4 = std::array<double, 3>{drop_coords[0], drop_coords[1], drop_coords[2]};
+#endif
     const auto gbxindex =
         (unsigned int)gbxmaps.get_domain_decomposition().get_local_bounding_gridbox_index(
             drop_coords);  // TODO(ALL): access through gbxmaps (note error in conversions?)
 
+#ifndef NDEBUG
     // Since the coordinates have already been corrected in the sending
     // process here just the gridbox index update is necessary
-    assert((drop_coords[0] == b4[0]) && (drop_coords[1] == b4[1]) && (drop_coords[2] == b4[2]) &&
-           "drop coordinates should have already been corrected and so shoudn't have changed here");
+    if ((drop_coords[0] != b4[0]) || (drop_coords[1] != b4[1]) || (drop_coords[2] != b4[2])) {
+      throw std::runtime_error(
+          "drop coordinates should have already been corrected and so shoudn't have changed here");
+    }
+#endif
     totsupers(i).set_sdgbxindex(gbxindex);
   }
 

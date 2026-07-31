@@ -37,7 +37,9 @@
  */
 KOKKOS_FUNCTION
 double saturation_pressure(const double temp) {
-  assert((temp > 0) && "psat ERROR: temperature must be larger than 0K.");
+  if (temp <= 0) {
+    Kokkos::abort("psat ERROR: temperature must be larger than 0K.");
+  }
 
   constexpr double A = 17.4146;     // constants from Bjorn Gitlab originally from paper
   constexpr double B = 33.639;      // ditto
@@ -61,7 +63,9 @@ double saturation_pressure(const double temp) {
  */
 KOKKOS_FUNCTION
 double saturation_pressure_murphy_koop(const double temp) {
-  assert((temp > 0) && "psat ERROR: temperature must be larger than 0K.");
+  if (temp <= 0) {
+    Kokkos::abort("psat ERROR: temperature must be larger than 0K.");
+  }
 
   const auto T = double{temp * dlc::TEMP0};  // real T [K]
 

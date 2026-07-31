@@ -105,9 +105,9 @@ KOKKOS_FUNCTION bool DoCoalescence::coalesce_superdroplet_pair(const uint64_t ga
     return is_null_superdrop(drop1);
   }
 
-  assert((xi1 >= gamma * xi2) &&
-         "something undefined occured "
-         "during colllision-coalescence");
+  if (xi1 < gamma * xi2) {
+    Kokkos::abort("something undefined occured during colllision-coalescence");
+  }
   return 0;
 }
 
@@ -130,12 +130,16 @@ KOKKOS_FUNCTION bool DoCoalescence::coalesce_superdroplet_pair(const uint64_t ga
 KOKKOS_FUNCTION void DoCoalescence::twin_superdroplet_coalescence(const uint64_t gamma,
                                                                   Superdrop& drop1,
                                                                   Superdrop& drop2) const {
-  assert((drop1.get_xi() == gamma * drop2.get_xi()) && "condition for twin coalescence not met");
+  if (drop1.get_xi() != gamma * drop2.get_xi()) {
+    Kokkos::abort("condition for twin coalescence not met");
+  }
 
   const auto old_xi = drop2.get_xi();  // = drop1.xi
   const auto new_xi = old_xi / 2;      // same as floor() for positive ints
 
-  assert((new_xi < old_xi) && "coalescence must decrease multiplicity");
+  if (new_xi >= old_xi) {
+    Kokkos::abort("coalescence must decrease multiplicity");
+  }
 
   const auto new_rcubed = double{drop2.rcubed() + gamma * drop1.rcubed()};
   const auto new_r = double{Kokkos::pow(new_rcubed, (1.0 / 3.0))};
@@ -168,11 +172,15 @@ KOKKOS_FUNCTION void DoCoalescence::twin_superdroplet_coalescence(const uint64_t
 KOKKOS_FUNCTION void DoCoalescence::different_superdroplet_coalescence(const uint64_t gamma,
                                                                        Superdrop& drop1,
                                                                        Superdrop& drop2) const {
-  assert((drop1.get_xi() > gamma * drop2.get_xi()) && "condition on xis for coalescence not met");
+  if (drop1.get_xi() <= gamma * drop2.get_xi()) {
+    Kokkos::abort("condition on xis for coalescence not met");
+  }
 
   const auto new_xi = drop1.get_xi() - gamma * drop2.get_xi();
 
-  assert((new_xi < drop1.get_xi()) && "coalescence must decrease multiplicity");
+  if (new_xi >= drop1.get_xi()) {
+    Kokkos::abort("coalescence must decrease multiplicity");
+  }
 
   drop1.set_xi(new_xi);
 

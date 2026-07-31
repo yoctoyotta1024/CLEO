@@ -19,11 +19,11 @@
 #ifndef LIBS_ZARR_XARRAY_METADATA_HPP_
 #define LIBS_ZARR_XARRAY_METADATA_HPP_
 
-#include <cassert>
 #include <cstdint>
 #include <iomanip>
 #include <limits>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <vector>

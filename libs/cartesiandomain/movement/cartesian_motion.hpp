@@ -25,7 +25,6 @@
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
-#include <cassert>
 #include <functional>
 
 #include "../../cleoconstants.hpp"
@@ -45,11 +44,12 @@ struct CartesianCheckBounds {
     const bool bad_gbxindex((idx != LIMITVALUES::oob_gbxindex) &&
                             ((coord < bounds.first) | (coord >= bounds.second)));
 
-    assert((!bad_gbxindex) &&
-           "SD not in previous gbx nor a neighbour."
-           " Try reducing the motion timestep to"
-           " satisfy CFL criteria, or use "
-           " 'update_ifoutside' to update sd_gbxindex");
+    if (bad_gbxindex) {
+      Kokkos::abort(
+          "SD not in previous gbx nor a neighbour. Try reducing the motion "
+          "timestep to satisfy CFL criteria, or use 'update_ifoutside' "
+          "to update sd_gbxindex");
+    }
   }
 };
 

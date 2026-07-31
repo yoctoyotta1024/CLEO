@@ -30,7 +30,9 @@ and Climatology 6, 203–204 (1967)." Note function is called
 with conversion to real temp /K = T*Temp0 and from real psat
 to dimensionless psat = psat/P0. */
 double cvode_saturationpressure(const double temp) {
-  assert((temp > 0) && "psat ERROR: temperature must be larger than 0K.");
+  if (temp <= 0) {
+    throw std::runtime_error("psat ERROR: temperature must be larger than 0K.");
+  }
 
   constexpr double A = 17.4146;     // constants from Bjorn Gitlab originally from paper
   constexpr double B = 33.639;      // ditto

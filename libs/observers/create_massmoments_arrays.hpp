@@ -21,7 +21,6 @@
 #define LIBS_OBSERVERS_CREATE_MASSMOMENTS_ARRAYS_HPP_
 
 #include <Kokkos_Core.hpp>
-#include <cassert>
 #include <concepts>
 #include <cstdint>
 
@@ -50,7 +49,7 @@
  * @return XarrayZarrArray<Store, T> The created XarrayZarrArray.
  */
 template <typename Dataset, typename Store, typename T>
-XarrayZarrArray<Store, T> create_massmoment_xarray(const Dataset &dataset, Store &store,
+XarrayZarrArray<Store, T> create_massmoment_xarray(const Dataset& dataset, Store& store,
                                                    const std::string_view name,
                                                    const std::string_view units,
                                                    const double scale_factor, const size_t maxchunk,
@@ -76,7 +75,7 @@ XarrayZarrArray<Store, T> create_massmoment_xarray(const Dataset &dataset, Store
  * @return XarrayZarrArray<Store, uint64_t> The created XarrayZarrArray (for the 0th mass moment).
  */
 template <typename Dataset, typename Store>
-XarrayZarrArray<Store, uint64_t> create_massmom0_xarray(const Dataset &dataset, Store &store,
+XarrayZarrArray<Store, uint64_t> create_massmom0_xarray(const Dataset& dataset, Store& store,
                                                         const std::string_view name,
                                                         const size_t maxchunk, const size_t ngbxs) {
   const auto units = std::string_view("");
@@ -100,7 +99,7 @@ XarrayZarrArray<Store, uint64_t> create_massmom0_xarray(const Dataset &dataset, 
  * @return XarrayZarrArray<Store, uint64_t> The created XarrayZarrArray (for the 1st mass moment).
  */
 template <typename Dataset, typename Store>
-XarrayZarrArray<Store, float> create_massmom1_xarray(const Dataset &dataset, Store &store,
+XarrayZarrArray<Store, float> create_massmom1_xarray(const Dataset& dataset, Store& store,
                                                      const std::string_view name,
                                                      const size_t maxchunk, const size_t ngbxs) {
   const auto units = std::string_view("g");
@@ -125,7 +124,7 @@ XarrayZarrArray<Store, float> create_massmom1_xarray(const Dataset &dataset, Sto
  * @return XarrayZarrArray<Store, uint64_t> The created XarrayZarrArray (for the 2nd mass moment).
  */
 template <typename Dataset, typename Store>
-XarrayZarrArray<Store, float> create_massmom2_xarray(const Dataset &dataset, Store &store,
+XarrayZarrArray<Store, float> create_massmom2_xarray(const Dataset& dataset, Store& store,
                                                      const std::string_view name,
                                                      const size_t maxchunk, const size_t ngbxs) {
   const auto units = std::string_view("g^2");

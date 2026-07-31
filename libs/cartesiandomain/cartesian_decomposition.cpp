@@ -294,8 +294,10 @@ bool CartesianDecomposition::create(std::vector<size_t> ndims, GbxBoundsFromBina
   permute_and_trim_factorizations(factorizations, ndims);
 
   // Raise an error if there are no decompositions left after trimming
-  assert(!factorizations.empty() &&
-         "No domain decomposition found for the number of gridboxes and processes");
+  if (factorizations.empty()) {
+    throw std::runtime_error(
+        "No domain decomposition found for the number of gridboxes and processes");
+  }
 
   // Finds the best (most even) decomposition of gridboxes among processes
   decomposition_index = find_best_decomposition(factorizations, ndims);

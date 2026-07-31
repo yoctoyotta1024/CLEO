@@ -21,9 +21,9 @@
 #define LIBS_OBSERVERS_MASSMOMENTS_OBSERVER_HPP_
 
 #include <Kokkos_Core.hpp>
-#include <cassert>
 #include <concepts>
 #include <cstdint>
+#include <stdexcept>
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
@@ -294,10 +294,15 @@ struct CollectMassMoments {
    * @return Functor for collecting mass moments.
    */
   Functor get_functor(const viewd_constgbx d_gbxs, const subviewd_constsupers d_supers) const {
-    assert(((mom0_ptr->d_data.extent(0) == d_gbxs.extent(0)) &&
-            (mom1_ptr->d_data.extent(0) == d_gbxs.extent(0)) &&
-            (mom2_ptr->d_data.extent(0) == d_gbxs.extent(0))) &&
-           "d_data views for mass moments should be size of the number of gridboxes");
+#ifndef NDEBUG
+    if (!((mom0_ptr->d_data.extent(0) == d_gbxs.extent(0)) &&
+          (mom1_ptr->d_data.extent(0) == d_gbxs.extent(0)) &&
+          (mom2_ptr->d_data.extent(0) == d_gbxs.extent(0)))) {
+      throw std::runtime_error(
+        "d_data views for mass moments should "
+        "be size of the number of gridboxes");
+    }
+#endif
     return Functor(ffunc, d_gbxs, d_supers, mom0_ptr->d_data, mom1_ptr->d_data, mom2_ptr->d_data);
   }
 

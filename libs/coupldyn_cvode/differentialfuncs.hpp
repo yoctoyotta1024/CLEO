@@ -20,8 +20,8 @@
 
 #include <nvector/nvector_serial.h> /* access to serial N_Vector            */
 
-#include <cassert>
 #include <cmath>
+#include <stdexcept>
 
 #include "../cleoconstants.hpp"
 

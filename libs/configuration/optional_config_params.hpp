@@ -23,10 +23,10 @@
 #include <yaml-cpp/yaml.h>
 
 #include <Kokkos_Core.hpp>
-#include <cassert>
 #include <filesystem>
 #include <iostream>
 #include <limits>
+#include <stdexcept>
 #include <string>
 
 namespace NaNVals {

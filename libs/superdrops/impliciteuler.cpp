@@ -211,8 +211,11 @@ KOKKOS_FUNCTION double ImplicitIterations::newtonraphson_untilconverged(
   auto niter = size_t{1};
 
   while (!is_converged) {
-    assert((niter <= niterslimit) &&
-           "No root converged upon within max number of iterations of Newton Raphson Method.");
+    if (niter > niterslimit) {
+      Kokkos::abort(
+        "No root converged upon within max number of "
+        "iterations of Newton Raphson Method.");
+    }
     const auto result =
         iterate_rootfinding_algorithm(odeconsts, subdelt, rprev, ziter);  // ziter, is_converged
     ziter = result.first;

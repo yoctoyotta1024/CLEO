@@ -21,7 +21,6 @@
 #define LIBS_OBSERVERS_SUPERDROPS_OBSERVER_HPP_
 
 #include <Kokkos_Core.hpp>
-#include <cassert>
 #include <concepts>
 #include <cstdint>
 #include <memory>
@@ -60,7 +59,7 @@ struct RaggedCount {
    * @param store The store the dataset writes to.
    * @param maxchunk The maximum chunk size (number of elements).
    */
-  RaggedCount(const Dataset &dataset, Store &store, const size_t maxchunk)
+  RaggedCount(const Dataset& dataset, Store& store, const size_t maxchunk)
       : xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
             dataset.template create_raggedcount_array<uint32_t>("raggedcount", "", 1, {maxchunk},
                                                                 {"time"}, "superdroplets"))) {}
@@ -74,7 +73,7 @@ struct RaggedCount {
    * @param dataset The dataset to write data to.
    * @param d_supers The view of total super-droplets.
    */
-  void write_to_array(const Dataset &dataset, const subviewd_constsupers d_supers) const {
+  void write_to_array(const Dataset& dataset, const subviewd_constsupers d_supers) const {
     const auto totnsupers = static_cast<uint32_t>(d_supers.extent(0));
     dataset.write_to_array(xzarr_ptr, totnsupers);
   }
@@ -86,7 +85,7 @@ struct RaggedCount {
    *
    * @param dataset The dataset to write data to.
    */
-  void write_arrayshape(const Dataset &dataset) const { dataset.write_arrayshape(xzarr_ptr); }
+  void write_arrayshape(const Dataset& dataset) const { dataset.write_arrayshape(xzarr_ptr); }
 };
 
 /**
@@ -112,7 +111,7 @@ struct RaggedCount {
  */
 template <typename Dataset, typename T, typename FunctorFunc>
 CollectDataForDataset<Dataset> auto CollectSuperdropVariable(
-    const Dataset &dataset, const FunctorFunc ffunc, const std::string_view name,
+    const Dataset& dataset, const FunctorFunc ffunc, const std::string_view name,
     const std::string_view units, const double scale_factor, const size_t maxchunk) {
   const auto chunkshape = std::vector<size_t>{maxchunk};
   const auto dimnames = std::vector<std::string>{"superdroplets"};
@@ -161,7 +160,7 @@ struct SdgbxindexFunc {
  * sdgbxindex data.
  */
 template <typename Dataset>
-CollectDataForDataset<Dataset> auto CollectSdgbxindex(const Dataset &dataset,
+CollectDataForDataset<Dataset> auto CollectSdgbxindex(const Dataset& dataset,
                                                       const size_t maxchunk) {
   return CollectSuperdropVariable<Dataset, uint32_t, SdgbxindexFunc>(dataset, SdgbxindexFunc{},
                                                                      "sdgbxindex", "", 1, maxchunk);
@@ -205,7 +204,7 @@ struct SdIdFunc {
  * sdId data.
  */
 template <typename Dataset>
-CollectDataForDataset<Dataset> auto CollectSdId(const Dataset &dataset, const size_t maxchunk) {
+CollectDataForDataset<Dataset> auto CollectSdId(const Dataset& dataset, const size_t maxchunk) {
   return CollectSuperdropVariable<Dataset, uint32_t, SdIdFunc>(dataset, SdIdFunc{}, "sdId", "", 1,
                                                                maxchunk);
 }
@@ -228,8 +227,11 @@ struct XiFunc {
   KOKKOS_INLINE_FUNCTION
   void operator()(const size_t kk, viewd_constgbx d_gbxs, const subviewd_constsupers d_supers,
                   Buffer<uint64_t>::mirrorviewd_buffer d_data) const {
-    assert((d_supers(kk).get_xi() < LIMITVALUES::uint64_t_max) &&
-           "superdroplet mulitiplicy too large to represent with 4 byte unsigned integer");
+    if (d_supers(kk).get_xi() >= LIMITVALUES::uint64_t_max) {
+      Kokkos::abort(
+          "superdroplet multiplicity too large to "
+          "represent with 8 byte unsigned integer");
+    }
     auto xi = static_cast<uint64_t>(d_supers(kk).get_xi());
     d_data(kk) = xi;
   }
@@ -250,7 +252,7 @@ struct XiFunc {
  * data.
  */
 template <typename Dataset>
-CollectDataForDataset<Dataset> auto CollectXi(const Dataset &dataset, const size_t maxchunk) {
+CollectDataForDataset<Dataset> auto CollectXi(const Dataset& dataset, const size_t maxchunk) {
   return CollectSuperdropVariable<Dataset, uint64_t, XiFunc>(dataset, XiFunc{}, "xi", "", 1,
                                                              maxchunk);
 }
@@ -292,7 +294,7 @@ struct RadiusFunc {
  * radius.
  */
 template <typename Dataset>
-CollectDataForDataset<Dataset> auto CollectRadius(const Dataset &dataset, const size_t maxchunk) {
+CollectDataForDataset<Dataset> auto CollectRadius(const Dataset& dataset, const size_t maxchunk) {
   return CollectSuperdropVariable<Dataset, float, RadiusFunc>(dataset, RadiusFunc{}, "radius",
                                                               "micro-m", dlc::R0 * 1e6, maxchunk);
 }
@@ -333,7 +335,7 @@ struct MsolFunc {
  * @return CollectDataForDataset<Dataset> An instance of CollectDataForDataset for collecting msol.
  */
 template <typename Dataset>
-CollectDataForDataset<Dataset> auto CollectMsol(const Dataset &dataset, const size_t maxchunk) {
+CollectDataForDataset<Dataset> auto CollectMsol(const Dataset& dataset, const size_t maxchunk) {
   return CollectSuperdropVariable<Dataset, float, MsolFunc>(dataset, MsolFunc{}, "msol", "g",
                                                             dlc::MASS0grams, maxchunk);
 }
@@ -375,7 +377,7 @@ struct Coord3Func {
  * coord3.
  */
 template <typename Dataset>
-CollectDataForDataset<Dataset> auto CollectCoord3(const Dataset &dataset, const size_t maxchunk) {
+CollectDataForDataset<Dataset> auto CollectCoord3(const Dataset& dataset, const size_t maxchunk) {
   return CollectSuperdropVariable<Dataset, float, Coord3Func>(dataset, Coord3Func{}, "coord3", "m",
                                                               dlc::COORD0, maxchunk);
 }
@@ -417,7 +419,7 @@ struct Coord1Func {
  * coord1.
  */
 template <typename Dataset>
-CollectDataForDataset<Dataset> auto CollectCoord1(const Dataset &dataset, const size_t maxchunk) {
+CollectDataForDataset<Dataset> auto CollectCoord1(const Dataset& dataset, const size_t maxchunk) {
   return CollectSuperdropVariable<Dataset, float, Coord1Func>(dataset, Coord1Func{}, "coord1", "m",
                                                               dlc::COORD0, maxchunk);
 }
@@ -459,7 +461,7 @@ struct Coord2Func {
  * coord2.
  */
 template <typename Dataset>
-CollectDataForDataset<Dataset> auto CollectCoord2(const Dataset &dataset, const size_t maxchunk) {
+CollectDataForDataset<Dataset> auto CollectCoord2(const Dataset& dataset, const size_t maxchunk) {
   return CollectSuperdropVariable<Dataset, float, Coord2Func>(dataset, Coord2Func{}, "coord2", "m",
                                                               dlc::COORD0, maxchunk);
 }
@@ -480,8 +482,8 @@ CollectDataForDataset<Dataset> auto CollectCoord2(const Dataset &dataset, const 
  * @return Observer An observer instance for writing thermodynamic variables from each gridbox.
  */
 template <typename Dataset, typename Store>
-inline Observer auto SuperdropsObserver(const unsigned int interval, const Dataset &dataset,
-                                        Store &store, const size_t maxchunk,
+inline Observer auto SuperdropsObserver(const unsigned int interval, const Dataset& dataset,
+                                        Store& store, const size_t maxchunk,
                                         CollectDataForDataset<Dataset> auto collect_data) {
   const CollectRaggedCount<Dataset> auto ragged_count = RaggedCount(dataset, store, maxchunk);
   return WriteToDatasetObserver(interval, dataset, collect_data, ragged_count);

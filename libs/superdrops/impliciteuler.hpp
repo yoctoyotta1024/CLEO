@@ -24,7 +24,6 @@
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
-#include <cassert>
 
 #include "../cleoconstants.hpp"
 #include "thermodynamic_equations.hpp"
@@ -82,7 +81,7 @@ struct ImplicitIterations {
    * @param rprev Radius of droplet at previous timestep.
    * @param ziter Initial value for ziter.
    */
-  KOKKOS_FUNCTION double integrate_condensation_ode(const ODEConstants &odeconsts,
+  KOKKOS_FUNCTION double integrate_condensation_ode(const ODEConstants& odeconsts,
                                                     const double subdelt, const double rprev,
                                                     double ziter) const;
 
@@ -102,7 +101,7 @@ struct ImplicitIterations {
    * @param rprev Radius of droplet at previous timestep.
    * @return Initial guess for ziter.
    */
-  KOKKOS_FUNCTION double initialguess(const ODEConstants &odeconsts, const double rprev) const;
+  KOKKOS_FUNCTION double initialguess(const ODEConstants& odeconsts, const double rprev) const;
 
  private:
   /**
@@ -121,7 +120,7 @@ struct ImplicitIterations {
    * @return The updated value of ziter.
    */
   KOKKOS_FUNCTION Kokkos::pair<double, bool> newtonraphson_niterations(
-      const ODEConstants &odeconsts, const double subdelt, const double rprev, double ziter,
+      const ODEConstants& odeconsts, const double subdelt, const double rprev, double ziter,
       const size_t niters) const;
   /**
    *
@@ -140,7 +139,7 @@ struct ImplicitIterations {
    * @param ziter The current guess for ziter.
    * @return The updated value of ziter.
    */
-  KOKKOS_FUNCTION double newtonraphson_untilconverged(const ODEConstants &odeconsts,
+  KOKKOS_FUNCTION double newtonraphson_untilconverged(const ODEConstants& odeconsts,
                                                       const size_t niterslimit,
                                                       const double subdelt, const double rprev,
                                                       double ziter) const;
@@ -161,7 +160,7 @@ struct ImplicitIterations {
    * @return A pair of the updated ziter and a boolean which is true if a root is converged upon.
    */
   KOKKOS_FUNCTION
-  Kokkos::pair<double, bool> iterate_rootfinding_algorithm(const ODEConstants &odeconsts,
+  Kokkos::pair<double, bool> iterate_rootfinding_algorithm(const ODEConstants& odeconsts,
                                                            const double subdelt, const double rprev,
                                                            double ziter) const;
 
@@ -183,7 +182,7 @@ struct ImplicitIterations {
    * @param rsqrd Current radius squared.
    * @return RHS of g(z) / z * subdelt evaluted at rqrd.
    */
-  KOKKOS_FUNCTION double ode_gfunc(const ODEConstants &odeconsts, const double subdelt,
+  KOKKOS_FUNCTION double ode_gfunc(const ODEConstants& odeconsts, const double subdelt,
                                    const double rprev, const double rsqrd) const;
 
   /**
@@ -198,7 +197,7 @@ struct ImplicitIterations {
    * @param rsqrd Current radius squared.
    * @return RHS of dg(z)/dz * subdelt evaluted at rqrd.
    */
-  KOKKOS_FUNCTION double ode_gfuncderivative(const ODEConstants &odeconsts, const double subdelt,
+  KOKKOS_FUNCTION double ode_gfuncderivative(const ODEConstants& odeconsts, const double subdelt,
                                              const double rsqrd) const;
 
   /**
@@ -251,7 +250,7 @@ class ImplicitEuler {
    * @param ziter Current guess for ziter.
    * @return Boolean = true if solution is guarenteed to be unique.
    */
-  KOKKOS_FUNCTION bool first_unique_criteria(const ImplicitIterations::ODEConstants &odeconsts,
+  KOKKOS_FUNCTION bool first_unique_criteria(const ImplicitIterations::ODEConstants& odeconsts,
                                              const double rprev, const double ziter) const;
 
   /**
@@ -264,7 +263,7 @@ class ImplicitEuler {
    * @param odeconsts Constants of ODE during integration
    * @return Critical time step for unique solution.
    */
-  KOKKOS_FUNCTION double critial_timestep(const ImplicitIterations::ODEConstants &odeconsts) const {
+  KOKKOS_FUNCTION double critial_timestep(const ImplicitIterations::ODEConstants& odeconsts) const {
     const double cuberoot = Kokkos::pow(5.0 * odeconsts.bkoh / odeconsts.akoh, 1.5);
     return 2.5 * odeconsts.ffactor_fv / odeconsts.akoh * cuberoot;
   }
@@ -281,7 +280,7 @@ class ImplicitEuler {
    * @param subdelt Time over which to integrate ODE over.
    * @return Boolean = true if solution is guarenteed to be unique.
    */
-  KOKKOS_FUNCTION bool second_unique_criteria(const ImplicitIterations::ODEConstants &odeconsts,
+  KOKKOS_FUNCTION bool second_unique_criteria(const ImplicitIterations::ODEConstants& odeconsts,
                                               const double subdelt) const {
     return (subdelt <= critial_timestep(odeconsts));
   }
@@ -305,7 +304,7 @@ class ImplicitEuler {
    * @return Updated radius^2 for time = t + delt
    */
   KOKKOS_FUNCTION double solve_with_adaptive_subtimestepping(
-      const ImplicitIterations::ODEConstants &odeconsts, const double delt, double rprev,
+      const ImplicitIterations::ODEConstants& odeconsts, const double delt, double rprev,
       double ziter) const;
 
  public:
@@ -321,8 +320,9 @@ class ImplicitEuler {
   ImplicitEuler(const double delt, const size_t maxniters, const double rtol, const double atol,
                 const double minsubdelt)
       : delt(delt), minsubdelt(minsubdelt), implit(maxniters, rtol, atol) {
-    assert((delt >= minsubdelt) &&
-           "timestep must be as least as large as subtimestep for implicit method");
+    if (delt < minsubdelt) {
+      Kokkos::abort("timestep must be as least as large as subtimestep for implicit method");
+    }
   }
 
   /**
