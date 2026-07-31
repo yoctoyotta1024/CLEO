@@ -3,7 +3,7 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html"><link rel="next" title="Coalescence-Breakup-Rebound" href="coalbure.html"><link rel="prev" title="Collision Kinetics" href="collisionkinetics.html">
+<link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html"><link rel="next" title="Breakup" href="breakup.html"><link rel="prev" title="Collision Kinetics" href="collisionkinetics.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>Coalescence - CLEO 0.X.Y documentation</title>
@@ -271,6 +271,7 @@
 <li class="toctree-l4"><a class="reference internal" href="collisions.html">Collisions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="collisionkinetics.html">Collision Kinetics</a></li>
 <li class="toctree-l4 current current-page"><a class="current reference internal" href="#">Coalescence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="breakup.html">Breakup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="coalbure.html">Coalescence-Breakup-Rebound</a></li>
 <li class="toctree-l4"><a class="reference internal" href="shuffle.html">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
 <li class="toctree-l4"><a class="reference internal" href="urbg.html">Randomness Generation</a></li>
@@ -498,16 +499,34 @@
 </div>
 </dd></dl>
 
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenfunction: Unable to resolve function “CollCoal” with arguments None in doxygen xml output for project “libs” from directory: ../build/doxygen/xml/.
-Potential matches:
-</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">template</span><span class="o">&lt;</span><span class="n">PairProbability</span> <span class="n">Probability</span><span class="o">&gt;</span> <span class="n">MicrophysicalProcess</span> <span class="n">auto</span> <span class="n">CollCoal</span><span class="p">(</span><span class="n">const</span> <span class="n">unsigned</span> <span class="nb">int</span> <span class="n">interval</span><span class="p">,</span> <span class="n">const</span> <span class="n">std</span><span class="p">::</span><span class="n">function</span><span class="o">&lt;</span><span class="n">double</span><span class="p">(</span><span class="n">unsigned</span> <span class="nb">int</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">int2realtime</span><span class="p">,</span> <span class="n">const</span> <span class="n">Probability</span> <span class="n">collcoalprob</span><span class="p">)</span>
-<span class="o">-</span> <span class="n">template</span><span class="o">&lt;</span><span class="n">PairProbability</span> <span class="n">Probability</span><span class="o">&gt;</span> <span class="n">MicrophysicalProcess</span> <span class="n">auto</span> <span class="n">CollCoal</span><span class="p">(</span><span class="n">const</span> <span class="n">unsigned</span> <span class="nb">int</span> <span class="n">interval</span><span class="p">,</span> <span class="n">const</span> <span class="n">std</span><span class="p">::</span><span class="n">function</span><span class="o">&lt;</span><span class="n">double</span><span class="p">(</span><span class="n">unsigned</span> <span class="nb">int</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">int2realtime</span><span class="p">,</span> <span class="n">const</span> <span class="n">Probability</span> <span class="n">collcoalprob</span><span class="p">,</span> <span class="n">const</span> <span class="n">uint64_t</span> <span class="n">seed</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_15PairProbabilityE8CollCoal20MicrophysicalProcessKjKNSt8functionIFdjEEEK11Probability">
+<span id="_CPPv3I_15PairProbabilityE8CollCoalKjKNSt8functionIFdjEEEK11Probability"></span><span id="_CPPv2I_15PairProbabilityE8CollCoalKjKNSt8functionIFdjEEEK11Probability"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="collisions.html#_CPPv4I0E15PairProbability" title="PairProbability"><span class="n"><span class="pre">PairProbability</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Probability</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="coalescence_8hpp_1aff165ed6188169f5d4abe0191681522e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../microphysical_process.html#_CPPv4I0E20MicrophysicalProcess" title="MicrophysicalProcess"><span class="n"><span class="pre">MicrophysicalProcess</span></span></a><span class="w"> </span><span class="k"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CollCoal</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">interval</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">(</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">int2realtime</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15PairProbabilityE8CollCoal20MicrophysicalProcessKjKNSt8functionIFdjEEEK11Probability" title="CollCoal::Probability"><span class="n"><span class="pre">Probability</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">collcoalprob</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_15PairProbabilityE8CollCoal20MicrophysicalProcessKjKNSt8functionIFdjEEEK11Probability" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Constructs a microphysical process for collision-coalescence of superdroplets. </p>
+<p>This function constructs a microphysical process for collision-coalescence of superdroplets with a constant timestep and probability of collision-coalescence determined by ‘collcoalprob’ and a random seed for the random number generator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>Probability</strong> – Type satisfying the <a class="reference internal" href="collisions.html#conceptPairProbability"><span class="std std-ref">PairProbability</span></a> concept. </p>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>interval</strong> – The constant timestep interval. </p></li>
+<li><p><strong>int2realtime</strong> – A function that converts an integer timestep to real time. </p></li>
+<li><p><strong>collcoalprob</strong> – The probability of collision-coalescence. </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>An instance of <a class="reference internal" href="../microphysical_process.html#conceptMicrophysicalProcess"><span class="std std-ref">MicrophysicalProcess</span></a> for collision-coalescence. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_15PairProbabilityE8CollCoal20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK8uint64_t">
+<span id="_CPPv3I_15PairProbabilityE8CollCoalKjKNSt8functionIFdjEEEK11ProbabilityK8uint64_t"></span><span id="_CPPv2I_15PairProbabilityE8CollCoalKjKNSt8functionIFdjEEEK11ProbabilityK8uint64_t"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="collisions.html#_CPPv4I0E15PairProbability" title="PairProbability"><span class="n"><span class="pre">PairProbability</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Probability</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="coalescence_8hpp_1ab32f817cadf2bd3683543a69f7ff8589"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../microphysical_process.html#_CPPv4I0E20MicrophysicalProcess" title="MicrophysicalProcess"><span class="n"><span class="pre">MicrophysicalProcess</span></span></a><span class="w"> </span><span class="k"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CollCoal</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">interval</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">(</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">int2realtime</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15PairProbabilityE8CollCoal20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK8uint64_t" title="CollCoal::Probability"><span class="n"><span class="pre">Probability</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">collcoalprob</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_15PairProbabilityE8CollCoal20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK8uint64_t" title="Link to this definition">¶</a><br /></dt>
+<dd><p>same as CollCoal above but with fixed seed </p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -515,12 +534,12 @@ Potential matches:
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="coalbure.html">
+          <a class="next-page" href="breakup.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Coalescence-Breakup-Rebound</div>
+                <div class="title">Breakup</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -576,6 +595,8 @@ Potential matches:
 <li><a class="reference internal" href="#_CPPv4NK13DoCoalescence34different_superdroplet_coalescenceEK8uint64_tR9SuperdropR9Superdrop"><code class="docutils literal notranslate"><span class="pre">different_superdroplet_coalescence()</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#_CPPv4I_15PairProbabilityE8CollCoal20MicrophysicalProcessKjKNSt8functionIFdjEEEK11Probability"><code class="docutils literal notranslate"><span class="pre">CollCoal()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I_15PairProbabilityE8CollCoal20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK8uint64_t"><code class="docutils literal notranslate"><span class="pre">CollCoal()</span></code></a></li>
 </ul>
 </li>
 </ul>

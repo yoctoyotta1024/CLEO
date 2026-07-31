@@ -271,6 +271,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/collisions.html">Collisions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/collisionkinetics.html">Collision Kinetics</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/coalescence.html">Coalescence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/breakup.html">Breakup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/coalbure.html">Coalescence-Breakup-Rebound</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/shuffle.html">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/urbg.html">Randomness Generation</a></li>
@@ -410,7 +411,10 @@
 <p>Calls <code class="docutils literal notranslate"><a class="reference internal" href="#structConstTstepObserver_1a582cf71863102a56660e196312a2d27d"><span class="std std-ref"><span class="pre">before_timestepping</span></span></a></code> function of <code class="docutils literal notranslate"><a class="reference internal" href="#structConstTstepObserver_1a8ceb0010494c85045852a40e86fb438d"><span class="std std-ref"><span class="pre">do_obs</span></span></a></code>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>d_gbxs</strong> – The view of gridboxes in device memory. </p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>d_gbxs</strong> – The view of gridboxes in device memory. </p></li>
+<li><p><strong>d_supers</strong> – The view of superdrops in device memory. </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

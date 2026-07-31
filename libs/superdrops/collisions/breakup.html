@@ -3,10 +3,10 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html"><link rel="next" title="Coalescence" href="coalescence.html"><link rel="prev" title="Collisions" href="collisions.html">
+<link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html"><link rel="next" title="Coalescence-Breakup-Rebound" href="coalbure.html"><link rel="prev" title="Coalescence" href="coalescence.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
-        <title>Collision Kinetics - CLEO 0.X.Y documentation</title>
+        <title>Breakup - CLEO 0.X.Y documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -269,9 +269,9 @@
 <li class="toctree-l2 current has-children"><a class="reference internal" href="../superdropsmod.html">Superdrops Module</a><input aria-label="Toggle navigation of Superdrops Module" checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l3 current has-children"><a class="reference internal" href="collisionsmod.html">Collisions Module</a><input aria-label="Toggle navigation of Collisions Module" checked="" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="collisions.html">Collisions</a></li>
-<li class="toctree-l4 current current-page"><a class="current reference internal" href="#">Collision Kinetics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="collisionkinetics.html">Collision Kinetics</a></li>
 <li class="toctree-l4"><a class="reference internal" href="coalescence.html">Coalescence</a></li>
-<li class="toctree-l4"><a class="reference internal" href="breakup.html">Breakup</a></li>
+<li class="toctree-l4 current current-page"><a class="current reference internal" href="#">Breakup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="coalbure.html">Coalescence-Breakup-Rebound</a></li>
 <li class="toctree-l4"><a class="reference internal" href="shuffle.html">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
 <li class="toctree-l4"><a class="reference internal" href="urbg.html">Randomness Generation</a></li>
@@ -355,7 +355,7 @@
         </a>
         <div class="content-icon-container">
           <div class="view-this-page">
-  <a class="muted-link" href="../../../_sources/libs/superdrops/collisions/collisionkinetics.rst.txt" title="View this page">
+  <a class="muted-link" href="../../../_sources/libs/superdrops/collisions/breakup.rst.txt" title="View this page">
     <svg><use href="#svg-eye"></use></svg>
     <span class="visually-hidden">View this page</span>
   </a>
@@ -373,85 +373,85 @@
           </label>
         </div>
         <article role="main" id="furo-main-content">
-          <section id="collision-kinetics">
-<h1>Collision Kinetics<a class="headerlink" href="#collision-kinetics" title="Link to this heading">¶</a></h1>
-<p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/superdrops/collisions/collisionkinetics.hpp&gt;</span></code>
-<a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/superdrops/collisions/collisionkinetics.hpp">[source]</a></p>
+          <section id="breakup">
+<h1>Breakup<a class="headerlink" href="#breakup" title="Link to this heading">¶</a></h1>
+<p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/superdrops/collisions/breakup.hpp&gt;</span></code>
+<a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/superdrops/collisions/breakup.hpp">[source]</a></p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4I_10NFragmentsE9DoBreakup">
+<span id="_CPPv3I_10NFragmentsE9DoBreakup"></span><span id="_CPPv2I_10NFragmentsE9DoBreakup"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">NFragments</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NFrags</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structDoBreakup"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DoBreakup</span></span></span><a class="headerlink" href="#_CPPv4I_10NFragmentsE9DoBreakup" title="Link to this definition">¶</a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv424collision_kinetic_energyKdKdKdKd">
-<span id="_CPPv324collision_kinetic_energyKdKdKdKd"></span><span id="_CPPv224collision_kinetic_energyKdKdKdKd"></span><span id="collision_kinetic_energy__doubleC.doubleC.doubleC.doubleC"></span><span class="target" id="collisionkinetics_8hpp_1a4d987fe60902236eff7410a11697dedb"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">collision_kinetic_energy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">r1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">r2</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">terminalv1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">terminalv2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv424collision_kinetic_energyKdKdKdKd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Calculates the collision kinetic energy between two droplets. </p>
-<p>Returns cke, where cke = collision kinetic energy [Joules] as formulated in Low and List 1982(a) eqn 3.1 given the dimensionless radii, r1 and r2, and the dimensionless terminal velocities of droplets, terminalv1 and terminalv2, respectively.</p>
-<p>
-Returns cke, where cke = collision kinetic energy [Joules] as formulated in Low and List 1982(a) eqn 3.1 given the dimensionless radii, r1 and r2, and the dimensionless terminal velocities of droplets, terminalv1 and terminalv2, respectively.</p>
+<dt class="sig sig-object cpp" id="_CPPv4N9DoBreakup9DoBreakupEK6NFrags">
+<span id="_CPPv3N9DoBreakup9DoBreakupEK6NFrags"></span><span id="_CPPv2N9DoBreakup9DoBreakupEK6NFrags"></span><span id="DoBreakup::DoBreakup__NFragsC"></span><span class="target" id="structDoBreakup_1a2c8fcdd9f2a31e5e43f0bd508dfcd55c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DoBreakup</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_10NFragmentsE9DoBreakup" title="DoBreakup::NFrags"><span class="n"><span class="pre">NFrags</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">nfrags</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9DoBreakup9DoBreakupEK6NFrags" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9DoBreakupclER9SuperdropR9SuperdropKdKdKd">
+<span id="_CPPv3NK9DoBreakupclER9SuperdropR9SuperdropKdKdKd"></span><span id="_CPPv2NK9DoBreakupclER9SuperdropR9SuperdropKdKdKd"></span><span id="DoBreakup::call-operator__SuperdropR.SuperdropR.doubleC.doubleC.doubleCC"></span><span class="target" id="structDoBreakup_1af03673703b8497feeb6549aec16fc11f"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop1</span></span>, <a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop2</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">prob</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">phi_coll</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">phi_out</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9DoBreakupclER9SuperdropR9SuperdropKdKdKd" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Operator used as an adaptor such that <a class="reference internal" href="#structDoBreakup"><span class="std std-ref">DoBreakup</span></a> satisfies the <a class="reference internal" href="collisions.html#conceptPairEnactX"><span class="std std-ref">PairEnactX</span></a> concept and so can be used as the EnactCollision function-like object in the <a class="reference internal" href="collisions.html#structDoCollisions"><span class="std std-ref">DoCollisions</span></a> struct. </p>
+<p>This operator calls functions to enact the collision-breakup of two super-droplets.</p>
+<p><em>NOTE:</em> phi_out is not used since outcome of collision is already pre-determined to be breakup.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>r1</strong> – The radius of the first superdroplet. </p></li>
-<li><p><strong>r2</strong> – The radius of the second superdroplet. </p></li>
-<li><p><strong>terminalv1</strong> – The terminal velocity of the first superdroplet. </p></li>
-<li><p><strong>terminalv2</strong> – The terminal velocity of the second superdroplet.</p></li>
+<li><p><strong>drop1</strong> – First superdroplet. </p></li>
+<li><p><strong>drop2</strong> – Second superdroplet. </p></li>
+<li><p><strong>prob</strong> – Probability of collision. </p></li>
+<li><p><strong>phi_coll</strong> – Random number in the range [0.0, 1.0] for collision. </p></li>
+<li><p><strong>phi_out</strong> – Random number in the range [0.0, 1.0] for outcome of collision (not used). </p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The collision kinetic energy.</p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The collision kinetic energy [Joules]. </p>
+<dd class="field-even"><p>True if the resulting superdroplet is null, otherwise false. </p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv415coal_surfenergyKdKd">
-<span id="_CPPv315coal_surfenergyKdKd"></span><span id="_CPPv215coal_surfenergyKdKd"></span><span id="coal_surfenergy__doubleC.doubleC"></span><span class="target" id="collisionkinetics_8hpp_1a390cd104db46eecdff219fbb335da260"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coal_surfenergy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">r1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">r2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv415coal_surfenergyKdKd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Calculates the surface tension energy of a coalesced droplet. </p>
-<p>Returns the surface tension energy of a single spherical droplet, as calculated by equation 4.3 of Low and List 1982, equiavelent to two droplets which coalesce.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>r1</strong> – The dimensionless radius of one droplet involed in coalescence. </p></li>
-<li><p><strong>r2</strong> – The dimensionless radius of the other droplet involed in coalescence. </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The surface tension energy of the superdroplet [Joules]. </p>
-</dd>
-</dl>
+<dt class="sig sig-object cpp" id="_CPPv4NK9DoBreakup25breakup_superdroplet_pairER9SuperdropR9Superdrop">
+<span id="_CPPv3NK9DoBreakup25breakup_superdroplet_pairER9SuperdropR9Superdrop"></span><span id="_CPPv2NK9DoBreakup25breakup_superdroplet_pairER9SuperdropR9Superdrop"></span><span id="DoBreakup::breakup_superdroplet_pair__SuperdropR.SuperdropRC"></span><span class="target" id="structDoBreakup_1aec19b9fac64449943cf663b3fca5968e"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">breakup_superdroplet_pair</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop1</span></span>, <a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop2</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9DoBreakup25breakup_superdroplet_pairER9SuperdropR9Superdrop" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-functions">Private Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9DoBreakup13breakup_gammaEKdKd">
+<span id="_CPPv3NK9DoBreakup13breakup_gammaEKdKd"></span><span id="_CPPv2NK9DoBreakup13breakup_gammaEKdKd"></span><span id="DoBreakup::breakup_gamma__doubleC.doubleCC"></span><span class="target" id="structDoBreakup_1adade8d2e094df4d1ece50358fc87e992"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">breakup_gamma</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">prob</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">phi</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9DoBreakup13breakup_gammaEKdKd" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9DoBreakup25twin_superdroplet_breakupER9SuperdropR9Superdrop">
+<span id="_CPPv3NK9DoBreakup25twin_superdroplet_breakupER9SuperdropR9Superdrop"></span><span id="_CPPv2NK9DoBreakup25twin_superdroplet_breakupER9SuperdropR9Superdrop"></span><span id="DoBreakup::twin_superdroplet_breakup__SuperdropR.SuperdropRC"></span><span class="target" id="structDoBreakup_1a81bbd3e473aff30791dd3599f3f0b7f1"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">twin_superdroplet_breakup</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop1</span></span>, <a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop2</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9DoBreakup25twin_superdroplet_breakupER9SuperdropR9Superdrop" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK9DoBreakup30different_superdroplet_breakupER9SuperdropR9Superdrop">
+<span id="_CPPv3NK9DoBreakup30different_superdroplet_breakupER9SuperdropR9Superdrop"></span><span id="_CPPv2NK9DoBreakup30different_superdroplet_breakupER9SuperdropR9Superdrop"></span><span id="DoBreakup::different_superdroplet_breakup__SuperdropR.SuperdropRC"></span><span class="target" id="structDoBreakup_1abc083fab5c02e21a8d4388e31289dd38"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">different_superdroplet_breakup</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop1</span></span>, <a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop2</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK9DoBreakup30different_superdroplet_breakupER9SuperdropR9Superdrop" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9DoBreakup6nfragsE">
+<span id="_CPPv3N9DoBreakup6nfragsE"></span><span id="_CPPv2N9DoBreakup6nfragsE"></span><span id="DoBreakup::nfrags__NFrags"></span><span class="target" id="structDoBreakup_1ab8eaf134d952f1fa6945b95b934e2817"></span><a class="reference internal" href="#_CPPv4I_10NFragmentsE9DoBreakup" title="DoBreakup::NFrags"><span class="n"><span class="pre">NFrags</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nfrags</span></span></span><a class="headerlink" href="#_CPPv4N9DoBreakup6nfragsE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv410surfenergyKd">
-<span id="_CPPv310surfenergyKd"></span><span id="_CPPv210surfenergyKd"></span><span id="surfenergy__doubleC"></span><span class="target" id="collisionkinetics_8hpp_1ae0c72767aa35081a8d44a1bc5bf40cdf"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">surfenergy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">radius</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv410surfenergyKd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Calculates the surface tension energy of a single droplet. </p>
-<p>Returns the energy due to surface tension of a single droplet, analogous to equation 4.2 of Low and List 1982</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>radius</strong> – The dimensionless radius of the droplet. </p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The surface tension energy of the droplet [Joules]. </p>
-</dd>
-</dl>
-</dd></dl>
+<dt class="sig sig-object cpp" id="_CPPv4I_15PairProbability_10NFragmentsE6CollBu20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFrags">
+<span id="_CPPv3I_15PairProbability_10NFragmentsE6CollBuKjKNSt8functionIFdjEEEK11ProbabilityK6NFrags"></span><span id="_CPPv2I_15PairProbability_10NFragmentsE6CollBuKjKNSt8functionIFdjEEEK11ProbabilityK6NFrags"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="collisions.html#_CPPv4I0E15PairProbability" title="PairProbability"><span class="n"><span class="pre">PairProbability</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Probability</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">NFragments</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NFrags</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="breakup_8hpp_1a809e685581cd5f15cd7f14949bd38e9a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../microphysical_process.html#_CPPv4I0E20MicrophysicalProcess" title="MicrophysicalProcess"><span class="n"><span class="pre">MicrophysicalProcess</span></span></a><span class="w"> </span><span class="k"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CollBu</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">interval</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">(</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">int2realtime</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15PairProbability_10NFragmentsE6CollBu20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFrags" title="CollBu::Probability"><span class="n"><span class="pre">Probability</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">collbuprob</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15PairProbability_10NFragmentsE6CollBu20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFrags" title="CollBu::NFrags"><span class="n"><span class="pre">NFrags</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">nfrags</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_15PairProbability_10NFragmentsE6CollBu20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFrags" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv416total_surfenergyKdKd">
-<span id="_CPPv316total_surfenergyKdKd"></span><span id="_CPPv216total_surfenergyKdKd"></span><span id="total_surfenergy__doubleC.doubleC"></span><span class="target" id="collisionkinetics_8hpp_1afd84e163cc8fcd964ee4712ad0870f27"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">total_surfenergy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">r1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">r2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv416total_surfenergyKdKd" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Calculates the sum of the surface energy of a pair of droplets. </p>
-<p>Returns the total energy due to surface tension by summing the individual surface tension energies for a pair of droplets with radii r1 and r2 as in equation 4.2 of Low and List 1982.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>r1</strong> – The dimensionless radius of the first superdroplet. </p></li>
-<li><p><strong>r2</strong> – The dimensionless radius of the second superdroplet. </p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The total surface energy of the pair of superdroplets [Joules]. </p>
-</dd>
-</dl>
-</dd></dl>
+<dt class="sig sig-object cpp" id="_CPPv4I_15PairProbability_10NFragmentsE6CollBu20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK8uint64_t">
+<span id="_CPPv3I_15PairProbability_10NFragmentsE6CollBuKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK8uint64_t"></span><span id="_CPPv2I_15PairProbability_10NFragmentsE6CollBuKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK8uint64_t"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="collisions.html#_CPPv4I0E15PairProbability" title="PairProbability"><span class="n"><span class="pre">PairProbability</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Probability</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">NFragments</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NFrags</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="breakup_8hpp_1a0cd3c2dd810958e028448fe4862e730a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../microphysical_process.html#_CPPv4I0E20MicrophysicalProcess" title="MicrophysicalProcess"><span class="n"><span class="pre">MicrophysicalProcess</span></span></a><span class="w"> </span><span class="k"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CollBu</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">interval</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">(</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">int2realtime</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15PairProbability_10NFragmentsE6CollBu20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK8uint64_t" title="CollBu::Probability"><span class="n"><span class="pre">Probability</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">collbuprob</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15PairProbability_10NFragmentsE6CollBu20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK8uint64_t" title="CollBu::NFrags"><span class="n"><span class="pre">NFrags</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">nfrags</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_15PairProbability_10NFragmentsE6CollBu20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK8uint64_t" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
 
 </section>
 
@@ -460,23 +460,23 @@ Returns cke, where cke = collision kinetic energy [Joules] as formulated in Low 
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="coalescence.html">
+          <a class="next-page" href="coalbure.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Coalescence</div>
+                <div class="title">Coalescence-Breakup-Rebound</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="collisions.html">
+          <a class="prev-page" href="coalescence.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Collisions</div>
+                <div class="title">Coalescence</div>
                 
               </div>
             </a>
@@ -511,11 +511,19 @@ Returns cke, where cke = collision kinetic energy [Joules] as formulated in Low 
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">Collision Kinetics</a><ul>
-<li><a class="reference internal" href="#_CPPv424collision_kinetic_energyKdKdKdKd"><code class="docutils literal notranslate"><span class="pre">collision_kinetic_energy()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv415coal_surfenergyKdKd"><code class="docutils literal notranslate"><span class="pre">coal_surfenergy()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv410surfenergyKd"><code class="docutils literal notranslate"><span class="pre">surfenergy()</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv416total_surfenergyKdKd"><code class="docutils literal notranslate"><span class="pre">total_surfenergy()</span></code></a></li>
+<li><a class="reference internal" href="#">Breakup</a><ul>
+<li><a class="reference internal" href="#_CPPv4I_10NFragmentsE9DoBreakup"><code class="docutils literal notranslate"><span class="pre">DoBreakup</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N9DoBreakup9DoBreakupEK6NFrags"><code class="docutils literal notranslate"><span class="pre">DoBreakup()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK9DoBreakupclER9SuperdropR9SuperdropKdKdKd"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK9DoBreakup25breakup_superdroplet_pairER9SuperdropR9Superdrop"><code class="docutils literal notranslate"><span class="pre">breakup_superdroplet_pair()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK9DoBreakup13breakup_gammaEKdKd"><code class="docutils literal notranslate"><span class="pre">breakup_gamma()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK9DoBreakup25twin_superdroplet_breakupER9SuperdropR9Superdrop"><code class="docutils literal notranslate"><span class="pre">twin_superdroplet_breakup()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK9DoBreakup30different_superdroplet_breakupER9SuperdropR9Superdrop"><code class="docutils literal notranslate"><span class="pre">different_superdroplet_breakup()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N9DoBreakup6nfragsE"><code class="docutils literal notranslate"><span class="pre">nfrags</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#_CPPv4I_15PairProbability_10NFragmentsE6CollBu20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFrags"><code class="docutils literal notranslate"><span class="pre">CollBu()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I_15PairProbability_10NFragmentsE6CollBu20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK8uint64_t"><code class="docutils literal notranslate"><span class="pre">CollBu()</span></code></a></li>
 </ul>
 </li>
 </ul>

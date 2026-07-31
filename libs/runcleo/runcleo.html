@@ -271,6 +271,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/collisions.html">Collisions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/collisionkinetics.html">Collision Kinetics</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/coalescence.html">Coalescence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/breakup.html">Breakup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/coalbure.html">Coalescence-Breakup-Rebound</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/shuffle.html">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/urbg.html">Randomness Generation</a></li>
@@ -449,7 +450,10 @@
 <p>This function prepares the SDM and Coupled Dynamics for timestepping. It calls the <code class="docutils literal notranslate"><a class="reference internal" href="#classRunCLEO_1ae3b2a9982c2a0a2f679a21014e32c9ee"><span class="std std-ref"><span class="pre">prepare_to_timestep</span></span></a></code> function of both the Coupled Dynamics and <a class="reference internal" href="sdmmethods.html#classSDMMethods"><span class="std std-ref">SDMMethods</span></a> objects.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>gbxs</strong> – DualView of gridboxes. </p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gbxs</strong> – DualView of gridboxes. </p></li>
+<li><p><strong>allsupers</strong> – Superdroplets in and out of the domain. </p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>0 on success. </p>

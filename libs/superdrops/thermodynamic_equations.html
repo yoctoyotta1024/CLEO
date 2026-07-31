@@ -271,6 +271,7 @@
 <li class="toctree-l4"><a class="reference internal" href="collisions/collisions.html">Collisions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="collisions/collisionkinetics.html">Collision Kinetics</a></li>
 <li class="toctree-l4"><a class="reference internal" href="collisions/coalescence.html">Coalescence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="collisions/breakup.html">Breakup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="collisions/coalbure.html">Coalescence-Breakup-Rebound</a></li>
 <li class="toctree-l4"><a class="reference internal" href="collisions/shuffle.html">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
 <li class="toctree-l4"><a class="reference internal" href="collisions/urbg.html">Randomness Generation</a></li>
@@ -494,7 +495,7 @@ Equation adapted from Bjorn Steven’s “make_tetens” python function from hi
 <dd><p>Calculate the ventilation factor for the condensation-diffusion growth equation. </p>
 <p>Equation for ventilation factor, $f_v$, is fit to data from Kinzer and Gunn (1951) and from Pruppacher and Rasmussen (1979) according to Florian Poydenot, whereby <span class="math notranslate nohighlight">\( f_v = 1 + \frac{1}{\frac{1}{c_1R^\alpha} + \frac{1}{c_2R^\beta}} \)</span> where <span class="math notranslate nohighlight">\( c_1 = 6.954*10^7 \)</span>, <span class="math notranslate nohighlight">\( \alpha=1.963 \)</span>, <span class="math notranslate nohighlight">\( c_2=1.069*10^3 \)</span>, <span class="math notranslate nohighlight">\( \beta=0.702 \)</span>, and <span class="math notranslate nohighlight">\(R\)</span> is the radius of the water droplet in [m].</p>
 <p>
-Equation for ventilation factor, $f_v$, is fit to data from Kinzer and Gunn (1951) and from Pruppacher and Rasmussen (1979) according to Florian Poydenot, whereby $ f_v = 1 + \frac{1}{\frac{1}{c_1R^\alpha} + \frac{1}{c_2R^\beta}} $ where $ c_1 = 6.954*10^7 $, $ \alpha=1.963 $, $ c_2=1.069*10^3 $, $ \beta=0.702 $, and $R$ is the radius of the water droplet in [m].</p>
+Equation for ventilation factor, f_v, is fit to data from Kinzer and Gunn (1951) and from Pruppacher and Rasmussen (1979) according to Florian Poydenot, whereby f_v = 1 + 1 / (1 / (c_1 R^alpha) + 1 / (c_2 R^beta)) where c_1 = 6.954*10^7, alpha = 1.963, c_2 = 1.069*10^3, beta = 0.702, and R is the radius of the water droplet in [m].</p>
 <p>Equation is capped at fv=20 (corresponds to the value of the uncapped fv when the droplet radius is ~3.30mm) because droplets greater than ~3mm have a constant fall speed in all conventional terminal velocity formulations (see terminal_velocity.hpp for the available terminal velocity parameterisations in CLEO). </p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

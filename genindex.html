@@ -269,6 +269,7 @@
 <li class="toctree-l4"><a class="reference internal" href="libs/superdrops/collisions/collisions.html">Collisions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="libs/superdrops/collisions/collisionkinetics.html">Collision Kinetics</a></li>
 <li class="toctree-l4"><a class="reference internal" href="libs/superdrops/collisions/coalescence.html">Coalescence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="libs/superdrops/collisions/breakup.html">Breakup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="libs/superdrops/collisions/coalbure.html">Coalescence-Breakup-Rebound</a></li>
 <li class="toctree-l4"><a class="reference internal" href="libs/superdrops/collisions/shuffle.html">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
 <li class="toctree-l4"><a class="reference internal" href="libs/superdrops/collisions/urbg.html">Randomness Generation</a></li>
@@ -650,6 +651,12 @@
 </li>
         <li><a href="libs/superdrops/collisions/collisionkinetics.html#_CPPv415coal_surfenergyKdKd">coal_surfenergy (C++ function)</a>
 </li>
+        <li><a href="libs/superdrops/collisions/coalbure.html#_CPPv4I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuRe20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4Flag">CoalBuRe (C++ function)</a>, <a href="libs/superdrops/collisions/coalbure.html#_CPPv4I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuRe20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4FlagK8uint64_t">[1]</a>
+</li>
+        <li><a href="libs/superdrops/collisions/breakup.html#_CPPv4I_15PairProbability_10NFragmentsE6CollBu20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFrags">CollBu (C++ function)</a>, <a href="libs/superdrops/collisions/breakup.html#_CPPv4I_15PairProbability_10NFragmentsE6CollBu20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK8uint64_t">[1]</a>
+</li>
+        <li><a href="libs/superdrops/collisions/coalescence.html#_CPPv4I_15PairProbabilityE8CollCoal20MicrophysicalProcessKjKNSt8functionIFdjEEEK11Probability">CollCoal (C++ function)</a>, <a href="libs/superdrops/collisions/coalescence.html#_CPPv4I_15PairProbabilityE8CollCoal20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK8uint64_t">[1]</a>
+</li>
         <li><a href="libs/observers/superdrops_observer.html#_CPPv4I0E13CollectCoord121CollectDataForDatasetI7DatasetERK7DatasetK6size_t">CollectCoord1 (C++ function)</a>
 </li>
         <li><a href="libs/observers/superdrops_observer.html#_CPPv4I0E13CollectCoord221CollectDataForDatasetI7DatasetERK7DatasetK6size_t">CollectCoord2 (C++ function)</a>
@@ -690,12 +697,12 @@
 </li>
         <li><a href="libs/observers/massmoments_observer.html#_CPPv4NK18CollectMassMoments11get_functorEK14viewd_constgbxK20subviewd_constsupers">CollectMassMoments::get_functor (C++ function)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="libs/observers/massmoments_observer.html#_CPPv4N18CollectMassMoments8mom0_ptrE">CollectMassMoments::mom0_ptr (C++ member)</a>
 </li>
         <li><a href="libs/observers/massmoments_observer.html#_CPPv4N18CollectMassMoments8mom1_ptrE">CollectMassMoments::mom1_ptr (C++ member)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="libs/observers/massmoments_observer.html#_CPPv4N18CollectMassMoments8mom2_ptrE">CollectMassMoments::mom2_ptr (C++ member)</a>
 </li>
         <li><a href="libs/observers/massmoments_observer.html#_CPPv4NK18CollectMassMoments16reallocate_viewsEK6size_t">CollectMassMoments::reallocate_views (C++ function)</a>
@@ -904,6 +911,22 @@
 </li>
         <li><a href="cleopy/initsuperdropsbinary_src/probdists.html#cleopy.initsuperdropsbinary_src.probdists.DiracDelta">DiracDelta (class in cleopy.initsuperdropsbinary_src.probdists)</a>
 </li>
+        <li><a href="libs/superdrops/collisions/breakup.html#_CPPv4I_10NFragmentsE9DoBreakup">DoBreakup (C++ struct)</a>
+</li>
+        <li><a href="libs/superdrops/collisions/breakup.html#_CPPv4NK9DoBreakup13breakup_gammaEKdKd">DoBreakup::breakup_gamma (C++ function)</a>
+</li>
+        <li><a href="libs/superdrops/collisions/breakup.html#_CPPv4NK9DoBreakup25breakup_superdroplet_pairER9SuperdropR9Superdrop">DoBreakup::breakup_superdroplet_pair (C++ function)</a>
+</li>
+        <li><a href="libs/superdrops/collisions/breakup.html#_CPPv4NK9DoBreakup30different_superdroplet_breakupER9SuperdropR9Superdrop">DoBreakup::different_superdroplet_breakup (C++ function)</a>
+</li>
+        <li><a href="libs/superdrops/collisions/breakup.html#_CPPv4N9DoBreakup9DoBreakupEK6NFrags">DoBreakup::DoBreakup (C++ function)</a>
+</li>
+        <li><a href="libs/superdrops/collisions/breakup.html#_CPPv4N9DoBreakup6nfragsE">DoBreakup::nfrags (C++ member)</a>
+</li>
+        <li><a href="libs/superdrops/collisions/breakup.html#_CPPv4NK9DoBreakupclER9SuperdropR9SuperdropKdKdKd">DoBreakup::operator() (C++ function)</a>
+</li>
+        <li><a href="libs/superdrops/collisions/breakup.html#_CPPv4NK9DoBreakup25twin_superdroplet_breakupER9SuperdropR9Superdrop">DoBreakup::twin_superdroplet_breakup (C++ function)</a>
+</li>
         <li><a href="libs/superdrops/collisions/coalbure.html#_CPPv4I_10NFragments_12CoalBuReFlagE10DoCoalBuRe">DoCoalBuRe (C++ struct)</a>
 </li>
         <li><a href="libs/superdrops/collisions/coalbure.html#_CPPv4N10DoCoalBuRe2buE">DoCoalBuRe::bu (C++ member)</a>
@@ -952,6 +975,8 @@
 </li>
         <li><a href="libs/superdrops/condensation.html#_CPPv414DoCondensation">DoCondensation (C++ struct)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="libs/superdrops/condensation.html#_CPPv4N14DoCondensation15do_alter_thermoE">DoCondensation::do_alter_thermo (C++ member)</a>
 </li>
         <li><a href="libs/superdrops/condensation.html#_CPPv4NK14DoCondensation15do_condensationERK10TeamMemberK15subviewd_supersR5StateK10SDMMonitor">DoCondensation::do_condensation (C++ function)</a>
@@ -960,8 +985,6 @@
 </li>
         <li><a href="libs/superdrops/condensation.html#_CPPv4NK14DoCondensation29effect_on_thermodynamic_stateERK10TeamMemberKdR5State">DoCondensation::effect_on_thermodynamic_state (C++ function)</a>
 </li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="libs/superdrops/condensation.html#_CPPv4N14DoCondensation4impeE">DoCondensation::impe (C++ member)</a>
 </li>
         <li><a href="libs/superdrops/condensation.html#_CPPv4NK14DoCondensationclERK10TeamMemberKj15subviewd_supersR5StateK10SDMMonitor">DoCondensation::operator() (C++ function)</a>

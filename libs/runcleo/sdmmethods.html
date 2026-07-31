@@ -271,6 +271,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/collisions.html">Collisions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/collisionkinetics.html">Collision Kinetics</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/coalescence.html">Coalescence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/breakup.html">Breakup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/coalbure.html">Coalescence-Breakup-Rebound</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/shuffle.html">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/urbg.html">Randomness Generation</a></li>
@@ -481,7 +482,10 @@
 <p>This function prepares the CLEO SDM for timestepping by calling the <code class="docutils literal notranslate"><span class="pre">before_timestepping</span></code> function of the observer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>d_gbxs</strong> – View of gridboxes on device. </p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>gbxs</strong> – DualView of gridboxes. </p></li>
+<li><p><strong>allsupers</strong> – Superdroplets in and out of the domain. </p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>

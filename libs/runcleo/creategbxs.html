@@ -271,6 +271,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/collisions.html">Collisions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/collisionkinetics.html">Collision Kinetics</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/coalescence.html">Coalescence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/breakup.html">Breakup</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/coalbure.html">Coalescence-Breakup-Rebound</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/shuffle.html">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/urbg.html">Randomness Generation</a></li>
@@ -527,14 +528,10 @@ This function returns the state of the Gridbox at the ii’th index in the initi
 <span id="_CPPv3I_11GridboxMaps0E11create_gbxsRK7GbxMapsRK12GbxInitCondsRK14SupersInDomain"></span><span id="_CPPv2I_11GridboxMaps0E11create_gbxsRK7GbxMapsRK12GbxInitCondsRK14SupersInDomain"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">GridboxMaps</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxMaps</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxInitConds</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="creategbxs_8hpp_1a2dbef5275a2824ef592027b5f123a523"></span><a class="reference internal" href="../kokkosaliases.html#_CPPv412dualview_gbx" title="dualview_gbx"><span class="n"><span class="pre">dualview_gbx</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_gbxs</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_11GridboxMaps0E11create_gbxs12dualview_gbxRK7GbxMapsRK12GbxInitCondsRK14SupersInDomain" title="create_gbxs::GbxMaps"><span class="n"><span class="pre">GbxMaps</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">gbxmaps</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_11GridboxMaps0E11create_gbxs12dualview_gbxRK7GbxMapsRK12GbxInitCondsRK14SupersInDomain" title="create_gbxs::GbxInitConds"><span class="n"><span class="pre">GbxInitConds</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">gbxic</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">SupersInDomain</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">allsupers</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_11GridboxMaps0E11create_gbxs12dualview_gbxRK7GbxMapsRK12GbxInitCondsRK14SupersInDomain" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Create Gridboxes from initial conditions. </p>
 <p>This function creates Gridboxes based on the provided gridbox maps and initial conditions, and given super-droplets.</p>
-<p>
-This function creates Gridboxes based on the provided gridbox maps and initial conditions, and given super-droplets.</p>
 <p>Kokkos::Profiling are null pointers unless a Kokkos profiler library has been exported to “KOKKOS_TOOLS_LIBS” prior to runtime so the lib gets dynamically loaded.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>GbxMaps</strong> – Type representing Gridbox Maps. </p></li>
-<li><p><strong>GbxInitConds</strong> – Type representing Gridbox initial conditions.</p></li>
 <li><p><strong>GbxMaps</strong> – Type representing Gridbox Maps. </p></li>
 <li><p><strong>GbxInitConds</strong> – Type representing Gridbox initial conditions.</p></li>
 </ul>
@@ -544,16 +541,10 @@ This function creates Gridboxes based on the provided gridbox maps and initial c
 <li><p><strong>gbxmaps</strong> – The Gridbox Maps. </p></li>
 <li><p><strong>gbxic</strong> – The Gridbox initial conditions. </p></li>
 <li><p><strong>allsupers</strong> – The view of all super-droplets (in bounds of domain).</p></li>
-<li><p><strong>gbxmaps</strong> – The Gridbox Maps. </p></li>
-<li><p><strong>gbxic</strong> – The Gridbox initial conditions. </p></li>
-<li><p><strong>allsupers</strong> – The view of all super-droplets (in bounds of domain).</p></li>
 </ul>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>The view of initialised Gridboxes.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The view of initialised Gridboxes. </p>
+<dd class="field-odd"><p>The view of initialised Gridboxes. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -595,31 +586,15 @@ This function creates Gridboxes based on the provided gridbox maps and initial c
 </pre></div>
 </div>
 </p>
-<p>
-This function initialises Gridboxes in host memory using data from Gridbox Maps, a Gridbox generator, and a view of super-droplets.</p>
-<p>The equivalent serial version of Kokkos::parallel_for([…]) loop is: <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">ii</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span> <span class="n">ii</span> <span class="o">&lt;</span> <span class="n">ngbxs</span><span class="p">;</span> <span class="o">++</span><span class="n">ii</span><span class="p">)</span>
-<span class="p">{</span>
- <span class="n">h_gbxs</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span> <span class="o">=</span> <span class="n">gen</span><span class="p">(</span><span class="n">ii</span><span class="p">,</span> <span class="n">gbxmaps</span><span class="p">,</span> <span class="n">domainsupers</span><span class="p">);</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</p>
 <dl class="field-list simple">
 <dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>GbxMaps</strong> – Type representing Gridbox Maps.</p></li>
-<li><p><strong>GbxMaps</strong> – Type representing Gridbox Maps.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>GbxMaps</strong> – Type representing Gridbox Maps.</p>
 </dd>
 <dt class="field-even">Parameters<span class="colon">:</span></dt>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>gbxmaps</strong> – The Gridbox Maps. </p></li>
 <li><p><strong>gen</strong> – The Gridbox generator. </p></li>
 <li><p><strong>domainsupers</strong> – The view of all super-droplets (in bounds of domain). </p></li>
-<li><p><strong>h_gbxs</strong> – The view of Gridboxes on the host.</p></li>
-<li><p><strong>gbxmaps</strong> – The Gridbox Maps. </p></li>
-<li><p><strong>gen</strong> – The Gridbox generator. </p></li>
-<li><p><strong>domainsupers</strong> – The view of all super-droplets (both in and out of bounds of domain). </p></li>
 <li><p><strong>h_gbxs</strong> – The view of Gridboxes on the host. </p></li>
 </ul>
 </dd>

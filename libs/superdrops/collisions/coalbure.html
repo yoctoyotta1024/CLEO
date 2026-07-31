@@ -3,7 +3,7 @@
   <head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html"><link rel="next" title="Thread-Safe Superdroplet Shuffling Algorithms" href="shuffle.html"><link rel="prev" title="Coalescence" href="coalescence.html">
+<link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html"><link rel="next" title="Thread-Safe Superdroplet Shuffling Algorithms" href="shuffle.html"><link rel="prev" title="Breakup" href="breakup.html">
 
     <!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
         <title>Coalescence-Breakup-Rebound - CLEO 0.X.Y documentation</title>
@@ -271,6 +271,7 @@
 <li class="toctree-l4"><a class="reference internal" href="collisions.html">Collisions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="collisionkinetics.html">Collision Kinetics</a></li>
 <li class="toctree-l4"><a class="reference internal" href="coalescence.html">Coalescence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="breakup.html">Breakup</a></li>
 <li class="toctree-l4 current current-page"><a class="current reference internal" href="#">Coalescence-Breakup-Rebound</a></li>
 <li class="toctree-l4"><a class="reference internal" href="shuffle.html">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
 <li class="toctree-l4"><a class="reference internal" href="urbg.html">Randomness Generation</a></li>
@@ -482,8 +483,8 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp" id="_CPPv4N10DoCoalBuRe2buE">
-<span id="_CPPv3N10DoCoalBuRe2buE"></span><span id="_CPPv2N10DoCoalBuRe2buE"></span><span id="DoCoalBuRe::bu__DoBreakup:NFrags:"></span><span class="target" id="structDoCoalBuRe_1a9996fdffa0464ece178366dedc0fb499"></span><span class="n"><span class="pre">DoBreakup</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_10NFragments_12CoalBuReFlagE10DoCoalBuRe" title="DoCoalBuRe::NFrags"><span class="n"><span class="pre">NFrags</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bu</span></span></span><a class="headerlink" href="#_CPPv4N10DoCoalBuRe2buE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Instance of DoBreakup with specified no. of fragments calculation. </p>
+<span id="_CPPv3N10DoCoalBuRe2buE"></span><span id="_CPPv2N10DoCoalBuRe2buE"></span><span id="DoCoalBuRe::bu__DoBreakup:NFrags:"></span><span class="target" id="structDoCoalBuRe_1a9996fdffa0464ece178366dedc0fb499"></span><a class="reference internal" href="breakup.html#_CPPv4I_10NFragmentsE9DoBreakup" title="DoBreakup"><span class="n"><span class="pre">DoBreakup</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I_10NFragments_12CoalBuReFlagE10DoCoalBuRe" title="DoCoalBuRe::NFrags"><span class="n"><span class="pre">NFrags</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bu</span></span></span><a class="headerlink" href="#_CPPv4N10DoCoalBuRe2buE" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Instance of <a class="reference internal" href="breakup.html#structDoBreakup"><span class="std std-ref">DoBreakup</span></a> with specified no. of fragments calculation. </p>
 </dd></dl>
 
 <dl class="cpp var">
@@ -495,16 +496,40 @@
 </div>
 </dd></dl>
 
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>doxygenfunction: Unable to resolve function “CoalBuRe” with arguments None in doxygen xml output for project “libs” from directory: ../build/doxygen/xml/.
-Potential matches:
-</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">-</span> <span class="n">template</span><span class="o">&lt;</span><span class="n">PairProbability</span> <span class="n">Probability</span><span class="p">,</span> <span class="n">NFragments</span> <span class="n">NFrags</span><span class="p">,</span> <span class="n">CoalBuReFlag</span> <span class="n">Flag</span><span class="o">&gt;</span> <span class="n">MicrophysicalProcess</span> <span class="n">auto</span> <span class="n">CoalBuRe</span><span class="p">(</span><span class="n">const</span> <span class="n">unsigned</span> <span class="nb">int</span> <span class="n">interval</span><span class="p">,</span> <span class="n">const</span> <span class="n">std</span><span class="p">::</span><span class="n">function</span><span class="o">&lt;</span><span class="n">double</span><span class="p">(</span><span class="n">unsigned</span> <span class="nb">int</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">int2realtime</span><span class="p">,</span> <span class="n">const</span> <span class="n">Probability</span> <span class="n">collprob</span><span class="p">,</span> <span class="n">const</span> <span class="n">NFrags</span> <span class="n">nfrags</span><span class="p">,</span> <span class="n">const</span> <span class="n">Flag</span> <span class="n">coalbure_flag</span><span class="p">)</span>
-<span class="o">-</span> <span class="n">template</span><span class="o">&lt;</span><span class="n">PairProbability</span> <span class="n">Probability</span><span class="p">,</span> <span class="n">NFragments</span> <span class="n">NFrags</span><span class="p">,</span> <span class="n">CoalBuReFlag</span> <span class="n">Flag</span><span class="o">&gt;</span> <span class="n">MicrophysicalProcess</span> <span class="n">auto</span> <span class="n">CoalBuRe</span><span class="p">(</span><span class="n">const</span> <span class="n">unsigned</span> <span class="nb">int</span> <span class="n">interval</span><span class="p">,</span> <span class="n">const</span> <span class="n">std</span><span class="p">::</span><span class="n">function</span><span class="o">&lt;</span><span class="n">double</span><span class="p">(</span><span class="n">unsigned</span> <span class="nb">int</span><span class="p">)</span><span class="o">&gt;</span> <span class="n">int2realtime</span><span class="p">,</span> <span class="n">const</span> <span class="n">Probability</span> <span class="n">collprob</span><span class="p">,</span> <span class="n">const</span> <span class="n">NFrags</span> <span class="n">nfrags</span><span class="p">,</span> <span class="n">const</span> <span class="n">Flag</span> <span class="n">coalbure_flag</span><span class="p">,</span> <span class="n">const</span> <span class="n">uint64_t</span> <span class="n">seed</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuRe20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4Flag">
+<span id="_CPPv3I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuReKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4Flag"></span><span id="_CPPv2I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuReKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4Flag"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="collisions.html#_CPPv4I0E15PairProbability" title="PairProbability"><span class="n"><span class="pre">PairProbability</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Probability</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">NFragments</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NFrags</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">CoalBuReFlag</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Flag</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="coalbure_8hpp_1aba708f07acca19f6c2133b342e8224a5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../microphysical_process.html#_CPPv4I0E20MicrophysicalProcess" title="MicrophysicalProcess"><span class="n"><span class="pre">MicrophysicalProcess</span></span></a><span class="w"> </span><span class="k"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CoalBuRe</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">interval</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">(</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">int2realtime</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuRe20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4Flag" title="CoalBuRe::Probability"><span class="n"><span class="pre">Probability</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">collprob</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuRe20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4Flag" title="CoalBuRe::NFrags"><span class="n"><span class="pre">NFrags</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">nfrags</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuRe20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4Flag" title="CoalBuRe::Flag"><span class="n"><span class="pre">Flag</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">coalbure_flag</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuRe20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4Flag" title="Link to this definition">¶</a><br /></dt>
+<dd><p>Constructs a Microphysical Process for collision-coalescence, breakup, or rebound of superdroplets. </p>
+<p>This function constructs a Microphysical Process for collision-coalescence, breakup, or rebound of superdroplets with a constant timestep ‘interval’ and probability of collision determined by ‘collprob’ and a random seed for the random number generator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Probability</strong> – Type of <a class="reference internal" href="collisions.html#conceptPairProbability"><span class="std std-ref">PairProbability</span></a>. </p></li>
+<li><p><strong>NFrags</strong> – Number of fragments for breakup. </p></li>
+<li><p><strong>Flag</strong> – Flag indicating the action to perform. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Parameters<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>interval</strong> – Timestep interval between collision events. </p></li>
+<li><p><strong>int2realtime</strong> – Function to convert interval to a real time [s]. </p></li>
+<li><p><strong>collprob</strong> – Probability of collisions. </p></li>
+<li><p><strong>nfrags</strong> – Calculatino for number of fragments cases of breakup. </p></li>
+<li><p><strong>coalbure_flag</strong> – Flag indicating the action to perform: coalescence, breakup or rebound. </p></li>
+</ul>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A Microphysical Process enacting collision- coalescence, breakup or rebound. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuRe20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4FlagK8uint64_t">
+<span id="_CPPv3I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuReKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4FlagK8uint64_t"></span><span id="_CPPv2I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuReKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4FlagK8uint64_t"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="collisions.html#_CPPv4I0E15PairProbability" title="PairProbability"><span class="n"><span class="pre">PairProbability</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Probability</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">NFragments</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NFrags</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">CoalBuReFlag</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Flag</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="coalbure_8hpp_1a8403223e3e6c08e176b9ac1679a2a3d5"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../microphysical_process.html#_CPPv4I0E20MicrophysicalProcess" title="MicrophysicalProcess"><span class="n"><span class="pre">MicrophysicalProcess</span></span></a><span class="w"> </span><span class="k"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CoalBuRe</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">interval</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">(</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">int2realtime</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuRe20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4FlagK8uint64_t" title="CoalBuRe::Probability"><span class="n"><span class="pre">Probability</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">collprob</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuRe20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4FlagK8uint64_t" title="CoalBuRe::NFrags"><span class="n"><span class="pre">NFrags</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">nfrags</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuRe20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4FlagK8uint64_t" title="CoalBuRe::Flag"><span class="n"><span class="pre">Flag</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">coalbure_flag</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">seed</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuRe20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4FlagK8uint64_t" title="Link to this definition">¶</a><br /></dt>
+<dd><p>same as CoalBuRe above but with fixed seed </p>
+</dd></dl>
+
 </section>
 
         </article>
@@ -521,14 +546,14 @@ Potential matches:
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="coalescence.html">
+          <a class="prev-page" href="breakup.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">Coalescence</div>
+                <div class="title">Breakup</div>
                 
               </div>
             </a>
@@ -574,6 +599,8 @@ Potential matches:
 <li><a class="reference internal" href="#_CPPv4N10DoCoalBuRe13coalbure_flagE"><code class="docutils literal notranslate"><span class="pre">coalbure_flag</span></code></a></li>
 </ul>
 </li>
+<li><a class="reference internal" href="#_CPPv4I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuRe20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4Flag"><code class="docutils literal notranslate"><span class="pre">CoalBuRe()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I_15PairProbability_10NFragments_12CoalBuReFlagE8CoalBuRe20MicrophysicalProcessKjKNSt8functionIFdjEEEK11ProbabilityK6NFragsK4FlagK8uint64_t"><code class="docutils literal notranslate"><span class="pre">CoalBuRe()</span></code></a></li>
 </ul>
 </li>
 </ul>
