@@ -11,5 +11,8 @@ Header file: ``<libs/superdrops/collisions/coalbure.hpp>``
    :members:
    :undoc-members:
 
-.. doxygenfunction:: CoalBuRe
+.. doxygenfunction:: CoalBuRe(const unsigned int interval, const std::function<double(unsigned int)> int2realtime, const Probability collprob, const NFrags nfrags, const Flag coalbure_flag)
+   :project: superdrops
+
+.. doxygenfunction:: CoalBuRe(const unsigned int interval, const std::function<double(unsigned int)> int2realtime, const Probability collprob, const NFrags nfrags, const Flag coalbure_flag, const uint64_t seed)
    :project: superdrops

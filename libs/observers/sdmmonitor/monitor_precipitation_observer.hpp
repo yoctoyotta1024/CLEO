@@ -50,7 +50,8 @@ struct MonitorPrecipitation {
   /**
    * @brief Placeholder function to obey SDMMonitor concept does nothing.
    *
-   * @param d_gbxs The view of gridboxes in device memory.
+   * @param team_member Kokkos team member in TeamPolicy parallel loop over gridboxes.
+   * @param d_supers The subview of superdrops.
    */
   KOKKOS_FUNCTION
   void before_timestepping(const TeamMember& team_member,
@@ -83,14 +84,14 @@ struct MonitorPrecipitation {
   void monitor_motion(const viewd_constgbx d_gbxs, const subviewd_constsupers domainsupers) const {}
 
   /**
-   * @brief calculate accumulated precipitation over a constant timestep, i.e.
+   * @brief Calculate accumulated precipitation over a constant timestep, i.e.
    * the mean rate of precipitation over a timestep, as the droplet motion through
    * the bottom boundary of each gridbox,
    * i.e. output = downward mass flux of water / water density * timestep
    *
-   * @param gbxindex gridbox whose bottom boundary is to be evaluated.
+   * @param team_member Kokkos team member in TeamPolicy parallel loop over gridboxes.
+   * @param gbxindex Gridbox whose bottom boundary is to be evaluated.
    * @param gbxmaps The Gridbox Maps.
-   * @param state The State of the volume containing the super-droplets (gridbox matching gbxindex).
    * @param drop The super-droplet to evaluate.
    */
   KOKKOS_FUNCTION
@@ -121,6 +122,7 @@ struct MonitorPrecipitation {
  * @tparam Store Type of store for dataset.
  * @param interval Observation timestep.
  * @param dataset Dataset to write time data to.
+ * @param store Store for the dataset.
  * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
  * @param ngbxs The number of gridboxes.
  * @return Constructed type satisfying observer concept.

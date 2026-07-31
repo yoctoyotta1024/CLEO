@@ -14,5 +14,8 @@ Header file: ``<libs/superdrops/collisions/coalescence.hpp>``
    :members:
    :undoc-members:
 
-.. doxygenfunction:: CollCoal
+.. doxygenfunction:: CollCoal(const unsigned int interval, const std::function<double(unsigned int)> int2realtime, const Probability collcoalprob)
+   :project: superdrops
+
+.. doxygenfunction:: CollCoal(const unsigned int interval, const std::function<double(unsigned int)> int2realtime, const Probability collcoalprob, const uint64_t seed)
    :project: superdrops

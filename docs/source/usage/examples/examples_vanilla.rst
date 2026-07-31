@@ -28,11 +28,11 @@ execute these commands in your terminal before running any of the scripts:
 
    .. code-block:: console
 
-     export CC=gcc-15
-     export CXX=g++-15
-     export OMPI_CC=gcc-15
-     export OMPI_CXX=g++-15
-     export OMPI_FC=gfortran-15
+     export CC=gcc-16
+     export CXX=g++-16
+     export OMPI_CC=gcc-16
+     export OMPI_CXX=g++-16
+     export OMPI_FC=gfortran-16
 
 The bash script for every example in ``scripts/vanilla/examples/`` provides command line
 arguments to ``scripts/vanilla/examples/build_compile_run_plot.sh``. This script has

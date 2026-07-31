@@ -20,6 +20,7 @@ Contents:
    collisions
    collisionkinetics
    coalescence
+   breakup
    coalbure
    shuffle
    urbg

@@ -38,8 +38,8 @@ jobs:
 
   release:
     needs: ["cog_check_job", "test_cleopy_build"]
-    # Only release new version when merging into `origin/main`.`
-    if: "github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository_owner == 'yoctoyotta1024'"
+    # Only release new version when merging into `origin/main` of yoctoyotta1024's CLEO repo.`
+    if: "github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'yoctoyotta1024/CLEO'"
     permissions:
       contents: write
     runs-on: ubuntu-latest
