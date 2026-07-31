@@ -76,6 +76,7 @@ struct CombinedObserver {
    * Each observer is run sequentially.
    *
    * @param d_gbxs The view of gridboxes in device memory.
+   * @param d_supers The view of superdrops in device memory.
    */
   void before_timestepping(const viewd_constgbx d_gbxs, const subviewd_constsupers d_supers) const {
     a.before_timestepping(d_gbxs, d_supers);
@@ -175,6 +176,7 @@ struct NullObserver {
    * @brief No operations before timestepping.
    *
    * @param d_gbxs The view of gridboxes in device memory.
+   * @param d_supers The view of superdrops in device memory.
    */
   void before_timestepping(const viewd_constgbx d_gbxs, const subviewd_constsupers d_supers) const {
   }

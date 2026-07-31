@@ -61,6 +61,7 @@ class DoSDMMonitorObs {
   /**
    * @brief Constructor for DoSDMMonitorObs.
    * @param dataset Dataset to write monitored data to.
+   * @param store Store dataset writes into.
    * @param xzarr_ptr Pointer to zarr array in xarray dataset.
    * @param monitor SDMMonitor to use.
    */

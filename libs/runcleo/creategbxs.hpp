@@ -154,6 +154,9 @@ class GenGridbox {
  * This function creates Gridboxes based on the provided gridbox maps and initial conditions,
  * and given super-droplets.
  *
+ * Kokkos::Profiling are null pointers unless a Kokkos profiler library has been
+ * exported to "KOKKOS_TOOLS_LIBS" prior to runtime so the lib gets dynamically loaded.
+ *
  * @tparam GbxMaps Type representing Gridbox Maps.
  * @tparam GbxInitConds Type representing Gridbox initial conditions.
  *
@@ -332,7 +335,7 @@ inline dualview_gbx initialise_gbxs(const GbxMaps& gbxmaps, const GbxInitConds& 
  *
  * @param gbxmaps The Gridbox Maps.
  * @param gen The Gridbox generator.
- * @param domainsupers The view of all super-droplets (both in and out of bounds of domain).
+ * @param domainsupers The view of all super-droplets (in bounds of domain).
  * @param h_gbxs The view of Gridboxes on the host.
  */
 template <GridboxMaps GbxMaps>

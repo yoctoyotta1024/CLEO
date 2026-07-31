@@ -110,6 +110,7 @@ class GbxindexObserver {
    * the size of the gbxindex dimension in the dataset is correct.
    *
    * @param d_gbxs View of gridboxes on device.
+   * @param d_supers View of superdrops on device.
    */
   void before_timestepping(const viewd_constgbx d_gbxs, const subviewd_constsupers d_supers) const {
     std::cout << "observer includes gbxindex observer\n";
