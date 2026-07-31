@@ -45,7 +45,7 @@
 template <typename Dataset, typename Store>
 class DoTimeObs {
  private:
-  Dataset &dataset; /**< Dataset to write time data to. */
+  Dataset& dataset; /**< Dataset to write time data to. */
   std::shared_ptr<XarrayZarrArray<Store, float>>
       xzarr_ptr; /**< Pointer to time array in dataset. */
   std::function<double(unsigned int)>
@@ -77,7 +77,7 @@ class DoTimeObs {
    * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
    * @param step2dimlesstime Function to convert model timesteps to a real time [assumed seconds].
    */
-  DoTimeObs(Dataset &dataset, Store &store, const size_t maxchunk,
+  DoTimeObs(Dataset& dataset, Store& store, const size_t maxchunk,
             const std::function<double(unsigned int)> step2dimlesstime)
       : dataset(dataset),
         xzarr_ptr(std::make_shared<XarrayZarrArray<Store, float>>(
@@ -138,7 +138,7 @@ class DoTimeObs {
  * @return Constructed type satisfying observer concept.
  */
 template <typename Dataset, typename Store>
-inline Observer auto TimeObserver(const unsigned int interval, Dataset &dataset, Store &store,
+inline Observer auto TimeObserver(const unsigned int interval, Dataset& dataset, Store& store,
                                   const size_t maxchunk,
                                   const std::function<double(unsigned int)> step2dimlesstime) {
   return ConstTstepObserver(interval, DoTimeObs(dataset, store, maxchunk, step2dimlesstime));

@@ -44,7 +44,7 @@ struct InitSupersFromBinary {
   size_t initnsupers; /**< initial no. of super-droplets to initialise */
   std::filesystem::path initsupers_filename; /**< filename for super-droplets' initial conditons */
   unsigned int nspacedims;      /**< number of spatial dimensions to model (0-D, 1-D, 2-D of 3-D) */
-  const CartesianMaps &gbxmaps; /**< hook to get to gridbox maps for current cartesian domain */
+  const CartesianMaps& gbxmaps; /**< hook to get to gridbox maps for current cartesian domain */
 
   /* returns InitSupersData created by reading some data from a binary file and
   filling the rest with un-initialised super-droplets */
@@ -53,11 +53,11 @@ struct InitSupersFromBinary {
     return initsupers.fetch_data();
   }
 
-  void trim_nonlocal_superdrops(InitSupersData &initdata) const;
+  void trim_nonlocal_superdrops(InitSupersData& initdata) const;
 
   /* adds data for un-initialised (and out of bounds) superdrops into initdata so that initial
   conditions exist for maxnsupers number of superdrops in total */
-  InitSupersData add_uninitialised_superdrops_data(InitSupersData &initdata) const;
+  InitSupersData add_uninitialised_superdrops_data(InitSupersData& initdata) const;
 
   /* sets sdIds for un-initialised superdrops' using an sdId's generator */
   std::vector<Superdrop::IDType> sdIds_for_uninitialised_superdrops(const size_t size) const;
@@ -65,8 +65,8 @@ struct InitSupersFromBinary {
  public:
   /* constructor ensures the number of super-droplets to intialise is >= maxiumum number of
    * superdrops*/
-  explicit InitSupersFromBinary(const OptionalConfigParams::InitSupersFromBinaryParams &config,
-                                const CartesianMaps &gbxmaps)
+  explicit InitSupersFromBinary(const OptionalConfigParams::InitSupersFromBinaryParams& config,
+                                const CartesianMaps& gbxmaps)
       : maxnsupers(config.maxnsupers),
         initnsupers(config.initnsupers),
         initsupers_filename(config.initsupers_filename),

@@ -33,9 +33,9 @@ using HostSpace =
     Kokkos::DefaultHostExecutionSpace; /**< (default) execution space for host parallelism */
 
 /* Defines aliases for Kokkos views and subviews of super-droplets. */
-using viewd_supers = Kokkos::View<Superdrop *>; /**< View in device memory of superdrops. */
+using viewd_supers = Kokkos::View<Superdrop*>; /**< View in device memory of superdrops. */
 using viewd_constsupers =
-    Kokkos::View<const Superdrop *>; /**< View in device memory of const superdrops. */
+    Kokkos::View<const Superdrop*>; /**< View in device memory of const superdrops. */
 
 using kkpair_size_t = Kokkos::pair<size_t, size_t>; /**< size_t pair (e.g. see supersingbx refs). */
 using subviewd_supers =

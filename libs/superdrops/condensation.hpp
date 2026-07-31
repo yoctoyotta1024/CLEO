@@ -43,9 +43,9 @@ so that parallel loop in superdroplets_change function (see below) only captures
 necessary objects and not other members of DoCondensation coincidentally
 */
 struct SuperdropletsChangeFunctor {
-  const ImplicitEuler &impe;    /**< Instance of ImplicitEuler ODE solver */
+  const ImplicitEuler& impe;    /**< Instance of ImplicitEuler ODE solver */
   const subviewd_supers supers; /** The view of superdroplets. */
-  const State &state;           /**< The thermodynamic state. */
+  const State& state;           /**< The thermodynamic state. */
   const double s_ratio;         /**< s_ratio The saturation ratio. */
   const double ffactor;         /**< The sum of the diffusion factors. */
 
@@ -66,14 +66,14 @@ struct SuperdropletsChangeFunctor {
    * @return The mass of liquid condensed or evaporated.
    */
   KOKKOS_FUNCTION
-  double superdrop_mass_change(Superdrop &drop, const double temp, const double s_ratio,
+  double superdrop_mass_change(Superdrop& drop, const double temp, const double s_ratio,
                                const double ffactor) const;
 
   /*
    * operator for functor in superdroplets_change function used in parallel (TeamThreadRangePolicy)
    * loop over superdroplets in supers view in order to call superdrop_mass_change
    */
-  KOKKOS_INLINE_FUNCTION void operator()(const size_t kk, double &mass_condensed) const {
+  KOKKOS_INLINE_FUNCTION void operator()(const size_t kk, double& mass_condensed) const {
     const auto deltamass = superdrop_mass_change(supers(kk), state.temp, s_ratio, ffactor);
     mass_condensed += deltamass;
   }
@@ -100,13 +100,13 @@ struct EffectOnThermodynamicStateFunctor {
    * @return The updated State.
    */
   KOKKOS_FUNCTION
-  State state_change(const double totrho_condensed, State &state) const;
+  State state_change(const double totrho_condensed, State& state) const;
 
   /*
    * operator for functor in effect_on_thermodynamic_state function called in
    * parallel (Single PerTeam Policy) in order to call state_change
    */
-  KOKKOS_INLINE_FUNCTION void operator()(State &state) const {
+  KOKKOS_INLINE_FUNCTION void operator()(State& state) const {
     constexpr double R0cubed_VOL0 = dlc::R0 * dlc::R0 * dlc::R0 / dlc::VOL0;
     const auto totrho_condensed = double{totmass_condensed / state.get_volume() *
                                          R0cubed_VOL0};  // drho_condensed_vapour/dt * delta t
@@ -138,7 +138,7 @@ struct DoCondensation {
    * @param mo Monitor of SDM processes.
    */
   KOKKOS_FUNCTION
-  void do_condensation(const TeamMember &team_member, const subviewd_supers supers, State &state,
+  void do_condensation(const TeamMember& team_member, const subviewd_supers supers, State& state,
                        const SDMMonitor auto mo) const {
     /* superdroplet radii changes */
     const auto totmass_condensed = superdroplets_change(team_member, supers, state);
@@ -170,9 +170,9 @@ struct DoCondensation {
    * @param state The state.
    * @return The total change in liquid water mass.
    */
-  KOKKOS_FUNCTION double superdroplets_change(const TeamMember &team_member,
+  KOKKOS_FUNCTION double superdroplets_change(const TeamMember& team_member,
                                               const subviewd_supers supers,
-                                              const State &state) const;
+                                              const State& state) const;
 
   /**
    * @brief Applies the effect of condensation / evaporation on the thermodynamics of the State.
@@ -186,8 +186,8 @@ struct DoCondensation {
    * (prior to condensation / evaporation).
    */
   KOKKOS_FUNCTION
-  void effect_on_thermodynamic_state(const TeamMember &team_member, const double totmass_condensed,
-                                     State &state) const;
+  void effect_on_thermodynamic_state(const TeamMember& team_member, const double totmass_condensed,
+                                     State& state) const;
 
  public:
   /**
@@ -217,8 +217,8 @@ struct DoCondensation {
    * @param mo Monitor of SDM processes.
    * @return The updated view super-droplets.
    */
-  KOKKOS_INLINE_FUNCTION void operator()(const TeamMember &team_member, const unsigned int subt,
-                                         subviewd_supers supers, State &state,
+  KOKKOS_INLINE_FUNCTION void operator()(const TeamMember& team_member, const unsigned int subt,
+                                         subviewd_supers supers, State& state,
                                          const SDMMonitor auto mo) const {
     do_condensation(team_member, supers, state, mo);
   }

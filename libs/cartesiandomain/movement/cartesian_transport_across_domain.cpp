@@ -22,9 +22,9 @@
 /* (re)sorting supers based on their gbxindexes as step to 'move' superdroplets across the domain.
 May also include MPI communication with moves superdroplets away from/into a node's domain
 */
-SupersInDomain CartesianTransportAcrossDomain::operator()(const CartesianMaps &gbxmaps,
+SupersInDomain CartesianTransportAcrossDomain::operator()(const CartesianMaps& gbxmaps,
                                                           const viewd_gbx d_gbxs,
-                                                          SupersInDomain &allsupers) const {
+                                                          SupersInDomain& allsupers) const {
   int comm_size;
   comm_size = init_communicator::get_comm_size();
 

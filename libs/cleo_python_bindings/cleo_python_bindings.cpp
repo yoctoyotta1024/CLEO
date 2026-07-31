@@ -23,7 +23,7 @@ int test_cleo_python_bindings(const int i, const int j) {
   return i + j;
 }
 
-void cleo_initialize(const Config &config) {
+void cleo_initialize(const Config& config) {
   /* Initialize Communicator here */
   /* NOTE: call to init_communicator constructor assumes MPI was initialised aleady,
     e.g. in python with ```from mpi4py import MPI``` */

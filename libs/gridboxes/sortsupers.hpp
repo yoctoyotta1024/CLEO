@@ -22,6 +22,7 @@
 #include <Kokkos_Sort.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 #include <stdexcept>
+
 #include "../kokkosaliases.hpp"
 #include "superdrops/superdrop.hpp"
 
@@ -29,7 +30,7 @@ namespace KCS = KokkosCleoSettings;
 
 /* returns true if superdrops in "supers" view are already sorted by the Comparator */
 template <class Comparator>
-inline bool is_sorted_supers(const viewd_constsupers supers, const Comparator &comp) {
+inline bool is_sorted_supers(const viewd_constsupers supers, const Comparator& comp) {
   return Kokkos::Experimental::is_sorted("IsSupersSorted", ExecSpace(), supers, comp);
 }
 
@@ -107,7 +108,7 @@ struct SortSupersBySdgbxindex {
   /* a precedes b if its sdgbxindex is smaller */
   struct SortComparator {
     KOKKOS_INLINE_FUNCTION
-    bool operator()(const Superdrop &a, const Superdrop &b) const {
+    bool operator()(const Superdrop& a, const Superdrop& b) const {
       return (a.get_sdgbxindex()) < (b.get_sdgbxindex());
     }
   };
@@ -168,7 +169,7 @@ struct SortSupersBySdgbxindex {
     const auto ngbxs = size_t{d_gbxs.extent(0)};
     Kokkos::parallel_for(
         "counting_sort_gbxs", TeamPolicy(ngbxs, KCS::team_size),
-        KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
+        KOKKOS_CLASS_LAMBDA(const TeamMember& team_member) {
           const auto ii = team_member.league_rank();
           auto supers = d_gbxs(ii).supersingbx(domainsupers);
           const auto nsupers = size_t{supers.extent(0)};

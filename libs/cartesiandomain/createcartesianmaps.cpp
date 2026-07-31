@@ -23,17 +23,17 @@
 
 #include "mpi.h"
 
-void check_ngridboxes_matches_maps(const CartesianMaps &gbxmaps, const size_t ngbxs);
+void check_ngridboxes_matches_maps(const CartesianMaps& gbxmaps, const size_t ngbxs);
 
-void check_ngridboxes_matches_ndims(const CartesianMaps &gbxmaps, const size_t ngbxs);
+void check_ngridboxes_matches_ndims(const CartesianMaps& gbxmaps, const size_t ngbxs);
 
-void set_maps_ndims(const std::vector<size_t> &ndims, CartesianMaps &gbxmaps);
+void set_maps_ndims(const std::vector<size_t>& ndims, CartesianMaps& gbxmaps);
 
-void set_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary &gfb,
-                        CartesianMaps &gbxmaps);
+void set_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary& gfb,
+                        CartesianMaps& gbxmaps);
 
-void set_null_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary &gfb,
-                             CartesianMaps &gbxmaps);
+void set_null_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary& gfb,
+                             CartesianMaps& gbxmaps);
 
 /* bounds for CartesianMaps of gridboxes along directions of model not used e.g. in 1-D model,
 these are bounds of gridboxes in coord1 and coord2 directions */
@@ -71,7 +71,7 @@ CartesianMaps create_cartesian_maps(const size_t ngbxs, const unsigned int nspac
   return gbxmaps;
 }
 
-void check_ngridboxes_matches_maps(const CartesianMaps &gbxmaps, const size_t ngbxs) {
+void check_ngridboxes_matches_maps(const CartesianMaps& gbxmaps, const size_t ngbxs) {
   const auto ngbxs_from_maps = gbxmaps.maps_size();
   if (ngbxs_from_maps != ngbxs + 1) {
     throw std::invalid_argument(
@@ -81,7 +81,7 @@ void check_ngridboxes_matches_maps(const CartesianMaps &gbxmaps, const size_t ng
 }
 
 /* checks number of gridboxes according to maps matches with expected value from gfb */
-void check_ngridboxes_matches_ndims(const CartesianMaps &gbxmaps, const size_t ngbxs) {
+void check_ngridboxes_matches_ndims(const CartesianMaps& gbxmaps, const size_t ngbxs) {
   const auto h_ndims = gbxmaps.get_global_ndims_hostcopy();
   const auto ngbxs_from_ndims = size_t{h_ndims(0) * h_ndims(1) * h_ndims(2)};
 
@@ -96,7 +96,7 @@ void check_ngridboxes_matches_ndims(const CartesianMaps &gbxmaps, const size_t n
 copys ndims  to gbxmaps' ndims to set number of dimensions (ie. number of gridboxes) in
 [coord3, coord1, coord2] directions
 */
-void set_maps_ndims(const std::vector<size_t> &i_ndims, CartesianMaps &gbxmaps) {
+void set_maps_ndims(const std::vector<size_t>& i_ndims, CartesianMaps& gbxmaps) {
   auto h_ndims = Kokkos::create_mirror_view(
       gbxmaps.get_global_ndims());  // mirror ndims in case view is on device
 
@@ -113,7 +113,7 @@ can be identified later If the neighbour index is local convert it to a
 local index by subtracting gridboxes_slice_start
 */
 kkpair_size_t correct_neighbor_indices(kkpair_size_t neighbours, const std::vector<size_t> ndims,
-                                       const CartesianDecomposition &domain_decomposition) {
+                                       const CartesianDecomposition& domain_decomposition) {
   int my_rank;
   my_rank = init_communicator::get_comm_rank();
   std::array<size_t, 3> neighbor_coordinates;
@@ -140,8 +140,8 @@ kkpair_size_t correct_neighbor_indices(kkpair_size_t neighbours, const std::vect
 /* Sets all coord[X]bounds maps (for X = x, y, z) using gfb data as well as back and
 forward neighbours maps assuming periodic or finite boundary conditions in
 cartesian domain */
-void set_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary &gfb,
-                        CartesianMaps &gbxmaps) {
+void set_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary& gfb,
+                        CartesianMaps& gbxmaps) {
   if (nspacedims > 3) {
     throw std::invalid_argument("only 0 <= nspacedims <= 3 is valid ");
   }
@@ -186,7 +186,7 @@ void set_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary
 
   Kokkos::parallel_for(
       "set_cartesian_maps", HostTeamPolicy(partition_size[0], Kokkos::AUTO()),
-      KOKKOS_LAMBDA(const HostTeamMember &team_member) {
+      KOKKOS_LAMBDA(const HostTeamMember& team_member) {
         const auto k = team_member.league_rank();
         Kokkos::parallel_for(
             Kokkos::TeamThreadRange(team_member, partition_size[1]), [=](const size_t i) {
@@ -259,8 +259,8 @@ conditions where neighbour of gridbox in a certain direction is itself). Null di
  - coord1 and coord2 (x and y) for a 1-D model,
  - coord3, coord1 and coord2 (z, x and y) for a 0-D model.
 */
-void set_null_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary &gfb,
-                             CartesianMaps &gbxmaps) {
+void set_null_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary& gfb,
+                             CartesianMaps& gbxmaps) {
   if (nspacedims >= 3) {
     throw std::invalid_argument("null model dimensions only valid for 0 <= nspacedims < 3");
   }
@@ -288,7 +288,7 @@ void set_null_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromB
   // gbxmaps in switch rather than use deep_copy)
   Kokkos::parallel_for(
       "set_null_cartesian_maps", HostTeamPolicy(partition_size[0], Kokkos::AUTO()),
-      KOKKOS_LAMBDA(const HostTeamMember &team_member) {
+      KOKKOS_LAMBDA(const HostTeamMember& team_member) {
         const auto k = team_member.league_rank();
         Kokkos::parallel_for(
             Kokkos::TeamThreadRange(team_member, partition_size[1]), [=](const size_t i) {

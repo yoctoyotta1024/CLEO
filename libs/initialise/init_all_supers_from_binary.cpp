@@ -22,7 +22,7 @@
 
 /* check all the vectors in the initdata struct all have sizes consistent with one another
 and with maxnsupers. Include coords data in check if nspacedims > 0 */
-void check_initdata_sizes(const InitSupersData &in, const size_t maxnsupers,
+void check_initdata_sizes(const InitSupersData& in, const size_t maxnsupers,
                           const size_t nspacedims) {
   std::vector<size_t> sizes({maxnsupers, in.sdgbxindexes.size(), in.xis.size(), in.radii.size(),
                              in.msols.size(), in.sdIds.size()});
@@ -43,12 +43,12 @@ void check_initdata_sizes(const InitSupersData &in, const size_t maxnsupers,
 
 /* sets initial data for solutes as
 a single SoluteProprties instance */
-void InitAllSupersFromBinary::initdata_for_solutes(InitSupersData &initdata) const {
+void InitAllSupersFromBinary::initdata_for_solutes(InitSupersData& initdata) const {
   initdata.solutes.at(0) = SoluteProperties{};
 }
 
 /* sets initial data for sdIds using an sdId's generator */
-void InitAllSupersFromBinary::initdata_for_sdIds(InitSupersData &initdata) const {
+void InitAllSupersFromBinary::initdata_for_sdIds(InitSupersData& initdata) const {
   auto sdIdgen = Superdrop::IDType::Gen();
 
   for (size_t kk(0); kk < maxnsupers; ++kk) {
@@ -58,7 +58,7 @@ void InitAllSupersFromBinary::initdata_for_sdIds(InitSupersData &initdata) const
 
 /* sets initial data in initdata using data read
 from a binary file called initsupers_filename */
-void InitAllSupersFromBinary::initdata_from_binary(InitSupersData &initdata) const {
+void InitAllSupersFromBinary::initdata_from_binary(InitSupersData& initdata) const {
   std::ifstream file(open_binary(initsupers_filename));
 
   std::vector<VarMetadata> meta(metadata_from_binary(file));
@@ -69,8 +69,8 @@ void InitAllSupersFromBinary::initdata_from_binary(InitSupersData &initdata) con
 }
 
 /* copy data for vectors from binary file to initdata struct */
-void InitAllSupersFromBinary::read_initdata_binary(InitSupersData &initdata, std::ifstream &file,
-                                                   const std::vector<VarMetadata> &meta) const {
+void InitAllSupersFromBinary::read_initdata_binary(InitSupersData& initdata, std::ifstream& file,
+                                                   const std::vector<VarMetadata>& meta) const {
   initdata.sdgbxindexes = vector_from_binary<unsigned int>(file, meta.at(0));
 
   initdata.xis = vector_from_binary<uint64_t>(file, meta.at(1));

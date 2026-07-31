@@ -31,7 +31,7 @@ functions ("on_step" and "next_step") as well as the
 constraints on the "superdrop_coords" function */
 template <typename M, typename GbxMaps>
 concept Motion =
-    requires(M m, const unsigned int u, const GbxMaps &gbxmaps, const State &state, Superdrop &sd) {
+    requires(M m, const unsigned int u, const GbxMaps& gbxmaps, const State& state, Superdrop& sd) {
       { m.next_step(u) } -> std::convertible_to<unsigned int>;
       { m.on_step(u) } -> std::same_as<bool>;
       { m.superdrop_coords(u, gbxmaps, state, sd) } -> std::same_as<void>;
@@ -46,12 +46,12 @@ struct NullMotion {
   bool on_step(const unsigned int t_mdl) const { return false; }
 
   template <typename GbxMaps>
-  KOKKOS_INLINE_FUNCTION void superdrop_coords(const unsigned int gbxindex, const GbxMaps &gbxmaps,
-                                               const State &state, Superdrop &drop) const {}
+  KOKKOS_INLINE_FUNCTION void superdrop_coords(const unsigned int gbxindex, const GbxMaps& gbxmaps,
+                                               const State& state, Superdrop& drop) const {}
 
   template <typename GbxMaps>
-  KOKKOS_INLINE_FUNCTION void superdrop_gbx(const unsigned int gbxindex, const GbxMaps &gbxmaps,
-                                            Superdrop &drop) const {}
+  KOKKOS_INLINE_FUNCTION void superdrop_gbx(const unsigned int gbxindex, const GbxMaps& gbxmaps,
+                                            Superdrop& drop) const {}
 };
 
 #endif  // LIBS_SUPERDROPS_MOTION_HPP_

@@ -42,18 +42,18 @@
  * @param mom2 Reference to where to place value of 2nd mass moment.
  */
 KOKKOS_FUNCTION
-void calculate_massmoments(const TeamMember &team_member, const viewd_constsupers supers,
-                           uint64_t &mom0, float &mom1, float &mom2) {
+void calculate_massmoments(const TeamMember& team_member, const viewd_constsupers supers,
+                           uint64_t& mom0, float& mom1, float& mom2) {
   const size_t nsupers(supers.extent(0));
 
   Kokkos::parallel_reduce(
       Kokkos::TeamThreadRange(team_member, nsupers),
-      KOKKOS_LAMBDA(const size_t kk, uint64_t &m0, float &m1, float &m2) {
-        const auto &drop(supers(kk));
+      KOKKOS_LAMBDA(const size_t kk, uint64_t& m0, float& m1, float& m2) {
+        const auto& drop(supers(kk));
         if (drop.get_xi() >= LIMITVALUES::uint64_t_max) {
           Kokkos::abort(
-            "superdroplet multiplicity too large to represent "
-            "with 8 byte unsigned integer");
+              "superdroplet multiplicity too large to represent "
+              "with 8 byte unsigned integer");
         }
         m0 += static_cast<uint64_t>(drop.get_xi());
 
@@ -90,20 +90,20 @@ void calculate_massmoments(const TeamMember &team_member, const viewd_constsuper
  * @param mom2 Reference to where to place value of 2nd mass moment.
  */
 KOKKOS_FUNCTION
-void calculate_rainmassmoments(const TeamMember &team_member, const viewd_constsupers supers,
-                               uint64_t &mom0, float &mom1, float &mom2) {
+void calculate_rainmassmoments(const TeamMember& team_member, const viewd_constsupers supers,
+                               uint64_t& mom0, float& mom1, float& mom2) {
   constexpr double rlim(40e-6 / dlc::R0);  // dimless minimum radius of raindrop
 
   const size_t nsupers(supers.extent(0));
   Kokkos::parallel_reduce(
       Kokkos::TeamThreadRange(team_member, nsupers),
-      KOKKOS_LAMBDA(const size_t kk, uint64_t &m0, float &m1, float &m2) {
-        const auto &drop(supers(kk));
+      KOKKOS_LAMBDA(const size_t kk, uint64_t& m0, float& m1, float& m2) {
+        const auto& drop(supers(kk));
         const auto binary = bool{drop.get_radius() >= rlim};  // 1 if droplet is raindrop, else 0
         if (drop.get_xi() >= LIMITVALUES::uint64_t_max) {
           Kokkos::abort(
-            "superdroplet multiplicity too large to represent "
-            "with 8 byte unsigned integer");
+              "superdroplet multiplicity too large to represent "
+              "with 8 byte unsigned integer");
         }
         m0 += static_cast<uint64_t>(drop.get_xi() * binary);
 

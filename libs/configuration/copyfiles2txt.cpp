@@ -23,12 +23,12 @@
 
 /* open a file called filename and copy
 text line by line into wfile */
-void copyfile(std::ofstream &wfile, const std::filesystem::path filename);
+void copyfile(std::ofstream& wfile, const std::filesystem::path filename);
 
 /* creates new empty file called setup_filename and copies contents of
 files listed in files2copy vector one by one */
 void copyfiles2txt(const std::filesystem::path setup_filename,
-                   const std::vector<std::filesystem::path> &files2copy) {
+                   const std::vector<std::filesystem::path>& files2copy) {
   const auto setup_filestr = setup_filename.string();
   std::cout << "----- writing to new setup file: " << setup_filestr << " -----\n";
 
@@ -45,7 +45,7 @@ void copyfiles2txt(const std::filesystem::path setup_filename,
   wfile.close();
 
   wfile.open(setup_filestr, std::ios::app);  // copy files one by one
-  for (auto &filename : files2copy) {
+  for (auto& filename : files2copy) {
     copyfile(wfile, filename);
   }
   wfile.close();
@@ -55,7 +55,7 @@ void copyfiles2txt(const std::filesystem::path setup_filename,
 
 /* open a file called filename and copy
 text line by line into wfile */
-void copyfile(std::ofstream &wfile, const std::filesystem::path filename) {
+void copyfile(std::ofstream& wfile, const std::filesystem::path filename) {
   const auto filestr = filename.string();
   std::ifstream readfile(filestr);
 

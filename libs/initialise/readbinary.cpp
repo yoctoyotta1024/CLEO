@@ -19,7 +19,7 @@
 
 #include "initialise/readbinary.hpp"
 
-GblMetadata::GblMetadata(std::ifstream &file) {
+GblMetadata::GblMetadata(std::ifstream& file) {
   // read 4 unsigned ints are start of binary file
   file.clear();
   file.seekg(0, std::ios::beg);
@@ -39,7 +39,7 @@ GblMetadata::GblMetadata(std::ifstream &file) {
 
 /* read 'gblmbytes' bytes of file and interpret as string of global metadata
 to print to terminal. Return current position in file (after reading) */
-std::string GblMetadata::read_global_metastring(std::ifstream &file, const int off) const {
+std::string GblMetadata::read_global_metastring(std::ifstream& file, const int off) const {
   file.seekg(off, std::ios::beg);
 
   const size_t nchars = charbytes / sizeof(char);
@@ -52,7 +52,7 @@ std::string GblMetadata::read_global_metastring(std::ifstream &file, const int o
   return metastr;
 }
 
-VarMetadata::VarMetadata(std::ifstream &file, const int off) {
+VarMetadata::VarMetadata(std::ifstream& file, const int off) {
   file.seekg(off, std::ios::beg);
 
   std::vector<unsigned int> uints(3, 0);
@@ -62,7 +62,7 @@ VarMetadata::VarMetadata(std::ifstream &file, const int off) {
   file.read(chars, 2 * sizeof(char));
 
   double dbl;
-  file.read(reinterpret_cast<char *>(&dbl), sizeof(double));
+  file.read(reinterpret_cast<char*>(&dbl), sizeof(double));
 
   b0 = uints.front();
   bsize = uints.at(1);
@@ -89,7 +89,7 @@ std::ifstream open_binary(const std::filesystem::path filename) {
 read and print the global metadata string at the start of the file,
 then return a vector containing the metadata that is specific to
 each of the variables in the file */
-std::vector<VarMetadata> metadata_from_binary(std::ifstream &file) {
+std::vector<VarMetadata> metadata_from_binary(std::ifstream& file) {
   const auto gblmeta = GblMetadata(file);
 
   unsigned int pos = 4 * sizeof(unsigned int) +
@@ -108,7 +108,7 @@ std::vector<VarMetadata> metadata_from_binary(std::ifstream &file) {
 for checking if vectors are the same size e.g. for vectors of
 SD attributes created from reading initSDsfile and used to
 make InitSdsData object */
-void check_vectorsizes(const std::vector<size_t> &sizes) {
+void check_vectorsizes(const std::vector<size_t>& sizes) {
   const size_t sz0 = sizes.front();
   for (auto sz : sizes) {
     if (sz != sz0) {

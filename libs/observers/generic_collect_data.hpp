@@ -157,7 +157,7 @@ class GenericCollectData {
    * @param dataset The dataset to write data to.
    */
   template <typename Dataset>
-  void write_to_arrays(const Dataset &dataset) const {
+  void write_to_arrays(const Dataset& dataset) const {
     Kokkos::deep_copy(ptr->h_data, ptr->d_data);
     dataset.write_to_array(ptr->xzarr, ptr->h_data);
   }
@@ -169,7 +169,7 @@ class GenericCollectData {
    * @param dataset The dataset to write data to.
    */
   template <typename Dataset>
-  void write_to_ragged_arrays(const Dataset &dataset) const {
+  void write_to_ragged_arrays(const Dataset& dataset) const {
     Kokkos::deep_copy(ptr->h_data, ptr->d_data);
     dataset.write_to_ragged_array(ptr->xzarr, ptr->h_data);
   }
@@ -180,7 +180,7 @@ class GenericCollectData {
    * @param dataset The dataset to write array shape to.
    */
   template <typename Dataset>
-  void write_arrayshapes(const Dataset &dataset) const {
+  void write_arrayshapes(const Dataset& dataset) const {
     dataset.write_arrayshape(ptr->xzarr);
   }
 
@@ -190,7 +190,7 @@ class GenericCollectData {
    * @param dataset The dataset to write array shape to.
    */
   template <typename Dataset>
-  void write_ragged_arrayshapes(const Dataset &dataset) const {
+  void write_ragged_arrayshapes(const Dataset& dataset) const {
     dataset.write_ragged_arrayshape(ptr->xzarr);
   }
 };

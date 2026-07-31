@@ -29,12 +29,12 @@
 
 namespace py = pybind11;
 
-void pyTimesteps(py::module &m);
-void pycreate_timesteps(py::module &m);
-void pyrealtime2step(py::module &m);
+void pyTimesteps(py::module& m);
+void pycreate_timesteps(py::module& m);
+void pyrealtime2step(py::module& m);
 
-void pyInitSupersFromBinary(py::module &m);
+void pyInitSupersFromBinary(py::module& m);
 
-void pyInitGbxsNull(py::module &m);
+void pyInitGbxsNull(py::module& m);
 
 #endif  // LIBS_CLEO_PYTHON_BINDINGS_PY_INITIALISE_HPP_

@@ -24,7 +24,7 @@ int test_coupldyn_numpy(const int i, const int j) {
   return i * j;
 }
 
-void include_coupldyn_numpy_submodule(py::module &m) {
+void include_coupldyn_numpy_submodule(py::module& m) {
   auto m_sub = m.def_submodule(
       "coupldyn_numpy", "Python bindings for selected parts of CLEO's coupldyn_numpy library");
 

@@ -25,7 +25,7 @@
 #include "superdrops/collisions/lowlistprob.hpp"
 
 struct LowListCreateMicrophysics {
-  MicrophysicalProcess auto operator()(const Config &config, const Timesteps &tsteps) const {
+  MicrophysicalProcess auto operator()(const Config& config, const Timesteps& tsteps) const {
     const auto c = config.get_breakup();
     const PairProbability auto buprob = LowListBuProb(RogersGKTerminalVelocity{});
     const NFragments auto nfrags = ConstNFrags(c.constnfrags.nfrags);
@@ -40,6 +40,6 @@ struct LowListCreateMicrophysics {
   }
 };
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   return generic_microphysics_main(argc, argv, LowListCreateMicrophysics{});
 }

@@ -52,7 +52,7 @@
  * @return Observer An observer instance for writing the state data.
  */
 template <typename Dataset>
-inline Observer auto StateObserver(const unsigned int interval, const Dataset &dataset,
+inline Observer auto StateObserver(const unsigned int interval, const Dataset& dataset,
                                    const size_t maxchunk, const size_t ngbxs) {
   const CollectDataForDataset<Dataset> auto thermo = CollectThermo(dataset, maxchunk, ngbxs);
   const CollectDataForDataset<Dataset> auto windvel = CollectWindVel(dataset, maxchunk, ngbxs);

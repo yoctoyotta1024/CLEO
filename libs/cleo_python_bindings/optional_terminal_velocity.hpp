@@ -43,7 +43,7 @@ class OptionalTerminalVelocity {
    * @return The (dimensionless) terminal velocity.
    */
   KOKKOS_INLINE_FUNCTION
-  double operator()(const Superdrop &drop) const {
+  double operator()(const Superdrop& drop) const {
     if (enable_terminal_velocity) {
       return rogersgk(drop);
     }

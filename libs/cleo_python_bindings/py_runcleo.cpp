@@ -19,18 +19,18 @@
 
 #include "./py_runcleo.hpp"
 
-void pycreate_supers_from_binary(py::module &m) {
+void pycreate_supers_from_binary(py::module& m) {
   m.def("create_supers_from_binary", &create_supers<InitSupersFromBinary>,
         "returns SupersInDomain instance", py::arg("sdic"), py::arg("gbxindex_max"));
 }
 
-void pycreate_gbxs_cartesian_null(py::module &m) {
+void pycreate_gbxs_cartesian_null(py::module& m) {
   m.def("create_gbxs_cartesian_null", &create_gbxs<pyca::map_cart, InitGbxsNull>,
         "returns dualview of Gridboxes instance", py::arg("gbxmaps"), py::arg("gbxic"),
         py::arg("allsupers"));
 }
 
-void pyCartesianNullSDMMethods(py::module &m) {
+void pyCartesianNullSDMMethods(py::module& m) {
   py::class_<pyca::sdm_cart_null>(m, "CartesianNullSDMMethods")
       .def(py::init<const unsigned int, pyca::map_cart, pyca::micro_null, pyca::move_cart_null,
                     pyca::obs_null>())
@@ -44,14 +44,14 @@ void pyCartesianNullSDMMethods(py::module &m) {
            py::arg("allsupers"))
       .def(
           "run_step",
-          [](const pyca::sdm_cart_null &self, const unsigned int t_mdl,
-             const unsigned int t_mdl_next, const dualview_gbx gbxs, SupersInDomain &allsupers) {
+          [](const pyca::sdm_cart_null& self, const unsigned int t_mdl,
+             const unsigned int t_mdl_next, const dualview_gbx gbxs, SupersInDomain& allsupers) {
             self.run_step(t_mdl, t_mdl_next, gbxs.view_device(), allsupers);
           },
           py::arg("t_mdl"), py::arg("t_mdl_next"), py::arg("gbxs"), py::arg("allsupers"));
 }
 
-void pyCartesianSDMMethods(py::module &m) {
+void pyCartesianSDMMethods(py::module& m) {
   py::class_<pyca::sdm_cart_all>(m, "CartesianSDMMethods")
       .def(py::init<const unsigned int, pyca::map_cart, pyca::micro_all, pyca::move_cart,
                     pyobserver::obs>())
@@ -65,8 +65,8 @@ void pyCartesianSDMMethods(py::module &m) {
            py::arg("allsupers"))
       .def(
           "run_step",
-          [](const pyca::sdm_cart_all &self, const unsigned int t_mdl,
-             const unsigned int t_mdl_next, const dualview_gbx gbxs, SupersInDomain &allsupers) {
+          [](const pyca::sdm_cart_all& self, const unsigned int t_mdl,
+             const unsigned int t_mdl_next, const dualview_gbx gbxs, SupersInDomain& allsupers) {
             self.run_step(t_mdl, t_mdl_next, gbxs.view_device(), allsupers);
           },
           py::arg("t_mdl"), py::arg("t_mdl_next"), py::arg("gbxs"), py::arg("allsupers"));

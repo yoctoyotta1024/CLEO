@@ -24,7 +24,7 @@ Kokkos::parallel_for([...]) (on host) is equivalent to:
 for (size_t ii(0); ii < ngbxs; ++ii){[...]}
 when in serial */
 template <typename GbxMaps, typename CD>
-void FromFileComms::receive_dynamics(const GbxMaps &gbxmaps, const FromFileDynamics &ffdyn,
+void FromFileComms::receive_dynamics(const GbxMaps& gbxmaps, const FromFileDynamics& ffdyn,
                                      const viewh_gbx h_gbxs) const {
   const size_t ngbxs(h_gbxs.extent(0));
 
@@ -37,9 +37,9 @@ void FromFileComms::receive_dynamics(const GbxMaps &gbxmaps, const FromFileDynam
 /* updates the state of a gridbox using information
 received from FromFileDynamics solver for 1-way
 coupling to CLEO SDM */
-void FromFileComms::update_gridbox_state(const FromFileDynamics &ffdyn, const size_t ii,
-                                         Gridbox &gbx) const {
-  State &state(gbx.state);
+void FromFileComms::update_gridbox_state(const FromFileDynamics& ffdyn, const size_t ii,
+                                         Gridbox& gbx) const {
+  State& state(gbx.state);
 
   state.press = ffdyn.get_press(ii);
   state.temp = ffdyn.get_temp(ii);
@@ -52,7 +52,7 @@ void FromFileComms::update_gridbox_state(const FromFileDynamics &ffdyn, const si
 }
 
 template void FromFileComms::send_dynamics<CartesianMaps, FromFileDynamics>(
-    const CartesianMaps &, const viewh_constgbx, FromFileDynamics &) const;
+    const CartesianMaps&, const viewh_constgbx, FromFileDynamics&) const;
 
 template void FromFileComms::receive_dynamics<CartesianMaps, FromFileDynamics>(
-    const CartesianMaps &, const FromFileDynamics &, const viewh_gbx) const;
+    const CartesianMaps&, const FromFileDynamics&, const viewh_gbx) const;

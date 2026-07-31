@@ -265,7 +265,7 @@ struct CartesianMaps {
     return to_forward_coord2nghbr.value_at(i);  // value returned by map at index i
   }
 
-  void create_decomposition(std::vector<size_t> global_ndims, GbxBoundsFromBinary gfb ) {
+  void create_decomposition(std::vector<size_t> global_ndims, GbxBoundsFromBinary gfb) {
     domain_decomposition.create(global_ndims, gfb);
     if (domain_decomposition.get_total_local_gridboxes() <
         domain_decomposition.get_total_global_gridboxes()) {
@@ -299,7 +299,7 @@ struct CartesianMaps {
    */
   KOKKOS_FUNCTION
   unsigned int get_local_bounding_gridbox_index(const unsigned int gbxindex, double& coord3,
-                                          double& coord1, double& coord2) const;
+                                                double& coord1, double& coord2) const;
 };
 
 #endif  // LIBS_CARTESIANDOMAIN_CARTESIANMAPS_HPP_

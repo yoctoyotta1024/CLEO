@@ -55,7 +55,7 @@ double SimmelTerminalVelocity::watermass(const double radius) const {
  * @return The (dimensionless) terminal velocity.
  */
 KOKKOS_FUNCTION
-double SimmelTerminalVelocity::operator()(const Superdrop &drop) const {
+double SimmelTerminalVelocity::operator()(const Superdrop& drop) const {
   /* dimensionless values for radii thresholds, For reference, see table 2 of Simmel et al. 2002 */
   constexpr double r1 = 6.7215e-5 / dlc::R0;
   constexpr double r2 = 7.5582e-4 / dlc::R0;
@@ -93,7 +93,7 @@ double SimmelTerminalVelocity::operator()(const Superdrop &drop) const {
  *
  */
 KOKKOS_FUNCTION
-double RogersYauTerminalVelocity::operator()(const Superdrop &drop) const {
+double RogersYauTerminalVelocity::operator()(const Superdrop& drop) const {
   constexpr double r1 = 3e-5 / dlc::R0;
   constexpr double r2 = 6e-4 / dlc::R0;
   constexpr double r3 = 2e-3 / dlc::R0;
@@ -125,7 +125,7 @@ double RogersYauTerminalVelocity::operator()(const Superdrop &drop) const {
  *
  */
 KOKKOS_FUNCTION
-double RogersGKTerminalVelocity::operator()(const Superdrop &drop) const {
+double RogersGKTerminalVelocity::operator()(const Superdrop& drop) const {
   constexpr double radius0 =
       3.725 * 1e-4 / dlc::R0;  // dimensionless conversion of D_0 [mm] (to radius)
   constexpr double kcaps =

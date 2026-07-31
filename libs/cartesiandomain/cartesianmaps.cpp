@@ -21,9 +21,9 @@
 #include "cartesiandomain/cartesianmaps.hpp"
 
 KOKKOS_FUNCTION
-unsigned int get_no_decomposition_bounding_gridbox(const CartesianMaps &gbxmaps,
-                                                   const unsigned int gbxindex, double &coord3,
-                                                   double &coord1, double &coord2);
+unsigned int get_no_decomposition_bounding_gridbox(const CartesianMaps& gbxmaps,
+                                                   const unsigned int gbxindex, double& coord3,
+                                                   double& coord1, double& coord2);
 
 /* on host, throws error if maps are not all
 the same size, else returns size of maps */
@@ -67,7 +67,8 @@ size_t CartesianMaps::local_to_global_gridbox_index(unsigned int local_gridbox_i
 // TODO(ALL) make domain_decomp call compatible with GPUs and then remove comm_size guard
 KOKKOS_FUNCTION
 unsigned int CartesianMaps::get_local_bounding_gridbox_index(const unsigned int gbxindex,
-                            double &coord3, double &coord1, double &coord2) const {
+                                                             double& coord3, double& coord1,
+                                                             double& coord2) const {
   if (is_decomp) {
     auto coordinates = std::array<double, 3>{coord3, coord1, coord2};
     const auto idx = domain_decomposition.get_local_bounding_gridbox_index(coordinates);
@@ -109,8 +110,8 @@ int flag_sdgbxindex(const unsigned int idx, const Kokkos::pair<double, double> b
 in forwards coord2 (y) direction and to update superdrop
 coord2 if superdrop has exceeded the y rightmost domain boundary */
 KOKKOS_FUNCTION
-unsigned int change_to_forwards_coord2nghbr(const unsigned int idx, const CartesianMaps &gbxmaps,
-                                            double &coord2) {
+unsigned int change_to_forwards_coord2nghbr(const unsigned int idx, const CartesianMaps& gbxmaps,
+                                            double& coord2) {
   const auto nghbr = gbxmaps.coord2forward(idx);
   const auto ndims = gbxmaps.get_global_ndims();
   const auto incre = (unsigned int)ndims(0) * ndims(1);  // ngbxs in z * ngbxs in x direction
@@ -127,8 +128,8 @@ unsigned int change_to_forwards_coord2nghbr(const unsigned int idx, const Cartes
 in backwards coord2 (y) direction and to update superdrop
 coord2 if superdrop has exceeded the y leftmost domain boundary */
 KOKKOS_FUNCTION
-unsigned int change_to_backwards_coord2nghbr(const unsigned int idx, const CartesianMaps &gbxmaps,
-                                             double &coord2) {
+unsigned int change_to_backwards_coord2nghbr(const unsigned int idx, const CartesianMaps& gbxmaps,
+                                             double& coord2) {
   const auto nghbr = gbxmaps.coord2backward(idx);
   const auto ndims = gbxmaps.get_global_ndims();
   const auto incre = (unsigned int)ndims(0) * ndims(1);  // ngbxs in z * ngbxs in x direction
@@ -145,8 +146,8 @@ unsigned int change_to_backwards_coord2nghbr(const unsigned int idx, const Carte
 in forwards coord1 (x) direction and to update superdrop
 coord1 if superdrop has exceeded the x front domain boundary */
 KOKKOS_FUNCTION
-unsigned int change_to_forwards_coord1nghbr(const unsigned int idx, const CartesianMaps &gbxmaps,
-                                            double &coord1) {
+unsigned int change_to_forwards_coord1nghbr(const unsigned int idx, const CartesianMaps& gbxmaps,
+                                            double& coord1) {
   const auto nghbr = gbxmaps.coord1forward(idx);
   const auto ndims = gbxmaps.get_global_ndims();
   const auto incre = (unsigned int)ndims(0);  // increment
@@ -163,8 +164,8 @@ unsigned int change_to_forwards_coord1nghbr(const unsigned int idx, const Cartes
 in backwards coord1 (x) direction and to update superdrop
 coord1 if superdrop has exceeded the x back domain boundary */
 KOKKOS_FUNCTION
-unsigned int change_to_backwards_coord1nghbr(const unsigned int idx, const CartesianMaps &gbxmaps,
-                                             double &coord1) {
+unsigned int change_to_backwards_coord1nghbr(const unsigned int idx, const CartesianMaps& gbxmaps,
+                                             double& coord1) {
   const auto nghbr = gbxmaps.coord1backward(idx);
   const auto ndims = gbxmaps.get_global_ndims();
   const auto incre = (unsigned int)ndims(0);  // increment
@@ -181,8 +182,8 @@ unsigned int change_to_backwards_coord1nghbr(const unsigned int idx, const Carte
 forwards coord3 (z) direction and to update superdrop coord3
 if it has exceeded the z upper domain boundary */
 KOKKOS_FUNCTION
-unsigned int change_to_forwards_coord3nghbr(const unsigned int idx, const CartesianMaps &gbxmaps,
-                                            double &coord3) {
+unsigned int change_to_forwards_coord3nghbr(const unsigned int idx, const CartesianMaps& gbxmaps,
+                                            double& coord3) {
   const auto nghbr = (unsigned int)gbxmaps.coord3forward(idx);
   const auto incre = (unsigned int)1;  // increment
   // drop was upper z edge of domain (now moving above it)
@@ -198,8 +199,8 @@ unsigned int change_to_forwards_coord3nghbr(const unsigned int idx, const Cartes
 in backwards coord3 (z) direction and to update superdrop
 coord3 if its has exceeded the z lower domain boundary */
 KOKKOS_FUNCTION
-unsigned int change_to_backwards_coord3nghbr(const unsigned int idx, const CartesianMaps &gbxmaps,
-                                             double &coord3) {
+unsigned int change_to_backwards_coord3nghbr(const unsigned int idx, const CartesianMaps& gbxmaps,
+                                             double& coord3) {
   const auto nghbr = gbxmaps.coord3backward(idx);
   const auto incre = (unsigned int)1;  // increment
   // drop was at lower z edge of domain (now moving below it)
@@ -219,7 +220,7 @@ if flag = 2 idx updated to forwards neighbour gbxindex.
 _Note:_ backwards/forwards functions may change the
 superdroplet's attributes e.g. if it leaves the domain. */
 KOKKOS_FUNCTION
-unsigned int change_if_coord2nghbr(const CartesianMaps &gbxmaps, unsigned int idx, double &coord2) {
+unsigned int change_if_coord2nghbr(const CartesianMaps& gbxmaps, unsigned int idx, double& coord2) {
   const auto flag = flag_sdgbxindex(idx, gbxmaps.coord2bounds(idx), coord2);  // !=0 idx shld change
   switch (flag) {
     case 1:
@@ -240,7 +241,7 @@ if flag = 2 idx updated to forwards neighbour gbxindex.
 _Note:_ backwards/forwards functions may change the
 superdroplet's attributes e.g. if it leaves the domain. */
 KOKKOS_FUNCTION
-unsigned int change_if_coord1nghbr(const CartesianMaps &gbxmaps, unsigned int idx, double &coord1) {
+unsigned int change_if_coord1nghbr(const CartesianMaps& gbxmaps, unsigned int idx, double& coord1) {
   const auto flag = flag_sdgbxindex(idx, gbxmaps.coord1bounds(idx), coord1);  // !=0 idx shld change
   switch (flag) {
     case 1:
@@ -261,7 +262,7 @@ if flag = 2 idx updated to forwards neighbour gbxindex.
 _Note:_ backwards/forwards functions may change the
 superdroplet's coords e.g. if it leaves the domain. */
 KOKKOS_FUNCTION
-unsigned int change_if_coord3nghbr(const CartesianMaps &gbxmaps, unsigned int idx, double &coord3) {
+unsigned int change_if_coord3nghbr(const CartesianMaps& gbxmaps, unsigned int idx, double& coord3) {
   const auto flag = flag_sdgbxindex(idx, gbxmaps.coord3bounds(idx), coord3);  // !=0 idx shld change
   switch (flag) {
     case 1:
@@ -275,9 +276,9 @@ unsigned int change_if_coord3nghbr(const CartesianMaps &gbxmaps, unsigned int id
 }
 
 KOKKOS_FUNCTION
-unsigned int get_no_decomposition_bounding_gridbox(const CartesianMaps &gbxmaps,
-                                                   const unsigned int gbxindex, double &coord3,
-                                                   double &coord1, double &coord2) {
+unsigned int get_no_decomposition_bounding_gridbox(const CartesianMaps& gbxmaps,
+                                                   const unsigned int gbxindex, double& coord3,
+                                                   double& coord1, double& coord2) {
   auto idx = (unsigned int)change_if_coord3nghbr(gbxmaps, gbxindex, coord3);
   idx = change_if_coord1nghbr(gbxmaps, idx, coord1);
   idx = change_if_coord2nghbr(gbxmaps, idx, coord2);

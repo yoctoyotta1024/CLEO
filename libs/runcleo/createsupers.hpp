@@ -41,7 +41,7 @@
  * @return A view of superdrops in device memory.
  */
 template <typename SuperdropInitConds>
-viewd_supers initialise_supers(const SuperdropInitConds &sdic);
+viewd_supers initialise_supers(const SuperdropInitConds& sdic);
 
 /**
  * @brief Return a mirror view of superdrops on host memory.
@@ -65,7 +65,7 @@ viewd_supers initialise_supers(const SuperdropInitConds &sdic);
  * @return A mirror view of superdrops on host memory.
  */
 template <typename SuperdropInitConds>
-viewd_supers::HostMirror initialise_supers_on_host(const SuperdropInitConds &sdic,
+viewd_supers::HostMirror initialise_supers_on_host(const SuperdropInitConds& sdic,
                                                    const viewd_supers totsupers);
 
 /**
@@ -109,7 +109,7 @@ void print_supers(const viewd_constsupers totsupers);
  * @return Struct for handling super-droplets in device memory.
  */
 template <typename SuperdropInitConds>
-SupersInDomain create_supers(const SuperdropInitConds &sdic, const unsigned int gbxindex_max) {
+SupersInDomain create_supers(const SuperdropInitConds& sdic, const unsigned int gbxindex_max) {
   Kokkos::Profiling::ScopedRegion region("init_supers");
 
   // Log message and create superdrops using the initial conditions
@@ -149,7 +149,7 @@ SupersInDomain create_supers(const SuperdropInitConds &sdic, const unsigned int 
  * @return A view of superdrops in device memory.
  */
 template <typename SuperdropInitConds>
-viewd_supers initialise_supers(const SuperdropInitConds &sdic) {
+viewd_supers initialise_supers(const SuperdropInitConds& sdic) {
   // create superdrops view on device
   auto totsupers = viewd_supers("totsupers", sdic.get_maxnsupers());
 
@@ -184,7 +184,7 @@ viewd_supers initialise_supers(const SuperdropInitConds &sdic) {
  * @return A mirror view of superdrops on host memory.
  */
 template <typename SuperdropInitConds>
-viewd_supers::HostMirror initialise_supers_on_host(const SuperdropInitConds &sdic,
+viewd_supers::HostMirror initialise_supers_on_host(const SuperdropInitConds& sdic,
                                                    const viewd_supers totsupers) {
   // Create a mirror view of supers in case the original view is on device memory
   auto h_totsupers = Kokkos::create_mirror_view(totsupers);

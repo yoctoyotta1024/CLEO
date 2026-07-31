@@ -67,7 +67,7 @@ class CollectiveDataset {
    *
    * @param dim A pair with the dimension name and local size
    */
-  void collect_distributed_dim_size(const std::pair<std::string, size_t> &dim) {
+  void collect_distributed_dim_size(const std::pair<std::string, size_t>& dim) {
     my_rank = init_communicator::get_comm_rank();
     comm_size = init_communicator::get_comm_size();
     std::vector<size_t> distributed_sizes(comm_size);
@@ -92,13 +92,13 @@ class CollectiveDataset {
    * @param dimnames The names of the dimensions related to the array
    */
   template <typename T>
-  Kokkos::View<T *, HostSpace> collect_global_data(Kokkos::View<T *, HostSpace> data,
-                                                   std::vector<std::string> dimnames) const {
+  Kokkos::View<T*, HostSpace> collect_global_data(Kokkos::View<T*, HostSpace> data,
+                                                  std::vector<std::string> dimnames) const {
     size_t innermost_dimension = dimnames.size() - 1;
     if (my_rank == 0) {
       std::vector<int> receive_displacements(comm_size, 0), receive_counts(comm_size, 0);
       size_t global_size = datasetdims.at(dimnames[innermost_dimension]);
-      Kokkos::View<T *, HostSpace> global_data("global_output_data", global_size);
+      Kokkos::View<T*, HostSpace> global_data("global_output_data", global_size);
 
       // Calculate the receive counts and displacements to receive the data
       for (int i = 0; i < comm_size; i++) {
@@ -140,7 +140,7 @@ class CollectiveDataset {
         collect_global_array(nullptr, data.data(), datasetdims.at(dimnames[innermost_dimension]),
                              nullptr, nullptr);
 
-      return Kokkos::View<T *, HostSpace>();
+      return Kokkos::View<T*, HostSpace>();
     }
   }
 
@@ -157,7 +157,7 @@ class CollectiveDataset {
    * gridbox order
    */
   template <typename T>
-  void correct_gridbox_data(std::string dimension, T *target, T *source) const {
+  void correct_gridbox_data(std::string dimension, T* target, T* source) const {
     size_t offset = 0;
     for (int process = 0; process < comm_size; process++) {
       for (size_t i = 0; i < distributed_datasetdims.at(dimension)[process]; i++) {
@@ -171,8 +171,8 @@ class CollectiveDataset {
   /**
    * @brief Wrapper for MPI gatherv call for a float array
    */
-  void collect_global_array(float *target, float *local_source, int local_size, int *receive_counts,
-                            int *receive_displacements) const {
+  void collect_global_array(float* target, float* local_source, int local_size, int* receive_counts,
+                            int* receive_displacements) const {
     MPI_Gatherv(local_source, local_size, MPI_FLOAT, target, receive_counts, receive_displacements,
                 MPI_FLOAT, 0, comm);
   }
@@ -180,8 +180,8 @@ class CollectiveDataset {
   /**
    * @brief Wrapper for MPI gatherv call for a unsigned int array
    */
-  void collect_global_array(unsigned int *target, unsigned int *local_source, int local_size,
-                            int *receive_counts, int *receive_displacements) const {
+  void collect_global_array(unsigned int* target, unsigned int* local_source, int local_size,
+                            int* receive_counts, int* receive_displacements) const {
     MPI_Gatherv(local_source, local_size, MPI_UNSIGNED, target, receive_counts,
                 receive_displacements, MPI_UNSIGNED, 0, comm);
   }
@@ -189,8 +189,8 @@ class CollectiveDataset {
   /**
    * @brief Wrapper for MPI gatherv call for a unsigned int array
    */
-  void collect_global_array(size_t *target, size_t *local_source, int local_size,
-                            int *receive_counts, int *receive_displacements) const {
+  void collect_global_array(size_t* target, size_t* local_source, int local_size,
+                            int* receive_counts, int* receive_displacements) const {
     MPI_Gatherv(local_source, local_size, MPI_UNSIGNED_LONG, target, receive_counts,
                 receive_displacements, MPI_UNSIGNED_LONG, 0, comm);
   }
@@ -200,7 +200,7 @@ class CollectiveDataset {
    *
    * @param dim A pair containing the name and size of the dimension to be added.
    */
-  void add_dimension(const std::pair<std::string, size_t> &dim) {
+  void add_dimension(const std::pair<std::string, size_t>& dim) {
     collect_distributed_dim_size(dim);
     size_t dim_size = dim.second;
 
@@ -222,7 +222,7 @@ class CollectiveDataset {
    *
    * @param store The store object associated with the Dataset.
    */
-  explicit CollectiveDataset(Store &store) : group(store), datasetdims() {
+  explicit CollectiveDataset(Store& store) : group(store), datasetdims() {
     store[".zattrs"] =
         "{\n"
         "  \"creator\": \"Clara Bayley\",\n"
@@ -238,14 +238,14 @@ class CollectiveDataset {
    * @param dimname A string for the name of the dimension in the dataset.
    * @return The size of (i.e. number of elements along) the dimension.
    */
-  size_t get_dimension(const std::string &dimname) const { return datasetdims.at(dimname); }
+  size_t get_dimension(const std::string& dimname) const { return datasetdims.at(dimname); }
 
   /**
    * @brief Sets the size of an existing dimension in the dataset.
    *
    * @param dim A pair containing the name of the dimension and its new size to be set.
    */
-  void set_dimension(const std::pair<std::string, size_t> &dim) {
+  void set_dimension(const std::pair<std::string, size_t>& dim) {
     collect_distributed_dim_size(dim);
     size_t dim_size = dim.second;
 
@@ -289,8 +289,8 @@ class CollectiveDataset {
   template <typename T>
   XarrayZarrArray<Store, T> create_array(const std::string_view name, const std::string_view units,
                                          const double scale_factor,
-                                         const std::vector<size_t> &chunkshape,
-                                         const std::vector<std::string> &dimnames) const {
+                                         const std::vector<size_t>& chunkshape,
+                                         const std::vector<std::string>& dimnames) const {
     return XarrayZarrArray<Store, T>(group.store, datasetdims, name, units, scale_factor,
                                      chunkshape, dimnames);
   }
@@ -332,8 +332,8 @@ class CollectiveDataset {
   XarrayZarrArray<Store, T> create_ragged_array(const std::string_view name,
                                                 const std::string_view units,
                                                 const double scale_factor,
-                                                const std::vector<size_t> &chunkshape,
-                                                const std::vector<std::string> &dimnames,
+                                                const std::vector<size_t>& chunkshape,
+                                                const std::vector<std::string>& dimnames,
                                                 const std::string_view sampledimname) const {
     return XarrayZarrArray<Store, T>(group.store, datasetdims, name, units, scale_factor,
                                      chunkshape, dimnames, sampledimname);
@@ -355,8 +355,8 @@ class CollectiveDataset {
   XarrayZarrArray<Store, T> create_raggedcount_array(const std::string_view name,
                                                      const std::string_view units,
                                                      const double scale_factor,
-                                                     const std::vector<size_t> &chunkshape,
-                                                     const std::vector<std::string> &dimnames,
+                                                     const std::vector<size_t>& chunkshape,
+                                                     const std::vector<std::string>& dimnames,
                                                      const std::string_view sampledimname) const {
     return XarrayZarrArray<Store, T>(group.store, datasetdims, name, units, scale_factor,
                                      chunkshape, dimnames, sampledimname);
@@ -370,7 +370,7 @@ class CollectiveDataset {
    * @param xzarr An instance of XarrayZarrArray representing the array.
    */
   template <typename T>
-  void write_arrayshape(XarrayZarrArray<Store, T> &xzarr) const {
+  void write_arrayshape(XarrayZarrArray<Store, T>& xzarr) const {
     if (my_rank == 0) xzarr.write_arrayshape(datasetdims);
   }
 
@@ -393,7 +393,7 @@ class CollectiveDataset {
    * @param xzarr An instance of XarrayZarrArray representing the array.
    */
   template <typename T>
-  void write_ragged_arrayshape(XarrayZarrArray<Store, T> &xzarr) const {
+  void write_ragged_arrayshape(XarrayZarrArray<Store, T>& xzarr) const {
     if (my_rank == 0) xzarr.write_ragged_arrayshape();
   }
 
@@ -410,7 +410,7 @@ class CollectiveDataset {
    * @param h_data The data to be written to the array.
    */
   template <typename T>
-  void write_to_array(XarrayZarrArray<Store, T> &xzarr,
+  void write_to_array(XarrayZarrArray<Store, T>& xzarr,
                       const typename Buffer<T>::viewh_buffer h_data) const {
     auto global_data = collect_global_data(h_data, xzarr.get_dimnames());
     if (my_rank == 0) {
@@ -479,7 +479,7 @@ class CollectiveDataset {
    * @param h_data The data to be written to the array.
    */
   template <typename T>
-  void write_to_ragged_array(XarrayZarrArray<Store, T> &xzarr,
+  void write_to_ragged_array(XarrayZarrArray<Store, T>& xzarr,
                              const typename Buffer<T>::viewh_buffer h_data) const {
     std::vector<int> distributed_sizes(comm_size);
     std::vector<int> receive_displacements(comm_size, 0), receive_counts(comm_size, 0);
@@ -488,7 +488,7 @@ class CollectiveDataset {
     // Since there is no defined dimensions for ragged arrays collect the array sizes directly
     MPI_Gather(&local_size, 1, MPI_INT, distributed_sizes.data(), 1, MPI_INT, 0, comm);
     int global_size = std::accumulate(distributed_sizes.begin(), distributed_sizes.end(), 0);
-    Kokkos::View<T *, HostSpace> global_data("global_output_data", global_size);
+    Kokkos::View<T*, HostSpace> global_data("global_output_data", global_size);
 
     // Calculate the receive counts and displacements (meaningful only for process 0)
     for (int i = 0; i < comm_size; i++) {
@@ -512,7 +512,7 @@ class CollectiveDataset {
           global_superdroplet_ordering.get()->at(global_data[i]) = i;
       }
       // Correctly orders the data based on the global superdroplet ordering
-      Kokkos::View<T *, HostSpace> global_write_data("global_write_data", global_size);
+      Kokkos::View<T*, HostSpace> global_write_data("global_write_data", global_size);
       for (size_t i = 0; i < global_data.extent(0); i++)
         global_write_data[i] = global_data[global_superdroplet_ordering.get()->at(i)];
 

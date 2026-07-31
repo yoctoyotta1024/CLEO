@@ -32,8 +32,8 @@
 #include "superdrops/superdrop.hpp"
 
 /* Gridboxes */
-using dualview_gbx = Kokkos::DualView<Gridbox *>;            /**< Dual view of gridboxes. */
-using dualview_constgbx = Kokkos::DualView<const Gridbox *>; /**< Dual view of const gridboxe. */
+using dualview_gbx = Kokkos::DualView<Gridbox*>;            /**< Dual view of gridboxes. */
+using dualview_constgbx = Kokkos::DualView<const Gridbox*>; /**< Dual view of const gridboxe. */
 
 using viewh_gbx = dualview_gbx::t_host;           /**< View in host memory of gridboxes. */
 using viewh_constgbx = dualview_constgbx::t_host; /**< view in host memory of const gridboxes. */
@@ -52,9 +52,9 @@ using viewd_ndims = Kokkos::View<size_t[3]>;
 /**< View in device memory for number of gridboxes in CartesianMaps. */
 
 /* Sorting Superdrops */
-using viewd_counts = Kokkos::View<size_t *>; /**< View in device memory for sorting superdroplets */
+using viewd_counts = Kokkos::View<size_t*>; /**< View in device memory for sorting superdroplets */
 /**< Scatter view for abstracted use of atomics/duplicates when computing sums for viewd_counts */
-using scatterviewd_counts = Kokkos::Experimental::ScatterView<size_t *>;
+using scatterviewd_counts = Kokkos::Experimental::ScatterView<size_t*>;
 
 namespace KokkosCleoSettings {
 constexpr auto team_size = Kokkos::AUTO();

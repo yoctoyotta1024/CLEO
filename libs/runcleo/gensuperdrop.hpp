@@ -79,7 +79,7 @@ class GenSuperdrop {
    * @param sdic The instance of the data for super-droplets' initial conditions.
    */
   template <typename SuperdropInitConds>
-  explicit GenSuperdrop(const SuperdropInitConds &sdic)
+  explicit GenSuperdrop(const SuperdropInitConds& sdic)
       : maxnsupers(sdic.get_maxnsupers()),
         nspacedims(sdic.get_nspacedims()),
         initdata(sdic.fetch_data()) {}
