@@ -2,6 +2,26 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.68.1](https://github.com/yoctoyotta1024/CLEO/compare/ff7765503372606b892dbb28ff02af2aae3c6805..v0.68.1) - 2026-07-31
+#### Bug Fixes
+- missing stdexcept lib - ([495d0ee](https://github.com/yoctoyotta1024/CLEO/commit/495d0ee41b492d4ab36c50376f31aff48b1a1f98)) - clara.bayley
+- creation of b4 array must come before call to get_local_bounding_gridbox_index - ([0db63b3](https://github.com/yoctoyotta1024/CLEO/commit/0db63b32b17293a09513d484dc76e3845b9eada2)) - clara.bayley
+- for adia0d - ([10ed505](https://github.com/yoctoyotta1024/CLEO/commit/10ed505a97e2ac3dde8fef26764d604e8e0c552b)) - Harshada Balasubramanian
+- Kokkos Abort and runtime Error - ([2972088](https://github.com/yoctoyotta1024/CLEO/commit/2972088ad4e6d4494c89bf2156c11960073ffe69)) - Harshada Balasubramanian
+- typos for debug mode - ([e981a97](https://github.com/yoctoyotta1024/CLEO/commit/e981a97b0bb5ffc53b3e5f59f2580cf3f8954540)) - Harshada Balasubramanian
+- introduce -DCMAKE_BUILD_TYPE= - ([c6df85d](https://github.com/yoctoyotta1024/CLEO/commit/c6df85d9e29f5be5ad7d89fc464f46ed78d9e717)) - Harshada Balasubramanian
+#### Miscellaneous Chores
+- formatting and remove unused cassert lib - ([b0cd77b](https://github.com/yoctoyotta1024/CLEO/commit/b0cd77bcfcae52ce400ab2c995db932a3745bdaa)) - clara.bayley
+- extend logic for gridbox - ([6172e99](https://github.com/yoctoyotta1024/CLEO/commit/6172e99187597f9ddd351efed574e862115164b0)) - Harshada Balasubramanian
+-  wrap sdinit check inside NDEBUG macro - ([ff77655](https://github.com/yoctoyotta1024/CLEO/commit/ff7765503372606b892dbb28ff02af2aae3c6805)) - Harshada Balasubramanian
+#### Refactoring
+- rename BUILD_TYPE to CLEO_CMAKE_BUILD_TYPE - ([f99e09b](https://github.com/yoctoyotta1024/CLEO/commit/f99e09b54ffb6cefdddf768fb719dc792ae5c086)) - clara.bayley
+- use std runtime error instead of kokkos abort in cvode solver - ([0c899f7](https://github.com/yoctoyotta1024/CLEO/commit/0c899f7bce0e989ccfbcaafdca17c2feec2aac9d)) - clara.bayley
+- use DEBUG flag for more print statements - ([0203003](https://github.com/yoctoyotta1024/CLEO/commit/02030033e7be47b9240fbbc8c8493856c970c1dc)) - clara.bayley
+- pass Debug to CMAKE build as flag if CLEO_ENABLEDEBUG is true - ([b23a5ff](https://github.com/yoctoyotta1024/CLEO/commit/b23a5ffbb45773e88cb7cfd9bc7515d7d128f0b8)) - clara.bayley
+
+- - -
+
 ## [v0.68.0](https://github.com/yoctoyotta1024/CLEO/compare/1901abf456a060b443332db225f7ee03b8718b88..v0.68.0) - 2026-07-30
 #### Bug Fixes
 - errors in rebase conflicts corrected - ([cf9a67d](https://github.com/yoctoyotta1024/CLEO/commit/cf9a67d84f2211d9076d247fba9cb1874a41a4fd)) - clara.bayley
