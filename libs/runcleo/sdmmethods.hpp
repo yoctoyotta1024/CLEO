@@ -239,7 +239,8 @@ class SDMMethods {
    * This function prepares the CLEO SDM for timestepping by
    * calling the `before_timestepping` function of the observer.
    *
-   * @param d_gbxs View of gridboxes on device.
+   * @param gbxs DualView of gridboxes.
+   * @param allsupers Superdroplets in and out of the domain.
    */
   void prepare_to_timestep(const dualview_gbx gbxs, const SupersInDomain& allsupers) const {
     const auto d_gbxs = gbxs.view_device();

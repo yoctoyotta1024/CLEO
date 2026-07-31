@@ -146,7 +146,7 @@ class DoMonitorMassMomentsChangeObs {
   /**
    * @brief Constructor for DoMonitorMassMomentsChangeObs.
    * @param dataset Dataset to write monitored data to.
-   * &param store Store dataset writes into.
+   * @param store Store dataset writes into.
    * @param maxchunk The maximum chunk size (number of elements) for Xarrays.
    * @param ngbxs The number of gridboxes.
    */
