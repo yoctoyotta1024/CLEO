@@ -14,15 +14,14 @@ configure_machine_runtime_settings() {
 
   ### --------------- YAC runtime settings --------------- ###
   source "${HELPER_DIR}/vanilla_packages.sh"
-  if [ "${CLEO_COMPILERNAME}" == "gcc" ]
-  then
+  if [ "${CLEO_COMPILERNAME}" == "gcc" ]; then
     fyamllib=${vanilla_gcc_fyamllib}
   else
     echo "Bad inputs, YAC on 'vanilla' computer only compatible with 'gcc' compiler name"
     exit 1
   fi
   export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${fyamllib}
-  export PYTHONPATH=${PYTHONPATH}:${CLEO_YACYAXTROOT}/yac/python # path to YAC python bindings
+  export PYTHONPATH=${PYTHONPATH}:${CLEO_YACYAXTROOT}/yac/python
   ### ---------------------------------------------------- ###
 
 

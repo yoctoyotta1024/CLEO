@@ -14,17 +14,35 @@ configure_machine_build_flags() {
 
   if [ "${CLEO_COMPILERNAME}" == "gcc" ]
   then
-    if ! command -v mpic++ &> /dev/null; then
-      echo "Error: 'mpic++' command not found. Please ensure MPI is installed and available in PATH."
+    # Find a working mpic++/mpicc — skip broken wrappers (e.g. from Anaconda)
+    _find_working_mpi() {
+      local cmd="$1"
+      local found
+      # Walk PATH entries in order; test each candidate with --version
+      IFS=: read -ra _path_dirs <<< "${PATH}"
+      for _dir in "${_path_dirs[@]}"; do
+        found="${_dir}/${cmd}"
+        if [[ -x "${found}" ]] && "${found}" --version &>/dev/null; then
+          echo "${found}"
+          return 0
+        fi
+      done
+      return 1
+    }
+
+    _mpicxx=$(_find_working_mpi mpic++)
+    if [[ -z "${_mpicxx}" ]]; then
+      echo "Error: no working 'mpic++' found in PATH. Please ensure a working MPI is installed."
       exit 1
     fi
-    if ! command -v mpicc &> /dev/null; then
-      echo "Error: 'mpicc' command not found. Please ensure MPI is installed and available in PATH."
+    _mpicc=$(_find_working_mpi mpicc)
+    if [[ -z "${_mpicc}" ]]; then
+      echo "Error: no working 'mpicc' found in PATH. Please ensure a working MPI is installed."
       exit 1
     fi
 
-    export CLEO_CXX_COMPILER="$(command -v mpic++)"
-    export CLEO_CC_COMPILER="$(command -v mpicc)"
+    export CLEO_CXX_COMPILER="${_mpicxx}"
+    export CLEO_CC_COMPILER="${_mpicc}"
 
     if [ "${CLEO_ENABLEDEBUG}" == "true" ]
     then

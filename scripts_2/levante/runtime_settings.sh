@@ -21,7 +21,7 @@ configure_machine_runtime_settings() {
 
   fyamllib=$(levante_fyamllib_for_compiler "${CLEO_COMPILERNAME}")
   export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${fyamllib}
-  export PYTHONPATH=${PYTHONPATH}:${CLEO_YACYAXTROOT}/yac/python # path to YAC python bindings
+  export PYTHONPATH=${PYTHONPATH}:${CLEO_YACYAXTROOT}/yac/python
   ### ---------------------------------------------------- ###
 
   ### --------------- set runtime optimisations ---------- ###
