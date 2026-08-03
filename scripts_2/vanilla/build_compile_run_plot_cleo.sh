@@ -26,9 +26,10 @@ set -e
 ###   $9  make_clean     true | false                    (default: false)
 ###
 ### Available examples (see common/experiments.sh for full details):
-###   as2017  cuspbifurc  breakup  shima2009  constthermo2d  divfree2d
-###   eurec4a1d  rainshaft1d  python_bindings  kokkostools
-###   fromfile  fromfile_irreg  bubble3d
+###   as2017  breakup  constthermo2d  cuspbifurc  divfree2d
+###   eurec4a1d  kokkostools  python_bindings  rainshaft1d  shima2009
+###
+###   Note: fromfile, fromfile_irreg, and bubble3d require Levante (SLURM/YAC)
 ### ============================================================ ###
 
 #step 1: configure
@@ -38,6 +39,22 @@ experiment=${1:-"as2017"}
 buildtype=${2:-"serial"}
 compilername=${3:-gcc}
 path2CLEO=${4:-${CLEO_PATH2CLEO}}
+
+### --- validate experiment is supported on vanilla --- ###
+vanilla_experiments=(
+  as2017 breakup constthermo2d cuspbifurc divfree2d
+  eurec4a1d kokkostools python_bindings rainshaft1d shima2009
+)
+valid=false
+for e in "${vanilla_experiments[@]}"; do
+  [[ "${experiment}" == "${e}" ]] && valid=true && break
+done
+if [[ "${valid}" == false ]]; then
+  echo "Error: experiment '${experiment}' is not supported on vanilla."
+  echo "Supported experiments: ${vanilla_experiments[*]}"
+  exit 1
+fi
+### --------------------------------------------------- ###
 
 if [ "${path2CLEO}" == "" ]; then
   echo "Please provide path to CLEO source directory"
