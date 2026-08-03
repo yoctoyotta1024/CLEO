@@ -29,7 +29,7 @@ set -e
 ###
 ### Available examples (see common/experiments.sh for full details):
 ###   as2017  cuspbifurc  breakup  shima2009  constthermo2d  divfree2d
-###   eurec4a1d  rainshaft1d  python_bindings  kokkostools
+###   eurec4a1d  rainshaft1d  python_bindings
 ###   fromfile  fromfile_irreg  bubble3d
 ### ============================================================ ###
 
@@ -42,7 +42,7 @@ buildtype=${2:-"openmp"}
 compilername=${3:-gcc}
 path2CLEO=${4:-${HOME}/CLEO}
 
-# Export build context early so experiment resolution can use it (e.g. kokkostools paths).
+# Export build context early so experiment resolution can use it.
 export CLEO_BUILDTYPE=${buildtype}
 export CLEO_COMPILERNAME=${compilername}
 export CLEO_PATH2CLEO=${path2CLEO}
