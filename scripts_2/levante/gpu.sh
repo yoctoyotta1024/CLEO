@@ -2,9 +2,9 @@
 #SBATCH --job-name=cleo_gpu
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
-#SBATCH --gpus=4
+#SBATCH --gpus=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=128
+#SBATCH --cpus-per-task=1
 #SBATCH --mem=10G
 #SBATCH --time=00:30:00
 #SBATCH --mail-user=
