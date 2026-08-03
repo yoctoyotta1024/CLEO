@@ -39,11 +39,19 @@ build_cleo() {
 
   echo "CLEO_BUILD_FLAGS: ${CLEO_BUILD_FLAGS}"
   echo "CLEO_YAC_FLAGS: ${CLEO_YAC_FLAGS}"
+  echo "CLEO_ENABLEDEBUG: ${CLEO_ENABLEDEBUG}"
   echo "### ------------------------------------------- ###"
+
+  if [ "${CLEO_ENABLEDEBUG}" = "true" ]; then
+    CLEO_CMAKE_BUILD_TYPE="Debug"
+  else
+    CLEO_CMAKE_BUILD_TYPE="Release"
+  fi
 
   cmake -DCMAKE_CXX_COMPILER=${CLEO_CXX_COMPILER} \
       -DCMAKE_C_COMPILER=${CLEO_CC_COMPILER} \
       -DCMAKE_CXX_FLAGS="${CLEO_CXX_FLAGS}" \
+      -DCMAKE_BUILD_TYPE=${CLEO_CMAKE_BUILD_TYPE} \
       -S ${CLEO_PATH2CLEO} -B ${CLEO_PATH2BUILD} \
       ${CLEO_KOKKOS_BASIC_FLAGS} ${CLEO_KOKKOS_HOST_FLAGS} ${CLEO_KOKKOS_DEVICE_FLAGS} \
       ${CLEO_BUILD_FLAGS} ${CLEO_YAC_FLAGS}
