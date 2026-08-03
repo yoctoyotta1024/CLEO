@@ -132,6 +132,11 @@ case "${experiment}" in
     build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
     executables="kokkostools"
 
+    if [[ -z "${CLEO_KOKKOSTOOLS}" ]]; then
+      echo "Error: CLEO_KOKKOSTOOLS must be set for the 'kokkostools' experiment."
+      exit 1
+    fi
+
     pythonscript=${path2CLEO}/examples/kokkostools/kokkostools.py
     src_config_filename=${path2CLEO}/examples/kokkostools/src/config/kokkostools_config.yaml
     postproc_filename="${path2CLEO}/build_kokkostools/bin/${executables}_${CLEO_BUILDTYPE}.txt"
