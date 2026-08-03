@@ -12,7 +12,7 @@ source /etc/profile
 module purge
 spack unload --all
 
-LEVANTE_BASH_SRC="${CLEO_PATH2CLEO}/scripts_2/levante/bash/src"
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &>/dev/null && pwd )
 
 root4YAC=$1                         # absolute path for YAC and YAXT installations
 compilername=${2:-gcc}              # compile yac and yaxt with "gcc" or "intel"
@@ -27,7 +27,7 @@ yac_tag=v3.9.2
 yac_version=yac_$yac_tag
 yac_source=https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/$yac_tag/$yac_version.tar.gz
 
-source ${LEVANTE_BASH_SRC}/levante_packages.sh
+source "${SCRIPT_DIR}/levante_packages.sh"
 
 if [ "${compilername}" == "" ]
 then
