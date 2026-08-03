@@ -127,49 +127,6 @@ case "${experiment}" in
       --do_inputfiles --do_run_executable --do_plot_results --ntasks=4"
     ;;
 
-  kokkostools)
-    path2build=${path2CLEO}/build_kokkostools/${CLEO_BUILDTYPE}
-    build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
-    executables="kokkostools"
-
-    if [[ -z "${CLEO_KOKKOSTOOLS}" ]]; then
-      if [[ "${CLEO_AUTO_INSTALL_KOKKOSTOOLS}" == "true" ]]; then
-        if [[ -z "${CLEO_MACHINE}" || -z "${CLEO_COMPILERNAME}" ]]; then
-          echo "Error: CLEO_MACHINE and CLEO_COMPILERNAME must be set for auto-installing kokkostools."
-          exit 1
-        fi
-
-        install_script="${path2CLEO}/scripts_2/${CLEO_MACHINE}/helpers/install_kokkos_tools.sh"
-        if [[ ! -f "${install_script}" ]]; then
-          echo "Error: kokkostools installer not found at ${install_script}"
-          exit 1
-        fi
-
-        tools_repo_parent="${CLEO_KOKKOSTOOLS_REPO_PARENT:-${path2CLEO}}"
-        if [[ ! -d "${tools_repo_parent}/kokkos-tools" ]]; then
-          echo "Error: expected kokkos-tools repository at ${tools_repo_parent}/kokkos-tools"
-          echo "Set CLEO_KOKKOSTOOLS_REPO_PARENT to the directory containing the 'kokkos-tools' repo."
-          exit 1
-        fi
-
-        tools_install_prefix="${path2CLEO}/build_kokkostools/tools/${CLEO_MACHINE}/${CLEO_COMPILERNAME}"
-        echo "Auto-installing kokkostools to ${tools_install_prefix}"
-        bash "${install_script}" "${tools_repo_parent}" "${CLEO_COMPILERNAME}" "${tools_install_prefix}"
-        export CLEO_KOKKOSTOOLS="${tools_install_prefix}"
-      else
-        echo "Error: CLEO_KOKKOSTOOLS must be set for the 'kokkostools' experiment."
-        echo "Set CLEO_AUTO_INSTALL_KOKKOSTOOLS=true to auto-install it."
-        exit 1
-      fi
-    fi
-
-    pythonscript=${path2CLEO}/examples/kokkostools/kokkostools.py
-    src_config_filename=${path2CLEO}/examples/kokkostools/src/config/kokkostools_config.yaml
-    postproc_filename="${path2CLEO}/build_kokkostools/bin/${executables}_${CLEO_BUILDTYPE}.txt"
-    script_args="${CLEO_KOKKOSTOOLS} ${src_config_filename} ${postproc_filename} \
-      --nruns=2 --do_inputfiles --do_run_executable --do_plot_results"
-    ;;
-
   python_bindings)
     path2build=${path2CLEO}/build_pybind/
     build_flags="-DCLEO_COUPLED_DYNAMICS=numpy -DCLEO_DOMAIN=cartesian \
@@ -207,7 +164,7 @@ case "${experiment}" in
   *)
     echo "Error: unknown experiment '${experiment}'."
     echo "Available: as2017 cuspbifurc breakup shima2009 constthermo2d divfree2d"
-    echo "           eurec4a1d rainshaft1d python_bindings kokkostools"
+    echo "           eurec4a1d rainshaft1d python_bindings"
     echo "           fromfile fromfile_irreg bubble3d"
     exit 1
     ;;
