@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 ### -------------- GCC compiler(s) Packages ------------ ###
 levante_gcc="gcc/11.2.0-gcc-11.2.0" # bcn7mbu # module load
 levante_gcc_libs="/sw/spack-levante/gcc-11.2.0-bcn7mb/lib64" # for libstdc++.so (hint with module show "...")
@@ -30,3 +32,99 @@ levante_intel_fyamllib="${levante_intel_fyaml_root}/lib"
 ### specific packages for YAC installation only
 levante_intel_netcdf_root="/sw/spack-levante/netcdf-c-main-l24a66" # match `module show ${netcdf}`
 ### ---------------------------------------------------- ###
+
+levante_reset_modules() {
+  source /etc/profile
+  module purge
+  spack unload --all
+}
+
+levante_fyamllib_for_compiler() {
+  local compilername="$1"
+  case "${compilername}" in
+    gcc)
+      echo "${levante_gcc_fyamllib}"
+      ;;
+    intel)
+      echo "${levante_intel_fyamllib}"
+      ;;
+    *)
+      echo "Error: unsupported compiler '${compilername}'. Must be 'gcc' or 'intel'."
+      return 1
+      ;;
+  esac
+}
+
+levante_load_build_stack() {
+  local compilername="$1"
+  local buildtype="$2"
+
+  case "${compilername}" in
+    gcc)
+      module load "${levante_gcc}" "${levante_gcc_openmpi}"
+      spack load "${levante_gcc_cmake}"
+      if [[ "${buildtype}" == "cuda" ]]; then
+        spack load "${levante_gcc_cuda}"
+        export CLEO_CUDA_ROOT="${CLEO_CUDA_ROOT:-${levante_gcc_cuda_root}}"
+      fi
+      ;;
+    intel)
+      if [[ "${buildtype}" == "cuda" ]]; then
+        echo "Error: CUDA build on Levante is not compatible with the intel compiler. Use gcc."
+        return 1
+      fi
+      module load "${levante_intel}" "${levante_intel_openmpi}"
+      spack load "${levante_intel_cmake}"
+      ;;
+    *)
+      echo "Error: unsupported compiler '${compilername}'. Must be 'gcc' or 'intel'."
+      return 1
+      ;;
+  esac
+}
+
+levante_load_runtime_stack() {
+  local compilername="$1"
+  local buildtype="$2"
+
+  case "${compilername}" in
+    gcc)
+      module load "${levante_gcc_openmpi}"
+      export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${levante_gcc_libs}"
+      if [[ "${buildtype}" == "cuda" ]]; then
+        spack load "${levante_gcc_cuda}"
+        export CLEO_CUDA_ROOT="${CLEO_CUDA_ROOT:-${levante_gcc_cuda_root}}"
+      fi
+      ;;
+    intel)
+      if [[ "${buildtype}" == "cuda" ]]; then
+        echo "Error: CUDA runtime on Levante is not compatible with the intel compiler. Use gcc."
+        return 1
+      fi
+      module load "${levante_intel_openmpi}"
+      ;;
+    *)
+      echo "Error: unsupported compiler '${compilername}'. Must be 'gcc' or 'intel'."
+      return 1
+      ;;
+  esac
+}
+
+levante_load_yac_dependencies() {
+  local compilername="$1"
+
+  case "${compilername}" in
+    gcc)
+      module load "${levante_gcc_netcdf_yac}"
+      spack load "${levante_gcc_openblas_yac}"
+      ;;
+    intel)
+      module load "${levante_intel_netcdf_yac}"
+      spack load "${levante_intel_openblas_yac}"
+      ;;
+    *)
+      echo "Error: unsupported compiler '${compilername}'. Must be 'gcc' or 'intel'."
+      return 1
+      ;;
+  esac
+}

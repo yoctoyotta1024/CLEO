@@ -8,9 +8,6 @@
 ### ------------------------------------------------------- ###
 
 set -e
-source /etc/profile
-module purge
-spack unload --all
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &>/dev/null && pwd )
 
@@ -28,6 +25,7 @@ yac_version=yac_$yac_tag
 yac_source=https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/$yac_tag/$yac_version.tar.gz
 
 source "${SCRIPT_DIR}/levante_packages.sh"
+levante_reset_modules
 
 if [ "${compilername}" == "" ]
 then
@@ -35,16 +33,14 @@ then
   exit 1
 elif [ "${compilername}" == "gcc" ]
 then
-  compiler=${levante_gcc}
-  openmpi=${levante_gcc_openmpi}
-  netcdf=${levante_gcc_netcdf_yac}
+  levante_load_build_stack "${compilername}" "openmp"
+  levante_load_yac_dependencies "${compilername}"
   netcdf_root=${levante_gcc_netcdf_root}
   fyaml_root=${levante_gcc_fyaml_root}
 elif [ "${compilername}" == "intel" ]
 then
-  compiler=${levante_intel}
-  openmpi=${levante_intel_openmpi}
-  netcdf=${levante_intel_netcdf_yac}
+  levante_load_build_stack "${compilername}" "openmp"
+  levante_load_yac_dependencies "${compilername}"
   netcdf_root=${levante_intel_netcdf_root}
   fyaml_root=${levante_intel_fyaml_root}
 else
@@ -64,8 +60,6 @@ then
   echo "ERROR: YAC build directory not found, please make sure it exists"
   exit 1
 fi
-
-module load ${compiler} ${openmpi} ${netcdf}
 
 CC="$(command -v mpicc)"
 FC="$(command -v mpifort)"

@@ -10,6 +10,7 @@ configure_machine_yac_flags() {
 
     source "${SCRIPT_DIR}/levante_packages.sh"
     source "${COMMON_DIR}/build_yac.sh"
+    levante_load_yac_dependencies "${CLEO_COMPILERNAME}"
 
     case "${CLEO_COMPILERNAME}" in
 
@@ -20,10 +21,7 @@ configure_machine_yac_flags() {
                 exit 1
             fi
 
-            module load "${levante_gcc_netcdf_yac}"
-            spack load "${levante_gcc_openblas_yac}"
-
-            fyamllib="${levante_gcc_fyamllib}"
+            fyamllib=$(levante_fyamllib_for_compiler "${CLEO_COMPILERNAME}")
             ;;
 
         intel)
@@ -33,10 +31,7 @@ configure_machine_yac_flags() {
                 exit 1
             fi
 
-            module load "${levante_intel_netcdf_yac}"
-            spack load "${levante_intel_openblas_yac}"
-
-            fyamllib="${levante_intel_fyamllib}"
+            fyamllib=$(levante_fyamllib_for_compiler "${CLEO_COMPILERNAME}")
             ;;
 
         *)

@@ -14,16 +14,20 @@ configure_machine_build_flags() {
 
   ### -------- choose compiler(s) and their flags -------- ###
   source "${LEVANTE_HELPERS_DIR}/levante_packages.sh"
+  levante_reset_modules
+  levante_load_build_stack "${CLEO_COMPILERNAME}" "${CLEO_BUILDTYPE}"
+
+  if ! command -v mpic++ &> /dev/null; then
+    echo "Error: 'mpic++' command not found after loading Levante toolchain."
+    exit 1
+  fi
+  if ! command -v mpicc &> /dev/null; then
+    echo "Error: 'mpicc' command not found after loading Levante toolchain."
+    exit 1
+  fi
 
   if [ "${CLEO_COMPILERNAME}" == "intel" ]
   then
-    if [ "${CLEO_BUILDTYPE}" == "cuda" ]
-    then
-      echo "Error: CUDA build on Levante is not compatible with the intel compiler. Use gcc."
-      exit 1
-    fi
-    module load ${levante_intel} ${levante_intel_openmpi}
-    spack load ${levante_intel_cmake}
     export CLEO_CXX_COMPILER="$(command -v mpic++)"
     export CLEO_CC_COMPILER="$(command -v mpicc)"
 
@@ -38,16 +42,8 @@ configure_machine_build_flags() {
 
   elif [ "${CLEO_COMPILERNAME}" == "gcc" ]
   then
-    module load ${levante_gcc} ${levante_gcc_openmpi}
-    spack load ${levante_gcc_cmake}
     export CLEO_CXX_COMPILER="$(command -v mpic++)"
     export CLEO_CC_COMPILER="$(command -v mpicc)"
-
-    if [ "${CLEO_BUILDTYPE}" == "cuda" ]
-    then
-      spack load ${levante_gcc_cuda}
-      export CLEO_CUDA_ROOT=${levante_gcc_cuda_root}
-    fi
 
     if [ "${CLEO_ENABLEDEBUG}" == "true" ]
     then

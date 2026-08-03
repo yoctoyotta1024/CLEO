@@ -17,20 +17,9 @@ configure_machine_runtime_settings() {
 
   ### --------------- YAC runtime settings --------------- ###
   source "${LEVANTE_HELPERS_DIR}/levante_packages.sh"
+  levante_load_runtime_stack "${CLEO_COMPILERNAME}" "${CLEO_BUILDTYPE}"
 
-  if [ "${CLEO_COMPILERNAME}" == "gcc" ]
-  then
-    module load ${levante_gcc_openmpi}
-    export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${levante_gcc_libs}
-    fyamllib=${levante_gcc_fyamllib}
-  elif [ "${CLEO_COMPILERNAME}" == "intel" ]
-  then
-    module load ${levante_intel_openmpi}
-    fyamllib=${levante_intel_fyamllib}
-  else
-    echo "Bad inputs, YAC on Levante only compatible with 'gcc' or 'intel' compiler names"
-    exit 1
-  fi
+  fyamllib=$(levante_fyamllib_for_compiler "${CLEO_COMPILERNAME}")
   export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${fyamllib}
   export PYTHONPATH=${PYTHONPATH}:${CLEO_YACYAXTROOT}/yac/python # path to YAC python bindings
   ### ---------------------------------------------------- ###
@@ -38,11 +27,18 @@ configure_machine_runtime_settings() {
   ### --------------- set runtime optimisations ---------- ###
   if [ "${CLEO_BUILDTYPE}" == "cuda" ]
   then
+    if [[ -z "${CLEO_CUDA_ROOT}" ]]; then
+      echo "Error: CLEO_CUDA_ROOT is not set for cuda runtime."
+      exit 1
+    fi
+    export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${CLEO_CUDA_ROOT}/lib64"
     export UCX_RNDV_SCHEME=put_zcopy                        # Preferred communication scheme with Rendezvous protocol
     export UCX_RNDV_THRESH=16384                            # Threshold when to switch transport from TCP to NVLINK
     export UCX_IB_GPU_DIRECT_RDMA=yes                       # Allow remote direct memory access from/to GPU
     export UCX_TLS=cma,rc,mm,cuda_ipc,cuda_copy,gdr_copy    # Include cuda and gdr based transport layers
     export UCX_MEMTYPE_CACHE=n                              # Prevent misdetection of GPU memory as host memory
+  else
+    export UCX_TLS="shm,rc_mlx5,rc_x,self" # for jobs using LESS than 150 nodes
   fi
 
   export OMPI_MCA_osc="ucx"
@@ -51,7 +47,6 @@ configure_machine_runtime_settings() {
   export UCX_HANDLE_ERRORS="bt"
   export OMPI_MCA_pml_ucx_opal_mem_hooks=1
   export OMPI_MCA_io="romio321"           # basic optimisation of I/O
-  export UCX_TLS="shm,rc_mlx5,rc_x,self" # for jobs using LESS than 150 nodes
 
   export OMP_PROC_BIND=spread  # (!) will be overridden by KMP_AFFINITY
   export OMP_PLACES=threads    # (!) will be overridden by KMP_AFFINITY
