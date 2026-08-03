@@ -40,6 +40,11 @@ buildtype=${2:-"serial"}
 compilername=${3:-gcc}
 path2CLEO=${4:-${CLEO_PATH2CLEO}}
 
+# Export build context early so experiment resolution can use it (e.g. kokkostools paths).
+export CLEO_BUILDTYPE=${buildtype}
+export CLEO_COMPILERNAME=${compilername}
+export CLEO_PATH2CLEO=${path2CLEO}
+
 ### --- validate experiment is supported on vanilla --- ###
 vanilla_experiments=(
   as2017 breakup constthermo2d cuspbifurc divfree2d
@@ -74,9 +79,6 @@ enabledebug=${8:-false}
 make_clean=${9:-false}
 
 ### ----------------- export inputs -------------------- ###
-export CLEO_BUILDTYPE=${buildtype}
-export CLEO_COMPILERNAME=${compilername}
-export CLEO_PATH2CLEO=${path2CLEO}
 export CLEO_YACYAXTROOT=${yacyaxtroot}
 export CLEO_ENABLEDEBUG=${enabledebug}
 ### ---------------------------------------------------- ###
