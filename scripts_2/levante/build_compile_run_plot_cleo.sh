@@ -18,7 +18,7 @@ set -e
 ### Arguments:
 ###   $1  experiment       Name of experiment to run        (default: set below)
 ###   $2  buildtype        serial | threads | openmp | cuda (default: openmp)
-###   $3  compilername     gcc | intel                      (default: gc)
+###   $3  compilername     gcc | intel                      (default: gcc)
 ###   $4  path2CLEO        Absolute path to CLEO source     (default: $CLEO_PATH2CLEO)
 ###   $5  path2build       Absolute path for build dir      (default: from experiment)
 ###   $6  build_flags      Extra CMake flags                (default: from experiment)
@@ -59,6 +59,11 @@ yacyaxtroot=${7:-${HOME}/yacyaxt/${compilername}}
 enabledebug=${8:-false}
 make_clean=${9:-false}
 stacksize_limit=${10:-204800}
+
+if [[ "${buildtype}" == "cuda" && "${compilername}" != "gcc" ]]; then
+  echo "Error: CUDA build on Levante requires compilername='gcc'."
+  exit 1
+fi
 ### ---------------------------------------------------- ###
 
 ### ----------------- export inputs -------------------- ###
