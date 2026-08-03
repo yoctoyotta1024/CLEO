@@ -13,7 +13,7 @@ set -e
 ###                                    [stacksize_limit]
 ###
 ###   All arguments are optional — defaults come from environment variables
-###   and example_params.sh.
+###   and experiments.sh.
 ###
 ### Arguments:
 ###   $1  experiment       Name of experiment to run        (default: set below)
@@ -27,7 +27,7 @@ set -e
 ###   $9  make_clean       true | false                     (default: false)
 ###   $10 stacksize_limit  ulimit -s value (kB)             (default: 204800)
 ###
-### Available examples (see common/examples/example_params.sh for full details):
+### Available examples (see common/experiments.sh for full details):
 ###   as2017  cuspbifurc  breakup  shima2009  constthermo2d  divfree2d
 ###   eurec4a1d  rainshaft1d  python_bindings  kokkostools
 ###   fromfile  fromfile_irreg  bubble3d
@@ -47,8 +47,13 @@ if [ "${path2CLEO}" == "" ]; then
   exit 1
 fi
 
-[ -f "${path2CLEO}/scripts_2/common/examples/example_params.sh" ] && \
-  source ${path2CLEO}/scripts_2/common/examples/example_params.sh "$5" "$6" "${experiment}"
+experiments_script="${path2CLEO}/scripts_2/common/experiments.sh"
+if [ ! -f "${experiments_script}" ]; then
+  echo "Error: experiments script not found at ${experiments_script}"
+  exit 1
+fi
+source "${experiments_script}"
+load_experiment_config "$5" "$6" "${experiment}"
 
 yacyaxtroot=${7:-${HOME}/yacyaxt/${compilername}}
 enabledebug=${8:-false}
@@ -66,34 +71,45 @@ export CLEO_MAKE_JOBS=32
 ### ---------------------------------------------------- ###
 
 ### -------------------- check inputs ------------------ ###
-source ${path2CLEO}/scripts_2/common/bash/src/check_inputs.sh
+source "${path2CLEO}/scripts_2/common/check_inputs.sh"
 
 check_args_not_empty "${CLEO_BUILDTYPE}" "${CLEO_COMPILERNAME}" "${CLEO_PATH2CLEO}" \
                      "${CLEO_PATH2BUILD}" "${CLEO_BUILD_FLAGS}" "${CLEO_YACYAXTROOT}" \
                      "${CLEO_ENABLEDEBUG}" "${stacksize_limit}"
 ### ---------------------------------------------------- ###
 
-[ -f "${path2CLEO}/scripts_2/common/bash/src/print_configuration.sh" ] && \
-  source "${path2CLEO}/scripts_2/common/bash/src/print_configuration.sh" "${experiment}"
+print_config_script="${path2CLEO}/scripts_2/common/print_configuration.sh"
+if [ -f "${print_config_script}" ]; then
+  source "${print_config_script}"
+  print_configuration "${experiment}"
+fi
 
 ### --------------------- build CLEO ------------------- ###
-buildcmd="${CLEO_PATH2CLEO}/scripts_2/common/bash/build_cleo.sh"
+buildcmd="${CLEO_PATH2CLEO}/scripts_2/common/build_cleo.sh"
 if [ ! -f "${buildcmd}" ]; then
   echo "Error: build script not found at ${buildcmd}"
   exit 1
 fi
 echo "${buildcmd}"
 source "${buildcmd}"
+build_cleo
 ### ---------------------------------------------------- ###
 
 ### ---------------- compile experiment ---------------- ###
-compilecmd="${CLEO_PATH2CLEO}/scripts_2/common/bash/compile_cleo.sh"
+compilecmd="${CLEO_PATH2CLEO}/scripts_2/common/compile_cleo.sh"
 echo "${compilecmd} \"${executables}\" ${make_clean}"
-source "${compilecmd}" "${executables}" "${make_clean}"
+source "${compilecmd}"
+compile_cleo "${executables}" "${make_clean}"
 ### ---------------------------------------------------- ###
 
 ### ------------- load runtime environment ------------- ###
-source ${path2CLEO}/scripts_2/levante/bash/src/runtime_settings.sh ${stacksize_limit}
+runtime_settings_script="${path2CLEO}/scripts_2/levante/runtime_settings.sh"
+if [ ! -f "${runtime_settings_script}" ]; then
+  echo "Error: runtime settings script not found at ${runtime_settings_script}"
+  exit 1
+fi
+source "${runtime_settings_script}"
+configure_machine_runtime_settings "${stacksize_limit}"
 ### ---------------------------------------------------- ###
 
 ### ----------- run Python plot/analysis script -------- ###
