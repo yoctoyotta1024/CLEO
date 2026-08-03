@@ -133,8 +133,34 @@ case "${experiment}" in
     executables="kokkostools"
 
     if [[ -z "${CLEO_KOKKOSTOOLS}" ]]; then
-      echo "Error: CLEO_KOKKOSTOOLS must be set for the 'kokkostools' experiment."
-      exit 1
+      if [[ "${CLEO_AUTO_INSTALL_KOKKOSTOOLS}" == "true" ]]; then
+        if [[ -z "${CLEO_MACHINE}" || -z "${CLEO_COMPILERNAME}" ]]; then
+          echo "Error: CLEO_MACHINE and CLEO_COMPILERNAME must be set for auto-installing kokkostools."
+          exit 1
+        fi
+
+        install_script="${path2CLEO}/scripts_2/${CLEO_MACHINE}/helpers/install_kokkos_tools.sh"
+        if [[ ! -f "${install_script}" ]]; then
+          echo "Error: kokkostools installer not found at ${install_script}"
+          exit 1
+        fi
+
+        tools_repo_parent="${CLEO_KOKKOSTOOLS_REPO_PARENT:-${path2CLEO}}"
+        if [[ ! -d "${tools_repo_parent}/kokkos-tools" ]]; then
+          echo "Error: expected kokkos-tools repository at ${tools_repo_parent}/kokkos-tools"
+          echo "Set CLEO_KOKKOSTOOLS_REPO_PARENT to the directory containing the 'kokkos-tools' repo."
+          exit 1
+        fi
+
+        tools_install_prefix="${path2CLEO}/build_kokkostools/tools/${CLEO_MACHINE}/${CLEO_COMPILERNAME}"
+        echo "Auto-installing kokkostools to ${tools_install_prefix}"
+        bash "${install_script}" "${tools_repo_parent}" "${CLEO_COMPILERNAME}" "${tools_install_prefix}"
+        export CLEO_KOKKOSTOOLS="${tools_install_prefix}"
+      else
+        echo "Error: CLEO_KOKKOSTOOLS must be set for the 'kokkostools' experiment."
+        echo "Set CLEO_AUTO_INSTALL_KOKKOSTOOLS=true to auto-install it."
+        exit 1
+      fi
     fi
 
     pythonscript=${path2CLEO}/examples/kokkostools/kokkostools.py
