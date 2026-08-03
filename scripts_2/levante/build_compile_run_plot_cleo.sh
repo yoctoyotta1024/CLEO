@@ -42,6 +42,11 @@ buildtype=${2:-"openmp"}
 compilername=${3:-gcc}
 path2CLEO=${4:-${HOME}/CLEO}
 
+# Export build context early so experiment resolution can use it (e.g. kokkostools paths).
+export CLEO_BUILDTYPE=${buildtype}
+export CLEO_COMPILERNAME=${compilername}
+export CLEO_PATH2CLEO=${path2CLEO}
+
 if [ "${path2CLEO}" == "" ]; then
   echo "Please provide path to CLEO source directory"
   exit 1
@@ -67,9 +72,6 @@ fi
 ### ---------------------------------------------------- ###
 
 ### ----------------- export inputs -------------------- ###
-export CLEO_BUILDTYPE=${buildtype}
-export CLEO_COMPILERNAME=${compilername}
-export CLEO_PATH2CLEO=${path2CLEO}
 export CLEO_YACYAXTROOT=${yacyaxtroot}
 export CLEO_ENABLEDEBUG=${enabledebug}
 export CLEO_MAKE_JOBS=32
