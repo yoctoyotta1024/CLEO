@@ -25,6 +25,17 @@ set -e
 ###   $8  enabledebug    true | false                    (default: false)
 ###   $9  make_clean     true | false                    (default: false)
 ###
+### Required env vars (unless passed as args):
+###   CLEO_PATH2CLEO
+###   CLEO_PYTHON
+###   CLEO_YACYAXTROOT
+###
+### Additional vars for kokkostools experiment:
+###   CLEO_KOKKOSTOOLS
+###   or (opt-in auto-install):
+###     CLEO_AUTO_INSTALL_KOKKOSTOOLS=true
+###     CLEO_KOKKOSTOOLS_REPO_PARENT=<parent directory containing kokkos-tools/>
+###
 ### Available examples (see common/experiments.sh for full details):
 ###   as2017  breakup  constthermo2d  cuspbifurc  divfree2d
 ###   eurec4a1d  kokkostools  python_bindings  rainshaft1d  shima2009

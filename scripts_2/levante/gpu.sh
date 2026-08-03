@@ -18,4 +18,14 @@ source /etc/profile
 module purge
 spack unload --all
 
-${SLURM_SUBMIT_DIR}/scripts_2/levante/build_compile_run_plot_cleo.sh constthermo2d cuda gcc
+repo_dir="${SLURM_SUBMIT_DIR:-$(pwd)}"
+
+if [[ ! -f "${repo_dir}/scripts_2/levante/build_compile_run_plot_cleo.sh" ]]; then
+  echo "Error: expected CLEO repo at '${repo_dir}' (missing scripts_2/levante/build_compile_run_plot_cleo.sh)."
+  exit 1
+fi
+
+source "${repo_dir}/scripts_2/common/check_inputs.sh"
+check_args_not_empty "${CLEO_PYTHON}" "${CLEO_YACYAXTROOT}"
+
+"${repo_dir}/scripts_2/levante/build_compile_run_plot_cleo.sh" constthermo2d cuda gcc "${repo_dir}"
