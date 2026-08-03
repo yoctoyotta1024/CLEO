@@ -101,13 +101,21 @@ def main(
         show_figures,
         save_figures,
     ]  # booleans for [showing, saving] initialisation figures
+    SDgbx_range = range(
+        int(39 * 20 / (2500 / config["domain"]["ngbxs"])),
+        int(124 * 20 / (2500 / config["domain"]["ngbxs"])),
+    )
     SDgbxs2plt = list(
-        range(39, 124)
+        SDgbx_range
     )  # gbxindex of initial SDs to plot if any(isfigures) (nb. "all" can be very slow)
     SDgbxs2plt = [random.choice(SDgbxs2plt)]  # choose random gbx from list to plot
 
     ### --- settings for 1-D gridbox boundaries --- ###
-    zgrid = [0, 2500, 20]  # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
+    zgrid = [
+        0,
+        2500,
+        2500 / config["domain"]["ngbxs"],
+    ]  # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
     xgrid = np.array([0, 20])  # array of xhalf coords [m]
     ygrid = np.array([0, 20])  # array of yhalf coords [m]
 
@@ -125,8 +133,9 @@ def main(
     ### --- settings for initial superdroplets --- ###
     # initial superdroplet coordinates
     zlim = 800  # min z coord of superdroplets [m]
-    npergbx = 256  # number of superdroplets per gridbox
-
+    npergbx = int(
+        config["domain"]["maxnsupers"] / (SDgbx_range[-1] - SDgbx_range[0] + 1)
+    )
     # initial superdroplet radii (and implicitly solute masses)
     rspan = [3e-9, 5e-5]  # min and max range of radii to sample [m]
     dryr_sf = 1.0  # dryradii are 1/sf of radii [m]
