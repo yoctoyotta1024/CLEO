@@ -35,17 +35,13 @@ run_experiment() {
 for entry in \
   "as2017 serial gcc" \
   "breakup serial gcc" \
-  "constthermo2d serial gcc" \
-  "cuspbifurc serial gcc" \
-  "divfree2d serial gcc" \
-  "eurec4a1d serial gcc" \
-  "python_bindings serial gcc" \
-  "rainshaft1d serial gcc" \
-  "shima2009 serial gcc" \
-  "as2017 openmp gcc" \
-  "breakup openmp gcc" \
+  "constthermo2d openmp gcc" \
+  "cuspbifurc threads gcc" \
   "divfree2d openmp gcc" \
-  "rainshaft1d openmp gcc"; do
+  "eurec4a1d threads gcc" \
+  "rainshaft1d threads gcc" \
+  "shima2009 openmp gcc" \
+  "python_bindings openmp gcc"; do
   set -- $entry
   run_experiment "$1" "$2" "$3"
 done
