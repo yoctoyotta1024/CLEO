@@ -18,4 +18,4 @@ source /etc/profile
 module purge
 spack unload --all
 
-${SLURM_SUBMIT_DIR}/scripts_2/levante/build_compile_run_plot_cleo.sh constthermo2d cuda
+${SLURM_SUBMIT_DIR}/scripts_2/levante/build_compile_run_plot_cleo.sh constthermo2d cuda gcc
