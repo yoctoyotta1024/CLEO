@@ -13,19 +13,36 @@
 #SBATCH --output=./cleo_gpu.%j.out
 #SBATCH --error=./cleo_gpu.%j.out
 
-set -e
-source /etc/profile
-module purge
-spack unload --all
+CLEO_PATH2CLEO="${SLURM_SUBMIT_DIR:-$(pwd)}"
 
-repo_dir="${SLURM_SUBMIT_DIR:-$(pwd)}"
-
-if [[ ! -f "${repo_dir}/scripts_2/levante/build_compile_run_plot_cleo.sh" ]]; then
-  echo "Error: expected CLEO repo at '${repo_dir}' (missing scripts_2/levante/build_compile_run_plot_cleo.sh)."
-  exit 1
-fi
-
-source "${repo_dir}/scripts_2/common/check_inputs.sh"
+source "${CLEO_PATH2CLEO}/scripts_2/common/check_inputs.sh"
 check_args_not_empty "${CLEO_PYTHON}" "${CLEO_YACYAXTROOT}"
 
-"${repo_dir}/scripts_2/levante/build_compile_run_plot_cleo.sh" constthermo2d cuda gcc "${repo_dir}"
+run_experiment() {
+  local experiment="$1"
+  local buildtype="$2"
+  local compilername="$3"
+
+  echo "=== Running ${experiment} (${buildtype}, ${compilername}) ==="
+  "${CLEO_PATH2CLEO}/scripts_2/levante/build_compile_run_plot_cleo.sh" \
+    "${experiment}" "${buildtype}" "${compilername}" "${CLEO_PATH2CLEO}"
+}
+
+for entry in \
+  "as2017 cuda gcc" \
+  "breakup cuda gcc" \
+  "constthermo2d cuda gcc" \
+  "cuspbifurc cuda gcc" \
+  "divfree2d cuda gcc" \
+  "eurec4a1d cuda gcc" \
+  "rainshaft1d cuda gcc" \
+  "shima2009 cuda gcc" \
+  "python_bindings cuda gcc"; do
+  set -- $entry
+  run_experiment "$1" "$2" "$3"
+done
+
+# For a later MPI-heavy test, you can swap to:
+# run_experiment fromfile openmp gcc
+
+#"${CLEO_PATH2CLEO}/scripts_2/levante/build_compile_run_plot_cleo.sh" constthermo2d cuda gcc "${CLEO_PATH2CLEO}"
