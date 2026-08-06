@@ -37,7 +37,7 @@ bool cfl_criterion(const double gridstep, const double sdstep) {
   Criterion is C = delta[X] / gridstep =< 1 where the
   gridstep is calculated from the gridbox boundaries map */
 template <GridboxMaps GbxMaps>
-KOKKOS_INLINE_FUNCTION bool cfl_criteria(const GbxMaps &gbxmaps, const unsigned int gbxindex,
+KOKKOS_INLINE_FUNCTION bool cfl_criteria(const GbxMaps& gbxmaps, const unsigned int gbxindex,
                                          const double delta3, const double delta1,
                                          const double delta2) {
   double gridstep(gbxmaps.coord3bounds(gbxindex).second - gbxmaps.coord3bounds(gbxindex).first);
@@ -49,9 +49,9 @@ KOKKOS_INLINE_FUNCTION bool cfl_criteria(const GbxMaps &gbxmaps, const unsigned 
   gridstep = gbxmaps.coord2bounds(gbxindex).second - gbxmaps.coord2bounds(gbxindex).first;
   cfl = (cfl_criterion(gridstep, delta2) && cfl);
 
-  assert((cfl) &&
-         "CFL criteria for superdrop motion not met."
-         "Consider reducing sdmotion timestep");
+  if (!cfl) {
+    Kokkos::abort("CFL criteria for superdrop motion not met. Consider reducing sdmotion timestep");
+  }
 
   return cfl;
 }

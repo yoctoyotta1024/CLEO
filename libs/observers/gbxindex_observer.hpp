@@ -67,7 +67,7 @@ struct GbxIndexFunctor {
 template <typename Dataset, typename Store>
 class GbxindexObserver {
  private:
-  Dataset &dataset; /**< Dataset to write gridbox index data to. */
+  Dataset& dataset; /**< Dataset to write gridbox index data to. */
   std::shared_ptr<XarrayZarrArray<Store, uint32_t>>
       xzarr_ptr; /**< Pointer to gridbox index array in dataset. */
 
@@ -95,7 +95,7 @@ class GbxindexObserver {
    * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
    * @param ngbxs Number of gridboxes in final array.
    */
-  GbxindexObserver(Dataset &dataset, Store &store, const size_t maxchunk, const size_t ngbxs)
+  GbxindexObserver(Dataset& dataset, Store& store, const size_t maxchunk, const size_t ngbxs)
       : dataset(dataset),
         xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
             dataset.template create_coordinate_array<uint32_t>("gbxindex", "", 1, maxchunk,
@@ -110,6 +110,7 @@ class GbxindexObserver {
    * the size of the gbxindex dimension in the dataset is correct.
    *
    * @param d_gbxs View of gridboxes on device.
+   * @param d_supers View of superdrops on device.
    */
   void before_timestepping(const viewd_constgbx d_gbxs, const subviewd_constsupers d_supers) const {
     std::cout << "observer includes gbxindex observer\n";

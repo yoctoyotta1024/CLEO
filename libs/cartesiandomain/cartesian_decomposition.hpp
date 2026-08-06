@@ -24,12 +24,12 @@
 
 #include <algorithm>
 #include <array>
-#include <cassert>
 #include <cmath>
 #include <cstddef>
 #include <iostream>
 #include <limits>
 #include <map>
+#include <stdexcept>
 #include <vector>
 
 #include "../cleoconstants.hpp"
@@ -103,7 +103,7 @@ class CartesianDecomposition {
   int local_to_global_gridbox_index(size_t local_gridbox_index, int process = -1) const;
   int global_to_local_gridbox_index(size_t global_gridbox_index) const;
   int get_gridbox_owner_process(size_t global_gridbox_index) const;
-  unsigned int get_local_bounding_gridbox_index(std::array<double, 3> &coordinates) const;
+  unsigned int get_local_bounding_gridbox_index(std::array<double, 3>& coordinates) const;
   // void set_gridbox_size(double z_size, double x_size, double y_size);
   void set_gridbox_bounds(GbxBoundsFromBinary gfb);
   // Sets the behavior of all dimensions
@@ -113,31 +113,31 @@ class CartesianDecomposition {
 // Given the global domain, a global decomposition and a partition index,
 // returns the partition origin and size
 void construct_partition(const std::vector<size_t> ndims, std::vector<size_t> decomposition,
-                         int partition_index, std::array<size_t, 3> &partition_origin,
-                         std::array<size_t, 3> &partition_size);
+                         int partition_index, std::array<size_t, 3>& partition_origin,
+                         std::array<size_t, 3>& partition_size);
 
 // Adds all permutations of a particular decomposition and removes the ones that
 // do not fit the global dimension sizes
-void permute_and_trim_factorizations(std::vector<std::vector<size_t>> &factors,
+void permute_and_trim_factorizations(std::vector<std::vector<size_t>>& factors,
                                      const std::vector<size_t> ndims);
 
 // Finds the best decomposition given by the most even division of gridboxes among processes
-int find_best_decomposition(std::vector<std::vector<size_t>> &factors,
+int find_best_decomposition(std::vector<std::vector<size_t>>& factors,
                             const std::vector<size_t> ndims);
 
 // Functions for getting indexes and coordinates in an arbitrary 3D gridbox domain
-size_t get_index_from_coordinates(const std::vector<size_t> &ndims, const size_t k, const size_t i,
+size_t get_index_from_coordinates(const std::vector<size_t>& ndims, const size_t k, const size_t i,
                                   const size_t j);
-std::array<size_t, 3> get_coordinates_from_index(const std::vector<size_t> &ndims,
+std::array<size_t, 3> get_coordinates_from_index(const std::vector<size_t>& ndims,
                                                  const size_t index);
 
 // Support functions
 std::vector<std::vector<size_t>> factorize(int n);
-void factorize_helper(int n, int start, std::vector<size_t> &current,
-                      std::vector<std::vector<size_t>> &result);
-void heap_permutation(std::vector<std::vector<size_t>> &results, std::vector<size_t> arr, int size);
+void factorize_helper(int n, int start, std::vector<size_t>& current,
+                      std::vector<std::vector<size_t>>& result);
+void heap_permutation(std::vector<std::vector<size_t>>& results, std::vector<size_t> arr, int size);
 int get_multiplications_to_turn_int(double entry_value);
-int binary_search(std::array<double, 3> &coordinates,
-    int dimension, std::array<size_t, 3> partition_size,
-    std::vector<std::vector<double>> gridbox_bounds);
+int binary_search(std::array<double, 3>& coordinates, int dimension,
+                  std::array<size_t, 3> partition_size,
+                  std::vector<std::vector<double>> gridbox_bounds);
 #endif  // LIBS_CARTESIANDOMAIN_CARTESIAN_DECOMPOSITION_HPP_

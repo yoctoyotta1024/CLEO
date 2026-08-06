@@ -45,8 +45,8 @@
 namespace py = pybind11;
 namespace pyca = cleo_python_bindings_aliases;
 
-void pyNullObserver(py::module &m);
-void pyObserver(py::module &m);
-void pycreate_observer(py::module &m);
+void pyNullObserver(py::module& m);
+void pyObserver(py::module& m);
+void pycreate_observer(py::module& m);
 
 #endif  // LIBS_CLEO_PYTHON_BINDINGS_PY_OBSERVERS_HPP_

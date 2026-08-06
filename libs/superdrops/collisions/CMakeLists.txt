@@ -13,12 +13,11 @@ set(LIB_BINARY_DIR ${CMAKE_BINARY_DIR}/lib)
 # Add executables and create library target
 set(SOURCES
   "shuffle.cpp"
-  "coalbure_flag.cpp"
+  "coalescence_efficiency.cpp"
   "coalescence.cpp"
   "collisionkinetics.cpp"
   "golovinprob.cpp"
   "longhydroprob.cpp"
-  "lowlistprob.cpp"
 )
 # must use STATIC (not(!) SHARED) lib for linking to executable if build is CUDA enabled with Kokkos
 add_library("${LIBNAME}" STATIC ${SOURCES})

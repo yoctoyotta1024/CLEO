@@ -48,11 +48,19 @@ then
   source ${bashsrc}/build_openmp.sh
   source ${bashsrc}/build_cuda.sh
 fi
+
+if [ "${CLEO_ENABLEDEBUG}" = "true" ]; then
+    CLEO_CMAKE_BUILD_TYPE="Debug"
+else
+    CLEO_CMAKE_BUILD_TYPE="Release"
+fi
 ### ---------------------------------------------------- ###
 
 ### ---------------- build CLEO with cmake ------------- ###
 echo "### --------------- Build Inputs -------------- ###"
 echo "CLEO_BUILDTYPE: ${CLEO_BUILDTYPE}"
+echo "CLEO_ENABLEDEBUG: ${CLEO_ENABLEDEBUG}"
+echo "CLEO_CMAKE_BUILD_TYPE: ${CLEO_CMAKE_BUILD_TYPE}"
 echo "CLEO_COMPILERNAME: ${CLEO_COMPILERNAME}"
 echo "CLEO_PATH2CLEO: ${CLEO_PATH2CLEO}"
 echo "CLEO_PATH2BUILD: ${CLEO_PATH2BUILD}"
@@ -70,9 +78,11 @@ echo "CLEO_YACYAXTROOT: ${CLEO_YACYAXTROOT}"
 echo "CLEO_YAC_FLAGS: ${CLEO_YAC_FLAGS}"
 echo "### ------------------------------------------- ###"
 
+
 cmake -DCMAKE_CXX_COMPILER=${CLEO_CXX_COMPILER} \
     -DCMAKE_C_COMPILER=${CLEO_CC_COMPILER} \
     -DCMAKE_CXX_FLAGS="${CLEO_CXX_FLAGS}" \
+    -DCMAKE_BUILD_TYPE=${CLEO_CMAKE_BUILD_TYPE} \
     -S ${CLEO_PATH2CLEO} -B ${CLEO_PATH2BUILD} \
     ${CLEO_KOKKOS_BASIC_FLAGS} ${CLEO_KOKKOS_HOST_FLAGS} ${CLEO_KOKKOS_DEVICE_FLAGS} \
     ${CLEO_BUILD_FLAGS} ${CLEO_YAC_FLAGS}

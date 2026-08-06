@@ -65,7 +65,14 @@ def parse_arguments():
     parser.add_argument(
         "--kernels",
         nargs="*",
-        choices=["long", "lowlist", "szakallurbich", "testikstraub"],
+        choices=[
+            "constcoal",
+            "long",
+            "lowlist",
+            "straub",
+            "szakallurbich",
+            "testikstraub",
+        ],
         type=str,
         help="kernel examples to plot",
         default=["long"],
@@ -151,9 +158,11 @@ def plot_allkernels_results(
         ax.set_yticklabels([])  # Remove y-axis tick labels
 
     styles = {
-        "long": ["Long (coal only)", "grey", 0.8],
+        "constcoal": ["Const E_coal", "grey", 1.0],
+        "long": ["Long (coal only)", "black", 0.8],
         "lowlist": ["Low & List", "blue", 1.0],
         "szakallurbich": ["Szakall & Urbich", "green", 1.0],
+        "straub": ["Straub", "maroon", 1.0],
         "testikstraub": ["Testik + Straub", "purple", 1.0],
     }
     linestyles = ["dotted", (0, (3, 1, 1, 1)), "dashed", "dashdot", "solid"]

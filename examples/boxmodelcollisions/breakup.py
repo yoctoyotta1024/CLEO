@@ -42,7 +42,7 @@ parser.add_argument(
 parser.add_argument(
     "--kernels",
     nargs="*",
-    choices=["long", "lowlist", "szakallurbich", "testikstraub"],
+    choices=["constcoal", "long", "lowlist", "straub", "szakallurbich", "testikstraub"],
     type=str,
     help="kernel examples to run",
 )
@@ -96,6 +96,8 @@ for k in kernels:
 executables = {
     "long": "longcolls",
     "lowlist": "lowlistcolls",
+    "constcoal": "constcoalcolls",
+    "straub": "straubcolls",
     "szakallurbich": "szakallurbichcolls",
     "testikstraub": "testikstraubcolls",
 }

@@ -30,7 +30,9 @@ and Climatology 6, 203–204 (1967)." Note function is called
 with conversion to real temp /K = T*Temp0 and from real psat
 to dimensionless psat = psat/P0. */
 double cvode_saturationpressure(const double temp) {
-  assert((temp > 0) && "psat ERROR: temperature must be larger than 0K.");
+  if (temp <= 0) {
+    throw std::runtime_error("psat ERROR: temperature must be larger than 0K.");
+  }
 
   constexpr double A = 17.4146;     // constants from Bjorn Gitlab originally from paper
   constexpr double B = 33.639;      // ditto
@@ -78,7 +80,7 @@ static double dp_dt(const double t, const double wmax, const double tauhalf) {
   Parcel has water vapour mass mixing ratio (m_v/m_dry) = qv and
   liquid water mass mixing ratio (m_c/m_dry) = qc.
   _Note:_ True dTemp/dt = dtemp * TEMP0/TIME0  */
-static double dtemp_dt_adia(const int k, const double pdot, const N_Vector &y) {
+static double dtemp_dt_adia(const int k, const double pdot, const N_Vector& y) {
   double p(NV_Ith_S(y, k));
   double temp(NV_Ith_S(y, k + 1));
   double qv(NV_Ith_S(y, k + 2));
@@ -96,7 +98,7 @@ static double dtemp_dt_adia(const int k, const double pdot, const N_Vector &y) {
 
 /* Simple function f(t,y, ydot) called by ODE solver to
   integrate ODEs over time. */
-int odes_func(realtype t, N_Vector y, N_Vector ydot, void *user_data) {
+int odes_func(realtype t, N_Vector y, N_Vector ydot, void* user_data) {
   constexpr int NVARS = 4;  // no. of (distinct) variables per grid box
 
   UserData data = (UserData)user_data;

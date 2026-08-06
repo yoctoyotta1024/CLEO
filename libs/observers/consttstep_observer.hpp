@@ -75,6 +75,7 @@ struct ConstTstepObserver {
    * Calls `before_timestepping` function of `do_obs`.
    *
    * @param d_gbxs The view of gridboxes in device memory.
+   * @param d_supers The view of superdrops in device memory.
    */
   void before_timestepping(const viewd_constgbx d_gbxs, const subviewd_constsupers d_supers) const {
     do_obs.before_timestepping(d_gbxs, d_supers);

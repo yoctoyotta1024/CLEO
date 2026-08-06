@@ -21,9 +21,9 @@
 #define LIBS_OBSERVERS_MASSMOMENTS_OBSERVER_HPP_
 
 #include <Kokkos_Core.hpp>
-#include <cassert>
 #include <concepts>
 #include <cstdint>
+#include <stdexcept>
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
@@ -58,8 +58,8 @@
  * @param mom2 Reference to where to place value of 2nd mass moment.
  */
 KOKKOS_FUNCTION
-void calculate_massmoments(const TeamMember &team_member, const viewd_constsupers supers,
-                           uint64_t &mom0, float &mom1, float &mom2);
+void calculate_massmoments(const TeamMember& team_member, const viewd_constsupers supers,
+                           uint64_t& mom0, float& mom1, float& mom2);
 
 /**
  * @brief Performs calculation of 0th, 1st, and 2nd moments of the (real) raindroplet mass
@@ -86,8 +86,8 @@ void calculate_massmoments(const TeamMember &team_member, const viewd_constsuper
  * @param mom2 Reference to where to place value of 2nd mass moment.
  */
 KOKKOS_FUNCTION
-void calculate_rainmassmoments(const TeamMember &team_member, const viewd_constsupers supers,
-                               uint64_t &mom0, float &mom1, float &mom2);
+void calculate_rainmassmoments(const TeamMember& team_member, const viewd_constsupers supers,
+                               uint64_t& mom0, float& mom1, float& mom2);
 
 /**
  * @brief Functor to perform calculation of 0th, 1st, and 2nd moments of the (real)
@@ -121,7 +121,7 @@ struct MassMomentsFunc {
    * @param d_mom2 The mirror view buffer for the 2nd mass moment.
    */
   KOKKOS_FUNCTION
-  void operator()(const TeamMember &team_member, const viewd_constgbx d_gbxs,
+  void operator()(const TeamMember& team_member, const viewd_constgbx d_gbxs,
                   const subviewd_constsupers d_supers, Buffer<uint64_t>::mirrorviewd_buffer d_mom0,
                   Buffer<float>::mirrorviewd_buffer d_mom1,
                   Buffer<float>::mirrorviewd_buffer d_mom2) const {
@@ -166,7 +166,7 @@ struct RaindropsMassMomentsFunc {
    * @param d_mom2 The mirror view buffer for the 2nd mass moment.
    */
   KOKKOS_FUNCTION
-  void operator()(const TeamMember &team_member, const viewd_constgbx d_gbxs,
+  void operator()(const TeamMember& team_member, const viewd_constgbx d_gbxs,
                   const subviewd_constsupers d_supers, Buffer<uint64_t>::mirrorviewd_buffer d_mom0,
                   Buffer<float>::mirrorviewd_buffer d_mom1,
                   Buffer<float>::mirrorviewd_buffer d_mom2) const {
@@ -203,7 +203,7 @@ struct CollectMassMoments {
    */
   template <typename Dataset, typename T>
   void write_one_array(std::shared_ptr<XarrayAndViews<Store, T>> ptr,
-                       const Dataset &dataset) const {
+                       const Dataset& dataset) const {
     Kokkos::deep_copy(ptr->h_data, ptr->d_data);
     dataset.write_to_array(ptr->xzarr, ptr->h_data);
   }
@@ -218,7 +218,7 @@ struct CollectMassMoments {
    */
   template <typename Dataset, typename T>
   void write_one_arrayshape(std::shared_ptr<XarrayAndViews<Store, T>> ptr,
-                            const Dataset &dataset) const {
+                            const Dataset& dataset) const {
     dataset.write_arrayshape(ptr->xzarr);
   }
 
@@ -262,7 +262,7 @@ struct CollectMassMoments {
      * from within a Kokkos::parallel_for loop with a team policy.
      */
     KOKKOS_INLINE_FUNCTION
-    void operator()(const TeamMember &team_member) const {
+    void operator()(const TeamMember& team_member) const {
       ffunc(team_member, d_gbxs, d_supers, d_mom0, d_mom1, d_mom2);
     }
   };
@@ -294,10 +294,15 @@ struct CollectMassMoments {
    * @return Functor for collecting mass moments.
    */
   Functor get_functor(const viewd_constgbx d_gbxs, const subviewd_constsupers d_supers) const {
-    assert(((mom0_ptr->d_data.extent(0) == d_gbxs.extent(0)) &&
-            (mom1_ptr->d_data.extent(0) == d_gbxs.extent(0)) &&
-            (mom2_ptr->d_data.extent(0) == d_gbxs.extent(0))) &&
-           "d_data views for mass moments should be size of the number of gridboxes");
+#ifndef NDEBUG
+    if (!((mom0_ptr->d_data.extent(0) == d_gbxs.extent(0)) &&
+          (mom1_ptr->d_data.extent(0) == d_gbxs.extent(0)) &&
+          (mom2_ptr->d_data.extent(0) == d_gbxs.extent(0)))) {
+      throw std::runtime_error(
+          "d_data views for mass moments should "
+          "be size of the number of gridboxes");
+    }
+#endif
     return Functor(ffunc, d_gbxs, d_supers, mom0_ptr->d_data, mom1_ptr->d_data, mom2_ptr->d_data);
   }
 
@@ -307,7 +312,7 @@ struct CollectMassMoments {
    * @param dataset The dataset to write data to.
    */
   template <typename Dataset>
-  void write_to_arrays(const Dataset &dataset) const {
+  void write_to_arrays(const Dataset& dataset) const {
     write_one_array(mom0_ptr, dataset);
     write_one_array(mom1_ptr, dataset);
     write_one_array(mom2_ptr, dataset);
@@ -319,7 +324,7 @@ struct CollectMassMoments {
    * @param dataset The dataset to write data to.
    */
   template <typename Dataset>
-  void write_arrayshapes(const Dataset &dataset) const {
+  void write_arrayshapes(const Dataset& dataset) const {
     write_one_arrayshape(mom0_ptr, dataset);
     write_one_arrayshape(mom1_ptr, dataset);
     write_one_arrayshape(mom2_ptr, dataset);
@@ -331,7 +336,7 @@ struct CollectMassMoments {
    * @param dataset The dataset to write data to.
    */
   template <typename Dataset>
-  void write_to_ragged_arrays(const Dataset &dataset) const {}
+  void write_to_ragged_arrays(const Dataset& dataset) const {}
 
   /**
    * @brief Null function to satisfy CollectDataForDataset concept.
@@ -339,7 +344,7 @@ struct CollectMassMoments {
    * @param dataset The dataset to write data to.
    */
   template <typename Dataset>
-  void write_ragged_arrayshapes(const Dataset &dataset) const {}
+  void write_ragged_arrayshapes(const Dataset& dataset) const {}
 
   /**
    * @brief Null function to satisfy CollectDataForDataset concept.
@@ -364,8 +369,8 @@ struct CollectMassMoments {
  * observer concept.
  */
 template <typename Dataset, typename Store>
-inline Observer auto MassMomentsObserver(const unsigned int interval, const Dataset &dataset,
-                                         Store &store, const size_t maxchunk, const size_t ngbxs) {
+inline Observer auto MassMomentsObserver(const unsigned int interval, const Dataset& dataset,
+                                         Store& store, const size_t maxchunk, const size_t ngbxs) {
   const auto xzarr_mom0 = create_massmom0_xarray(dataset, store, "massmom0", maxchunk, ngbxs);
   const auto xzarr_mom1 = create_massmom1_xarray(dataset, store, "massmom1", maxchunk, ngbxs);
   const auto xzarr_mom2 = create_massmom2_xarray(dataset, store, "massmom2", maxchunk, ngbxs);
@@ -395,7 +400,7 @@ inline Observer auto MassMomentsObserver(const unsigned int interval, const Data
  */
 template <typename Dataset, typename Store>
 inline Observer auto MassMomentsRaindropsObserver(const unsigned int interval,
-                                                  const Dataset &dataset, Store &store,
+                                                  const Dataset& dataset, Store& store,
                                                   const size_t maxchunk, const size_t ngbxs) {
   const auto xzarr_mom0 =
       create_massmom0_xarray(dataset, store, "massmom0_raindrops", maxchunk, ngbxs);

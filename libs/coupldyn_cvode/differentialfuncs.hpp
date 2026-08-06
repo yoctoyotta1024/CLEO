@@ -20,8 +20,8 @@
 
 #include <nvector/nvector_serial.h> /* access to serial N_Vector            */
 
-#include <cassert>
 #include <cmath>
+#include <stdexcept>
 
 #include "../cleoconstants.hpp"
 
@@ -36,7 +36,7 @@ typedef struct pUserData {
   size_t neq;
   realtype wmax;
   realtype tauhalf;
-} *UserData;
+}* UserData;
 
 /* Calculate mass mixing ratio, qv = m_v/m_dry = rho_v/rho_dry
 given the vapour pressure, pv = p_v/p_tot and total pressure p_tot */
@@ -63,6 +63,6 @@ double cvode_saturationpressure(const double temp);
 
 /* Simple function f(t,y, ydot) called by ODE solver to
   integrate ODEs over time. */
-int odes_func(realtype t, N_Vector y, N_Vector ydot, void *user_data);
+int odes_func(realtype t, N_Vector y, N_Vector ydot, void* user_data);
 
 #endif  // LIBS_COUPLDYN_CVODE_DIFFERENTIALFUNCS_HPP_

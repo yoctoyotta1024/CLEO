@@ -19,7 +19,7 @@
 
 /* get change in state since
 previous time step to current one */
-std::array<double, 4> CvodeComms::state_change(CvodeDynamics &cvode, const viewh_constgbx h_gbxs,
+std::array<double, 4> CvodeComms::state_change(CvodeDynamics& cvode, const viewh_constgbx h_gbxs,
                                                const size_t ii) const {
   const State state(h_gbxs(ii).state);
   const auto prevstate(cvode.get_previous_state(ii));  // [press, temp, qvap, qcond]
@@ -35,7 +35,7 @@ std::array<double, 4> CvodeComms::state_change(CvodeDynamics &cvode, const viewh
 
 /* change is_delta_y = false to is_delta_y = true
 if delta contains non-zero elements */
-bool CvodeComms::is_state_change(const std::array<double, 4> &delta, bool is_delta_y) const {
+bool CvodeComms::is_state_change(const std::array<double, 4>& delta, bool is_delta_y) const {
   if (is_delta_y == false) {
     const std::array<double, 4> nodelta = {0.0, 0.0, 0.0, 0.0};
     if (delta != nodelta) {

@@ -57,8 +57,8 @@
 #include "zarr/simple_dataset.hpp"
 
 template <typename Dataset, typename Store>
-inline Observer auto create_superdrops_observer(const Config &config, const Timesteps &tsteps,
-                                                Dataset &dataset, Store &store) {
+inline Observer auto create_superdrops_observer(const Config& config, const Timesteps& tsteps,
+                                                Dataset& dataset, Store& store) {
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
 
@@ -77,8 +77,8 @@ inline Observer auto create_superdrops_observer(const Config &config, const Time
 }
 
 template <typename Dataset>
-inline Observer auto create_gridbox_observer(const Config &config, const Timesteps &tsteps,
-                                             Dataset &dataset) {
+inline Observer auto create_gridbox_observer(const Config& config, const Timesteps& tsteps,
+                                             Dataset& dataset) {
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
   const auto ngbxs = config.get_ngbxs();
@@ -101,8 +101,8 @@ inline Observer auto create_gridbox_observer(const Config &config, const Timeste
 }
 
 template <typename Dataset, typename Store>
-inline Observer auto create_observer2(const Config &config, const Timesteps &tsteps,
-                                      Dataset &dataset, Store &store) {
+inline Observer auto create_observer2(const Config& config, const Timesteps& tsteps,
+                                      Dataset& dataset, Store& store) {
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
   const auto ngbxs = config.get_ngbxs();
@@ -122,8 +122,8 @@ inline Observer auto create_observer2(const Config &config, const Timesteps &tst
 /* ---------------------------------------------------------------------------------------------- */
 
 template <typename Dataset, typename Store>
-inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
-                                     Dataset &dataset, Store &store) {
+inline Observer auto create_observer(const Config& config, const Timesteps& tsteps,
+                                     Dataset& dataset, Store& store) {
   const auto obsstep = tsteps.get_obsstep();
 
   const Observer auto obs0 = StreamOutObserver(obsstep, &step2realtime);
@@ -133,7 +133,7 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
   return obs0 >> obs1;
 }
 
-inline auto create_movement(const CartesianMaps &gbxmaps) {
+inline auto create_movement(const CartesianMaps& gbxmaps) {
   const Motion<CartesianMaps> auto motion = NullMotion{};
   const BoundaryConditions<CartesianMaps> auto boundary_conditions = NullBoundaryConditions{};
 
@@ -141,14 +141,14 @@ inline auto create_movement(const CartesianMaps &gbxmaps) {
 }
 
 template <GridboxMaps GbxMaps>
-inline InitialConditions auto create_initconds(const Config &config, const GbxMaps &gbxmaps) {
+inline InitialConditions auto create_initconds(const Config& config, const GbxMaps& gbxmaps) {
   const auto initsupers = InitAllSupersFromBinary(config.get_initsupersfrombinary());
   const auto initgbxs = InitGbxsNull(gbxmaps.get_local_ngridboxes_hostcopy());
 
   return InitConds(initsupers, initgbxs);
 }
 
-inline CoupledDynamics auto create_coupldyn(const Config &config, const CartesianMaps &gbxmaps,
+inline CoupledDynamics auto create_coupldyn(const Config& config, const CartesianMaps& gbxmaps,
                                             const unsigned int couplstep,
                                             const unsigned int t_end) {
   const auto h_ndims = gbxmaps.get_global_ndims_hostcopy();
@@ -160,8 +160,8 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
 }
 
 template <typename Dataset, typename Store>
-inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset &dataset,
-                       Store &store) {
+inline auto create_sdm(const Config& config, const Timesteps& tsteps, Dataset& dataset,
+                       Store& store) {
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps = create_cartesian_maps(
       config.get_ngbxs(), config.get_nspacedims(), config.get_grid_filename());
@@ -171,7 +171,7 @@ inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset &d
   return SDMMethods(couplstep, gbxmaps, microphys, movesupers, obs);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   // print_type_sizes(argc, argv);
 
   Kokkos::Timer kokkostimer;

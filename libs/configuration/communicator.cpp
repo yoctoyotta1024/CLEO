@@ -28,7 +28,7 @@ MPI_Comm init_communicator::comm = NULL;
 int init_communicator::comm_size = -1;
 int init_communicator::my_rank = -1;
 
-init_communicator::init_communicator(int argc, char *argv[], const Config &config) {
+init_communicator::init_communicator(int argc, char* argv[], const Config& config) {
   if (!(std::isnan(config.get_yac_dynamics().lower_longitude))) {
     std::cout << "yac is present\n";
     // -- YAC initialization and calendar definitions ---

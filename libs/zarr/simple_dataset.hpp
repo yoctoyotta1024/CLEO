@@ -52,7 +52,7 @@ class SimpleDataset {
    *
    * @param dim A pair containing the name and size of the dimension to be added.
    */
-  void add_dimension(const std::pair<std::string, size_t> &dim) {
+  void add_dimension(const std::pair<std::string, size_t>& dim) {
     datasetdims.insert({dim.first, dim.second});
   }
 
@@ -65,7 +65,7 @@ class SimpleDataset {
    *
    * @param store The store object associated with the Dataset.
    */
-  explicit SimpleDataset(Store &store) : group(store), datasetdims() {
+  explicit SimpleDataset(Store& store) : group(store), datasetdims() {
     store[".zattrs"] =
         "{\n"
         "  \"creator\": \"Clara Bayley\",\n"
@@ -79,14 +79,14 @@ class SimpleDataset {
    * @param dimname A string for the name of the dimension in the dataset.
    * @return The size of (i.e. number of elements along) the dimension.
    */
-  size_t get_dimension(const std::string &dimname) const { return datasetdims.at(dimname); }
+  size_t get_dimension(const std::string& dimname) const { return datasetdims.at(dimname); }
 
   /**
    * @brief Sets the size of an existing dimension in the dataset.
    *
    * @param dim A pair containing the name of the dimension and its new size to be set.
    */
-  void set_dimension(const std::pair<std::string, size_t> &dim) {
+  void set_dimension(const std::pair<std::string, size_t>& dim) {
     datasetdims.at(dim.first) = dim.second;
   }
 
@@ -104,8 +104,8 @@ class SimpleDataset {
   template <typename T>
   XarrayZarrArray<Store, T> create_array(const std::string_view name, const std::string_view units,
                                          const double scale_factor,
-                                         const std::vector<size_t> &chunkshape,
-                                         const std::vector<std::string> &dimnames) const {
+                                         const std::vector<size_t>& chunkshape,
+                                         const std::vector<std::string>& dimnames) const {
     return XarrayZarrArray<Store, T>(group.store, datasetdims, name, units, scale_factor,
                                      chunkshape, dimnames);
   }
@@ -147,8 +147,8 @@ class SimpleDataset {
   XarrayZarrArray<Store, T> create_ragged_array(const std::string_view name,
                                                 const std::string_view units,
                                                 const double scale_factor,
-                                                const std::vector<size_t> &chunkshape,
-                                                const std::vector<std::string> &dimnames,
+                                                const std::vector<size_t>& chunkshape,
+                                                const std::vector<std::string>& dimnames,
                                                 const std::string_view sampledimname) const {
     return XarrayZarrArray<Store, T>(group.store, datasetdims, name, units, scale_factor,
                                      chunkshape, dimnames, sampledimname);
@@ -170,8 +170,8 @@ class SimpleDataset {
   XarrayZarrArray<Store, T> create_raggedcount_array(const std::string_view name,
                                                      const std::string_view units,
                                                      const double scale_factor,
-                                                     const std::vector<size_t> &chunkshape,
-                                                     const std::vector<std::string> &dimnames,
+                                                     const std::vector<size_t>& chunkshape,
+                                                     const std::vector<std::string>& dimnames,
                                                      const std::string_view sampledimname) const {
     return XarrayZarrArray<Store, T>(group.store, datasetdims, name, units, scale_factor,
                                      chunkshape, dimnames, sampledimname);
@@ -185,7 +185,7 @@ class SimpleDataset {
    * @param xzarr An instance of XarrayZarrArray representing the array.
    */
   template <typename T>
-  void write_arrayshape(XarrayZarrArray<Store, T> &xzarr) const {
+  void write_arrayshape(XarrayZarrArray<Store, T>& xzarr) const {
     xzarr.write_arrayshape(datasetdims);
   }
 
@@ -208,7 +208,7 @@ class SimpleDataset {
    * @param xzarr An instance of XarrayZarrArray representing the array.
    */
   template <typename T>
-  void write_ragged_arrayshape(XarrayZarrArray<Store, T> &xzarr) const {
+  void write_ragged_arrayshape(XarrayZarrArray<Store, T>& xzarr) const {
     xzarr.write_ragged_arrayshape();
   }
 
@@ -225,7 +225,7 @@ class SimpleDataset {
    * @param h_data The data to be written to the array.
    */
   template <typename T>
-  void write_to_array(XarrayZarrArray<Store, T> &xzarr,
+  void write_to_array(XarrayZarrArray<Store, T>& xzarr,
                       const typename Buffer<T>::viewh_buffer h_data) const {
     xzarr.write_to_array(h_data);
     xzarr.write_arrayshape(datasetdims);
@@ -282,7 +282,7 @@ class SimpleDataset {
    * @param h_data The data to be written to the array.
    */
   template <typename T>
-  void write_to_ragged_array(XarrayZarrArray<Store, T> &xzarr,
+  void write_to_ragged_array(XarrayZarrArray<Store, T>& xzarr,
                              const typename Buffer<T>::viewh_buffer h_data) const {
     xzarr.write_to_array(h_data);
     xzarr.write_ragged_arrayshape();

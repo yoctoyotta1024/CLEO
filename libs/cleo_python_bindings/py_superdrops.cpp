@@ -18,26 +18,26 @@
 
 #include "./py_superdrops.hpp"
 
-pyca::micro_all create_microphysical_process(const Config &config, const Timesteps &tsteps);
+pyca::micro_all create_microphysical_process(const Config& config, const Timesteps& tsteps);
 
-void pyNullMicrophysicalProcess(py::module &m) {
+void pyNullMicrophysicalProcess(py::module& m) {
   py::class_<pyca::micro_null>(m, "NullMicrophysicalProcess").def(py::init());
 }
 
-void pyAllMicrophysicalProcess(py::module &m) {
+void pyAllMicrophysicalProcess(py::module& m) {
   py::class_<pyca::micro_all>(m, "AllMicrophysicalProcess")
       .def(py::init<CombinedMicrophysicalProcess<pyca::micro_null, pyca::micro_cond>,
                     pyca::micro_colls>());
 }
 
-void pycreate_microphysical_process(py::module &m) {
+void pycreate_microphysical_process(py::module& m) {
   m.def("pycreate_microphysical_process", &create_microphysical_process,
         "returns type of Microphysical Process", py::arg("config"), py::arg("timesteps"));
 }
 
-void pyNullMotion(py::module &m) { py::class_<pyca::mo_null>(m, "NullMotion").def(py::init()); }
+void pyNullMotion(py::module& m) { py::class_<pyca::mo_null>(m, "NullMotion").def(py::init()); }
 
-pyca::micro_all create_microphysical_process(const Config &config, const Timesteps &tsteps) {
+pyca::micro_all create_microphysical_process(const Config& config, const Timesteps& tsteps) {
   /* Returns combined microphysical process which behaves like a null process unless
   settings for other processes are defined in config.
 
@@ -60,12 +60,12 @@ pyca::micro_all create_microphysical_process(const Config &config, const Timeste
                         c.rtol, c.atol, c.MINSUBTSTEP, &realtime2dimless);
   }
 
-  const PairProbability auto collcoalprob = LongHydroProb();
+  const PairProbability auto collcoalprob = LongHydroProb();  // assumes coaleff = 1.0
   const MicrophysicsFunc auto no_colls =
       DoCollisions<LongHydroProb, DoCoalescence>(0.0, collcoalprob, DoCoalescence{});
   MicrophysicalProcess auto colls = ConstTstepMicrophysics(LIMITVALUES::uintmax, no_colls);
   if (python_bindings_config.enable_collisions) {
-    std::cout << "Adding collision-coalescence to microphysical process\n";
+    std::cout << "Adding collision-coalescence (with random seed) to microphysical process\n";
     colls = CollCoal(tsteps.get_collstep(), &step2realtime, collcoalprob);
   }
 

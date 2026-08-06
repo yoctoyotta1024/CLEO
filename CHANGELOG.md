@@ -2,6 +2,140 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.68.1](https://github.com/yoctoyotta1024/CLEO/compare/ff7765503372606b892dbb28ff02af2aae3c6805..v0.68.1) - 2026-07-31
+#### Bug Fixes
+- missing stdexcept lib - ([495d0ee](https://github.com/yoctoyotta1024/CLEO/commit/495d0ee41b492d4ab36c50376f31aff48b1a1f98)) - clara.bayley
+- creation of b4 array must come before call to get_local_bounding_gridbox_index - ([0db63b3](https://github.com/yoctoyotta1024/CLEO/commit/0db63b32b17293a09513d484dc76e3845b9eada2)) - clara.bayley
+- for adia0d - ([10ed505](https://github.com/yoctoyotta1024/CLEO/commit/10ed505a97e2ac3dde8fef26764d604e8e0c552b)) - Harshada Balasubramanian
+- Kokkos Abort and runtime Error - ([2972088](https://github.com/yoctoyotta1024/CLEO/commit/2972088ad4e6d4494c89bf2156c11960073ffe69)) - Harshada Balasubramanian
+- typos for debug mode - ([e981a97](https://github.com/yoctoyotta1024/CLEO/commit/e981a97b0bb5ffc53b3e5f59f2580cf3f8954540)) - Harshada Balasubramanian
+- introduce -DCMAKE_BUILD_TYPE= - ([c6df85d](https://github.com/yoctoyotta1024/CLEO/commit/c6df85d9e29f5be5ad7d89fc464f46ed78d9e717)) - Harshada Balasubramanian
+#### Miscellaneous Chores
+- formatting and remove unused cassert lib - ([b0cd77b](https://github.com/yoctoyotta1024/CLEO/commit/b0cd77bcfcae52ce400ab2c995db932a3745bdaa)) - clara.bayley
+- extend logic for gridbox - ([6172e99](https://github.com/yoctoyotta1024/CLEO/commit/6172e99187597f9ddd351efed574e862115164b0)) - Harshada Balasubramanian
+-  wrap sdinit check inside NDEBUG macro - ([ff77655](https://github.com/yoctoyotta1024/CLEO/commit/ff7765503372606b892dbb28ff02af2aae3c6805)) - Harshada Balasubramanian
+#### Refactoring
+- rename BUILD_TYPE to CLEO_CMAKE_BUILD_TYPE - ([f99e09b](https://github.com/yoctoyotta1024/CLEO/commit/f99e09b54ffb6cefdddf768fb719dc792ae5c086)) - clara.bayley
+- use std runtime error instead of kokkos abort in cvode solver - ([0c899f7](https://github.com/yoctoyotta1024/CLEO/commit/0c899f7bce0e989ccfbcaafdca17c2feec2aac9d)) - clara.bayley
+- use DEBUG flag for more print statements - ([0203003](https://github.com/yoctoyotta1024/CLEO/commit/02030033e7be47b9240fbbc8c8493856c970c1dc)) - clara.bayley
+- pass Debug to CMAKE build as flag if CLEO_ENABLEDEBUG is true - ([b23a5ff](https://github.com/yoctoyotta1024/CLEO/commit/b23a5ffbb45773e88cb7cfd9bc7515d7d128f0b8)) - clara.bayley
+
+- - -
+
+## [v0.68.0](https://github.com/yoctoyotta1024/CLEO/compare/1901abf456a060b443332db225f7ee03b8718b88..v0.68.0) - 2026-07-30
+#### Bug Fixes
+- errors in rebase conflicts corrected - ([cf9a67d](https://github.com/yoctoyotta1024/CLEO/commit/cf9a67d84f2211d9076d247fba9cb1874a41a4fd)) - clara.bayley
+#### Features
+- collisions struct can take a fixed seed for the random number generator pool - ([5d005a2](https://github.com/yoctoyotta1024/CLEO/commit/5d005a21d8fbb530a985720c5a78ed74527b3e5c)) - clara.bayley
+- configuration allows option fixed seed for collisions - ([de0cb18](https://github.com/yoctoyotta1024/CLEO/commit/de0cb18d1a5d6d9e1d51d5b06a9e6f2cc14df9cf)) - clara.bayley
+#### Miscellaneous Chores
+- comment out seed in roughpaper - ([7b4c2bd](https://github.com/yoctoyotta1024/CLEO/commit/7b4c2bd7e2a80efe5dd848ef232f1d2cdb19a85b)) - clara.bayley
+- formatting - ([ad633ea](https://github.com/yoctoyotta1024/CLEO/commit/ad633ea75c0f58d3be757508b6a6a3ab2d3e0af4)) - clara.bayley
+- formatting - ([1901abf](https://github.com/yoctoyotta1024/CLEO/commit/1901abf456a060b443332db225f7ee03b8718b88)) - clara.bayley
+#### Refactoring
+- add clearer note on seed in configs - ([0406ed3](https://github.com/yoctoyotta1024/CLEO/commit/0406ed33f957f14dfb905d70517a086cdd852331)) - clara.bayley
+- show example with fixed seed in roughpaper - ([5c9627e](https://github.com/yoctoyotta1024/CLEO/commit/5c9627ec5fbe3d952f4a4a4ede787d577373bc8b)) - clara.bayley
+- use fixed seed for golovin kernel in shima2009 example - ([f11160a](https://github.com/yoctoyotta1024/CLEO/commit/f11160a2d8884576576e7286c736f849f4846692)) - clara.bayley
+
+- - -
+
+## [v0.67.0](https://github.com/yoctoyotta1024/CLEO/compare/2d5ee9e9a36bce65fb7d1244437cc4af300a25aa..v0.67.0) - 2026-07-29
+#### Bug Fixes
+- remove stray creation of terminalv from RogersGKTerminalVelocity - ([b409aef](https://github.com/yoctoyotta1024/CLEO/commit/b409aefe56d52f8c72fb1a705601c70c6b412735)) - clara.bayley
+#### Continuous Integration
+- compile two more breakup example executables - ([7f0dc05](https://github.com/yoctoyotta1024/CLEO/commit/7f0dc0543175d5089bba0ca599b6d839d2e9a98e)) - clara.bayley
+#### Features
+- new breakup examples for other flag options - ([e76556c](https://github.com/yoctoyotta1024/CLEO/commit/e76556c33a539e33fb31064fc28e1f62f0e7bfb3)) - clara.bayley
+#### Miscellaneous Chores
+- **(version)** v0.66.1 - ([2d5ee9e](https://github.com/yoctoyotta1024/CLEO/commit/2d5ee9e9a36bce65fb7d1244437cc4af300a25aa)) - yoctoyotta1024
+- add note on use of phi_out - ([bd4d4f2](https://github.com/yoctoyotta1024/CLEO/commit/bd4d4f2ade65a125c8473cacf9c5a1ba489bf561)) - clara.bayley
+- formatting for robustness - ([0a41043](https://github.com/yoctoyotta1024/CLEO/commit/0a41043a984d4c97461f764a441287424be348a2)) - clara.bayley
+#### Refactoring
+- change colours - ([5f52cfd](https://github.com/yoctoyotta1024/CLEO/commit/5f52cfdb0bfeeac8b1a4f54a865493e3a9f8aed7)) - clara.bayley
+- make examples compatible with changes to TSCoalBuReFlag - ([3ee27bf](https://github.com/yoctoyotta1024/CLEO/commit/3ee27bfd196795c6221d5ed02ad4742bbcaedfc4)) - clara.bayley
+- make examples compatible with changes to SUCoalBuReFlag - ([764c9e9](https://github.com/yoctoyotta1024/CLEO/commit/764c9e9a12a12da0acde66d9d8de1c5ef01e02d8)) - clara.bayley
+- make examples compatible with changes to LowListCoalProb and LowListBuProb - ([bb52c12](https://github.com/yoctoyotta1024/CLEO/commit/bb52c121620c9c500489aed152fdefef060de7a6)) - clara.bayley
+- make examples compatible with changes for CollisionKineticEnergyNFrags - ([0918b01](https://github.com/yoctoyotta1024/CLEO/commit/0918b01dad1a8b42911f6ae968c0ee425600cdcc)) - clara.bayley
+- remove deleted files from cmake - ([ba90725](https://github.com/yoctoyotta1024/CLEO/commit/ba90725a6b5fc87adbafeab2fb08787c52825515)) - clara.bayley
+- remove contrained RogersGKTerminalVelocity from TSCoalBuReFlag - ([9f1563b](https://github.com/yoctoyotta1024/CLEO/commit/9f1563bfdec4beb162a938e014412326873d3e4f)) - clara.bayley
+- remove contrained RogersGKTerminalVelocity from SUCoalBuReFlag - ([efa2a4d](https://github.com/yoctoyotta1024/CLEO/commit/efa2a4d67146759582e378dfd9c97e23f0b6e427)) - clara.bayley
+- remove contrained RogersGKTerminalVelocity from LowListCoalProb - ([b016ca3](https://github.com/yoctoyotta1024/CLEO/commit/b016ca3ceb13878c5cffabfed2bb28a5a4c4604c)) - clara.bayley
+- remove contrained RogersGKTerminalVelocity from CollisionKineticEnergyNFrags - ([f5d5ed4](https://github.com/yoctoyotta1024/CLEO/commit/f5d5ed4ea96fd1e24657290b9663b3a6e5056e5e)) - clara.bayley
+- add comment on examples with E_coal = 1.0 - ([d7bfe30](https://github.com/yoctoyotta1024/CLEO/commit/d7bfe301eb6cc80eb276a29b53675a45e0d834ab)) - clara.bayley
+- add note clarifying coaleff in example of LongHydroProb box model - ([476e745](https://github.com/yoctoyotta1024/CLEO/commit/476e745d6d8d40ddf49a628d5b8fe8e6c42d034c)) - clara.bayley
+- show possible collision configurations more clearly - ([9d86190](https://github.com/yoctoyotta1024/CLEO/commit/9d86190a8905aeab44bdaa007cd969604e69577f)) - clara.bayley
+
+- - -
+
+## [v0.66.1](https://github.com/yoctoyotta1024/CLEO/compare/1a493246e3c9edf6c1e6ee64603803a4de56b388..v0.66.1) - 2026-07-29
+#### Bug Fixes
+- remove redundant initialisation of supers - ([65bbf47](https://github.com/yoctoyotta1024/CLEO/commit/65bbf473d38acb8d34a85b9b426f4ac8c0aab0c3)) - Harshada Balasubramanian
+- YAC issues with netcdf dependencies - ([ee938c5](https://github.com/yoctoyotta1024/CLEO/commit/ee938c570f1289a28631d4332b8eb416d82315cc)) - Harshada Balasubramanian
+- resolve yaml-cpp cmake version compatibility - ([1a49324](https://github.com/yoctoyotta1024/CLEO/commit/1a493246e3c9edf6c1e6ee64603803a4de56b388)) - Harshada Balasubramanian
+#### Build system
+- **(deps)** upgrade yaml-cpp to  0.9.0 - ([62a1e16](https://github.com/yoctoyotta1024/CLEO/commit/62a1e162e91e5ff4437f02799ee7afd90548e8bf)) - Harshada Balasubramanian
+#### Documentation
+- update documentation for netcdf dependency - ([d8bd50d](https://github.com/yoctoyotta1024/CLEO/commit/d8bd50d793b89ffdf41d784a953a4b8e77c1d8a4)) - Harshada Balasubramanian
+#### Miscellaneous Chores
+- extend logic for gridbox - ([e12080a](https://github.com/yoctoyotta1024/CLEO/commit/e12080a8f454259d638d983d52951c6e75a5d8df)) - Harshada Balasubramanian
+-  wrap sdinit check inside NDEBUG macro - ([2cf9149](https://github.com/yoctoyotta1024/CLEO/commit/2cf9149cbad65fdb0d9fce78c0135dbaf3840072)) - Harshada Balasubramanian
+- use yaml-cpp CMakeLists from main - ([e689c00](https://github.com/yoctoyotta1024/CLEO/commit/e689c00523e6a1c24616d9dc6cf41c76a8cfd014)) - Harshada Balasubramanian
+
+- - -
+
+## [v0.66.0](https://github.com/yoctoyotta1024/CLEO/compare/4be7e09846e5be8fa3b5bbba70c4c9f3b09c0715..v0.66.0) - 2026-07-29
+#### Bug Fixes
+- replace rescaling phi with drawing independent random number for coalbure algorithm - ([f5b04fb](https://github.com/yoctoyotta1024/CLEO/commit/f5b04fba45d19fadd5d4c08523c725a680807380)) - clara.bayley
+#### Documentation
+- mention testik 2009 as well as testik et al. 2011 - ([c341d0b](https://github.com/yoctoyotta1024/CLEO/commit/c341d0b57f139600848b74832a7214f8a2457137)) - clara.bayley
+#### Features
+- option to use only straub2010 for coalescence or breakup - ([76cb1df](https://github.com/yoctoyotta1024/CLEO/commit/76cb1dfa5df9d6a0bd76d3762c5e18af14ee908d)) - clara.bayley
+- option for constant coaleff coalescence or breakup - ([f60b8b0](https://github.com/yoctoyotta1024/CLEO/commit/f60b8b0ddac53a9e5ff5ba0b4c861f339da337db)) - clara.bayley
+- new optional configuration to set coaleff - ([4be7e09](https://github.com/yoctoyotta1024/CLEO/commit/4be7e09846e5be8fa3b5bbba70c4c9f3b09c0715)) - clara.bayley
+#### Miscellaneous Chores
+- formatting - ([439ad5a](https://github.com/yoctoyotta1024/CLEO/commit/439ad5afa2b557e15f6ffb154678d4f9054b4e00)) - clara.bayley
+- formatting - ([f2b45d4](https://github.com/yoctoyotta1024/CLEO/commit/f2b45d4e41b1d5d8de2fd4fa6c9ca4e502aa4fe8)) - clara.bayley
+- formatting - ([9ce1a91](https://github.com/yoctoyotta1024/CLEO/commit/9ce1a91c0c4c1a4b19a9ae6cf181df00a71844b2)) - clara.bayley
+- formatting - ([f65fceb](https://github.com/yoctoyotta1024/CLEO/commit/f65fceb72475ae2b9b0453382b51273ea09f88ae)) - clara.bayley
+#### Refactoring
+- add Testik 2009 reference in comments - ([d37edf3](https://github.com/yoctoyotta1024/CLEO/commit/d37edf3defc8d1997226bc1bae59b0eec3d328c7)) - clara.bayley
+- demonstrate use of new coalbure flags in roughpaper - ([8dedc7b](https://github.com/yoctoyotta1024/CLEO/commit/8dedc7bfd98388c2b5844508124f98c7c5cbfa6f)) - clara.bayley
+- move straub collision eff calc into seperate file - ([9e29cee](https://github.com/yoctoyotta1024/CLEO/commit/9e29cee62782e7ce528971d074e38a0927dbd158)) - clara.bayley
+- demonstrate const coaleff usage in roughpaper main - ([3cd9bb7](https://github.com/yoctoyotta1024/CLEO/commit/3cd9bb71da858fa46a5b2d417575d185d6609031)) - clara.bayley
+
+- - -
+
+## [v0.65.2](https://github.com/yoctoyotta1024/CLEO/compare/b3688572967ff34c044588c0066c97ddc2ff1f3a..v0.65.2) - 2026-07-29
+#### Bug Fixes
+- download yac and yaxt from owncloud servers - ([9033bf1](https://github.com/yoctoyotta1024/CLEO/commit/9033bf18c2a5c7424ce58228c9e6e0ae2614f09e)) - clara.bayley
+- update yac and yaxt versions - ([2ff3d03](https://github.com/yoctoyotta1024/CLEO/commit/2ff3d038e8045221925b49d79c25dcfc475b3721)) - clara.bayley
+#### Continuous Integration
+- update setup python - ([eaad482](https://github.com/yoctoyotta1024/CLEO/commit/eaad48290e3cca6f92cf775b9d4b32d2de04d0a7)) - clara.bayley
+- update artifacts - ([560e885](https://github.com/yoctoyotta1024/CLEO/commit/560e8856595b45260f01ff498cb3c1143a8875b7)) - clara.bayley
+- update miniconda setup - ([55cd573](https://github.com/yoctoyotta1024/CLEO/commit/55cd573d3fc49eadacd01e5da05c62cae8a86145)) - clara.bayley
+- update action-gh-release - ([83693f4](https://github.com/yoctoyotta1024/CLEO/commit/83693f44c6f2eef984d5b162ced2aabae6119e1c)) - clara.bayley
+- fix missing python in mamba environment setup - ([03ce75f](https://github.com/yoctoyotta1024/CLEO/commit/03ce75f2214b48c53317dac0ce60efa59810915b)) - clara.bayley
+- update checkout - ([f91250a](https://github.com/yoctoyotta1024/CLEO/commit/f91250ad8229620021a049d349a90ada79f00f19)) - clara.bayley
+#### Miscellaneous Chores
+- update version of yaml-cpp - ([4e3c4a4](https://github.com/yoctoyotta1024/CLEO/commit/4e3c4a41f04c85dd866ab085367ff6710c1fc8bc)) - clara.bayley
+#### Refactoring
+- change color in plot - ([b368857](https://github.com/yoctoyotta1024/CLEO/commit/b3688572967ff34c044588c0066c97ddc2ff1f3a)) - clara.bayley
+
+- - -
+
+## [v0.65.1](https://github.com/yoctoyotta1024/CLEO/compare/7caad851999035354b0be0a1f6d97b94a598cf56..v0.65.1) - 2026-02-18
+#### Bug Fixes
+- typos in examples_levante.rst - ([ce5fee3](https://github.com/yoctoyotta1024/CLEO/commit/ce5fee315a2e81f017c5f4c145a1022463ed194f)) - Sylwester Arabas
+- typos in examples_vanilla.rst - ([b6361fa](https://github.com/yoctoyotta1024/CLEO/commit/b6361fade74b9210003d333f5767d58cb61b08a1)) - Sylwester Arabas
+#### Miscellaneous Chores
+- update levante account - ([17f26e6](https://github.com/yoctoyotta1024/CLEO/commit/17f26e6e4c6cf4bfae8561c9d8098b1ce800d467)) - clara.bayley
+#### Refactoring
+- execute examples - ([0c85ec2](https://github.com/yoctoyotta1024/CLEO/commit/0c85ec2aabce21ebbad5f00e0493e8ad7a5f4712)) - clara.bayley
+- update levante account on bubble scripts - ([b10c192](https://github.com/yoctoyotta1024/CLEO/commit/b10c1923bde9aac4904f6b44282431ea5596966e)) - clara.bayley
+- delete unnecesary titles with dropdowns - ([7caad85](https://github.com/yoctoyotta1024/CLEO/commit/7caad851999035354b0be0a1f6d97b94a598cf56)) - clara.bayley
+
+- - -
+
 ## [v0.65.0](https://github.com/yoctoyotta1024/CLEO/compare/12ada9a667b02f89a540a4cd0c3559a66fd8ed90..v0.65.0) - 2026-01-23
 #### Bug Fixes
 - missing pip requirement - ([a66f056](https://github.com/yoctoyotta1024/CLEO/commit/a66f05632ddda74ffa32464de19ae7da30f8a90f)) - clara.bayley

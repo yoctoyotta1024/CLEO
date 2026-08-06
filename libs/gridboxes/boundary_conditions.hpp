@@ -31,7 +31,7 @@
  */
 template <typename BCs, typename GbxMaps>
 concept BoundaryConditions =
-    requires(BCs b, const GbxMaps &gbxmaps, const viewd_gbx d_gbxs, SupersInDomain &allsupers) {
+    requires(BCs b, const GbxMaps& gbxmaps, const viewd_gbx d_gbxs, SupersInDomain& allsupers) {
       { b.apply(gbxmaps, d_gbxs, allsupers) } -> std::convertible_to<SupersInDomain>;
     };
 
@@ -41,8 +41,8 @@ concept BoundaryConditions =
  */
 struct NullBoundaryConditions {
   template <GridboxMaps GbxMaps>
-  SupersInDomain apply(const GbxMaps &gbxmaps, viewd_gbx d_gbxs,
-                       const SupersInDomain &allsupers) const {
+  SupersInDomain apply(const GbxMaps& gbxmaps, viewd_gbx d_gbxs,
+                       const SupersInDomain& allsupers) const {
     return allsupers;
   }
 };

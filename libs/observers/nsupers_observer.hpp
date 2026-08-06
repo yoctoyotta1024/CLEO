@@ -71,7 +71,7 @@ struct NsupersFunc {
  * for collecting the number of superdroplets in each gridbox.
  */
 template <typename Dataset>
-inline CollectDataForDataset<Dataset> auto CollectNsupers(const Dataset &dataset,
+inline CollectDataForDataset<Dataset> auto CollectNsupers(const Dataset& dataset,
                                                           const size_t maxchunk,
                                                           const size_t ngbxs) {
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
@@ -93,7 +93,7 @@ inline CollectDataForDataset<Dataset> auto CollectNsupers(const Dataset &dataset
  * @return Observer An observer instance for writing the number of superdroplets.
  */
 template <typename Dataset>
-inline Observer auto NsupersObserver(const unsigned int interval, const Dataset &dataset,
+inline Observer auto NsupersObserver(const unsigned int interval, const Dataset& dataset,
                                      const size_t maxchunk, const size_t ngbxs) {
   return WriteToDatasetObserver(interval, dataset, CollectNsupers(dataset, maxchunk, ngbxs));
 }

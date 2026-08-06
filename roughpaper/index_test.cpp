@@ -18,7 +18,7 @@
 #include <iostream>
 #include <string>
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   int grid_points = std::stoi(argv[1]);
   std::cout << "grid_points: " << grid_points << "\n";
 

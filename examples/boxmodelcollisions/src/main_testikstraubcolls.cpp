@@ -14,8 +14,8 @@
  * -----
  * File Description:
  * runs the CLEO super-droplet model (SDM) for 0-D box model with coalescence, rebound and
- * breakup with flag decided based on section 4 of Testik et al. 2011 (figure 12) as well
- * as coalescence efficiency from Straub et al. 2010 and Schlottke et al. 2010.
+ * breakup with flag decided based on section 4 of Testik et al. 2011 (figure 12; first proposed in
+ * Testik 2009) as well as coalescence efficiency from Straub et al. 2010 and Schlottke et al. 2010.
  * After make/compiling, execute for example via:
  * ./src/testikstraubcolls ../src/config/config.yaml
  */
@@ -29,16 +29,16 @@
 #include "superdrops/collisions/longhydroprob.hpp"
 
 struct TestikStraubCreateMicrophysics {
-  MicrophysicalProcess auto operator()(const Config &config, const Timesteps &tsteps) const {
+  MicrophysicalProcess auto operator()(const Config& config, const Timesteps& tsteps) const {
     const PairProbability auto collprob = LongHydroProb();
-    const NFragments auto nfrags = CollisionKineticEnergyNFrags{};
-    const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag{};
+    const NFragments auto nfrags = CollisionKineticEnergyNFrags(RogersGKTerminalVelocity{});
+    const CoalBuReFlag auto coalbure_flag = TSCoalBuReFlag(RogersGKTerminalVelocity{});
     const MicrophysicalProcess auto colls =
         CoalBuRe(tsteps.get_collstep(), &step2realtime, collprob, nfrags, coalbure_flag);
     return colls;
   }
 };
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   return generic_microphysics_main(argc, argv, TestikStraubCreateMicrophysics{});
 }

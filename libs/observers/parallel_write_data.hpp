@@ -109,7 +109,7 @@ class ParallelWriteGridboxes {
  private:
   ParallelGridboxesFunc
       parallel_gridboxes_func; /**< Function-like object for call to loop over gridboxes.*/
-  const Dataset &dataset;      /**< Dataset to write data to. */
+  const Dataset& dataset;      /**< Dataset to write data to. */
   CollectData collect_data; /**< CollectData Object satisfying the CollectDataForDataset concept. */
 
  public:
@@ -120,7 +120,7 @@ class ParallelWriteGridboxes {
    * @param dataset The dataset to write data to.
    * @param collect_data The object satisfying the CollectDataForDataset concept to collect data.
    */
-  ParallelWriteGridboxes(ParallelGridboxesFunc parallel_gridboxes_func, const Dataset &dataset,
+  ParallelWriteGridboxes(ParallelGridboxesFunc parallel_gridboxes_func, const Dataset& dataset,
                          CollectData collect_data)
       : parallel_gridboxes_func(parallel_gridboxes_func),
         dataset(dataset),
@@ -159,7 +159,7 @@ class ParallelWriteGridboxes {
  */
 template <typename CRC, typename Dataset>
 concept CollectRaggedCount =
-    requires(CRC crc, const Dataset &ds, const subviewd_constsupers d_supers) {
+    requires(CRC crc, const Dataset& ds, const subviewd_constsupers d_supers) {
       { crc.write_to_array(ds, d_supers) } -> std::same_as<void>;
       { crc.write_arrayshape(ds) } -> std::same_as<void>;
     };
@@ -184,7 +184,7 @@ template <typename Dataset, CollectDataForDataset<Dataset> CollectData,
           CollectRaggedCount<Dataset> RaggedCount>
 class ParallelWriteSupers {
  private:
-  const Dataset &dataset; /**< dataset to write data to */
+  const Dataset& dataset; /**< dataset to write data to */
   CollectData collect_data;
   /**< functions to collect data within loop over superdroplets and write to ragged array(s) */
   RaggedCount ragged_count; /**< functions to write ragged count variable to a dataset */
@@ -217,7 +217,7 @@ class ParallelWriteSupers {
    * @param ragged_count Object for writing the ragged count variable in the dataset satisfying the
    * CollectRaggedCount concept.
    */
-  ParallelWriteSupers(const Dataset &dataset, CollectData collect_data, RaggedCount ragged_count)
+  ParallelWriteSupers(const Dataset& dataset, CollectData collect_data, RaggedCount ragged_count)
       : dataset(dataset), collect_data(collect_data), ragged_count(ragged_count) {}
 
   /**

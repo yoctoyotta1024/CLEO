@@ -56,7 +56,7 @@
  */
 template <typename Dataset, typename FunctorFunc>
 CollectDataForDataset<Dataset> auto CollectThermoVariable(
-    const Dataset &dataset, const FunctorFunc ffunc, const std::string_view name,
+    const Dataset& dataset, const FunctorFunc ffunc, const std::string_view name,
     const std::string_view units, const double scale_factor, const size_t maxchunk,
     const size_t ngbxs) {
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
@@ -169,7 +169,7 @@ struct QcondFunc {
  * thermodynamics from the state of each gridbox.
  */
 template <typename Dataset>
-inline CollectDataForDataset<Dataset> auto CollectThermo(const Dataset &dataset,
+inline CollectDataForDataset<Dataset> auto CollectThermo(const Dataset& dataset,
                                                          const size_t maxchunk,
                                                          const size_t ngbxs) {
   const CollectDataForDataset<Dataset> auto press = CollectThermoVariable<Dataset, PressFunc>(
@@ -202,7 +202,7 @@ inline CollectDataForDataset<Dataset> auto CollectThermo(const Dataset &dataset,
  * @return Observer An observer instance for writing thermodynamic variables from each gridbox.
  */
 template <typename Dataset>
-inline Observer auto ThermoObserver(const unsigned int interval, const Dataset &dataset,
+inline Observer auto ThermoObserver(const unsigned int interval, const Dataset& dataset,
                                     const size_t maxchunk, const size_t ngbxs) {
   const CollectDataForDataset<Dataset> auto thermo = CollectThermo(dataset, maxchunk, ngbxs);
   return WriteToDatasetObserver(interval, dataset, thermo);

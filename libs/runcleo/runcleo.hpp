@@ -69,10 +69,10 @@ template <CoupledDynamics CD, GridboxMaps GbxMaps, MicrophysicalProcess Microphy
           Observer Obs, CouplingComms<GbxMaps, CD> Comms>
 class RunCLEO {
  private:
-  const SDMMethods<GbxMaps, Microphys, M, T, BCs, Obs> &sdm;
+  const SDMMethods<GbxMaps, Microphys, M, T, BCs, Obs>& sdm;
   /**< SDMMethods object. */
-  CD &coupldyn;       /**< CoupledDynamics object.  */
-  const Comms &comms; /**< CouplingComms object. */
+  CD& coupldyn;       /**< CoupledDynamics object.  */
+  const Comms& comms; /**< CouplingComms object. */
 
   /**
    * @brief Prepare SDM and Coupled Dynamics for timestepping.
@@ -82,9 +82,10 @@ class RunCLEO {
    * SDMMethods objects.
    *
    * @param gbxs DualView of gridboxes.
+   * @param allsupers Superdroplets in and out of the domain.
    * @return 0 on success.
    */
-  int prepare_to_timestep(const dualview_gbx gbxs, const SupersInDomain &allsupers) const {
+  int prepare_to_timestep(const dualview_gbx gbxs, const SupersInDomain& allsupers) const {
     std::cout << "\n--- prepare timestepping ---\n";
 
     coupldyn.prepare_to_timestep();
@@ -123,7 +124,7 @@ class RunCLEO {
    * @return 0 on success.
    */
   int timestep_cleo(const unsigned int t_end, const dualview_gbx gbxs,
-                    SupersInDomain &allsupers) const {
+                    SupersInDomain& allsupers) const {
     std::cout << "\n--- timestepping ---\n";
 
     unsigned int t_mdl(0);
@@ -160,7 +161,7 @@ class RunCLEO {
    * @return Size of the next timestep.
    */
   unsigned int start_step(const unsigned int t_mdl, dualview_gbx gbxs,
-                          const SupersInDomain &allsupers) const {
+                          const SupersInDomain& allsupers) const {
     if (t_mdl % sdm.get_couplstep() == 0) {
       gbxs.sync_host();
       comms.receive_dynamics(sdm.gbxmaps, coupldyn, gbxs.view_host());
@@ -217,7 +218,7 @@ class RunCLEO {
    * @param allsupers Struct to handle all superdrops (both in and out of bounds of domain).
    */
   void sdm_step(const unsigned int t_mdl, unsigned int t_next, dualview_gbx gbxs,
-                SupersInDomain &allsupers) const {
+                SupersInDomain& allsupers) const {
     Kokkos::Profiling::ScopedRegion region("timestep_sdm");
 
     gbxs.sync_device();  // get device up to date with host
@@ -273,8 +274,8 @@ class RunCLEO {
    * @param coupldyn CoupledDynamics object.
    * @param comms CouplingComms object.
    */
-  RunCLEO(const SDMMethods<GbxMaps, Microphys, M, T, BCs, Obs> &sdm, CD &coupldyn,
-          const Comms &comms)
+  RunCLEO(const SDMMethods<GbxMaps, Microphys, M, T, BCs, Obs>& sdm, CD& coupldyn,
+          const Comms& comms)
       : sdm(sdm), coupldyn(coupldyn), comms(comms) {
     check_coupling();
   }
@@ -300,7 +301,7 @@ class RunCLEO {
    * @param t_end End time for timestepping.
    * @return 0 on success.
    */
-  int operator()(const InitialConditions auto &initconds, const unsigned int t_end) const {
+  int operator()(const InitialConditions auto& initconds, const unsigned int t_end) const {
     Kokkos::Profiling::pushRegion("runcleo");
 
     // create runtime objects and prepare CLEO for timestepping

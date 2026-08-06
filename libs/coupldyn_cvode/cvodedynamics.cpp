@@ -64,7 +64,7 @@ int CvodeDynamics::run_dynamics(const unsigned int t_next) {
 
 /* Reinitialize the solver after discontinuous change in
   temp, qv and qc due to condensation */
-int CvodeDynamics::reinitialise(const double next_t, const std::vector<double> &delta_y) {
+int CvodeDynamics::reinitialise(const double next_t, const std::vector<double>& delta_y) {
   re_y = NULL;
   re_y = N_VNew_Serial(neq, sunctx);
 
@@ -73,13 +73,13 @@ int CvodeDynamics::reinitialise(const double next_t, const std::vector<double> &
   }
 
   retval = CVodeReInit(cvode_mem, next_t, re_y);
-  if (check_retval(reinterpret_cast<void *>(&retval), "CVodeReInit", 1)) return (1);
+  if (check_retval(reinterpret_cast<void*>(&retval), "CVodeReInit", 1)) return (1);
 
   return retval;
 }
 
 /* construct instance of CVODE ODE solver with initial conditions */
-CvodeDynamics::CvodeDynamics(const OptionalConfigParams::CvodeDynamicsParams &config,
+CvodeDynamics::CvodeDynamics(const OptionalConfigParams::CvodeDynamicsParams& config,
                              const unsigned int couplstep,
                              const std::function<double(unsigned int)> step2dimlesstime)
     : interval(couplstep),
@@ -125,7 +125,7 @@ CvodeDynamics::~CvodeDynamics() {
 for thermodynamic variables (p, temp, qv, qc) to
 initialise cvode thermodynamics solver */
 std::vector<double> CvodeDynamics::initial_conditions(
-    const OptionalConfigParams::CvodeDynamicsParams &config) const {
+    const OptionalConfigParams::CvodeDynamicsParams& config) const {
   const auto press_i = double{config.P_init / dlc::P0};
   const auto temp_i = double{config.TEMP_init / dlc::TEMP0};
   const auto qcond_i = double{0.0};
@@ -167,7 +167,7 @@ int CvodeDynamics::setup_ODE_solver(const double i_rtol, const double i_atol) {
   /* 2. Set the scalar relative and vector absolute tolerances */
   RTOL = i_rtol;
   ATOLS = N_VNew_Serial(neq, sunctx);
-  if (check_retval(reinterpret_cast<void *>(ATOLS), "N_VNew_Serial", 0)) return (1);
+  if (check_retval(reinterpret_cast<void*>(ATOLS), "N_VNew_Serial", 0)) return (1);
 
   for (size_t i = 0; i < neq; ++i) {
     NV_Ith_S(ATOLS, i) = i_atol;
@@ -175,7 +175,7 @@ int CvodeDynamics::setup_ODE_solver(const double i_rtol, const double i_atol) {
 
   /* 3. initialise y vector with initial conditions */
   y = N_VNew_Serial(neq, sunctx);
-  if (check_retval(reinterpret_cast<void *>(y), "N_VNew_Serial", 0)) return (1);
+  if (check_retval(reinterpret_cast<void*>(y), "N_VNew_Serial", 0)) return (1);
   for (size_t i = 0; i < neq; ++i) {
     NV_Ith_S(y, i) = previousstates.at(i);
   }
@@ -183,7 +183,7 @@ int CvodeDynamics::setup_ODE_solver(const double i_rtol, const double i_atol) {
   /* 4. Call CVodeCreate to create the solver memory and specify the
    * Backward Differentiation Formula (CV_BDF) */
   cvode_mem = CVodeCreate(CV_BDF, sunctx);
-  if (check_retval(reinterpret_cast<void *>(cvode_mem), "CVodeCreate", 0)) return (1);
+  if (check_retval(reinterpret_cast<void*>(cvode_mem), "CVodeCreate", 0)) return (1);
 
   /* 5. Call CVodeInit to initialize the integrator memory and specify the
    * user's right hand side function in y'=f(t,y), the initial time T0=0.0,
@@ -194,7 +194,7 @@ int CvodeDynamics::setup_ODE_solver(const double i_rtol, const double i_atol) {
   /* 6. Set linear solver optional inputs.
    * Provide user data which can be accessed in user provided routines */
   retval = CVodeSetUserData(cvode_mem, data);
-  if (check_retval(reinterpret_cast<void *>(&retval), "CVodeSetUserData", 1)) return (1);
+  if (check_retval(reinterpret_cast<void*>(&retval), "CVodeSetUserData", 1)) return (1);
 
   /* 7. Call CVodeSVtolerances to specify the scalar relative tolerance
    * and vector absolute tolerances */
@@ -203,11 +203,11 @@ int CvodeDynamics::setup_ODE_solver(const double i_rtol, const double i_atol) {
 
   /* 8. Create dense SUNMatrix for use in linear solves */
   A = SUNDenseMatrix(neq, neq, sunctx);
-  if (check_retval(reinterpret_cast<void *>(A), "SUNDenseMatrix", 0)) return (1);
+  if (check_retval(reinterpret_cast<void*>(A), "SUNDenseMatrix", 0)) return (1);
 
   /* 9. Create dense SUNLinearSolver object for use by CVode */
   LS = SUNLinSol_Dense(y, A, sunctx);
-  if (check_retval(reinterpret_cast<void *>(LS), "SUNLinSol_Dense", 0)) return (1);
+  if (check_retval(reinterpret_cast<void*>(LS), "SUNLinSol_Dense", 0)) return (1);
 
   /* 10. Attach the matrix and linear solver to CVODE */
   retval = CVodeSetLinearSolver(cvode_mem, LS, A);
@@ -224,8 +224,8 @@ int CvodeDynamics::setup_ODE_solver(const double i_rtol, const double i_atol) {
   opt == 2 means function allocates memory so check if returned
            NULL pointer
 */
-int CvodeDynamics::check_retval(void *returnvalue, const char *funcname, int opt) {
-  int *retval;
+int CvodeDynamics::check_retval(void* returnvalue, const char* funcname, int opt) {
+  int* retval;
 
   /* Check if SUNDIALS function returned NULL pointer - no memory allocated */
   if (opt == 0 && returnvalue == NULL) {
@@ -235,7 +235,7 @@ int CvodeDynamics::check_retval(void *returnvalue, const char *funcname, int opt
 
     // Check if retval < 0
   } else if (opt == 1) {
-    retval = reinterpret_cast<int *>(returnvalue);
+    retval = reinterpret_cast<int*>(returnvalue);
     if (*retval < 0) {
       std::cout << stderr << "\nCVODE_SUNDIALS_ERROR: %s() failed with retval = %d\n\n"
                 << funcname << " " << *retval << '\n';

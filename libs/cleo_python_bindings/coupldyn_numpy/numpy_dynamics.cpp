@@ -26,7 +26,7 @@ void NumpyDynamics::print_dynamics(const unsigned int t_mdl) const {
   }
 }
 
-void pyNumpyDynamics(py::module &m) {
+void pyNumpyDynamics(py::module& m) {
   py::class_<NumpyDynamics>(m, "NumpyDynamics")
       .def(py::init<const unsigned int, py::array_t<double>, py::array_t<double>,
                     py::array_t<double>, py::array_t<double>, py::array_t<double>,

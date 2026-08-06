@@ -23,7 +23,6 @@
 #define LIBS_GRIDBOXES_PREDCORRMOTION_HPP_
 
 #include <Kokkos_Core.hpp>
-#include <cassert>
 #include <functional>
 
 #include "../cleoconstants.hpp"
@@ -73,8 +72,8 @@ struct PredCorrMotion {
   from a forward timestep of the motion and then increments the superdroplet coordinates
   accordingly */
   KOKKOS_INLINE_FUNCTION
-  void superdrop_coords(const unsigned int gbxindex, const GbxMaps &gbxmaps, const State &state,
-                        Superdrop &drop) const {
+  void superdrop_coords(const unsigned int gbxindex, const GbxMaps& gbxmaps, const State& state,
+                        Superdrop& drop) const {
     /* change in SD coords: (coord3, coord1, coord2) */
     drop = predcorr(gbxindex, gbxmaps, state, drop);
   }
@@ -83,13 +82,13 @@ struct PredCorrMotion {
   concept to update a superdroplet if it should move between gridboxes
   (or out of domain). Function also called check_bounds to check
   superdroplet is indeed in correct gridbox after update. */
-  KOKKOS_INLINE_FUNCTION void superdrop_gbx(const unsigned int gbxindex, const GbxMaps &gbxmaps,
-                                            Superdrop &drop) const {
+  KOKKOS_INLINE_FUNCTION void superdrop_gbx(const unsigned int gbxindex, const GbxMaps& gbxmaps,
+                                            Superdrop& drop) const {
     auto coord3 = drop.get_coord3();
     auto coord1 = drop.get_coord1();
     auto coord2 = drop.get_coord2();
     const auto idx = gbxmaps.get_local_bounding_gridbox_index(gbxindex, coord3, coord1,
-                                                        coord2);  // drop_coords may change(!)
+                                                              coord2);  // drop_coords may change(!)
 
     // Sets the updated superdroplet coordinates and gridbox index
     drop.set_coords(coord3, coord1, coord2);

@@ -23,6 +23,7 @@
 
 #include <cstdlib>
 #include <iostream>
+#include <stdexcept>
 
 #include "./py_cartesiandomain.hpp"
 #include "./py_configuration.hpp"

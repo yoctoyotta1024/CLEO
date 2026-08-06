@@ -159,8 +159,8 @@ The Examples
   The ``breakup.py`` example models collision-coalescence-rebound-breakup using the hydrodynamic kernel with Long's
   collision efficiency as given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`, and the
   coalescence/breakup/rebound probability based on section 4 of Testik et al. 2011 (figure 12)
-  :cite:`testik2011` as well as coalescence efficiency and number of fragements produced from
-  Straub et al. 2010 and Schlottke et al. 2010 respectively (:cite:`schlottke2010`, :cite:`straub2010`).
+  :cite:`testik2011` (first proposed in :cite:`testik2009`), as well as coalescence efficiency and number of fragements
+  produced from Straub et al. 2010 and Schlottke et al. 2010 respectively (:cite:`schlottke2010`, :cite:`straub2010`).
 
   This example produces a plot, by default called ``~/CLEO/build_colls0d/[...]/bin/testikstraub_validation.png``.
 
@@ -219,7 +219,7 @@ The Examples
 .. dropdown:: Divergence Free Motion
   :animate: fade-in
 
-  This example is runs from the ``examples/divfreemotion/divfree2d.py`` script.
+  This example is run from the ``examples/divfreemotion/divfree2d.py`` script.
 
   1. :ref:`Configure the bash scripts<configurebash_levante>`, ``scripts/levante/examples/build_compile_run_plot.sh``
   and ``scripts/levante/examples/divfree2d.sh``.
@@ -243,7 +243,7 @@ The Examples
   .. dropdown:: The Original 1-D Rainshaft
     :animate: fade-in-slide-down
 
-    This example is runs from the ``examples/rainshaft1d/rainshaft1d.py`` script.
+    This example is run from the ``examples/rainshaft1d/rainshaft1d.py`` script.
 
     1. :ref:`Configure the bash scripts<configurebash_levante>`, ``scripts/levante/examples/build_compile_run_plot.sh``
     and ``scripts/levante/examples/rainshaft1d.sh``.
@@ -267,7 +267,7 @@ The Examples
 .. dropdown:: Constant 2-D Thermodynamics
   :animate: fade-in
 
-  This example is runs from the ``examples/constthermo2d/constthermo2d.py`` script.
+  This example is run from the ``examples/constthermo2d/constthermo2d.py`` script.
 
   1. :ref:`Configure the bash scripts<configurebash_levante>`, ``scripts/levante/examples/build_compile_run_plot.sh``
   and ``scripts/levante/examples/constthermo2d.sh``
@@ -323,7 +323,7 @@ The Examples
 .. dropdown:: Python Bindings
   :animate: fade-in
 
-  This example is runs from the ``examples/python_bindings/python_bindings.py`` script.
+  This example is run from the ``examples/python_bindings/python_bindings.py`` script.
 
   1. :ref:`Configure the bash scripts<configurebash_levante>`, ``scripts/levante/examples/build_compile_run_plot.sh``
   and ``scripts/levante/examples/python_bindings.sh``

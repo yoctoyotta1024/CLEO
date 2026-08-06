@@ -37,7 +37,7 @@ with ndims [nz, nx, ny]. kij is useful for then getting
 position in of a variable in a flattened array defined on
 the faces of the same grid. E.g for the w velocity defined
 on z faces of the grid which therefore has dims [nz+1, nx, ny] */
-std::array<size_t, 3> kijfromindex(const std::array<size_t, 3> &ndims, const size_t index) {
+std::array<size_t, 3> kijfromindex(const std::array<size_t, 3>& ndims, const size_t index) {
   const size_t j = index / (ndims[0] * ndims[1]);
   const size_t k = index % ndims[0];
   const size_t i = index / ndims[0] - ndims[1] * j;
@@ -56,7 +56,7 @@ void CartesianDynamics::increment_position() {
   pos_yface += ndims[0] * ndims[1] * (ndims[2] + 1);
 }
 
-CartesianDynamics::CartesianDynamics(const OptionalConfigParams::FromFileDynamicsParams &config,
+CartesianDynamics::CartesianDynamics(const OptionalConfigParams::FromFileDynamicsParams& config,
                                      const std::array<size_t, 3> i_ndims, const unsigned int nsteps)
     : ndims(i_ndims),
       pos(0),
@@ -86,7 +86,7 @@ CartesianDynamics::CartesianDynamics(const OptionalConfigParams::FromFileDynamic
 
 /* depending on nspacedims, read in data
 for 1-D, 2-D or 3-D wind velocity components */
-void CartesianDynamics::set_winds(const OptionalConfigParams::FromFileDynamicsParams &config) {
+void CartesianDynamics::set_winds(const OptionalConfigParams::FromFileDynamicsParams& config) {
   const auto nspacedims = config.nspacedims;
 
   switch (nspacedims) {
@@ -111,7 +111,7 @@ void CartesianDynamics::set_winds(const OptionalConfigParams::FromFileDynamicsPa
 velocity components in 1D, 2D or 3D model
 and check they have correct size */
 std::string CartesianDynamics::set_winds_from_binaries(
-    const OptionalConfigParams::FromFileDynamicsParams &config) {
+    const OptionalConfigParams::FromFileDynamicsParams& config) {
   const auto nspacedims = config.nspacedims;
 
   std::string infostart(std::to_string(nspacedims) + "-D model, wind velocity");
@@ -207,9 +207,9 @@ CartesianDynamics::get_winds_func CartesianDynamics::get_vvel_from_binary() cons
 velocity components are appropriate length given spatial dimension
 of model and definiton on z, x or y faces of gridboxes  */
 void CartesianDynamics::check_thermodynamics_vectorsizes(const unsigned int nspacedims,
-                                                         const std::array<size_t, 3> &ndims,
+                                                         const std::array<size_t, 3>& ndims,
                                                          const unsigned int nsteps) const {
-  auto is_size = [](const std::vector<double> &vel, const size_t sz) {
+  auto is_size = [](const std::vector<double>& vel, const size_t sz) {
     const size_t velsize(vel.size());
     if (velsize < sz) {
       throw std::invalid_argument(std::to_string(velsize) +

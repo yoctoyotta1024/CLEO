@@ -42,7 +42,7 @@
  * @tparam CD The type for the dyanmics solver to check against the CoupledDynamics concept.
  */
 template <typename Comms, typename GbxMaps, typename CD>
-concept CouplingComms = requires(Comms s, GbxMaps &gbxmaps, CD &coupldyn, viewh_gbx h_gbxs) {
+concept CouplingComms = requires(Comms s, GbxMaps& gbxmaps, CD& coupldyn, viewh_gbx h_gbxs) {
   { s.template send_dynamics<GbxMaps, CD>(gbxmaps, h_gbxs, coupldyn) } -> std::same_as<void>;
   { s.template receive_dynamics<GbxMaps, CD>(gbxmaps, coupldyn, h_gbxs) } -> std::same_as<void>;
 };
@@ -66,7 +66,7 @@ struct NullComms {
    * @param h_gbxs The view of Gridboxes.
    */
   template <GridboxMaps GbxMaps, CoupledDynamics CD>
-  void receive_dynamics(const GbxMaps &gbxmaps, const CD &coupldyn, const viewh_gbx h_gbxs) const {}
+  void receive_dynamics(const GbxMaps& gbxmaps, const CD& coupldyn, const viewh_gbx h_gbxs) const {}
 
   /**
    * @brief Sends dynamics information.
@@ -79,7 +79,7 @@ struct NullComms {
    * @param coupldyn The coupled dynamics solver object.
    */
   template <GridboxMaps GbxMaps, CoupledDynamics CD>
-  void send_dynamics(const GbxMaps &gbxmaps, const viewh_constgbx h_gbxs, CD &coupldyn) const {}
+  void send_dynamics(const GbxMaps& gbxmaps, const viewh_constgbx h_gbxs, CD& coupldyn) const {}
 };
 
 #endif  // LIBS_RUNCLEO_COUPLINGCOMMS_HPP_

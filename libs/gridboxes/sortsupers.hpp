@@ -21,7 +21,7 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Sort.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
-// #include <cassert>
+#include <stdexcept>
 
 #include "../kokkosaliases.hpp"
 #include "superdrops/superdrop.hpp"
@@ -30,7 +30,7 @@ namespace KCS = KokkosCleoSettings;
 
 /* returns true if superdrops in "supers" view are already sorted by the Comparator */
 template <class Comparator>
-inline bool is_sorted_supers(const viewd_constsupers supers, const Comparator &comp) {
+inline bool is_sorted_supers(const viewd_constsupers supers, const Comparator& comp) {
   return Kokkos::Experimental::is_sorted("IsSupersSorted", ExecSpace(), supers, comp);
 }
 
@@ -108,7 +108,7 @@ struct SortSupersBySdgbxindex {
   /* a precedes b if its sdgbxindex is smaller */
   struct SortComparator {
     KOKKOS_INLINE_FUNCTION
-    bool operator()(const Superdrop &a, const Superdrop &b) const {
+    bool operator()(const Superdrop& a, const Superdrop& b) const {
       return (a.get_sdgbxindex()) < (b.get_sdgbxindex());
     }
   };
@@ -148,9 +148,13 @@ struct SortSupersBySdgbxindex {
     const auto functor = CountingSortFunctor{gbxindex_max, totsupers, totsupers_tmp, cumlcounts};
     Kokkos::parallel_for("counting_sort", Kokkos::RangePolicy<ExecSpace>(0, ntotsupers), functor);
 
-    /* assertion for debugging only works for hostspace cumlcounts */
-    // assert((cumlcounts(counts.extent(0) - 1) == totsupers_tmp.extent(0)) &&
-    //        "last cumulative sum of totsupers count should equal expected number of totsupers");
+    /* runtime error check for debugging only works for hostspace cumlcounts */
+#ifndef NDEBUG
+    if (cumlcounts(counts.extent(0) - 1) != totsupers_tmp.extent(0)) {
+      throw std::runtime_error(
+          "last cumulative sum of totsupers count should equal expected number of totsupers");
+    }
+#endif
 
     return totsupers_tmp;
   }
@@ -165,7 +169,7 @@ struct SortSupersBySdgbxindex {
     const auto ngbxs = size_t{d_gbxs.extent(0)};
     Kokkos::parallel_for(
         "counting_sort_gbxs", TeamPolicy(ngbxs, KCS::team_size),
-        KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
+        KOKKOS_CLASS_LAMBDA(const TeamMember& team_member) {
           const auto ii = team_member.league_rank();
           auto supers = d_gbxs(ii).supersingbx(domainsupers);
           const auto nsupers = size_t{supers.extent(0)};
@@ -177,9 +181,13 @@ struct SortSupersBySdgbxindex {
     const auto functor = CountingSortFunctor{gbxindex_max, oob_supers, totsupers_tmp, cumlcounts};
     Kokkos::parallel_for("counting_sort_oob", Kokkos::RangePolicy<ExecSpace>(0, noobs), functor);
 
-    /* assertion for debugging only works for hostspace cumlcounts */
-    // assert((cumlcounts(counts.extent(0) - 1) == totsupers_tmp.extent(0)) &&
-    //        "last cumulative sum of totsupers count should equal expected number of totsupers");
+    /* runtime error check for debugging only works for hostspace cumlcounts */
+#ifndef NDEBUG
+    if (cumlcounts(counts.extent(0) - 1) != totsupers_tmp.extent(0)) {
+      throw std::runtime_error(
+          "last cumulative sum of totsupers count should equal expected number of totsupers");
+    }
+#endif
 
     return totsupers_tmp;
   }
