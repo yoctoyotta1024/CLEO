@@ -34,7 +34,7 @@
  * @tparam CDD The type that satisfies the CollectDataForDataset concept.
  */
 template <typename CDD, typename Dataset>
-concept CollectDataForDataset = requires(CDD cdd, const Dataset &ds, const viewd_constgbx d_gbxs,
+concept CollectDataForDataset = requires(CDD cdd, const Dataset& ds, const viewd_constgbx d_gbxs,
                                          const subviewd_constsupers d_supers, const size_t sz) {
   { cdd.get_functor(d_gbxs, d_supers) };
   { cdd.reallocate_views(sz) } -> std::same_as<void>;
@@ -80,7 +80,7 @@ struct CombinedCollectDataForDataset {
 
     /* Functor operator to perform copy of each element in parallel in Kokkos Team Policy */
     KOKKOS_INLINE_FUNCTION
-    void operator()(const TeamMember &team_member) const {
+    void operator()(const TeamMember& team_member) const {
       a_functor(team_member);
       b_functor(team_member);
     }
@@ -99,25 +99,25 @@ struct CombinedCollectDataForDataset {
   }
 
   template <typename Dataset>
-  void write_to_arrays(const Dataset &dataset) const {
+  void write_to_arrays(const Dataset& dataset) const {
     a.write_to_arrays(dataset);
     b.write_to_arrays(dataset);
   }
 
   template <typename Dataset>
-  void write_to_ragged_arrays(const Dataset &dataset) const {
+  void write_to_ragged_arrays(const Dataset& dataset) const {
     a.write_to_ragged_arrays(dataset);
     b.write_to_ragged_arrays(dataset);
   }
 
   template <typename Dataset>
-  void write_arrayshapes(const Dataset &dataset) const {
+  void write_arrayshapes(const Dataset& dataset) const {
     a.write_arrayshapes(dataset);
     b.write_arrayshapes(dataset);
   }
 
   template <typename Dataset>
-  void write_ragged_arrayshapes(const Dataset &dataset) const {
+  void write_ragged_arrayshapes(const Dataset& dataset) const {
     a.write_ragged_arrayshapes(dataset);
     b.write_ragged_arrayshapes(dataset);
   }
@@ -136,7 +136,7 @@ struct NullCollectDataForDataset {
     void operator()(const size_t nn) const {}
 
     KOKKOS_INLINE_FUNCTION
-    void operator()(const TeamMember &team_member) const {}
+    void operator()(const TeamMember& team_member) const {}
   };
 
   Functor get_functor(const viewd_constgbx d_gbxs, const subviewd_constsupers d_supers) const {
@@ -144,16 +144,16 @@ struct NullCollectDataForDataset {
   }
 
   template <typename Dataset>
-  void write_to_arrays(const Dataset &dataset) const {}
+  void write_to_arrays(const Dataset& dataset) const {}
 
   template <typename Dataset>
-  void write_to_ragged_arrays(const Dataset &dataset) const {}
+  void write_to_ragged_arrays(const Dataset& dataset) const {}
 
   template <typename Dataset>
-  void write_arrayshapes(const Dataset &dataset) const {}
+  void write_arrayshapes(const Dataset& dataset) const {}
 
   template <typename Dataset>
-  void write_ragged_arrayshapes(const Dataset &dataset) const {}
+  void write_ragged_arrayshapes(const Dataset& dataset) const {}
 
   void reallocate_views(const size_t sz) const {}
 };

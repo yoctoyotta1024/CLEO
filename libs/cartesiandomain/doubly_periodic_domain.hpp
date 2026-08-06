@@ -39,7 +39,7 @@ gbxidx='idx' in a cartesian domain. Treatment of neighbours
 for gridboxes at the edges of the domain is either finite
 (null neighbour) or periodic (cyclic neighbour) */
 inline Kokkos::pair<unsigned int, unsigned int> cartesian_coord3nghbrs(
-    const unsigned int idx, const std::vector<size_t> &ndims) {
+    const unsigned int idx, const std::vector<size_t>& ndims) {
   return finitedomain_nghbrs(idx, 1, ndims.at(0));
   // return periodicdomain_nghbrs(idx, 1, ndims.at(0));
 }
@@ -50,7 +50,7 @@ gbxidx='idx' in a cartesian domain. Treatment of neighbours
 for gridboxes at the edges of the domain is either finite
 (null neighbour) or periodic (cyclic neighbour) */
 inline Kokkos::pair<unsigned int, unsigned int> cartesian_coord1nghbrs(
-    const unsigned int idx, const std::vector<size_t> &ndims) {
+    const unsigned int idx, const std::vector<size_t>& ndims) {
   const auto nz = (unsigned int)ndims.at(0);  // no. gridboxes in z direction
   // return finitedomain_nghbrs(idx, nz, ndims.at(1));
   return periodicdomain_nghbrs(idx, nz, ndims.at(1));
@@ -62,7 +62,7 @@ gbxidx='idx' in a cartesian domain. Treatment of neighbours
 for gridboxes at the edges of the domain is either finite
 (null neighbour) or periodic (cyclic neighbour) */
 inline Kokkos::pair<unsigned int, unsigned int> cartesian_coord2nghbrs(
-    const unsigned int idx, const std::vector<size_t> &ndims) {
+    const unsigned int idx, const std::vector<size_t>& ndims) {
   const auto nznx = (unsigned int)ndims.at(0) *
                     ndims.at(1);  // no. gridboxes in z direction * no. gridboxes in x direction
   // return finitedomain_nghbrs(idx, nznx, ndims.at(2));

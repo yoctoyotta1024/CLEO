@@ -25,7 +25,7 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
 #include <algorithm>
-#include <cassert>
+#include <stdexcept>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -159,8 +159,10 @@ class XarrayZarrArray {
         dimnames(dimnames),
         arrayshape(dimnames.size(), 0),
         last_totnchunks(0) {
-    assert((chunkshape.size() == dimnames.size()) &&
-           "number of named dimensions of array must match number dimensions of chunks");
+    if (chunkshape.size() != dimnames.size()) {
+      throw std::runtime_error(
+          "number of named dimensions of array must match number dimensions of chunks");
+    }
     int my_rank;
     my_rank = init_communicator::get_comm_rank();
 
@@ -191,8 +193,10 @@ class XarrayZarrArray {
         dimnames(dimnames),
         arrayshape(dimnames.size(), 0),
         last_totnchunks(0) {
-    assert((chunkshape.size() == dimnames.size()) &&
-           "number of named dimensions of array must match number dimensions of chunks");
+    if (chunkshape.size() != dimnames.size()) {
+      throw std::runtime_error(
+          "number of named dimensions of array must match number dimensions of chunks");
+    }
     int my_rank;
     my_rank = init_communicator::get_comm_rank();
     if (my_rank == 0) {

@@ -31,6 +31,6 @@ namespace py = pybind11;
 
 int test_coupldyn_numpy(const int i, const int j);
 
-void include_coupldyn_numpy_submodule(py::module &m);
+void include_coupldyn_numpy_submodule(py::module& m);
 
 #endif  // LIBS_CLEO_PYTHON_BINDINGS_COUPLDYN_NUMPY_PYCOUPLDYN_NUMPY_HPP_

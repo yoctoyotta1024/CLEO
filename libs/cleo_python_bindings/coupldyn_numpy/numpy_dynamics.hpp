@@ -28,7 +28,7 @@
 
 namespace py = pybind11;
 
-void pyNumpyDynamics(py::module &m);
+void pyNumpyDynamics(py::module& m);
 
 struct NumpyDynamics {
  private:
@@ -65,7 +65,9 @@ struct NumpyDynamics {
 
   void run_step(const unsigned int t_mdl, const unsigned int t_next) const {
     if (on_step(t_mdl)) {
-      // print_dynamics(t_mdl);  // useful for debugging
+#ifndef NDEBUG
+      print_dynamics(t_mdl);  // useful for debugging
+#endif
     }
   }
 

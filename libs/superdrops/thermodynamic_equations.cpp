@@ -37,7 +37,9 @@
  */
 KOKKOS_FUNCTION
 double saturation_pressure(const double temp) {
-  assert((temp > 0) && "psat ERROR: temperature must be larger than 0K.");
+  if (temp <= 0) {
+    Kokkos::abort("psat ERROR: temperature must be larger than 0K.");
+  }
 
   constexpr double A = 17.4146;     // constants from Bjorn Gitlab originally from paper
   constexpr double B = 33.639;      // ditto
@@ -61,7 +63,9 @@ double saturation_pressure(const double temp) {
  */
 KOKKOS_FUNCTION
 double saturation_pressure_murphy_koop(const double temp) {
-  assert((temp > 0) && "psat ERROR: temperature must be larger than 0K.");
+  if (temp <= 0) {
+    Kokkos::abort("psat ERROR: temperature must be larger than 0K.");
+  }
 
   const auto T = double{temp * dlc::TEMP0};  // real T [K]
 
@@ -112,12 +116,11 @@ double diffusion_factor(const double press, const double temp, const double psat
 /**
  * @brief Calculate the ventilation factor for the condensation-diffusion growth equation.
  *
- * Equation for ventilation factor, $f_v$, is fit to data from Kinzer and Gunn (1951) and from
+ * Equation for ventilation factor, f_v, is fit to data from Kinzer and Gunn (1951) and from
  * Pruppacher and Rasmussen (1979) according to Florian Poydenot, whereby
- * $ f_v = 1 + \frac{1}{\frac{1}{c_1R^\alpha} + \frac{1}{c_2R^\beta}} $
- * where $ c_1 = 6.954*10^7 $, $ \alpha=1.963 $, $ c_2=1.069*10^3 $,
- * $ \beta=0.702 $, and $R$ is the radius
- * of the water droplet in [m].
+ * f_v = 1 + 1 / (1 / (c_1 R^alpha) + 1 / (c_2 R^beta))
+ * where c_1 = 6.954*10^7, alpha = 1.963, c_2 = 1.069*10^3,
+ * beta = 0.702, and R is the radius of the water droplet in [m].
  *
  * Equation is capped at fv=20 (corresponds to the value of the uncapped fv when the
  * droplet radius is ~3.30mm) because droplets greater than ~3mm have a constant

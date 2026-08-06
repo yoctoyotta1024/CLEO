@@ -23,13 +23,16 @@
 #include "superdrops/collisions/golovinprob.hpp"
 
 struct GolovinCreateMicrophysics {
-  MicrophysicalProcess auto operator()(const Config &config, const Timesteps &tsteps) const {
+  MicrophysicalProcess auto operator()(const Config& config, const Timesteps& tsteps) const {
+    const auto c = config.get_collisions();
+
     const PairProbability auto prob = GolovinProb();
-    const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(), &step2realtime, prob);
+    const MicrophysicalProcess auto colls =
+        CollCoal(tsteps.get_collstep(), &step2realtime, prob, c.seed);
     return colls;
   }
 };
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   return generic_microphysics_main(argc, argv, GolovinCreateMicrophysics{});
 }

@@ -44,7 +44,7 @@
 template <typename Dataset, typename Store>
 class DoTotNsupersObs {
  private:
-  Dataset &dataset; /**< dataset to write totnsupers data to */
+  Dataset& dataset; /**< dataset to write totnsupers data to */
   std::shared_ptr<XarrayZarrArray<Store, uint32_t>> xzarr_ptr; /**< pointer to totnsupers array */
 
   /**
@@ -69,7 +69,7 @@ class DoTotNsupersObs {
    * @param store Store which dataset writes to.
    * @param maxchunk Maximum number of elements in a chunk (1-D vector size).
    */
-  DoTotNsupersObs(Dataset &dataset, Store &store, const size_t maxchunk)
+  DoTotNsupersObs(Dataset& dataset, Store& store, const size_t maxchunk)
       : dataset(dataset),
         xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
             dataset.template create_array<uint32_t>("totnsupers", "", 1, {maxchunk}, {"time"}))) {}
@@ -127,7 +127,7 @@ class DoTotNsupersObs {
  * @return Constructed type satisfying observer concept.
  */
 template <typename Dataset, typename Store>
-inline Observer auto TotNsupersObserver(const unsigned int interval, Dataset &dataset, Store &store,
+inline Observer auto TotNsupersObserver(const unsigned int interval, Dataset& dataset, Store& store,
                                         const size_t maxchunk) {
   return ConstTstepObserver(interval, DoTotNsupersObs(dataset, store, maxchunk));
 }

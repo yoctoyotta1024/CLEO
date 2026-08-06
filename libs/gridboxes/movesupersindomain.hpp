@@ -22,7 +22,6 @@
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Profiling_ScopedRegion.hpp>
-#include <cassert>
 #include <concepts>
 
 #include "../cleoconstants.hpp"
@@ -147,7 +146,7 @@ template <GridboxMaps GbxMaps, Motion<GbxMaps> M, TransportAcrossDomain<GbxMaps>
 class MoveSupersInDomain {
  public:
   /* (expensive!) test if superdrops' gbxindex doesn't match gridbox's gbxindex,
-  raise error is assertion fails */
+  raise error if assertion fails */
   void check_sdgbxindex_during_motion(const viewd_constgbx d_gbxs,
                                       const viewd_constsupers totsupers) const {
     const auto ngbxs = d_gbxs.extent(0);
@@ -155,8 +154,9 @@ class MoveSupersInDomain {
         "check_sdgbxindex_during_motion", TeamPolicy(ngbxs, KCS::team_size),
         KOKKOS_LAMBDA(const TeamMember& team_member) {
           const auto ii = team_member.league_rank();
-          assert(d_gbxs(ii).supersingbx.iscorrect(team_member, totsupers) &&
-                 "incorrect references to superdrops in gridbox during motion");
+          if (!d_gbxs(ii).supersingbx.iscorrect(team_member, totsupers)) {
+            Kokkos::abort("incorrect references to superdrops in gridbox during motion");
+          }
         });
   }
 
@@ -218,7 +218,9 @@ class MoveSupersInDomain {
     set_gridboxes_refs(d_gbxs, allsupers.domain_supers());
 
     /* optional (expensive!) test if superdrops' gbxindex doesn't match gridbox's gbxindex */
-    // check_sdgbxindex_during_motion(d_gbxs, allsupers.get_totsupers_readonly());
+#ifndef NDEBUG
+    check_sdgbxindex_during_motion(d_gbxs, allsupers.get_totsupers_readonly());
+#endif
 
     return allsupers;
   }

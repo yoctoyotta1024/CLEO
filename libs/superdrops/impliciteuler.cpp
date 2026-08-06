@@ -67,7 +67,7 @@ KOKKOS_FUNCTION double ImplicitEuler::solve_condensation(
  *
  */
 KOKKOS_FUNCTION bool ImplicitEuler::first_unique_criteria(
-    const ImplicitIterations::ODEConstants &odeconsts, const double rprev,
+    const ImplicitIterations::ODEConstants& odeconsts, const double rprev,
     const double ziter) const {
   const double akoh = odeconsts.akoh;
   const double bkoh = odeconsts.bkoh;
@@ -96,7 +96,7 @@ KOKKOS_FUNCTION bool ImplicitEuler::first_unique_criteria(
  *
  */
 KOKKOS_FUNCTION double ImplicitEuler::solve_with_adaptive_subtimestepping(
-    const ImplicitIterations::ODEConstants &odeconsts, const double delt, double rprev,
+    const ImplicitIterations::ODEConstants& odeconsts, const double delt, double rprev,
     double ziter) const {
   const auto critdelt = critial_timestep(odeconsts);
   const auto mindelt = Kokkos::fmax(critdelt, minsubdelt);
@@ -126,7 +126,7 @@ KOKKOS_FUNCTION double ImplicitEuler::solve_with_adaptive_subtimestepping(
  *
  */
 KOKKOS_FUNCTION
-double ImplicitIterations::integrate_condensation_ode(const ODEConstants &odeconsts,
+double ImplicitIterations::integrate_condensation_ode(const ODEConstants& odeconsts,
                                                       const double subdelt, const double rprev,
                                                       double ziter) const {
   const size_t niters = 2;
@@ -153,7 +153,7 @@ double ImplicitIterations::integrate_condensation_ode(const ODEConstants &odecon
  * than its (activation radius)^2 if the supersaturation > its activation supersaturation.
  *
  */
-KOKKOS_FUNCTION double ImplicitIterations::initialguess(const ODEConstants &odeconsts,
+KOKKOS_FUNCTION double ImplicitIterations::initialguess(const ODEConstants& odeconsts,
                                                         const double rprev) const {
   const auto s_act = double{1 + Kokkos::sqrt(4.0 * Kokkos::pow(odeconsts.akoh, 3.0) / 27 /
                                              odeconsts.bkoh)};  // activation supersaturation
@@ -179,7 +179,7 @@ KOKKOS_FUNCTION double ImplicitIterations::initialguess(const ODEConstants &odec
  *
  */
 KOKKOS_FUNCTION Kokkos::pair<double, bool> ImplicitIterations::newtonraphson_niterations(
-    const ODEConstants &odeconsts, const double subdelt, const double rprev, double ziter,
+    const ODEConstants& odeconsts, const double subdelt, const double rprev, double ziter,
     const size_t niters) const {
   auto is_converged = false;
 
@@ -205,14 +205,17 @@ KOKKOS_FUNCTION Kokkos::pair<double, bool> ImplicitIterations::newtonraphson_nit
  *
  */
 KOKKOS_FUNCTION double ImplicitIterations::newtonraphson_untilconverged(
-    const ODEConstants &odeconsts, const size_t niterslimit, const double subdelt,
+    const ODEConstants& odeconsts, const size_t niterslimit, const double subdelt,
     const double rprev, double ziter) const {
   auto is_converged = bool{false};
   auto niter = size_t{1};
 
   while (!is_converged) {
-    assert((niter <= niterslimit) &&
-           "No root converged upon within max number of iterations of Newton Raphson Method.");
+    if (niter > niterslimit) {
+      Kokkos::abort(
+          "No root converged upon within max number of "
+          "iterations of Newton Raphson Method.");
+    }
     const auto result =
         iterate_rootfinding_algorithm(odeconsts, subdelt, rprev, ziter);  // ziter, is_converged
     ziter = result.first;
@@ -235,7 +238,7 @@ KOKKOS_FUNCTION double ImplicitIterations::newtonraphson_untilconverged(
  */
 KOKKOS_FUNCTION
 Kokkos::pair<double, bool> ImplicitIterations::iterate_rootfinding_algorithm(
-    const ODEConstants &odeconsts, const double subdelt, const double rprev, double ziter) const {
+    const ODEConstants& odeconsts, const double subdelt, const double rprev, double ziter) const {
   // perform iteration
   const auto numerator = ode_gfunc(odeconsts, subdelt, rprev, ziter);
   const auto denominator = ode_gfuncderivative(odeconsts, subdelt, ziter);
@@ -264,7 +267,7 @@ Kokkos::pair<double, bool> ImplicitIterations::iterate_rootfinding_algorithm(
  * _Note:_ z = ziter = radius^2.
  *
  */
-KOKKOS_FUNCTION double ImplicitIterations::ode_gfunc(const ODEConstants &odeconsts,
+KOKKOS_FUNCTION double ImplicitIterations::ode_gfunc(const ODEConstants& odeconsts,
                                                      const double subdelt, const double rprev,
                                                      const double rsqrd) const {
   const auto radius = double{Kokkos::sqrt(rsqrd)};
@@ -285,7 +288,7 @@ KOKKOS_FUNCTION double ImplicitIterations::ode_gfunc(const ODEConstants &odecons
  * consistent as in ode_gfunc(...).
  *
  */
-KOKKOS_FUNCTION double ImplicitIterations::ode_gfuncderivative(const ODEConstants &odeconsts,
+KOKKOS_FUNCTION double ImplicitIterations::ode_gfuncderivative(const ODEConstants& odeconsts,
                                                                const double subdelt,
                                                                const double rsqrd) const {
   const auto radius = double{Kokkos::sqrt(rsqrd)};

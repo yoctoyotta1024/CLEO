@@ -43,7 +43,7 @@ struct InitGbxsCvode {
   double qcond_i;    // initial liquid water mixing ratio
 
  public:
-  explicit InitGbxsCvode(const OptionalConfigParams::CvodeDynamicsParams &config)
+  explicit InitGbxsCvode(const OptionalConfigParams::CvodeDynamicsParams& config)
       : ngbxs(config.ngbxs),
         press_i(config.P_init / dlc::P0),
         temp_i(config.TEMP_init / dlc::TEMP0),

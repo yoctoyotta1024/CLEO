@@ -34,7 +34,7 @@ namespace dlc = dimless_constants;
  * convertible to a double (should be its terminal velocity!).
  */
 template <typename V>
-concept VelocityFormula = requires(V v, const Superdrop &drop) {
+concept VelocityFormula = requires(V v, const Superdrop& drop) {
   { v(drop) } -> std::convertible_to<double>;
 };
 
@@ -49,7 +49,7 @@ struct NullTerminalVelocity {
    * @return 0.0
    */
   KOKKOS_FUNCTION
-  double operator()(const Superdrop &drop) const { return 0.0; }
+  double operator()(const Superdrop& drop) const { return 0.0; }
 };
 
 /**
@@ -82,7 +82,7 @@ struct SimmelTerminalVelocity {
    * @return The (dimensionless) terminal velocity.
    */
   KOKKOS_FUNCTION
-  double operator()(const Superdrop &drop) const;
+  double operator()(const Superdrop& drop) const;
 };
 
 /**
@@ -100,7 +100,7 @@ struct RogersYauTerminalVelocity {
    * @return The (dimensionless) terminal velocity.
    */
   KOKKOS_FUNCTION
-  double operator()(const Superdrop &drop) const;
+  double operator()(const Superdrop& drop) const;
 };
 
 /**
@@ -118,7 +118,7 @@ struct RogersGKTerminalVelocity {
    * @return The (dimensionless) terminal velocity.
    */
   KOKKOS_FUNCTION
-  double operator()(const Superdrop &drop) const;
+  double operator()(const Superdrop& drop) const;
 };
 
 /**

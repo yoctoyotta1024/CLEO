@@ -84,8 +84,8 @@ std::string xarray_metadata_for_floats(const std::string_view units, const doubl
  * @brief Make string of array attributes metadata for .zattrs json which is used to make zarr array
  * compatible with Xarray and NetCDF.
  *
- * Metadata for integer types (e.g. dtype "u") doesn't include scale_factor so assertion
- * checks scale_factor is equal to 1.0.
+ * Metadata for integer types (e.g. dtype "u") doesn't include scale_factor so error-test included
+ * to check scale_factor is equal to 1.0.
  *
  * @param units The units of the array's coordinates.
  * @param scale_factor The scale factor of data, must equal 1.0.
@@ -94,7 +94,9 @@ std::string xarray_metadata_for_floats(const std::string_view units, const doubl
  */
 std::string xarray_metadata_for_ints(const std::string_view units, const double scale_factor,
                                      const std::vector<std::string>& dimnames) {
-  assert((scale_factor == 1.0) && "scale_factor cannot be used on non-floating point type");
+  if (scale_factor != 1.0) {
+    throw std::runtime_error("scale_factor cannot be used on non-floating point type");
+  }
   const auto zattrs = std::string(
       "{\n"
       "  \"_ARRAY_DIMENSIONS\": " +
@@ -144,8 +146,8 @@ std::string raggedarray_xarray_metadata_for_floats(const std::string_view units,
  * @brief Make string of array attributes metadata for .zattrs json which is used to make array for
  * a raggedcount variable in Zarr compatible with Xarray and NetCDF.
  *
- * Metadata for integer types (e.g. dtype "u") doesn't include scale_factor so assertion
- * checks scale_factor is equal to 1.0.
+ * Metadata for integer types (e.g. dtype "u") doesn't include scale_factor so error-test included
+ * to check scale_factor is equal to 1.0.
  *
  * @param units The units of the array's coordinates.
  * @param scale_factor The scale factor of data.
@@ -157,7 +159,9 @@ std::string raggedarray_xarray_metadata_for_ints(const std::string_view units,
                                                  const double scale_factor,
                                                  const std::vector<std::string>& dimnames,
                                                  const std::string_view sampledimname) {
-  assert((scale_factor == 1.0) && "scale_factor cannot be used on non-floating point type");
+  if (scale_factor != 1.0) {
+    throw std::runtime_error("scale_factor cannot be used on non-floating point type");
+  }
   const auto zattrs = std::string(
       "{\n"
       "  \"_ARRAY_DIMENSIONS\": " +

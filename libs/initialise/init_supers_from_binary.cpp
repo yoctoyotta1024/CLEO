@@ -42,7 +42,7 @@ std::vector<Superdrop::IDType> InitSupersFromBinary::sdIds_for_uninitialised_sup
 /* adds data for un-initialised (and out of bounds) superdrops into initdata so that initial
 conditions exist for maxnsupers number of superdrops in total */
 InitSupersData InitSupersFromBinary::add_uninitialised_superdrops_data(
-    InitSupersData &initdata) const {
+    InitSupersData& initdata) const {
   const auto size = maxnsupers - initdata.sdgbxindexes.size();
 
   const auto sdgbxindexes =
@@ -61,7 +61,7 @@ InitSupersData InitSupersFromBinary::add_uninitialised_superdrops_data(
   return initdata + nandata;
 }
 
-void InitSupersFromBinary::trim_nonlocal_superdrops(InitSupersData &initdata) const {
+void InitSupersFromBinary::trim_nonlocal_superdrops(InitSupersData& initdata) const {
   int my_rank;
   my_rank = init_communicator::get_comm_rank();
 

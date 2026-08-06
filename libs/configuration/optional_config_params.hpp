@@ -23,10 +23,10 @@
 #include <yaml-cpp/yaml.h>
 
 #include <Kokkos_Core.hpp>
-#include <cassert>
 #include <filesystem>
 #include <iostream>
 #include <limits>
+#include <stdexcept>
 #include <string>
 
 namespace NaNVals {
@@ -79,6 +79,20 @@ struct OptionalConfigParams {
     double rtol = NaNVals::dbl();        /**< relative tolerance for implicit Euler integration */
     double atol = NaNVals::dbl();        /**< absolute tolerance for implicit Euler integration */
   } condensation;
+
+  struct CollisionsParams {
+    void set_params(const YAML::Node& config);
+    void print_params() const;
+    uint64_t seed = NaNVals::sizet(); /**< fixed seed for collision probability generator pool */
+  } collisions;
+
+  struct CoalescenceParams {
+    void set_params(const YAML::Node& config);
+    void print_params() const;
+    struct ConstCoalEffParams {
+      double coaleff = NaNVals::dbl(); /**< constant coalescence efficiency */
+    } constcoaleff;
+  } coalescence;
 
   struct BreakupParams {
     void set_params(const YAML::Node& config);

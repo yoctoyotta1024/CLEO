@@ -248,7 +248,8 @@ struct MonitorMassMomentsChange {
   /**
    * @brief Placeholder function to obey SDMMonitor concept does nothing.
    *
-   * @param d_gbxs The view of gridboxes in device memory.
+   * @param team_member Kokkos team member in TeamPolicy parallel loop over gridboxes.
+   * @param d_supers The subview of superdrops.
    */
   KOKKOS_FUNCTION
   void before_timestepping(const TeamMember& team_member,
@@ -319,9 +320,9 @@ struct MonitorMassMomentsChange {
   /**
    * @brief Placeholder function to obey SDMMonitor concept does nothing.
    *
-   * @param gbxindex gridbox whose bottom boundary is to be evaluated.
+   * @param team_member Kokkos team member in TeamPolicy parallel loop over gridboxes.
+   * @param gbxindex Gridbox whose bottom boundary is to be evaluated.
    * @param gbxmaps The Gridbox Maps.
-   * @param state The State of the volume containing the super-droplets (gridbox matching gbxindex).
    * @param drop The super-droplet to evaluate.
    */
   KOKKOS_FUNCTION

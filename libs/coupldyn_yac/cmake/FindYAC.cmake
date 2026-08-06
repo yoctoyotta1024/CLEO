@@ -1,6 +1,6 @@
-find_package(YAXT)
-find_package(NetCDF)
-find_package(LAPACK)
+find_package(YAXT REQUIRED)
+find_package(NetCDF REQUIRED)
+find_package(LAPACK REQUIRED)
 enable_language(C)
 find_package(MPI REQUIRED COMPONENTS C)
 

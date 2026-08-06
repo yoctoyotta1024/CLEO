@@ -66,7 +66,8 @@ Commit Specification
 --------------------
 We use `conventional commits <https://www.conventionalcommits.org/>`_ as a a lightweight convention
 on top of commit messages to ensure they are meaningful, provide a useful history and can be used
-by automated tools such as `Cocogitto-bot <https://github.com/apps/cocogitto-bot>`_.
+by automated tools such as `Cocogitto <https://github.com/cocogitto/cocogitto>`_.
+
 
 Code Style / Formatting
 -----------------------

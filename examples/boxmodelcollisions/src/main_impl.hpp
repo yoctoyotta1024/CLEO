@@ -58,20 +58,20 @@
 #include "zarr/simple_dataset.hpp"
 
 template <GridboxMaps GbxMaps>
-inline InitialConditions auto create_initconds(const Config &config, const GbxMaps &gbxmaps) {
+inline InitialConditions auto create_initconds(const Config& config, const GbxMaps& gbxmaps) {
   const auto initsupers = InitAllSupersFromBinary(config.get_initsupersfrombinary());
   const auto initgbxs = InitGbxsNull(gbxmaps.get_local_ngridboxes_hostcopy());
 
   return InitConds(initsupers, initgbxs);
 }
 
-inline GridboxMaps auto create_gbxmaps(const Config &config) {
+inline GridboxMaps auto create_gbxmaps(const Config& config) {
   const auto gbxmaps = create_cartesian_maps(config.get_ngbxs(), config.get_nspacedims(),
                                              config.get_grid_filename());
   return gbxmaps;
 }
 
-inline auto create_movement(const CartesianMaps &gbxmaps) {
+inline auto create_movement(const CartesianMaps& gbxmaps) {
   const Motion<CartesianMaps> auto motion = NullMotion{};
   const BoundaryConditions<CartesianMaps> auto boundary_conditions = NullBoundaryConditions{};
 
@@ -79,8 +79,8 @@ inline auto create_movement(const CartesianMaps &gbxmaps) {
 }
 
 template <typename Dataset, typename Store>
-inline Observer auto create_superdrops_observer(const unsigned int interval, Dataset &dataset,
-                                                Store &store, const int maxchunk) {
+inline Observer auto create_superdrops_observer(const unsigned int interval, Dataset& dataset,
+                                                Store& store, const int maxchunk) {
   CollectDataForDataset<Dataset> auto sdid = CollectSdId(dataset, maxchunk);
   CollectDataForDataset<Dataset> auto xi = CollectXi(dataset, maxchunk);
   CollectDataForDataset<Dataset> auto radius = CollectRadius(dataset, maxchunk);
@@ -91,8 +91,8 @@ inline Observer auto create_superdrops_observer(const unsigned int interval, Dat
 }
 
 template <typename Dataset, typename Store>
-inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
-                                     Dataset &dataset, Store &store) {
+inline Observer auto create_observer(const Config& config, const Timesteps& tsteps,
+                                     Dataset& dataset, Store& store) {
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
 
@@ -106,8 +106,8 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
 }
 
 template <typename Dataset, typename Store, typename CreateMicrophysics>
-inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset &dataset,
-                       Store &store, const CreateMicrophysics create_microphysics) {
+inline auto create_sdm(const Config& config, const Timesteps& tsteps, Dataset& dataset,
+                       Store& store, const CreateMicrophysics create_microphysics) {
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps = create_gbxmaps(config);
   const MicrophysicalProcess auto microphys = create_microphysics(config, tsteps);
@@ -118,7 +118,7 @@ inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset &d
 }
 
 template <typename CreateMicrophysics>
-inline int generic_microphysics_main(int argc, char *argv[],
+inline int generic_microphysics_main(int argc, char* argv[],
                                      const CreateMicrophysics create_microphysics) {
   if (argc < 2) {
     throw std::invalid_argument("configuration file(s) not specified");

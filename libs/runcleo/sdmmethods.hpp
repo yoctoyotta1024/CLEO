@@ -60,7 +60,7 @@ struct SDMMicrophysicsFunctor {
   const subviewd_supers domainsupers; /**view on device of all superdroplets in all gridboxes. */
   const SDMMo mo;                     /**< object that is type of SDMMonitor to use. */
 
-  KOKKOS_INLINE_FUNCTION void operator()(const TeamMember &team_member) const {
+  KOKKOS_INLINE_FUNCTION void operator()(const TeamMember& team_member) const {
     const auto ii = team_member.league_rank();
     auto supers = d_gbxs(ii).supersingbx(domainsupers);
     for (unsigned int subt = t_sdm; subt < t_next; subt = microphys.next_step(subt)) {
@@ -134,7 +134,7 @@ class SDMMethods {
    * @param allsupers View of all superdrops (both in and out of bounds of domain).
    * @param mo Monitor of SDM processes.
    */
-  void superdrops_movement(const unsigned int t_sdm, viewd_gbx d_gbxs, SupersInDomain &allsupers,
+  void superdrops_movement(const unsigned int t_sdm, viewd_gbx d_gbxs, SupersInDomain& allsupers,
                            const SDMMonitor auto mo) const {
     Kokkos::Profiling::ScopedRegion region("timestep_sdm_movement");
 
@@ -184,7 +184,7 @@ class SDMMethods {
    */
   template <SDMMonitor SDMMo>
   void sdm_microphysics(const unsigned int t_sdm, const unsigned int t_next, const viewd_gbx d_gbxs,
-                        const SupersInDomain &allsupers, const SDMMo mo) const {
+                        const SupersInDomain& allsupers, const SDMMo mo) const {
     Kokkos::Profiling::ScopedRegion region("timestep_sdm_microphysics");
 
     const auto domainsupers = allsupers.domain_supers();
@@ -239,9 +239,10 @@ class SDMMethods {
    * This function prepares the CLEO SDM for timestepping by
    * calling the `before_timestepping` function of the observer.
    *
-   * @param d_gbxs View of gridboxes on device.
+   * @param gbxs DualView of gridboxes.
+   * @param allsupers Superdroplets in and out of the domain.
    */
-  void prepare_to_timestep(const dualview_gbx gbxs, const SupersInDomain &allsupers) const {
+  void prepare_to_timestep(const dualview_gbx gbxs, const SupersInDomain& allsupers) const {
     const auto d_gbxs = gbxs.view_device();
     const auto domainsupers = allsupers.domain_supers_readonly();
     obs.before_timestepping(d_gbxs, domainsupers);
@@ -259,7 +260,7 @@ class SDMMethods {
    * @param allsupers View of all (inside and outside of domain) superdroplets on device.
    */
   void at_start_step(const unsigned int t_mdl, const dualview_gbx gbxs,
-                     const SupersInDomain &allsupers) const {
+                     const SupersInDomain& allsupers) const {
     const auto d_gbxs = gbxs.view_device();
     const auto domainsupers = allsupers.domain_supers_readonly();
     obs.at_start_step(t_mdl, d_gbxs, domainsupers);
@@ -278,7 +279,7 @@ class SDMMethods {
    * @param allsupers View of all superdrops (both in and out of bounds of domain).
    */
   void run_step(const unsigned int t_mdl, const unsigned int t_mdl_next, viewd_gbx d_gbxs,
-                SupersInDomain &allsupers) const {
+                SupersInDomain& allsupers) const {
     const SDMMonitor auto mo = obs.get_sdmmonitor();
 
     unsigned int t_sdm(t_mdl);

@@ -93,6 +93,16 @@ void OptionalConfigParams::set_microphysics(const YAML::Node& config) {
     condensation.print_params();
   }
 
+  if (node["collisions"]) {
+    collisions.set_params(config);
+    collisions.print_params();
+  }
+
+  if (node["coalescence"]) {
+    coalescence.set_params(config);
+    coalescence.print_params();
+  }
+
   if (node["breakup"]) {
     breakup.set_params(config);
     breakup.print_params();
@@ -162,6 +172,28 @@ void OptionalConfigParams::CondensationParams::print_params() const {
             << "\n---------------------------------------------------------\n";
 }
 
+void OptionalConfigParams::CollisionsParams::set_params(const YAML::Node& config) {
+  const YAML::Node node = config["microphysics"]["collisions"];
+  seed = node["seed"].as<uint64_t>();
+}
+
+void OptionalConfigParams::CollisionsParams::print_params() const {
+  std::cout << "\n-------- Collisions Configuration Parameters --------------"
+            << "\nseed: " << seed
+            << "\n---------------------------------------------------------\n";
+}
+
+void OptionalConfigParams::CoalescenceParams::set_params(const YAML::Node& config) {
+  const YAML::Node node = config["microphysics"]["coalescence"]["constcoaleff"];
+  constcoaleff.coaleff = node["coaleff"].as<double>();
+}
+
+void OptionalConfigParams::CoalescenceParams::print_params() const {
+  std::cout << "\n-------- Coalescence Configuration Parameters --------------"
+            << "\nConstCoalEff coaleff: " << constcoaleff.coaleff
+            << "\n---------------------------------------------------------\n";
+}
+
 void OptionalConfigParams::BreakupParams::set_params(const YAML::Node& config) {
   const YAML::Node node = config["microphysics"]["breakup"]["constnfrags"];
   constnfrags.nfrags = node["nfrags"].as<double>();
@@ -176,7 +208,9 @@ void OptionalConfigParams::BreakupParams::print_params() const {
 void OptionalConfigParams::InitSupersFromBinaryParams::set_params(const YAML::Node& config) {
   const YAML::Node node = config["initsupers"];
 
-  assert((node["type"].as<std::string>() == "frombinary"));
+  if (node["type"].as<std::string>() != "frombinary") {
+    throw std::runtime_error("configuration type must be 'frombinary'");
+  }
 
   maxnsupers = config["domain"]["maxnsupers"].as<size_t>();
   initsupers_filename = std::filesystem::path(node["initsupers_filename"].as<std::string>());
@@ -199,7 +233,9 @@ void OptionalConfigParams::InitSupersFromBinaryParams::print_params() const {
 void OptionalConfigParams::FromFileDynamicsParams::set_params(const YAML::Node& config) {
   const YAML::Node node = config["coupled_dynamics"];
 
-  assert((node["type"].as<std::string>() == "fromfile"));
+  if (node["type"].as<std::string>() != "fromfile") {
+    throw std::runtime_error("configuration type must be 'fromfile'");
+  }
 
   /* convert string to std::filesystem::path type */
   auto fspath_from_yaml = [&node](const std::string& key) {
@@ -234,7 +270,9 @@ void OptionalConfigParams::FromFileDynamicsParams::print_params() const {
 void OptionalConfigParams::CvodeDynamicsParams::set_params(const YAML::Node& config) {
   const YAML::Node node = config["coupled_dynamics"];
 
-  assert((node["type"].as<std::string>() == "cvode"));
+  if (node["type"].as<std::string>() != "cvode") {
+    throw std::runtime_error("configuration type must be 'cvode'");
+  }
 
   ngbxs = config["domain"]["ngbxs"].as<unsigned int>();
   P_init = node["P_init"].as<double>();
@@ -257,7 +295,9 @@ void OptionalConfigParams::CvodeDynamicsParams::print_params() const {
 void OptionalConfigParams::YacDynamicsParams::set_params(const YAML::Node& config) {
   const YAML::Node node = config["coupled_dynamics"];
 
-  assert((node["type"].as<std::string>() == "yac"));
+  if (node["type"].as<std::string>() != "yac") {
+    throw std::runtime_error("configuration type must be 'yac'");
+  }
 
   lower_longitude = node["lower_longitude"].as<double>();
   upper_longitude = node["upper_longitude"].as<double>();

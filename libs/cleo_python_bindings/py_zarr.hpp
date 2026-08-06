@@ -30,12 +30,12 @@
 namespace py = pybind11;
 namespace pyca = cleo_python_bindings_aliases;
 
-inline void pyFSStore(py::module &m) {
+inline void pyFSStore(py::module& m) {
   py::class_<FSStore>(m, "FSStore").def(py::init<std::filesystem::path>());
 }
 
-inline void pySimpleDataset(py::module &m) {
-  py::class_<SimpleDataset<FSStore>>(m, "SimpleDataset").def(py::init<FSStore &>());
+inline void pySimpleDataset(py::module& m) {
+  py::class_<SimpleDataset<FSStore>>(m, "SimpleDataset").def(py::init<FSStore&>());
 }
 
 #endif  // LIBS_CLEO_PYTHON_BINDINGS_PY_ZARR_HPP_

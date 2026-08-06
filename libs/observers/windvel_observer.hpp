@@ -53,7 +53,7 @@
  * for collecting a wind velocity component from each gridbox.
  */
 template <typename Dataset, typename FunctorFunc>
-CollectDataForDataset<Dataset> auto CollectWindVariable(const Dataset &dataset,
+CollectDataForDataset<Dataset> auto CollectWindVariable(const Dataset& dataset,
                                                         const FunctorFunc ffunc,
                                                         const std::string_view name,
                                                         const size_t maxchunk, const size_t ngbxs) {
@@ -146,7 +146,7 @@ struct VvelFunc {
  * velocity data.
  */
 template <typename Dataset>
-inline CollectDataForDataset<Dataset> auto CollectWindVel(const Dataset &dataset,
+inline CollectDataForDataset<Dataset> auto CollectWindVel(const Dataset& dataset,
                                                           const size_t maxchunk,
                                                           const size_t ngbxs) {
   const CollectDataForDataset<Dataset> auto wvel =
@@ -173,7 +173,7 @@ inline CollectDataForDataset<Dataset> auto CollectWindVel(const Dataset &dataset
  * @return Observer An observer instance for writing the wind velocity components.
  */
 template <typename Dataset>
-inline Observer auto WindVelObserver(const unsigned int interval, const Dataset &dataset,
+inline Observer auto WindVelObserver(const unsigned int interval, const Dataset& dataset,
                                      const size_t maxchunk, const size_t ngbxs) {
   const CollectDataForDataset<Dataset> auto windvel = CollectWindVel(dataset, maxchunk, ngbxs);
   return WriteToDatasetObserver(interval, dataset, windvel);
