@@ -154,17 +154,19 @@ bool GbxBoundsFromBinary::check_3Dmodel_gbxbounds() const {
 /* returns distance (number of hops) from start of
 gbxidxs vector to position where gbxidx matches idx
 (ie. *it = idx) */
-size_t GbxBoundsFromBinary::find_idx_in_gbxidxs(const unsigned int idx) const {
-  auto it(std::find(gbxidxs.begin(), gbxidxs.end(), idx));  // iterator to idx
-  size_t pos(std::distance(gbxidxs.begin(), it));           // distance from start of gbxidxs to idx
+size_t GbxBoundsFromBinary::find_idx_in_gbxidxs(
+    const unsigned int idx) const {
+  if (idx < gbxidxs.size() && gbxidxs[idx] == idx) {
+    return idx;
+  }
 
-  if (pos > (gbxidxs.size() - 1)) {
-    /* if pos is larger than the largest valid position
-    in gbxidxs, idx has not been found so throw an error*/
+  auto it = std::find(gbxidxs.begin(), gbxidxs.end(), idx);
+
+  if (it == gbxidxs.end()) {
     throw std::invalid_argument("idx not found in gbxidxs");
   }
 
-  return pos;
+  return std::distance(gbxidxs.begin(), it);
 }
 
 /* returns coord3 {lower, upper} gridbox bounds
@@ -172,6 +174,8 @@ from position in gbxbounds vector which corresponds
 to position in gbxidxs where gbxidx = idx */
 Kokkos::pair<double, double> GbxBoundsFromBinary::get_coord3gbxbounds(
     const unsigned int idx) const {
+  // this calculation should only happen once for all the
+  // get_coord*gbxbounds functions. PERFORMANCE BOTTLENECK
   const unsigned int pos = find_idx_in_gbxidxs(idx) * 6;  // position of zmin for gbxidx = idx
 
   return {gbxbounds.at(pos), gbxbounds.at(pos + 1)};

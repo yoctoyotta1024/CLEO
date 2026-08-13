@@ -184,17 +184,23 @@ void set_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary
   to_gbxareas.insert(oob, 0.0);
   to_gbxvolumes.insert(oob, 0.0);
 
+  using HostExecSpace = Kokkos::DefaultHostExecutionSpace;
+  using MDPolicy = Kokkos::MDRangePolicy<
+    HostExecSpace,
+    Kokkos::Rank<3>>;
+
   Kokkos::parallel_for(
-      "set_cartesian_maps", HostTeamPolicy(partition_size[0], Kokkos::AUTO()),
-      KOKKOS_LAMBDA(const HostTeamMember& team_member) {
-        const auto k = team_member.league_rank();
-        Kokkos::parallel_for(
-            Kokkos::TeamThreadRange(team_member, partition_size[1]), [=](const size_t i) {
-              Kokkos::parallel_for(
-                  Kokkos::ThreadVectorRange(team_member, partition_size[2]), [=](const size_t j) {
-                    int idx = get_index_from_coordinates(ndims, partition_origin[0] + k,
-                                                         partition_origin[1] + i,
-                                                         partition_origin[2] + j);
+    "set_cartesian_maps",
+    MDPolicy({0, 0, 0},
+             {partition_size[0],
+              partition_size[1],
+              partition_size[2]}),
+    KOKKOS_LAMBDA(const size_t k,
+                  const size_t i,
+                  const size_t j) {
+      int idx = get_index_from_coordinates(ndims, partition_origin[0] + k,
+                                            partition_origin[1] + i,
+                                            partition_origin[2] + j);
 
                     int local_gbx_index = domain_decomposition.global_to_local_gridbox_index(idx);
 
@@ -221,8 +227,6 @@ void set_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary
 
                     to_gbxareas.insert(local_gbx_index, gfb.gbxarea(idx));
                     to_gbxvolumes.insert(local_gbx_index, gfb.gbxvol(idx));
-                  });
-            });
       });
 
   switch (nspacedims) {
@@ -286,14 +290,20 @@ void set_null_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromB
 
   // TODO(ALL): perform on GPUs once domain_decomposition is GPU compatible (then after loop assign
   // gbxmaps in switch rather than use deep_copy)
+  using HostExecSpace = Kokkos::DefaultHostExecutionSpace;
+  using MDPolicy = Kokkos::MDRangePolicy<
+    HostExecSpace,
+    Kokkos::Rank<3>>;
+
   Kokkos::parallel_for(
-      "set_null_cartesian_maps", HostTeamPolicy(partition_size[0], Kokkos::AUTO()),
-      KOKKOS_LAMBDA(const HostTeamMember& team_member) {
-        const auto k = team_member.league_rank();
-        Kokkos::parallel_for(
-            Kokkos::TeamThreadRange(team_member, partition_size[1]), [=](const size_t i) {
-              Kokkos::parallel_for(
-                  Kokkos::ThreadVectorRange(team_member, partition_size[2]), [=](const size_t j) {
+    "set_cartesian_maps",
+    MDPolicy({0, 0, 0},
+             {partition_size[0],
+              partition_size[1],
+              partition_size[2]}),
+    KOKKOS_LAMBDA(const size_t k,
+                  const size_t i,
+                  const size_t j) {
                     int idx = get_index_from_coordinates(ndims, partition_origin[0] + k,
                                                          partition_origin[1] + i,
                                                          partition_origin[2] + j);
@@ -304,8 +314,6 @@ void set_null_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromB
                     const auto nullnghbr = nullnghbrs(local_gbx_index);
                     h_back_nullnghbr.insert(local_gbx_index, nullnghbr.first);
                     h_forward_nullnghbr.insert(local_gbx_index, nullnghbr.second);
-                  });
-            });
       });
 
   switch (nspacedims) {
