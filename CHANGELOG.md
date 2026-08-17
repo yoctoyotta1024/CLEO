@@ -2,6 +2,24 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.68.2](https://github.com/yoctoyotta1024/CLEO/compare/cee64060907c45b6a91f09e3aac9d1557b47fc9b..v0.68.2) - 2026-08-17
+#### Bug Fixes
+- use zcoord not xcoord for rhotilda - ([1ad307a](https://github.com/yoctoyotta1024/CLEO/commit/1ad307a27eb55db1ffa1fb0c1c6880877bbe5a36)) - clara.bayley
+#### Continuous Integration
+- only run publishing and version control on yoctoyotta1024/CLEO repo - ([4e187a5](https://github.com/yoctoyotta1024/CLEO/commit/4e187a50bea8fa0f2e4daf99d80ae0d5bc3272d9)) - clara.bayley
+#### Documentation
+- fixes to html building and add breakup doc - ([526e10b](https://github.com/yoctoyotta1024/CLEO/commit/526e10b2e230f9a68bde4ef437fd17e9d8c17a8b)) - clara.bayley
+- correct docstrings for doxygen - ([562acdb](https://github.com/yoctoyotta1024/CLEO/commit/562acdb44754fe3080fb8b8ca76c608446212527)) - clara.bayley
+- update gcc in note - ([d5b6a16](https://github.com/yoctoyotta1024/CLEO/commit/d5b6a16ded7f9128489bac0c34a5375c59982ed7)) - clara.bayley
+- correct cocogitto link - ([6dcc425](https://github.com/yoctoyotta1024/CLEO/commit/6dcc425e4e1e7b36a12726118639a869a42ce427)) - clara.bayley
+#### Miscellaneous Chores
+- format all CLEO libraries except coupldyn_yac (and bubble example) - ([36019e2](https://github.com/yoctoyotta1024/CLEO/commit/36019e260cd7c76813fadd2fd13643b5526046f5)) - clara.bayley
+- format examples except bubble - ([16af919](https://github.com/yoctoyotta1024/CLEO/commit/16af919befc452cc25effdd8583176b50b88bd97)) - clara.bayley
+- formatting hpp in libs - ([2a83315](https://github.com/yoctoyotta1024/CLEO/commit/2a8331535d87246ebcb4c251b6b482e41b41cfc1)) - clara.bayley
+- formatting roughpaper - ([cee6406](https://github.com/yoctoyotta1024/CLEO/commit/cee64060907c45b6a91f09e3aac9d1557b47fc9b)) - clara.bayley
+
+- - -
+
 ## [v0.68.1](https://github.com/yoctoyotta1024/CLEO/compare/ff7765503372606b892dbb28ff02af2aae3c6805..v0.68.1) - 2026-07-31
 #### Bug Fixes
 - missing stdexcept lib - ([495d0ee](https://github.com/yoctoyotta1024/CLEO/commit/495d0ee41b492d4ab36c50376f31aff48b1a1f98)) - clara.bayley
