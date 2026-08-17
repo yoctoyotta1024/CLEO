@@ -367,7 +367,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cleopy.initsuperdropsbinary_src.probdists</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">----- CLEO -----</span>
 <span class="sd">File: probdists.py</span>
 <span class="sd">Project: initsuperdropsbinary_src</span>
@@ -375,16 +375,16 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
+<span class="sd">License: BSD 3-Clause "New" or "Revised" License</span>
 <span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
 <span class="sd">-----</span>
 <span class="sd">Copyright (c) 2023 MPI-M, Clara Bayley</span>
 <span class="sd">-----</span>
 <span class="sd">File Description:</span>
-<span class="sd">Class calls&#39; return normalised probability</span>
+<span class="sd">Class calls' return normalised probability</span>
 <span class="sd">of radii for various probability distributions</span>
 <span class="sd">assuming bins are evenly spaced in log10(r)</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">special</span>
@@ -393,16 +393,16 @@
 <div class="viewcode-block" id="MinXiDistrib">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/probdists.html#cleopy.initsuperdropsbinary_src.probdists.MinXiDistrib">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">MinXiDistrib</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;probability of radius for a given probability distribution but with a</span>
-<span class="sd">    minimum value such that xi&gt;=&#39;xi_min&#39;&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""probability of radius for a given probability distribution but with a</span>
+<span class="sd">    minimum value such that xi&gt;='xi_min'"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probdistrib</span><span class="p">,</span> <span class="n">xi_min</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">probdistrib</span> <span class="o">=</span> <span class="n">probdistrib</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">xi_min</span> <span class="o">=</span> <span class="n">xi_min</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">totxi</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;returns probability for radii from a certain distribution or the</span>
-<span class="sd">        probability such that xi has minimum value &#39;xi_min&#39;&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""returns probability for radii from a certain distribution or the</span>
+<span class="sd">        probability such that xi has minimum value 'xi_min'"""</span>
         <span class="n">prob</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">probdistrib</span><span class="p">(</span><span class="n">radii</span><span class="p">,</span> <span class="n">totxi</span><span class="p">)</span>
         <span class="n">prob_min</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">xi_min</span> <span class="o">/</span> <span class="n">totxi</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">prob</span> <span class="o">&lt;</span> <span class="n">prob_min</span><span class="p">,</span> <span class="n">prob_min</span><span class="p">,</span> <span class="n">prob</span><span class="p">)</span></div>
@@ -412,23 +412,23 @@
 <div class="viewcode-block" id="CombinedRadiiProbDistribs">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/probdists.html#cleopy.initsuperdropsbinary_src.probdists.CombinedRadiiProbDistribs">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">CombinedRadiiProbDistribs</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;probability of radius from the sum of several</span>
-<span class="sd">    probability distributions&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""probability of radius from the sum of several</span>
+<span class="sd">    probability distributions"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">probdistribs</span><span class="p">,</span> <span class="n">scalefacs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">probdistribs</span> <span class="o">=</span> <span class="n">probdistribs</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scalefacs</span> <span class="o">=</span> <span class="n">scalefacs</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">scalefacs</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">probdistribs</span><span class="p">):</span>
-            <span class="n">errmsg</span> <span class="o">=</span> <span class="s2">&quot;relative height of each probability distribution must be given&quot;</span>
+            <span class="n">errmsg</span> <span class="o">=</span> <span class="s2">"relative height of each probability distribution must be given"</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">errmsg</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">totxi</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_probdistrib</span><span class="p">(</span><span class="n">radii</span><span class="p">,</span> <span class="n">totxi</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_probdistrib</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">totxi</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;returns distribution for radii given by the</span>
-<span class="sd">        sum of the distributions in probdistribs list&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""returns distribution for radii given by the</span>
+<span class="sd">        sum of the distributions in probdistribs list"""</span>
 
         <span class="n">probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">radii</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">distrib</span><span class="p">,</span> <span class="n">sf</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">probdistribs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scalefacs</span><span class="p">):</span>
@@ -441,8 +441,8 @@
 <div class="viewcode-block" id="DiracDelta">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/probdists.html#cleopy.initsuperdropsbinary_src.probdists.DiracDelta">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DiracDelta</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;probability of radius nonzero if it is</span>
-<span class="sd">    closest value in sample of radii to r0&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""probability of radius nonzero if it is</span>
+<span class="sd">    closest value in sample of radii to r0"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r0</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">r0</span> <span class="o">=</span> <span class="n">r0</span>
@@ -451,13 +451,13 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_probdistrib</span><span class="p">(</span><span class="n">radii</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_probdistrib</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radii</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns probability of radius in radii sample for</span>
+<span class="w">        </span><span class="sd">"""Returns probability of radius in radii sample for</span>
 <span class="sd">        discrete version of dirac delta function centred on</span>
 <span class="sd">        value of r in radii closest to r0. For each radius in radii,</span>
-<span class="sd">        probability of that radius = 0 if it&#39;s not the closest value</span>
+<span class="sd">        probability of that radius = 0 if it's not the closest value</span>
 <span class="sd">        in radii to r0. If it is the closest, the probability is maximal</span>
 <span class="sd">        (ie. prob = 1 and is then re-normalised such that sum of the</span>
-<span class="sd">        probalilities over the sample = 1)&quot;&quot;&quot;</span>
+<span class="sd">        probalilities over the sample = 1)"""</span>
 
         <span class="k">if</span> <span class="n">radii</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
             <span class="n">diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">radii</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">r0</span><span class="p">)</span>
@@ -473,8 +473,8 @@
 <div class="viewcode-block" id="VolExponential">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/probdists.html#cleopy.initsuperdropsbinary_src.probdists.VolExponential">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">VolExponential</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;probability of radius given by exponential in</span>
-<span class="sd">    volume distribution as defined by Shima et al. (2009)&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""probability of radius given by exponential in</span>
+<span class="sd">    volume distribution as defined by Shima et al. (2009)"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radius0</span><span class="p">,</span> <span class="n">rspan</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">radius0</span> <span class="o">=</span> <span class="n">radius0</span>  <span class="c1"># peak of volume exponential distribution [m]</span>
@@ -484,12 +484,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_probdistrib</span><span class="p">(</span><span class="n">radii</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_probdistrib</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radii</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns probability of eaach radius in radii according to</span>
+<span class="w">        </span><span class="sd">"""Returns probability of eaach radius in radii according to</span>
 <span class="sd">        distribution where probability of volume is exponential and bins</span>
 <span class="sd">        for radii are evently spaced in ln(r).</span>
 <span class="sd">        typical parameter values:</span>
 <span class="sd">        radius0 = 30.531e-6 # [m]</span>
-<span class="sd">        numconc = 2**(23) # [m^-3]&quot;&quot;&quot;</span>
+<span class="sd">        numconc = 2**(23) # [m^-3]"""</span>
 
         <span class="n">rwdth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">rspan</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">rspan</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -506,20 +506,20 @@
 <div class="viewcode-block" id="LnNormal">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/probdists.html#cleopy.initsuperdropsbinary_src.probdists.LnNormal">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">LnNormal</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;probability of radius given by lognormal distribution</span>
-<span class="sd">    as defined by section 5.2.3 of &quot;An Introduction to clouds from</span>
-<span class="sd">    the Microscale to Climate&quot; by Lohmann, Luond and Mahrt and radii</span>
+<span class="w">    </span><span class="sd">"""probability of radius given by lognormal distribution</span>
+<span class="sd">    as defined by section 5.2.3 of "An Introduction to clouds from</span>
+<span class="sd">    the Microscale to Climate" by Lohmann, Luond and Mahrt and radii</span>
 <span class="sd">    sampled from evenly spaced bins in ln(r).</span>
 <span class="sd">    typical parameter values:</span>
 <span class="sd">    geomeans = [0.02e-6, 0.2e-6, 3.5e-6] # [m]</span>
 <span class="sd">    geosigs = [1.55, 2.3, 2]</span>
 <span class="sd">    scalefacs = [1e6, 0.3e6, 0.025e6]</span>
-<span class="sd">    numconc = 1e9 # [m^-3]&quot;&quot;&quot;</span>
+<span class="sd">    numconc = 1e9 # [m^-3]"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">geomeans</span><span class="p">,</span> <span class="n">geosigs</span><span class="p">,</span> <span class="n">scalefacs</span><span class="p">):</span>
         <span class="n">nmodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">geomeans</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">nmodes</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">geosigs</span><span class="p">)</span> <span class="ow">or</span> <span class="n">nmodes</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">scalefacs</span><span class="p">):</span>
-            <span class="n">errmsg</span> <span class="o">=</span> <span class="s2">&quot;parameters for number of lognormal modes is not consistent&quot;</span>
+            <span class="n">errmsg</span> <span class="o">=</span> <span class="s2">"parameters for number of lognormal modes is not consistent"</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">errmsg</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">nmodes</span> <span class="o">=</span> <span class="n">nmodes</span>
@@ -531,8 +531,8 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_probdistrib</span><span class="p">(</span><span class="n">radii</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_probdistrib</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radii</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns probability of each radius in radii derived</span>
-<span class="sd">        from superposition of Logarithmic (in e) Normal Distributions&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Returns probability of each radius in radii derived</span>
+<span class="sd">        from superposition of Logarithmic (in e) Normal Distributions"""</span>
 
         <span class="n">probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">radii</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nmodes</span><span class="p">):</span>
@@ -545,10 +545,10 @@
 <div class="viewcode-block" id="LnNormal.lnnormaldist">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/probdists.html#cleopy.initsuperdropsbinary_src.probdists.LnNormal.lnnormaldist">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">lnnormaldist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">scalefac</span><span class="p">,</span> <span class="n">geomean</span><span class="p">,</span> <span class="n">geosig</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;calculate probability of radii given the paramters of a</span>
-<span class="sd">        lognormal dsitribution accordin to equation 5.8 of &quot;An</span>
-<span class="sd">        Introduction to clouds from the Microscale to Climate&quot;</span>
-<span class="sd">        by Lohmann, Luond and Mahrt&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""calculate probability of radii given the paramters of a</span>
+<span class="sd">        lognormal dsitribution accordin to equation 5.8 of "An</span>
+<span class="sd">        Introduction to clouds from the Microscale to Climate"</span>
+<span class="sd">        by Lohmann, Luond and Mahrt"""</span>
 
         <span class="n">sigtilda</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">geosig</span><span class="p">)</span>
         <span class="n">mutilda</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">geomean</span><span class="p">)</span>
@@ -566,8 +566,8 @@
 <div class="viewcode-block" id="ClouddropsHansenGamma">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/probdists.html#cleopy.initsuperdropsbinary_src.probdists.ClouddropsHansenGamma">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ClouddropsHansenGamma</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;probability of radius according to gamma distribution for</span>
-<span class="sd">    shallow cumuli cloud droplets from Poertge et al. 2023&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""probability of radius according to gamma distribution for</span>
+<span class="sd">    shallow cumuli cloud droplets from Poertge et al. 2023"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reff</span><span class="p">,</span> <span class="n">nueff</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">reff</span> <span class="o">=</span> <span class="n">reff</span>
@@ -577,12 +577,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_probdistrib</span><span class="p">(</span><span class="n">radii</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_probdistrib</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radii</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;return gamma distribution for cloud droplets</span>
+<span class="w">        </span><span class="sd">"""return gamma distribution for cloud droplets</span>
 <span class="sd">        given radius [m] using parameters from Poertge</span>
 <span class="sd">        et al. 2023 for shallow cumuli (figure 12).</span>
 <span class="sd">        typical values:</span>
 <span class="sd">        reff = 7e-6 #[m]</span>
-<span class="sd">        nueff = 0.08 # []&quot;&quot;&quot;</span>
+<span class="sd">        nueff = 0.08 # []"""</span>
 
         <span class="n">xp</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nueff</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">nueff</span>
         <span class="n">n0const</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reff</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">nueff</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="n">xp</span><span class="p">)</span>
@@ -600,8 +600,8 @@
 <div class="viewcode-block" id="RaindropsGeoffroyGamma">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/probdists.html#cleopy.initsuperdropsbinary_src.probdists.RaindropsGeoffroyGamma">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">RaindropsGeoffroyGamma</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;probability of radius given gamma distribution for</span>
-<span class="sd">    shallow cumuli rain droplets from Geoffroy et al. 2014&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""probability of radius given gamma distribution for</span>
+<span class="sd">    shallow cumuli rain droplets from Geoffroy et al. 2014"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nrain</span><span class="p">,</span> <span class="n">qrain</span><span class="p">,</span> <span class="n">dvol</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nrain</span> <span class="o">=</span> <span class="n">nrain</span>  <span class="c1"># raindrop concentration [ndrops/m^3]</span>
@@ -612,14 +612,14 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_probdistrib</span><span class="p">(</span><span class="n">radii</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_probdistrib</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radii</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;returns probability of each radius according to a</span>
+<span class="w">        </span><span class="sd">"""returns probability of each radius according to a</span>
 <span class="sd">        gamma distribution for rain droplets using parameters</span>
 <span class="sd">        from Geoffroy et al. 2014 for precipitating shallow</span>
 <span class="sd">        cumuli RICO (see figure 3 and equations 2,3 and 5).</span>
 <span class="sd">        typical parameter values:</span>
 <span class="sd">        nrain = 3 / 0.001 # [ndrops/m^3]</span>
 <span class="sd">        qrain = 0.9 # [g/m^3]</span>
-<span class="sd">        dvol = 800e-6 #[m]&quot;&quot;&quot;</span>
+<span class="sd">        dvol = 800e-6 #[m]"""</span>
 
         <span class="n">nu</span> <span class="o">=</span> <span class="mi">18</span> <span class="o">/</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nrain</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">qrain</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.25</span><span class="p">)</span>  <span class="c1"># []</span>
         <span class="n">lamda</span> <span class="o">=</span> <span class="p">(</span><span class="n">nu</span> <span class="o">*</span> <span class="p">(</span><span class="n">nu</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">nu</span> <span class="o">+</span> <span class="mi">2</span><span class="p">))</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">dvol</span>  <span class="c1"># [m^-1]</span>
@@ -648,7 +648,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 31 July 2026</div>
+              Last updated on 17 August 2026</div>
           </div>
           <div class="right-details">
             

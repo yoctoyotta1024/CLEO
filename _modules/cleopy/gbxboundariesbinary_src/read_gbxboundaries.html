@@ -367,7 +367,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cleopy.gbxboundariesbinary_src.read_gbxboundaries</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Copyright (c) 2024 MPI-M, Clara Bayley</span>
 
 
@@ -378,11 +378,11 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
+<span class="sd">License: BSD 3-Clause "New" or "Revised" License</span>
 <span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
 <span class="sd">-----</span>
 <span class="sd">File Description:</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
@@ -395,10 +395,10 @@
 <div class="viewcode-block" id="get_gridboxboundaries">
 <a class="viewcode-back" href="../../../cleopy/gbxboundariesbinary_src/read_gbxboundaries.html#cleopy.gbxboundariesbinary_src.read_gbxboundaries.get_gridboxboundaries">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_gridboxboundaries</span><span class="p">(</span>
-    <span class="n">grid_filename</span><span class="p">,</span> <span class="n">COORD0</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">constants_filename</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">grid_filename</span><span class="p">,</span> <span class="n">COORD0</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">constants_filename</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;get gridbox boundaries from binary file and</span>
-<span class="sd">    re-dimensionalise usign COORD0 const from constants_filename&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""get gridbox boundaries from binary file and</span>
+<span class="sd">    re-dimensionalise usign COORD0 const from constants_filename"""</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">COORD0</span><span class="p">:</span>
         <span class="n">COORD0</span> <span class="o">=</span> <span class="n">get_COORD0_from_constsfile</span><span class="p">(</span><span class="n">constants_filename</span><span class="p">)</span>
@@ -416,9 +416,9 @@
 <div class="viewcode-block" id="get_domainvol_from_grid_filename">
 <a class="viewcode-back" href="../../../cleopy/gbxboundariesbinary_src/read_gbxboundaries.html#cleopy.gbxboundariesbinary_src.read_gbxboundaries.get_domainvol_from_grid_filename">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_domainvol_from_grid_filename</span><span class="p">(</span>
-    <span class="n">grid_filename</span><span class="p">,</span> <span class="n">COORD0</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">constants_filename</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+    <span class="n">grid_filename</span><span class="p">,</span> <span class="n">COORD0</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">constants_filename</span><span class="o">=</span><span class="s2">""</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;get total domain volume from binary file&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""get total domain volume from binary file"""</span>
 
     <span class="n">zhalf</span><span class="p">,</span> <span class="n">xhalf</span><span class="p">,</span> <span class="n">yhalf</span> <span class="o">=</span> <span class="n">get_gridboxboundaries</span><span class="p">(</span>
         <span class="n">grid_filename</span><span class="p">,</span> <span class="n">COORD0</span><span class="o">=</span><span class="n">COORD0</span><span class="p">,</span> <span class="n">constants_filename</span><span class="o">=</span><span class="n">constants_filename</span>
@@ -431,9 +431,9 @@
 <div class="viewcode-block" id="get_gbxvols_from_gridfile">
 <a class="viewcode-back" href="../../../cleopy/gbxboundariesbinary_src/read_gbxboundaries.html#cleopy.gbxboundariesbinary_src.read_gbxboundaries.get_gbxvols_from_gridfile">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_gbxvols_from_gridfile</span><span class="p">(</span>
-    <span class="n">grid_filename</span><span class="p">,</span> <span class="n">COORD0</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">constants_filename</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">grid_filename</span><span class="p">,</span> <span class="n">COORD0</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">constants_filename</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;get total domain volume from binary file&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""get total domain volume from binary file"""</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">COORD0</span><span class="p">:</span>
         <span class="n">COORD0</span> <span class="o">=</span> <span class="n">get_COORD0_from_constsfile</span><span class="p">(</span><span class="n">constants_filename</span><span class="p">)</span>
@@ -449,8 +449,8 @@
 <div class="viewcode-block" id="fullcell">
 <a class="viewcode-back" href="../../../cleopy/gbxboundariesbinary_src/read_gbxboundaries.html#cleopy.gbxboundariesbinary_src.read_gbxboundaries.fullcell">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">fullcell</span><span class="p">(</span><span class="n">halfcell</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;return fullcell corods (cell centres)</span>
-<span class="sd">    given half coords in a direction&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""return fullcell corods (cell centres)</span>
+<span class="sd">    given half coords in a direction"""</span>
 
     <span class="k">return</span> <span class="p">(</span><span class="n">halfcell</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">halfcell</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span></div>
 
@@ -459,8 +459,8 @@
 <div class="viewcode-block" id="cellwidth">
 <a class="viewcode-back" href="../../../cleopy/gbxboundariesbinary_src/read_gbxboundaries.html#cleopy.gbxboundariesbinary_src.read_gbxboundaries.cellwidth">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">cellwidth</span><span class="p">(</span><span class="n">halfcell</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;return cell spacing (width) given half coords</span>
-<span class="sd">    in a direction&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""return cell spacing (width) given half coords</span>
+<span class="sd">    in a direction"""</span>
 
     <span class="n">delta</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">halfcell</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="n">halfcell</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
@@ -479,7 +479,7 @@
 <div class="viewcode-block" id="fullcoords_forallgridboxes">
 <a class="viewcode-back" href="../../../cleopy/gbxboundariesbinary_src/read_gbxboundaries.html#cleopy.gbxboundariesbinary_src.read_gbxboundaries.fullcoords_forallgridboxes">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">fullcoords_forallgridboxes</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;returns (x,y,z) centres of gridboxes in domain&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""returns (x,y,z) centres of gridboxes in domain"""</span>
 
     <span class="n">zhalf</span><span class="p">,</span> <span class="n">xhalf</span><span class="p">,</span> <span class="n">yhalf</span> <span class="o">=</span> <span class="n">halfcoords_from_gbxbounds</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">zfull</span><span class="p">,</span> <span class="n">xfull</span><span class="p">,</span> <span class="n">yfull</span> <span class="o">=</span> <span class="n">fullcell_fromhalfcoords</span><span class="p">(</span><span class="n">zhalf</span><span class="p">,</span> <span class="n">xhalf</span><span class="p">,</span> <span class="n">yhalf</span><span class="p">)</span>
@@ -497,28 +497,28 @@
 <div class="viewcode-block" id="coords_forgridboxfaces">
 <a class="viewcode-back" href="../../../cleopy/gbxboundariesbinary_src/read_gbxboundaries.html#cleopy.gbxboundariesbinary_src.read_gbxboundaries.coords_forgridboxfaces">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">coords_forgridboxfaces</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">face</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;returns (x,y,z) coordinates of gridboxes faces</span>
-<span class="sd">    in a particular direction&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""returns (x,y,z) coordinates of gridboxes faces</span>
+<span class="sd">    in a particular direction"""</span>
 
     <span class="n">ndims</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">ndims</span><span class="p">]</span>
     <span class="n">zhalf</span><span class="p">,</span> <span class="n">xhalf</span><span class="p">,</span> <span class="n">yhalf</span> <span class="o">=</span> <span class="n">halfcoords_from_gbxbounds</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="n">zfull</span><span class="p">,</span> <span class="n">xfull</span><span class="p">,</span> <span class="n">yfull</span> <span class="o">=</span> <span class="n">fullcell_fromhalfcoords</span><span class="p">(</span><span class="n">zhalf</span><span class="p">,</span> <span class="n">xhalf</span><span class="p">,</span> <span class="n">yhalf</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">face</span> <span class="o">==</span> <span class="s2">&quot;z&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">face</span> <span class="o">==</span> <span class="s2">"z"</span><span class="p">:</span>
         <span class="n">nz</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
         <span class="n">zfaces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">zhalf</span><span class="p">,</span> <span class="n">nx</span> <span class="o">*</span> <span class="n">ny</span><span class="p">)</span>  <span class="c1"># zfull of every gridbox in order of gbxindex</span>
         <span class="n">xfulls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">xfull</span><span class="p">,</span> <span class="n">nz</span><span class="p">),</span> <span class="n">ny</span><span class="p">)</span>
         <span class="n">yfulls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">yfull</span><span class="p">,</span> <span class="n">nz</span> <span class="o">*</span> <span class="n">nx</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">zfaces</span><span class="p">,</span> <span class="n">xfulls</span><span class="p">,</span> <span class="n">yfulls</span>
 
-    <span class="k">elif</span> <span class="n">face</span> <span class="o">==</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">face</span> <span class="o">==</span> <span class="s2">"x"</span><span class="p">:</span>
         <span class="n">nz</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
         <span class="n">zfulls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">zfull</span><span class="p">,</span> <span class="n">nx</span> <span class="o">*</span> <span class="n">ny</span><span class="p">)</span>  <span class="c1"># zfull of every gridbox in order of gbxindex</span>
         <span class="n">xfaces</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">xhalf</span><span class="p">,</span> <span class="n">nz</span><span class="p">),</span> <span class="n">ny</span><span class="p">)</span>
         <span class="n">yfulls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">yfull</span><span class="p">,</span> <span class="n">nz</span> <span class="o">*</span> <span class="n">nx</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">zfulls</span><span class="p">,</span> <span class="n">xfaces</span><span class="p">,</span> <span class="n">yfulls</span>
 
-    <span class="k">elif</span> <span class="n">face</span> <span class="o">==</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">face</span> <span class="o">==</span> <span class="s2">"y"</span><span class="p">:</span>
         <span class="n">nz</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span> <span class="o">=</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="n">zfulls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">zfull</span><span class="p">,</span> <span class="n">nx</span> <span class="o">*</span> <span class="n">ny</span><span class="p">)</span>  <span class="c1"># zfull of every gridbox in order of gbxindex</span>
         <span class="n">xfulls</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">xfull</span><span class="p">,</span> <span class="n">nz</span><span class="p">),</span> <span class="n">ny</span><span class="p">)</span>
@@ -532,9 +532,9 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">read_dimless_gbxboundaries_binary</span><span class="p">(</span>
     <span class="n">filename</span><span class="p">,</span> <span class="n">COORD0</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_ndims</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;return dictionary for gbx indicies to gbx boundaries by</span>
+<span class="w">    </span><span class="sd">"""return dictionary for gbx indicies to gbx boundaries by</span>
 <span class="sd">    reading binary file. Return dimensionless version if COORD0</span>
-<span class="sd">    not give (=False).&quot;&quot;&quot;</span>
+<span class="sd">    not give (=False)."""</span>
 
     <span class="n">data</span><span class="p">,</span> <span class="n">ndata_pervar</span> <span class="o">=</span> <span class="n">readbinary</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="n">isprint</span><span class="p">)</span>
     <span class="n">datatypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">]</span>
@@ -548,7 +548,7 @@
 
     <span class="n">ngridboxes</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">ndims</span><span class="p">))</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">gbxidxs</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ngridboxes</span><span class="p">:</span>
-        <span class="n">err</span> <span class="o">=</span> <span class="s2">&quot;number of gridbox indexes not consistent with (z,x,y) dims&quot;</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="s2">"number of gridbox indexes not consistent with (z,x,y) dims"</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
 
     <span class="n">boundsdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">ll</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">:],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">datatypes</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
@@ -569,8 +569,8 @@
 <div class="viewcode-block" id="halfcoords_from_gbxbounds">
 <a class="viewcode-back" href="../../../cleopy/gbxboundariesbinary_src/read_gbxboundaries.html#cleopy.gbxboundariesbinary_src.read_gbxboundaries.halfcoords_from_gbxbounds">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">halfcoords_from_gbxbounds</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;returns half coords of gbx boundaries in lists obtained</span>
-<span class="sd">    from gbxbounds dictionary&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""returns half coords of gbx boundaries in lists obtained</span>
+<span class="sd">    from gbxbounds dictionary"""</span>
 
     <span class="n">boundsdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">gbxbounds</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
 
@@ -584,9 +584,9 @@
     <span class="n">yhalf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">yhalf</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">boundsdata</span><span class="p">[:,</span> <span class="mi">5</span><span class="p">]))</span>
 
     <span class="k">if</span> <span class="n">isprint</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;zhalf: &quot;</span><span class="p">,</span> <span class="n">zhalf</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;xhalf: &quot;</span><span class="p">,</span> <span class="n">xhalf</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;yhalf: &quot;</span><span class="p">,</span> <span class="n">yhalf</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"zhalf: "</span><span class="p">,</span> <span class="n">zhalf</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"xhalf: "</span><span class="p">,</span> <span class="n">xhalf</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"yhalf: "</span><span class="p">,</span> <span class="n">yhalf</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">zhalf</span><span class="p">,</span> <span class="n">xhalf</span><span class="p">,</span> <span class="n">yhalf</span></div>
 
@@ -597,9 +597,9 @@
     <span class="n">grid_filename</span><span class="p">,</span>
     <span class="n">savefig</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">savefigpath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">savelabel</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">savelabel</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
 <span class="p">):</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;font.size&quot;</span><span class="p">:</span> <span class="mi">14</span><span class="p">})</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"font.size"</span><span class="p">:</span> <span class="mi">14</span><span class="p">})</span>
 
     <span class="n">zhalf</span><span class="p">,</span> <span class="n">xhalf</span><span class="p">,</span> <span class="n">yhalf</span> <span class="o">=</span> <span class="n">get_gridboxboundaries</span><span class="p">(</span>
         <span class="n">grid_filename</span><span class="p">,</span> <span class="n">constants_filename</span><span class="o">=</span><span class="n">constants_filename</span>
@@ -613,37 +613,37 @@
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">crd</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">]):</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">crd</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="s2">"z"</span><span class="p">,</span> <span class="s2">"x"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">]):</span>
         <span class="n">xlims</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.8</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">deltas</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">deltas</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="mf">1.2</span><span class="p">]</span>
         <span class="n">ylims</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">halfs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">halfs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">]</span>
-        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">deltas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">fulls</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;centres&quot;</span><span class="p">)</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">deltas</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">fulls</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"k"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"centres"</span><span class="p">)</span>
         <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span>
             <span class="n">halfs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span>
             <span class="n">xlims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
             <span class="n">xlims</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">"grey"</span><span class="p">,</span>
             <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
             <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;boundaries&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">"boundaries"</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xlims</span><span class="p">)</span>
         <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ylims</span><span class="p">)</span>
-        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;gridbox spacing, </span><span class="se">\u0394</span><span class="s2"> &quot;</span> <span class="o">+</span> <span class="n">crd</span> <span class="o">+</span> <span class="s2">&quot; /km&quot;</span><span class="p">)</span>
-        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;gridbox centres, &quot;</span> <span class="o">+</span> <span class="n">crd</span> <span class="o">+</span> <span class="s2">&quot;f /km&quot;</span><span class="p">)</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"gridbox spacing, </span><span class="se">\u0394</span><span class="s2"> "</span> <span class="o">+</span> <span class="n">crd</span> <span class="o">+</span> <span class="s2">" /km"</span><span class="p">)</span>
+        <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"gridbox centres, "</span> <span class="o">+</span> <span class="n">crd</span> <span class="o">+</span> <span class="s2">"f /km"</span><span class="p">)</span>
         <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 
     <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">savefig</span><span class="p">:</span>
-        <span class="n">savename</span> <span class="o">=</span> <span class="n">savefigpath</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;gridboxboundaries</span><span class="si">{</span><span class="n">savelabel</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">)</span>
+        <span class="n">savename</span> <span class="o">=</span> <span class="n">savefigpath</span> <span class="o">/</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">"gridboxboundaries</span><span class="si">{</span><span class="n">savelabel</span><span class="si">}</span><span class="s2">.png"</span><span class="p">)</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
             <span class="n">savename</span><span class="p">,</span>
             <span class="n">dpi</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span>
-            <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
-            <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span>
-            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">,</span>
+            <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">,</span>
+            <span class="n">facecolor</span><span class="o">=</span><span class="s2">"w"</span><span class="p">,</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">"png"</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Figure .png saved as: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">savename</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Figure .png saved as: "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">savename</span><span class="p">))</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">calc_domainvol</span><span class="p">(</span><span class="n">zhalf</span><span class="p">,</span> <span class="n">xhalf</span><span class="p">,</span> <span class="n">yhalf</span><span class="p">):</span>
@@ -701,7 +701,7 @@
 <div class="viewcode-block" id="print_domain_info">
 <a class="viewcode-back" href="../../../cleopy/gbxboundariesbinary_src/read_gbxboundaries.html#cleopy.gbxboundariesbinary_src.read_gbxboundaries.print_domain_info">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">print_domain_info</span><span class="p">(</span><span class="n">constants_filename</span><span class="p">,</span> <span class="n">grid_filename</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;prints information about domain read from grid_filename and constants file&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""prints information about domain read from grid_filename and constants file"""</span>
 
     <span class="n">isprint</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="n">COORD0</span> <span class="o">=</span> <span class="n">get_COORD0_from_constsfile</span><span class="p">(</span><span class="n">constants_filename</span><span class="p">)</span>
@@ -716,34 +716,34 @@
     <span class="n">ytot</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xtns</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">xtns</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
 
     <span class="n">inforstr</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">------ DOMAIN / GRIDBOXES INFO ------</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;------------- &quot;</span>
+        <span class="s2">"</span><span class="se">\n</span><span class="s2">------ DOMAIN / GRIDBOXES INFO ------</span><span class="se">\n</span><span class="s2">"</span>
+        <span class="o">+</span> <span class="s2">"------------- "</span>
         <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">griddims</span><span class="p">)</span>
-        <span class="o">+</span> <span class="s2">&quot;-D MODEL -------------</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;domain dimensions: (</span><span class="si">{:3g}</span><span class="s2">x</span><span class="si">{:3g}</span><span class="s2">x</span><span class="si">{:3g}</span><span class="s2">)m^3</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ztot</span><span class="p">,</span> <span class="n">xtot</span><span class="p">,</span> <span class="n">ytot</span><span class="p">)</span>
-        <span class="o">+</span> <span class="s2">&quot;domain no. gridboxes: &quot;</span>
+        <span class="o">+</span> <span class="s2">"-D MODEL -------------</span><span class="se">\n</span><span class="s2">"</span>
+        <span class="o">+</span> <span class="s2">"domain dimensions: (</span><span class="si">{:3g}</span><span class="s2">x</span><span class="si">{:3g}</span><span class="s2">x</span><span class="si">{:3g}</span><span class="s2">)m^3</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ztot</span><span class="p">,</span> <span class="n">xtot</span><span class="p">,</span> <span class="n">ytot</span><span class="p">)</span>
+        <span class="o">+</span> <span class="s2">"domain no. gridboxes: "</span>
         <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">spacings</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-        <span class="o">+</span> <span class="s2">&quot;x&quot;</span>
+        <span class="o">+</span> <span class="s2">"x"</span>
         <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">spacings</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-        <span class="o">+</span> <span class="s2">&quot;x&quot;</span>
+        <span class="o">+</span> <span class="s2">"x"</span>
         <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">spacings</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
-        <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;domain z limits: (</span><span class="si">{:3g}</span><span class="s2">,</span><span class="si">{:3g}</span><span class="s2">)m</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">xtns</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">xtns</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-        <span class="o">+</span> <span class="s2">&quot;domain x limits: (</span><span class="si">{:3g}</span><span class="s2">, </span><span class="si">{:3g}</span><span class="s2">)m</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
+        <span class="o">+</span> <span class="s2">"domain z limits: (</span><span class="si">{:3g}</span><span class="s2">,</span><span class="si">{:3g}</span><span class="s2">)m</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">xtns</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">xtns</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="o">+</span> <span class="s2">"domain x limits: (</span><span class="si">{:3g}</span><span class="s2">, </span><span class="si">{:3g}</span><span class="s2">)m</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">xtns</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">xtns</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
         <span class="p">)</span>
-        <span class="o">+</span> <span class="s2">&quot;domain y limits: (</span><span class="si">{:3g}</span><span class="s2">, </span><span class="si">{:3g}</span><span class="s2">)m</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="o">+</span> <span class="s2">"domain y limits: (</span><span class="si">{:3g}</span><span class="s2">, </span><span class="si">{:3g}</span><span class="s2">)m</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
             <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">xtns</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">xtns</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
         <span class="p">)</span>
-        <span class="o">+</span> <span class="s2">&quot;mean gridbox z spacing: </span><span class="si">{:3g}</span><span class="s2"> m</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">spacings</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-        <span class="o">+</span> <span class="s2">&quot;mean gridbox x spacing: </span><span class="si">{:3g}</span><span class="s2"> m</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">spacings</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
-        <span class="o">+</span> <span class="s2">&quot;mean gridbox y spacing: </span><span class="si">{:3g}</span><span class="s2"> m</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">spacings</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
-        <span class="o">+</span> <span class="s2">&quot;mean gridbox volume: </span><span class="si">{:3g}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">gridboxvols</span><span class="p">))</span>
-        <span class="o">+</span> <span class="s2">&quot; m^3</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;total domain volume: </span><span class="si">{:3g}</span><span class="s2"> m^3</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">domainvol</span><span class="p">)</span>
-        <span class="o">+</span> <span class="s2">&quot;total no. gridboxes: &quot;</span>
+        <span class="o">+</span> <span class="s2">"mean gridbox z spacing: </span><span class="si">{:3g}</span><span class="s2"> m</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">spacings</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="o">+</span> <span class="s2">"mean gridbox x spacing: </span><span class="si">{:3g}</span><span class="s2"> m</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">spacings</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="o">+</span> <span class="s2">"mean gridbox y spacing: </span><span class="si">{:3g}</span><span class="s2"> m</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">spacings</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="o">+</span> <span class="s2">"mean gridbox volume: </span><span class="si">{:3g}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">gridboxvols</span><span class="p">))</span>
+        <span class="o">+</span> <span class="s2">" m^3</span><span class="se">\n</span><span class="s2">"</span>
+        <span class="o">+</span> <span class="s2">"total domain volume: </span><span class="si">{:3g}</span><span class="s2"> m^3</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">domainvol</span><span class="p">)</span>
+        <span class="o">+</span> <span class="s2">"total no. gridboxes: "</span>
         <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ngridboxes</span><span class="p">)</span>
-        <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">------------------------------------</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">------------------------------------</span><span class="se">\n</span><span class="s2">"</span>
     <span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">inforstr</span><span class="p">)</span></div>
 
@@ -765,7 +765,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 31 July 2026</div>
+              Last updated on 17 August 2026</div>
           </div>
           <div class="right-details">
             

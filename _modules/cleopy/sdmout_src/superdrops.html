@@ -367,7 +367,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cleopy.sdmout_src.superdrops</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Copyright (c) 2025 MPI-M, Clara Bayley</span>
 
 
@@ -378,13 +378,13 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
+<span class="sd">License: BSD 3-Clause "New" or "Revised" License</span>
 <span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
 <span class="sd">-----</span>
 <span class="sd">File Description:</span>
 <span class="sd">python class(es) to handle superdroplet attributes data from SDM zarr store in ragged array format.</span>
 <span class="sd">Non-compatible update on supersdata and sdtracing modules</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">awkward</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ak</span>
@@ -399,25 +399,25 @@
 <div class="viewcode-block" id="SuperdropProperties">
 <a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.SuperdropProperties">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SuperdropProperties</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Contains attributes common to all superdroplets and functions</span>
-<span class="sd">    for calculating derived ones&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Contains attributes common to all superdroplets and functions</span>
+<span class="sd">    for calculating derived ones"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">consts</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">is_print</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Common attributes shared by superdroplets:</span>
+<span class="w">        </span><span class="sd">"""Common attributes shared by superdroplets:</span>
 <span class="sd">        RHO_L = density of liquid in droplets (=density of water at 300K) [Kg/m^3]</span>
 <span class="sd">        RHO_SOL = density of (dry) solute [Kg/m^3]</span>
 <span class="sd">        MR_SOL = Mr of solute [g/mol]</span>
-<span class="sd">        IONIC = degree ionic dissociation (van&#39;t Hoff factor)</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        IONIC = degree ionic dissociation (van't Hoff factor)</span>
+<span class="sd">        """</span>
         <span class="c1"># properties: value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_props</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;RHO_L&quot;</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;RHO_L&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;RHO_SOL&quot;</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;RHO_SOL&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;MR_SOL&quot;</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;MR_SOL&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;IONIC&quot;</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;IONIC&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;RHO_L_units&quot;</span><span class="p">:</span> <span class="s2">&quot;Kg m^{-3}&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;RHO_SOL_units&quot;</span><span class="p">:</span> <span class="s2">&quot;Kg m^{-3}&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;MR_SOL_units&quot;</span><span class="p">:</span> <span class="s2">&quot;g mol^{-1}&quot;</span><span class="p">,</span>
+            <span class="s2">"RHO_L"</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">"RHO_L"</span><span class="p">],</span>
+            <span class="s2">"RHO_SOL"</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">"RHO_SOL"</span><span class="p">],</span>
+            <span class="s2">"MR_SOL"</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">"MR_SOL"</span><span class="p">],</span>
+            <span class="s2">"IONIC"</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">"IONIC"</span><span class="p">],</span>
+            <span class="s2">"RHO_L_units"</span><span class="p">:</span> <span class="s2">"Kg m^{-3}"</span><span class="p">,</span>
+            <span class="s2">"RHO_SOL_units"</span><span class="p">:</span> <span class="s2">"Kg m^{-3}"</span><span class="p">,</span>
+            <span class="s2">"MR_SOL_units"</span><span class="p">:</span> <span class="s2">"g mol^{-1}"</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="n">is_print</span><span class="p">:</span>
@@ -427,48 +427,48 @@
         <span class="k">if</span> <span class="ow">not</span> <span class="n">units</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="n">var</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="n">var</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="n">var</span> <span class="o">+</span> <span class="s2">&quot;_units&quot;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="n">var</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="n">var</span> <span class="o">+</span> <span class="s2">"_units"</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">RHO_L</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_props</span><span class="p">(</span><span class="s2">&quot;RHO_L&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_props</span><span class="p">(</span><span class="s2">"RHO_L"</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">RHO_SOL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_props</span><span class="p">(</span><span class="s2">&quot;RHO_SOL&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_props</span><span class="p">(</span><span class="s2">"RHO_SOL"</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">MR_SOL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_props</span><span class="p">(</span><span class="s2">&quot;MR_SOL&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_props</span><span class="p">(</span><span class="s2">"MR_SOL"</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">IONIC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">units</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;degree ionic dissociation (van&#39;t Hoff factor) has no units&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_props</span><span class="p">(</span><span class="s2">&quot;IONIC&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"degree ionic dissociation (van't Hoff factor) has no units"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_props</span><span class="p">(</span><span class="s2">"IONIC"</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">print_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---- Superdrop Properties -----&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;RHO_L =&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">RHO_L</span><span class="p">())</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;RHO_SOL =&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">RHO_SOL</span><span class="p">())</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;MR_SOL =&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MR_SOL</span><span class="p">())</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;IONIC =&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">IONIC</span><span class="p">())</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-------------------------------&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"---- Superdrop Properties -----"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"RHO_L ="</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">RHO_L</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"RHO_SOL ="</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">RHO_SOL</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"MR_SOL ="</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MR_SOL</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"IONIC ="</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">IONIC</span><span class="p">())</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"-------------------------------"</span><span class="p">)</span>
 
 <div class="viewcode-block" id="SuperdropProperties.rhoeff">
 <a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.SuperdropProperties.rhoeff">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">rhoeff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">msol</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;calculates effective density [g m^-3] of</span>
+<span class="w">        </span><span class="sd">"""calculates effective density [g m^-3] of</span>
 <span class="sd">        droplet such that mass_droplet, m = 4/3*pi*r^3 * rhoeff</span>
 <span class="sd">        taking into account mass of liquid and mass of</span>
 <span class="sd">        solute assuming solute occupies volume it</span>
-<span class="sd">        would given its (dry) density, RHO_SOL.&quot;&quot;&quot;</span>
+<span class="sd">        would given its (dry) density, RHO_SOL."""</span>
 
         <span class="n">msol</span> <span class="o">=</span> <span class="n">msol</span> <span class="o">/</span> <span class="mi">1000</span>  <span class="c1"># convert from grams to Kg</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">r</span> <span class="o">/</span> <span class="mf">1e6</span>  <span class="c1"># convert microns to m</span>
 
         <span class="n">solfactor</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">msol</span> <span class="o">/</span> <span class="p">(</span><span class="mf">4.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">r</span><span class="o">**</span><span class="mi">3</span><span class="p">))</span>
-        <span class="n">rhoeff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="s2">&quot;RHO_L&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">solfactor</span> <span class="o">*</span> <span class="p">(</span>
-            <span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="s2">&quot;RHO_L&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="s2">&quot;RHO_SOL&quot;</span><span class="p">]</span>
+        <span class="n">rhoeff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="s2">"RHO_L"</span><span class="p">]</span> <span class="o">+</span> <span class="n">solfactor</span> <span class="o">*</span> <span class="p">(</span>
+            <span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="s2">"RHO_L"</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="s2">"RHO_SOL"</span><span class="p">]</span>
         <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">rhoeff</span> <span class="o">*</span> <span class="mi">1000</span>  <span class="c1"># [g/m^3]</span></div>
@@ -477,7 +477,7 @@
 <div class="viewcode-block" id="SuperdropProperties.vol">
 <a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.SuperdropProperties.vol">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">vol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;volume of droplet [m^3]&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""volume of droplet [m^3]"""</span>
 
         <span class="n">r</span> <span class="o">=</span> <span class="n">r</span> <span class="o">/</span> <span class="mf">1e6</span>  <span class="c1"># convert microns to m</span>
 
@@ -487,19 +487,19 @@
 <div class="viewcode-block" id="SuperdropProperties.mass">
 <a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.SuperdropProperties.mass">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">mass</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">msol</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        total mass of droplet (water + (dry) areosol) [g],</span>
 <span class="sd">        m =  4/3*pi*rho_l**3 + msol(1-rho_l/rho_sol)</span>
 <span class="sd">        ie. m = 4/3*pi*rhoeff*R**3</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
 
         <span class="n">msol</span> <span class="o">=</span> <span class="n">msol</span> <span class="o">/</span> <span class="mi">1000</span>  <span class="c1"># convert from grams to Kg</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">r</span> <span class="o">/</span> <span class="mf">1e6</span>  <span class="c1"># convert microns to m</span>
 
         <span class="n">msoleff</span> <span class="o">=</span> <span class="n">msol</span> <span class="o">*</span> <span class="p">(</span>
-            <span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="s2">&quot;RHO_L&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="s2">&quot;RHO_SOL&quot;</span><span class="p">]</span>
+            <span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="s2">"RHO_L"</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="s2">"RHO_SOL"</span><span class="p">]</span>
         <span class="p">)</span>  <span class="c1"># effect of solute on mass</span>
-        <span class="n">m</span> <span class="o">=</span> <span class="n">msoleff</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">r</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="s2">&quot;RHO_L&quot;</span><span class="p">]</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">msoleff</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">r</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="s2">"RHO_L"</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">m</span> <span class="o">*</span> <span class="mi">1000</span>  <span class="c1"># [g]</span></div>
 
@@ -507,15 +507,15 @@
 <div class="viewcode-block" id="SuperdropProperties.m_water">
 <a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.SuperdropProperties.m_water">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">m_water</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">msol</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;mass of only water in droplet [g]&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""mass of only water in droplet [g]"""</span>
 
         <span class="n">msol</span> <span class="o">=</span> <span class="n">msol</span> <span class="o">/</span> <span class="mi">1000</span>  <span class="c1"># convert msol from grams to Kg</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">r</span> <span class="o">/</span> <span class="mf">1e6</span>  <span class="c1"># convert microns to m</span>
 
-        <span class="n">v_sol</span> <span class="o">=</span> <span class="n">msol</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="s2">&quot;RHO_SOL&quot;</span><span class="p">]</span>
+        <span class="n">v_sol</span> <span class="o">=</span> <span class="n">msol</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="s2">"RHO_SOL"</span><span class="p">]</span>
         <span class="n">v_w</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">r</span><span class="o">**</span><span class="mi">3</span><span class="p">)</span> <span class="o">-</span> <span class="n">v_sol</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="s2">&quot;RHO_L&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">v_w</span> <span class="o">*</span> <span class="mi">1000</span>  <span class="c1"># [g]</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="s2">"RHO_L"</span><span class="p">]</span> <span class="o">*</span> <span class="n">v_w</span> <span class="o">*</span> <span class="mi">1000</span>  <span class="c1"># [g]</span></div>
 </div>
 
 
@@ -539,48 +539,48 @@
                 <span class="n">SuperdropProperties</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">consts</span><span class="p">,</span> <span class="n">is_print</span><span class="o">=</span><span class="n">is_print</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                    <span class="s2">&quot;No superdroplet properties attached to superdroplet dataset&quot;</span>
+                    <span class="s2">"No superdroplet properties attached to superdroplet dataset"</span>
                 <span class="p">)</span>
 
             <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tryopen_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-            <span class="n">raggedcount</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;raggedcount&quot;</span><span class="p">]</span>  <span class="c1"># ragged count variable</span>
+            <span class="n">raggedcount</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">"raggedcount"</span><span class="p">]</span>  <span class="c1"># ragged count variable</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;sdId&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;sdgbxindex&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;xi&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;radius&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;msol&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;coord3&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;coord1&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;coord2&quot;</span><span class="p">,</span>
+                <span class="s2">"sdId"</span><span class="p">,</span>
+                <span class="s2">"sdgbxindex"</span><span class="p">,</span>
+                <span class="s2">"xi"</span><span class="p">,</span>
+                <span class="s2">"radius"</span><span class="p">,</span>
+                <span class="s2">"msol"</span><span class="p">,</span>
+                <span class="s2">"coord3"</span><span class="p">,</span>
+                <span class="s2">"coord1"</span><span class="p">,</span>
+                <span class="s2">"coord2"</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="n">var</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tryvar</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">raggedcount</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span> <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span>
             <span class="p">}</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_units</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="s2">&quot;radius_units&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tryunits</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s2">&quot;radius&quot;</span><span class="p">),</span>  <span class="c1"># probably microns</span>
-                <span class="s2">&quot;msol_units&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tryunits</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s2">&quot;msol&quot;</span><span class="p">),</span>  <span class="c1"># probably gramms</span>
-                <span class="s2">&quot;coord3_units&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tryunits</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s2">&quot;coord3&quot;</span><span class="p">),</span>  <span class="c1"># probably meters</span>
-                <span class="s2">&quot;coord1_units&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tryunits</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s2">&quot;coord1&quot;</span><span class="p">),</span>  <span class="c1"># probably meters</span>
-                <span class="s2">&quot;coord2_units&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tryunits</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s2">&quot;coord2&quot;</span><span class="p">),</span>  <span class="c1"># probably meters</span>
+                <span class="s2">"radius_units"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tryunits</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s2">"radius"</span><span class="p">),</span>  <span class="c1"># probably microns</span>
+                <span class="s2">"msol_units"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tryunits</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s2">"msol"</span><span class="p">),</span>  <span class="c1"># probably gramms</span>
+                <span class="s2">"coord3_units"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tryunits</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s2">"coord3"</span><span class="p">),</span>  <span class="c1"># probably meters</span>
+                <span class="s2">"coord1_units"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tryunits</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s2">"coord1"</span><span class="p">),</span>  <span class="c1"># probably meters</span>
+                <span class="s2">"coord2_units"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tryunits</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="s2">"coord2"</span><span class="p">),</span>  <span class="c1"># probably meters</span>
             <span class="p">}</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;unknow type of dataset to make superdroplets from&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"unknow type of dataset to make superdroplets from"</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">tryopen_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;supers dataset: &quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;zarr&quot;</span><span class="p">,</span> <span class="n">consolidated</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"supers dataset: "</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">"zarr"</span><span class="p">,</span> <span class="n">consolidated</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">dataset</span>
 
 <div class="viewcode-block" id="Superdrops.tryvar">
 <a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.tryvar">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">tryvar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">raggedcount</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;attempts to return variable in form of ragged array</span>
+<span class="w">        </span><span class="sd">"""attempts to return variable in form of ragged array</span>
 <span class="sd">        (ak.Array) with dims [time, raggedcount]</span>
-<span class="sd">        for a variable &quot;var&quot; in xarray dataset &#39;ds&#39;.</span>
-<span class="sd">        If attempt fails, returns empty array instead&quot;&quot;&quot;</span>
+<span class="sd">        for a variable "var" in xarray dataset 'ds'.</span>
+<span class="sd">        If attempt fails, returns empty array instead"""</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">ak</span><span class="o">.</span><span class="n">unflatten</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">raggedcount</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
@@ -590,16 +590,16 @@
 <div class="viewcode-block" id="Superdrops.tryunits">
 <a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.tryunits">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">tryunits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">:</span> <span class="n">xr</span><span class="o">.</span><span class="n">Dataset</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;attempts to return the units of a variable</span>
-<span class="sd">        in xarray dataset &#39;ds&#39;. If attempt fails, returns null&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""attempts to return the units of a variable</span>
+<span class="sd">        in xarray dataset 'ds'. If attempt fails, returns null"""</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">units</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="k">return</span> <span class="s2">&quot;&quot;</span></div>
+            <span class="k">return</span> <span class="s2">""</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_units</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units</span><span class="p">[</span><span class="n">var</span> <span class="o">+</span> <span class="s2">&quot;_units&quot;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units</span><span class="p">[</span><span class="n">var</span> <span class="o">+</span> <span class="s2">"_units"</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_variable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">units</span><span class="p">:</span>
@@ -608,124 +608,124 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">[</span><span class="n">var</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">sdId</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;sdId&quot;</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"sdId"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">sdgbxindex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;sdgbxindex&quot;</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"sdgbxindex"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">xi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;xi&quot;</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"xi"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">radius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;radius&quot;</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"radius"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">msol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;msol&quot;</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"msol"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">coord3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;coord3&quot;</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"coord3"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">coord1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;coord1&quot;</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"coord1"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">coord2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;coord2&quot;</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"coord2"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">if</span> <span class="s2">&quot;time&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;time is not attached to superdrops&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"time"</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"time"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"time is not attached to superdrops"</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">radius_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">&quot;radius&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">"radius"</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">msol_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">&quot;msol&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">"msol"</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">coord3_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">&quot;coord3&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">"coord3"</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">coord1_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">&quot;coord1&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">"coord1"</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">coord2_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">&quot;coord2&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">"coord2"</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">time_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="s2">&quot;time&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;time is not attached to superdrops&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"time"</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">"time"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"time is not attached to superdrops"</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;sdId&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"sdId"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sdId</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;sdgbxindex&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"sdgbxindex"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sdgbxindex</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;xi&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"xi"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">xi</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;radius&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"radius"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;msol&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"msol"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">msol</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;coord3&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"coord3"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coord3</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;coord1&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"coord1"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coord1</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;coord2&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"coord2"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coord2</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;time&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"time"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;radius_units&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"radius_units"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius_units</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;msol_units&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"msol_units"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">msol_units</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;coord3_units&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"coord3_units"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coord3_units</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;coord1_units&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"coord1_units"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coord1_units</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;coord2_units&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"coord2_units"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">coord2_units</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;time_units&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"time_units"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">time_units</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">err</span> <span class="o">=</span> <span class="s2">&quot;no known return provided for &quot;</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s2">&quot; key&quot;</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="s2">"no known return provided for "</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s2">" key"</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">attach_time</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">time_units</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">do_reshape</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">var4reshape</span><span class="o">=</span><span class="s2">&quot;sdId&quot;</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">time_units</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">do_reshape</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">var4reshape</span><span class="o">=</span><span class="s2">"sdId"</span>
     <span class="p">):</span>
-        <span class="k">if</span> <span class="s2">&quot;time&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">"time"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">do_reshape</span><span class="p">:</span>
                 <span class="c1"># e.g. use sdId array to make 1-D time array have matching (ragged) dimension</span>
                 <span class="n">time</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">broadcast_arrays</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">[</span><span class="n">var4reshape</span><span class="p">],</span> <span class="n">time</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">])</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">Array</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_units</span><span class="p">[</span><span class="s2">&quot;time_units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_units</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"time"</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">[</span><span class="s2">"time"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">Array</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_units</span><span class="p">[</span><span class="s2">"time_units"</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_units</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;time already attached to superdrops&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"time already attached to superdrops"</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">detach_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="s2">&quot;time&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;time is not attached to superdrops&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"time"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"time is not attached to superdrops"</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">variables</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">)</span>
-            <span class="n">variables</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+            <span class="n">variables</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"time"</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
-            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
-            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units</span><span class="p">[</span><span class="s2">&quot;time_units&quot;</span><span class="p">]</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">[</span><span class="s2">"time"</span><span class="p">]</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units</span><span class="p">[</span><span class="s2">"time_units"</span><span class="p">]</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sample_values</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="n">variables2sample</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sample_values</span><span class="o">=</span><span class="s2">"all"</span><span class="p">,</span> <span class="n">variables2sample</span><span class="o">=</span><span class="s2">"all"</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sample_var</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">sample_var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">[</span><span class="n">sample_var</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sample_values</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">sample_values</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sample_values</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">sample_values</span> <span class="o">==</span> <span class="s2">"all"</span><span class="p">:</span>
             <span class="n">sample_values</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">ak</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">sample_var</span><span class="p">)))</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sample_values</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">sample_values</span> <span class="o">=</span> <span class="p">[</span><span class="n">sample_values</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">variables2sample</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">variables2sample</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">variables2sample</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">variables2sample</span> <span class="o">==</span> <span class="s2">"all"</span><span class="p">:</span>
             <span class="n">variables2sample</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">variables2sample</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">variables2sample</span> <span class="o">=</span> <span class="p">[</span><span class="n">variables2sample</span><span class="p">]</span>
@@ -749,13 +749,13 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">sample_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
         <span class="n">ndrops2sample</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">sample_population</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
-        <span class="n">variables2sample</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+        <span class="n">sample_population</span><span class="o">=</span><span class="s2">"all"</span><span class="p">,</span>
+        <span class="n">variables2sample</span><span class="o">=</span><span class="s2">"all"</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sample_var</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">sample_var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">[</span><span class="n">sample_var</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="n">sample_population</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">sample_population</span> <span class="o">==</span> <span class="s2">"all"</span><span class="p">:</span>
             <span class="n">sample_population</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">ak</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">sample_var</span><span class="p">)))</span>
 
         <span class="n">sample_values</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">sample_population</span><span class="p">,</span> <span class="n">ndrops2sample</span><span class="p">)</span>
@@ -764,17 +764,17 @@
         <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">select_range</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">var_for_range</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">range_values</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">variables2select</span><span class="o">=</span><span class="s2">&quot;all&quot;</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">var_for_range</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">range_values</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">variables2select</span><span class="o">=</span><span class="s2">"all"</span>
     <span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">var_for_range</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">var_for_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">[</span><span class="n">var_for_range</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">range_values</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">range_values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">range_values</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;range_values must be [min, max] of var_for_range to select&quot;</span>
+                <span class="s2">"range_values must be [min, max] of var_for_range to select"</span>
             <span class="p">)</span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">variables2select</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">variables2select</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">variables2select</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">variables2select</span> <span class="o">==</span> <span class="s2">"all"</span><span class="p">:</span>
             <span class="n">variables2select</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">variables2select</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">variables2select</span> <span class="o">=</span> <span class="p">[</span><span class="n">variables2select</span><span class="p">]</span>
@@ -815,7 +815,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">time_slice</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">times2select</span><span class="p">,</span>
-        <span class="n">variables2slice</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+        <span class="n">variables2slice</span><span class="o">=</span><span class="s2">"all"</span><span class="p">,</span>
         <span class="n">attach_time</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">time_units</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -823,7 +823,7 @@
         <span class="k">if</span> <span class="n">attach_time</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">attach_time</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">time_units</span><span class="p">,</span> <span class="n">do_reshape</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">variables2slice</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">variables2slice</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">variables2slice</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">variables2slice</span> <span class="o">==</span> <span class="s2">"all"</span><span class="p">:</span>
             <span class="n">variables2slice</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span>
         <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">variables2slice</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">variables2slice</span> <span class="o">=</span> <span class="p">[</span><span class="n">variables2slice</span><span class="p">]</span>
@@ -866,7 +866,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 31 July 2026</div>
+              Last updated on 17 August 2026</div>
           </div>
           <div class="right-details">
             

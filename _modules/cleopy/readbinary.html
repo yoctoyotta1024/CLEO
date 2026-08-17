@@ -367,7 +367,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cleopy.readbinary</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Copyright (c) 2025 MPI-M, Clara Bayley</span>
 
 
@@ -378,11 +378,11 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
+<span class="sd">License: BSD 3-Clause "New" or "Revised" License</span>
 <span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
 <span class="sd">-----</span>
 <span class="sd">File Description:</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -394,10 +394,10 @@
 <div class="viewcode-block" id="readbinary">
 <a class="viewcode-back" href="../../cleopy/readbinary.html#cleopy.readbinary.readbinary">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">readbinary</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;return list of vectors containing dimenionsless</span>
-<span class="sd">    data read from binary file&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""return list of vectors containing dimenionsless</span>
+<span class="sd">    data read from binary file"""</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reading binary file:</span><span class="se">\n</span><span class="s2"> &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Reading binary file:</span><span class="se">\n</span><span class="s2"> "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
 
     <span class="n">nvars</span><span class="p">,</span> <span class="n">metabytes</span><span class="p">,</span> <span class="n">metapervar</span> <span class="o">=</span> <span class="n">read_metadata</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="n">isprint</span><span class="p">)</span>
 
@@ -410,8 +410,8 @@
 <div class="viewcode-block" id="read_metadata">
 <a class="viewcode-back" href="../../cleopy/readbinary.html#cleopy.readbinary.read_metadata">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">read_metadata</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;read global metadata and return the variable specific metadata</span>
-<span class="sd">    in a 2D array with each row being the metadata for a different variable&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""read global metadata and return the variable specific metadata</span>
+<span class="sd">    in a 2D array with each row being the metadata for a different variable"""</span>
 
     <span class="n">dtc</span> <span class="o">=</span> <span class="n">DataTypeCodes</span><span class="p">()</span>
 
@@ -422,16 +422,16 @@
     <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">isprint</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Metadata: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="n">gblmetadata</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Metadata: </span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"'"</span> <span class="o">+</span> <span class="n">gblmetadata</span> <span class="o">+</span> <span class="s2">"'"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">metapervar</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">metabytes</span><span class="p">,</span> <span class="n">metapervar</span></div>
 
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">first4uints</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">dtc</span><span class="p">):</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">binaryfile</span><span class="p">:</span>
-        <span class="n">bytes4uints</span> <span class="o">=</span> <span class="n">dtc</span><span class="o">.</span><span class="n">format_size</span><span class="p">(</span><span class="s2">&quot;IIII&quot;</span><span class="p">)</span>
-        <span class="n">uints</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;IIII&quot;</span><span class="p">,</span> <span class="n">binaryfile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">bytes4uints</span><span class="p">))</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">binaryfile</span><span class="p">:</span>
+        <span class="n">bytes4uints</span> <span class="o">=</span> <span class="n">dtc</span><span class="o">.</span><span class="n">format_size</span><span class="p">(</span><span class="s2">"IIII"</span><span class="p">)</span>
+        <span class="n">uints</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">"&lt;IIII"</span><span class="p">,</span> <span class="n">binaryfile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">bytes4uints</span><span class="p">))</span>
 
     <span class="n">metabytes</span><span class="p">,</span> <span class="n">gblmeta_bytes</span><span class="p">,</span> <span class="n">nvars</span><span class="p">,</span> <span class="n">metapervar_bytes</span> <span class="o">=</span> <span class="n">uints</span>
 
@@ -441,18 +441,18 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">get_metadatapervar</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">dtc</span><span class="p">,</span> <span class="n">gblmeta_bytes</span><span class="p">,</span> <span class="n">nvars</span><span class="p">,</span> <span class="n">metabytes</span><span class="p">):</span>
     <span class="n">mpv_format</span> <span class="o">=</span> <span class="n">MetadataPerVariable</span><span class="p">()</span><span class="o">.</span><span class="n">mpv_format</span>
 
-    <span class="n">nchars</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">gblmeta_bytes</span> <span class="o">/</span> <span class="n">dtc</span><span class="o">.</span><span class="n">dtype2bytesize</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="s2">&quot;c&quot;</span><span class="p">)))</span>
-    <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;&lt;&quot;</span> <span class="o">+</span> <span class="s2">&quot;c&quot;</span> <span class="o">*</span> <span class="n">nchars</span> <span class="o">+</span> <span class="n">mpv_format</span> <span class="o">*</span> <span class="n">nvars</span>
+    <span class="n">nchars</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">gblmeta_bytes</span> <span class="o">/</span> <span class="n">dtc</span><span class="o">.</span><span class="n">dtype2bytesize</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="s2">"c"</span><span class="p">)))</span>
+    <span class="nb">format</span> <span class="o">=</span> <span class="s2">"&lt;"</span> <span class="o">+</span> <span class="s2">"c"</span> <span class="o">*</span> <span class="n">nchars</span> <span class="o">+</span> <span class="n">mpv_format</span> <span class="o">*</span> <span class="n">nvars</span>
 
-    <span class="n">skipbytes</span> <span class="o">=</span> <span class="n">dtc</span><span class="o">.</span><span class="n">format_size</span><span class="p">(</span><span class="s2">&quot;IIII&quot;</span><span class="p">)</span>
+    <span class="n">skipbytes</span> <span class="o">=</span> <span class="n">dtc</span><span class="o">.</span><span class="n">format_size</span><span class="p">(</span><span class="s2">"IIII"</span><span class="p">)</span>
     <span class="n">nbytes2read</span> <span class="o">=</span> <span class="n">metabytes</span> <span class="o">-</span> <span class="n">skipbytes</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">binaryfile</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">binaryfile</span><span class="p">:</span>
         <span class="n">binaryfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">skipbytes</span><span class="p">)</span>
         <span class="n">mdata</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="nb">format</span><span class="p">,</span> <span class="n">binaryfile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">nbytes2read</span><span class="p">))</span>
         <span class="n">metastr</span> <span class="o">=</span> <span class="n">mdata</span><span class="p">[:</span><span class="n">nchars</span><span class="p">]</span>
         <span class="n">mpervar</span> <span class="o">=</span> <span class="n">mdata</span><span class="p">[</span><span class="n">nchars</span><span class="p">:]</span>
 
-    <span class="n">gblmetadata</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">metastr</span><span class="p">])</span>
+    <span class="n">gblmetadata</span> <span class="o">=</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">metastr</span><span class="p">])</span>
     <span class="n">metapervar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">mpervar</span><span class="p">,</span> <span class="p">(</span><span class="n">nvars</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mpervar</span><span class="p">)</span> <span class="o">/</span> <span class="n">nvars</span><span class="p">)))</span>
 
     <span class="k">return</span> <span class="n">gblmetadata</span><span class="p">,</span> <span class="n">metapervar</span>
@@ -460,15 +460,15 @@
 
 <span class="k">def</span><span class="w"> </span><span class="nf">read_data</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">nvars</span><span class="p">,</span> <span class="n">metabytes</span><span class="p">,</span> <span class="n">metapervar</span><span class="p">):</span>
     <span class="n">dataformat</span><span class="p">,</span> <span class="n">ndata_pervar</span> <span class="o">=</span> <span class="n">get_dataformat</span><span class="p">(</span><span class="n">nvars</span><span class="p">,</span> <span class="n">metapervar</span><span class="p">)</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">binaryfile</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"rb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">binaryfile</span><span class="p">:</span>
         <span class="n">binaryfile</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">metabytes</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">dataformat</span><span class="p">,</span> <span class="n">binaryfile</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ndata_pervar</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
         <span class="n">err</span> <span class="o">=</span> <span class="p">(</span>
             <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
-            <span class="o">+</span> <span class="s2">&quot; datapoints read in total is incorrect given&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot; metadata states no. datapoints per variable is &quot;</span>
+            <span class="o">+</span> <span class="s2">" datapoints read in total is incorrect given"</span>
+            <span class="o">+</span> <span class="s2">" metadata states no. datapoints per variable is "</span>
             <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ndata_pervar</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
@@ -482,12 +482,12 @@
         <span class="n">metapervar</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uintc</span>
     <span class="p">)</span>  <span class="c1"># no. datapoints of each variable</span>
 
-    <span class="n">dataformat</span> <span class="o">=</span> <span class="s2">&quot;&lt;&quot;</span>
+    <span class="n">dataformat</span> <span class="o">=</span> <span class="s2">"&lt;"</span>
     <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nvars</span><span class="p">):</span>
         <span class="nb">format</span> <span class="o">=</span> <span class="p">[</span><span class="n">dtypes</span><span class="p">[</span><span class="n">n</span><span class="p">]]</span> <span class="o">*</span> <span class="n">ndata_pervar</span><span class="p">[</span>
             <span class="n">n</span>
         <span class="p">]</span>  <span class="c1"># list of binary encoded characters for struct format</span>
-        <span class="nb">format</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+        <span class="nb">format</span> <span class="o">=</span> <span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
             <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">format</span><span class="p">]</span>
         <span class="p">)</span>  <span class="c1"># convert to one continous decoded string</span>
         <span class="n">dataformat</span> <span class="o">+=</span> <span class="nb">format</span>
@@ -511,7 +511,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 31 July 2026</div>
+              Last updated on 17 August 2026</div>
           </div>
           <div class="right-details">
             

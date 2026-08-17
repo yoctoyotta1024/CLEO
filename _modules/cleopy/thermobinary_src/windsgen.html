@@ -367,7 +367,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cleopy.thermobinary_src.windsgen</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Copyright (c) 2024 MPI-M, Clara Bayley</span>
 
 
@@ -378,12 +378,12 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
+<span class="sd">License: BSD 3-Clause "New" or "Revised" License</span>
 <span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
 <span class="sd">-----</span>
 <span class="sd">File Description:</span>
 <span class="sd">Various ways of generating wind fields (wvel, vvel and uvel) to read into Cleo</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.create_thermodynamics</span><span class="w"> </span><span class="kn">import</span> <span class="n">thermoinputsdict</span>
@@ -392,9 +392,9 @@
 
 <span class="k">def</span><span class="w"> </span><span class="nf">empty_winds</span><span class="p">():</span>
     <span class="n">WINDSDATA</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;WVEL&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span>
-        <span class="s2">&quot;UVEL&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span>
-        <span class="s2">&quot;VVEL&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span>
+        <span class="s2">"WVEL"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span>
+        <span class="s2">"UVEL"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span>
+        <span class="s2">"VVEL"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([]),</span>
     <span class="p">}</span>
 
     <span class="k">return</span> <span class="n">WINDSDATA</span>
@@ -403,24 +403,24 @@
 <div class="viewcode-block" id="constant_winds">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/windsgen.html#cleopy.thermobinary_src.windsgen.constant_winds">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">constant_winds</span><span class="p">(</span><span class="n">ndims</span><span class="p">,</span> <span class="n">ntime</span><span class="p">,</span> <span class="n">WVEL</span><span class="p">,</span> <span class="n">UVEL</span><span class="p">,</span> <span class="n">VVEL</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;create dictionary for winds, array are</span>
+<span class="w">    </span><span class="sd">"""create dictionary for winds, array are</span>
 <span class="sd">    empty by default, or given constant values WVEl, UVEL and VVEL.</span>
 <span class="sd">    Here, shape_[X]face = no. data for wind velocity component</span>
-<span class="sd">    defined on gridbox [X] faces&quot;&quot;&quot;</span>
+<span class="sd">    defined on gridbox [X] faces"""</span>
 
     <span class="n">WINDSDATA</span> <span class="o">=</span> <span class="n">empty_winds</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">WVEL</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">shape_zface</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">ndims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">ntime</span><span class="p">)</span>
-        <span class="n">WINDSDATA</span><span class="p">[</span><span class="s2">&quot;WVEL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_zface</span><span class="p">,</span> <span class="n">WVEL</span><span class="p">)</span>
+        <span class="n">WINDSDATA</span><span class="p">[</span><span class="s2">"WVEL"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_zface</span><span class="p">,</span> <span class="n">WVEL</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">UVEL</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">shape_xface</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">ndims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">ntime</span><span class="p">)</span>
-            <span class="n">WINDSDATA</span><span class="p">[</span><span class="s2">&quot;UVEL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_xface</span><span class="p">,</span> <span class="n">UVEL</span><span class="p">)</span>
+            <span class="n">WINDSDATA</span><span class="p">[</span><span class="s2">"UVEL"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_xface</span><span class="p">,</span> <span class="n">UVEL</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">VVEL</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">shape_yface</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">ndims</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ntime</span><span class="p">)</span>
-                <span class="n">WINDSDATA</span><span class="p">[</span><span class="s2">&quot;VVEL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_yface</span><span class="p">,</span> <span class="n">VVEL</span><span class="p">)</span>
+                <span class="n">WINDSDATA</span><span class="p">[</span><span class="s2">"VVEL"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_yface</span><span class="p">,</span> <span class="n">VVEL</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">WINDSDATA</span></div>
 
@@ -429,8 +429,8 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">divfree_flowfield2D</span><span class="p">(</span>
     <span class="n">wmax</span><span class="p">,</span> <span class="n">zlength</span><span class="p">,</span> <span class="n">xlength</span><span class="p">,</span> <span class="n">rhotilda_zfaces</span><span class="p">,</span> <span class="n">rhotilda_xfaces</span><span class="p">,</span> <span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span>
 <span class="p">):</span>
-    <span class="n">zfaces</span><span class="p">,</span> <span class="n">xcens_z</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">coords_forgridboxfaces</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
-    <span class="n">zcens_x</span><span class="p">,</span> <span class="n">xfaces</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">coords_forgridboxfaces</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">zfaces</span><span class="p">,</span> <span class="n">xcens_z</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">coords_forgridboxfaces</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="s2">"z"</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">zcens_x</span><span class="p">,</span> <span class="n">xfaces</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">coords_forgridboxfaces</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="s2">"x"</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span>
 
     <span class="n">ztilda</span> <span class="o">=</span> <span class="n">zlength</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
     <span class="n">xtilda</span> <span class="o">=</span> <span class="n">xlength</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
@@ -448,7 +448,7 @@
 <div class="viewcode-block" id="ConstUniformWinds">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/windsgen.html#cleopy.thermobinary_src.windsgen.ConstUniformWinds">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ConstUniformWinds</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;create winds that&#39;s constant in time and uniform throughout the domain&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""create winds that's constant in time and uniform throughout the domain"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -468,9 +468,9 @@
 <div class="viewcode-block" id="Simple2DFlowField">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/windsgen.html#cleopy.thermobinary_src.windsgen.Simple2DFlowField">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Simple2DFlowField</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;create winds that are constant in time in a 2D (z,x) dependent flow field</span>
+<span class="w">    </span><span class="sd">"""create winds that are constant in time in a 2D (z,x) dependent flow field</span>
 <span class="sd">    assumign dry hydrostatic adiabat for density profile.</span>
-<span class="sd">    Equations derived from Arabas et al. 2015 (sect 2.1)&quot;&quot;&quot;</span>
+<span class="sd">    Equations derived from Arabas et al. 2015 (sect 2.1)"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -488,13 +488,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Xlength</span> <span class="o">=</span> <span class="n">Xlength</span>  <span class="c1"># wavelength of velocity modulation in x direction [m]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">VVEL</span> <span class="o">=</span> <span class="n">VVEL</span>  <span class="c1"># horizontal (y) velocity</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">RGAS_DRY</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;RGAS_DRY&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">RGAS_V</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;RGAS_V&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">RHO0</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;RHO0&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RGAS_DRY</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"RGAS_DRY"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RGAS_V</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"RGAS_V"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RHO0</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"RHO0"</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">wvel_uvel_from_flowfield</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">THERMODATA</span><span class="p">,</span> <span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">):</span>
-        <span class="n">PRESS</span><span class="p">,</span> <span class="n">TEMP</span> <span class="o">=</span> <span class="n">THERMODATA</span><span class="p">[</span><span class="s2">&quot;PRESS&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">THERMODATA</span><span class="p">[</span><span class="s2">&quot;TEMP&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">qvap</span> <span class="o">=</span> <span class="n">THERMODATA</span><span class="p">[</span><span class="s2">&quot;qvap&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">PRESS</span><span class="p">,</span> <span class="n">TEMP</span> <span class="o">=</span> <span class="n">THERMODATA</span><span class="p">[</span><span class="s2">"PRESS"</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">THERMODATA</span><span class="p">[</span><span class="s2">"TEMP"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">qvap</span> <span class="o">=</span> <span class="n">THERMODATA</span><span class="p">[</span><span class="s2">"qvap"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">rho_dry</span> <span class="o">=</span> <span class="n">PRESS</span> <span class="o">/</span> <span class="p">(</span><span class="n">TEMP</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RGAS_DRY</span> <span class="o">+</span> <span class="n">qvap</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">RGAS_V</span><span class="p">))</span>
         <span class="n">rhotilda</span> <span class="o">=</span> <span class="n">rho_dry</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">RHO0</span>  <span class="c1"># scalar value is the same over entire domain</span>
 
@@ -508,12 +508,12 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">WMAX</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">WVEL</span><span class="p">,</span> <span class="n">UVEL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wvel_uvel_from_flowfield</span><span class="p">(</span><span class="n">THERMODATA</span><span class="p">,</span> <span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">)</span>
-            <span class="n">WINDSDATA</span><span class="p">[</span><span class="s2">&quot;WVEL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">WVEL</span><span class="p">,</span> <span class="n">ntime</span><span class="p">)</span>
-            <span class="n">WINDSDATA</span><span class="p">[</span><span class="s2">&quot;UVEL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">UVEL</span><span class="p">,</span> <span class="n">ntime</span><span class="p">)</span>
+            <span class="n">WINDSDATA</span><span class="p">[</span><span class="s2">"WVEL"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">WVEL</span><span class="p">,</span> <span class="n">ntime</span><span class="p">)</span>
+            <span class="n">WINDSDATA</span><span class="p">[</span><span class="s2">"UVEL"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">UVEL</span><span class="p">,</span> <span class="n">ntime</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">VVEL</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">shape_yface</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">ndims</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ntime</span><span class="p">)</span>
-                <span class="n">WINDSDATA</span><span class="p">[</span><span class="s2">&quot;VVEL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_yface</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">VVEL</span><span class="p">)</span>
+                <span class="n">WINDSDATA</span><span class="p">[</span><span class="s2">"VVEL"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_yface</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">VVEL</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">WINDSDATA</span></div>
 
@@ -522,9 +522,9 @@
 <div class="viewcode-block" id="DryAdiabat2DFlowField">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/windsgen.html#cleopy.thermobinary_src.windsgen.DryAdiabat2DFlowField">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DryAdiabat2DFlowField</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;create winds that are constant in time in a 2D (z,x) dependent flow field.</span>
+<span class="w">    </span><span class="sd">"""create winds that are constant in time in a 2D (z,x) dependent flow field.</span>
 <span class="sd">    Divergence free field with density dependence assuming dry adiabat.</span>
-<span class="sd">    Equations derived from Arabas et al. 2015 (sect 2.1)&quot;&quot;&quot;</span>
+<span class="sd">    Equations derived from Arabas et al. 2015 (sect 2.1)"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -542,10 +542,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">dryadiabat</span> <span class="o">=</span> <span class="n">dryadiabat</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">wvel_uvel_from_flowfield</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">):</span>
-        <span class="n">zfaces</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">coords_forgridboxfaces</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">xfaces</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">coords_forgridboxfaces</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">zfaces</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">coords_forgridboxfaces</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="s2">"z"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">xfaces_z</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">coords_forgridboxfaces</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="s2">"x"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">rhotilda_zfaces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dryadiabat</span><span class="o">.</span><span class="n">rhotilda</span><span class="p">(</span><span class="n">zfaces</span><span class="p">)</span>
-        <span class="n">rhotilda_xfaces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dryadiabat</span><span class="o">.</span><span class="n">rhotilda</span><span class="p">(</span><span class="n">xfaces</span><span class="p">)</span>
+        <span class="n">rhotilda_xfaces</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dryadiabat</span><span class="o">.</span><span class="n">rhotilda</span><span class="p">(</span><span class="n">xfaces_z</span><span class="p">)</span>
 
         <span class="n">WVEL</span><span class="p">,</span> <span class="n">UVEL</span> <span class="o">=</span> <span class="n">divfree_flowfield2D</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">WMAX</span><span class="p">,</span>
@@ -563,12 +563,12 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">WMAX</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">WVEL</span><span class="p">,</span> <span class="n">UVEL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wvel_uvel_from_flowfield</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">)</span>
-            <span class="n">WINDSDATA</span><span class="p">[</span><span class="s2">&quot;WVEL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">WVEL</span><span class="p">,</span> <span class="n">ntime</span><span class="p">)</span>
-            <span class="n">WINDSDATA</span><span class="p">[</span><span class="s2">&quot;UVEL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">UVEL</span><span class="p">,</span> <span class="n">ntime</span><span class="p">)</span>
+            <span class="n">WINDSDATA</span><span class="p">[</span><span class="s2">"WVEL"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">WVEL</span><span class="p">,</span> <span class="n">ntime</span><span class="p">)</span>
+            <span class="n">WINDSDATA</span><span class="p">[</span><span class="s2">"UVEL"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">UVEL</span><span class="p">,</span> <span class="n">ntime</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">VVEL</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">shape_yface</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">ndims</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ntime</span><span class="p">)</span>
-                <span class="n">WINDSDATA</span><span class="p">[</span><span class="s2">&quot;VVEL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_yface</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">VVEL</span><span class="p">)</span>
+                <span class="n">WINDSDATA</span><span class="p">[</span><span class="s2">"VVEL"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_yface</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">VVEL</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">WINDSDATA</span></div>
 
@@ -577,8 +577,8 @@
 <div class="viewcode-block" id="SinusoidalUpdraught">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/windsgen.html#cleopy.thermobinary_src.windsgen.SinusoidalUpdraught">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SinusoidalUpdraught</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;creates constant in time wind field with sinusoidal vertial velocity profile &#39;wwel&#39;</span>
-<span class="sd">    and optionally uniform horizontal (uvel, vvel) wind field&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""creates constant in time wind field with sinusoidal vertial velocity profile 'wwel'</span>
+<span class="sd">    and optionally uniform horizontal (uvel, vvel) wind field"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -595,10 +595,10 @@
 <div class="viewcode-block" id="SinusoidalUpdraught.wvel_profile">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/windsgen.html#cleopy.thermobinary_src.windsgen.SinusoidalUpdraught.wvel_profile">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">wvel_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">ntime</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;returns updraught (w always &gt;=0.0) sinusoidal</span>
-<span class="sd">        profile with amplitude WMAX and wavelength 2*Wlength&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""returns updraught (w always &gt;=0.0) sinusoidal</span>
+<span class="sd">        profile with amplitude WMAX and wavelength 2*Wlength"""</span>
 
-        <span class="n">zfaces</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">coords_forgridboxfaces</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">zfaces</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">coords_forgridboxfaces</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="s2">"z"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">WVEL</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">WMAX</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">zfaces</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wlength</span><span class="p">))</span>
 
         <span class="n">WVEL</span><span class="p">[</span><span class="n">WVEL</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
@@ -609,7 +609,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_winds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">ntime</span><span class="p">,</span> <span class="n">THERMODATA</span><span class="p">):</span>
         <span class="n">WINDSDATA</span> <span class="o">=</span> <span class="n">constant_winds</span><span class="p">(</span><span class="n">ndims</span><span class="p">,</span> <span class="n">ntime</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">WMAX</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">UVEL</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">VVEL</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Wlength</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
-            <span class="n">WINDSDATA</span><span class="p">[</span><span class="s2">&quot;WVEL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wvel_profile</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">ntime</span><span class="p">)</span>
+            <span class="n">WINDSDATA</span><span class="p">[</span><span class="s2">"WVEL"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wvel_profile</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">ntime</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">WINDSDATA</span></div>
 
@@ -631,7 +631,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 31 July 2026</div>
+              Last updated on 17 August 2026</div>
           </div>
           <div class="right-details">
             

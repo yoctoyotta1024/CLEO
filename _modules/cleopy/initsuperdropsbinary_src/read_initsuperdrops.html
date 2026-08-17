@@ -367,7 +367,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cleopy.initsuperdropsbinary_src.read_initsuperdrops</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Copyright (c) 2024 MPI-M, Clara Bayley</span>
 
 
@@ -378,11 +378,11 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
+<span class="sd">License: BSD 3-Clause "New" or "Revised" License</span>
 <span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
 <span class="sd">-----</span>
 <span class="sd">File Description:</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
@@ -402,10 +402,10 @@
     <span class="n">gbxs2plt</span><span class="p">,</span>
     <span class="n">savefig</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">savefigpath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">savelabel</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">savelabel</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;plot initial superdroplet distribution from initsupersfile binary</span>
-<span class="sd">    of every gridbox with index in gbx2plts&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""plot initial superdroplet distribution from initsupersfile binary</span>
+<span class="sd">    of every gridbox with index in gbx2plts"""</span>
 
     <span class="n">plot_initGBxs_attrdistribs</span><span class="p">(</span>
         <span class="n">config_filename</span><span class="p">,</span>
@@ -435,19 +435,19 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">get_superdroplet_attributes</span><span class="p">(</span>
     <span class="n">config_filename</span><span class="p">,</span> <span class="n">constants_filename</span><span class="p">,</span> <span class="n">initsupers_filename</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;get gridbox boundaries from binary file and</span>
-<span class="sd">    re-dimensionalise usign COORD0 const from constants_filename&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""get gridbox boundaries from binary file and</span>
+<span class="sd">    re-dimensionalise usign COORD0 const from constants_filename"""</span>
 
     <span class="n">inputs</span> <span class="o">=</span> <span class="n">initsupers_inputsdict</span><span class="p">(</span><span class="n">config_filename</span><span class="p">,</span> <span class="n">constants_filename</span><span class="p">)</span>
 
     <span class="n">attrs</span> <span class="o">=</span> <span class="n">read_dimless_superdrops_binary</span><span class="p">(</span><span class="n">initsupers_filename</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
     <span class="c1"># re-dimensionalise SD attributes</span>
-    <span class="n">attrs</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">radius</span> <span class="o">*</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;R0&quot;</span><span class="p">]</span>
-    <span class="n">attrs</span><span class="o">.</span><span class="n">msol</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">msol</span> <span class="o">*</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;MASS0&quot;</span><span class="p">]</span>
-    <span class="n">attrs</span><span class="o">.</span><span class="n">coord3</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">coord3</span> <span class="o">*</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;COORD0&quot;</span><span class="p">]</span>
-    <span class="n">attrs</span><span class="o">.</span><span class="n">coord1</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">coord1</span> <span class="o">*</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;COORD0&quot;</span><span class="p">]</span>
-    <span class="n">attrs</span><span class="o">.</span><span class="n">coord2</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">coord2</span> <span class="o">*</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;COORD0&quot;</span><span class="p">]</span>
+    <span class="n">attrs</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">radius</span> <span class="o">*</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"R0"</span><span class="p">]</span>
+    <span class="n">attrs</span><span class="o">.</span><span class="n">msol</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">msol</span> <span class="o">*</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"MASS0"</span><span class="p">]</span>
+    <span class="n">attrs</span><span class="o">.</span><span class="n">coord3</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">coord3</span> <span class="o">*</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"COORD0"</span><span class="p">]</span>
+    <span class="n">attrs</span><span class="o">.</span><span class="n">coord1</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">coord1</span> <span class="o">*</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"COORD0"</span><span class="p">]</span>
+    <span class="n">attrs</span><span class="o">.</span><span class="n">coord2</span> <span class="o">=</span> <span class="n">attrs</span><span class="o">.</span><span class="n">coord2</span> <span class="o">*</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"COORD0"</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">attrs</span></div>
 
@@ -456,7 +456,7 @@
 <div class="viewcode-block" id="read_dimless_superdrops_binary">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/read_initsuperdrops.html#cleopy.initsuperdropsbinary_src.read_initsuperdrops.read_dimless_superdrops_binary">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">read_dimless_superdrops_binary</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;return dimenionsless gbx boundaries by reading binary file&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""return dimenionsless gbx boundaries by reading binary file"""</span>
 
     <span class="n">datatypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">]</span>
     <span class="n">datatypes</span> <span class="o">+=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span>
@@ -476,7 +476,7 @@
     <span class="n">attrs</span><span class="o">.</span><span class="n">coord2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">ll</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="p">:],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">datatypes</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span>
 
     <span class="nb">print</span><span class="p">(</span>
-        <span class="s2">&quot;attribute shapes: &quot;</span><span class="p">,</span>
+        <span class="s2">"attribute shapes: "</span><span class="p">,</span>
         <span class="n">attrs</span><span class="o">.</span><span class="n">sdgbxindex</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
         <span class="n">attrs</span><span class="o">.</span><span class="n">xi</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
         <span class="n">attrs</span><span class="o">.</span><span class="n">radius</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span>
@@ -493,7 +493,7 @@
 <div class="viewcode-block" id="totmass">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/read_initsuperdrops.html#cleopy.initsuperdropsbinary_src.read_initsuperdrops.totmass">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">totmass</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">msol</span><span class="p">,</span> <span class="n">RHO_L</span><span class="p">,</span> <span class="n">RHO_SOL</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;droplet totmass = mass of water + solute&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""droplet totmass = mass of water + solute"""</span>
     <span class="n">massconst</span> <span class="o">=</span> <span class="mf">4.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">radius</span> <span class="o">*</span> <span class="n">radius</span> <span class="o">*</span> <span class="n">radius</span> <span class="o">*</span> <span class="n">RHO_L</span>
     <span class="n">density_factor</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">RHO_L</span> <span class="o">/</span> <span class="n">RHO_SOL</span>
     <span class="n">totmass</span> <span class="o">=</span> <span class="n">msol</span> <span class="o">*</span> <span class="n">density_factor</span> <span class="o">+</span> <span class="n">massconst</span>
@@ -525,20 +525,20 @@
     <span class="p">)</span>  <span class="c1"># mass as if drops had density of water=1000Kg/m^3 [g m^3]</span>
 
     <span class="n">inforstr</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">------ DOMAIN SUPERDROPLETS INFO ------</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;total droplet number conc: </span><span class="si">{:3g}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">numconc</span><span class="p">)</span>
-        <span class="o">+</span> <span class="s2">&quot; /cm^3</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;total droplet mass:        </span><span class="si">{:3g}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">massconc</span><span class="p">)</span>
-        <span class="o">+</span> <span class="s2">&quot; g/m^3</span><span class="se">\n</span><span class="s2">&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;       as if water:        </span><span class="si">{:3g}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">m_w_conc</span><span class="p">)</span>
-        <span class="o">+</span> <span class="s2">&quot; g/m^3&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">------------------------------------</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="s2">"</span><span class="se">\n</span><span class="s2">------ DOMAIN SUPERDROPLETS INFO ------</span><span class="se">\n</span><span class="s2">"</span>
+        <span class="o">+</span> <span class="s2">"total droplet number conc: </span><span class="si">{:3g}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">numconc</span><span class="p">)</span>
+        <span class="o">+</span> <span class="s2">" /cm^3</span><span class="se">\n</span><span class="s2">"</span>
+        <span class="o">+</span> <span class="s2">"total droplet mass:        </span><span class="si">{:3g}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">massconc</span><span class="p">)</span>
+        <span class="o">+</span> <span class="s2">" g/m^3</span><span class="se">\n</span><span class="s2">"</span>
+        <span class="o">+</span> <span class="s2">"       as if water:        </span><span class="si">{:3g}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">m_w_conc</span><span class="p">)</span>
+        <span class="o">+</span> <span class="s2">" g/m^3"</span>
+        <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">------------------------------------</span><span class="se">\n</span><span class="s2">"</span>
     <span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">inforstr</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">plot_initdistribs</span><span class="p">(</span><span class="n">attrs</span><span class="p">,</span> <span class="n">gbxvols</span><span class="p">,</span> <span class="n">gbxidxs</span><span class="p">):</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;font.size&quot;</span><span class="p">:</span> <span class="mi">14</span><span class="p">})</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"font.size"</span><span class="p">:</span> <span class="mi">14</span><span class="p">})</span>
     <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">figure_setup</span><span class="p">(</span><span class="n">attrs</span><span class="o">.</span><span class="n">coord3</span><span class="p">,</span> <span class="n">attrs</span><span class="o">.</span><span class="n">coord1</span><span class="p">,</span> <span class="n">attrs</span><span class="o">.</span><span class="n">coord2</span><span class="p">)</span>
 
     <span class="c1"># create nbins evenly spaced in log10(r)</span>
@@ -573,8 +573,8 @@
     <span class="n">savefig</span><span class="p">,</span>
     <span class="n">savelabel</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;plot initial superdroplet distribution from initsupersfile binary</span>
-<span class="sd">    of every gridbox with index in gbx2plts&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""plot initial superdroplet distribution from initsupersfile binary</span>
+<span class="sd">    of every gridbox with index in gbx2plts"""</span>
 
     <span class="n">gbxvols</span> <span class="o">=</span> <span class="n">get_gbxvols_from_gridfile</span><span class="p">(</span>
         <span class="n">grid_filename</span><span class="p">,</span> <span class="n">constants_filename</span><span class="o">=</span><span class="n">constants_filename</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">False</span>
@@ -585,13 +585,13 @@
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gbxs2plt</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
         <span class="n">gbxidxs</span> <span class="o">=</span> <span class="p">[</span><span class="n">gbxs2plt</span><span class="p">]</span>
-        <span class="n">savename</span> <span class="o">=</span> <span class="s2">&quot;initGBx&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">gbxs2plt</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_distrib&quot;</span> <span class="o">+</span> <span class="n">savelabel</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span>
-    <span class="k">elif</span> <span class="n">gbxs2plt</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+        <span class="n">savename</span> <span class="o">=</span> <span class="s2">"initGBx"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">gbxs2plt</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"_distrib"</span> <span class="o">+</span> <span class="n">savelabel</span> <span class="o">+</span> <span class="s2">".png"</span>
+    <span class="k">elif</span> <span class="n">gbxs2plt</span> <span class="o">==</span> <span class="s2">"all"</span><span class="p">:</span>
         <span class="n">gbxidxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">attrs</span><span class="o">.</span><span class="n">sdgbxindex</span><span class="p">)</span>
-        <span class="n">savename</span> <span class="o">=</span> <span class="s2">&quot;initallGBxs_distribs&quot;</span> <span class="o">+</span> <span class="n">savelabel</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span>
+        <span class="n">savename</span> <span class="o">=</span> <span class="s2">"initallGBxs_distribs"</span> <span class="o">+</span> <span class="n">savelabel</span> <span class="o">+</span> <span class="s2">".png"</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">gbxidxs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">gbxs2plt</span><span class="p">]</span>
-        <span class="n">savename</span> <span class="o">=</span> <span class="s2">&quot;initGBxs_distribs&quot;</span> <span class="o">+</span> <span class="n">savelabel</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span>
+        <span class="n">savename</span> <span class="o">=</span> <span class="s2">"initGBxs_distribs"</span> <span class="o">+</span> <span class="n">savelabel</span> <span class="o">+</span> <span class="s2">".png"</span>
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span><span class="p">,</span> <span class="n">lines</span> <span class="o">=</span> <span class="n">plot_initdistribs</span><span class="p">(</span><span class="n">attrs</span><span class="p">,</span> <span class="n">gbxvols</span><span class="p">,</span> <span class="n">gbxidxs</span><span class="p">)</span>
 
@@ -599,8 +599,8 @@
 
     <span class="k">if</span> <span class="n">savefig</span><span class="p">:</span>
         <span class="n">savename</span> <span class="o">=</span> <span class="n">savefigpath</span> <span class="o">/</span> <span class="n">savename</span>
-        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">savename</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Figure .png saved as: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">savename</span><span class="p">))</span></div>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">savename</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">"w"</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"png"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Figure .png saved as: "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">savename</span><span class="p">))</span></div>
 
 
 
@@ -614,7 +614,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
 
-    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ncoords</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;-D SDM Initial Superdroplet Conditions&quot;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">ncoords</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"-D SDM Initial Superdroplet Conditions"</span><span class="p">)</span>
     <span class="n">axs</span> <span class="o">=</span> <span class="n">axs</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">ncoords</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
         <span class="n">axs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">remove</span><span class="p">()</span>
@@ -625,11 +625,11 @@
 <div class="viewcode-block" id="log10r_frequency_distribution">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/read_initsuperdrops.html#cleopy.initsuperdropsbinary_src.read_initsuperdrops.log10r_frequency_distribution">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">log10r_frequency_distribution</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">hedgs</span><span class="p">,</span> <span class="n">wghts</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;get distribution of data with weights &#39;wghts&#39; against</span>
+<span class="w">    </span><span class="sd">"""get distribution of data with weights 'wghts' against</span>
 <span class="sd">    log10(r). Uses np.histogram to get frequency of a particular</span>
 <span class="sd">    value of data that falls in each bin (with each bin defined</span>
-<span class="sd">    by it&#39;s edges &#39;hedgs&#39;). Return distirbution alongside the radius</span>
-<span class="sd">    bin centers and widths in [m]&quot;&quot;&quot;</span>
+<span class="sd">    by it's edges 'hedgs'). Return distirbution alongside the radius</span>
+<span class="sd">    bin centers and widths in [m]"""</span>
 
     <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">wghts</span><span class="p">)</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="n">wghts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">radius</span><span class="p">),</span> <span class="n">wghts</span><span class="p">)</span>
@@ -652,33 +652,33 @@
 <div class="viewcode-block" id="plot_radiusdistrib">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/read_initsuperdrops.html#cleopy.initsuperdropsbinary_src.read_initsuperdrops.plot_radiusdistrib">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">plot_radiusdistrib</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">hedgs</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">xi</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;get and plotthe superdroplet radius in each log10(r)</span>
-<span class="sd">    bin and as a scatter on a twinx axis with their multiplicities&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""get and plotthe superdroplet radius in each log10(r)</span>
+<span class="sd">    bin and as a scatter on a twinx axis with their multiplicities"""</span>
 
-    <span class="n">l1</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">radius</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">,</span> <span class="n">xi</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;multiplicities&quot;</span><span class="p">)</span>
+    <span class="n">l1</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">radius</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">,</span> <span class="n">xi</span><span class="p">,</span> <span class="n">zorder</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"multiplicities"</span><span class="p">)</span>
 
     <span class="n">ax2</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
     <span class="n">hist</span><span class="p">,</span> <span class="n">hedgs</span><span class="p">,</span> <span class="n">hwdths</span><span class="p">,</span> <span class="n">hcens</span> <span class="o">=</span> <span class="n">log10r_frequency_distribution</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">hedgs</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
     <span class="n">l2</span> <span class="o">=</span> <span class="n">ax2</span><span class="o">.</span><span class="n">step</span><span class="p">(</span>
         <span class="n">hcens</span><span class="p">,</span>
         <span class="n">hist</span><span class="p">,</span>
-        <span class="n">where</span><span class="o">=</span><span class="s2">&quot;mid&quot;</span><span class="p">,</span>
+        <span class="n">where</span><span class="o">=</span><span class="s2">"mid"</span><span class="p">,</span>
         <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
         <span class="n">zorder</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;grey&quot;</span><span class="p">,</span>
-        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;number distribution&quot;</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">"grey"</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">"number distribution"</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;radius, r, /</span><span class="se">\u03BC</span><span class="s2">m&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">"log"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"radius, r, /</span><span class="se">\u03BC</span><span class="s2">m"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s2">"log"</span><span class="p">)</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;superdroplet multiplicity&quot;</span><span class="p">)</span>
-    <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;superdroplet number distribution&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"superdroplet multiplicity"</span><span class="p">)</span>
+    <span class="n">ax2</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"superdroplet number distribution"</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_legend</span><span class="p">():</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
-        <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower right&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">"lower left"</span><span class="p">)</span>
+        <span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">"lower right"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="p">[</span><span class="n">l1</span><span class="p">,</span> <span class="n">l2</span><span class="p">]</span></div>
 
@@ -687,18 +687,18 @@
 <div class="viewcode-block" id="plot_numconcdistrib">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/read_initsuperdrops.html#cleopy.initsuperdropsbinary_src.read_initsuperdrops.plot_numconcdistrib">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">plot_numconcdistrib</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">hedgs</span><span class="p">,</span> <span class="n">xi</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">vol</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;get and plot frequency of real droplets in each log10(r) bin&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""get and plot frequency of real droplets in each log10(r) bin"""</span>
 
     <span class="n">wghts</span> <span class="o">=</span> <span class="n">xi</span> <span class="o">/</span> <span class="n">vol</span> <span class="o">/</span> <span class="mf">1e6</span>  <span class="c1"># [cm^-3]</span>
     <span class="n">hist</span><span class="p">,</span> <span class="n">hedgs</span><span class="p">,</span> <span class="n">hwdths</span><span class="p">,</span> <span class="n">hcens</span> <span class="o">=</span> <span class="n">log10r_frequency_distribution</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">hedgs</span><span class="p">,</span> <span class="n">wghts</span><span class="p">)</span>
 
-    <span class="n">line</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">hcens</span><span class="p">,</span> <span class="n">hist</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;binned distribution&quot;</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s2">&quot;mid&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;radius, r, /</span><span class="se">\u03BC</span><span class="s2">m&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;real droplet number</span><span class="se">\n</span><span class="s2">concentration / cm$^{-3}$&quot;</span><span class="p">)</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">hcens</span><span class="p">,</span> <span class="n">hist</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"binned distribution"</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s2">"mid"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">"log"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"radius, r, /</span><span class="se">\u03BC</span><span class="s2">m"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"real droplet number</span><span class="se">\n</span><span class="s2">concentration / cm$^{-3}$"</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_legend</span><span class="p">():</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;lower left&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">"lower left"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">line</span></div>
 
@@ -707,15 +707,15 @@
 <div class="viewcode-block" id="plot_masssolutedistrib">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/read_initsuperdrops.html#cleopy.initsuperdropsbinary_src.read_initsuperdrops.plot_masssolutedistrib">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">plot_masssolutedistrib</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">hedgs</span><span class="p">,</span> <span class="n">xi</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">msol</span><span class="p">,</span> <span class="n">vol</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;get and plot frequency of real droplets in each log10(r) bin&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""get and plot frequency of real droplets in each log10(r) bin"""</span>
 
     <span class="n">wghts</span> <span class="o">=</span> <span class="n">msol</span> <span class="o">*</span> <span class="n">xi</span> <span class="o">/</span> <span class="n">vol</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">/</span> <span class="mf">1e6</span>  <span class="c1"># [g cm^-3]</span>
     <span class="n">hist</span><span class="p">,</span> <span class="n">hedgs</span><span class="p">,</span> <span class="n">hwdths</span><span class="p">,</span> <span class="n">hcens</span> <span class="o">=</span> <span class="n">log10r_frequency_distribution</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">hedgs</span><span class="p">,</span> <span class="n">wghts</span><span class="p">)</span>
 
-    <span class="n">line</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">hcens</span><span class="p">,</span> <span class="n">hist</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s2">&quot;mid&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;radius, r, /</span><span class="se">\u03BC</span><span class="s2">m&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;solute mass per unit volume / g cm$^{-3}$&quot;</span><span class="p">)</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">hcens</span><span class="p">,</span> <span class="n">hist</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s2">"mid"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">"log"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"radius, r, /</span><span class="se">\u03BC</span><span class="s2">m"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"solute mass per unit volume / g cm$^{-3}$"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">line</span></div>
 
@@ -724,16 +724,16 @@
 <div class="viewcode-block" id="plot_totmassdistrib">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/read_initsuperdrops.html#cleopy.initsuperdropsbinary_src.read_initsuperdrops.plot_totmassdistrib">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">plot_totmassdistrib</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">hedgs</span><span class="p">,</span> <span class="n">xi</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">msol</span><span class="p">,</span> <span class="n">vol</span><span class="p">,</span> <span class="n">RHO_L</span><span class="p">,</span> <span class="n">RHO_SOL</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;get and plot frequency of real droplets in each log10(r) bin&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""get and plot frequency of real droplets in each log10(r) bin"""</span>
 
     <span class="n">mass</span> <span class="o">=</span> <span class="n">totmass</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">msol</span><span class="p">,</span> <span class="n">RHO_L</span><span class="p">,</span> <span class="n">RHO_SOL</span><span class="p">)</span>
     <span class="n">wghts</span> <span class="o">=</span> <span class="n">mass</span> <span class="o">*</span> <span class="n">xi</span> <span class="o">/</span> <span class="n">vol</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">/</span> <span class="mf">1e6</span>  <span class="c1"># [g cm^-3]</span>
     <span class="n">hist</span><span class="p">,</span> <span class="n">hedgs</span><span class="p">,</span> <span class="n">hwdths</span><span class="p">,</span> <span class="n">hcens</span> <span class="o">=</span> <span class="n">log10r_frequency_distribution</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">hedgs</span><span class="p">,</span> <span class="n">wghts</span><span class="p">)</span>
 
-    <span class="n">line</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">hcens</span><span class="p">,</span> <span class="n">hist</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s2">&quot;mid&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;radius, r, /</span><span class="se">\u03BC</span><span class="s2">m&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;droplet mass per unit volume / g cm$^{-3}$&quot;</span><span class="p">)</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">hcens</span><span class="p">,</span> <span class="n">hist</span><span class="p">,</span> <span class="n">where</span><span class="o">=</span><span class="s2">"mid"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">"log"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"radius, r, /</span><span class="se">\u03BC</span><span class="s2">m"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"droplet mass per unit volume / g cm$^{-3}$"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">line</span></div>
 
@@ -742,12 +742,12 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">scatter_totmass_solutemass</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">msol</span><span class="p">,</span> <span class="n">RHO_L</span><span class="p">,</span> <span class="n">RHO_SOL</span><span class="p">):</span>
     <span class="n">mass</span> <span class="o">=</span> <span class="n">totmass</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">msol</span><span class="p">,</span> <span class="n">RHO_L</span><span class="p">,</span> <span class="n">RHO_SOL</span><span class="p">)</span>
 
-    <span class="n">line</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">mass</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">msol</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">mass</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">msol</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">"x"</span><span class="p">)</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;total mass / g&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;solute mass / g&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">"log"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s2">"log"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"total mass / g"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"solute mass / g"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">line</span>
 
@@ -778,9 +778,9 @@
     <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">coord3</span><span class="p">):</span>
         <span class="n">line</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">radius</span> <span class="o">*</span> <span class="mf">1e6</span><span class="p">,</span> <span class="n">coord3</span><span class="p">)</span>
 
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;radius, r, /</span><span class="se">\u03BC</span><span class="s2">m&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;superdroplet coord&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">coordnum</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; / m&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">"log"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"radius, r, /</span><span class="se">\u03BC</span><span class="s2">m"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">"superdroplet coord"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">coordnum</span><span class="p">)</span> <span class="o">+</span> <span class="s2">" / m"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">line</span>
 
@@ -797,9 +797,9 @@
     <span class="n">savefig</span><span class="p">,</span>
     <span class="n">savelabel</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;plot initial superdroplet mass distributions</span>
+<span class="w">    </span><span class="sd">"""plot initial superdroplet mass distributions</span>
 <span class="sd">    from initsupersfile binary of every gridbox with index</span>
-<span class="sd">    in gbx2plts&quot;&quot;&quot;</span>
+<span class="sd">    in gbx2plts"""</span>
 
     <span class="n">gbxvols</span> <span class="o">=</span> <span class="n">get_gbxvols_from_gridfile</span><span class="p">(</span>
         <span class="n">grid_filename</span><span class="p">,</span> <span class="n">constants_filename</span><span class="o">=</span><span class="n">constants_filename</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">False</span>
@@ -811,31 +811,31 @@
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gbxs2plt</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
         <span class="n">gbxidxs</span> <span class="o">=</span> <span class="p">[</span><span class="n">gbxs2plt</span><span class="p">]</span>
-        <span class="n">savename</span> <span class="o">=</span> <span class="s2">&quot;initGBx&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">gbxs2plt</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;_dropletmasses&quot;</span> <span class="o">+</span> <span class="n">savelabel</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span>
-    <span class="k">elif</span> <span class="n">gbxs2plt</span> <span class="o">==</span> <span class="s2">&quot;all&quot;</span><span class="p">:</span>
+        <span class="n">savename</span> <span class="o">=</span> <span class="s2">"initGBx"</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">gbxs2plt</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"_dropletmasses"</span> <span class="o">+</span> <span class="n">savelabel</span> <span class="o">+</span> <span class="s2">".png"</span>
+    <span class="k">elif</span> <span class="n">gbxs2plt</span> <span class="o">==</span> <span class="s2">"all"</span><span class="p">:</span>
         <span class="n">gbxidxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">attrs</span><span class="o">.</span><span class="n">sdgbxindex</span><span class="p">)</span>
-        <span class="n">savename</span> <span class="o">=</span> <span class="s2">&quot;initallGBxs_dropletmasses&quot;</span> <span class="o">+</span> <span class="n">savelabel</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span>
+        <span class="n">savename</span> <span class="o">=</span> <span class="s2">"initallGBxs_dropletmasses"</span> <span class="o">+</span> <span class="n">savelabel</span> <span class="o">+</span> <span class="s2">".png"</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">gbxidxs</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">g</span><span class="p">)</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">gbxs2plt</span><span class="p">]</span>
-        <span class="n">savename</span> <span class="o">=</span> <span class="s2">&quot;initGBxs_dropletmasses&quot;</span> <span class="o">+</span> <span class="n">savelabel</span> <span class="o">+</span> <span class="s2">&quot;.png&quot;</span>
+        <span class="n">savename</span> <span class="o">=</span> <span class="s2">"initGBxs_dropletmasses"</span> <span class="o">+</span> <span class="n">savelabel</span> <span class="o">+</span> <span class="s2">".png"</span>
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span><span class="p">,</span> <span class="n">lines</span> <span class="o">=</span> <span class="n">plot_massdistribs</span><span class="p">(</span>
-        <span class="n">attrs</span><span class="p">,</span> <span class="n">gbxvols</span><span class="p">,</span> <span class="n">gbxidxs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;RHO_L&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;RHO_SOL&quot;</span><span class="p">]</span>
+        <span class="n">attrs</span><span class="p">,</span> <span class="n">gbxvols</span><span class="p">,</span> <span class="n">gbxidxs</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"RHO_L"</span><span class="p">],</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"RHO_SOL"</span><span class="p">]</span>
     <span class="p">)</span>
 
     <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">savefig</span><span class="p">:</span>
         <span class="n">savename</span> <span class="o">=</span> <span class="n">savefigpath</span> <span class="o">/</span> <span class="n">savename</span>
-        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">savename</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Figure .png saved as: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">savename</span><span class="p">))</span></div>
+        <span class="n">fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">savename</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">"w"</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"png"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Figure .png saved as: "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">savename</span><span class="p">))</span></div>
 
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">plot_massdistribs</span><span class="p">(</span><span class="n">attrs</span><span class="p">,</span> <span class="n">gbxvols</span><span class="p">,</span> <span class="n">gbxidxs</span><span class="p">,</span> <span class="n">RHO_L</span><span class="p">,</span> <span class="n">RHO_SOL</span><span class="p">):</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;font.size&quot;</span><span class="p">:</span> <span class="mi">14</span><span class="p">})</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"font.size"</span><span class="p">:</span> <span class="mi">14</span><span class="p">})</span>
     <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">ncols</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">&quot;SDM Initial Superdroplet Mass Distributions&quot;</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s2">"SDM Initial Superdroplet Mass Distributions"</span><span class="p">)</span>
 
     <span class="c1"># create nbins evenly spaced in log10(r)</span>
     <span class="n">nbins</span> <span class="o">=</span> <span class="mi">20</span>
@@ -883,7 +883,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 31 July 2026</div>
+              Last updated on 17 August 2026</div>
           </div>
           <div class="right-details">
             

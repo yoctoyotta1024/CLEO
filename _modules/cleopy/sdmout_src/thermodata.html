@@ -367,7 +367,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cleopy.sdmout_src.thermodata</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Copyright (c) 2024 MPI-M, Clara Bayley</span>
 
 
@@ -378,12 +378,12 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
+<span class="sd">License: BSD 3-Clause "New" or "Revised" License</span>
 <span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
 <span class="sd">-----</span>
 <span class="sd">File Description:</span>
 <span class="sd">python class to handle thermodynamics and wind fields data from SDM zarr store in cartesian domain</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
@@ -394,8 +394,8 @@
 
 <span class="k">def</span><span class="w"> </span><span class="nf">thermotryopen_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;thermodynamic fields dataset: &quot;</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;zarr&quot;</span><span class="p">,</span> <span class="n">consolidated</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"thermodynamic fields dataset: "</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">"zarr"</span><span class="p">,</span> <span class="n">consolidated</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">dataset</span>
 
@@ -403,8 +403,8 @@
 <div class="viewcode-block" id="thermovar4d_fromzarr">
 <a class="viewcode-back" href="../../../cleopy/sdmout_src/thermodata.html#cleopy.sdmout_src.thermodata.thermovar4d_fromzarr">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;&#39; returns 4D variable with dims</span>
-<span class="sd">    [time, y, x, z] from zarr dataset &quot;ds&quot; &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""' returns 4D variable with dims</span>
+<span class="sd">    [time, y, x, z] from zarr dataset "ds" """</span>
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">reshape</span><span class="p">)</span></div>
 
@@ -417,20 +417,20 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">consts</span> <span class="o">=</span> <span class="n">consts</span>
 
         <span class="n">reshape</span> <span class="o">=</span> <span class="p">[</span><span class="n">ntime</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">ndims</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">press</span> <span class="o">=</span> <span class="n">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="s2">&quot;press&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">temp</span> <span class="o">=</span> <span class="n">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="s2">&quot;temp&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span> <span class="o">=</span> <span class="n">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="s2">&quot;qvap&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">qcond</span> <span class="o">=</span> <span class="n">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="s2">&quot;qcond&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">press</span> <span class="o">=</span> <span class="n">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="s2">"press"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temp</span> <span class="o">=</span> <span class="n">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="s2">"temp"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span> <span class="o">=</span> <span class="n">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="s2">"qvap"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qcond</span> <span class="o">=</span> <span class="n">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="s2">"qcond"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">potential_temp</span><span class="p">()</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">press_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;press&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span>  <span class="c1"># assumed probably hecto-pascals</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">temp_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;temp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span>  <span class="c1"># assumed probably kelvin</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">qvap_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;qvap&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span>  <span class="c1"># assumed probably g/Kg</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">qcond_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;qcond&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span>  <span class="c1"># assumed probably g/Kg</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">theta_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;temp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span>  <span class="c1"># assumed probably kelvin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">press_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">"press"</span><span class="p">]</span><span class="o">.</span><span class="n">units</span>  <span class="c1"># assumed probably hecto-pascals</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temp_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">"temp"</span><span class="p">]</span><span class="o">.</span><span class="n">units</span>  <span class="c1"># assumed probably kelvin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qvap_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">"qvap"</span><span class="p">]</span><span class="o">.</span><span class="n">units</span>  <span class="c1"># assumed probably g/Kg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qcond_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">"qcond"</span><span class="p">]</span><span class="o">.</span><span class="n">units</span>  <span class="c1"># assumed probably g/Kg</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">"temp"</span><span class="p">]</span><span class="o">.</span><span class="n">units</span>  <span class="c1"># assumed probably kelvin</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">potential_temp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;potential temperature, theta&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""potential temperature, theta"""</span>
 
         <span class="n">press</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">press</span> <span class="o">*</span> <span class="mi">100</span>  <span class="c1"># convert from hPa to Pa</span>
         <span class="n">qvap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span> <span class="o">/</span> <span class="mi">1000</span>  <span class="c1"># convert g/Kg to Kg/Kg</span>
@@ -438,56 +438,56 @@
         <span class="k">return</span> <span class="n">thermoeqns</span><span class="o">.</span><span class="n">dry_pot_temp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">,</span> <span class="n">press</span><span class="p">,</span> <span class="n">qvap</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">consts</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">saturationpressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;saturation pressure in hectoPascals&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""saturation pressure in hectoPascals"""</span>
 
         <span class="n">psat</span> <span class="o">=</span> <span class="n">thermoeqns</span><span class="o">.</span><span class="n">saturation_pressure</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">)</span>  <span class="c1"># [Pa]</span>
 
         <span class="k">return</span> <span class="n">psat</span> <span class="o">/</span> <span class="mi">100</span>  <span class="c1"># [hPa]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">vapourpressure</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;returns vapour pressure in hectoPascals&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""returns vapour pressure in hectoPascals"""</span>
 
         <span class="n">p_pascals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">press</span> <span class="o">*</span> <span class="mi">100</span>  <span class="c1"># convert from hPa to Pa</span>
         <span class="n">qvap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span> <span class="o">/</span> <span class="mi">1000</span>  <span class="c1"># convert g/Kg to Kg/Kg</span>
-        <span class="n">Mr_ratio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consts</span><span class="p">[</span><span class="s2">&quot;Mr_ratio&quot;</span><span class="p">]</span>
+        <span class="n">Mr_ratio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consts</span><span class="p">[</span><span class="s2">"Mr_ratio"</span><span class="p">]</span>
         <span class="n">pvap</span> <span class="o">=</span> <span class="n">thermoeqns</span><span class="o">.</span><span class="n">vapour_pressure</span><span class="p">(</span><span class="n">p_pascals</span><span class="p">,</span> <span class="n">qvap</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">)</span>  <span class="c1"># [Pa]</span>
 
         <span class="k">return</span> <span class="n">pvap</span> <span class="o">/</span> <span class="mi">100</span>  <span class="c1"># [hPa]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">relative_humidity</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;returns relative humidty and supersaturation&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""returns relative humidty and supersaturation"""</span>
 
         <span class="n">p_pascals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">press</span> <span class="o">*</span> <span class="mi">100</span>  <span class="c1"># convert from hPa to Pa</span>
         <span class="n">qvap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span> <span class="o">/</span> <span class="mi">1000</span>  <span class="c1"># convert g/Kg to Kg/Kg</span>
-        <span class="n">Mr_ratio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consts</span><span class="p">[</span><span class="s2">&quot;Mr_ratio&quot;</span><span class="p">]</span>
+        <span class="n">Mr_ratio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consts</span><span class="p">[</span><span class="s2">"Mr_ratio"</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">thermoeqns</span><span class="o">.</span><span class="n">relative_humidity</span><span class="p">(</span><span class="n">p_pascals</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">,</span> <span class="n">qvap</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">supersaturation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;returns relative humidty and supersaturation&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""returns relative humidty and supersaturation"""</span>
 
         <span class="n">p_pascals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">press</span> <span class="o">*</span> <span class="mi">100</span>  <span class="c1"># convert from hPa to Pa</span>
         <span class="n">qvap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span> <span class="o">/</span> <span class="mi">1000</span>  <span class="c1"># convert g/Kg to Kg/Kg</span>
-        <span class="n">Mr_ratio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consts</span><span class="p">[</span><span class="s2">&quot;Mr_ratio&quot;</span><span class="p">]</span>
+        <span class="n">Mr_ratio</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consts</span><span class="p">[</span><span class="s2">"Mr_ratio"</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">thermoeqns</span><span class="o">.</span><span class="n">supersaturation</span><span class="p">(</span><span class="n">p_pascals</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">,</span> <span class="n">qvap</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;press&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"press"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">press</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;temp&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"temp"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;qvap&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"qvap"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;qcond&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"qcond"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">qcond</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;theta&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"theta"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;relh&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"relh"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">relative_humidity</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;supersat&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"supersat"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">supersaturation</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">err</span> <span class="o">=</span> <span class="s2">&quot;no known return provided for &quot;</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s2">&quot; key&quot;</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="s2">"no known return provided for "</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s2">" key"</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
 
 
@@ -498,23 +498,23 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">consts</span> <span class="o">=</span> <span class="n">consts</span>
 
         <span class="n">reshape</span> <span class="o">=</span> <span class="p">[</span><span class="n">ntime</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">ndims</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wvel</span> <span class="o">=</span> <span class="n">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="s2">&quot;wvel&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">uvel</span> <span class="o">=</span> <span class="n">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="s2">&quot;uvel&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">vvel</span> <span class="o">=</span> <span class="n">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="s2">&quot;vvel&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wvel</span> <span class="o">=</span> <span class="n">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="s2">"wvel"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uvel</span> <span class="o">=</span> <span class="n">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="s2">"uvel"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vvel</span> <span class="o">=</span> <span class="n">thermovar4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">reshape</span><span class="p">,</span> <span class="s2">"vvel"</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">wvel_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;wvel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span>  <span class="c1"># probably hecto pascals</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">uvel_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;uvel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span>  <span class="c1"># probably hecto pascals</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">vvel_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;vvel&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span>  <span class="c1"># probably hecto pascals</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wvel_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">"wvel"</span><span class="p">]</span><span class="o">.</span><span class="n">units</span>  <span class="c1"># probably hecto pascals</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uvel_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">"uvel"</span><span class="p">]</span><span class="o">.</span><span class="n">units</span>  <span class="c1"># probably hecto pascals</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vvel_units</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="s2">"vvel"</span><span class="p">]</span><span class="o">.</span><span class="n">units</span>  <span class="c1"># probably hecto pascals</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;wvel&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"wvel"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wvel</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;uvel&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"uvel"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">uvel</span>
-        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;vvel&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"vvel"</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">vvel</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">err</span> <span class="o">=</span> <span class="s2">&quot;no known return provided for &quot;</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s2">&quot; key&quot;</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="s2">"no known return provided for "</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s2">" key"</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
 </pre></div>
         </article>
@@ -534,7 +534,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 31 July 2026</div>
+              Last updated on 17 August 2026</div>
           </div>
           <div class="right-details">
             

@@ -367,7 +367,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cleopy.initsuperdropsbinary_src.crdgens</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">----- CLEO -----</span>
 <span class="sd">File: crdgens.py</span>
 <span class="sd">Project: initsuperdropsbinary_src</span>
@@ -375,7 +375,7 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
+<span class="sd">License: BSD 3-Clause "New" or "Revised" License</span>
 <span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
 <span class="sd">-----</span>
 <span class="sd">Copyright (c) 2023 MPI-M, Clara Bayley</span>
@@ -384,7 +384,7 @@
 <span class="sd">various ways of generating spatial</span>
 <span class="sd">coordinates for superdroplet initial</span>
 <span class="sd">conditions</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
@@ -394,8 +394,8 @@
 <div class="viewcode-block" id="nsupers_at_domain_base">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/crdgens.html#cleopy.initsuperdropsbinary_src.crdgens.nsupers_at_domain_base">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">nsupers_at_domain_base</span><span class="p">(</span><span class="n">grid_filename</span><span class="p">,</span> <span class="n">constants_filename</span><span class="p">,</span> <span class="n">nsupers</span><span class="p">,</span> <span class="n">zlim</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;create dict for sd initialisation where nsupers</span>
-<span class="sd">    only occur in gridboxes with upper bound &lt;= zlim&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""create dict for sd initialisation where nsupers</span>
+<span class="sd">    only occur in gridboxes with upper bound &lt;= zlim"""</span>
 
     <span class="n">COORD0</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">get_COORD0_from_constsfile</span><span class="p">(</span><span class="n">constants_filename</span><span class="p">)</span>
     <span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">read_dimless_gbxboundaries_binary</span><span class="p">(</span>
@@ -416,8 +416,8 @@
 <div class="viewcode-block" id="nsupers_at_domain_top">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/crdgens.html#cleopy.initsuperdropsbinary_src.crdgens.nsupers_at_domain_top">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">nsupers_at_domain_top</span><span class="p">(</span><span class="n">grid_filename</span><span class="p">,</span> <span class="n">constants_filename</span><span class="p">,</span> <span class="n">nsupers</span><span class="p">,</span> <span class="n">zlim</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;create dict for sd initialisation where nsupers</span>
-<span class="sd">    only occur in gridboxes with lower bound &gt;= zlim&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""create dict for sd initialisation where nsupers</span>
+<span class="sd">    only occur in gridboxes with lower bound &gt;= zlim"""</span>
 
     <span class="n">COORD0</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">get_COORD0_from_constsfile</span><span class="p">(</span><span class="n">constants_filename</span><span class="p">)</span>
     <span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">read_dimless_gbxboundaries_binary</span><span class="p">(</span>
@@ -438,15 +438,15 @@
 <div class="viewcode-block" id="MonoCoordGen">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/crdgens.html#cleopy.initsuperdropsbinary_src.crdgens.MonoCoordGen">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">MonoCoordGen</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;method to generate superdroplets with</span>
-<span class="sd">    coord all equal to coord0&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""method to generate superdroplets with</span>
+<span class="sd">    coord all equal to coord0"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coord0</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coord0</span> <span class="o">=</span> <span class="n">coord0</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nsupers</span><span class="p">,</span> <span class="n">coordrange</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns coord for nsupers all</span>
-<span class="sd">        with the value of coord0&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Returns coord for nsupers all</span>
+<span class="sd">        with the value of coord0"""</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">coord0</span> <span class="o">&gt;=</span> <span class="n">coordrange</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">coord0</span> <span class="o">&lt;</span> <span class="n">coordrange</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
             <span class="n">attrs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">nsupers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">coord0</span><span class="p">)</span>
@@ -460,16 +460,16 @@
 <div class="viewcode-block" id="SampleCoordGen">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/crdgens.html#cleopy.initsuperdropsbinary_src.crdgens.SampleCoordGen">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SampleCoordGen</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;method to generate &#39;nsupers&#39;</span>
-<span class="sd">    no. of superdroplets&#39; coord [m]</span>
-<span class="sd">    by sampling in range bewteen coordspan&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""method to generate 'nsupers'</span>
+<span class="sd">    no. of superdroplets' coord [m]</span>
+<span class="sd">    by sampling in range bewteen coordspan"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">random</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">random</span> <span class="o">=</span> <span class="n">random</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nsupers</span><span class="p">,</span> <span class="n">coordrange</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns coord3 for nsupers</span>
-<span class="sd">        sampled from coord3span [m]&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Returns coord3 for nsupers</span>
+<span class="sd">        sampled from coord3span [m]"""</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">random</span><span class="p">:</span>
             <span class="n">coord</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">coordrange</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">coordrange</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">nsupers</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -498,7 +498,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 31 July 2026</div>
+              Last updated on 17 August 2026</div>
           </div>
           <div class="right-details">
             

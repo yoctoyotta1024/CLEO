@@ -367,7 +367,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cleopy.sdmout_src.pyzarr</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Copyright (c) 2025 MPI-M, Clara Bayley</span>
 
 
@@ -378,13 +378,13 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
+<span class="sd">License: BSD 3-Clause "New" or "Revised" License</span>
 <span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
 <span class="sd">-----</span>
 <span class="sd">File Description:</span>
 <span class="sd">functions to return zarr data in useful formats for plotting e.g. for handling ragged arrays</span>
 <span class="sd">of superdroplet attributes</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -399,7 +399,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_rawdataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;zarr&quot;</span><span class="p">,</span> <span class="n">consolidated</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">"zarr"</span><span class="p">,</span> <span class="n">consolidated</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_rawdata4key</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
@@ -408,14 +408,14 @@
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_rawdata4raggedkey</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
     <span class="n">ds</span> <span class="o">=</span> <span class="n">get_rawdataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">ak</span><span class="o">.</span><span class="n">unflatten</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;raggedcount&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ak</span><span class="o">.</span><span class="n">unflatten</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">ds</span><span class="p">[</span><span class="s2">"raggedcount"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="raggedvar_fromzarr">
 <a class="viewcode-back" href="../../../cleopy/sdmout_src/pyzarr.html#cleopy.sdmout_src.pyzarr.raggedvar_fromzarr">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">raggedvar_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">raggedcount</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;returns ragged ak.Array dims [time, ragged]</span>
-<span class="sd">    for a variable &quot;var&quot; in zarr ds&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""returns ragged ak.Array dims [time, ragged]</span>
+<span class="sd">    for a variable "var" in zarr ds"""</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
         <span class="n">ds</span> <span class="o">=</span> <span class="n">get_rawdataset</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
 
@@ -426,8 +426,8 @@
 <div class="viewcode-block" id="var4d_fromzarr">
 <a class="viewcode-back" href="../../../cleopy/sdmout_src/pyzarr.html#cleopy.sdmout_src.pyzarr.var4d_fromzarr">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">var4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">ntime</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;&#39; returns 4D variable with dims</span>
-<span class="sd">    [time, y, x, z] from zarr dataset &quot;ds&quot; &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""' returns 4D variable with dims</span>
+<span class="sd">    [time, y, x, z] from zarr dataset "ds" """</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
         <span class="n">ds</span> <span class="o">=</span> <span class="n">get_rawdataset</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
 
@@ -439,8 +439,8 @@
 <div class="viewcode-block" id="var3d_fromzarr">
 <a class="viewcode-back" href="../../../cleopy/sdmout_src/pyzarr.html#cleopy.sdmout_src.pyzarr.var3d_fromzarr">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">var3d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;&#39; returns 3D variable with dims</span>
-<span class="sd">    [y, x, z] from zarr dataset &quot;ds&quot; &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""' returns 3D variable with dims</span>
+<span class="sd">    [y, x, z] from zarr dataset "ds" """</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
         <span class="n">ds</span> <span class="o">=</span> <span class="n">get_rawdataset</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
 
@@ -451,11 +451,11 @@
 <div class="viewcode-block" id="get_thermodata">
 <a class="viewcode-back" href="../../../cleopy/sdmout_src/pyzarr.html#cleopy.sdmout_src.pyzarr.get_thermodata">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_thermodata</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">ntime</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">consts</span><span class="p">,</span> <span class="n">getwinds</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;returns a thermodynamic data in a dictionary. The value under</span>
+<span class="w">    </span><span class="sd">"""returns a thermodynamic data in a dictionary. The value under</span>
 <span class="sd">    each key is the thermodynamics data in a 2D array</span>
-<span class="sd">    with dimensions [time, gridbox]. E.g. thermo[&quot;qvap&quot;][:,0] gives the</span>
-<span class="sd">    timeseries of qvap for the 0th gridbox. thermo[&quot;qvap][0] gives</span>
-<span class="sd">    the qvap of all gridboxes at the 0th output time&quot;&quot;&quot;</span>
+<span class="sd">    with dimensions [time, gridbox]. E.g. thermo["qvap"][:,0] gives the</span>
+<span class="sd">    timeseries of qvap for the 0th gridbox. thermo["qvap][0] gives</span>
+<span class="sd">    the qvap of all gridboxes at the 0th output time"""</span>
 
     <span class="n">thermo</span> <span class="o">=</span> <span class="n">thermodata</span><span class="o">.</span><span class="n">Thermodata</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">ntime</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">consts</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">getwinds</span><span class="p">:</span>
@@ -479,39 +479,39 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_rainmassmoms</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">ntime</span><span class="p">,</span> <span class="n">ndims</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">massmoms</span><span class="o">.</span><span class="n">MassMoms</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">ntime</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">lab</span><span class="o">=</span><span class="s2">&quot;_raindrops&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">massmoms</span><span class="o">.</span><span class="n">MassMoms</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">ntime</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">lab</span><span class="o">=</span><span class="s2">"_raindrops"</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_gbxindex</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">ndims</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">var3d_fromzarr</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="s2">&quot;gbxindex&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">var3d_fromzarr</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="s2">"gbxindex"</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_totnsupers</span><span class="p">(</span><span class="n">dataset</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
         <span class="n">dataset</span> <span class="o">=</span> <span class="n">get_rawdataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;totnsupers&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="k">return</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">"totnsupers"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;raggedcount&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+        <span class="k">return</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">"raggedcount"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_nsupers</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">ntime</span><span class="p">,</span> <span class="n">ndims</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">var4d_fromzarr</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">ntime</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="s2">&quot;nsupers&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">var4d_fromzarr</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">ntime</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="s2">"nsupers"</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="surfaceprecip_estimate">
 <a class="viewcode-back" href="../../../cleopy/sdmout_src/pyzarr.html#cleopy.sdmout_src.pyzarr.surfaceprecip_estimate">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">surfaceprecip_estimate</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">gbxs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;use last radius of SDs before they leave the domain to</span>
+<span class="w">    </span><span class="sd">"""use last radius of SDs before they leave the domain to</span>
 <span class="sd">    estimate the volume of precipitation at each timestep.</span>
 <span class="sd">    Values should be approx. equal to sum over gbxs (multiplied</span>
-<span class="sd">    by area_gbx/area_domain) of logbook values for precip&quot;&quot;&quot;</span>
+<span class="sd">    by area_gbx/area_domain) of logbook values for precip"""</span>
 
     <span class="n">ds</span> <span class="o">=</span> <span class="n">get_rawdataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
 
-    <span class="n">sdId</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">unflatten</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="s2">&quot;sdId&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;raggedcount&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-    <span class="n">radius</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">unflatten</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="s2">&quot;radius&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;raggedcount&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-    <span class="n">xi</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">unflatten</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="s2">&quot;xi&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">ds</span><span class="p">[</span><span class="s2">&quot;raggedcount&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+    <span class="n">sdId</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">unflatten</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="s2">"sdId"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">ds</span><span class="p">[</span><span class="s2">"raggedcount"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+    <span class="n">radius</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">unflatten</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="s2">"radius"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">ds</span><span class="p">[</span><span class="s2">"raggedcount"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+    <span class="n">xi</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">unflatten</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="s2">"xi"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">ds</span><span class="p">[</span><span class="s2">"raggedcount"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
 
     <span class="n">r3sum</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">ti</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
@@ -529,9 +529,9 @@
         <span class="mi">4</span> <span class="o">/</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">r3sum</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1e18</span><span class="p">)</span>
     <span class="p">)</span>  <span class="c1"># volume of water that left domain [m^3]</span>
 
-    <span class="n">domainy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">gbxs</span><span class="p">[</span><span class="s2">&quot;yhalf&quot;</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">gbxs</span><span class="p">[</span><span class="s2">&quot;yhalf&quot;</span><span class="p">])</span>  <span class="c1"># [m]</span>
-    <span class="n">domainx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">gbxs</span><span class="p">[</span><span class="s2">&quot;xhalf&quot;</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">gbxs</span><span class="p">[</span><span class="s2">&quot;xhalf&quot;</span><span class="p">])</span>  <span class="c1"># [m]</span>
-    <span class="n">deltat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span> <span class="o">/</span> <span class="mi">60</span>  <span class="c1"># [hrs]</span>
+    <span class="n">domainy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">gbxs</span><span class="p">[</span><span class="s2">"yhalf"</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">gbxs</span><span class="p">[</span><span class="s2">"yhalf"</span><span class="p">])</span>  <span class="c1"># [m]</span>
+    <span class="n">domainx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">gbxs</span><span class="p">[</span><span class="s2">"xhalf"</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">gbxs</span><span class="p">[</span><span class="s2">"xhalf"</span><span class="p">])</span>  <span class="c1"># [m]</span>
+    <span class="n">deltat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="s2">"time"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">/</span> <span class="mi">60</span> <span class="o">/</span> <span class="mi">60</span>  <span class="c1"># [hrs]</span>
     <span class="n">preciprate</span> <span class="o">=</span> <span class="n">precipvol</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">/</span> <span class="p">(</span><span class="n">domainx</span> <span class="o">*</span> <span class="n">domainy</span><span class="p">)</span> <span class="o">/</span> <span class="n">deltat</span>  <span class="c1"># [mm/hr]</span>
 
     <span class="n">precipaccum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">preciprate</span> <span class="o">*</span> <span class="n">deltat</span><span class="p">)</span>  <span class="c1"># [mm]</span>
@@ -558,7 +558,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 31 July 2026</div>
+              Last updated on 17 August 2026</div>
           </div>
           <div class="right-details">
             

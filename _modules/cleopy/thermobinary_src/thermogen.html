@@ -367,7 +367,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cleopy.thermobinary_src.thermogen</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Copyright (c) 2024 MPI-M, Clara Bayley</span>
 
 
@@ -378,12 +378,12 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
+<span class="sd">License: BSD 3-Clause "New" or "Revised" License</span>
 <span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
 <span class="sd">-----</span>
 <span class="sd">File Description:</span>
 <span class="sd">Various ways of generating fields for Temp, Pressure, Qvap and Qcond to read into Cleo</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">integrate</span>
@@ -397,19 +397,19 @@
     <span class="n">consts</span> <span class="o">=</span> <span class="n">cxx2py</span><span class="o">.</span><span class="n">read_cxxconsts_into_floats</span><span class="p">(</span><span class="n">constants_filename</span><span class="p">)</span>
     <span class="n">mconsts</span> <span class="o">=</span> <span class="n">cxx2py</span><span class="o">.</span><span class="n">derive_more_floats</span><span class="p">(</span><span class="n">consts</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">&quot;Mr_ratio&quot;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">"Mr_ratio"</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="saturation_press">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/thermogen.html#cleopy.thermobinary_src.thermogen.saturation_press">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">saturation_press</span><span class="p">(</span><span class="n">TEMP</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the equilibrium vapor pressure of water over</span>
+<span class="w">    </span><span class="sd">"""Calculate the equilibrium vapor pressure of water over</span>
 <span class="sd">    liquid water ie. the saturation pressure (psat) given the</span>
-<span class="sd">    temperature [K]. Equation from Bjorn Steven&#39;s &quot;make_tetens&quot;</span>
-<span class="sd">    function in module &quot;moist_thermodynamics.saturation_vapour_pressures&quot;</span>
-<span class="sd">    available on gitlab. Original paper &quot;Murray, F. W. On the</span>
+<span class="sd">    temperature [K]. Equation from Bjorn Steven's "make_tetens"</span>
+<span class="sd">    function in module "moist_thermodynamics.saturation_vapour_pressures"</span>
+<span class="sd">    available on gitlab. Original paper "Murray, F. W. On the</span>
 <span class="sd">    Computation of Saturation Vapor Pressure. Journal of Applied</span>
-<span class="sd">    Meteorology and Climatology 6, 203–204 (1967).&quot;&quot;&quot;</span>
+<span class="sd">    Meteorology and Climatology 6, 203–204 (1967)."""</span>
 
     <span class="n">Aconst</span> <span class="o">=</span> <span class="mf">17.4146</span>
     <span class="n">Bconst</span> <span class="o">=</span> <span class="mf">33.639</span>
@@ -417,7 +417,7 @@
     <span class="n">PREF</span> <span class="o">=</span> <span class="mf">611.655</span>  <span class="c1"># Triple point pressure [Pa] of water</span>
 
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">TEMP</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;psat ERROR: T must be larger than 0K.&quot;</span> <span class="o">+</span> <span class="s2">&quot; T = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">TEMP</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"psat ERROR: T must be larger than 0K."</span> <span class="o">+</span> <span class="s2">" T = "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">TEMP</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">PREF</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">Aconst</span> <span class="o">*</span> <span class="p">(</span><span class="n">TEMP</span> <span class="o">-</span> <span class="n">TREF</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">TEMP</span> <span class="o">-</span> <span class="n">Bconst</span><span class="p">))</span>  <span class="c1"># [Pa]</span></div>
 
@@ -426,9 +426,9 @@
 <div class="viewcode-block" id="relh2qvap">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/thermogen.html#cleopy.thermobinary_src.thermogen.relh2qvap">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">relh2qvap</span><span class="p">(</span><span class="n">press</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">relh</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;convert relative humidity [%] (relh) into vapour mass</span>
+<span class="w">    </span><span class="sd">"""convert relative humidity [%] (relh) into vapour mass</span>
 <span class="sd">    mixing ratio (qvap) given ambient temperature and pressure</span>
-<span class="sd">    and ratio of molecular masses: vapour/air&quot;&quot;&quot;</span>
+<span class="sd">    and ratio of molecular masses: vapour/air"""</span>
 
     <span class="n">vapourpress</span> <span class="o">=</span> <span class="n">saturation_press</span><span class="p">(</span><span class="n">temp</span><span class="p">)</span> <span class="o">*</span> <span class="n">relh</span> <span class="o">/</span> <span class="mf">100.0</span>  <span class="c1"># [Pa]</span>
 
@@ -450,34 +450,34 @@
 <div class="viewcode-block" id="qparams_to_qvap">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/thermogen.html#cleopy.thermobinary_src.thermogen.qparams_to_qvap">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">qparams_to_qvap</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">,</span> <span class="n">PRESS</span><span class="p">,</span> <span class="n">TEMP</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;returns qvaps given list of qvaps, supersaturation ratios</span>
-<span class="sd">    or relative humidities&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""returns qvaps given list of qvaps, supersaturation ratios</span>
+<span class="sd">    or relative humidities"""</span>
 
-    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;qvap&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">"qvap"</span><span class="p">:</span>
         <span class="n">qparams</span> <span class="o">=</span> <span class="n">params</span>
         <span class="k">return</span> <span class="n">qparams</span>
 
-    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;sratio&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">"sratio"</span><span class="p">:</span>
         <span class="n">qparams</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">sratio</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
             <span class="n">qparams</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sratio2qvap</span><span class="p">(</span><span class="n">sratio</span><span class="p">,</span> <span class="n">PRESS</span><span class="p">,</span> <span class="n">TEMP</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">qparams</span>
 
-    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;relh&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">"relh"</span><span class="p">:</span>
         <span class="n">qparams</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">for</span> <span class="n">relh</span> <span class="ow">in</span> <span class="n">params</span><span class="p">:</span>
             <span class="n">qparams</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">relh2qvap</span><span class="p">(</span><span class="n">PRESS</span><span class="p">,</span> <span class="n">TEMP</span><span class="p">,</span> <span class="n">relh</span><span class="p">,</span> <span class="n">Mr_ratio</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">qparams</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;valid method not given to generate qvap&quot;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"valid method not given to generate qvap"</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="ConstUniformThermo">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/thermogen.html#cleopy.thermobinary_src.thermogen.ConstUniformThermo">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ConstUniformThermo</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;create thermodynamics that&#39;s constant in time and uniform throughout the domain&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""create thermodynamics that's constant in time and uniform throughout the domain"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -486,7 +486,7 @@
         <span class="n">qvap</span><span class="p">,</span>
         <span class="n">qcond</span><span class="p">,</span>
         <span class="n">relh</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">constants_filename</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">constants_filename</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">PRESS</span> <span class="o">=</span> <span class="n">PRESS</span>  <span class="c1"># pressure [Pa]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">TEMP</span> <span class="o">=</span> <span class="n">TEMP</span>  <span class="c1"># temperature [T]</span>
@@ -507,10 +507,10 @@
         <span class="p">)</span>  <span class="c1"># = no. data for var defined at gridbox centers</span>
 
         <span class="n">THERMODATA</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;PRESS&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_cen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">PRESS</span><span class="p">),</span>
-            <span class="s2">&quot;TEMP&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_cen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEMP</span><span class="p">),</span>
-            <span class="s2">&quot;qvap&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_cen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span><span class="p">),</span>
-            <span class="s2">&quot;qcond&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_cen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qcond</span><span class="p">),</span>
+            <span class="s2">"PRESS"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_cen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">PRESS</span><span class="p">),</span>
+            <span class="s2">"TEMP"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_cen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEMP</span><span class="p">),</span>
+            <span class="s2">"qvap"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_cen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span><span class="p">),</span>
+            <span class="s2">"qcond"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_cen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qcond</span><span class="p">),</span>
         <span class="p">}</span>
 
         <span class="k">return</span> <span class="n">THERMODATA</span></div>
@@ -520,8 +520,8 @@
 <div class="viewcode-block" id="Simple2TierRelativeHumidity">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/thermogen.html#cleopy.thermobinary_src.thermogen.Simple2TierRelativeHumidity">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Simple2TierRelativeHumidity</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;create thermodynamics that&#39;s constant in time with (P,T,qc) uniform throughout the domain</span>
-<span class="sd">    and with relative humidity uniform above and below Zbase&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""create thermodynamics that's constant in time with (P,T,qc) uniform throughout the domain</span>
+<span class="sd">    and with relative humidity uniform above and below Zbase"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -542,12 +542,12 @@
 
         <span class="c1"># determine qvap [below, above] z (cloud) base</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Zbase</span> <span class="o">=</span> <span class="n">Zbase</span>
-        <span class="n">qvaps</span> <span class="o">=</span> <span class="n">qparams_to_qvap</span><span class="p">(</span><span class="n">qvapmethod</span><span class="p">,</span> <span class="n">qvapparams</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Mr_ratio&quot;</span><span class="p">],</span> <span class="n">PRESS</span><span class="p">,</span> <span class="n">TEMP</span><span class="p">)</span>
+        <span class="n">qvaps</span> <span class="o">=</span> <span class="n">qparams_to_qvap</span><span class="p">(</span><span class="n">qvapmethod</span><span class="p">,</span> <span class="n">qvapparams</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"Mr_ratio"</span><span class="p">],</span> <span class="n">PRESS</span><span class="p">,</span> <span class="n">TEMP</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">qvap_below</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvap_above</span> <span class="o">=</span> <span class="n">qvaps</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">RGAS_DRY</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;RGAS_DRY&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">RGAS_V</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;RGAS_V&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">RHO0</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;RHO0&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RGAS_DRY</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"RGAS_DRY"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RGAS_V</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"RGAS_V"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RHO0</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"RHO0"</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_qvap_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">zfulls</span><span class="p">):</span>
         <span class="n">qvap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">zfulls</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Zbase</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvap_above</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvap_below</span><span class="p">)</span>
@@ -557,7 +557,7 @@
 <div class="viewcode-block" id="Simple2TierRelativeHumidity.rhotilda">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/thermogen.html#cleopy.thermobinary_src.thermogen.Simple2TierRelativeHumidity.rhotilda">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">rhotilda</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ZCOORDS</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;returns dimensionless rho_dry profile for use in stream function&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""returns dimensionless rho_dry profile for use in stream function"""</span>
         <span class="n">PRESS</span><span class="p">,</span> <span class="n">TEMP</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hydrostatic_adiabatic_thermo</span><span class="p">(</span><span class="n">ZCOORDS</span><span class="p">)</span>
         <span class="n">RHO_DRY</span> <span class="o">=</span> <span class="n">PRESS</span> <span class="o">/</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">RGAS_DRY</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvap</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">RGAS_V</span><span class="p">)</span> <span class="o">*</span> <span class="n">TEMP</span><span class="p">)</span>
         <span class="n">rhotilda</span> <span class="o">=</span> <span class="n">RHO_DRY</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">RHO0</span>
@@ -574,10 +574,10 @@
             <span class="n">ntime</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">ndims</span><span class="p">)</span>
         <span class="p">)</span>  <span class="c1"># = no. data for var defined at gridbox centers</span>
         <span class="n">THERMODATA</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;PRESS&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_cen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">PRESS</span><span class="p">),</span>
-            <span class="s2">&quot;TEMP&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_cen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEMP</span><span class="p">),</span>
-            <span class="s2">&quot;qvap&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">qvap</span><span class="p">,</span> <span class="n">ntime</span><span class="p">),</span>
-            <span class="s2">&quot;qcond&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_cen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qcond</span><span class="p">),</span>
+            <span class="s2">"PRESS"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_cen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">PRESS</span><span class="p">),</span>
+            <span class="s2">"TEMP"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_cen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEMP</span><span class="p">),</span>
+            <span class="s2">"qvap"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">qvap</span><span class="p">,</span> <span class="n">ntime</span><span class="p">),</span>
+            <span class="s2">"qcond"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_cen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qcond</span><span class="p">),</span>
         <span class="p">}</span>
 
         <span class="k">return</span> <span class="n">THERMODATA</span></div>
@@ -587,11 +587,11 @@
 <div class="viewcode-block" id="DryHydrostaticAdiabatic2TierRelH">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/thermogen.html#cleopy.thermobinary_src.thermogen.DryHydrostaticAdiabatic2TierRelH">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">DryHydrostaticAdiabatic2TierRelH</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;create thermodynamics that&#39;s constant in time and in hydrostatic equillibrium with</span>
+<span class="w">    </span><span class="sd">"""create thermodynamics that's constant in time and in hydrostatic equillibrium with</span>
 <span class="sd">    a dry adiabat accounting for the mass of water vapour in the air.</span>
 <span class="sd">    Equations derived from Arabas et al. 2015 (sect 2.1).</span>
 <span class="sd">    Relative humidity like for Simple2TierRelativeHumidity exceptional moist layer possible</span>
-<span class="sd">    to add within in a certain height range&quot;&quot;&quot;</span>
+<span class="sd">    to add within in a certain height range"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -616,21 +616,21 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Zbase</span> <span class="o">=</span> <span class="n">Zbase</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">qvapmethod</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvapparams</span> <span class="o">=</span> <span class="n">qvapmethod</span><span class="p">,</span> <span class="n">qvapparams</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">qvapz0</span> <span class="o">=</span> <span class="n">qparams_to_qvap</span><span class="p">(</span>
-            <span class="n">qvapmethod</span><span class="p">,</span> <span class="n">qvapparams</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Mr_ratio&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">PRESSz0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">THETA</span>
+            <span class="n">qvapmethod</span><span class="p">,</span> <span class="n">qvapparams</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"Mr_ratio"</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">PRESSz0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">THETA</span>
         <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">moistlayer</span> <span class="o">=</span> <span class="n">moistlayer</span>
 
         <span class="c1">### constants ###</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">GRAVG</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;G&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">CP_DRY</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;CP_DRY&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">RGAS_DRY</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;RGAS_DRY&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">RGAS_V</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;RGAS_V&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GRAVG</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"G"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CP_DRY</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"CP_DRY"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RGAS_DRY</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"RGAS_DRY"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RGAS_V</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"RGAS_V"</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">RC_DRY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">RGAS_DRY</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">CP_DRY</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">RCONST</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvapz0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">RGAS_V</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">RGAS_DRY</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">P1000</span> <span class="o">=</span> <span class="mi">100000</span>  <span class="c1"># P_1000 = 1000 hPa [Pa]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">CP0</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;CP0&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">RHO0</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;RHO0&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Mr_ratio</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Mr_ratio&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CP0</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"CP0"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RHO0</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"RHO0"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Mr_ratio</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"Mr_ratio"</span><span class="p">]</span>
 
         <span class="n">alpha</span> <span class="o">=</span> <span class="n">PRESSz0</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RCONST</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">P1000</span><span class="p">)</span>
         <span class="n">TEMPz0</span> <span class="o">=</span> <span class="n">THETA</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">RC_DRY</span><span class="p">)</span>  <span class="c1"># temperature at z=0m [K]</span>
@@ -640,8 +640,8 @@
 <div class="viewcode-block" id="DryHydrostaticAdiabatic2TierRelH.hydrostatic_adiabatic_profile">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/thermogen.html#cleopy.thermobinary_src.thermogen.DryHydrostaticAdiabatic2TierRelH.hydrostatic_adiabatic_profile">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">hydrostatic_adiabatic_profile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ZCOORDS</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;returns *profile* of density (not the density itself!)</span>
-<span class="sd">        rho = rhoprofile^((1-RC_DRY)/RC_DRY) = profile^pow&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""returns *profile* of density (not the density itself!)</span>
+<span class="sd">        rho = rhoprofile^((1-RC_DRY)/RC_DRY) = profile^pow"""</span>
         <span class="nb">pow</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">RC_DRY</span> <span class="o">-</span> <span class="mi">1</span>
 
         <span class="n">Aa</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvapz0</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">P1000</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">RC_DRY</span><span class="p">)</span>
@@ -668,7 +668,7 @@
 <div class="viewcode-block" id="DryHydrostaticAdiabatic2TierRelH.rhotilda">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/thermogen.html#cleopy.thermobinary_src.thermogen.DryHydrostaticAdiabatic2TierRelH.rhotilda">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">rhotilda</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ZCOORDS</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;returns dimensionless rho_dry profile for use in stream function&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""returns dimensionless rho_dry profile for use in stream function"""</span>
         <span class="n">PRESS</span><span class="p">,</span> <span class="n">TEMP</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hydrostatic_adiabatic_thermo</span><span class="p">(</span><span class="n">ZCOORDS</span><span class="p">)</span>
 
         <span class="n">RHO_DRY</span> <span class="o">=</span> <span class="n">PRESS</span> <span class="o">/</span> <span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">RGAS_DRY</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvapz0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">RGAS_V</span><span class="p">)</span> <span class="o">*</span> <span class="n">TEMP</span><span class="p">)</span>
@@ -685,10 +685,10 @@
         <span class="n">qvap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">zfulls</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">Zbase</span><span class="p">,</span> <span class="n">qvaps</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qvaps</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">moistlayer</span><span class="p">:</span>
-            <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">moistlayer</span><span class="p">[</span><span class="s2">&quot;z1&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">moistlayer</span><span class="p">[</span><span class="s2">&quot;z2&quot;</span><span class="p">]</span>
-            <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">moistlayer</span><span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">moistlayer</span><span class="p">[</span><span class="s2">&quot;x2&quot;</span><span class="p">]</span>
+            <span class="n">z1</span><span class="p">,</span> <span class="n">z2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">moistlayer</span><span class="p">[</span><span class="s2">"z1"</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">moistlayer</span><span class="p">[</span><span class="s2">"z2"</span><span class="p">]</span>
+            <span class="n">x1</span><span class="p">,</span> <span class="n">x2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">moistlayer</span><span class="p">[</span><span class="s2">"x1"</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">moistlayer</span><span class="p">[</span><span class="s2">"x2"</span><span class="p">]</span>
             <span class="n">mlqvap</span> <span class="o">=</span> <span class="n">sratio2qvap</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">moistlayer</span><span class="p">[</span><span class="s2">&quot;mlsratio&quot;</span><span class="p">],</span> <span class="n">PRESS</span><span class="p">,</span> <span class="n">TEMP</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mr_ratio</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">moistlayer</span><span class="p">[</span><span class="s2">"mlsratio"</span><span class="p">],</span> <span class="n">PRESS</span><span class="p">,</span> <span class="n">TEMP</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mr_ratio</span>
             <span class="p">)</span>
             <span class="n">moistregion</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="p">(</span><span class="n">zfulls</span> <span class="o">&gt;=</span> <span class="n">z1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">zfulls</span> <span class="o">&lt;</span> <span class="n">z2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">xfulls</span> <span class="o">&gt;=</span> <span class="n">x1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">xfulls</span> <span class="o">&lt;</span> <span class="n">x2</span><span class="p">)</span>
@@ -710,10 +710,10 @@
             <span class="n">ntime</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">ndims</span><span class="p">)</span>
         <span class="p">)</span>  <span class="c1"># = no. data for var defined at gridbox centers</span>
         <span class="n">THERMODATA</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;PRESS&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">PRESS</span><span class="p">,</span> <span class="n">ntime</span><span class="p">),</span>
-            <span class="s2">&quot;TEMP&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">TEMP</span><span class="p">,</span> <span class="n">ntime</span><span class="p">),</span>
-            <span class="s2">&quot;qvap&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">qvap</span><span class="p">,</span> <span class="n">ntime</span><span class="p">),</span>
-            <span class="s2">&quot;qcond&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_cen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qcond</span><span class="p">),</span>
+            <span class="s2">"PRESS"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">PRESS</span><span class="p">,</span> <span class="n">ntime</span><span class="p">),</span>
+            <span class="s2">"TEMP"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">TEMP</span><span class="p">,</span> <span class="n">ntime</span><span class="p">),</span>
+            <span class="s2">"qvap"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">qvap</span><span class="p">,</span> <span class="n">ntime</span><span class="p">),</span>
+            <span class="s2">"qcond"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_cen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qcond</span><span class="p">),</span>
         <span class="p">}</span>
 
         <span class="k">return</span> <span class="n">THERMODATA</span></div>
@@ -723,9 +723,9 @@
 <div class="viewcode-block" id="HydrostaticLapseRates">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/thermogen.html#cleopy.thermobinary_src.thermogen.HydrostaticLapseRates">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">HydrostaticLapseRates</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;create thermodynamics that&#39;s constant in time and in hydrostatic equillibrium and</span>
+<span class="w">    </span><span class="sd">"""create thermodynamics that's constant in time and in hydrostatic equillibrium and</span>
 <span class="sd">    following temperature and qvap (adiabats) with constant lapse rates above/below zbase.</span>
-<span class="sd">    Qcond is uniform and constant.&quot;&quot;&quot;</span>
+<span class="sd">    Qcond is uniform and constant."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -751,30 +751,30 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">qcond</span> <span class="o">=</span> <span class="n">qcond</span>  <span class="c1"># liquid water content [Kg/Kg]</span>
 
         <span class="n">inputs</span> <span class="o">=</span> <span class="n">thermoinputsdict</span><span class="p">(</span><span class="n">config_filename</span><span class="p">,</span> <span class="n">constants_filename</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">GRAVG</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;G&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">RGAS_DRY</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;RGAS_DRY&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Mr_ratio</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;Mr_ratio&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GRAVG</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"G"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RGAS_DRY</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"RGAS_DRY"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Mr_ratio</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"Mr_ratio"</span><span class="p">]</span>
 
 <div class="viewcode-block" id="HydrostaticLapseRates.temp1">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/thermogen.html#cleopy.thermobinary_src.thermogen.HydrostaticLapseRates.temp1">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">temp1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;note unit conversion of input lapse rates:</span>
-<span class="sd">        templapse rate = -dT/dz [K km^-1]  --&gt;  [K m^-1]&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""note unit conversion of input lapse rates:</span>
+<span class="sd">        templapse rate = -dT/dz [K km^-1]  --&gt;  [K m^-1]"""</span>
         <span class="n">temp1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEMPz0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEMPlapses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">z</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">temp1</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;TEMP &gt; 0.0K&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"TEMP &gt; 0.0K"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">temp1</span></div>
 
 
 <div class="viewcode-block" id="HydrostaticLapseRates.temp2">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/thermogen.html#cleopy.thermobinary_src.thermogen.HydrostaticLapseRates.temp2">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">temp2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;note unit conversion of input lapse rates:</span>
-<span class="sd">        templapse rate = -dT/dz [K km^-1]  --&gt;  [K m^-1]&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""note unit conversion of input lapse rates:</span>
+<span class="sd">        templapse rate = -dT/dz [K km^-1]  --&gt;  [K m^-1]"""</span>
         <span class="n">T_Zbase</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp1</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Zbase</span><span class="p">)</span>  <span class="c1"># TEMP at Zbase</span>
         <span class="n">temp2</span> <span class="o">=</span> <span class="n">T_Zbase</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEMPlapses</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Zbase</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">temp2</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;TEMP &gt; 0.0K&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"TEMP &gt; 0.0K"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">temp2</span></div>
 
 
@@ -785,7 +785,7 @@
 <div class="viewcode-block" id="HydrostaticLapseRates.press1">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/thermogen.html#cleopy.thermobinary_src.thermogen.HydrostaticLapseRates.press1">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">press1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;hydrostatic pressure for value z where z &lt;= self.Zbase&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""hydrostatic pressure for value z where z &lt;= self.Zbase"""</span>
         <span class="n">P0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PRESSz0</span>
         <span class="n">integral</span> <span class="o">=</span> <span class="n">integrate</span><span class="o">.</span><span class="n">quad</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp1</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">z</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">hydrostatic_pressure</span><span class="p">(</span><span class="n">P0</span><span class="p">,</span> <span class="n">integral</span><span class="p">)</span></div>
@@ -794,7 +794,7 @@
 <div class="viewcode-block" id="HydrostaticLapseRates.press2">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/thermogen.html#cleopy.thermobinary_src.thermogen.HydrostaticLapseRates.press2">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">press2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;hydrostatic pressure for value z where z &gt; self.Zbase&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""hydrostatic pressure for value z where z &gt; self.Zbase"""</span>
         <span class="n">P0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">press1</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Zbase</span><span class="p">)</span>
         <span class="n">integral</span> <span class="o">=</span> <span class="n">integrate</span><span class="o">.</span><span class="n">quad</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp2</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">Zbase</span><span class="p">,</span> <span class="n">z</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">hydrostatic_pressure</span><span class="p">(</span><span class="n">P0</span><span class="p">,</span> <span class="n">integral</span><span class="p">)</span></div>
@@ -803,26 +803,26 @@
 <div class="viewcode-block" id="HydrostaticLapseRates.qvap1">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/thermogen.html#cleopy.thermobinary_src.thermogen.HydrostaticLapseRates.qvap1">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">qvap1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;note unit conversion of input lapse rates:</span>
-<span class="sd">        qvaplapse rate = -dqvap/dz [g/Kg km^-1]  --&gt;  [m^-1]&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""note unit conversion of input lapse rates:</span>
+<span class="sd">        qvaplapse rate = -dqvap/dz [g/Kg km^-1]  --&gt;  [m^-1]"""</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvaplapses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;saturated&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvaplapses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"saturated"</span><span class="p">:</span>
             <span class="n">sratio</span> <span class="o">=</span> <span class="mf">1.001</span>
             <span class="n">qvap1</span> <span class="o">=</span> <span class="n">sratio2qvap</span><span class="p">(</span><span class="n">sratio</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">press2</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp2</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mr_ratio</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">qvap1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvapz0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvaplapses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e6</span> <span class="o">*</span> <span class="n">z</span>
 
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">qvap1</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;TEMP &gt; 0.0K&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"TEMP &gt; 0.0K"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">qvap1</span></div>
 
 
 <div class="viewcode-block" id="HydrostaticLapseRates.qvap2">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/thermogen.html#cleopy.thermobinary_src.thermogen.HydrostaticLapseRates.qvap2">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">qvap2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;note unit conversion of input lapse rates:</span>
-<span class="sd">        qvaplapse rate = -dqvap/dz [g/Kg km^-1]  --&gt;  [m^-1]&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvaplapses</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;saturated&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""note unit conversion of input lapse rates:</span>
+<span class="sd">        qvaplapse rate = -dqvap/dz [g/Kg km^-1]  --&gt;  [m^-1]"""</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvaplapses</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"saturated"</span><span class="p">:</span>
             <span class="n">sratio</span> <span class="o">=</span> <span class="mf">1.001</span>
             <span class="n">qvap2</span> <span class="o">=</span> <span class="n">sratio2qvap</span><span class="p">(</span><span class="n">sratio</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">press2</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp2</span><span class="p">(</span><span class="n">z</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">Mr_ratio</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -830,7 +830,7 @@
             <span class="n">qvap2</span> <span class="o">=</span> <span class="n">qvap_Zbase</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvaplapses</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e6</span> <span class="o">*</span> <span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Zbase</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">qvap2</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;TEMP &gt; 0.0K&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"TEMP &gt; 0.0K"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">qvap2</span></div>
 
 
@@ -873,10 +873,10 @@
             <span class="n">ntime</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">ndims</span><span class="p">)</span>
         <span class="p">)</span>  <span class="c1"># = no. data for var defined at gridbox centers</span>
         <span class="n">THERMODATA</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;PRESS&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">PRESS</span><span class="p">,</span> <span class="n">ntime</span><span class="p">),</span>
-            <span class="s2">&quot;TEMP&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">TEMP</span><span class="p">,</span> <span class="n">ntime</span><span class="p">),</span>
-            <span class="s2">&quot;qvap&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">qvap</span><span class="p">,</span> <span class="n">ntime</span><span class="p">),</span>
-            <span class="s2">&quot;qcond&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_cen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qcond</span><span class="p">),</span>
+            <span class="s2">"PRESS"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">PRESS</span><span class="p">,</span> <span class="n">ntime</span><span class="p">),</span>
+            <span class="s2">"TEMP"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">TEMP</span><span class="p">,</span> <span class="n">ntime</span><span class="p">),</span>
+            <span class="s2">"qvap"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">qvap</span><span class="p">,</span> <span class="n">ntime</span><span class="p">),</span>
+            <span class="s2">"qcond"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">shape_cen</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">qcond</span><span class="p">),</span>
         <span class="p">}</span>
 
         <span class="k">return</span> <span class="n">THERMODATA</span></div>
@@ -899,7 +899,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 31 July 2026</div>
+              Last updated on 17 August 2026</div>
           </div>
           <div class="right-details">
             

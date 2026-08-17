@@ -367,7 +367,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cleopy.editconfigfile</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Copyright (c) 2025 MPI-M, Clara Bayley</span>
 
 
@@ -378,11 +378,11 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
+<span class="sd">License: BSD 3-Clause "New" or "Revised" License</span>
 <span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
 <span class="sd">-----</span>
 <span class="sd">File Description:</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">ruamel.yaml</span><span class="w"> </span><span class="kn">import</span> <span class="n">YAML</span>
 
@@ -390,8 +390,8 @@
 <div class="viewcode-block" id="update_param">
 <a class="viewcode-back" href="../../cleopy/editconfigfile.html#cleopy.editconfigfile.update_param">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">update_param</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">new_value</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Function to recursively searches for &#39;param&#39; key in YAML node</span>
-<span class="sd">    and updates it&#39;s value to with &#39;new_value&#39; when found&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Function to recursively searches for 'param' key in YAML node</span>
+<span class="sd">    and updates it's value to with 'new_value' when found"""</span>
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">node</span><span class="p">:</span>
@@ -414,24 +414,24 @@
 <div class="viewcode-block" id="edit_config_params">
 <a class="viewcode-back" href="../../cleopy/editconfigfile.html#cleopy.editconfigfile.edit_config_params">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">edit_config_params</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">params2change</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;rewrites config YAML file with key,value pairs listed in params2change updated to new values</span>
-<span class="sd">    whilst preserving original YAML file&#39;s formatting and comments etc.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""rewrites config YAML file with key,value pairs listed in params2change updated to new values</span>
+<span class="sd">    whilst preserving original YAML file's formatting and comments etc."""</span>
 
     <span class="n">yaml</span> <span class="o">=</span> <span class="n">YAML</span><span class="p">()</span>
 
     <span class="c1"># Load the YAML file</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 
     <span class="c1"># Update the parameters from the YAML file</span>
     <span class="k">for</span> <span class="n">param</span><span class="p">,</span> <span class="n">new_value</span> <span class="ow">in</span> <span class="n">params2change</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">is_success</span> <span class="o">=</span> <span class="n">update_param</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">new_value</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">is_success</span><span class="p">:</span>
-            <span class="n">errmsg</span> <span class="o">=</span> <span class="n">param</span> <span class="o">+</span> <span class="s2">&quot; could not be updated to new value: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">new_value</span><span class="p">)</span>
+            <span class="n">errmsg</span> <span class="o">=</span> <span class="n">param</span> <span class="o">+</span> <span class="s2">" could not be updated to new value: "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">new_value</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">errmsg</span><span class="p">)</span>
 
     <span class="c1"># Overwrite the YAML file</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"w"</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
         <span class="n">yaml</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span></div>
 
 </pre></div>
@@ -452,7 +452,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 31 July 2026</div>
+              Last updated on 17 August 2026</div>
           </div>
           <div class="right-details">
             

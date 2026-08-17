@@ -367,7 +367,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cleopy.initsuperdropsbinary_src.rgens</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Copyright (c) 2024 MPI-M, Clara Bayley</span>
 
 
@@ -378,12 +378,12 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
+<span class="sd">License: BSD 3-Clause "New" or "Revised" License</span>
 <span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
 <span class="sd">-----</span>
 <span class="sd">File Description:</span>
 <span class="sd">various ways of generatring radii of superdroplets for their initial conditions</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
@@ -391,15 +391,15 @@
 <div class="viewcode-block" id="MonoAttrGen">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/rgens.html#cleopy.initsuperdropsbinary_src.rgens.MonoAttrGen">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">MonoAttrGen</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;method to generate superdroplets with an</span>
-<span class="sd">    attribute all equal to attr0&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""method to generate superdroplets with an</span>
+<span class="sd">    attribute all equal to attr0"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr0</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">attr0</span> <span class="o">=</span> <span class="n">attr0</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nsupers</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns attribute for nsupers all</span>
-<span class="sd">        with the value of attr0&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Returns attribute for nsupers all</span>
+<span class="sd">        with the value of attr0"""</span>
 
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">nsupers</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
             <span class="n">nsupers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">nsupers</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -413,25 +413,25 @@
 <div class="viewcode-block" id="SampleLog10RadiiGen">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/rgens.html#cleopy.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SampleLog10RadiiGen</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;method to generate superdroplet radii by randomly</span>
+<span class="w">    </span><span class="sd">"""method to generate superdroplet radii by randomly</span>
 <span class="sd">    sampling from bins that are linearly spaced in log10(r)</span>
-<span class="sd">    between rspan[0] and rspan[1]&quot;&quot;&quot;</span>
+<span class="sd">    between rspan[0] and rspan[1]"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rspan</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rspan</span> <span class="o">=</span> <span class="n">rspan</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nsupers</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns radii for nsupers sampled from rspan [m]&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Returns radii for nsupers sampled from rspan [m]"""</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_radiisample</span><span class="p">(</span><span class="n">nsupers</span><span class="p">)</span>  <span class="c1"># units [m]</span>
 
 <div class="viewcode-block" id="SampleLog10RadiiGen.generate_radiisample">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/rgens.html#cleopy.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.generate_radiisample">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_radiisample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbins</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Divide rspan [m] into evenly spaced bins in log10(r).</span>
+<span class="w">        </span><span class="sd">"""Divide rspan [m] into evenly spaced bins in log10(r).</span>
 <span class="sd">        If edges=True, return values of radii at edges of bins.</span>
 <span class="sd">        Else sample each bin randomly to obtain the radius</span>
-<span class="sd">        of &#39;nsupers&#39; no. of superdroplets&quot;&quot;&quot;</span>
+<span class="sd">        of 'nsupers' no. of superdroplets"""</span>
 
         <span class="k">if</span> <span class="n">nbins</span><span class="p">:</span>
             <span class="n">log10redgs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
@@ -447,8 +447,8 @@
 <div class="viewcode-block" id="SampleLog10RadiiGen.randomlysample_log10rbins">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/rgens.html#cleopy.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.randomlysample_log10rbins">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">randomlysample_log10rbins</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nbins</span><span class="p">,</span> <span class="n">log10redgs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;given the bin edges, randomly sample each bin of</span>
-<span class="sd">        log10(radius /m) and return the resultant radii [m]&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""given the bin edges, randomly sample each bin of</span>
+<span class="sd">        log10(radius /m) and return the resultant radii [m]"""</span>
 
         <span class="n">log10r_binwidth</span> <span class="o">=</span> <span class="p">(</span><span class="n">log10redgs</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">log10redgs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="n">nbins</span>
 
@@ -478,7 +478,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 31 July 2026</div>
+              Last updated on 17 August 2026</div>
           </div>
           <div class="right-details">
             

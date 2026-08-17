@@ -367,7 +367,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cleopy.initsuperdropsbinary_src.create_initsuperdrops</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Copyright (c) 2024 MPI-M, Clara Bayley</span>
 
 
@@ -378,11 +378,11 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
+<span class="sd">License: BSD 3-Clause "New" or "Revised" License</span>
 <span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
 <span class="sd">-----</span>
 <span class="sd">File Description:</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">os.path</span><span class="w"> </span><span class="kn">import</span> <span class="n">isfile</span>
@@ -395,7 +395,7 @@
 <div class="viewcode-block" id="ManyAttrs">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/create_initsuperdrops.html#cleopy.initsuperdropsbinary_src.create_initsuperdrops.ManyAttrs">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ManyAttrs</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;store for lists of each attribute for all superdroplets&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""store for lists of each attribute for all superdroplets"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sdgbxindex</span> <span class="o">=</span> <span class="p">[]</span>
@@ -418,8 +418,8 @@
 <div class="viewcode-block" id="ManyAttrs.extend_attrlists">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/create_initsuperdrops.html#cleopy.initsuperdropsbinary_src.create_initsuperdrops.ManyAttrs.extend_attrlists">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">extend_attrlists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mia</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;use an instance of ManyAttrs (mia) to</span>
-<span class="sd">        extend lists in this instance&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""use an instance of ManyAttrs (mia) to</span>
+<span class="sd">        extend lists in this instance"""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sdgbxindex</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">mia</span><span class="o">.</span><span class="n">sdgbxindex</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">xi</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">mia</span><span class="o">.</span><span class="n">xi</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">mia</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span>
@@ -434,9 +434,9 @@
 <div class="viewcode-block" id="initsupers_inputsdict">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/create_initsuperdrops.html#cleopy.initsuperdropsbinary_src.create_initsuperdrops.initsupers_inputsdict">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">initsupers_inputsdict</span><span class="p">(</span><span class="n">config_filename</span><span class="p">,</span> <span class="n">constants_filename</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;create values from constants file &amp; config file</span>
+<span class="w">    </span><span class="sd">"""create values from constants file &amp; config file</span>
 <span class="sd">    required as inputs to create initial</span>
-<span class="sd">    superdroplet conditions&quot;&quot;&quot;</span>
+<span class="sd">    superdroplet conditions"""</span>
 
     <span class="n">consts</span> <span class="o">=</span> <span class="n">cxx2py</span><span class="o">.</span><span class="n">read_cxxconsts_into_floats</span><span class="p">(</span><span class="n">constants_filename</span><span class="p">)</span>
     <span class="n">mconsts</span> <span class="o">=</span> <span class="n">cxx2py</span><span class="o">.</span><span class="n">derive_more_floats</span><span class="p">(</span><span class="n">consts</span><span class="p">)</span>
@@ -444,14 +444,14 @@
 
     <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span>
         <span class="c1"># for creating SD attribute distirbutions</span>
-        <span class="s2">&quot;nspacedims&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;nspacedims&quot;</span><span class="p">]),</span>
-        <span class="s2">&quot;RHO_L&quot;</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;RHO_L&quot;</span><span class="p">],</span>  <span class="c1"># liquid density [Kg/m^3]</span>
-        <span class="s2">&quot;RHO_SOL&quot;</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;RHO_SOL&quot;</span><span class="p">],</span>  <span class="c1"># solute density [Kg/m^3]</span>
+        <span class="s2">"nspacedims"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">"nspacedims"</span><span class="p">]),</span>
+        <span class="s2">"RHO_L"</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">"RHO_L"</span><span class="p">],</span>  <span class="c1"># liquid density [Kg/m^3]</span>
+        <span class="s2">"RHO_SOL"</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">"RHO_SOL"</span><span class="p">],</span>  <span class="c1"># solute density [Kg/m^3]</span>
         <span class="c1"># for de-dimensionalising attributes</span>
-        <span class="s2">&quot;R0&quot;</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;R0&quot;</span><span class="p">],</span>  <span class="c1"># droplet radius lengthscale [m]</span>
-        <span class="s2">&quot;RHO0&quot;</span><span class="p">:</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">&quot;RHO0&quot;</span><span class="p">],</span>  <span class="c1"># characteristic density scale [Kg/m^3]</span>
-        <span class="s2">&quot;MASS0&quot;</span><span class="p">:</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">&quot;MASS0&quot;</span><span class="p">],</span>  <span class="c1"># characteristic mass scale [Kg]</span>
-        <span class="s2">&quot;COORD0&quot;</span><span class="p">:</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">&quot;COORD0&quot;</span><span class="p">],</span>  <span class="c1"># z coordinate lengthscale [m]</span>
+        <span class="s2">"R0"</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">"R0"</span><span class="p">],</span>  <span class="c1"># droplet radius lengthscale [m]</span>
+        <span class="s2">"RHO0"</span><span class="p">:</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">"RHO0"</span><span class="p">],</span>  <span class="c1"># characteristic density scale [Kg/m^3]</span>
+        <span class="s2">"MASS0"</span><span class="p">:</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">"MASS0"</span><span class="p">],</span>  <span class="c1"># characteristic mass scale [Kg]</span>
+        <span class="s2">"COORD0"</span><span class="p">:</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">"COORD0"</span><span class="p">],</span>  <span class="c1"># z coordinate lengthscale [m]</span>
     <span class="p">}</span>
 
     <span class="k">return</span> <span class="n">inputs</span></div>
@@ -461,32 +461,32 @@
 <div class="viewcode-block" id="is_sdgbxindex_correct">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/create_initsuperdrops.html#cleopy.initsuperdropsbinary_src.create_initsuperdrops.is_sdgbxindex_correct">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">is_sdgbxindex_correct</span><span class="p">(</span><span class="n">gridboxbounds</span><span class="p">,</span> <span class="n">coord3</span><span class="p">,</span> <span class="n">coord1</span><span class="p">,</span> <span class="n">coord2</span><span class="p">,</span> <span class="n">gbxindex</span><span class="p">,</span> <span class="n">sdgbxindex</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;rasises error if superdroplet coords [m] lie outside gridbox bounds [m]</span>
-<span class="sd">    or if gridbox index not equal to superdroplet&#39;s.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""rasises error if superdroplet coords [m] lie outside gridbox bounds [m]</span>
+<span class="sd">    or if gridbox index not equal to superdroplet's."""</span>
 
     <span class="n">errmsg</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">coord</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="n">coord3</span><span class="p">,</span> <span class="n">coord1</span><span class="p">,</span> <span class="n">coord2</span><span class="p">]):</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">coord</span> <span class="o">&lt;</span> <span class="n">gridboxbounds</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">i</span><span class="p">])</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
             <span class="n">errmsg</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;superdroplet coord&quot;</span>
+                <span class="s2">"superdroplet coord"</span>
                 <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="o">+</span> <span class="s2">&quot; below lower&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot; limit of gridbox it&#39;s associated with&quot;</span>
+                <span class="o">+</span> <span class="s2">" below lower"</span>
+                <span class="o">+</span> <span class="s2">" limit of gridbox it's associated with"</span>
             <span class="p">)</span>
         <span class="k">elif</span> <span class="p">(</span><span class="n">coord</span> <span class="o">&gt;=</span> <span class="n">gridboxbounds</span><span class="p">[</span><span class="mi">2</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
             <span class="n">errmsg</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;superdroplet coord&quot;</span>
+                <span class="s2">"superdroplet coord"</span>
                 <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="o">+</span> <span class="s2">&quot; above upper&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot; limit of gridbox it&#39;s associated with&quot;</span>
+                <span class="o">+</span> <span class="s2">" above upper"</span>
+                <span class="o">+</span> <span class="s2">" limit of gridbox it's associated with"</span>
             <span class="p">)</span>
     <span class="k">if</span> <span class="n">errmsg</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">errmsg</span><span class="p">)</span>
 
     <span class="k">elif</span> <span class="p">(</span><span class="n">sdgbxindex</span> <span class="o">!=</span> <span class="n">gbxindex</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
         <span class="n">errmsg</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;superdroplet gridbox index not the same as&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot; gridbox it should be associated with&quot;</span>
+            <span class="s2">"superdroplet gridbox index not the same as"</span>
+            <span class="o">+</span> <span class="s2">" gridbox it should be associated with"</span>
         <span class="p">)</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">errmsg</span><span class="p">)</span></div>
 
@@ -504,15 +504,15 @@
     <span class="n">numconc_tolerance</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
     <span class="n">isprint</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;use superdroplet attribute generator &quot;initattrsgen&quot;</span>
+<span class="w">    </span><span class="sd">"""use superdroplet attribute generator "initattrsgen"</span>
 <span class="sd">    and settings from config and consts files to</span>
-<span class="sd">    make dimensionless superdroplet attributes&quot;&quot;&quot;</span>
+<span class="sd">    make dimensionless superdroplet attributes"""</span>
 
     <span class="c1"># generate attributes</span>
     <span class="n">sdgbxindex</span> <span class="o">=</span> <span class="p">[</span><span class="n">gbxindex</span><span class="p">]</span> <span class="o">*</span> <span class="n">nsupers</span>
     <span class="n">xi</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">msol</span> <span class="o">=</span> <span class="n">initattrsgen</span><span class="o">.</span><span class="n">generate_attributes</span><span class="p">(</span>
         <span class="n">nsupers</span><span class="p">,</span>
-        <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;RHO_SOL&quot;</span><span class="p">],</span>
+        <span class="n">inputs</span><span class="p">[</span><span class="s2">"RHO_SOL"</span><span class="p">],</span>
         <span class="n">gbxindex</span><span class="p">,</span>
         <span class="n">gridboxbounds</span><span class="p">,</span>
         <span class="n">NUMCONC</span><span class="p">,</span>
@@ -520,16 +520,16 @@
         <span class="n">isprint</span><span class="o">=</span><span class="n">isprint</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">coord3</span><span class="p">,</span> <span class="n">coord1</span><span class="p">,</span> <span class="n">coord2</span> <span class="o">=</span> <span class="n">initattrsgen</span><span class="o">.</span><span class="n">generate_coords</span><span class="p">(</span>
-        <span class="n">nsupers</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;nspacedims&quot;</span><span class="p">],</span> <span class="n">gridboxbounds</span>
+        <span class="n">nsupers</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"nspacedims"</span><span class="p">],</span> <span class="n">gridboxbounds</span>
     <span class="p">)</span>
     <span class="n">is_sdgbxindex_correct</span><span class="p">(</span><span class="n">gridboxbounds</span><span class="p">,</span> <span class="n">coord3</span><span class="p">,</span> <span class="n">coord1</span><span class="p">,</span> <span class="n">coord2</span><span class="p">,</span> <span class="n">gbxindex</span><span class="p">,</span> <span class="n">sdgbxindex</span><span class="p">)</span>
 
     <span class="c1"># de-dimsionalise attributes</span>
-    <span class="n">radius</span> <span class="o">=</span> <span class="n">radius</span> <span class="o">/</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;R0&quot;</span><span class="p">]</span>
-    <span class="n">msol</span> <span class="o">=</span> <span class="n">msol</span> <span class="o">/</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;MASS0&quot;</span><span class="p">]</span>
-    <span class="n">coord3</span> <span class="o">=</span> <span class="n">coord3</span> <span class="o">/</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;COORD0&quot;</span><span class="p">]</span>
-    <span class="n">coord1</span> <span class="o">=</span> <span class="n">coord1</span> <span class="o">/</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;COORD0&quot;</span><span class="p">]</span>
-    <span class="n">coord2</span> <span class="o">=</span> <span class="n">coord2</span> <span class="o">/</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;COORD0&quot;</span><span class="p">]</span>
+    <span class="n">radius</span> <span class="o">=</span> <span class="n">radius</span> <span class="o">/</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"R0"</span><span class="p">]</span>
+    <span class="n">msol</span> <span class="o">=</span> <span class="n">msol</span> <span class="o">/</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"MASS0"</span><span class="p">]</span>
+    <span class="n">coord3</span> <span class="o">=</span> <span class="n">coord3</span> <span class="o">/</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"COORD0"</span><span class="p">]</span>
+    <span class="n">coord1</span> <span class="o">=</span> <span class="n">coord1</span> <span class="o">/</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"COORD0"</span><span class="p">]</span>
+    <span class="n">coord2</span> <span class="o">=</span> <span class="n">coord2</span> <span class="o">/</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"COORD0"</span><span class="p">]</span>
 
     <span class="n">attrs4gbx</span> <span class="o">=</span> <span class="n">ManyAttrs</span><span class="p">()</span>
     <span class="n">attrs4gbx</span><span class="o">.</span><span class="n">set_attrlists</span><span class="p">(</span><span class="n">sdgbxindex</span><span class="p">,</span> <span class="n">xi</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">msol</span><span class="p">,</span> <span class="n">coord3</span><span class="p">,</span> <span class="n">coord1</span><span class="p">,</span> <span class="n">coord2</span><span class="p">)</span>
@@ -549,7 +549,7 @@
     <span class="n">numconc_tolerance</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
     <span class="n">isprint</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;returns lists for attributes of all SDs in domain called attrs&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""returns lists for attributes of all SDs in domain called attrs"""</span>
 
     <span class="n">attrs</span> <span class="o">=</span> <span class="n">ManyAttrs</span><span class="p">()</span>  <span class="c1"># lists of attrs for SDs in domain</span>
 
@@ -578,10 +578,10 @@
         <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
 
         <span class="n">warning</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;WARNING! dtype of attributes is being changed!&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot; from &quot;</span>
+            <span class="s2">"WARNING! dtype of attributes is being changed!"</span>
+            <span class="o">+</span> <span class="s2">" from "</span>
             <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">og</span><span class="p">)</span>
-            <span class="o">+</span> <span class="s2">&quot; to &quot;</span>
+            <span class="o">+</span> <span class="s2">" to "</span>
             <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">warning</span><span class="p">)</span>
@@ -592,9 +592,9 @@
 <div class="viewcode-block" id="ctype_compatible_attrs">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/create_initsuperdrops.html#cleopy.initsuperdropsbinary_src.create_initsuperdrops.ctype_compatible_attrs">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">ctype_compatible_attrs</span><span class="p">(</span><span class="n">attrs</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;make list from arrays of SD attributes that are</span>
+<span class="w">    </span><span class="sd">"""make list from arrays of SD attributes that are</span>
 <span class="sd">    compatible with c type expected by SDM e.g. unsigned</span>
-<span class="sd">    long ints for xi, doubles for radius and msol&quot;&quot;&quot;</span>
+<span class="sd">    long ints for xi, doubles for radius and msol"""</span>
 
     <span class="n">datatypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">]</span>
     <span class="n">datatypes</span> <span class="o">+=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span>  <span class="c1"># coords datatype</span>
@@ -628,29 +628,29 @@
 <div class="viewcode-block" id="check_datashape">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/create_initsuperdrops.html#cleopy.initsuperdropsbinary_src.create_initsuperdrops.check_datashape">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">check_datashape</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">nspacedims</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;make sure each superdroplet attribute in data has length stated</span>
+<span class="w">    </span><span class="sd">"""make sure each superdroplet attribute in data has length stated</span>
 <span class="sd">    in ndata and that this length is compatible with the nummber of</span>
-<span class="sd">    attributes and superdroplets expected given ndata&quot;&quot;&quot;</span>
+<span class="sd">    attributes and superdroplets expected given ndata"""</span>
 
-    <span class="n">err</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">err</span> <span class="o">=</span> <span class="s2">""</span>
     <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="n">n</span> <span class="o">!=</span> <span class="n">ndata</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">ndata</span><span class="p">[:</span> <span class="mi">4</span> <span class="o">+</span> <span class="n">nspacedims</span><span class="p">]]):</span>
         <span class="n">err</span> <span class="o">+=</span> <span class="p">(</span>
-            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">------ ERROR! -----</span><span class="se">\n</span><span class="s2">&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;not all variables in data are same length, ndata = &quot;</span>
+            <span class="s2">"</span><span class="se">\n</span><span class="s2">------ ERROR! -----</span><span class="se">\n</span><span class="s2">"</span>
+            <span class="o">+</span> <span class="s2">"not all variables in data are same length, ndata = "</span>
             <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ndata</span><span class="p">[:</span> <span class="mi">4</span> <span class="o">+</span> <span class="n">nspacedims</span><span class="p">])</span>
-            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">---------------------</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">---------------------</span><span class="se">\n</span><span class="s2">"</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ndata</span><span class="p">):</span>
         <span class="n">err</span> <span class="o">+=</span> <span class="p">(</span>
-            <span class="s2">&quot;inconsistent dimensions of data: &quot;</span>
+            <span class="s2">"inconsistent dimensions of data: "</span>
             <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
-            <span class="o">+</span> <span class="s2">&quot;, and&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot; data per attribute: &quot;</span>
+            <span class="o">+</span> <span class="s2">", and"</span>
+            <span class="o">+</span> <span class="s2">" data per attribute: "</span>
             <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ndata</span><span class="p">)</span>
-            <span class="o">+</span> <span class="s2">&quot;. data should be 1D with&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot; shape: num_attributes * nsupers. data should be list of&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot; [nsupers]*num_attributes.&quot;</span>
+            <span class="o">+</span> <span class="s2">". data should be 1D with"</span>
+            <span class="o">+</span> <span class="s2">" shape: num_attributes * nsupers. data should be list of"</span>
+            <span class="o">+</span> <span class="s2">" [nsupers]*num_attributes."</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">err</span><span class="p">:</span>
@@ -667,13 +667,13 @@
 
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">nsupers</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">nsupers</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">!=</span> <span class="n">gbxbounds</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">errmsg</span> <span class="o">=</span> <span class="s2">&quot;keys for nsupers dict don&#39;t match gridbox indexes&quot;</span>
+            <span class="n">errmsg</span> <span class="o">=</span> <span class="s2">"keys for nsupers dict don't match gridbox indexes"</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">errmsg</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">nsupers</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">errmsg</span> <span class="o">=</span> <span class="s2">&quot;nsupers must be either dict or int&quot;</span>
+        <span class="n">errmsg</span> <span class="o">=</span> <span class="s2">"nsupers must be either dict or int"</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">errmsg</span><span class="p">)</span>
 
 
@@ -690,19 +690,19 @@
     <span class="n">numconc_tolerance</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
     <span class="n">isprint</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;de-dimensionalise attributes in initattrsgen and then write to</span>
-<span class="sd">    to a binary file, &quot;initsupers_filename&quot;, with some metadata&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""de-dimensionalise attributes in initattrsgen and then write to</span>
+<span class="sd">    to a binary file, "initsupers_filename", with some metadata"""</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">isfile</span><span class="p">(</span><span class="n">grid_filename</span><span class="p">):</span>
         <span class="n">errmsg</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;grid_filename not found, but must be&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot; created before initsupersfile can be&quot;</span>
+            <span class="s2">"grid_filename not found, but must be"</span>
+            <span class="o">+</span> <span class="s2">" created before initsupersfile can be"</span>
         <span class="p">)</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">errmsg</span><span class="p">)</span>
 
     <span class="n">inputs</span> <span class="o">=</span> <span class="n">initsupers_inputsdict</span><span class="p">(</span><span class="n">config_filename</span><span class="p">,</span> <span class="n">constants_filename</span><span class="p">)</span>
     <span class="n">gbxbounds</span> <span class="o">=</span> <span class="n">read_dimless_gbxboundaries_binary</span><span class="p">(</span>
-        <span class="n">grid_filename</span><span class="p">,</span> <span class="n">COORD0</span><span class="o">=</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;COORD0&quot;</span><span class="p">],</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">False</span>
+        <span class="n">grid_filename</span><span class="p">,</span> <span class="n">COORD0</span><span class="o">=</span><span class="n">inputs</span><span class="p">[</span><span class="s2">"COORD0"</span><span class="p">],</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span>
     <span class="n">nsupersdict</span> <span class="o">=</span> <span class="n">nsupers_pergridboxdict</span><span class="p">(</span><span class="n">nsupers</span><span class="p">,</span> <span class="n">gbxbounds</span><span class="p">)</span>
 
@@ -730,26 +730,26 @@
     <span class="p">]</span>
 
     <span class="n">data</span><span class="p">,</span> <span class="n">datatypes</span> <span class="o">=</span> <span class="n">ctype_compatible_attrs</span><span class="p">(</span><span class="n">attrs</span><span class="p">)</span>
-    <span class="n">check_datashape</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;nspacedims&quot;</span><span class="p">])</span>
+    <span class="n">check_datashape</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"nspacedims"</span><span class="p">])</span>
 
-    <span class="n">units</span> <span class="o">=</span> <span class="p">[</span><span class="sa">b</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;m&quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;g&quot;</span><span class="p">]</span>
-    <span class="n">units</span> <span class="o">+=</span> <span class="p">[</span><span class="sa">b</span><span class="s2">&quot;m&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span>  <span class="c1"># coords units</span>
+    <span class="n">units</span> <span class="o">=</span> <span class="p">[</span><span class="sa">b</span><span class="s2">" "</span><span class="p">,</span> <span class="sa">b</span><span class="s2">" "</span><span class="p">,</span> <span class="sa">b</span><span class="s2">"m"</span><span class="p">,</span> <span class="sa">b</span><span class="s2">"g"</span><span class="p">]</span>
+    <span class="n">units</span> <span class="o">+=</span> <span class="p">[</span><span class="sa">b</span><span class="s2">"m"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span>  <span class="c1"># coords units</span>
 
-    <span class="n">scale_factors</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;R0&quot;</span><span class="p">],</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;MASS0&quot;</span><span class="p">]]</span>
-    <span class="n">scale_factors</span> <span class="o">+=</span> <span class="p">[</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;COORD0&quot;</span><span class="p">]]</span> <span class="o">*</span> <span class="mi">3</span>  <span class="c1"># coords scale factors</span>
+    <span class="n">scale_factors</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"R0"</span><span class="p">],</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"MASS0"</span><span class="p">]]</span>
+    <span class="n">scale_factors</span> <span class="o">+=</span> <span class="p">[</span><span class="n">inputs</span><span class="p">[</span><span class="s2">"COORD0"</span><span class="p">]]</span> <span class="o">*</span> <span class="mi">3</span>  <span class="c1"># coords scale factors</span>
     <span class="n">scale_factors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">scale_factors</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span>
 
-    <span class="n">metastr</span> <span class="o">=</span> <span class="s2">&quot;Variables in this file are Superdroplet attributes:&quot;</span>
+    <span class="n">metastr</span> <span class="o">=</span> <span class="s2">"Variables in this file are Superdroplet attributes:"</span>
     <span class="k">if</span> <span class="n">initattrsgen</span><span class="o">.</span><span class="n">coord3gen</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">initattrsgen</span><span class="o">.</span><span class="n">coord1gen</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">initattrsgen</span><span class="o">.</span><span class="n">coord2gen</span><span class="p">:</span>
-                <span class="n">metastr</span> <span class="o">+=</span> <span class="s2">&quot; [sdgbxindex, xi, radius, msol, coord3, coord1, coord2]&quot;</span>
+                <span class="n">metastr</span> <span class="o">+=</span> <span class="s2">" [sdgbxindex, xi, radius, msol, coord3, coord1, coord2]"</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">metastr</span> <span class="o">+=</span> <span class="s2">&quot; [sdgbxindex, xi, radius, msol, coord3, coord1]&quot;</span>
+                <span class="n">metastr</span> <span class="o">+=</span> <span class="s2">" [sdgbxindex, xi, radius, msol, coord3, coord1]"</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">metastr</span> <span class="o">+=</span> <span class="s2">&quot; [sdgbxindex, xi, radius, msol, coord3]&quot;</span>
+            <span class="n">metastr</span> <span class="o">+=</span> <span class="s2">" [sdgbxindex, xi, radius, msol, coord3]"</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">metastr</span> <span class="o">+=</span> <span class="s2">&quot; [sdgbxindex, xi, radius, msol]&quot;</span>
+        <span class="n">metastr</span> <span class="o">+=</span> <span class="s2">" [sdgbxindex, xi, radius, msol]"</span>
 
     <span class="n">writebinary</span><span class="o">.</span><span class="n">writebinary</span><span class="p">(</span>
         <span class="n">initsupers_filename</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">scale_factors</span><span class="p">,</span> <span class="n">metastr</span>
@@ -773,7 +773,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 31 July 2026</div>
+              Last updated on 17 August 2026</div>
           </div>
           <div class="right-details">
             

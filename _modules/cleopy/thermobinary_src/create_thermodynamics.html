@@ -367,7 +367,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cleopy.thermobinary_src.create_thermodynamics</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Copyright (c) 2025 MPI-M, Clara Bayley</span>
 
 
@@ -378,11 +378,11 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
+<span class="sd">License: BSD 3-Clause "New" or "Revised" License</span>
 <span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
 <span class="sd">-----</span>
 <span class="sd">File Description:</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">os.path</span><span class="w"> </span><span class="kn">import</span> <span class="n">isfile</span>
@@ -395,9 +395,9 @@
 <div class="viewcode-block" id="thermoinputsdict">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/create_thermodynamics.html#cleopy.thermobinary_src.create_thermodynamics.thermoinputsdict">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">thermoinputsdict</span><span class="p">(</span><span class="n">config_filename</span><span class="p">,</span> <span class="n">constants_filename</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;create values from constants file &amp; config file</span>
+<span class="w">    </span><span class="sd">"""create values from constants file &amp; config file</span>
 <span class="sd">    required as inputs to create initial</span>
-<span class="sd">    superdroplet conditions&quot;&quot;&quot;</span>
+<span class="sd">    superdroplet conditions"""</span>
 
     <span class="n">consts</span> <span class="o">=</span> <span class="n">cxx2py</span><span class="o">.</span><span class="n">read_cxxconsts_into_floats</span><span class="p">(</span><span class="n">constants_filename</span><span class="p">)</span>
     <span class="n">mconsts</span> <span class="o">=</span> <span class="n">cxx2py</span><span class="o">.</span><span class="n">derive_more_floats</span><span class="p">(</span><span class="n">consts</span><span class="p">)</span>
@@ -405,51 +405,51 @@
 
     <span class="n">inputs</span> <span class="o">=</span> <span class="p">{</span>
         <span class="c1"># for creating thermodynamic profiles</span>
-        <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;G&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;CP_DRY&quot;</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;CP_DRY&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;RGAS_DRY&quot;</span><span class="p">:</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">&quot;RGAS_DRY&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;RGAS_V&quot;</span><span class="p">:</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">&quot;RGAS_V&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;Mr_ratio&quot;</span><span class="p">:</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">&quot;Mr_ratio&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;COUPLTSTEP&quot;</span><span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;COUPLTSTEP&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;T_END&quot;</span><span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;T_END&quot;</span><span class="p">],</span>
+        <span class="s2">"G"</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">"G"</span><span class="p">],</span>
+        <span class="s2">"CP_DRY"</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">"CP_DRY"</span><span class="p">],</span>
+        <span class="s2">"RGAS_DRY"</span><span class="p">:</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">"RGAS_DRY"</span><span class="p">],</span>
+        <span class="s2">"RGAS_V"</span><span class="p">:</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">"RGAS_V"</span><span class="p">],</span>
+        <span class="s2">"Mr_ratio"</span><span class="p">:</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">"Mr_ratio"</span><span class="p">],</span>
+        <span class="s2">"COUPLTSTEP"</span><span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="s2">"COUPLTSTEP"</span><span class="p">],</span>
+        <span class="s2">"T_END"</span><span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="s2">"T_END"</span><span class="p">],</span>
         <span class="c1"># for de-dimensionalising attributes</span>
-        <span class="s2">&quot;W0&quot;</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;W0&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;P0&quot;</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;P0&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;TEMP0&quot;</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;TEMP0&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;RHO0&quot;</span><span class="p">:</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">&quot;RHO0&quot;</span><span class="p">],</span>  <span class="c1"># characteristic density scale [Kg/m^3]</span>
-        <span class="s2">&quot;CP0&quot;</span><span class="p">:</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">&quot;CP0&quot;</span><span class="p">],</span>
-        <span class="s2">&quot;COORD0&quot;</span><span class="p">:</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">&quot;COORD0&quot;</span><span class="p">],</span>  <span class="c1"># z coordinate lengthscale [m]</span>
+        <span class="s2">"W0"</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">"W0"</span><span class="p">],</span>
+        <span class="s2">"P0"</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">"P0"</span><span class="p">],</span>
+        <span class="s2">"TEMP0"</span><span class="p">:</span> <span class="n">consts</span><span class="p">[</span><span class="s2">"TEMP0"</span><span class="p">],</span>
+        <span class="s2">"RHO0"</span><span class="p">:</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">"RHO0"</span><span class="p">],</span>  <span class="c1"># characteristic density scale [Kg/m^3]</span>
+        <span class="s2">"CP0"</span><span class="p">:</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">"CP0"</span><span class="p">],</span>
+        <span class="s2">"COORD0"</span><span class="p">:</span> <span class="n">mconsts</span><span class="p">[</span><span class="s2">"COORD0"</span><span class="p">],</span>  <span class="c1"># z coordinate lengthscale [m]</span>
         <span class="c1"># for reading dimless thermodynamics</span>
-        <span class="s2">&quot;nspacedims&quot;</span><span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;nspacedims&quot;</span><span class="p">],</span>
+        <span class="s2">"nspacedims"</span><span class="p">:</span> <span class="n">config</span><span class="p">[</span><span class="s2">"nspacedims"</span><span class="p">],</span>
     <span class="p">}</span>
 
-    <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;ntime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;T_END&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;COUPLTSTEP&quot;</span><span class="p">]))</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">inputs</span><span class="p">[</span><span class="s2">"ntime"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">"T_END"</span><span class="p">]</span> <span class="o">/</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"COUPLTSTEP"</span><span class="p">]))</span> <span class="o">+</span> <span class="mi">1</span>
 
     <span class="k">return</span> <span class="n">inputs</span></div>
 
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">DimlessThermodynamics</span><span class="p">:</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">config_filename</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">constants_filename</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">config_filename</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">constants_filename</span><span class="o">=</span><span class="s2">""</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">inputs</span><span class="p">:</span>
             <span class="n">inputs</span> <span class="o">=</span> <span class="n">thermoinputsdict</span><span class="p">(</span><span class="n">config_filename</span><span class="p">,</span> <span class="n">constants_filename</span><span class="p">)</span>
 
         <span class="c1"># scale_factors to de-dimensionalise data</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">PRESS0</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;P0&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">TEMP0</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;TEMP0&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">PRESS0</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"P0"</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">TEMP0</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"TEMP0"</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">qvap0</span> <span class="o">=</span> <span class="mf">1.0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">qcond0</span> <span class="o">=</span> <span class="mf">1.0</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">VEL0</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;W0&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">VEL0</span> <span class="o">=</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"W0"</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">makedimless</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">THERMO</span><span class="p">):</span>
         <span class="n">thermodata</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;press&quot;</span><span class="p">:</span> <span class="n">THERMO</span><span class="p">[</span><span class="s2">&quot;PRESS&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">PRESS0</span><span class="p">,</span>
-            <span class="s2">&quot;temp&quot;</span><span class="p">:</span> <span class="n">THERMO</span><span class="p">[</span><span class="s2">&quot;TEMP&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEMP0</span><span class="p">,</span>
-            <span class="s2">&quot;qvap&quot;</span><span class="p">:</span> <span class="n">THERMO</span><span class="p">[</span><span class="s2">&quot;qvap&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;qcond&quot;</span><span class="p">:</span> <span class="n">THERMO</span><span class="p">[</span><span class="s2">&quot;qcond&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;wvel&quot;</span><span class="p">:</span> <span class="n">THERMO</span><span class="p">[</span><span class="s2">&quot;WVEL&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">VEL0</span><span class="p">,</span>
-            <span class="s2">&quot;uvel&quot;</span><span class="p">:</span> <span class="n">THERMO</span><span class="p">[</span><span class="s2">&quot;UVEL&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">VEL0</span><span class="p">,</span>
-            <span class="s2">&quot;vvel&quot;</span><span class="p">:</span> <span class="n">THERMO</span><span class="p">[</span><span class="s2">&quot;VVEL&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">VEL0</span><span class="p">,</span>
+            <span class="s2">"press"</span><span class="p">:</span> <span class="n">THERMO</span><span class="p">[</span><span class="s2">"PRESS"</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">PRESS0</span><span class="p">,</span>
+            <span class="s2">"temp"</span><span class="p">:</span> <span class="n">THERMO</span><span class="p">[</span><span class="s2">"TEMP"</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEMP0</span><span class="p">,</span>
+            <span class="s2">"qvap"</span><span class="p">:</span> <span class="n">THERMO</span><span class="p">[</span><span class="s2">"qvap"</span><span class="p">],</span>
+            <span class="s2">"qcond"</span><span class="p">:</span> <span class="n">THERMO</span><span class="p">[</span><span class="s2">"qcond"</span><span class="p">],</span>
+            <span class="s2">"wvel"</span><span class="p">:</span> <span class="n">THERMO</span><span class="p">[</span><span class="s2">"WVEL"</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">VEL0</span><span class="p">,</span>
+            <span class="s2">"uvel"</span><span class="p">:</span> <span class="n">THERMO</span><span class="p">[</span><span class="s2">"UVEL"</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">VEL0</span><span class="p">,</span>
+            <span class="s2">"vvel"</span><span class="p">:</span> <span class="n">THERMO</span><span class="p">[</span><span class="s2">"VVEL"</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">VEL0</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="n">sfs</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">PRESS0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEMP0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]</span>
@@ -459,17 +459,17 @@
 
     <span class="k">def</span><span class="w"> </span><span class="nf">redimensionalise</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">thermo</span><span class="p">):</span>
         <span class="n">THERMODATA</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;press&quot;</span><span class="p">:</span> <span class="n">thermo</span><span class="p">[</span><span class="s2">&quot;press&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">PRESS0</span><span class="p">,</span>
-            <span class="s2">&quot;temp&quot;</span><span class="p">:</span> <span class="n">thermo</span><span class="p">[</span><span class="s2">&quot;temp&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEMP0</span><span class="p">,</span>
-            <span class="s2">&quot;qvap&quot;</span><span class="p">:</span> <span class="n">thermo</span><span class="p">[</span><span class="s2">&quot;qvap&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;qcond&quot;</span><span class="p">:</span> <span class="n">thermo</span><span class="p">[</span><span class="s2">&quot;qcond&quot;</span><span class="p">],</span>
+            <span class="s2">"press"</span><span class="p">:</span> <span class="n">thermo</span><span class="p">[</span><span class="s2">"press"</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">PRESS0</span><span class="p">,</span>
+            <span class="s2">"temp"</span><span class="p">:</span> <span class="n">thermo</span><span class="p">[</span><span class="s2">"temp"</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEMP0</span><span class="p">,</span>
+            <span class="s2">"qvap"</span><span class="p">:</span> <span class="n">thermo</span><span class="p">[</span><span class="s2">"qvap"</span><span class="p">],</span>
+            <span class="s2">"qcond"</span><span class="p">:</span> <span class="n">thermo</span><span class="p">[</span><span class="s2">"qcond"</span><span class="p">],</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="s2">&quot;wvel&quot;</span> <span class="ow">in</span> <span class="n">thermo</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">THERMODATA</span><span class="p">[</span><span class="s2">&quot;wvel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">thermo</span><span class="p">[</span><span class="s2">&quot;wvel&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">VEL0</span>
-        <span class="k">if</span> <span class="s2">&quot;uvel&quot;</span> <span class="ow">in</span> <span class="n">thermo</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">THERMODATA</span><span class="p">[</span><span class="s2">&quot;uvel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">thermo</span><span class="p">[</span><span class="s2">&quot;uvel&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">VEL0</span>
-        <span class="k">if</span> <span class="s2">&quot;vvel&quot;</span> <span class="ow">in</span> <span class="n">thermo</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">THERMODATA</span><span class="p">[</span><span class="s2">&quot;vvel&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">thermo</span><span class="p">[</span><span class="s2">&quot;vvel&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">VEL0</span>
+        <span class="k">if</span> <span class="s2">"wvel"</span> <span class="ow">in</span> <span class="n">thermo</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">THERMODATA</span><span class="p">[</span><span class="s2">"wvel"</span><span class="p">]</span> <span class="o">=</span> <span class="n">thermo</span><span class="p">[</span><span class="s2">"wvel"</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">VEL0</span>
+        <span class="k">if</span> <span class="s2">"uvel"</span> <span class="ow">in</span> <span class="n">thermo</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">THERMODATA</span><span class="p">[</span><span class="s2">"uvel"</span><span class="p">]</span> <span class="o">=</span> <span class="n">thermo</span><span class="p">[</span><span class="s2">"uvel"</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">VEL0</span>
+        <span class="k">if</span> <span class="s2">"vvel"</span> <span class="ow">in</span> <span class="n">thermo</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">THERMODATA</span><span class="p">[</span><span class="s2">"vvel"</span><span class="p">]</span> <span class="o">=</span> <span class="n">thermo</span><span class="p">[</span><span class="s2">"vvel"</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">VEL0</span>
 
         <span class="k">return</span> <span class="n">THERMODATA</span>
 
@@ -481,10 +481,10 @@
             <span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
 
             <span class="n">warning</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;WARNING! dtype of attributes is being changed!&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot; from &quot;</span>
+                <span class="s2">"WARNING! dtype of attributes is being changed!"</span>
+                <span class="o">+</span> <span class="s2">" from "</span>
                 <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">og</span><span class="p">)</span>
-                <span class="o">+</span> <span class="s2">&quot; to &quot;</span>
+                <span class="o">+</span> <span class="s2">" to "</span>
                 <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
             <span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">warning</span><span class="p">)</span>
@@ -495,8 +495,8 @@
 <div class="viewcode-block" id="ctype_compatible_thermodynamics">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/create_thermodynamics.html#cleopy.thermobinary_src.create_thermodynamics.ctype_compatible_thermodynamics">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">ctype_compatible_thermodynamics</span><span class="p">(</span><span class="n">thermodata</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;check type of gridbox boundaries data is compatible</span>
-<span class="sd">    with c type double. If not, change type and raise error&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""check type of gridbox boundaries data is compatible</span>
+<span class="sd">    with c type double. If not, change type and raise error"""</span>
 
     <span class="n">datatypes</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">]</span> <span class="o">*</span> <span class="mi">7</span>
 
@@ -510,9 +510,9 @@
 <div class="viewcode-block" id="check_datashape">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/create_thermodynamics.html#cleopy.thermobinary_src.create_thermodynamics.check_datashape">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">check_datashape</span><span class="p">(</span><span class="n">thermodata</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">ntime</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;make sure each superdroplet attribute in data has length stated</span>
+<span class="w">    </span><span class="sd">"""make sure each superdroplet attribute in data has length stated</span>
 <span class="sd">    in ndata and that this length is compatible with the nummber of</span>
-<span class="sd">    attributes and superdroplets expected given ndata&quot;&quot;&quot;</span>
+<span class="sd">    attributes and superdroplets expected given ndata"""</span>
 
     <span class="c1"># expected lengths of data defined on gridbox centres or faces</span>
     <span class="n">cen</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ntime</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">ndims</span><span class="p">))</span>
@@ -520,44 +520,44 @@
     <span class="n">xface</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ntime</span> <span class="o">*</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">ndims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">yface</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ntime</span> <span class="o">*</span> <span class="p">(</span><span class="n">ndims</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">ndims</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-    <span class="nb">vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;press&quot;</span><span class="p">,</span> <span class="s2">&quot;temp&quot;</span><span class="p">,</span> <span class="s2">&quot;qvap&quot;</span><span class="p">,</span> <span class="s2">&quot;qcond&quot;</span><span class="p">]</span>
+    <span class="nb">vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"press"</span><span class="p">,</span> <span class="s2">"temp"</span><span class="p">,</span> <span class="s2">"qvap"</span><span class="p">,</span> <span class="s2">"qcond"</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">:</span>
         <span class="n">lenvar</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">thermodata</span><span class="p">[</span><span class="n">var</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">lenvar</span> <span class="o">!=</span> <span class="n">cen</span><span class="p">:</span>
             <span class="n">err</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">------ ERROR! -----</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">"</span><span class="se">\n</span><span class="s2">------ ERROR! -----</span><span class="se">\n</span><span class="s2">"</span>
                 <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">lenvar</span><span class="p">)</span>
-                <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+                <span class="o">+</span> <span class="s2">" "</span>
                 <span class="o">+</span> <span class="n">var</span>
-                <span class="o">+</span> <span class="s2">&quot; in thermodynamics data is not the&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot; expected length: ntimesteps*ngridboxes = &quot;</span>
+                <span class="o">+</span> <span class="s2">" in thermodynamics data is not the"</span>
+                <span class="o">+</span> <span class="s2">" expected length: ntimesteps*ngridboxes = "</span>
                 <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cen</span><span class="p">)</span>
-                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">---------------------</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">---------------------</span><span class="se">\n</span><span class="s2">"</span>
             <span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
 
-    <span class="nb">vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;wvel&quot;</span><span class="p">,</span> <span class="s2">&quot;uvel&quot;</span><span class="p">,</span> <span class="s2">&quot;vvel&quot;</span><span class="p">]</span>
+    <span class="nb">vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"wvel"</span><span class="p">,</span> <span class="s2">"uvel"</span><span class="p">,</span> <span class="s2">"vvel"</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">var</span><span class="p">,</span> <span class="n">face</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">vars</span><span class="p">,</span> <span class="p">[</span><span class="n">zface</span><span class="p">,</span> <span class="n">xface</span><span class="p">,</span> <span class="n">yface</span><span class="p">]):</span>
         <span class="n">lenvar</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">thermodata</span><span class="p">[</span><span class="n">var</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">lenvar</span><span class="p">,</span> <span class="n">lenvar</span> <span class="o">!=</span> <span class="n">face</span><span class="p">):</span>
             <span class="n">err</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">------ ERROR! -----</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">"</span><span class="se">\n</span><span class="s2">------ ERROR! -----</span><span class="se">\n</span><span class="s2">"</span>
                 <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">lenvar</span><span class="p">)</span>
-                <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+                <span class="o">+</span> <span class="s2">" "</span>
                 <span class="o">+</span> <span class="n">var</span>
-                <span class="o">+</span> <span class="s2">&quot; in thermodynamics data is not the&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot; expected length: ntimesteps*nfaces = &quot;</span>
+                <span class="o">+</span> <span class="s2">" in thermodynamics data is not the"</span>
+                <span class="o">+</span> <span class="s2">" expected length: ntimesteps*nfaces = "</span>
                 <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">face</span><span class="p">)</span>
-                <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">---------------------</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">---------------------</span><span class="se">\n</span><span class="s2">"</span>
             <span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
 
     <span class="n">lens</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">thermodata</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
     <span class="k">if</span> <span class="n">lens</span> <span class="o">!=</span> <span class="n">ndata</span><span class="p">:</span>
         <span class="n">err</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;inconsistent dimensions of thermodynamic data: &quot;</span>
+            <span class="s2">"inconsistent dimensions of thermodynamic data: "</span>
             <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">lens</span><span class="p">)</span>
-            <span class="o">+</span> <span class="s2">&quot; compared with given lengths: &quot;</span>
+            <span class="o">+</span> <span class="s2">" compared with given lengths: "</span>
             <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ndata</span><span class="p">)</span>
         <span class="p">)</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span></div>
@@ -569,22 +569,22 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">write_thermodynamics_binary</span><span class="p">(</span>
     <span class="n">thermofiles</span><span class="p">,</span> <span class="n">thermodyngen</span><span class="p">,</span> <span class="n">config_filename</span><span class="p">,</span> <span class="n">constants_filename</span><span class="p">,</span> <span class="n">grid_filename</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;write binarys for thermodynamic data over time on C staggered</span>
+<span class="w">    </span><span class="sd">"""write binarys for thermodynamic data over time on C staggered</span>
 <span class="sd">    grid. So that pressure, temperature, qvap and qcond are defined at</span>
-<span class="sd">    centres of gridboxes, whereas wind velocities are defined at faces&quot;&quot;&quot;</span>
+<span class="sd">    centres of gridboxes, whereas wind velocities are defined at faces"""</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">isfile</span><span class="p">(</span><span class="n">grid_filename</span><span class="p">):</span>
         <span class="n">errmsg</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;grid_filename not found, but must be&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot; created before initsupersfile can be&quot;</span>
+            <span class="s2">"grid_filename not found, but must be"</span>
+            <span class="o">+</span> <span class="s2">" created before initsupersfile can be"</span>
         <span class="p">)</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">errmsg</span><span class="p">)</span>
 
     <span class="n">inputs</span> <span class="o">=</span> <span class="n">thermoinputsdict</span><span class="p">(</span><span class="n">config_filename</span><span class="p">,</span> <span class="n">constants_filename</span><span class="p">)</span>
     <span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span> <span class="o">=</span> <span class="n">read_dimless_gbxboundaries_binary</span><span class="p">(</span>
-        <span class="n">grid_filename</span><span class="p">,</span> <span class="n">COORD0</span><span class="o">=</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;COORD0&quot;</span><span class="p">],</span> <span class="n">return_ndims</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">False</span>
+        <span class="n">grid_filename</span><span class="p">,</span> <span class="n">COORD0</span><span class="o">=</span><span class="n">inputs</span><span class="p">[</span><span class="s2">"COORD0"</span><span class="p">],</span> <span class="n">return_ndims</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span>
-    <span class="n">thermodata</span> <span class="o">=</span> <span class="n">thermodyngen</span><span class="o">.</span><span class="n">generate_thermodyn</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;ntime&quot;</span><span class="p">])</span>
+    <span class="n">thermodata</span> <span class="o">=</span> <span class="n">thermodyngen</span><span class="o">.</span><span class="n">generate_thermodyn</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"ntime"</span><span class="p">])</span>
 
     <span class="n">dth</span> <span class="o">=</span> <span class="n">DimlessThermodynamics</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">)</span>
     <span class="n">thermodata</span><span class="p">,</span> <span class="n">scale_factors</span> <span class="o">=</span> <span class="n">dth</span><span class="o">.</span><span class="n">makedimless</span><span class="p">(</span><span class="n">thermodata</span><span class="p">)</span>
@@ -592,38 +592,38 @@
     <span class="n">ndata</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span> <span class="k">for</span> <span class="n">dt</span> <span class="ow">in</span> <span class="n">thermodata</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span>
 
     <span class="n">thermodata</span><span class="p">,</span> <span class="n">datatypes</span> <span class="o">=</span> <span class="n">ctype_compatible_thermodynamics</span><span class="p">(</span><span class="n">thermodata</span><span class="p">)</span>
-    <span class="n">check_datashape</span><span class="p">(</span><span class="n">thermodata</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;ntime&quot;</span><span class="p">])</span>
+    <span class="n">check_datashape</span><span class="p">(</span><span class="n">thermodata</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="s2">"ntime"</span><span class="p">])</span>
 
-    <span class="n">units</span> <span class="o">=</span> <span class="p">[</span><span class="sa">b</span><span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot;K&quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="sa">b</span><span class="s2">&quot; &quot;</span><span class="p">]</span>
-    <span class="n">units</span> <span class="o">+=</span> <span class="p">[</span><span class="sa">b</span><span class="s2">&quot;m&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span>  <span class="c1"># velocity units</span>
+    <span class="n">units</span> <span class="o">=</span> <span class="p">[</span><span class="sa">b</span><span class="s2">"P"</span><span class="p">,</span> <span class="sa">b</span><span class="s2">"K"</span><span class="p">,</span> <span class="sa">b</span><span class="s2">" "</span><span class="p">,</span> <span class="sa">b</span><span class="s2">" "</span><span class="p">]</span>
+    <span class="n">units</span> <span class="o">+=</span> <span class="p">[</span><span class="sa">b</span><span class="s2">"m"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span>  <span class="c1"># velocity units</span>
     <span class="n">scale_factors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">scale_factors</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">)</span>
 
-    <span class="n">varat</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;centres&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;z-faces&quot;</span><span class="p">,</span> <span class="s2">&quot;x-faces&quot;</span><span class="p">,</span> <span class="s2">&quot;y-faces&quot;</span><span class="p">]</span>
+    <span class="n">varat</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"centres"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"z-faces"</span><span class="p">,</span> <span class="s2">"x-faces"</span><span class="p">,</span> <span class="s2">"y-faces"</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">thermodata</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
         <span class="k">if</span> <span class="n">thermodata</span><span class="p">[</span><span class="n">var</span><span class="p">]</span> <span class="o">!=</span> <span class="p">[]:</span>
             <span class="n">metastr</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;This file is flattened array of &quot;</span>
+                <span class="s2">"This file is flattened array of "</span>
                 <span class="o">+</span> <span class="n">var</span>
-                <span class="o">+</span> <span class="s2">&quot; variable&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot; for &quot;</span>
-                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;ntime&quot;</span><span class="p">])</span>
-                <span class="o">+</span> <span class="s2">&quot; timesteps defined at&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot; grid &quot;</span>
+                <span class="o">+</span> <span class="s2">" variable"</span>
+                <span class="o">+</span> <span class="s2">" for "</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">"ntime"</span><span class="p">])</span>
+                <span class="o">+</span> <span class="s2">" timesteps defined at"</span>
+                <span class="o">+</span> <span class="s2">" grid "</span>
                 <span class="o">+</span> <span class="n">varat</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
-                <span class="o">+</span> <span class="s2">&quot; for grid with dims: &quot;</span>
+                <span class="o">+</span> <span class="s2">" for grid with dims: "</span>
                 <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ndims</span><span class="p">)</span>
-                <span class="o">+</span> <span class="s2">&quot; (ie. file contains &quot;</span>
+                <span class="o">+</span> <span class="s2">" (ie. file contains "</span>
                 <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">ndata</span><span class="p">[</span><span class="n">v</span><span class="p">])</span>
-                <span class="o">+</span> <span class="s2">&quot; datapoints&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot; for &quot;</span>
+                <span class="o">+</span> <span class="s2">" datapoints"</span>
+                <span class="o">+</span> <span class="s2">" for "</span>
                 <span class="o">+</span> <span class="n">var</span>
-                <span class="o">+</span> <span class="s2">&quot; defined at gridbox &quot;</span>
+                <span class="o">+</span> <span class="s2">" defined at gridbox "</span>
                 <span class="o">+</span> <span class="n">varat</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
-                <span class="o">+</span> <span class="s2">&quot; over &quot;</span>
-                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">&quot;ntime&quot;</span><span class="p">])</span>
-                <span class="o">+</span> <span class="s2">&quot; time steps)&quot;</span>
+                <span class="o">+</span> <span class="s2">" over "</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="s2">"ntime"</span><span class="p">])</span>
+                <span class="o">+</span> <span class="s2">" time steps)"</span>
             <span class="p">)</span>
-            <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">thermofiles</span><span class="o">.</span><span class="n">stem</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">var</span><span class="si">}{</span><span class="n">thermofiles</span><span class="o">.</span><span class="n">suffix</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">thermofiles</span><span class="o">.</span><span class="n">stem</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">var</span><span class="si">}{</span><span class="n">thermofiles</span><span class="o">.</span><span class="n">suffix</span><span class="si">}</span><span class="s2">"</span>
             <span class="n">filename</span> <span class="o">=</span> <span class="n">thermofiles</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">filename</span>
             <span class="n">writebinary</span><span class="o">.</span><span class="n">writebinary</span><span class="p">(</span>
                 <span class="n">filename</span><span class="p">,</span>
@@ -653,7 +653,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 31 July 2026</div>
+              Last updated on 17 August 2026</div>
           </div>
           <div class="right-details">
             

@@ -367,7 +367,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cleopy.sdmout_src.thermoeqns</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">----- CLEO -----</span>
 <span class="sd">File: thermoeqns.py</span>
 <span class="sd">Project: sdmout_src</span>
@@ -375,7 +375,7 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
+<span class="sd">License: BSD 3-Clause "New" or "Revised" License</span>
 <span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
 <span class="sd">-----</span>
 <span class="sd">Copyright (c) 2023 MPI-M, Clara Bayley</span>
@@ -383,7 +383,7 @@
 <span class="sd">File Description:</span>
 <span class="sd">equations in python for calculating thermodynamic</span>
 <span class="sd">variables e.g. potential temperature</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
@@ -415,16 +415,16 @@
 <div class="viewcode-block" id="saturation_pressure">
 <a class="viewcode-back" href="../../../cleopy/sdmout_src/thermoeqns.html#cleopy.sdmout_src.thermoeqns.saturation_pressure">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">saturation_pressure</span><span class="p">(</span><span class="n">TEMP</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the equilibrium vapor pressure</span>
+<span class="w">    </span><span class="sd">"""Calculate the equilibrium vapor pressure</span>
 <span class="sd">    of water over liquid water ie. the</span>
 <span class="sd">    saturation pressure (psat) given TEMP /K.</span>
-<span class="sd">    Equation taken from Bjorn Steven&#39;s</span>
-<span class="sd">    &quot;make_tetens&quot; python function from his module</span>
-<span class="sd">    &quot;moist_thermodynamics.saturation_vapour_pressures&quot;</span>
+<span class="sd">    Equation taken from Bjorn Steven's</span>
+<span class="sd">    "make_tetens" python function from his module</span>
+<span class="sd">    "moist_thermodynamics.saturation_vapour_pressures"</span>
 <span class="sd">    available on gitlab. Original paper</span>
-<span class="sd">    &quot;Murray, F. W. On the Computation of Saturation</span>
+<span class="sd">    "Murray, F. W. On the Computation of Saturation</span>
 <span class="sd">    Vapor Pressure. Journal of Applied Meteorology</span>
-<span class="sd">    and Climatology 6, 203–204 (1967).&quot; &quot;&quot;&quot;</span>
+<span class="sd">    and Climatology 6, 203–204 (1967)." """</span>
 
     <span class="n">A</span> <span class="o">=</span> <span class="mf">17.4146</span>  <span class="c1"># constants from Bjorn Gitlab originally from paper</span>
     <span class="n">B</span> <span class="o">=</span> <span class="mf">33.639</span>  <span class="c1"># ditto</span>
@@ -432,7 +432,7 @@
     <span class="n">PREF</span> <span class="o">=</span> <span class="mf">611.655</span>  <span class="c1"># Triple point pressure [Pa] of water</span>
 
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">TEMP</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">):</span>
-        <span class="n">err</span> <span class="o">=</span> <span class="s2">&quot;Temperature must be larger than 0K.&quot;</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="s2">"Temperature must be larger than 0K."</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
 
     <span class="n">expothis</span> <span class="o">=</span> <span class="n">A</span> <span class="o">*</span> <span class="p">(</span><span class="n">TEMP</span> <span class="o">-</span> <span class="n">TREF</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">TEMP</span> <span class="o">-</span> <span class="n">B</span><span class="p">)</span>
@@ -444,13 +444,13 @@
 <div class="viewcode-block" id="saturation_pressure_murphy_koop">
 <a class="viewcode-back" href="../../../cleopy/sdmout_src/thermoeqns.html#cleopy.sdmout_src.thermoeqns.saturation_pressure_murphy_koop">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">saturation_pressure_murphy_koop</span><span class="p">(</span><span class="n">TEMP</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate the equilibrium vapor pressure</span>
+<span class="w">    </span><span class="sd">"""Calculate the equilibrium vapor pressure</span>
 <span class="sd">    of water over liquid water ie. the</span>
 <span class="sd">    saturation pressure (psat [Pa]). Equation taken from</span>
-<span class="sd">    typhon.physics.thermodynamics.e_eq_water_mk.&quot;&quot;&quot;</span>
+<span class="sd">    typhon.physics.thermodynamics.e_eq_water_mk."""</span>
 
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">TEMP</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">):</span>
-        <span class="n">err</span> <span class="o">=</span> <span class="s2">&quot;Temperature must be larger than 0K.&quot;</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="s2">"Temperature must be larger than 0K."</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
 
     <span class="n">lnpsat</span> <span class="o">=</span> <span class="p">(</span>
@@ -469,14 +469,14 @@
 <div class="viewcode-block" id="dry_pot_temp">
 <a class="viewcode-back" href="../../../cleopy/sdmout_src/thermoeqns.html#cleopy.sdmout_src.thermoeqns.dry_pot_temp">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">dry_pot_temp</span><span class="p">(</span><span class="n">Temp</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">qv</span><span class="p">,</span> <span class="n">consts</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;calculate potential Temperature [K]</span>
+<span class="w">    </span><span class="sd">"""calculate potential Temperature [K]</span>
 <span class="sd">    assuming moist (unsaturated) air with</span>
-<span class="sd">    vapour content qv&quot;&quot;&quot;</span>
+<span class="sd">    vapour content qv"""</span>
 
-    <span class="n">Cpdry</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;CP_DRY&quot;</span><span class="p">]</span>
-    <span class="n">Cpv</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;CP_V&quot;</span><span class="p">]</span>
-    <span class="n">Rgasdry</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;RGAS_DRY&quot;</span><span class="p">]</span>
-    <span class="n">Rgasv</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;RGAS_V&quot;</span><span class="p">]</span>
+    <span class="n">Cpdry</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">"CP_DRY"</span><span class="p">]</span>
+    <span class="n">Cpv</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">"CP_V"</span><span class="p">]</span>
+    <span class="n">Rgasdry</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">"RGAS_DRY"</span><span class="p">]</span>
+    <span class="n">Rgasv</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">"RGAS_V"</span><span class="p">]</span>
 
     <span class="n">Cp</span> <span class="o">=</span> <span class="n">Cpdry</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">qv</span> <span class="o">*</span> <span class="n">Cpv</span> <span class="o">/</span> <span class="n">Cpdry</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">qv</span><span class="p">)</span>
     <span class="n">Rgas</span> <span class="o">=</span> <span class="n">Rgasdry</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">qv</span> <span class="o">*</span> <span class="n">Rgasv</span> <span class="o">/</span> <span class="n">Rgasdry</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">qv</span><span class="p">)</span>
@@ -488,7 +488,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">dry_adiabat</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">consts</span><span class="p">):</span>
-    <span class="n">gamma</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;RGAS_DRY&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;CP_DRY&quot;</span><span class="p">]</span>
+    <span class="n">gamma</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">"RGAS_DRY"</span><span class="p">]</span> <span class="o">/</span> <span class="n">consts</span><span class="p">[</span><span class="s2">"CP_DRY"</span><span class="p">]</span>
     <span class="n">dry_adia</span> <span class="o">=</span> <span class="n">temp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">**</span> <span class="n">gamma</span>  <span class="c1"># dry adiabatic temp</span>
 
     <span class="n">dry_adia_theta</span> <span class="o">=</span> <span class="n">dry_adia</span> <span class="o">*</span> <span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">p</span><span class="p">)</span> <span class="o">**</span> <span class="n">gamma</span>  <span class="c1"># dry adiabatic theta (=const)</span>
@@ -499,12 +499,12 @@
 <div class="viewcode-block" id="specific_moist_static_energy">
 <a class="viewcode-back" href="../../../cleopy/sdmout_src/thermoeqns.html#cleopy.sdmout_src.thermoeqns.specific_moist_static_energy">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">specific_moist_static_energy</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">Temp</span><span class="p">,</span> <span class="n">qv</span><span class="p">,</span> <span class="n">consts</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;calculate the specific mass moist static</span>
-<span class="sd">    energy, mse, J/Kg. (ie. mse per unit mass).&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""calculate the specific mass moist static</span>
+<span class="sd">    energy, mse, J/Kg. (ie. mse per unit mass)."""</span>
 
-    <span class="n">GRAVG</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;G&quot;</span><span class="p">]</span>  <span class="c1"># [m/s^2]</span>
-    <span class="n">Latent_v</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;LATENT_V&quot;</span><span class="p">]</span>  <span class="c1"># [J/Kg]</span>
-    <span class="n">Cp_dry</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">&quot;CP_DRY&quot;</span><span class="p">]</span>  <span class="c1"># [J/Kg/K]</span>
+    <span class="n">GRAVG</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">"G"</span><span class="p">]</span>  <span class="c1"># [m/s^2]</span>
+    <span class="n">Latent_v</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">"LATENT_V"</span><span class="p">]</span>  <span class="c1"># [J/Kg]</span>
+    <span class="n">Cp_dry</span> <span class="o">=</span> <span class="n">consts</span><span class="p">[</span><span class="s2">"CP_DRY"</span><span class="p">]</span>  <span class="c1"># [J/Kg/K]</span>
 
     <span class="k">return</span> <span class="n">GRAVG</span> <span class="o">*</span> <span class="n">Z</span> <span class="o">+</span> <span class="n">Latent_v</span> <span class="o">*</span> <span class="n">qv</span> <span class="o">+</span> <span class="n">Cp_dry</span> <span class="o">*</span> <span class="n">Temp</span></div>
 
@@ -526,7 +526,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 31 July 2026</div>
+              Last updated on 17 August 2026</div>
           </div>
           <div class="right-details">
             

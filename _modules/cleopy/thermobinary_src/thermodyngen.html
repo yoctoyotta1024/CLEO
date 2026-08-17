@@ -367,7 +367,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cleopy.thermobinary_src.thermodyngen</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Copyright (c) 2024 MPI-M, Clara Bayley</span>
 
 
@@ -378,20 +378,20 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
+<span class="sd">License: BSD 3-Clause "New" or "Revised" License</span>
 <span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
 <span class="sd">-----</span>
 <span class="sd">File Description:</span>
 <span class="sd">Thermodyanmics generator to generate winds, temperature, pressure, qvap and qcond fields</span>
 <span class="sd">from thermo and winds generators in order to create files which Cleo can read for fromfile dynamics.</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 
 <div class="viewcode-block" id="ThermodynamicsGenerator">
 <a class="viewcode-back" href="../../../cleopy/thermobinary_src/thermodyngen.html#cleopy.thermobinary_src.thermodyngen.ThermodynamicsGenerator">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ThermodynamicsGenerator</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;create thermodynamics from winds generator (for wvel, vvel and uvel) and thermo generator</span>
-<span class="sd">    (for temperature, pressure, qvap and qcond) flow field&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""create thermodynamics from winds generator (for wvel, vvel and uvel) and thermo generator</span>
+<span class="sd">    (for temperature, pressure, qvap and qcond) flow field"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -401,15 +401,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">thermogen</span> <span class="o">=</span> <span class="n">thermogen</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">windsgen</span> <span class="o">=</span> <span class="n">windsgen</span>
 
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    create thermodynamics from winds generator (for wvel, vvel and uvel) and thermo generator</span>
 <span class="sd">    (for temperature, pressure, qvap and qcond) flow field</span>
 
-<span class="sd">    THERMODATA is dictionary with keys: &quot;temp&quot;, &quot;press&quot; &quot;qvap&quot; &quot;qcond&quot;</span>
-<span class="sd">    WINDSDATA is dictionary with keys: &quot;wwvel&quot;, &quot;vvel&quot; and &quot;uvel&quot;</span>
+<span class="sd">    THERMODATA is dictionary with keys: "temp", "press" "qvap" "qcond"</span>
+<span class="sd">    WINDSDATA is dictionary with keys: "wwvel", "vvel" and "uvel"</span>
 <span class="sd">    THERMODYNDATA is combination of two dictionaries. Note if keys are not distinct error thrown,</span>
 <span class="sd">    or data from key in THERMODATA is overwritten by data from matching key in WINDDATA</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_thermodyn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">ntime</span><span class="p">):</span>
         <span class="n">THERMODATA</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">thermogen</span><span class="o">.</span><span class="n">generate_thermo</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">ntime</span><span class="p">)</span>  <span class="c1"># dict</span>
@@ -420,7 +420,7 @@
         <span class="n">matching_keys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">THERMODATA</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">WINDDATA</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
         <span class="k">assert</span> <span class="p">(</span>
             <span class="ow">not</span> <span class="n">matching_keys</span>
-        <span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;THERMODATA and WINDDATA cannot have matching keys, unsafe overwriting&quot;</span>
+        <span class="p">)</span> <span class="ow">and</span> <span class="s2">"THERMODATA and WINDDATA cannot have matching keys, unsafe overwriting"</span>
 
         <span class="n">THERMODYNDATA</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">THERMODATA</span><span class="p">,</span> <span class="o">**</span><span class="n">WINDDATA</span><span class="p">}</span>
 
@@ -444,7 +444,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 31 July 2026</div>
+              Last updated on 17 August 2026</div>
           </div>
           <div class="right-details">
             

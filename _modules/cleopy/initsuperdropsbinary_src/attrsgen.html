@@ -367,7 +367,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for cleopy.initsuperdropsbinary_src.attrsgen</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">----- CLEO -----</span>
 <span class="sd">File: attrsgen.py</span>
 <span class="sd">Project: initsuperdropsbinary_src</span>
@@ -375,7 +375,7 @@
 <span class="sd">Author: Clara Bayley (CB)</span>
 <span class="sd">Additional Contributors:</span>
 <span class="sd">-----</span>
-<span class="sd">License: BSD 3-Clause &quot;New&quot; or &quot;Revised&quot; License</span>
+<span class="sd">License: BSD 3-Clause "New" or "Revised" License</span>
 <span class="sd">https://opensource.org/licenses/BSD-3-Clause</span>
 <span class="sd">-----</span>
 <span class="sd">Copyright (c) 2023 MPI-M, Clara Bayley</span>
@@ -383,7 +383,7 @@
 <span class="sd">File Description:</span>
 <span class="sd">attrsgen generates multiple superdroplet</span>
 <span class="sd">attributes given individual generators</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
@@ -394,10 +394,10 @@
 <div class="viewcode-block" id="AttrsGenerator">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/attrsgen.html#cleopy.initsuperdropsbinary_src.attrsgen.AttrsGenerator">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">AttrsGenerator</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;class for functions to generate attributes of</span>
+<span class="w">    </span><span class="sd">"""class for functions to generate attributes of</span>
 <span class="sd">    superdroplets given the generators for independent</span>
 <span class="sd">    attributes e.g. for radius and coord3 in substantation</span>
-<span class="sd">    of class&quot;&quot;&quot;</span>
+<span class="sd">    of class"""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -436,8 +436,8 @@
 <div class="viewcode-block" id="AttrsGenerator.mass_solutes">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/attrsgen.html#cleopy.initsuperdropsbinary_src.attrsgen.AttrsGenerator.mass_solutes">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">mass_solutes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">RHO_SOL</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;return the mass [Kg] of the solute in superdroplets given their</span>
-<span class="sd">        dry radii [m] and solute density [Kg m^3]&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""return the mass [Kg] of the solute in superdroplets given their</span>
+<span class="sd">        dry radii [m] and solute density [Kg m^3]"""</span>
 
         <span class="n">dryradii</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dryradiigen</span><span class="p">(</span><span class="n">radii</span><span class="p">)</span>  <span class="c1"># [m]</span>
         <span class="n">dryradii</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">radii</span> <span class="o">&lt;</span> <span class="n">dryradii</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">dryradii</span><span class="p">)</span>
@@ -449,11 +449,11 @@
 <div class="viewcode-block" id="AttrsGenerator.multiplicities">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/attrsgen.html#cleopy.initsuperdropsbinary_src.attrsgen.AttrsGenerator.multiplicities">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">multiplicities</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">NUMCONC</span><span class="p">,</span> <span class="n">samplevol</span><span class="p">,</span> <span class="n">gbxindex</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate the multiplicity of the dry radius of each</span>
-<span class="sd">        superdroplet given it&#39;s probability such that the total number</span>
+<span class="w">        </span><span class="sd">"""Calculate the multiplicity of the dry radius of each</span>
+<span class="sd">        superdroplet given it's probability such that the total number</span>
 <span class="sd">        concentration [m^-3] of real droplets in the volume, vol, [m^3]</span>
-<span class="sd">        is about &#39;numconc&#39;. Raise an error if any of the calculated</span>
-<span class="sd">        mulitiplicities are zero&quot;&quot;&quot;</span>
+<span class="sd">        is about 'numconc'. Raise an error if any of the calculated</span>
+<span class="sd">        mulitiplicities are zero"""</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">xi_by_pressure</span><span class="p">:</span>
             <span class="n">gbxnumconc</span> <span class="o">=</span> <span class="n">NUMCONC</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">press</span><span class="p">[</span><span class="n">gbxindex</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">press_ref</span>  <span class="c1"># [m^-3]</span>
@@ -467,13 +467,13 @@
         <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">xi</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
             <span class="n">num</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">xi</span><span class="p">[</span><span class="n">xi</span> <span class="o">==</span> <span class="mi">0</span><span class="p">])</span>
             <span class="n">errmsg</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;ERROR, &quot;</span>
+                <span class="s2">"ERROR, "</span>
                 <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
-                <span class="o">+</span> <span class="s2">&quot; out of &quot;</span>
+                <span class="o">+</span> <span class="s2">" out of "</span>
                 <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xi</span><span class="p">))</span>
-                <span class="o">+</span> <span class="s2">&quot; SDs&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot; created with multiplicity = 0. Consider increasing numconc&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot; or changing range of radii sampled.&quot;</span>
+                <span class="o">+</span> <span class="s2">" SDs"</span>
+                <span class="o">+</span> <span class="s2">" created with multiplicity = 0. Consider increasing numconc"</span>
+                <span class="o">+</span> <span class="s2">" or changing range of radii sampled."</span>
             <span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">errmsg</span><span class="p">)</span>
 
@@ -484,8 +484,8 @@
         <span class="k">if</span> <span class="n">nspacedims</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncoordsgen</span><span class="p">:</span>
             <span class="n">errmsg</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncoordsgen</span><span class="p">)</span>
-                <span class="o">+</span> <span class="s2">&quot; coord generators specified &quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;but nspacedims = &quot;</span>
+                <span class="o">+</span> <span class="s2">" coord generators specified "</span>
+                <span class="o">+</span> <span class="s2">"but nspacedims = "</span>
                 <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">nspacedims</span><span class="p">)</span>
             <span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">errmsg</span><span class="p">)</span>
@@ -499,19 +499,19 @@
         <span class="n">samplevol</span><span class="p">,</span>
         <span class="n">numconc_tolerance</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;check number concentration of real droplets calculated from</span>
+<span class="w">        </span><span class="sd">"""check number concentration of real droplets calculated from</span>
 <span class="sd">        multiplicities is same as input value for number conc. within fractional difference (error)</span>
 <span class="sd">        given by the numconc_tolerance.</span>
 <span class="sd">        Also check the total number of real droplets lies within 0.1% or more</span>
-<span class="sd">        of the expected value given the input number conc and sample volume&quot;&quot;&quot;</span>
+<span class="sd">        of the expected value given the input number conc and sample volume"""</span>
         <span class="n">nreals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">gbxnumconc</span> <span class="o">*</span> <span class="n">samplevol</span><span class="p">)</span>
         <span class="n">calcnreals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">multiplicities</span><span class="p">))</span>
         <span class="n">calcnumconc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">calcnreals</span> <span class="o">/</span> <span class="n">samplevol</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">rint</span><span class="p">(</span><span class="n">gbxnumconc</span><span class="p">)</span> <span class="o">-</span> <span class="n">calcnumconc</span><span class="p">)</span> <span class="o">/</span> <span class="n">gbxnumconc</span> <span class="o">&gt;</span> <span class="n">numconc_tolerance</span><span class="p">:</span>
             <span class="n">errmsg</span> <span class="o">=</span> <span class="p">(</span>
-                <span class="s2">&quot;total real droplet concentration&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot; </span><span class="si">{:0g}</span><span class="s2"> != numconc, </span><span class="si">{:0g}</span><span class="s2"> within error tolerance&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="s2">"total real droplet concentration"</span>
+                <span class="o">+</span> <span class="s2">" </span><span class="si">{:0g}</span><span class="s2"> != numconc, </span><span class="si">{:0g}</span><span class="s2"> within error tolerance"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                     <span class="n">calcnumconc</span><span class="p">,</span> <span class="n">gbxnumconc</span>
                 <span class="p">)</span>
             <span class="p">)</span>
@@ -519,20 +519,20 @@
 
         <span class="n">nreals_tolerance</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">numconc_tolerance</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">nreals</span> <span class="o">-</span> <span class="n">calcnreals</span><span class="p">)</span> <span class="o">/</span> <span class="n">nreals</span> <span class="o">&gt;</span> <span class="n">nreals_tolerance</span><span class="p">:</span>
-            <span class="n">errmsg</span> <span class="o">=</span> <span class="s2">&quot;total no. real droplets, </span><span class="si">{:0g}</span><span class="s2">,&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">errmsg</span> <span class="o">=</span> <span class="s2">"total no. real droplets, </span><span class="si">{:0g}</span><span class="s2">,"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                 <span class="n">calcnreals</span>
-            <span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; not consistent with sample volume </span><span class="si">{:.3g}</span><span class="s2"> m^3&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">samplevol</span><span class="p">)</span>
+            <span class="p">)</span> <span class="o">+</span> <span class="s2">" not consistent with sample volume </span><span class="si">{:.3g}</span><span class="s2"> m^3"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">samplevol</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">errmsg</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="AttrsGenerator.print_totalconc">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/attrsgen.html#cleopy.initsuperdropsbinary_src.attrsgen.AttrsGenerator.print_totalconc">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">print_totalconc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">multiplicities</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">mass_solutes</span><span class="p">,</span> <span class="n">RHO_SOL</span><span class="p">,</span> <span class="n">samplevol</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;print statement of total num conc and mass conc&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""print statement of total num conc and mass conc"""</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">totmass</span><span class="p">(</span><span class="n">radius</span><span class="p">,</span> <span class="n">msol</span><span class="p">,</span> <span class="n">RHO_SOL</span><span class="p">):</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;total mass of droplets represented by a superdroplet</span>
-<span class="sd">            droplet totmass = mass of water + solute&quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">"""total mass of droplets represented by a superdroplet</span>
+<span class="sd">            droplet totmass = mass of water + solute"""</span>
 
             <span class="n">RHO_L</span> <span class="o">=</span> <span class="mf">998.203</span>  <span class="c1"># density of liquid water [kg/m^3]</span>
             <span class="n">massconst</span> <span class="o">=</span> <span class="mf">4.0</span> <span class="o">/</span> <span class="mf">3.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">radius</span> <span class="o">*</span> <span class="n">radius</span> <span class="o">*</span> <span class="n">radius</span> <span class="o">*</span> <span class="n">RHO_L</span>
@@ -546,9 +546,9 @@
         <span class="n">massconc</span> <span class="o">=</span> <span class="n">totmass</span> <span class="o">/</span> <span class="n">samplevol</span>  <span class="c1"># [g/m^3]</span>
 
         <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;--- total droplet concentration = &quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{:1g}</span><span class="s2">cm^-3 =&gt; </span><span class="si">{:.1g}</span><span class="s2">g/m^3&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">numconc</span><span class="p">,</span> <span class="n">massconc</span><span class="p">)</span>
-            <span class="o">+</span> <span class="s2">&quot;, in </span><span class="si">{:.3g}</span><span class="s2">m^3 volume --- &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">samplevol</span><span class="p">)</span>
+            <span class="s2">"--- total droplet concentration = "</span>
+            <span class="o">+</span> <span class="s2">"</span><span class="si">{:1g}</span><span class="s2">cm^-3 =&gt; </span><span class="si">{:.1g}</span><span class="s2">g/m^3"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">numconc</span><span class="p">,</span> <span class="n">massconc</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s2">", in </span><span class="si">{:.3g}</span><span class="s2">m^3 volume --- "</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">samplevol</span><span class="p">)</span>
         <span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
@@ -566,8 +566,8 @@
         <span class="n">numconc_tolerance</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
         <span class="n">isprint</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;generate superdroplets (SDs) attributes that have dimensions</span>
-<span class="sd">        by calling the appropraite generating functions&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""generate superdroplets (SDs) attributes that have dimensions</span>
+<span class="sd">        by calling the appropraite generating functions"""</span>
 
         <span class="n">gbxvol</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">calc_domainvol</span><span class="p">(</span>
             <span class="n">gridboxbounds</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="n">gridboxbounds</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">],</span> <span class="n">gridboxbounds</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span>
@@ -595,8 +595,8 @@
 <div class="viewcode-block" id="AttrsGenerator.generate_coords">
 <a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/attrsgen.html#cleopy.initsuperdropsbinary_src.attrsgen.AttrsGenerator.generate_coords">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_coords</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nsupers</span><span class="p">,</span> <span class="n">nspacedims</span><span class="p">,</span> <span class="n">gridboxbounds</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;generate superdroplets (SDs) attributes that have dimensions</span>
-<span class="sd">        by calling the appropraite generating functions&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""generate superdroplets (SDs) attributes that have dimensions</span>
+<span class="sd">        by calling the appropraite generating functions"""</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">check_coordsgen_matches_modeldimension</span><span class="p">(</span><span class="n">nspacedims</span><span class="p">)</span>
 
@@ -644,7 +644,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 31 July 2026</div>
+              Last updated on 17 August 2026</div>
           </div>
           <div class="right-details">
             
