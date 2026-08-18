@@ -59,10 +59,6 @@ else
   then
     ${sbatch} ${path2examplesbash}/rainshaft1d.sh
 
-  elif  [ "${example}" == "kokkostools" ]
-  then
-    ${sbatch} ${path2examplesbash}/kokkostools.sh
-
   else
     echo "'${example}' is not an example"
     exit 1
