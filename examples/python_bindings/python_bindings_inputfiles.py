@@ -95,6 +95,7 @@ def main(
     yaml = YAML()
     with open(config_filename, "r") as file:
         config = yaml.load(file)
+    pyconfig = config["python_inputfiles"]
 
     ### ------------------------ INPUT PARAMETERS -------------------------- ###
     ### --- required CLEO cleoconstants.hpp file --- ###
@@ -110,24 +111,26 @@ def main(
     ]  # gbxindex of initial SDs to plot if any(isfigures) (nb. "all" can be very slow)
 
     ### --- settings for 2-D gridbox boundaries --- ###
-    zgrid = [0, 1500, 500]  # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
-    xgrid = [0, 1500, 500]  # evenly spaced xhalf coords [m]
-    ygrid = np.array([0, 20])  # array of yhalf coords [m]
+    # evenly spaced x and z spatial coords [min, max, delta] [m]
+    zgrid_spacing = float(pyconfig["zgrid_max"] / pyconfig["zgrid_ngbxs"])
+    xgrid_spacing = float(pyconfig["xgrid_max"] / pyconfig["xgrid_ngbxs"])
+    zgrid = [0, pyconfig["zgrid_max"], zgrid_spacing]  # evenly spaced zhalf coords [m]
+    xgrid = [0, pyconfig["xgrid_max"], xgrid_spacing]  # evenly spaced xhalf coords [m]
+    ygrid = np.array([0, pyconfig["ygrid_max"]])  # array of yhalf coords [y0, y1] [m]
 
     ### --- settings for initial superdroplets --- ###
     # settings for initial superdroplet coordinates
-    zlim = 750  # max z coord of superdroplets
-    npergbx = 8  # number of superdroplets per gridbox
+    zlim = pyconfig["sd_zlim"]
+    npergbx = pyconfig["nsupers_pergbx"]
 
     # [min, max] range of initial superdroplet radii (and implicitly solute masses)
-    rspan = [3e-9, 3e-6]  # [m]
+    rspan = list(pyconfig["rspan"])
 
-    # settings for initial superdroplet multiplicies
-    # (from bimodal Lognormal distribution)
-    geomeans = [0.02e-6, 0.15e-6]
-    geosigs = [1.4, 1.6]
-    scalefacs = [6e6, 4e6]
-    numconc = np.sum(scalefacs)
+    # settings for initial superdroplet multiplicies (from bimodal Lognormal distribution)
+    geomeans = list(pyconfig["geomeans"])
+    geosigs = list(pyconfig["geosigs"])
+    scalefacs = list(pyconfig["scalefacs"])
+    numconc = pyconfig["numconc"]
 
     ### --------------------- BINARY FILES GENERATION ---------------------- ###
     ### ----- write gridbox boundaries binary ----- ###
