@@ -130,6 +130,7 @@ def inputfiles(
     src_config_filename,
     config_filename,
     config_params,
+    gen_config,
     gen_gbxs,
     gen_supers,
     icond,
@@ -148,9 +149,10 @@ def inputfiles(
         savefigpath.mkdir(exist_ok=True)
 
     ### --- copy src_config_filename into tmp and edit parameters --- ###
-    config_filename.unlink(missing_ok=True)  # delete any existing config
-    shutil.copy(src_config_filename, config_filename)
-    editconfigfile.edit_config_params(config_filename, config_params)
+    if gen_config:
+        config_filename.unlink(missing_ok=True)  # delete any existing config
+        shutil.copy(src_config_filename, config_filename)
+        editconfigfile.edit_config_params(config_filename, config_params)
 
     ### --- delete any existing initial conditions --- ###
     yaml = YAML()
@@ -238,6 +240,7 @@ def plot_results(path2CLEO, savefigpath, config_filenames, runnums):
 # %%
 ### ----------------------------- RUN EXAMPLE ------------------------------ ###
 if args.do_inputfiles:
+    gen_config = True
     for runnum, [config_filename, config_params] in run_configs.items():
         if runnum == 0:
             gen_gbxs = True
@@ -262,6 +265,7 @@ if args.do_inputfiles:
             src_config_filename,
             config_filename,
             config_params,
+            gen_config,
             gen_gbxs,
             gen_supers,
             icond,
