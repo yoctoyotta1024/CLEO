@@ -18,6 +18,43 @@
 # and so can the thermodynamics files when using coupled thermodynamics "fromfile".
 #
 
+### Initialization Parameters for rshaft1d_inputfiles.py ###
+python_inputfiles:
+  zgrid_max: 2500                              # domain size in z [m]
+  xgrid_max: 20                                # domain size in x [m]
+  ygrid_max: 20                                # domain size in y [m]
+  sd_zlim: 800                                 # min z coord of initial superdroplets
+  nsupers_pergbx: 256                          # number of SDs per gridbox above sd_zlim <- note(!) must be consistent with maxnsupers (see below)
+  rspan:                                       # [min, max] range of radii to sample [m]
+    - 3e-9
+    - 5e-5
+  dryr_sf: 1.0                                 # dryradii are 1/sf of radii [m]
+  geomeans:                                    # geometric means of trimodal Lognormal distribution
+    - 0.02e-6
+    - 0.2e-6
+    - 3.5e-6
+  geosigs:                                     # geometric stddevs of trimodal Lognormal distribution
+    - 1.55
+    - 2.3
+    - 2
+  scalefacs:                                   # scale factors of peaks in trimodal Lognormal distribution
+    - 1.0
+    - 0.3
+    - 0.025
+  numconc: 1.325e9                             # total no. conc of real droplets [m^-3]
+  thermo_PRESSz0: 101315                       # settings for thermodynamics profiles [Pa]
+  thermo_TEMPz0: 297.9                         # [K]
+  thermo_qvapz0: 0.016                         # [Kg/Kg]
+  thermo_Zbase: 800                            # [m]
+  thermo_TEMPlapses:                           # -dT/dz [below, above] Zbase; [K/km]
+    - 9.8
+    - 6.5
+  thermo_qvaplapses:                           # -dvap/dz [below, above] Zbase; [g/Kg km^-1]
+    - 2.97
+    - "saturated"
+  thermo_WVEL: 4.0                             # max or constant vertical wind (see Wlength) [m/s]
+  thermo_Wlength: 1000                         # [m] use constant WVEL with Wlength=0.0, else sinusoidal 1-D profile below cloud base
+
 ### Kokkos Initialization Parameters ###
 kokkos_settings:
   num_threads: 256                                          # number of threads for host parallel backend
