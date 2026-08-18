@@ -102,6 +102,10 @@ def inputfiles(
     config_filename,
     config_params,
     thermofiles,
+    gen_config,
+    gen_gbxs,
+    gen_supers,
+    gen_thermo,
     isfigures,
 ):
     from cleopy import editconfigfile
@@ -124,21 +128,25 @@ def inputfiles(
         )
 
     ### --- copy src_config_filename into tmp and edit parameters --- ###
-    config_filename.unlink(missing_ok=True)  # delete any existing config
-    shutil.copy(src_config_filename, config_filename)
-    editconfigfile.edit_config_params(config_filename, config_params)
+    if gen_config:
+        config_filename.unlink(missing_ok=True)  # delete any existing config
+        shutil.copy(src_config_filename, config_filename)
+        editconfigfile.edit_config_params(config_filename, config_params)
 
     ### --- delete any existing initial conditions --- ###
     yaml = YAML()
     with open(config_filename, "r") as file:
         config = yaml.load(file)
-    Path(config["inputfiles"]["grid_filename"]).unlink(missing_ok=True)
-    Path(config["initsupers"]["initsupers_filename"]).unlink(missing_ok=True)
-    all_thermofiles = thermofiles.parent.glob(
-        f"{thermofiles.stem}*{thermofiles.suffix}"
-    )
-    for file in all_thermofiles:
-        file.unlink(missing_ok=True)
+    if gen_gbxs:
+        Path(config["inputfiles"]["grid_filename"]).unlink(missing_ok=True)
+    if gen_supers:
+        Path(config["initsupers"]["initsupers_filename"]).unlink(missing_ok=True)
+    if gen_thermo:
+        all_thermofiles = thermofiles.parent.glob(
+            f"{thermofiles.stem}*{thermofiles.suffix}"
+        )
+        for file in all_thermofiles:
+            file.unlink(missing_ok=True)
 
     ### --- input binary files generation --- ###
     # equivalent to ``import fromfile_irreg_inputfiles`` followed by
@@ -155,6 +163,12 @@ def inputfiles(
         config_filename,
         thermofiles,
     ]
+    if gen_gbxs:
+        cmd.append("--gen_gbxs")
+    if gen_supers:
+        cmd.append("--gen_supers")
+    if gen_thermo:
+        cmd.append("--gen_thermo")
     if isfigures[0]:
         cmd.append("--show_figures")
     if isfigures[1]:
@@ -210,6 +224,10 @@ def plot_results(path2CLEO, config_filename, savefigpath):
 # %%
 ### ----------------------------- RUN EXAMPLE ------------------------------ ###
 if args.do_inputfiles:
+    gen_config = True
+    gen_gbxs = True
+    gen_supers = True
+    gen_thermo = True
     inputfiles(
         path2CLEO,
         path2build,
@@ -221,6 +239,10 @@ if args.do_inputfiles:
         config_filename,
         config_params,
         thermofiles,
+        gen_config,
+        gen_gbxs,
+        gen_supers,
+        gen_thermo,
         isfigures,
     )
 
