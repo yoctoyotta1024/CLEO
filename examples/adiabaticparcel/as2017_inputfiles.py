@@ -115,7 +115,7 @@ def main(
     SDgbxs2plt = "all"  # gbxindex of initial SDs to plot if any(isfigures) (nb. "all" can be very slow)
 
     # settings for 0D Model (number of SD and grid coordinates)
-    nsupers = {0: pyconfig["nsupers_per_gbx"]}
+    nsupers = {0: int(config["domain"]["maxnsupers"])}
     zgrid = np.asarray([0, pyconfig["zgrid"]])
     xgrid = np.asarray([0, pyconfig["xgrid"]])
     ygrid = np.asarray([0, pyconfig["ygrid"]])

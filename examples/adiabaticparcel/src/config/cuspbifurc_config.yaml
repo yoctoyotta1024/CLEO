@@ -20,7 +20,6 @@
 
 ### Initialization Parameters for cuspbifurc_inputfiles.py ###
 python_inputfiles:
-  nsupers_per_gbx: 1                            # number of superdroplets in domain <- must match maxnsupers below(!)
   zgrid: 100                                    # domain size in z [m]
   xgrid: 100                                    # domain size in x [m]
   ygrid: 100                                    # domain size in x [m]
