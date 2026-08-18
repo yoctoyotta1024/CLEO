@@ -94,6 +94,7 @@ def main(
     yaml = YAML()
     with open(config_filename, "r") as file:
         config = yaml.load(file)
+    pyconfig = config["python_inputfiles"]
 
     ### ------------------------ INPUT PARAMETERS -------------------------- ###
     ### --- required CLEO cleoconstants.hpp file --- ###
@@ -107,16 +108,15 @@ def main(
     SDgbxs2plt = "all"  # gbxindex of initial SDs to plot if any(isfigures) (nb. "all" can be very slow)
 
     # settings for 0D Model (number of SD and grid coordinates)
-    nsupers = {0: 1}
-    zgrid = np.asarray([0, 100])
-    xgrid = np.asarray([0, 100])
-    ygrid = np.asarray([0, 100])
+    nsupers = {0: pyconfig["nsupers_per_gbx"]}
+    zgrid = np.asarray([0, pyconfig["zgrid"]])
+    xgrid = np.asarray([0, pyconfig["xgrid"]])
+    ygrid = np.asarray([0, pyconfig["ygrid"]])
 
     # settings for monodisperse droplet radii
     # numconc = total no. concentration of droplets [m^-3]
-    numconc = 0.5e9
-    # monor = dry radius of all droplets [m]
-    monor = 0.025e-6
+    numconc = pyconfig["numconc"]
+    monor = pyconfig["monor"]
 
     # monodisperse droplet radii probability distribution
     radiigen = rgens.MonoAttrGen(monor)
