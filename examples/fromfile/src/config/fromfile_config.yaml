@@ -18,6 +18,29 @@
 # and so can the thermodynamics files when using coupled thermodynamics "fromfile".
 #
 
+### Initialization Parameters for fromfile_inputfiles.py ###
+python_inputfiles:
+  zgrid_max: 1500                              # domain size in z [m]
+  xgrid_max: 1500                              # domain size in x [m]
+  ygrid_max: 300                               # domain size in y [m]
+  zgrid_ngbxs: 25                              # z direction ngbxs <- note(!) z_ * x_ * y_ngbxs == ngbxs (see below)
+  xgrid_ngbxs: 30                              # x direction ngbxs <- note(!) z_ * x_ * y_ngbxs == ngbxs (see below)
+  ygrid_ngbxs: 3                               # y direction ngbxs <- note(!) z_ * x_ * y_ngbxs == ngbxs (see below)
+  sd_zlim: 1000                                # max z coord of initial superdroplets
+  nsupers_pergbx: 2                            # number of SDs per gridbox below sd_zlim <- note(!) must be consistent with maxnsupers (see below)
+  monor: 1e-6                                  # all SDs have this same radius [m]
+  dryr_sf: 1.0                                 # scale factor for dry radii [m]
+  numconc: 5e8                                 # total no. conc of real droplets [m^-3]
+  thermo_PRESSz0: 101500                       # settings for thermodynamics profiles [Pa]
+  thermo_TEMPz0: 300                           # [K]
+  thermo_qvapz0: 0.05                          # [Kg/Kg]
+  thermo_qcondz0: 0.001                        # [Kg/Kg]
+  thermo_WMAX: 1.5                             # [m/s]
+  thermo_Zlength: 1500                         # [m]
+  thermo_Xlength: 1500                         # [m]
+  thermo_VMAX: 1.0                             # [m/s]
+  thermo_Ylength: 300                          # [m]
+
 ### Kokkos Initialization Parameters ###
 kokkos_settings:
   num_threads: 16                                          # number of threads for host parallel backend

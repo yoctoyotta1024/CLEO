@@ -87,7 +87,6 @@ def main(
     show_figures=False,
     save_figures=False,
 ):
-    import numpy as np
     from pathlib import Path
     from ruamel.yaml import YAML
 
@@ -108,6 +107,7 @@ def main(
     yaml = YAML()
     with open(config_filename, "r") as file:
         config = yaml.load(file)
+    pyconfig = config["python_inputfiles"]
 
     ### ------------------------ INPUT PARAMETERS -------------------------- ###
     ### --- required CLEO cleoconstants.hpp file --- ###
@@ -117,31 +117,35 @@ def main(
     isfigures = [show_figures, save_figures]
 
     ### --- settings for 3-D gridbox boundaries --- ###
-    zgrid = [0, 1500, 60]  # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
-    xgrid = [0, 1500, 50]  # evenly spaced xhalf coords [m]
-    ygrid = np.array([0, 100, 200, 300])  # array of yhalf coords [m]
+    # evenly spaced x, y and z spatial coords [min, max, delta] [m]
+    zgrid_spacing = float(pyconfig["zgrid_max"] / pyconfig["zgrid_ngbxs"])
+    xgrid_spacing = float(pyconfig["xgrid_max"] / pyconfig["xgrid_ngbxs"])
+    ygrid_spacing = float(pyconfig["ygrid_max"] / pyconfig["ygrid_ngbxs"])
+    zgrid = [0, pyconfig["zgrid_max"], zgrid_spacing]  # evenly spaced zhalf coords [m]
+    xgrid = [0, pyconfig["xgrid_max"], xgrid_spacing]  # evenly spaced xhalf coords [m]
+    ygrid = [0, pyconfig["ygrid_max"], ygrid_spacing]  # evenly spaced xhalf coords [m]
 
     ### --- settings for initial superdroplets --- ###
     # settings for initial superdroplet coordinates
-    zlim = 1000  # max z coord of superdroplets
-    npergbx = 2  # number of superdroplets per gridbox
+    zlim = pyconfig["sd_zlim"]
+    npergbx = pyconfig["nsupers_pergbx"]
 
     # settings for initial radius and aerosol distributions
-    monor = 1e-6  # all SDs have this same radius [m]
-    dryr_sf = 1.0  # scale factor for dry radii [m]
-    numconc = 5e8  # total no. conc of real droplets [m^-3]
+    monor = pyconfig["monor"]
+    dryr_sf = pyconfig["dryr_sf"]
+    numconc = pyconfig["numconc"]
     randcoord = False  # sample SD spatial coordinates randomly or not
 
     ### --- settings for 2D Thermodynamics --- ###
-    PRESSz0 = 101500  # [Pa]
-    TEMPz0 = 300  # [K]
-    qvapz0 = 0.05  # [Kg/Kg]
-    qcondz0 = 0.001  # [Kg/Kg]
-    WMAX = 1.5  # [m/s]
-    Zlength = 1500  # [m]
-    Xlength = 1500  # [m]
-    VMAX = 1.0  # [m/s]
-    Ylength = 300  # [m]
+    PRESSz0 = pyconfig["thermo_PRESSz0"]
+    TEMPz0 = pyconfig["thermo_TEMPz0"]
+    qvapz0 = pyconfig["thermo_qvapz0"]
+    qcondz0 = pyconfig["thermo_qcondz0"]
+    WMAX = pyconfig["thermo_WMAX"]
+    Zlength = pyconfig["thermo_Zlength"]
+    Xlength = pyconfig["thermo_Xlength"]
+    VMAX = pyconfig["thermo_VMAX"]
+    Ylength = pyconfig["thermo_Ylength"]
 
     ### --------------------- BINARY FILES GENERATION ---------------------- ###
     ### ----- write gridbox boundaries binary ----- ###
