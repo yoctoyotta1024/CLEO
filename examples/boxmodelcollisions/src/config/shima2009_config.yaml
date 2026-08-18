@@ -18,6 +18,23 @@
 # and so can the thermodynamics files when using coupled thermodynamics "fromfile".
 #
 
+### Initialization Parameters for shima2009_inputfiles.py ###
+python_inputfiles:
+  zgrid: 100                                    # domain size in z [m]
+  xgrid: 100                                    # domain size in x [m]
+  ygrid: 100                                    # domain size in x [m]
+  dryradius: 1e-16                              # all SDs have negligible solute [m]
+  rspan_1:                                      # [min, max] range of radii to sample [m]
+    - 0.62e-6
+    - 6.34e-2
+  volexpr0_1: 30.531e-6                         # peak of volume exponential distribution [m]
+  numconc_1: 8388608                            # = 2**23  # total no. conc of real droplets [m^-3]
+  rspan_2:                                      # [min, max] range of radii to sample [m]
+    - 0.62e-6
+    - 6.34e-2
+  volexpr0_2: 10.117e-6                         # peak of volume exponential distribution [m]
+  numconc_2: 226492416                          # = 27 * 2**23  # total no. conc of real droplets [m^-3]
+
 ### Kokkos Initialization Parameters ###
 kokkos_settings:
   num_threads: 128                                              # number of threads for host parallel backend

@@ -39,6 +39,21 @@ def parse_arguments():
         help="Absolute path to derive thermoynamics binary files",
     )
     parser.add_argument(
+        "--gen_gbxs",
+        action="store_true",  # default is False
+        help="Generate gridbox boundaries binary file conditions",
+    )
+    parser.add_argument(
+        "--gen_supers",
+        action="store_true",  # default is False
+        help="Generate initial superdroplet conditions binary file",
+    )
+    parser.add_argument(
+        "--gen_thermo",
+        action="store_true",  # default is False
+        help="Generate thermodynamics binary files",
+    )
+    parser.add_argument(
         "--savefigpath",
         type=Path,
         default=None,
@@ -64,6 +79,9 @@ def main(
     path2build,
     config_filename,
     thermofiles,
+    gen_gbxs=False,
+    gen_supers=False,
+    gen_thermo=False,
     savefigpath=None,
     show_figures=False,
     save_figures=False,
@@ -89,6 +107,7 @@ def main(
     yaml = YAML()
     with open(config_filename, "r") as file:
         config = yaml.load(file)
+    pyconfig = config["python_inputfiles"]
 
     ### ------------------------ INPUT PARAMETERS -------------------------- ###
     ### --- essential paths and filenames --- ###
@@ -104,102 +123,109 @@ def main(
     SDgbxs2plt = [0]  # gbxindex of SDs to plot (nb. "all" can be very slow)
 
     ### --- settings for 2-D gridbox boundaries --- ###
-    zgrid = [0, 1500, 50]  # evenly spaced zhalf coords [zmin, zmax, zdelta] [m]
-    xgrid = [0, 1500, 50]  # evenly spaced xhalf coords [m]
-    ygrid = np.array([0, 20])  # array of yhalf coords [m]
+    # evenly spaced x and z spatial coords [min, max, delta] [m]
+    zgrid_spacing = float(pyconfig["zgrid_max"] / pyconfig["zgrid_ngbxs"])
+    xgrid_spacing = float(pyconfig["xgrid_max"] / pyconfig["xgrid_ngbxs"])
+    zgrid = [0, pyconfig["zgrid_max"], zgrid_spacing]  # evenly spaced zhalf coords [m]
+    xgrid = [0, pyconfig["xgrid_max"], xgrid_spacing]  # evenly spaced xhalf coords [m]
+    ygrid = np.array([0, pyconfig["ygrid_max"]])  # array of yhalf coords [y0, y1] [m]
 
     ### --- settings for initial superdroplets --- ###
     # settings for initial superdroplet coordinates
-    zlim = 750  # max z coord of superdroplets
-    npergbx = 8  # number of superdroplets per gridbox
+    zlim = pyconfig["sd_zlim"]
+    npergbx = pyconfig["nsupers_pergbx"]
 
     # [min, max] range of initial superdroplet radii (and implicitly solute masses)
-    rspan = [3e-9, 3e-6]  # [m]
+    rspan = list(pyconfig["rspan"])
 
-    # settings for initial superdroplet multiplicies
-    # (from bimodal Lognormal distribution)
-    geomeans = [0.02e-6, 0.15e-6]
-    geosigs = [1.4, 1.6]
-    scalefacs = [6e6, 4e6]
-    numconc = np.sum(scalefacs)
+    # settings for initial superdroplet multiplicies (from bimodal Lognormal distribution)
+    geomeans = list(pyconfig["geomeans"])
+    geosigs = list(pyconfig["geosigs"])
+    scalefacs = list(pyconfig["scalefacs"])
+    numconc = pyconfig["numconc"]
 
     ### --- settings for 2D Thermodynamics --- ###
-    PRESS = 100000  # [Pa]
-    THETA = 298.15  # [K]
-    qcond = 0.0  # [Kg/Kg]
-    WMAX = 0.6  # [m/s]
+    PRESS = pyconfig["thermo_PRESS"]
+    THETA = pyconfig["thermo_THETA"]
+    WMAX = pyconfig["thermo_WMAX"]
+    Zlength = pyconfig["thermo_Zlength"]
+    Xlength = pyconfig["thermo_Xlength"]
+    qvapmethod = pyconfig["thermo_qvapmethod"]
+    Zbase = pyconfig["thermo_Zbase"]
+    sratios = list(pyconfig["thermo_sratios"])
     VVEL = None  # [m/s]
-    Zlength = 1500  # [m]
-    Xlength = 1500  # [m]
-    qvapmethod = "sratio"
-    Zbase = 750  # [m]
-    sratios = [1.0, 1.0]  # s_ratio [below, above] Zbase
+    qcond = 0.0  # background liquid water mass mixing ratio [Kg/Kg]
 
     ### --------------------- BINARY FILES GENERATION ---------------------- ###
     ### ----- write gridbox boundaries binary ----- ###
     grid_filename = Path(config["inputfiles"]["grid_filename"])
-    geninitconds.generate_gridbox_boundaries(
-        grid_filename,
-        zgrid,
-        xgrid,
-        ygrid,
-        constants_filename,
-        isfigures=isfigures,
-        savefigpath=savefigpath,
-    )
+    if gen_gbxs:
+        geninitconds.generate_gridbox_boundaries(
+            grid_filename,
+            zgrid,
+            xgrid,
+            ygrid,
+            constants_filename,
+            isfigures=isfigures,
+            savefigpath=savefigpath,
+        )
 
     ### ----- write thermodynamics binaries ----- ###
-    thermog = thermogen.Simple2TierRelativeHumidity(
-        config_filename,
-        constants_filename,
-        PRESS,
-        THETA,
-        qvapmethod,
-        sratios,
-        Zbase,
-        qcond,
-    )
-    windsg = windsgen.Simple2DFlowField(
-        config_filename, constants_filename, WMAX, Zlength, Xlength, VVEL
-    )
-    thermodyngen = thermodyngen.ThermodynamicsGenerator(thermog, windsg)
-    geninitconds.generate_thermodynamics_conditions_fromfile(
-        thermofiles,
-        thermodyngen,
-        config_filename,
-        constants_filename,
-        grid_filename,
-        isfigures=isfigures,
-        savefigpath=savefigpath,
-    )
+    if gen_thermo:
+        thermog = thermogen.Simple2TierRelativeHumidity(
+            config_filename,
+            constants_filename,
+            PRESS,
+            THETA,
+            qvapmethod,
+            sratios,
+            Zbase,
+            qcond,
+        )
+        windsg = windsgen.Simple2DFlowField(
+            config_filename, constants_filename, WMAX, Zlength, Xlength, VVEL
+        )
+        thermodyngen = thermodyngen.ThermodynamicsGenerator(thermog, windsg)
+        geninitconds.generate_thermodynamics_conditions_fromfile(
+            thermofiles,
+            thermodyngen,
+            config_filename,
+            constants_filename,
+            grid_filename,
+            isfigures=isfigures,
+            savefigpath=savefigpath,
+        )
 
     ### ----- write initial superdroplets binary ----- ###
-    initsupers_filename = Path(config["initsupers"]["initsupers_filename"])
-    nsupers = crdgens.nsupers_at_domain_base(
-        grid_filename, constants_filename, npergbx, zlim
-    )
-    coord3gen = crdgens.SampleCoordGen(True)  # sample coord3 randomly
-    coord1gen = crdgens.SampleCoordGen(True)  # sample coord1 randomly
-    coord2gen = None  # do not generate superdroplet coord2s
-    xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
-    radiigen = rgens.SampleLog10RadiiGen(rspan)  # randomly sample radii from rspan [m]
-    dryradiigen = dryrgens.ScaledRadiiGen(1.0)
+    if gen_supers:
+        initsupers_filename = Path(config["initsupers"]["initsupers_filename"])
+        nsupers = crdgens.nsupers_at_domain_base(
+            grid_filename, constants_filename, npergbx, zlim
+        )
+        coord3gen = crdgens.SampleCoordGen(True)  # sample coord3 randomly
+        coord1gen = crdgens.SampleCoordGen(True)  # sample coord1 randomly
+        coord2gen = None  # do not generate superdroplet coord2s
+        xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
+        radiigen = rgens.SampleLog10RadiiGen(
+            rspan
+        )  # randomly sample radii from rspan [m]
+        dryradiigen = dryrgens.ScaledRadiiGen(1.0)
 
-    initattrsgen = attrsgen.AttrsGenerator(
-        radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
-    )
-    geninitconds.generate_initial_superdroplet_conditions(
-        initattrsgen,
-        initsupers_filename,
-        config_filename,
-        constants_filename,
-        grid_filename,
-        nsupers,
-        numconc,
-        isfigures=isfigures,
-        savefigpath=savefigpath,
-        gbxs2plt=SDgbxs2plt,
-    )
+        initattrsgen = attrsgen.AttrsGenerator(
+            radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
+        )
+        geninitconds.generate_initial_superdroplet_conditions(
+            initattrsgen,
+            initsupers_filename,
+            config_filename,
+            constants_filename,
+            grid_filename,
+            nsupers,
+            numconc,
+            isfigures=isfigures,
+            savefigpath=savefigpath,
+            gbxs2plt=SDgbxs2plt,
+        )
 
 
 # %%
@@ -211,6 +237,9 @@ if __name__ == "__main__":
         args.path2build,
         args.config_filename,
         args.thermofiles,
+        gen_gbxs=args.gen_gbxs,
+        gen_supers=args.gen_supers,
+        gen_thermo=args.gen_thermo,
         savefigpath=args.savefigpath,
         show_figures=args.show_figures,
         save_figures=args.save_figures,

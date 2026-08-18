@@ -40,6 +40,21 @@ def parse_arguments():
         help="Absolute path to derive thermoynamics binary files",
     )
     parser.add_argument(
+        "--gen_gbxs",
+        action="store_true",  # default is False
+        help="Generate gridbox boundaries binary file conditions",
+    )
+    parser.add_argument(
+        "--gen_supers",
+        action="store_true",  # default is False
+        help="Generate initial superdroplet conditions binary file",
+    )
+    parser.add_argument(
+        "--gen_thermo",
+        action="store_true",  # default is False
+        help="Generate thermodynamics binary files",
+    )
+    parser.add_argument(
         "--savefigpath",
         type=Path,
         default=None,
@@ -65,6 +80,9 @@ def main(
     path2build,
     config_filename,
     thermofiles,
+    gen_gbxs=False,
+    gen_supers=False,
+    gen_thermo=False,
     savefigpath=None,
     show_figures=False,
     save_figures=False,
@@ -90,6 +108,7 @@ def main(
     yaml = YAML()
     with open(config_filename, "r") as file:
         config = yaml.load(file)
+    pyconfig = config["python_inputfiles"]
 
     ### ------------------------ INPUT PARAMETERS -------------------------- ###
     ### --- required CLEO cleoconstants.hpp file --- ###
@@ -99,86 +118,89 @@ def main(
     isfigures = [show_figures, save_figures]
 
     ### --- settings for 3-D irregular gridbox boundaries --- ###
-    zgrid = np.array([0, 20, 30, 45, 60, 80, 90, 120, 140, 180, 360, 500, 1000, 1500])
-    xgrid = np.array(
-        [0, 33, 205, 440, 650, 915, 1033, 1100, 1300, 1450, 1500]
-    )  # evenly spaced xhalf coords [m]
-    ygrid = np.array([0, 10, 75, 100, 150, 200, 300])  # array of yhalf coords [m]
+    zgrid = np.array(list(pyconfig["zgrid"]))
+    xgrid = np.array(list(pyconfig["xgrid"]))
+    ygrid = np.array(list(pyconfig["ygrid"]))
 
     ### --- settings for initial superdroplets --- ###
     # settings for initial superdroplet coordinates
-    zlim = 1000  # max z coord of superdroplets
-    npergbx = 2  # number of superdroplets per gridbox
+    zlim = pyconfig["sd_zlim"]
+    npergbx = pyconfig["nsupers_pergbx"]
 
     # settings for initial radius and aerosol distributions
-    monor = 1e-6  # all SDs have this same radius [m]
-    dryr_sf = 1.0  # scale factor for dry radii [m]
-    numconc = 5e8  # total no. conc of real droplets [m^-3]
+    monor = pyconfig["monor"]
+    dryr_sf = pyconfig["dryr_sf"]
+    numconc = pyconfig["numconc"]
     randcoord = False  # sample SD spatial coordinates randomly or not
 
     ### --- settings for 2D Thermodynamics --- ###
-    PRESSz0 = 101500  # [Pa]
-    TEMPz0 = 300  # [K]
-    qvapz0 = 0.05  # [Kg/Kg]
-    qcondz0 = 0.001  # [Kg/Kg]
-    WMAX = 1.5  # [m/s]
-    Zlength = 1500  # [m]
-    Xlength = 1500  # [m]
-    VMAX = 1.0  # [m/s]
-    Ylength = 300  # [m]
+    PRESSz0 = pyconfig["thermo_PRESSz0"]
+    TEMPz0 = pyconfig["thermo_TEMPz0"]
+    qvapz0 = pyconfig["thermo_qvapz0"]
+    qcondz0 = pyconfig["thermo_qcondz0"]
+    WMAX = pyconfig["thermo_WMAX"]
+    Zlength = pyconfig["thermo_Zlength"]
+    Xlength = pyconfig["thermo_Xlength"]
+    VMAX = pyconfig["thermo_VMAX"]
+    Ylength = pyconfig["thermo_Ylength"]
 
     ### --------------------- BINARY FILES GENERATION ---------------------- ###
     ### ----- write gridbox boundaries binary ----- ###
     grid_filename = Path(config["inputfiles"]["grid_filename"])
-    geninitconds.generate_gridbox_boundaries(
-        grid_filename,
-        zgrid,
-        xgrid,
-        ygrid,
-        constants_filename,
-        isprintinfo=True,
-        isfigures=isfigures,
-        savefigpath=savefigpath,
-    )
+    if gen_gbxs:
+        geninitconds.generate_gridbox_boundaries(
+            grid_filename,
+            zgrid,
+            xgrid,
+            ygrid,
+            constants_filename,
+            isprintinfo=True,
+            isfigures=isfigures,
+            savefigpath=savefigpath,
+        )
 
     ### ----- write thermodynamics binaries ----- ###
-    thermodyngen = gen_input_thermo.TimeVarying3DThermodyn(
-        PRESSz0, TEMPz0, qvapz0, qcondz0, WMAX, Zlength, Xlength, VMAX, Ylength
-    )
-    geninitconds.generate_thermodynamics_conditions_fromfile(
-        thermofiles,
-        thermodyngen,
-        config_filename,
-        constants_filename,
-        grid_filename,
-        isfigures=isfigures,
-        savefigpath=savefigpath,
-    )
+    if gen_thermo:
+        thermodyngen = gen_input_thermo.TimeVarying3DThermodyn(
+            PRESSz0, TEMPz0, qvapz0, qcondz0, WMAX, Zlength, Xlength, VMAX, Ylength
+        )
+        geninitconds.generate_thermodynamics_conditions_fromfile(
+            thermofiles,
+            thermodyngen,
+            config_filename,
+            constants_filename,
+            grid_filename,
+            isfigures=isfigures,
+            savefigpath=savefigpath,
+        )
 
     ### ----- write initial superdroplets binary ----- ###
-    initsupers_filename = Path(config["initsupers"]["initsupers_filename"])
-    nsupers = crdgens.nsupers_at_domain_base(
-        grid_filename, constants_filename, npergbx, zlim
-    )
-    radiigen = rgens.MonoAttrGen(monor)  # all SDs have the same radius [m]
-    dryradiigen = dryrgens.ScaledRadiiGen(dryr_sf)  # dryradii are 1/sf of radii [m]
-    coord3gen = crdgens.SampleCoordGen(randcoord)  # (not) random coord3 of SDs
-    coord1gen = crdgens.SampleCoordGen(randcoord)  # (not) random coord1 of SDs
-    coord2gen = crdgens.SampleCoordGen(randcoord)  # (not) random coord2 of SDs
-    xiprobdist = probdists.DiracDelta(monor)  # monodisperse droplet probability distrib
+    if gen_supers:
+        initsupers_filename = Path(config["initsupers"]["initsupers_filename"])
+        nsupers = crdgens.nsupers_at_domain_base(
+            grid_filename, constants_filename, npergbx, zlim
+        )
+        radiigen = rgens.MonoAttrGen(monor)  # all SDs have the same radius [m]
+        dryradiigen = dryrgens.ScaledRadiiGen(dryr_sf)  # dryradii are 1/sf of radii [m]
+        coord3gen = crdgens.SampleCoordGen(randcoord)  # (not) random coord3 of SDs
+        coord1gen = crdgens.SampleCoordGen(randcoord)  # (not) random coord1 of SDs
+        coord2gen = crdgens.SampleCoordGen(randcoord)  # (not) random coord2 of SDs
+        xiprobdist = probdists.DiracDelta(
+            monor
+        )  # monodisperse droplet probability distrib
 
-    initattrsgen = attrsgen.AttrsGenerator(
-        radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
-    )
-    geninitconds.generate_initial_superdroplet_conditions(
-        initattrsgen,
-        initsupers_filename,
-        config_filename,
-        constants_filename,
-        grid_filename,
-        nsupers,
-        numconc,
-    )
+        initattrsgen = attrsgen.AttrsGenerator(
+            radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
+        )
+        geninitconds.generate_initial_superdroplet_conditions(
+            initattrsgen,
+            initsupers_filename,
+            config_filename,
+            constants_filename,
+            grid_filename,
+            nsupers,
+            numconc,
+        )
 
 
 # %%
@@ -190,6 +212,9 @@ if __name__ == "__main__":
         args.path2build,
         args.config_filename,
         args.thermofiles,
+        gen_gbxs=args.gen_gbxs,
+        gen_supers=args.gen_supers,
+        gen_thermo=args.gen_thermo,
         savefigpath=args.savefigpath,
         show_figures=args.show_figures,
         save_figures=args.save_figures,

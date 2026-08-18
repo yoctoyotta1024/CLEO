@@ -101,6 +101,7 @@ def main(
     yaml = YAML()
     with open(config_filename, "r") as file:
         config = yaml.load(file)
+    pyconfig = config["python_inputfiles"]
 
     ### ------------------------ INPUT PARAMETERS -------------------------- ###
     ### --- required CLEO cleoconstants.hpp file --- ###
@@ -114,10 +115,10 @@ def main(
     SDgbxs2plt = "all"  # gbxindex of initial SDs to plot if any(isfigures) (nb. "all" can be very slow)
 
     # settings for 0D Model (number of SD and grid coordinates)
-    nsupers = {0: 64}
-    zgrid = np.asarray([0, 100])
-    xgrid = np.asarray([0, 100])
-    ygrid = np.asarray([0, 100])
+    nsupers = {0: int(config["domain"]["maxnsupers"])}
+    zgrid = np.asarray([0, pyconfig["zgrid"]])
+    xgrid = np.asarray([0, pyconfig["xgrid"]])
+    ygrid = np.asarray([0, pyconfig["ygrid"]])
 
     # init_conds dictionary is:
     # icond : [[m^-3] total no. concentration of droplets, monodisperse droplet radius [m]]

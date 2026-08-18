@@ -40,6 +40,16 @@ def parse_arguments():
         "config_filename", type=Path, help="Absolute path to configuration YAML file"
     )
     parser.add_argument(
+        "--gen_gbxs",
+        action="store_true",  # default is False
+        help="Generate gridbox boundaries binary file conditions",
+    )
+    parser.add_argument(
+        "--gen_supers",
+        action="store_true",  # default is False
+        help="Generate initial superdroplet conditions binary file",
+    )
+    parser.add_argument(
         "--savefigpath",
         type=Path,
         default=None,
@@ -64,6 +74,8 @@ def main(
     path2CLEO,
     path2build,
     config_filename,
+    gen_gbxs=False,
+    gen_supers=False,
     savefigpath=None,
     show_figures=False,
     save_figures=False,
@@ -82,6 +94,7 @@ def main(
     yaml = YAML()
     with open(config_filename, "r") as file:
         config = yaml.load(file)
+    pyconfig = config["python_inputfiles"]
 
     ### ------------------------ INPUT PARAMETERS -------------------------- ###
     ### --- required CLEO cleoconstants.hpp file --- ###
@@ -95,16 +108,15 @@ def main(
     SDgbxs2plt = "all"  # gbxindex of initial SDs to plot if any(isfigures) (nb. "all" can be very slow)
 
     # settings for 0D Model (number of SD and grid coordinates)
-    nsupers = {0: 1}
-    zgrid = np.asarray([0, 100])
-    xgrid = np.asarray([0, 100])
-    ygrid = np.asarray([0, 100])
+    nsupers = {0: int(config["domain"]["maxnsupers"])}
+    zgrid = np.asarray([0, pyconfig["zgrid"]])
+    xgrid = np.asarray([0, pyconfig["xgrid"]])
+    ygrid = np.asarray([0, pyconfig["ygrid"]])
 
     # settings for monodisperse droplet radii
     # numconc = total no. concentration of droplets [m^-3]
-    numconc = 0.5e9
-    # monor = dry radius of all droplets [m]
-    monor = 0.025e-6
+    numconc = pyconfig["numconc"]
+    monor = pyconfig["monor"]
 
     # monodisperse droplet radii probability distribution
     radiigen = rgens.MonoAttrGen(monor)
@@ -119,35 +131,37 @@ def main(
     ### --------------------- BINARY FILES GENERATION ---------------------- ###
     ### ----- write gridbox boundaries binary ----- ###
     grid_filename = Path(config["inputfiles"]["grid_filename"])
-    geninitconds.generate_gridbox_boundaries(
-        grid_filename,
-        zgrid,
-        xgrid,
-        ygrid,
-        constants_filename,
-        isprintinfo=True,
-        isfigures=isfigures,
-        savefigpath=savefigpath,
-    )
+    if gen_gbxs:
+        geninitconds.generate_gridbox_boundaries(
+            grid_filename,
+            zgrid,
+            xgrid,
+            ygrid,
+            constants_filename,
+            isprintinfo=True,
+            isfigures=isfigures,
+            savefigpath=savefigpath,
+        )
 
     ### ----- write initial superdroplets binary ----- ###
-    initsupers_filename = Path(config["initsupers"]["initsupers_filename"])
-    initattrsgen = attrsgen.AttrsGenerator(
-        radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
-    )
-    geninitconds.generate_initial_superdroplet_conditions(
-        initattrsgen,
-        initsupers_filename,
-        config_filename,
-        constants_filename,
-        grid_filename,
-        nsupers,
-        numconc,
-        isprintinfo=True,
-        isfigures=isfigures,
-        savefigpath=savefigpath,
-        gbxs2plt=SDgbxs2plt,
-    )
+    if gen_supers:
+        initsupers_filename = Path(config["initsupers"]["initsupers_filename"])
+        initattrsgen = attrsgen.AttrsGenerator(
+            radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
+        )
+        geninitconds.generate_initial_superdroplet_conditions(
+            initattrsgen,
+            initsupers_filename,
+            config_filename,
+            constants_filename,
+            grid_filename,
+            nsupers,
+            numconc,
+            isprintinfo=True,
+            isfigures=isfigures,
+            savefigpath=savefigpath,
+            gbxs2plt=SDgbxs2plt,
+        )
 
 
 # %%
@@ -158,6 +172,8 @@ if __name__ == "__main__":
         args.path2CLEO,
         args.path2build,
         args.config_filename,
+        gen_gbxs=args.gen_gbxs,
+        gen_supers=args.gen_supers,
         savefigpath=args.savefigpath,
         show_figures=args.show_figures,
         save_figures=args.save_figures,

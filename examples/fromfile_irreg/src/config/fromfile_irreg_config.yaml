@@ -18,6 +18,58 @@
 # and so can the thermodynamics files when using coupled thermodynamics "fromfile_irreg".
 #
 
+### Initialization Parameters for fromfile_irreg_inputfiles.py ###
+python_inputfiles:                        # <- note(!) z_ * x_ * y_ ngbxs == ngbxs (see below)
+  zgrid:                                  # zhalf coordinates of the grid; z_ngbxs = len(zgrid-1) [m]
+    - 0
+    - 20
+    - 30
+    - 45
+    - 60
+    - 80
+    - 90
+    - 120
+    - 140
+    - 180
+    - 360
+    - 500
+    - 1000
+    - 1500
+  xgrid:                                  # xhalf coordinates of the grid; x_ngbxs = len(xgrid-1) [m]
+    - 0
+    - 33
+    - 205
+    - 440
+    - 650
+    - 915
+    - 1033
+    - 1100
+    - 1300
+    - 1450
+    - 1500
+  ygrid:                                  # yhalf coordinates of the grid; y_ngbxs = len(ygrid-1) [m]
+    - 0
+    - 10
+    - 75
+    - 100
+    - 150
+    - 200
+    - 300
+  sd_zlim: 1000                                # max z coord of initial superdroplets
+  nsupers_pergbx: 2                            # number of SDs per gridbox below sd_zlim <- note(!) must be consistent with maxnsupers (see below)
+  monor: 1e-6                                  # all SDs have this same radius [m]
+  dryr_sf: 1.0                                 # scale factor for dry radii [m]
+  numconc: 5e8                                 # total no. conc of real droplets [m^-3]
+  thermo_PRESSz0: 101500                       # settings for thermodynamics profiles [Pa]
+  thermo_TEMPz0: 300                           # [K]
+  thermo_qvapz0: 0.05                          # [Kg/Kg]
+  thermo_qcondz0: 0.001                        # [Kg/Kg]
+  thermo_WMAX: 1.5                             # [m/s]
+  thermo_Zlength: 1500                         # [m]
+  thermo_Xlength: 1500                         # [m]
+  thermo_VMAX: 1.0                             # [m/s]
+  thermo_Ylength: 300                          # [m]
+
 ### Kokkos Initialization Parameters ###
 kokkos_settings:
   num_threads: 16                                          # number of threads for host parallel backend

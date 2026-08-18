@@ -49,6 +49,16 @@ def parse_arguments():
         help="kernel example to run",
     )
     parser.add_argument(
+        "--gen_gbxs",
+        action="store_true",  # default is False
+        help="Generate gridbox boundaries binary file conditions",
+    )
+    parser.add_argument(
+        "--gen_supers",
+        action="store_true",  # default is False
+        help="Generate initial superdroplet conditions binary file",
+    )
+    parser.add_argument(
         "--savefigpath",
         type=Path,
         default=None,
@@ -74,6 +84,8 @@ def main(
     path2build,
     config_filename,
     kernel,
+    gen_gbxs=False,
+    gen_supers=False,
     savefigpath=None,
     show_figures=False,
     save_figures=False,
@@ -92,6 +104,7 @@ def main(
     yaml = YAML()
     with open(config_filename, "r") as file:
         config = yaml.load(file)
+    pyconfig = config["python_inputfiles"]
 
     ### ------------------------ INPUT PARAMETERS -------------------------- ###
     ### --- required CLEO cleoconstants.hpp file --- ###
@@ -105,24 +118,24 @@ def main(
     SDgbxs2plt = "all"  # gbxindex of initial SDs to plot if any(isfigures) (nb. "all" can be very slow)
 
     ### --- settings for 0-D Model gridbox boundaries --- ###
-    zgrid = np.asarray([0, 100])
-    xgrid = np.asarray([0, 100])
-    ygrid = np.asarray([0, 100])
+    zgrid = np.asarray([0, pyconfig["zgrid"]])
+    xgrid = np.asarray([0, pyconfig["xgrid"]])
+    ygrid = np.asarray([0, pyconfig["ygrid"]])
 
     ### --- settings for initial superdroplets --- ###
     # settings for superdroplet coordinates
     nsupers = int(config["domain"]["maxnsupers"])
 
     # settings for superdroplet attributes
-    dryradius = 1e-16  # all SDs have negligible solute [m]
+    dryradius = pyconfig["dryradius"]
     coord3gen = None  # do not generate superdroplet coords
     coord1gen = None
     coord2gen = None
 
-    # radius distirbution from exponential in droplet volume for setup 1
-    rspan = [1e-7, 9e-5]  # max and min range of radii to sample [m]
-    volexpr0 = 30.531e-6  # peak of volume exponential distribution [m]
-    numconc = 2**23  # total no. conc of real droplets [m^-3]
+    # radius distribution from exponential in droplet volume
+    rspan = list(pyconfig["rspan"])
+    volexpr0 = pyconfig["volexpr0"]
+    numconc = pyconfig["numconc"]
 
     # attribute generators
     xiprobdist = probdists.VolExponential(volexpr0, rspan)
@@ -132,36 +145,38 @@ def main(
     ### --------------------- BINARY FILES GENERATION ---------------------- ###
     ### ----- write gridbox boundaries binary ----- ###
     grid_filename = Path(config["inputfiles"]["grid_filename"])
-    geninitconds.generate_gridbox_boundaries(
-        grid_filename,
-        zgrid,
-        xgrid,
-        ygrid,
-        constants_filename,
-        isprintinfo=True,
-        isfigures=isfigures,
-        savefigpath=savefigpath,
-    )
+    if gen_gbxs:
+        geninitconds.generate_gridbox_boundaries(
+            grid_filename,
+            zgrid,
+            xgrid,
+            ygrid,
+            constants_filename,
+            isprintinfo=True,
+            isfigures=isfigures,
+            savefigpath=savefigpath,
+        )
 
     ### ----- write initial superdroplets binary ----- ###
-    initsupers_filename = Path(config["initsupers"]["initsupers_filename"])
-    initattrsgen = attrsgen.AttrsGenerator(
-        radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
-    )
-    geninitconds.generate_initial_superdroplet_conditions(
-        initattrsgen,
-        initsupers_filename,
-        config_filename,
-        constants_filename,
-        grid_filename,
-        nsupers,
-        numconc,
-        isprintinfo=True,
-        isfigures=isfigures,
-        savefigpath=savefigpath,
-        gbxs2plt=SDgbxs2plt,
-        savelabel=f"_{kernel}",
-    )
+    if gen_supers:
+        initsupers_filename = Path(config["initsupers"]["initsupers_filename"])
+        initattrsgen = attrsgen.AttrsGenerator(
+            radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
+        )
+        geninitconds.generate_initial_superdroplet_conditions(
+            initattrsgen,
+            initsupers_filename,
+            config_filename,
+            constants_filename,
+            grid_filename,
+            nsupers,
+            numconc,
+            isprintinfo=True,
+            isfigures=isfigures,
+            savefigpath=savefigpath,
+            gbxs2plt=SDgbxs2plt,
+            savelabel=f"_{kernel}",
+        )
 
 
 # %%
@@ -173,6 +188,8 @@ if __name__ == "__main__":
         args.path2build,
         args.config_filename,
         args.kernel,
+        gen_gbxs=args.gen_gbxs,
+        gen_supers=args.gen_supers,
         savefigpath=args.savefigpath,
         show_figures=args.show_figures,
         save_figures=args.save_figures,

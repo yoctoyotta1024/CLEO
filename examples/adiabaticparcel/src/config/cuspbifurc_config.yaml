@@ -18,6 +18,14 @@
 # and so can the thermodynamics files when using coupled thermodynamics "fromfile".
 #
 
+### Initialization Parameters for cuspbifurc_inputfiles.py ###
+python_inputfiles:
+  zgrid: 100                                    # domain size in z [m]
+  xgrid: 100                                    # domain size in x [m]
+  ygrid: 100                                    # domain size in x [m]
+  numconc: 0.5e9                                # total no. concentration of droplets [m^-3]
+  monor: 0.025e-6                               # dry radius of all droplets [m]
+
 ### SDM Runtime Parameters ###
 domain:
   nspacedims : 0                                               # no. of spatial dimensions to model

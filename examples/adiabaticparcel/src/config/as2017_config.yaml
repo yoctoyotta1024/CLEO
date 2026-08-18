@@ -18,6 +18,12 @@
 # and so can the thermodynamics files when using coupled thermodynamics "fromfile".
 #
 
+### Initialization Parameters for as2017_inputfiles.py ###
+python_inputfiles:
+  zgrid: 100                                    # domain size in z [m]
+  xgrid: 100                                    # domain size in x [m]
+  ygrid: 100                                    # domain size in x [m]
+
 ### Kokkos Initialization Parameters ###
 kokkos_settings:
   num_threads: 64                                          # number of threads for host parallel backend

@@ -41,6 +41,16 @@ def parse_arguments():
         help="kernel example to run",
     )
     parser.add_argument(
+        "--gen_gbxs",
+        action="store_true",  # default is False
+        help="Generate gridbox boundaries binary file conditions",
+    )
+    parser.add_argument(
+        "--gen_supers",
+        action="store_true",  # default is False
+        help="Generate initial superdroplet conditions binary file",
+    )
+    parser.add_argument(
         "--savefigpath",
         type=Path,
         default=None,
@@ -83,9 +93,10 @@ def initial_superdroplet_conditions_for_setup(
     yaml = YAML()
     with open(config_filename, "r") as file:
         config = yaml.load(file)
+    pyconfig = config["python_inputfiles"]
 
     ### --- settings for superdroplet attributes --- ###
-    dryradius = 1e-16  # all SDs have negligible solute [m]
+    dryradius = pyconfig["dryradius"]
     dryradiigen = rgens.MonoAttrGen(dryradius)
     coord3gen = None  # do not generate superdroplet coords
     coord1gen = None
@@ -122,6 +133,8 @@ def main(
     path2build,
     config_filename,
     kernel,
+    gen_gbxs=False,
+    gen_supers=False,
     savefigpath=None,
     show_figures=False,
     save_figures=False,
@@ -140,6 +153,7 @@ def main(
     yaml = YAML()
     with open(config_filename, "r") as file:
         config = yaml.load(file)
+    pyconfig = config["python_inputfiles"]
 
     ### ------------------------ INPUT PARAMETERS -------------------------- ###
     ### --- required CLEO cleoconstants.hpp file --- ###
@@ -153,18 +167,18 @@ def main(
     SDgbxs2plt = "all"  # gbxindex of initial SDs to plot if any(isfigures) (nb. "all" can be very slow)
 
     ### --- settings for 0-D Model gridbox boundaries --- ###
-    zgrid = np.asarray([0, 100])
-    xgrid = np.asarray([0, 100])
-    ygrid = np.asarray([0, 100])
+    zgrid = np.asarray([0, pyconfig["zgrid"]])
+    xgrid = np.asarray([0, pyconfig["xgrid"]])
+    ygrid = np.asarray([0, pyconfig["ygrid"]])
 
     ### --- settings for initial superdroplets --- ###
     nsupers = int(config["domain"]["maxnsupers"])
 
     ### --- settings for initial superdroplets for setup 1 --- ###
     # radius distirbution from exponential in droplet volume
-    rspan_1 = [0.62e-6, 6.34e-2]  # max and min range of radii to sample [m]
-    volexpr0_1 = 30.531e-6  # peak of volume exponential distribution [m]
-    numconc_1 = 2**23  # total no. conc of real droplets [m^-3]
+    rspan_1 = list(pyconfig["rspan_1"])
+    volexpr0_1 = pyconfig["volexpr0_1"]
+    numconc_1 = pyconfig["numconc_1"]
 
     # attribute generators
     xiprobdist_1 = attrgens_shima2009.SampleXiShima2009()
@@ -174,9 +188,9 @@ def main(
 
     ### --- settings for initial superdroplets for setup 2 --- ###
     # radius distirbution from exponential in droplet volume
-    rspan_2 = [0.62e-6, 6.34e-2]  # max and min range of radii to sample [m]
-    volexpr0_2 = 10.117e-6  # peak of volume exponential distribution [m]
-    numconc_2 = 27 * 2**23  # total no. conc of real droplets [m^-3]
+    rspan_2 = list(pyconfig["rspan_2"])
+    volexpr0_2 = pyconfig["volexpr0_2"]
+    numconc_2 = pyconfig["numconc_2"]
 
     # attribute generators
     xiprobdist_2 = attrgens_shima2009.SampleXiShima2009()
@@ -187,48 +201,50 @@ def main(
     ### --------------------- BINARY FILES GENERATION ---------------------- ###
     ### ----- write gridbox boundaries binary ----- ###
     grid_filename = Path(config["inputfiles"]["grid_filename"])
-    geninitconds.generate_gridbox_boundaries(
-        grid_filename,
-        zgrid,
-        xgrid,
-        ygrid,
-        constants_filename,
-        isprintinfo=True,
-        isfigures=isfigures,
-        savefigpath=savefigpath,
-    )
+    if gen_gbxs:
+        geninitconds.generate_gridbox_boundaries(
+            grid_filename,
+            zgrid,
+            xgrid,
+            ygrid,
+            constants_filename,
+            isprintinfo=True,
+            isfigures=isfigures,
+            savefigpath=savefigpath,
+        )
 
     ### ----- write initial superdroplets binary ----- ###
-    if "golovin" == kernel or "long1" == kernel:
-        initial_superdroplet_conditions_for_setup(
-            path2CLEO,
-            config_filename,
-            nsupers,
-            radiigen_1,
-            xiprobdist_1,
-            numconc_1,
-            isfigures=isfigures,
-            savefigpath=savefigpath,
-            savelabel=f"_{kernel}",
-            gbxs2plt=SDgbxs2plt,
-        )
-    elif "long2" == kernel:
-        initial_superdroplet_conditions_for_setup(
-            path2CLEO,
-            config_filename,
-            nsupers,
-            radiigen_2,
-            xiprobdist_2,
-            numconc_2,
-            isfigures=isfigures,
-            savefigpath=savefigpath,
-            savelabel=f"_{kernel}",
-            gbxs2plt=SDgbxs2plt,
-        )
-    else:
-        raise ValueError(
-            "kernel for examples not recognised, please choose from: golovin, long1 or long2"
-        )
+    if gen_supers:
+        if "golovin" == kernel or "long1" == kernel:
+            initial_superdroplet_conditions_for_setup(
+                path2CLEO,
+                config_filename,
+                nsupers,
+                radiigen_1,
+                xiprobdist_1,
+                numconc_1,
+                isfigures=isfigures,
+                savefigpath=savefigpath,
+                savelabel=f"_{kernel}",
+                gbxs2plt=SDgbxs2plt,
+            )
+        elif "long2" == kernel:
+            initial_superdroplet_conditions_for_setup(
+                path2CLEO,
+                config_filename,
+                nsupers,
+                radiigen_2,
+                xiprobdist_2,
+                numconc_2,
+                isfigures=isfigures,
+                savefigpath=savefigpath,
+                savelabel=f"_{kernel}",
+                gbxs2plt=SDgbxs2plt,
+            )
+        else:
+            raise ValueError(
+                "kernel for examples not recognised, please choose from: golovin, long1 or long2"
+            )
 
 
 # %%
@@ -240,6 +256,8 @@ if __name__ == "__main__":
         args.path2build,
         args.config_filename,
         args.kernel,
+        gen_gbxs=args.gen_gbxs,
+        gen_supers=args.gen_supers,
         savefigpath=args.savefigpath,
         show_figures=args.show_figures,
         save_figures=args.save_figures,

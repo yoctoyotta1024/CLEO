@@ -95,6 +95,9 @@ def inputfiles(
     src_config_filename,
     config_filename,
     config_params,
+    gen_config,
+    gen_gbxs,
+    gen_supers,
     isfigures,
 ):
     from cleopy import editconfigfile
@@ -110,16 +113,19 @@ def inputfiles(
         savefigpath.mkdir(exist_ok=True)
 
     ### --- copy src_config_filename into tmp and edit parameters --- ###
-    config_filename.unlink(missing_ok=True)  # delete any existing config
-    shutil.copy(src_config_filename, config_filename)
-    editconfigfile.edit_config_params(config_filename, config_params)
+    if gen_config:
+        config_filename.unlink(missing_ok=True)  # delete any existing config
+        shutil.copy(src_config_filename, config_filename)
+        editconfigfile.edit_config_params(config_filename, config_params)
 
     ### --- delete any existing initial conditions --- ###
     yaml = YAML()
     with open(config_filename, "r") as file:
         config = yaml.load(file)
-    Path(config["inputfiles"]["grid_filename"]).unlink(missing_ok=True)
-    Path(config["initsupers"]["initsupers_filename"]).unlink(missing_ok=True)
+    if gen_gbxs:
+        Path(config["inputfiles"]["grid_filename"]).unlink(missing_ok=True)
+    if gen_supers:
+        Path(config["initsupers"]["initsupers_filename"]).unlink(missing_ok=True)
 
     ### --- input binary files generation --- ###
     # equivalent to ``import python_bindings_inputfiles`` followed by
@@ -135,6 +141,10 @@ def inputfiles(
         path2build,
         config_filename,
     ]
+    if gen_gbxs:
+        cmd.append("--gen_gbxs")
+    if gen_supers:
+        cmd.append("--gen_supers")
     if isfigures[0]:
         cmd.append("--show_figures")
     if isfigures[1]:
@@ -259,6 +269,9 @@ def run_exectuable(path2build, config_filename):
 # %%
 ### ----------------------------- RUN EXAMPLE ------------------------------ ###
 if args.do_inputfiles:
+    gen_config = True
+    gen_gbxs = True
+    gen_supers = True
     inputfiles(
         path2CLEO,
         path2build,
@@ -269,6 +282,9 @@ if args.do_inputfiles:
         src_config_filename,
         config_filename,
         config_params,
+        gen_config,
+        gen_gbxs,
+        gen_supers,
         isfigures,
     )
 

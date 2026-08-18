@@ -18,6 +18,39 @@
 # and so can the thermodynamics files when using coupled thermodynamics "fromfile".
 #
 
+### Initialization Parameters for divfree2d_inputfiles.py ###
+python_inputfiles:
+  zgrid_max: 1500                              # domain size in z [m]
+  xgrid_max: 1500                              # domain size in x [m]
+  ygrid_max: 20                                # domain size in y [m]
+  zgrid_ngbxs: 30                              # z direction ngbxs <- note(!) zgrid_ngbxs * xgrid_ngbxs == ngbxs (see below)
+  xgrid_ngbxs: 30                              # x direction ngbxs <- note(!) zgrid_ngbxs * xgrid_ngbxs == ngbxs (see below)
+  sd_zlim: 750                                 # max z coord of initial superdroplets
+  nsupers_pergbx: 8                            # number of SDs per gridbox below sd_zlim <- note(!) must be consistent with maxnsupers (see below)
+  rspan:                                       # [min, max] range of radii to sample [m]
+    - 3e-9
+    - 3e-6
+  geomeans:                                    # geometric means of bimodal Lognormal distribution
+    - 0.02e-6
+    - 0.15e-6
+  geosigs:                                     # geometric stddevs of bimodal Lognormal distribution
+    - 1.4
+    - 1.6
+  scalefacs:                                   # scale factors of peaks in bimodal Lognormal distribution
+    - 0.6
+    - 0.4
+  numconc: 1e7                                 # total no. conc of real droplets [m^-3]
+  thermo_PRESS: 100000                         # settings for thermodynamics profiles [Pa]
+  thermo_THETA: 298.15                         # [K]
+  thermo_WMAX: 0.6                             # [m/s]
+  thermo_Zlength: 1500                         # [m]
+  thermo_Xlength: 1500                         # [m]
+  thermo_qvapmethod: "sratio"
+  thermo_Zbase: 750                            # [m]
+  thermo_sratios:                              # s_ratio [below, above] Zbase
+    - 1.0
+    - 1.0
+
 ### Kokkos Initialization Parameters ###
 kokkos_settings:
   num_threads : 128                                    # number of threads for host parallel backend

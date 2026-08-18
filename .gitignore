@@ -12,6 +12,7 @@
 .DS_Store
 __pycache__
 .clang-format
+_kokkostools
 
 build*/
 docs/source/_autosummary
