@@ -18,6 +18,18 @@
 # and so can the thermodynamics files when using coupled thermodynamics "fromfile".
 #
 
+### Initialization Parameters for breakup_inputfiles.py ###
+python_inputfiles:
+  zgrid: 100                                    # domain size in z [m]
+  xgrid: 100                                    # domain size in x [m]
+  ygrid: 100                                    # domain size in x [m]
+  dryradius: 1e-16                              # all SDs have negligible solute [m]
+  rspan:                                        # [min, max] range of radii to sample [m]
+    - 1e-7
+    - 9e-5
+  volexpr0: 30.531e-6                           # peak of volume exponential distribution [m]
+  numconc: 8388608                              # = 2**23  # total no. conc of real droplets [m^-3]
+
 ### Kokkos Initialization Parameters ###
 kokkos_settings:
   num_threads: 128                                              # number of threads for host parallel backend

@@ -104,6 +104,7 @@ def main(
     yaml = YAML()
     with open(config_filename, "r") as file:
         config = yaml.load(file)
+    pyconfig = config["python_inputfiles"]
 
     ### ------------------------ INPUT PARAMETERS -------------------------- ###
     ### --- required CLEO cleoconstants.hpp file --- ###
@@ -117,24 +118,24 @@ def main(
     SDgbxs2plt = "all"  # gbxindex of initial SDs to plot if any(isfigures) (nb. "all" can be very slow)
 
     ### --- settings for 0-D Model gridbox boundaries --- ###
-    zgrid = np.asarray([0, 100])
-    xgrid = np.asarray([0, 100])
-    ygrid = np.asarray([0, 100])
+    zgrid = np.asarray([0, pyconfig["zgrid"]])
+    xgrid = np.asarray([0, pyconfig["xgrid"]])
+    ygrid = np.asarray([0, pyconfig["ygrid"]])
 
     ### --- settings for initial superdroplets --- ###
     # settings for superdroplet coordinates
     nsupers = int(config["domain"]["maxnsupers"])
 
     # settings for superdroplet attributes
-    dryradius = 1e-16  # all SDs have negligible solute [m]
+    dryradius = pyconfig["dryradius"]
     coord3gen = None  # do not generate superdroplet coords
     coord1gen = None
     coord2gen = None
 
-    # radius distirbution from exponential in droplet volume for setup 1
-    rspan = [1e-7, 9e-5]  # max and min range of radii to sample [m]
-    volexpr0 = 30.531e-6  # peak of volume exponential distribution [m]
-    numconc = 2**23  # total no. conc of real droplets [m^-3]
+    # radius distribution from exponential in droplet volume
+    rspan = list(pyconfig["rspan"])
+    volexpr0 = pyconfig["volexpr0"]
+    numconc = pyconfig["numconc"]
 
     # attribute generators
     xiprobdist = probdists.VolExponential(volexpr0, rspan)
