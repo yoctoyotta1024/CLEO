@@ -18,7 +18,7 @@
 # and so can the thermodynamics files when using coupled thermodynamics "fromfile".
 #
 
-### Initialization Parameters for divfree2d_inputfiles.py ###
+### Initialization Parameters for eurec4a1d_inputfiles.py ###
 python_inputfiles:
   zgrid_max: 3200                              # domain size in z [m]
   xgrid_max: 10                                # domain size in x [m]
