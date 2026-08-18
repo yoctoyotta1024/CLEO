@@ -49,6 +49,16 @@ def parse_arguments():
         help="kernel example to run",
     )
     parser.add_argument(
+        "--gen_gbxs",
+        action="store_true",  # default is False
+        help="Generate gridbox boundaries binary file conditions",
+    )
+    parser.add_argument(
+        "--gen_supers",
+        action="store_true",  # default is False
+        help="Generate initial superdroplet conditions binary file",
+    )
+    parser.add_argument(
         "--savefigpath",
         type=Path,
         default=None,
@@ -74,6 +84,8 @@ def main(
     path2build,
     config_filename,
     kernel,
+    gen_gbxs=False,
+    gen_supers=False,
     savefigpath=None,
     show_figures=False,
     save_figures=False,
@@ -132,36 +144,38 @@ def main(
     ### --------------------- BINARY FILES GENERATION ---------------------- ###
     ### ----- write gridbox boundaries binary ----- ###
     grid_filename = Path(config["inputfiles"]["grid_filename"])
-    geninitconds.generate_gridbox_boundaries(
-        grid_filename,
-        zgrid,
-        xgrid,
-        ygrid,
-        constants_filename,
-        isprintinfo=True,
-        isfigures=isfigures,
-        savefigpath=savefigpath,
-    )
+    if gen_gbxs:
+        geninitconds.generate_gridbox_boundaries(
+            grid_filename,
+            zgrid,
+            xgrid,
+            ygrid,
+            constants_filename,
+            isprintinfo=True,
+            isfigures=isfigures,
+            savefigpath=savefigpath,
+        )
 
     ### ----- write initial superdroplets binary ----- ###
-    initsupers_filename = Path(config["initsupers"]["initsupers_filename"])
-    initattrsgen = attrsgen.AttrsGenerator(
-        radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
-    )
-    geninitconds.generate_initial_superdroplet_conditions(
-        initattrsgen,
-        initsupers_filename,
-        config_filename,
-        constants_filename,
-        grid_filename,
-        nsupers,
-        numconc,
-        isprintinfo=True,
-        isfigures=isfigures,
-        savefigpath=savefigpath,
-        gbxs2plt=SDgbxs2plt,
-        savelabel=f"_{kernel}",
-    )
+    if gen_supers:
+        initsupers_filename = Path(config["initsupers"]["initsupers_filename"])
+        initattrsgen = attrsgen.AttrsGenerator(
+            radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
+        )
+        geninitconds.generate_initial_superdroplet_conditions(
+            initattrsgen,
+            initsupers_filename,
+            config_filename,
+            constants_filename,
+            grid_filename,
+            nsupers,
+            numconc,
+            isprintinfo=True,
+            isfigures=isfigures,
+            savefigpath=savefigpath,
+            gbxs2plt=SDgbxs2plt,
+            savelabel=f"_{kernel}",
+        )
 
 
 # %%
@@ -173,6 +187,8 @@ if __name__ == "__main__":
         args.path2build,
         args.config_filename,
         args.kernel,
+        gen_gbxs=args.gen_gbxs,
+        gen_supers=args.gen_supers,
         savefigpath=args.savefigpath,
         show_figures=args.show_figures,
         save_figures=args.save_figures,
