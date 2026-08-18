@@ -18,6 +18,33 @@
 # and so can the thermodynamics files when using coupled thermodynamics "fromfile".
 #
 
+### Initialization Parameters for divfree2d_inputfiles.py ###
+python_inputfiles:
+  zgrid_max: 3200                              # domain size in z [m]
+  xgrid_max: 10                                # domain size in x [m]
+  ygrid_max: 10                                # domain size in y [m]
+  sd_zlim: 0                                   # min z coord of initial superdroplets
+  nsupers_pergbx: 128                          # initial number of SDs per gridbox above sd_zlim
+  rspan:                                       # [min, max] range of radii to sample [m]
+    - 0.5e-8
+    - 2.5e-7
+  dryr_sf: 1.0                                 # dryradii are 1/sf of radii [m]
+  geomean: 0.04e-6                             # geometric mean of Lognormal distribution
+  geosig: 1.4                                  # geometric std of Lognormal distribution
+  numconc: 5e7                                 # total no. conc of real droplets [m^-3]
+  thermo_PRESSz0: 101315                       # settings for thermodynamics profiles [Pa]
+  thermo_TEMPz0: 297.9                         # [K]
+  thermo_qvapz0: 0.016                         # [Kg/Kg]
+  thermo_Zbase: 800                            # [m]
+  thermo_TEMPlapses:                           # -dT/dz [below, above] Zbase; [K/km]
+    - 9.8
+    - 6.5
+  thermo_qvaplapses:                           # -dvap/dz [below, above] Zbase; [g/Kg km^-1]
+    - 2.97
+    - "saturated"
+  thermo_WVEL: 4.0                             # max or constant vertical wind (see Wlength) [m/s]
+  thermo_Wlength: 1000                         # [m] use constant WVEL with Wlength=0.0, else sinusoidal 1-D profile below cloud base
+
 ### Kokkos Initialization Parameters ###
 kokkos_settings:
   num_threads: 128                                     # number of threads for host parallel backend
