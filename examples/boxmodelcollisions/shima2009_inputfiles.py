@@ -41,6 +41,16 @@ def parse_arguments():
         help="kernel example to run",
     )
     parser.add_argument(
+        "--gen_gbxs",
+        action="store_true",  # default is False
+        help="Generate gridbox boundaries binary file conditions",
+    )
+    parser.add_argument(
+        "--gen_supers",
+        action="store_true",  # default is False
+        help="Generate initial superdroplet conditions binary file",
+    )
+    parser.add_argument(
         "--savefigpath",
         type=Path,
         default=None,
@@ -122,6 +132,8 @@ def main(
     path2build,
     config_filename,
     kernel,
+    gen_gbxs=False,
+    gen_supers=False,
     savefigpath=None,
     show_figures=False,
     save_figures=False,
@@ -187,48 +199,50 @@ def main(
     ### --------------------- BINARY FILES GENERATION ---------------------- ###
     ### ----- write gridbox boundaries binary ----- ###
     grid_filename = Path(config["inputfiles"]["grid_filename"])
-    geninitconds.generate_gridbox_boundaries(
-        grid_filename,
-        zgrid,
-        xgrid,
-        ygrid,
-        constants_filename,
-        isprintinfo=True,
-        isfigures=isfigures,
-        savefigpath=savefigpath,
-    )
+    if gen_gbxs:
+        geninitconds.generate_gridbox_boundaries(
+            grid_filename,
+            zgrid,
+            xgrid,
+            ygrid,
+            constants_filename,
+            isprintinfo=True,
+            isfigures=isfigures,
+            savefigpath=savefigpath,
+        )
 
     ### ----- write initial superdroplets binary ----- ###
-    if "golovin" == kernel or "long1" == kernel:
-        initial_superdroplet_conditions_for_setup(
-            path2CLEO,
-            config_filename,
-            nsupers,
-            radiigen_1,
-            xiprobdist_1,
-            numconc_1,
-            isfigures=isfigures,
-            savefigpath=savefigpath,
-            savelabel=f"_{kernel}",
-            gbxs2plt=SDgbxs2plt,
-        )
-    elif "long2" == kernel:
-        initial_superdroplet_conditions_for_setup(
-            path2CLEO,
-            config_filename,
-            nsupers,
-            radiigen_2,
-            xiprobdist_2,
-            numconc_2,
-            isfigures=isfigures,
-            savefigpath=savefigpath,
-            savelabel=f"_{kernel}",
-            gbxs2plt=SDgbxs2plt,
-        )
-    else:
-        raise ValueError(
-            "kernel for examples not recognised, please choose from: golovin, long1 or long2"
-        )
+    if gen_supers:
+        if "golovin" == kernel or "long1" == kernel:
+            initial_superdroplet_conditions_for_setup(
+                path2CLEO,
+                config_filename,
+                nsupers,
+                radiigen_1,
+                xiprobdist_1,
+                numconc_1,
+                isfigures=isfigures,
+                savefigpath=savefigpath,
+                savelabel=f"_{kernel}",
+                gbxs2plt=SDgbxs2plt,
+            )
+        elif "long2" == kernel:
+            initial_superdroplet_conditions_for_setup(
+                path2CLEO,
+                config_filename,
+                nsupers,
+                radiigen_2,
+                xiprobdist_2,
+                numconc_2,
+                isfigures=isfigures,
+                savefigpath=savefigpath,
+                savelabel=f"_{kernel}",
+                gbxs2plt=SDgbxs2plt,
+            )
+        else:
+            raise ValueError(
+                "kernel for examples not recognised, please choose from: golovin, long1 or long2"
+            )
 
 
 # %%
@@ -240,6 +254,8 @@ if __name__ == "__main__":
         args.path2build,
         args.config_filename,
         args.kernel,
+        gen_gbxs=args.gen_gbxs,
+        gen_supers=args.gen_supers,
         savefigpath=args.savefigpath,
         show_figures=args.show_figures,
         save_figures=args.save_figures,
