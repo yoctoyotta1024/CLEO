@@ -40,6 +40,21 @@ def parse_arguments():
         help="Absolute path to derive thermoynamics binary files",
     )
     parser.add_argument(
+        "--gen_gbxs",
+        action="store_true",  # default is False
+        help="Generate gridbox boundaries binary file conditions",
+    )
+    parser.add_argument(
+        "--gen_supers",
+        action="store_true",  # default is False
+        help="Generate initial superdroplet conditions binary file",
+    )
+    parser.add_argument(
+        "--gen_thermo",
+        action="store_true",  # default is False
+        help="Generate thermodynamics binary files",
+    )
+    parser.add_argument(
         "--savefigpath",
         type=Path,
         default=None,
@@ -65,6 +80,9 @@ def main(
     path2build,
     config_filename,
     thermofiles,
+    gen_gbxs=False,
+    gen_supers=False,
+    gen_thermo=False,
     savefigpath=None,
     show_figures=False,
     save_figures=False,
@@ -143,82 +161,87 @@ def main(
     ### --------------------- BINARY FILES GENERATION ---------------------- ###
     ### ----- write gridbox boundaries binary ----- ###
     grid_filename = Path(config["inputfiles"]["grid_filename"])
-    geninitconds.generate_gridbox_boundaries(
-        grid_filename,
-        zgrid,
-        xgrid,
-        ygrid,
-        constants_filename,
-        isprintinfo=True,
-        isfigures=isfigures,
-        savefigpath=savefigpath,
-    )
+    if gen_gbxs:
+        geninitconds.generate_gridbox_boundaries(
+            grid_filename,
+            zgrid,
+            xgrid,
+            ygrid,
+            constants_filename,
+            isprintinfo=True,
+            isfigures=isfigures,
+            savefigpath=savefigpath,
+        )
 
     ### ----- write thermodynamics binaries ----- ###
-    thermog = thermogen.DryHydrostaticAdiabatic2TierRelH(
-        config_filename,
-        constants_filename,
-        PRESSz0,
-        THETA,
-        qvapmethod,
-        sratios,
-        Zbase,
-        qcond,
-        moistlayer,
-    )
-    windsg = thermog.create_default_windsgen(WMAX, Zlength, Xlength, VVEL)
-    thermodyngen = thermodyngen.ThermodynamicsGenerator(thermog, windsg)
-    geninitconds.generate_thermodynamics_conditions_fromfile(
-        thermofiles,
-        thermodyngen,
-        config_filename,
-        constants_filename,
-        grid_filename,
-        isfigures=isfigures,
-        savefigpath=savefigpath,
-    )
+    if gen_thermo:
+        thermog = thermogen.DryHydrostaticAdiabatic2TierRelH(
+            config_filename,
+            constants_filename,
+            PRESSz0,
+            THETA,
+            qvapmethod,
+            sratios,
+            Zbase,
+            qcond,
+            moistlayer,
+        )
+        windsg = thermog.create_default_windsgen(WMAX, Zlength, Xlength, VVEL)
+        thermodyngen = thermodyngen.ThermodynamicsGenerator(thermog, windsg)
+        geninitconds.generate_thermodynamics_conditions_fromfile(
+            thermofiles,
+            thermodyngen,
+            config_filename,
+            constants_filename,
+            grid_filename,
+            isfigures=isfigures,
+            savefigpath=savefigpath,
+        )
 
     ### ----- write initial superdroplets binary ----- ###
-    initsupers_filename = Path(config["initsupers"]["initsupers_filename"])
-    nsupers = crdgens.nsupers_at_domain_base(
-        grid_filename, constants_filename, npergbx, zlim
-    )
-    coord3gen = crdgens.SampleCoordGen(True)  # sample coord3 randomly
-    coord1gen = crdgens.SampleCoordGen(True)  # sample coord1 randomly
-    coord2gen = None  # do not generate superdroplet coord2s
-    xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
-    radiigen = rgens.SampleLog10RadiiGen(rspan)  # randomly sample radii from rspan [m]
-    dryradiigen = dryrgens.ScaledRadiiGen(1.0)
+    if gen_supers:
+        initsupers_filename = Path(config["initsupers"]["initsupers_filename"])
+        nsupers = crdgens.nsupers_at_domain_base(
+            grid_filename, constants_filename, npergbx, zlim
+        )
+        coord3gen = crdgens.SampleCoordGen(True)  # sample coord3 randomly
+        coord1gen = crdgens.SampleCoordGen(True)  # sample coord1 randomly
+        coord2gen = None  # do not generate superdroplet coord2s
+        xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
+        radiigen = rgens.SampleLog10RadiiGen(
+            rspan
+        )  # randomly sample radii from rspan [m]
+        dryradiigen = dryrgens.ScaledRadiiGen(1.0)
 
-    press = read_initial_pressure_into_dict(
-        grid_filename,
-        thermofiles,
-        constants_filename=constants_filename,
-        config_filename=config_filename,
-    )
+        press = read_initial_pressure_into_dict(
+            grid_filename,
+            thermofiles,
+            constants_filename=constants_filename,
+            config_filename=config_filename,
+        )
 
-    initattrsgen = attrsgen.AttrsGenerator(
-        radiigen,
-        dryradiigen,
-        xiprobdist,
-        coord3gen,
-        coord1gen,
-        coord2gen,
-        xi_by_pressure=True,
-        press=press,
-    )
-    geninitconds.generate_initial_superdroplet_conditions(
-        initattrsgen,
-        initsupers_filename,
-        config_filename,
-        constants_filename,
-        grid_filename,
-        nsupers,
-        numconc,
-        isfigures=isfigures,
-        savefigpath=savefigpath,
-        gbxs2plt=SDgbxs2plt,
-    )
+        initattrsgen = attrsgen.AttrsGenerator(
+            radiigen,
+            dryradiigen,
+            xiprobdist,
+            coord3gen,
+            coord1gen,
+            coord2gen,
+            xi_by_pressure=True,
+            press=press,
+        )
+        geninitconds.generate_initial_superdroplet_conditions(
+            initattrsgen,
+            initsupers_filename,
+            config_filename,
+            constants_filename,
+            grid_filename,
+            nsupers,
+            numconc,
+            isfigures=isfigures,
+            savefigpath=savefigpath,
+            gbxs2plt=SDgbxs2plt,
+        )
 
 
 # %%
@@ -230,6 +253,9 @@ if __name__ == "__main__":
         args.path2build,
         args.config_filename,
         args.thermofiles,
+        gen_gbxs=args.gen_gbxs,
+        gen_supers=args.gen_supers,
+        gen_thermo=args.gen_thermo,
         savefigpath=args.savefigpath,
         show_figures=args.show_figures,
         save_figures=args.save_figures,
