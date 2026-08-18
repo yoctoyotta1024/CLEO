@@ -298,7 +298,29 @@ The Examples
   reference solutions please :ref:`contact us <contact>`.
 
 
-.. dropdown:: Kokkos Tools Profiling Test
+.. dropdown:: Python Bindings
+  :animate: fade-in
+
+  This example is run from the ``examples/python_bindings/python_bindings.py`` script.
+
+  1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
+  and ``scripts/vanilla/examples/python_bindings.sh``
+
+  2. Execute the bash script ``python_bindings.sh``, e.g.
+
+  .. code-block:: console
+
+    $ scripts/vanilla/examples/python_bindings.sh
+
+  *Note*: you may have issues with python versions >= 3.14, please
+  see :ref:`this note<pybind11>` for details.
+
+  No plots are produced by this example but it should run sucessfully multiple times and produce
+  ``no plotting script for python bindings example`` messages. Please note the output during
+  time-stepping may not be ordered due to parallel execution.
+
+
+.. dropdown:: (*Removed since v0.68.3*) Kokkos Tools Profiling Test
   :animate: fade-in
 
   This example, ``kokkostools.py``, in ``examples/kokkostools/`` compiles and runs the same
@@ -333,27 +355,6 @@ The Examples
   The time spent in the "timestep" region can be compared with the ones
   in ``~/CLEO/examples/kokkostools/kokkostools_kpkerneltimer_example_solution``.
 
-
-.. dropdown:: Python Bindings
-  :animate: fade-in
-
-  This example is run from the ``examples/python_bindings/python_bindings.py`` script.
-
-  1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
-  and ``scripts/vanilla/examples/python_bindings.sh``
-
-  2. Execute the bash script ``python_bindings.sh``, e.g.
-
-  .. code-block:: console
-
-    $ scripts/vanilla/examples/python_bindings.sh
-
-  *Note*: you may have issues with python versions >= 3.14, please
-  see :ref:`this note<pybind11>` for details.
-
-  No plots are produced by this example but it should run sucessfully multiple times and produce
-  ``no plotting script for python bindings example`` messages. Please note the output during
-  time-stepping may not be ordered due to parallel execution.
 
 
 Extension

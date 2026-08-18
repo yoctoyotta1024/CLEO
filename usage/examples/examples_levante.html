@@ -607,7 +607,25 @@ reference solutions please <a class="reference internal" href="../contact.html#c
 </div>
 </details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3 sd-fade-in">
 <summary class="sd-summary-title sd-card-header">
-<span class="sd-summary-text">Kokkos Tools Profiling Test</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<span class="sd-summary-text">Python Bindings</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">This example is run from the <code class="docutils literal notranslate"><span class="pre">examples/python_bindings/python_bindings.py</span></code> script.</p>
+<p class="sd-card-text">1. <a class="reference internal" href="#configurebash-levante"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">scripts/levante/examples/build_compile_run_plot.sh</span></code>
+and <code class="docutils literal notranslate"><span class="pre">scripts/levante/examples/python_bindings.sh</span></code></p>
+<ol class="arabic simple" start="2">
+<li><p class="sd-card-text">Execute the bash script <code class="docutils literal notranslate"><span class="pre">python_bindings.sh</span></code>, e.g.</p></li>
+</ol>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>scripts/levante/examples/python_bindings.sh
+</pre></div>
+</div>
+<p class="sd-card-text"><em>Note</em>: you may have issues with python versions &gt;= 3.14, please
+see <a class="reference internal" href="../installation/extern.html#id2"><span class="std std-ref">this note</span></a> for details.</p>
+<p class="sd-card-text">No plots are produced by this example but it should run sucessfully multiple times and produce
+<code class="docutils literal notranslate"><span class="pre">no</span> <span class="pre">plotting</span> <span class="pre">script</span> <span class="pre">for</span> <span class="pre">python</span> <span class="pre">bindings</span> <span class="pre">example</span></code> messages. Please note the output during
+time-stepping may not be ordered due to parallel execution.</p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3 sd-fade-in">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">(<em>Removed since v0.68.3</em>) Kokkos Tools Profiling Test</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
 <p class="sd-card-text">This example, <code class="docutils literal notranslate"><span class="pre">kokkostools.py</span></code>, in <code class="docutils literal notranslate"><span class="pre">examples/kokkostools/</span></code> compiles and runs the same
 executable <code class="docutils literal notranslate"><span class="pre">kokkostools</span></code> for four different build configurations, (1) “cuda” with CUDA and OpenMP
 parallelism, (2) “openmp” with only OpenMP parallelism, (3) “threads” with only C++ threads
@@ -636,24 +654,6 @@ of the four different build configurations is written to
 <code class="docutils literal notranslate"><span class="pre">~/CLEO/build_kokkostools/bin/[build_type]_[run_number]_[process_info].txt</span></code>.
 The time spent in the “timestep” region can be compared with the ones
 in <code class="docutils literal notranslate"><span class="pre">~/CLEO/examples/kokkostools/kokkostools_kpkerneltimer_example_solution</span></code>.</p>
-</div>
-</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3 sd-fade-in">
-<summary class="sd-summary-title sd-card-header">
-<span class="sd-summary-text">Python Bindings</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
-<p class="sd-card-text">This example is run from the <code class="docutils literal notranslate"><span class="pre">examples/python_bindings/python_bindings.py</span></code> script.</p>
-<p class="sd-card-text">1. <a class="reference internal" href="#configurebash-levante"><span class="std std-ref">Configure the bash scripts</span></a>, <code class="docutils literal notranslate"><span class="pre">scripts/levante/examples/build_compile_run_plot.sh</span></code>
-and <code class="docutils literal notranslate"><span class="pre">scripts/levante/examples/python_bindings.sh</span></code></p>
-<ol class="arabic simple" start="2">
-<li><p class="sd-card-text">Execute the bash script <code class="docutils literal notranslate"><span class="pre">python_bindings.sh</span></code>, e.g.</p></li>
-</ol>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>scripts/levante/examples/python_bindings.sh
-</pre></div>
-</div>
-<p class="sd-card-text"><em>Note</em>: you may have issues with python versions &gt;= 3.14, please
-see <a class="reference internal" href="../installation/extern.html#id2"><span class="std std-ref">this note</span></a> for details.</p>
-<p class="sd-card-text">No plots are produced by this example but it should run sucessfully multiple times and produce
-<code class="docutils literal notranslate"><span class="pre">no</span> <span class="pre">plotting</span> <span class="pre">script</span> <span class="pre">for</span> <span class="pre">python</span> <span class="pre">bindings</span> <span class="pre">example</span></code> messages. Please note the output during
-time-stepping may not be ordered due to parallel execution.</p>
 </div>
 </details></section>
 <section id="extension">
@@ -699,7 +699,7 @@ with <code class="docutils literal notranslate"><span class="pre">cleopy</span><
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 17 August 2026</div>
+              Last updated on 18 August 2026</div>
           </div>
           <div class="right-details">
             
