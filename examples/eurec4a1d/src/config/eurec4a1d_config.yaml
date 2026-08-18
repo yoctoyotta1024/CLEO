@@ -24,7 +24,7 @@ python_inputfiles:
   xgrid_max: 10                                # domain size in x [m]
   ygrid_max: 10                                # domain size in y [m]
   sd_zlim: 0                                   # min z coord of initial superdroplets
-  nsupers_pergbx: 128                          # initial number of SDs per gridbox above sd_zlim
+  nsupers_pergbx: 128                          # number of SDs per gridbox above sd_zlim <- note(!) total initial SDs must be <= maxnsupers (see below)
   rspan:                                       # [min, max] range of radii to sample [m]
     - 0.5e-8
     - 2.5e-7
