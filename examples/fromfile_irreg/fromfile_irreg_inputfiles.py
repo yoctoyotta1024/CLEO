@@ -108,6 +108,7 @@ def main(
     yaml = YAML()
     with open(config_filename, "r") as file:
         config = yaml.load(file)
+    pyconfig = config["python_inputfiles"]
 
     ### ------------------------ INPUT PARAMETERS -------------------------- ###
     ### --- required CLEO cleoconstants.hpp file --- ###
@@ -117,33 +118,31 @@ def main(
     isfigures = [show_figures, save_figures]
 
     ### --- settings for 3-D irregular gridbox boundaries --- ###
-    zgrid = np.array([0, 20, 30, 45, 60, 80, 90, 120, 140, 180, 360, 500, 1000, 1500])
-    xgrid = np.array(
-        [0, 33, 205, 440, 650, 915, 1033, 1100, 1300, 1450, 1500]
-    )  # evenly spaced xhalf coords [m]
-    ygrid = np.array([0, 10, 75, 100, 150, 200, 300])  # array of yhalf coords [m]
+    zgrid = np.array(list(pyconfig["zgrid"]))
+    xgrid = np.array(list(pyconfig["xgrid"]))
+    ygrid = np.array(list(pyconfig["ygrid"]))
 
     ### --- settings for initial superdroplets --- ###
     # settings for initial superdroplet coordinates
-    zlim = 1000  # max z coord of superdroplets
-    npergbx = 2  # number of superdroplets per gridbox
+    zlim = pyconfig["sd_zlim"]
+    npergbx = pyconfig["nsupers_pergbx"]
 
     # settings for initial radius and aerosol distributions
-    monor = 1e-6  # all SDs have this same radius [m]
-    dryr_sf = 1.0  # scale factor for dry radii [m]
-    numconc = 5e8  # total no. conc of real droplets [m^-3]
+    monor = pyconfig["monor"]
+    dryr_sf = pyconfig["dryr_sf"]
+    numconc = pyconfig["numconc"]
     randcoord = False  # sample SD spatial coordinates randomly or not
 
     ### --- settings for 2D Thermodynamics --- ###
-    PRESSz0 = 101500  # [Pa]
-    TEMPz0 = 300  # [K]
-    qvapz0 = 0.05  # [Kg/Kg]
-    qcondz0 = 0.001  # [Kg/Kg]
-    WMAX = 1.5  # [m/s]
-    Zlength = 1500  # [m]
-    Xlength = 1500  # [m]
-    VMAX = 1.0  # [m/s]
-    Ylength = 300  # [m]
+    PRESSz0 = pyconfig["thermo_PRESSz0"]
+    TEMPz0 = pyconfig["thermo_TEMPz0"]
+    qvapz0 = pyconfig["thermo_qvapz0"]
+    qcondz0 = pyconfig["thermo_qcondz0"]
+    WMAX = pyconfig["thermo_WMAX"]
+    Zlength = pyconfig["thermo_Zlength"]
+    Xlength = pyconfig["thermo_Xlength"]
+    VMAX = pyconfig["thermo_VMAX"]
+    Ylength = pyconfig["thermo_Ylength"]
 
     ### --------------------- BINARY FILES GENERATION ---------------------- ###
     ### ----- write gridbox boundaries binary ----- ###
