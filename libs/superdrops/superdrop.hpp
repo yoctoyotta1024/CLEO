@@ -79,6 +79,21 @@ class Superdrop {
         sdId(i_sdId) {}
 
   /**
+   * @brief Returns True if the multiplicity of the super-droplet is 0.
+   *
+   * Also sets superdroplet sdgbxindex to out of bounds value if xi=0
+   *
+   * @return True if superdroplet xi=0, i.e. superdroplet is null, false otherwise.
+   */
+  KOKKOS_INLINE_FUNCTION bool is_null() {
+    if (attrs.xi <= 0) {
+      sdgbxindex = LIMITVALUES::oob_gbxindex;
+      return 1;
+    }
+    return 0;
+  }
+
+  /**
    * @brief Get the index of the Gridbox the superdrop currently occupies.
    *
    * @return Gridbox Index.
