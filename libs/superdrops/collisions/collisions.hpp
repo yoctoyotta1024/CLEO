@@ -63,7 +63,7 @@ concept PairProbability = requires(P p, Superdrop& drop, double d) {
  */
 template <typename X>
 concept PairEnactX = requires(X x, Superdrop& drop, double d) {
-  { x(drop, drop, d, d, d) } -> std::convertible_to<bool>;
+  { x(drop, drop, d, d, d) } -> std::convertible_to<size_t>;
 };
 
 /*
@@ -137,9 +137,9 @@ struct CollideSupersFunctor {
    * @param VOLUME The volume [m^-3].
    * @return True if the collision event results in null superdrops with xi=0, otherwise false.
    */
-  KOKKOS_INLINE_FUNCTION bool collide_superdroplet_pair(Superdrop& dropA, Superdrop& dropB,
-                                                        const double scale_p,
-                                                        const double VOLUME) const {
+  KOKKOS_INLINE_FUNCTION size_t collide_superdroplet_pair(Superdrop& dropA, Superdrop& dropB,
+                                                          const double scale_p,
+                                                          const double VOLUME) const {
     /* 1. assign references to each superdrop in pair that will collide
     such that (drop1.xi) >= (drop2.xi) */
     const auto drops = assign_drops(dropA, dropB);  // {drop1, drop2}
@@ -161,12 +161,11 @@ struct CollideSupersFunctor {
    * operator for functor with parallel (TeamThreadRangePolicy) loop over superdroplet pairs
    * in supers view in order to call collide_superdroplet_pair.
    *
-   * Note: conversion of boolean from collide_superdroplet_pair to size_t in oob_nsupers
    */
   KOKKOS_INLINE_FUNCTION void operator()(const size_t jj, size_t& oob_nsupers) const {
     const auto kk = size_t{jj * 2};
-    const auto is_null = collide_superdroplet_pair(supers(kk), supers(kk + 1), scale_p, VOLUME);
-    oob_nsupers += static_cast<size_t>(is_null);
+    const auto null_supers = collide_superdroplet_pair(supers(kk), supers(kk + 1), scale_p, VOLUME);
+    oob_nsupers += null_supers;
   }
 };
 
