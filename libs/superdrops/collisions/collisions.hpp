@@ -198,9 +198,9 @@ struct DoCollisions {
    * @param team_member The Kokkos team member.
    * @param supers The randomly shuffled view of super-droplets.
    * @param volume The volume in which to calculate the probability of collisions.
-   * @return The number of null (xi=0) superdrops.
+   * @return Boolean for if there are any null (xi=0) superdrops produced by collisions.
    */
-  KOKKOS_INLINE_FUNCTION void collide_supers(const TeamMember& team_member, subviewd_supers supers,
+  KOKKOS_INLINE_FUNCTION bool collide_supers(const TeamMember& team_member, subviewd_supers supers,
                                              const double volume) const {
     const auto nsupers = static_cast<size_t>(supers.extent(0));
     const auto npairs = size_t{nsupers / 2};  // no. pairs of superdrops (=floor() for nsupers > 0)
@@ -213,6 +213,8 @@ struct DoCollisions {
     Kokkos::parallel_reduce(Kokkos::TeamThreadRange(team_member, npairs), functor,
                             Kokkos::LOr<bool>(is_any_null));
     team_member.team_barrier();  // synchronise threads
+
+    return is_any_null;
   }
 
   /**
@@ -235,7 +237,11 @@ struct DoCollisions {
     supers = shuffle_supers(team_member, supers, genpool);
 
     /* collide all randomly generated pairs of SDs */
-    collide_supers(team_member, supers, volume);
+    is_any_null = collide_supers(team_member, supers, volume);
+
+    if (is_any_null) {
+      Kokkos::abort("superdrop xi < 1, null drop occured in coalescence");
+    }
   }
 
  public:
