@@ -29,18 +29,14 @@
 #include "./collisions.hpp"
 
 /**
- * @brief Raises an error if the multiplicity of the super-droplet is 0.
- *
- * This function checks if the given superdrop is null by verifying its multiplicity.
- * It ensures that the multiplicity (`xi`) of the superdrop is greater than 0.
- * If the multiplicity is 0, a runtime error is raised.
+ * @brief Returns True if the multiplicity of the super-droplet is 0.
  *
  * @param drop A reference to the `Superdrop` object to be checked.
- * @return Always returns 0 (=false).
+ * @return True if superdroplet xi=0, i.e. superdroplet is null, false otherwise.
  */
 KOKKOS_INLINE_FUNCTION bool is_null_superdrop(const Superdrop& drop) {
   if (drop.get_xi() <= 0) {
-    Kokkos::abort("superdrop xi < 1, null drop in coalescence");
+    return 1;
   }
   return 0;
 }

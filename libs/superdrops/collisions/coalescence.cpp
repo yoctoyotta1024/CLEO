@@ -102,7 +102,8 @@ KOKKOS_FUNCTION bool DoCoalescence::coalesce_superdroplet_pair(const uint64_t ga
     twin_superdroplet_coalescence(gamma, drop1, drop2);
 
     /* if xi1 = xi2 = 1 before coalesence, then xi1=0 now */
-    return is_null_superdrop(drop1);
+    bool is_null = is_null_superdrop(drop1);
+    return is_null;
   }
 
   if (xi1 < gamma * xi2) {
