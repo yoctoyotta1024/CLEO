@@ -162,7 +162,7 @@ struct CollideSupersFunctor {
    */
   KOKKOS_INLINE_FUNCTION void operator()(const size_t jj, bool& is_any_null) const {
     const auto kk = size_t{jj * 2};
-    is_null = collide_superdroplet_pair(supers(kk), supers(kk + 1), scale_p, VOLUME);
+    const auto is_null = collide_superdroplet_pair(supers(kk), supers(kk + 1), scale_p, VOLUME);
     is_any_null = is_any_null || is_null;
   }
 };
@@ -237,7 +237,7 @@ struct DoCollisions {
     supers = shuffle_supers(team_member, supers, genpool);
 
     /* collide all randomly generated pairs of SDs */
-    is_any_null = collide_supers(team_member, supers, volume);
+    const auto is_any_null = collide_supers(team_member, supers, volume);
 
     if (is_any_null) {
       Kokkos::abort("superdrop xi < 1, null drop occured in coalescence");
