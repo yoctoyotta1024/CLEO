@@ -24,6 +24,7 @@
 #include <cstdint>
 #include <functional>
 
+#include "../../cleoconstants.hpp"
 #include "../microphysicalprocess.hpp"
 #include "../superdrop.hpp"
 #include "./collisions.hpp"
@@ -31,11 +32,14 @@
 /**
  * @brief Returns True if the multiplicity of the super-droplet is 0.
  *
+ * Also sets superdroplet sdgbxindex to out of bounds value if xi=0
+ *
  * @param drop A reference to the `Superdrop` object to be checked.
  * @return True if superdroplet xi=0, i.e. superdroplet is null, false otherwise.
  */
-KOKKOS_INLINE_FUNCTION bool is_null_superdrop(const Superdrop& drop) {
+KOKKOS_INLINE_FUNCTION bool is_null_superdrop(Superdrop& drop) {
   if (drop.get_xi() <= 0) {
+    drop.set_sdgbxindex(LIMITVALUES::oob_gbxindex);
     return 1;
   }
   return 0;
