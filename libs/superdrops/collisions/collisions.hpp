@@ -134,9 +134,9 @@ struct CollideSupersFunctor {
    * @param dropB The second superdroplet.
    * @param scale_p The probability scaling factor.
    * @param VOLUME The volume [m^-3].
-   * @return True if the collision event results in null superdrops with xi=0), otherwise false.
+   * @return True if the collision event results in null superdrops with xi=0, otherwise false.
    */
-  KOKKOS_INLINE_FUNCTION void collide_superdroplet_pair(Superdrop& dropA, Superdrop& dropB,
+  KOKKOS_INLINE_FUNCTION bool collide_superdroplet_pair(Superdrop& dropA, Superdrop& dropB,
                                                         const double scale_p,
                                                         const double VOLUME) const {
     /* 1. assign references to each superdrop in pair that will collide
@@ -153,16 +153,17 @@ struct CollideSupersFunctor {
     const auto phi_out = urbg.drand(0.0, 1.0);  // for outcome of collisions extended algorithm only
     genpool.free_state(urbg.gen);
 
-    enact_collision(drops.first, drops.second, prob, phi_coll, phi_out);
+    return enact_collision(drops.first, drops.second, prob, phi_coll, phi_out);
   }
 
   /*
    * operator for functor with parallel (TeamThreadRangePolicy) loop over superdroplet pairs
    * in supers view in order to call collide_superdroplet_pair
    */
-  KOKKOS_INLINE_FUNCTION void operator()(const size_t jj) const {
+  KOKKOS_INLINE_FUNCTION void operator()(const size_t jj, bool& is_any_null) const {
     const auto kk = size_t{jj * 2};
-    collide_superdroplet_pair(supers(kk), supers(kk + 1), scale_p, VOLUME);
+    is_null = collide_superdroplet_pair(supers(kk), supers(kk + 1), scale_p, VOLUME);
+    is_any_null = is_any_null || is_null;
   }
 };
 
@@ -206,9 +207,11 @@ struct DoCollisions {
     const auto scale_p = double{nsupers * (nsupers - 1.0) / (2.0 * npairs)};
     const auto VOLUME = double{volume * dlc::VOL0};  // volume in which collisions occur [m^3]
 
+    bool is_any_null = 0;
     const auto functor =
         CollideSupersFunctor{probability, enact_collision, genpool, supers, scale_p, DELT, VOLUME};
-    Kokkos::parallel_for(Kokkos::TeamThreadRange(team_member, npairs), functor);
+    Kokkos::parallel_reduce(Kokkos::TeamThreadRange(team_member, npairs), functor,
+                            Kokkos::LOr<bool>(is_any_null));
     team_member.team_barrier();  // synchronise threads
   }
 
