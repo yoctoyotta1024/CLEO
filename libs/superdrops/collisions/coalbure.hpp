@@ -243,13 +243,13 @@ KOKKOS_FUNCTION bool DoCoalBuRe<NFrags, Flag>::coalesce_breakup_or_rebound(const
                                                                            Superdrop& drop2) const {
   const auto flag = coalbure_flag(phi, drop1, drop2);
 
-  bool is_null(0);
+  bool is_null = 0;
   switch (flag) {
     case 1:  // coalescence
       is_null = coal.coalesce_superdroplet_pair(gamma, drop1, drop2);
       break;
     case 2:  // breakup
-      bu.breakup_superdroplet_pair(drop1, drop2);
+      is_null = bu.breakup_superdroplet_pair(drop1, drop2);
       break;
   }
 
