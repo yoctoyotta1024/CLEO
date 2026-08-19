@@ -88,9 +88,9 @@ class Superdrop {
   KOKKOS_INLINE_FUNCTION bool is_null() {
     if (attrs.xi <= 0) {
       sdgbxindex = LIMITVALUES::oob_gbxindex;
-      return 1;
+      return true;
     }
-    return 0;
+    return false;
   }
 
   /**
