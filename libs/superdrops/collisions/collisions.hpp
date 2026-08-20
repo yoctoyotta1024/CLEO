@@ -238,9 +238,11 @@ struct DoCollisions {
    * @return The updated superdroplets.
    */
   KOKKOS_INLINE_FUNCTION subviewd_supers remove_null_supers(const TeamMember& team_member,
-                                                            const size_t oob_nsupers,
-                                                            subviewd_supers supers) const {
-    Kokkos::Experimental::sort_team(team_member, supers, SortComparator{});
+
+                                                            subviewd_supers supers,
+                                                            const size_t oob_nsupers) const {
+    Kokkos::Experimental::sort_team(team_member, supers,
+                                    SortComparator{});  // #WIP: check this sort works
     const auto nsupers = static_cast<size_t>(supers.extent(0));
     const kkpair_size_t new_refs({0, nsupers - oob_nsupers});  // #WIP: check this is correct bounds
     return Kokkos::subview(supers, new_refs);
@@ -272,7 +274,7 @@ struct DoCollisions {
     if (oob_nsupers == 0) {
       return supers;
     } else {
-      return remove_null_supers(team_member, supers);
+      return remove_null_supers(team_member, supers, oob_nsupers);
     }
   }
 
