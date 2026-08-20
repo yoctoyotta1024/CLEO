@@ -79,21 +79,6 @@ class Superdrop {
         sdId(i_sdId) {}
 
   /**
-   * @brief Returns True if the multiplicity of the super-droplet is 0.
-   *
-   * Also sets superdroplet sdgbxindex to out of bounds value if xi=0
-   *
-   * @return True if superdroplet xi=0, i.e. superdroplet is null, false otherwise.
-   */
-  KOKKOS_INLINE_FUNCTION bool is_null() {
-    if (attrs.xi <= 0) {
-      sdgbxindex = LIMITVALUES::oob_gbxindex;
-      return true;
-    }
-    return false;
-  }
-
-  /**
    * @brief Get the index of the Gridbox the superdrop currently occupies.
    *
    * @return Gridbox Index.
@@ -206,6 +191,19 @@ class Superdrop {
    * @return radius of the super-droplet cubed.
    */
   KOKKOS_INLINE_FUNCTION double rcubed() const { return attrs.rcubed(); }
+
+  /**
+   * @brief returns true if attributes are null
+   */
+  KOKKOS_INLINE_FUNCTION bool is_null() { return attrs.is_null(); }
+
+  /**
+   * @brief sets sdgbxindex to out of bounds index and attributes to null
+   */
+  KOKKOS_INLINE_FUNCTION void set_null() {
+    attrs.set_null();
+    sdgbxindex = LIMITVALUES::oob_gbxindex;
+  }
 
   /**
    * @brief Set the multiplicity 'xi' of the super-droplet.

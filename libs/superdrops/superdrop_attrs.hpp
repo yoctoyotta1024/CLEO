@@ -132,6 +132,21 @@ struct SuperdropAttrs {
   KOKKOS_FUNCTION auto get_ionic() const { return solute.ionic(); }
 
   /**
+   * @brief returns true if attributes are null
+   *
+   * i.e. if multiplicity == 0
+   */
+  KOKKOS_INLINE_FUNCTION bool is_null() { return xi == 0; }
+
+  /**
+   * @brief sets attributes to null values
+   *
+   * i.e. sets multiplicity = 0
+   *
+   */
+  KOKKOS_INLINE_FUNCTION void set_null() { xi = 0; }
+
+  /**
    * @brief Set the multiplicity of superdroplet.
    *
    * Set the multiplicity 'xi' of the superdroplet with assurance that new xi >= 1.

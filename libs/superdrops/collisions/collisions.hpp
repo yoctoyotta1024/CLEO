@@ -219,7 +219,7 @@ struct DoCollisions {
     const auto scale_p = double{nsupers * (nsupers - 1.0) / (2.0 * npairs)};
     const auto VOLUME = double{volume * dlc::VOL0};  // volume in which collisions occur [m^3]
 
-    auto oob_nsupers = size_t{0};  // #WIP check this reduction works
+    auto oob_nsupers = size_t{0};
     const auto functor =
         CollideSupersFunctor{probability, enact_collision, genpool, supers, scale_p, DELT, VOLUME};
     Kokkos::parallel_reduce(Kokkos::TeamThreadRange(team_member, npairs), functor, oob_nsupers);
@@ -241,10 +241,9 @@ struct DoCollisions {
 
                                                             subviewd_supers supers,
                                                             const size_t oob_nsupers) const {
-    Kokkos::Experimental::sort_team(team_member, supers,
-                                    SortComparator{});  // #WIP: check this sort works
+    Kokkos::Experimental::sort_team(team_member, supers, SortComparator{});
     const auto nsupers = static_cast<size_t>(supers.extent(0));
-    const kkpair_size_t new_refs({0, nsupers - oob_nsupers});  // #WIP: check this is correct bounds
+    const kkpair_size_t new_refs({0, nsupers - oob_nsupers});
     return Kokkos::subview(supers, new_refs);
   }
 

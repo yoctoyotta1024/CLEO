@@ -147,7 +147,11 @@ KOKKOS_FUNCTION void DoCoalescence::twin_superdroplet_coalescence(const uint64_t
 
   const auto new_msol = double{drop2.get_msol() + gamma * drop1.get_msol()};
 
-  drop1.set_xi(new_xi);
+  if (new_xi == 0) {
+    drop1.set_null();
+  } else {
+    drop1.set_xi(new_xi);
+  }
   drop2.set_xi(old_xi - new_xi);
 
   drop1.set_radius(new_r);
