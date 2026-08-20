@@ -193,6 +193,19 @@ class Superdrop {
   KOKKOS_INLINE_FUNCTION double rcubed() const { return attrs.rcubed(); }
 
   /**
+   * @brief returns true if attributes are null
+   */
+  KOKKOS_INLINE_FUNCTION bool is_null() { return attrs.is_null(); }
+
+  /**
+   * @brief sets sdgbxindex to out of bounds index and attributes to null
+   */
+  KOKKOS_INLINE_FUNCTION void set_null() {
+    attrs.set_null();
+    sdgbxindex = LIMITVALUES::oob_gbxindex;
+  }
+
+  /**
    * @brief Set the multiplicity 'xi' of the super-droplet.
    *
    * This function sets the value of the super-droplet's multiplicity 'xi' to the specified value.

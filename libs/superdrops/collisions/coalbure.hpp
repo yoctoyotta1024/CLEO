@@ -95,11 +95,11 @@ struct DoCoalBuRe {
    * @param phi Phi value.
    * @param drop1 First superdroplet.
    * @param drop2 Second superdroplet.
-   * @return True if the resulting superdroplet is null, otherwise false.
+   * @return Resulting total number of null (xi=0) superdroplets from collision (i.e. 0, 1 or 2)
    */
   KOKKOS_FUNCTION
-  bool coalesce_breakup_or_rebound(const uint64_t gamma, const double phi, Superdrop& drop1,
-                                   Superdrop& drop2) const;
+  size_t coalesce_breakup_or_rebound(const uint64_t gamma, const double phi, Superdrop& drop1,
+                                     Superdrop& drop2) const;
 
  public:
   /**
@@ -128,11 +128,11 @@ struct DoCoalBuRe {
    * @param phi_coll Random number in the range [0.0, 1.0] for collision.
    * @param phi_out Random number in the range [0.0, 1.0] for outcome of collision as breakup,
    * rebound or coalescence.
-   * @return True if the resulting superdroplet is null, otherwise false.
+   * @return Resulting total number of null (xi=0) superdroplets from collision (i.e. 0, 1 or 2)
    */
   KOKKOS_INLINE_FUNCTION
-  bool operator()(Superdrop& drop1, Superdrop& drop2, const double prob, const double phi_coll,
-                  const double phi_out) const;
+  size_t operator()(Superdrop& drop1, Superdrop& drop2, const double prob, const double phi_coll,
+                    const double phi_out) const;
 };
 
 /**
@@ -202,12 +202,13 @@ inline MicrophysicalProcess auto CoalBuRe(const unsigned int interval,
  * @param phi_coll Random number in the range [0.0, 1.0] for collision.
  * @param phi_out Random number in the range [0.0, 1.0] for outcome of collision as breakup,
  * rebound or coalescence.
- * @return True if the resulting superdroplet is null, otherwise false.
+ * @return Resulting total number of null (xi=0) superdroplets from collision (i.e. 0, 1 or 2)
  */
 template <NFragments NFrags, CoalBuReFlag Flag>
-KOKKOS_FUNCTION bool DoCoalBuRe<NFrags, Flag>::operator()(Superdrop& drop1, Superdrop& drop2,
-                                                          const double prob, const double phi_coll,
-                                                          const double phi_out) const {
+KOKKOS_FUNCTION size_t DoCoalBuRe<NFrags, Flag>::operator()(Superdrop& drop1, Superdrop& drop2,
+                                                            const double prob,
+                                                            const double phi_coll,
+                                                            const double phi_out) const {
   /* 1. calculate gamma factor for collision  */
   const auto xi1 = drop1.get_xi();
   const auto xi2 = drop2.get_xi();
@@ -234,26 +235,24 @@ KOKKOS_FUNCTION bool DoCoalBuRe<NFrags, Flag>::operator()(Superdrop& drop1, Supe
  * @param phi Phi value.
  * @param drop1 First superdroplet.
  * @param drop2 Second superdroplet.
- * @return True if the resulting superdroplet is null, otherwise false.
+ * @return Resulting total number of null (xi=0) superdroplets from collision (i.e. 0, 1 or 2)
  */
 template <NFragments NFrags, CoalBuReFlag Flag>
-KOKKOS_FUNCTION bool DoCoalBuRe<NFrags, Flag>::coalesce_breakup_or_rebound(const uint64_t gamma,
-                                                                           const double phi,
-                                                                           Superdrop& drop1,
-                                                                           Superdrop& drop2) const {
+KOKKOS_FUNCTION size_t DoCoalBuRe<NFrags, Flag>::coalesce_breakup_or_rebound(
+    const uint64_t gamma, const double phi, Superdrop& drop1, Superdrop& drop2) const {
   const auto flag = coalbure_flag(phi, drop1, drop2);
 
-  bool is_null(0);
+  size_t null_sds = 0;
   switch (flag) {
     case 1:  // coalescence
-      is_null = coal.coalesce_superdroplet_pair(gamma, drop1, drop2);
+      null_sds = coal.coalesce_superdroplet_pair(gamma, drop1, drop2);
       break;
     case 2:  // breakup
-      bu.breakup_superdroplet_pair(drop1, drop2);
+      null_sds = bu.breakup_superdroplet_pair(drop1, drop2);
       break;
   }
 
-  return is_null;
+  return null_sds;
 }
 
 #endif  // LIBS_SUPERDROPS_COLLISIONS_COALBURE_HPP_

@@ -72,18 +72,21 @@ struct DoBreakup {
    * @param prob Probability of collision.
    * @param phi_coll Random number in the range [0.0, 1.0] for collision.
    * @param phi_out Random number in the range [0.0, 1.0] for outcome of collision (not used).
-   * @return True if the resulting superdroplet is null, otherwise false.
+   * @return Resulting total number of null (xi=0) superdroplets from collision (i.e. 0, 1 or 2)
    */
   KOKKOS_FUNCTION
-  bool operator()(Superdrop& drop1, Superdrop& drop2, const double prob, const double phi_coll,
-                  const double phi_out) const;
+  size_t operator()(Superdrop& drop1, Superdrop& drop2, const double prob, const double phi_coll,
+                    const double phi_out) const;
 
-  /* enact collisional-breakup of droplets by changing
-  multiplicity, radius and solute mass of each
-  superdroplet in a pair. Method created by Author
-  (no citation yet available). Note implicit assumption
-  that gamma factor = 1. */
-  KOKKOS_FUNCTION void breakup_superdroplet_pair(Superdrop& drop1, Superdrop& drop2) const;
+  /**
+   * enact collisional-breakup of droplets by changing multiplicity, radius and solute mass of each
+   * superdroplet in a pair.
+   *
+   * Note implicit assumption that gamma factor = 1.
+   *
+   * @return Resulting total number of null (xi=0) superdroplets from collision (i.e. 0, 1 or 2)
+   */
+  KOKKOS_FUNCTION size_t breakup_superdroplet_pair(Superdrop& drop1, Superdrop& drop2) const;
 };
 
 /*
@@ -132,16 +135,16 @@ inline MicrophysicalProcess auto CollBu(const unsigned int interval,
  * @param prob Probability of collision.
  * @param phi_coll Random number in the range [0.0, 1.0] for collision.
  * @param phi_out Random number in the range [0.0, 1.0] for outcome of collision (not used).
- * @return True if the resulting superdroplet is null, otherwise false.
+ * @return Resulting total number of null (xi=0) superdroplets from collision (i.e. 0, 1 or 2)
  */
 template <NFragments NFrags>
-KOKKOS_FUNCTION bool DoBreakup<NFrags>::operator()(Superdrop& drop1, Superdrop& drop2,
-                                                   const double prob, const double phi_coll,
-                                                   const double phi_out) const {
+KOKKOS_FUNCTION size_t DoBreakup<NFrags>::operator()(Superdrop& drop1, Superdrop& drop2,
+                                                     const double prob, const double phi_coll,
+                                                     const double phi_out) const {
   /* enact collision-breakup on pair of superdroplets if
   gamma factor for collision-breakup is not zero */
   if (breakup_gamma(prob, phi_coll) != 0) {
-    breakup_superdroplet_pair(drop1, drop2);
+    return breakup_superdroplet_pair(drop1, drop2);
   }
 
   return 0;
@@ -162,18 +165,23 @@ KOKKOS_FUNCTION unsigned int DoBreakup<NFrags>::breakup_gamma(const double prob,
   }
 }
 
-/* enact collisional-breakup of droplets by changing
-multiplicity, radius and solute mass of each
-superdroplet in a pair. Method created by Author
-(no citation yet available). Note implicit assumption
-that gamma factor = 1. */
+/**
+ * enact collisional-breakup of droplets by changing multiplicity, radius and solute mass of each
+ * superdroplet in a pair.
+ *
+ * Note implicit assumption that gamma factor = 1.
+ *
+ * @return Resulting total number of null (xi=0) superdroplets from collision (i.e. 0, 1 or 2)
+ */
 template <NFragments NFrags>
-KOKKOS_FUNCTION void DoBreakup<NFrags>::breakup_superdroplet_pair(Superdrop& drop1,
-                                                                  Superdrop& drop2) const {
+KOKKOS_FUNCTION size_t DoBreakup<NFrags>::breakup_superdroplet_pair(Superdrop& drop1,
+                                                                    Superdrop& drop2) const {
   if (drop1.get_xi() == drop2.get_xi()) {
     twin_superdroplet_breakup(drop1, drop2);
+    return 0;
   } else {
     different_superdroplet_breakup(drop1, drop2);
+    return 0;
   }
 }
 
@@ -188,7 +196,8 @@ KOKKOS_FUNCTION void DoBreakup<NFrags>::twin_superdroplet_breakup(Superdrop& dro
   const auto old_xi = drop2.get_xi();  // = drop1.xi
   const auto totnfrags = double{nfrags(drop1, drop2) * old_xi};
   if ((totnfrags / old_xi) <= 2.5) {
-    Kokkos::abort("nfrags must be > 2.5");
+    Kokkos::abort(
+        "nfrags must be > 2.5, breakup cannot create fewer droplets than originally present");
   }
 
   const auto new_xi1 = static_cast<uint64_t>(Kokkos::round(totnfrags / 2));
@@ -235,7 +244,8 @@ KOKKOS_FUNCTION void DoBreakup<NFrags>::different_superdroplet_breakup(Superdrop
   const auto totnfrags = double{nfrags(drop1, drop2) * old_xi2};
   const auto new_xi2 = static_cast<uint64_t>(Kokkos::round(totnfrags));
   if ((totnfrags / old_xi2) <= 2.5) {
-    Kokkos::abort("nfrags must be > 2.5");
+    Kokkos::abort(
+        "nfrags must be > 2.5, breakup cannot create fewer droplets than originally present");
   }
 
   if (new_xi2 <= old_xi2) {

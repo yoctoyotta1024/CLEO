@@ -25,7 +25,7 @@ python_inputfiles:
   zgrid_ngbxs: 3                               # z direction ngbxs <- note(!) zgrid_ngbxs * xgrid_ngbxs == ngbxs (see below)
   xgrid_ngbxs: 3                               # x direction ngbxs <- note(!) zgrid_ngbxs * xgrid_ngbxs == ngbxs (see below)
   sd_zlim: 750                                 # max z coord of initial superdroplets
-  nsupers_pergbx: 8                            # number of SDs per gridbox below sd_zlim <- note(!) total initial SDs must be <= maxnsupers (see below)
+  nsupers_pergbx: 8                            # number of SDs per gridbox below sd_zlim <- note(!) total initial SDs must be <= maxnsupers and == initnsupers (see below)
   rspan:                                       # [min, max] range of radii to sample [m]
     - 3e-9
     - 3e-6

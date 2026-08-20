@@ -44,7 +44,7 @@ namespace KCS = KokkosCleoSettings;
  * @struct SDMMicrophysicsFunctor
  * @brief Structure for encapsulating the microphysics process in SDM.
  *
- * The `operator()` is called for SDM microphysics, and it uses Kokkos parallel_for(...)
+ * The `operator()` is called for SDM microphysics, and it uses Kokkos parallel_reduce(...)
  * for parallelized execution over gridboxes and/or superdroplets. Struct ensures parallel region
  * only captures objects relevant to microphysics and not other members of SDMMethods
  * (which may not be GPU compatible).
@@ -60,15 +60,35 @@ struct SDMMicrophysicsFunctor {
   const subviewd_supers domainsupers; /**view on device of all superdroplets in all gridboxes. */
   const SDMMo mo;                     /**< object that is type of SDMMonitor to use. */
 
-  KOKKOS_INLINE_FUNCTION void operator()(const TeamMember& team_member) const {
-    const auto ii = team_member.league_rank();
-    auto supers = d_gbxs(ii).supersingbx(domainsupers);
+  /** Note(!): number of superdroplets in supers may change in call to run microphysics and, if so,
+   * then it is REQUIRED to sort allsupers outside this functor (i.e. after gbxs parallel loop)
+   * and then call set_refs for all gbxs. See sdm_microphysics(...) below. This can occur e.g.
+   * due to null superdroplet after collision coalescence of two xi=1 superdroplets.
+   *
+   * @return true if number of superdroplets changes, false otherwise
+   */
+  KOKKOS_INLINE_FUNCTION bool run_subtimestepping(const TeamMember& team_member, State& state,
+                                                  subviewd_supers supers) const {
+    const auto nsupers_before = static_cast<size_t>(supers.extent(0));
     for (unsigned int subt = t_sdm; subt < t_next; subt = microphys.next_step(subt)) {
-      microphys.run_step(team_member, subt, supers, d_gbxs(ii).state, mo);
-      // TODO(CB): explicitly feed supers back into domainsupers after microphys.run_step(...)?
+      supers = microphys.run_step(team_member, subt, supers, state, mo);
     }
-
     mo.monitor_microphysics(team_member, supers);
+    const auto nsupers_after = static_cast<size_t>(supers.extent(0));
+
+    if (nsupers_before == nsupers_after) {
+      return false;
+    } else {
+      return true;  // number of superdroplets has changed
+    }
+  }
+
+  KOKKOS_INLINE_FUNCTION void operator()(const TeamMember& team_member,
+                                         bool& any_nsupers_change) const {
+    const auto ii = team_member.league_rank();
+    const auto nsupers_change =
+        run_subtimestepping(team_member, d_gbxs(ii).state, d_gbxs(ii).supersingbx(domainsupers));
+    any_nsupers_change = any_nsupers_change || nsupers_change;
   }
 };
 
@@ -150,28 +170,36 @@ class SDMMethods {
    * @brief run SDM microphysics for each gridbox (using sub-timestepping routine).
    *
    * This function runs SDM microphysics for each gridbox using a sub-timestepping routine.
-   * Kokkos::parallel_for is nested parallelism within parallelised loop over gridboxes,
-   * serial equivalent is simply: `for (size_t ii(0); ii < ngbxs; ++ii) { [...] }`
+   * Kokkos::parallel_reduce is nested parallelism within parallelised loop over gridboxes,
+   * serial equivalent is simply: `for (size_t ii(0); ii < ngbxs; ++ii) { [...] }` which then
+   * returns combined result of "logical or" operation over all gridboxes.
    *
    * @param t_sdm Current timestep for SDM.
    * @param t_next Next timestep for SDM.
    * @param d_gbxs View of gridboxes on device.
    * @param domainsupers View on device of all the superdroplets related to the gridboxes.
    * @param mo SDMMonitor to use.
+   * @return true if number of superdroplets in any gridbox has changed during microphysics
    */
   template <SDMMonitor SDMMo>
-  void sdm_microphysics(const unsigned int t_sdm, const unsigned int t_next, const viewd_gbx d_gbxs,
+  bool sdm_microphysics(const unsigned int t_sdm, const unsigned int t_next, const viewd_gbx d_gbxs,
                         const subviewd_supers domainsupers, const SDMMo mo) const {
     // TODO(ALL) use scratch space for parallel region(?)
     const size_t ngbxs(d_gbxs.extent(0));
     const auto functor = SDMMicrophysicsFunctor{microphys, t_sdm, t_next, d_gbxs, domainsupers, mo};
-    Kokkos::parallel_for("sdm_microphysics", TeamPolicy(ngbxs, KCS::team_size), functor);
+
+    auto any_nsupers_change = bool{false};
+    Kokkos::parallel_reduce("sdm_microphysics", TeamPolicy(ngbxs, KCS::team_size), functor,
+                            Kokkos::LOr<bool>(any_nsupers_change));
+    return any_nsupers_change;
   }
 
   /**
    * @brief run SDM microphysics for each gridbox (using sub-timestepping routine).
    *
-   * This operator is a wrapper around the function which runs SDM microphysics.
+   * This function is a wrapper around the function which runs SDM microphysics and then will
+   * sort all the superdroplets and set the refs of all the gridboxes if the change in number of
+   * superdroplets boolean returned from running microphysics is true
    *
    * Kokkos::Profiling are null pointers unless a Kokkos profiler library has been
    * exported to "KOKKOS_TOOLS_LIBS" prior to runtime so the lib gets dynamically loaded.
@@ -184,11 +212,21 @@ class SDMMethods {
    */
   template <SDMMonitor SDMMo>
   void sdm_microphysics(const unsigned int t_sdm, const unsigned int t_next, const viewd_gbx d_gbxs,
-                        const SupersInDomain& allsupers, const SDMMo mo) const {
+                        SupersInDomain& allsupers, const SDMMo mo) const {
     Kokkos::Profiling::ScopedRegion region("timestep_sdm_microphysics");
 
     const auto domainsupers = allsupers.domain_supers();
-    sdm_microphysics(t_sdm, t_next, d_gbxs, domainsupers, mo);
+    const auto any_nsupers_change = sdm_microphysics(t_sdm, t_next, d_gbxs, domainsupers, mo);
+
+    if (any_nsupers_change) {
+      allsupers.sort_totsupers(d_gbxs);
+      const size_t ngbxs(d_gbxs.extent(0));
+      Kokkos::parallel_for(
+          "microphysics_set_gridboxes_refs", Kokkos::RangePolicy<ExecSpace>(0, ngbxs),
+          KOKKOS_LAMBDA(const size_t ii) {
+            d_gbxs(ii).supersingbx.set_refs(allsupers.domain_supers());
+          });
+    }
   }
 
   /**
