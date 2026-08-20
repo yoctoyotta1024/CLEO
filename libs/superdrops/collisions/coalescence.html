@@ -377,21 +377,6 @@
 <h1>Coalescence<a class="headerlink" href="#coalescence" title="Link to this heading">¶</a></h1>
 <p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/superdrops/collisions/coalescence.hpp&gt;</span></code>
 <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/superdrops/collisions/coalescence.hpp">[source]</a></p>
-<dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv417is_null_superdropRK9Superdrop">
-<span id="_CPPv317is_null_superdropRK9Superdrop"></span><span id="_CPPv217is_null_superdropRK9Superdrop"></span><span id="is_null_superdrop__SuperdropCR"></span><span class="target" id="coalescence_8hpp_1abab7e5a1c8b0ed207f9bb2c89e931f70"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_null_superdrop</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv417is_null_superdropRK9Superdrop" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Raises an error if the multiplicity of the super-droplet is 0. </p>
-<p>This function checks if the given superdrop is null by verifying its multiplicity. It ensures that the multiplicity (<code class="docutils literal notranslate"><span class="pre">xi</span></code>) of the superdrop is greater than 0. If the multiplicity is 0, a runtime error is raised.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>drop</strong> – A reference to the <code class="docutils literal notranslate"><a class="reference internal" href="../superdrop.html#classSuperdrop"><span class="std std-ref"><span class="pre">Superdrop</span></span></a></code> object to be checked. </p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Always returns 0 (=false). </p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="cpp struct">
 <dt class="sig sig-object cpp" id="_CPPv413DoCoalescence">
 <span id="_CPPv313DoCoalescence"></span><span id="_CPPv213DoCoalescence"></span><span id="DoCoalescence"></span><span class="target" id="structDoCoalescence"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">DoCoalescence</span></span></span><a class="headerlink" href="#_CPPv413DoCoalescence" title="Link to this definition">¶</a><br /></dt>
@@ -399,7 +384,7 @@
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK13DoCoalescenceclER9SuperdropR9SuperdropKdKdKd">
-<span id="_CPPv3NK13DoCoalescenceclER9SuperdropR9SuperdropKdKdKd"></span><span id="_CPPv2NK13DoCoalescenceclER9SuperdropR9SuperdropKdKdKd"></span><span id="DoCoalescence::call-operator__SuperdropR.SuperdropR.doubleC.doubleC.doubleCC"></span><span class="target" id="structDoCoalescence_1a42757a0ea9901a59cda75cd728fc3afa"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop1</span></span>, <a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop2</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">prob</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">phi_coll</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">phi_out</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13DoCoalescenceclER9SuperdropR9SuperdropKdKdKd" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK13DoCoalescenceclER9SuperdropR9SuperdropKdKdKd"></span><span id="_CPPv2NK13DoCoalescenceclER9SuperdropR9SuperdropKdKdKd"></span><span id="DoCoalescence::call-operator__SuperdropR.SuperdropR.doubleC.doubleC.doubleCC"></span><span class="target" id="structDoCoalescence_1a272622b25ecdd5bba523a7675012de94"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">()</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop1</span></span>, <a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop2</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">prob</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">phi_coll</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">phi_out</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13DoCoalescenceclER9SuperdropR9SuperdropKdKdKd" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Operator used as an adaptor such that <a class="reference internal" href="#structDoCoalescence"><span class="std std-ref">DoCoalescence</span></a> satisfies the <a class="reference internal" href="collisions.html#conceptPairEnactX"><span class="std std-ref">PairEnactX</span></a> concept and so can be used as the EnactCollision function-like object in the <a class="reference internal" href="collisions.html#structDoCollisions"><span class="std std-ref">DoCollisions</span></a> struct. </p>
 <p>This operator calls functions to enact the collision-coalescence of two super-droplets.</p>
 <p><em>NOTE:</em> phi_out is not used since outcome of collision is already pre-determined to be coalescence.</p>
@@ -414,7 +399,7 @@
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>boolean=true if collision-coalescence resulted in null superdrops. </p>
+<dd class="field-even"><p>Resulting total number of null (xi=0) superdroplets from collision (i.e. 0, 1 or 2) </p>
 </dd>
 </dl>
 </dd></dl>
@@ -441,7 +426,7 @@
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4NK13DoCoalescence26coalesce_superdroplet_pairEK8uint64_tR9SuperdropR9Superdrop">
-<span id="_CPPv3NK13DoCoalescence26coalesce_superdroplet_pairEK8uint64_tR9SuperdropR9Superdrop"></span><span id="_CPPv2NK13DoCoalescence26coalesce_superdroplet_pairEK8uint64_tR9SuperdropR9Superdrop"></span><span id="DoCoalescence::coalesce_superdroplet_pair__uint64_tC.SuperdropR.SuperdropRC"></span><span class="target" id="structDoCoalescence_1a04271a0e56841bd93cdadc3c201fff81"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coalesce_superdroplet_pair</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gamma</span></span>, <a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop1</span></span>, <a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop2</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13DoCoalescence26coalesce_superdroplet_pairEK8uint64_tR9SuperdropR9Superdrop" title="Link to this definition">¶</a><br /></dt>
+<span id="_CPPv3NK13DoCoalescence26coalesce_superdroplet_pairEK8uint64_tR9SuperdropR9Superdrop"></span><span id="_CPPv2NK13DoCoalescence26coalesce_superdroplet_pairEK8uint64_tR9SuperdropR9Superdrop"></span><span id="DoCoalescence::coalesce_superdroplet_pair__uint64_tC.SuperdropR.SuperdropRC"></span><span class="target" id="structDoCoalescence_1ab1caf6431b65bc32516ebac63cba39de"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coalesce_superdroplet_pair</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">uint64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gamma</span></span>, <a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop1</span></span>, <a class="reference internal" href="../superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">drop2</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13DoCoalescence26coalesce_superdroplet_pairEK8uint64_tR9SuperdropR9Superdrop" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Coalesces a pair of superdroplets. </p>
 <p>This function coalesces a pair of superdroplets by changing their multiplicity, radius, and solute mass according to Shima et al. 2009 Section 5.1.3. part (5).</p>
 <dl class="field-list simple">
@@ -453,7 +438,7 @@
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>True if coalescence results in a null superdroplet, false otherwise. </p>
+<dd class="field-even"><p>Resulting total number of null (xi=0) superdroplets from collision (i.e. 0, 1 or 2) </p>
 </dd>
 </dl>
 </dd></dl>
@@ -564,7 +549,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 18 August 2026</div>
+              Last updated on 20 August 2026</div>
           </div>
           <div class="right-details">
             
@@ -586,7 +571,6 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">Coalescence</a><ul>
-<li><a class="reference internal" href="#_CPPv417is_null_superdropRK9Superdrop"><code class="docutils literal notranslate"><span class="pre">is_null_superdrop()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv413DoCoalescence"><code class="docutils literal notranslate"><span class="pre">DoCoalescence</span></code></a><ul>
 <li><a class="reference internal" href="#_CPPv4NK13DoCoalescenceclER9SuperdropR9SuperdropKdKdKd"><code class="docutils literal notranslate"><span class="pre">operator()()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4NK13DoCoalescence17coalescence_gammaEK8uint64_tK8uint64_tKdKd"><code class="docutils literal notranslate"><span class="pre">coalescence_gamma()</span></code></a></li>
