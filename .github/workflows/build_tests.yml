@@ -23,7 +23,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ runner.temp }}/yac/
-          key: ${{ runner.os }}-yac-cache-v3.19.0
+          key: ${{ runner.os }}-yac-cache-v3.20.2
           restore-keys: |
             ${{ runner.os }}-yac-
 
@@ -50,8 +50,8 @@ jobs:
       - name: Build YAC
         if: steps.cache_yac.outputs.cache-hit != 'true'
         run: |
-          mkdir yac-v3.19.0 && cd yac-v3.19.0
-          curl -s -L https://owncloud.gwdg.de/index.php/s/i1f5mUeStUYWSG9/download | tar xvz --strip-components=1
+          mkdir yac-v3.20.2 && cd yac-v3.20.2
+          curl -s -L https://owncloud.gwdg.de/index.php/s/v702ZKLjlHpvTPW/download | tar xvz --strip-components=1
           ./configure CFLAGS="-fPIC" CC=mpicc FC=mpif90 --disable-mpi-checks \
             --with-yaxt-root=${{ runner.temp }}/yaxt --prefix=${{ runner.temp }}/yac
           make -j 4
@@ -88,7 +88,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ runner.temp }}/yac/
-          key: ${{ runner.os }}-yac-cache-v3.19.0
+          key: ${{ runner.os }}-yac-cache-v3.20.2
 
       - name: Build Example
         run: |
@@ -138,7 +138,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ runner.temp }}/yac/
-          key: ${{ runner.os }}-yac-cache-v3.19.0
+          key: ${{ runner.os }}-yac-cache-v3.20.2
 
       - name: Build Parallel Execution Test
         run: |
