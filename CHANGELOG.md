@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.69.1](https://github.com/yoctoyotta1024/CLEO/compare/c2b88382472f3c0cdb3921a36bea63235f5fe910..v0.69.1) - 2026-08-25
+#### Bug Fixes
+- require yac only after yac_root is set - ([b1b8a7c](https://github.com/yoctoyotta1024/CLEO/commit/b1b8a7cc5c7cdcce44386ee94d13fdf85014dabe)) - clara.bayley
+#### Miscellaneous Chores
+- update yac version - ([c2b8838](https://github.com/yoctoyotta1024/CLEO/commit/c2b88382472f3c0cdb3921a36bea63235f5fe910)) - clara.bayley
+
+- - -
+
 ## [v0.69.0](https://github.com/yoctoyotta1024/CLEO/compare/0b64f49814ecd4eb08f9c73efee9fd9ae359622d..v0.69.0) - 2026-08-20
 #### Bug Fixes
 - bad const - ([fd55e84](https://github.com/yoctoyotta1024/CLEO/commit/fd55e84095692c8288f90fac6736a6b3702587c1)) - clara.bayley
