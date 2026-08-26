@@ -28,9 +28,7 @@ def parse_arguments():
     parser.add_argument(
         "path2CLEO", type=Path, help="Absolute path to CLEO directory (for cleopy)"
     )
-    parser.add_argument(
-        "path2build", type=Path, help="Absolute path to build directory"
-    )
+    parser.add_argument("sharepath", type=Path, help="Absolute path to share directory")
     parser.add_argument(
         "config_filename", type=Path, help="Absolute path to configuration YAML file"
     )
@@ -82,17 +80,15 @@ def get_zgrid(icon_grid_file, num_vertical_levels):
     return zgrid  # [m]
 
 
-def copy_icon_files(path2build, orginal_icon_grid_file, orginal_icon_data_file):
+def copy_icon_files(sharepath, orginal_icon_grid_file, orginal_icon_data_file):
     import shutil
 
-    assert (
-        path2build / "share"
-    ).is_dir(), "share directory doesn't exist in build directory"
+    assert (sharepath).is_dir(), "share directory doesn't exist in build directory"
 
-    icon_grid_file = path2build / "share" / orginal_icon_grid_file.name
+    icon_grid_file = sharepath / orginal_icon_grid_file.name
     shutil.copyfile(orginal_icon_grid_file, icon_grid_file)
 
-    icon_data_file = path2build / "share" / orginal_icon_data_file.name
+    icon_data_file = sharepath / orginal_icon_data_file.name
     shutil.copyfile(orginal_icon_data_file, icon_data_file)
 
     return icon_grid_file, icon_data_file
@@ -102,7 +98,7 @@ def copy_icon_files(path2build, orginal_icon_grid_file, orginal_icon_data_file):
 ### -------------------------------- MAIN ---------------------------------- ###
 def main(
     path2CLEO,
-    path2build,
+    sharepath,
     config_filename,
     gen_gbxs=False,
     gen_supers=False,
@@ -125,8 +121,8 @@ def main(
         attrsgen,
     )
 
-    if path2CLEO == path2build:
-        raise ValueError("build directory cannot be CLEO")
+    if path2CLEO == sharepath.parent:
+        raise ValueError("share directory parent cannot be CLEO")
 
     ### --- Load the config YAML file --- ###
     yaml = YAML()
@@ -141,7 +137,7 @@ def main(
     orginal_icon_data_file = Path(icon_yac_config["orginal_icon_data_file"])
     if copy_iconfiles:
         copy_icon_files(
-            Path(path2build), orginal_icon_grid_file, orginal_icon_data_file
+            Path(sharepath), orginal_icon_grid_file, orginal_icon_data_file
         )
 
     ### ------------------------ INPUT PARAMETERS -------------------------- ###
@@ -236,7 +232,7 @@ if __name__ == "__main__":
     args = parse_arguments()
     main(
         args.path2CLEO,
-        args.path2build,
+        args.sharepath,
         args.config_filename,
         gen_gbxs=args.gen_gbxs,
         gen_supers=args.gen_supers,
