@@ -39,6 +39,12 @@ parser.add_argument(
     help="Absolute path to source configuration YAML file",
 )
 parser.add_argument(
+    "path2experiment",
+    type=Path,
+    help="Absolute path for directories for inputs and outputs of experiment",
+)
+parser.add_argument("path2iconfiles", type=Path, help="Absolute path to icon .nc files")
+parser.add_argument(
     "--do_inputfiles",
     action="store_true",  # default is False
     help="Generate initial condition binary files",
@@ -60,15 +66,17 @@ args = parser.parse_args()
 ### --- command line parsed arguments --- ###
 path2CLEO = args.path2CLEO
 path2build = args.path2build
+path2experiment = args.path2experiment
+path2iconfiles = args.path2iconfiles
 src_config_filename = args.src_config_filename
 
 ### --- additional/derived arguments --- ###
-tmppath = path2build / "tmp"
-sharepath = path2build / "share"
-binpath = path2build / "bin"
+tmppath = path2experiment / "tmp"
+sharepath = path2experiment / "share"
+binpath = path2experiment / "bin"
 savefigpath = binpath
 
-config_filename = path2build / "tmp" / "bubble3d_config.yaml"
+config_filename = tmppath / "bubble3d_config.yaml"
 config_params = {
     "constants_filename": str(path2CLEO / "libs" / "cleoconstants.hpp"),
     "grid_filename": str(sharepath / "bubble3d_dimlessGBxboundaries.dat"),
@@ -77,8 +85,10 @@ config_params = {
     "zarrbasedir": str(binpath / "bubble3d_sol.zarr"),
     "yac_debug_config_file": str(binpath / "cleo_coupling_debug.yaml"),
     "yac_debug_grid_file": str(binpath / "cleo_grid_debug.nc"),
-    "orginal_icon_grid_file": "/work/mh0731/m300950/icon-mpim/experiments/bubble_1mom/outdata/bubble_1mom_atm_cgrid_ml.nc",
-    "orginal_icon_data_file": "/work/mh0731/m300950/icon-mpim/experiments/bubble_1mom/outdata/bubble_1mom_atm_3d_ml_20080801T000000Z.nc",
+    "orginal_icon_grid_file": str(path2iconfiles / "bubble_1mom_atm_cgrid_ml.nc"),
+    "orginal_icon_data_file": str(
+            path2iconfiles / "bubble_1mom_atm_3d_ml_20080801T000000Z.nc"
+        ),
 }
 
 isfigures = [False, True]  # booleans for [showing, saving] initialisation figures
@@ -131,10 +141,10 @@ def inputfiles(
 
     ### --- input binary files generation --- ###
     # equivalent to ``import bubble3d_inputfiles`` followed by
-    # ``bubble3d_inputfiles.main(path2CLEO, path2build, ...)``
+    # ``bubble3d_inputfiles.main(path2CLEO, sharepath, ...)``
     inputfiles_script = path2CLEO / "examples" / "bubble3d" / "bubble3d_inputfiles.py"
     python = sys.executable
-    cmd = [python, inputfiles_script, path2CLEO, path2build, config_filename]
+    cmd = [python, inputfiles_script, path2CLEO, sharepath, config_filename]
     if gen_gbxs:
         cmd.append("--gen_gbxs")
     if gen_supers:
