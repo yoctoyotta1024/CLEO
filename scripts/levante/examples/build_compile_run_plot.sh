@@ -47,7 +47,7 @@ fi
 
 if [[ "${compilername}" == "gcc" ]]
 then
-  yacyaxtroot=/work/mh0731/m300950/yacyaxt/gcc
+  yacyaxtroot=/home/m/m300950/icon-mpim/externals
 elif [[ "${compilername}" == "intel" ]]
 then
   yacyaxtroot=/work/mh0731/m300950/yacyaxt/intel
