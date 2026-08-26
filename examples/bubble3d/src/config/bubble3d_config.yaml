@@ -40,7 +40,7 @@ python_inputfiles:
 
 ### Kokkos Initialization Parameters ###
 kokkos_settings:
-  num_threads: 32                                          # number of threads for host parallel backend
+  num_threads: 1                                          # number of threads for host parallel backend
 
 ### YAC Setttings / Initialization Parameters ###
 yac_settings:
