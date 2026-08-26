@@ -77,8 +77,8 @@ config_params = {
     "zarrbasedir": str(binpath / "bubble3d_sol.zarr"),
     "yac_debug_config_file": str(binpath / "cleo_coupling_debug.yaml"),
     "yac_debug_grid_file": str(binpath / "cleo_grid_debug.nc"),
-    "orginal_icon_grid_file": "/work/mh0731/m300950/icon-mpim/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc",
-    "orginal_icon_data_file": "/work/mh0731/m300950/icon-mpim/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc",
+    "orginal_icon_grid_file": "/work/mh0731/m300950/icon-mpim/experiments/bubble_1mom/outdata/bubble_1mom_atm_cgrid_ml.nc",
+    "orginal_icon_data_file": "/work/mh0731/m300950/icon-mpim/experiments/bubble_1mom/outdata/bubble_1mom_atm_3d_ml_20080801T000000Z.nc",
 }
 
 isfigures = [False, True]  # booleans for [showing, saving] initialisation figures
