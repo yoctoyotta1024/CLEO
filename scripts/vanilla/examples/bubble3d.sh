@@ -21,10 +21,10 @@
 do_build="true"
 buildtype="openmp"
 compilername="gcc"
-path2CLEO=${HOME}/CLEO/
-path2build=${HOME}/CLEO/build_bubble3d/
-path2experiment="/work/mh0731/m300950/icon-mpim/experiments/bubble_cleo"
-path2iconfiles="/work/mh0731/m300950/icon-mpim/experiments/bubble_1mom/outdata"
+path2CLEO=${CLEO_PATH2CLEO}
+path2build=${path2CLEO}/build_bubble3d
+path2experiment="/Users/yoctoyotta1024/Documents/icon-mpim/experiments/bubble_cleo"
+path2iconfiles="/Users/yoctoyotta1024/Documents/icon-mpim/experiments/bubble_1mom/outdata"
 build_flags="-DCLEO_COUPLED_DYNAMICS=yac -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
 executables="bubble3d"
@@ -38,15 +38,8 @@ script_args="${src_config_filename} ${src_yac_config_filename} ${path2experiment
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
 
-if [[ "${compilername}" != "gcc" ]]
-then
-  echo "bubble3d example currently only working on Levante with gcc compiler"
-  echo "-> please use compilername=gcc"
-  exit 1
-fi
-
 ### ---------- build, compile and run example ---------- ###
-${path2CLEO}/scripts/levante/examples/build_compile_run_plot.sh ${do_build} \
+${path2CLEO}/scripts/vanilla/examples/build_compile_run_plot.sh ${do_build} \
   ${buildtype} ${compilername} ${path2CLEO} ${path2build} "${build_flags}" \
   "${executables}" ${pythonscript} "${script_args}"
 ### ---------------------------------------------------- ###
