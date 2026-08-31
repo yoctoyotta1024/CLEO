@@ -299,6 +299,7 @@ void OptionalConfigParams::YacDynamicsParams::set_params(const YAML::Node& confi
     throw std::runtime_error("configuration type must be 'yac'");
   }
 
+  yac_debug_file = std::filesystem::path(node["yac_debug_file"].as<std::string>());
   lower_longitude = node["lower_longitude"].as<double>();
   upper_longitude = node["upper_longitude"].as<double>();
   lower_latitude = node["lower_latitude"].as<double>();
