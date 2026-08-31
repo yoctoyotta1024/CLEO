@@ -423,8 +423,8 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
                   interp_stack_id, cleo_lag, icon_lag);
 
   // ---------------------------------------------------------
-
-  yac_cset_config_output_file("coupling_debug.yaml", YAC_CONFIG_OUTPUT_FORMAT_YAML,
+  const auto yac_debug_file = config.get_yac_dynamics().yac_debug_file.string();
+  yac_cset_config_output_file(yac_debug_file.c_str(), YAC_CONFIG_OUTPUT_FORMAT_YAML,
                               YAC_CONFIG_OUTPUT_SYNC_LOC_ENDDEF, 1);
   // --- End of YAC definitions ---
 
