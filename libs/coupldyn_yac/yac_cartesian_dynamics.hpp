@@ -137,14 +137,16 @@ struct CartesianDynamics {
   /* Public call to receive data from YAC
    * If the problem is 2D turns into a wrapper for receive_hor_slice_from_yac */
   void receive_fields_from_yac();
-  void receive_yac_field(unsigned int yac_field_id, double **yac_raw_data,
-                         std::vector<double> &target_array, const size_t ndims_north,
-                         const size_t ndims_east, const size_t vertical_levels,
-                         double conversion_factor) const;
-  void send_yac_field(int field_id, double* field_data, double conversion_factor);
-  void send_fields_to_yac(double* temp_state,
-                          double* qvap_state,
-                          double* qcond_state);
+  void receive_yac_cell_field(unsigned int yac_field_id, double **yac_raw_data,
+                              std::vector<double> &target_array, const size_t ndims_north,
+                              const size_t ndims_east, const size_t vertical_levels,
+                              double conversion_factor) const;
+  void receive_yac_edge_field(unsigned int yac_field_id, double **yac_raw_data,
+                              std::vector<double> &target_array, const size_t ndims_north,
+                              const size_t ndims_east, const size_t vertical_levels,
+                              double conversion_factor, bool eastward_edge) const;
+  void send_yac_field(int field_id, double *field_data, double conversion_factor);
+  void send_fields_to_yac(double *temp_state, double *qvap_state, double *qcond_state);
 };
 
 /* type satisfying CoupledDyanmics solver concept
