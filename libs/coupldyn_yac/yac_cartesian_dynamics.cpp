@@ -50,7 +50,7 @@ std::array<size_t, 3> kijfromindex(const std::array<size_t, 3>& ndims, const siz
 double get_dlon_from_metres(const double lower_latitude, const double longitude_to_meters,
                             double delta_east) {
   double dLon = 0.0;
-  dLon = (delta_east * dlc::COORD0) * longitude_to_meters;
+  dLon = (delta_east * dlc::COORD0) / longitude_to_meters;
   /*
     double EarthRadiusMeters = (100000) / (2 * M_PI);  // semi‑major axis a
     if (delta_east != 0.0) {
@@ -65,7 +65,7 @@ double get_dlon_from_metres(const double lower_latitude, const double longitude_
 double get_dlat_from_metres(const double lower_latitude, const double latitude_to_meters,
                             double delta_north) {
   double dLat = 0.0;
-  dLat = (delta_north * dlc::COORD0) * latitude_to_meters;
+  dLat = (delta_north * dlc::COORD0) / latitude_to_meters;
   /*
     double EarthRadiusMeters = (100000) / (2 * M_PI);  // semi‑major axis a
     if (delta_north != 0.0) {
