@@ -303,12 +303,16 @@ void OptionalConfigParams::YacDynamicsParams::set_params(const YAML::Node& confi
   upper_longitude = node["upper_longitude"].as<double>();
   lower_latitude = node["lower_latitude"].as<double>();
   upper_latitude = node["upper_latitude"].as<double>();
+  longitude_to_meters = node["longitude_to_meters"].as<double>();
+  latitude_to_meters = node["latitude_to_meters"].as<double>();
 }
 
 void OptionalConfigParams::YacDynamicsParams::print_params() const {
   std::cout << "\n-------- YacDynamics Configuration Parameters --------------"
             << "\nlower_longitude: " << lower_longitude << "\nupper_longitude: " << upper_longitude
             << "\nlower_latitude: " << lower_latitude << "\nupper_latitude: " << upper_latitude
+            << "\nlongitude_to_meters: " << longitude_to_meters
+            << "\nlatitude_to_meters: " << latitude_to_meters
             << "\n---------------------------------------------------------\n";
 }
 

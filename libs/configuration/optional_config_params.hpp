@@ -150,6 +150,8 @@ struct OptionalConfigParams {
     double upper_longitude = NaNVals::dbl();
     double lower_latitude = NaNVals::dbl();
     double upper_latitude = NaNVals::dbl();
+    double longitude_to_meters = NaNVals::dbl();
+    double latitude_to_meters = NaNVals::dbl();
   } yac_dynamics;
 
   /*** Bounday Conditions Parameters ***/

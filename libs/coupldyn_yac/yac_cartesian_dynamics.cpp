@@ -47,14 +47,12 @@ std::array<size_t, 3> kijfromindex(const std::array<size_t, 3>& ndims, const siz
   return std::array<size_t, 3>{k, i, j};
 }
 
-double get_dlon_from_metres(const double lower_latitude, double delta_east) {
-  // double EarthRadiusMeters = (100000) / (2 * M_PI);  // semi‑major axis a
+double get_dlon_from_metres(const double lower_latitude, const double longitude_to_meters,
+                            double delta_east) {
   double dLon = 0.0;
-
-  double MetresToRadians = (2 * M_PI) / (100000);
-
-  dLon = (delta_east * dlc::COORD0) * MetresToRadians;
+  dLon = (delta_east * dlc::COORD0) * longitude_to_meters;
   /*
+    double EarthRadiusMeters = (100000) / (2 * M_PI);  // semi‑major axis a
     if (delta_east != 0.0) {
       double cosLat = std::cos(lower_latitude);
       dLon = (delta_east*dlc::COORD0) / (EarthRadiusMeters * cosLat);
@@ -64,15 +62,15 @@ double get_dlon_from_metres(const double lower_latitude, double delta_east) {
   */
   return dLon;
 }
-double get_dlat_from_metres(const double lower_latitude, double delta_north) {
-  // double EarthRadiusMeters = (100000) / (2 * M_PI);  // semi‑major axis a
+double get_dlat_from_metres(const double lower_latitude, const double latitude_to_meters,
+                            double delta_north) {
   double dLat = 0.0;
-  double MetresToRadians = (2 * M_PI) / (100000);
-  dLat = (delta_north * dlc::COORD0) * MetresToRadians;
+  dLat = (delta_north * dlc::COORD0) * latitude_to_meters;
   /*
+    double EarthRadiusMeters = (100000) / (2 * M_PI);  // semi‑major axis a
     if (delta_north != 0.0) {
-      dLat = (delta_north*dlc::COORD0) / EarthRadiusMeters;
-      return dLat;
+    dLat = (delta_north*dlc::COORD0) / EarthRadiusMeters;
+    return dLat;
     }
     return 0.0;
   */
@@ -88,6 +86,8 @@ void create_vertex_coordinates(const Config& config, const std::array<size_t, 3>
   // const auto upper_longitude = config.get_yac_dynamics().upper_longitude;
   const auto lower_latitude = config.get_yac_dynamics().lower_latitude;
   // const auto upper_latitude = config.get_yac_dynamics().upper_latitude;
+  const auto longitude_to_meters = config.get_yac_dynamics().longitude_to_meters;
+  const auto latitude_to_meters = config.get_yac_dynamics().latitude_to_meters;
 
   auto vertex_longitudes_new = std::vector<double>(partition_size[EASTWARD] + 1, 0);
   auto vertex_latitudes_new = std::vector<double>(partition_size[NORTHWARD] + 1, 0);
@@ -107,13 +107,13 @@ void create_vertex_coordinates(const Config& config, const std::array<size_t, 3>
   */
   // ***** multiprocess **********
   for (size_t i = 0; i < vertex_longitudes.size(); i++) {
-    auto dLon = get_dlon_from_metres(lower_latitude,
+    auto dLon = get_dlon_from_metres(lower_latitude, longitude_to_meters,
                                      (gridbox_bounds[EASTWARD][i] - domain_bounds[0][EASTWARD]));
     vertex_longitudes[i] = lower_longitude + dLon;
   }
 
   for (size_t i = 0; i < vertex_latitudes.size(); i++) {
-    auto dLat = get_dlat_from_metres(lower_latitude,
+    auto dLat = get_dlat_from_metres(lower_latitude, latitude_to_meters,
                                      (gridbox_bounds[NORTHWARD][i] - domain_bounds[0][NORTHWARD]));
     vertex_latitudes[i] = lower_latitude + dLat;
   }
