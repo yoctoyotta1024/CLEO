@@ -27,6 +27,17 @@ icon_yac_config:
   icon_data_timestep: 30                                  # must match ICON data file [seconds]
   num_vertical_levels: 24                                 # number of vertical levels in CLEO (<= ICON)
 
+### Initialization Parameters for bubble3d_inputfiles.py ###
+python_inputfiles:
+  xgrid_ngbxs: 40                              # x direction ngbxs <- note(!) num_vertical_levels * xgrid_ngbxs == ngbxs (see below)
+  ygrid_ngbxs: 5                               # y direction ngbxs <- note(!) num_vertical_levels * xgrid_ngbxs == ngbxs (see below)
+  sd_zlim: 1000                                # max z coord of initial superdroplets
+  nsupers_pergbx: 2                            # number of SDs per gridbox below sd_zlim <- note(!) must be consistent with maxnsupers (see below)
+  monor: 1e-6                                  # all SDs have this same radius [m]
+  dryr_sf: 1.0                                 # scale factor for dry radii [m]
+  numconc: 5e8                                 # total no. conc of real droplets [m^-3]
+  randcoords: false                             # sample SD spatial coordinates randomly or not
+
 ### Kokkos Initialization Parameters ###
 kokkos_settings:
   num_threads: 32                                          # number of threads for host parallel backend
@@ -62,7 +73,9 @@ outputdata:
 
 coupled_dynamics:
   type: yac
-  lower_longitude: -3.29867229                                # must match xgrid domain delta_x
-  upper_longitude: 2.98451302
-  lower_latitude: -1.25665                                    # must match ygrid domain delta_y
-  upper_latitude: 1.25665
+  lower_longitude: -3.141592653589793                  # must match xgrid domain delta_x
+  upper_longitude: 3.141592653589793
+  lower_latitude: -0.1308996938995747                  # must match ygrid domain delta_y
+  upper_latitude: 0.06544984694978735
+  longitude_to_meters: 15915.494309189535              # conversion from longitude radians to km (100 km = 2*pi)
+  latitude_to_meters: 88212.62326748674                # conversion from latitude radians to km (17 km = 0.03125 * 2*pi)
