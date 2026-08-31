@@ -111,6 +111,8 @@ def main(
     show_figures=False,
     save_figures=False,
 ):
+    import numpy as np
+
     from pathlib import Path
     from ruamel.yaml import YAML
 
@@ -163,23 +165,13 @@ def main(
         cdconfig["lower_longitude"]
     )
     xgrid_max = xgrid_max_radians * cdconfig["longitude_to_meters"]
-    xgrid_spacing = float(xgrid_max / pyconfig["xgrid_ngbxs"])
-    xgrid = [
-        0,
-        xgrid_max,
-        xgrid_spacing,
-    ]
+    xgrid = np.linspace(0, xgrid_max, int(pyconfig["xgrid_ngbxs"]) + 1)
 
     ygrid_max_radians = abs(cdconfig["upper_latitude"]) + abs(
         cdconfig["lower_latitude"]
     )
     ygrid_max = ygrid_max_radians * cdconfig["latitude_to_meters"]
-    ygrid_spacing = float(ygrid_max / pyconfig["ygrid_ngbxs"])
-    ygrid = [
-        0,
-        ygrid_max,
-        ygrid_spacing,
-    ]  # evenly spaced xhalf coords [m] # distance must match latitudes in config file
+    ygrid = np.linspace(0, ygrid_max, int(pyconfig["ygrid_ngbxs"]) + 1)
 
     ### --- settings for initial superdroplets --- ###
     # settings for initial coordinates
@@ -246,6 +238,9 @@ if __name__ == "__main__":
         args.path2CLEO,
         args.path2build,
         args.config_filename,
+        gen_gbxs=args.gen_gbxs,
+        gen_supers=args.gen_supers,
+        copy_iconfiles=args.copy_iconfiles,
         savefigpath=args.savefigpath,
         show_figures=args.show_figures,
         save_figures=args.save_figures,
