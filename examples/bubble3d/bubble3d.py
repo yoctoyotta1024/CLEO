@@ -75,6 +75,7 @@ config_params = {
     "initsupers_filename": str(sharepath / "bubble3d_dimlessSDsinit.dat"),
     "setup_filename": str(binpath / "bubble3d_setup.txt"),
     "zarrbasedir": str(binpath / "bubble3d_sol.zarr"),
+    "yac_debug_file": str(binpath / "yac_coupling_debug.yaml"),
     "orginal_icon_grid_file": "/work/mh0731/m300950/icon-mpim/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc",
     "orginal_icon_data_file": "/work/mh0731/m300950/icon-mpim/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc",
 }
