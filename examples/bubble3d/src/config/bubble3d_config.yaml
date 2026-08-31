@@ -73,6 +73,7 @@ outputdata:
 
 coupled_dynamics:
   type: yac
+  yac_debug_file: /home/k/k202203/CLEO/build/bin/yac_coupling_debug.yaml    # yac_cset_config_output_file useful for debugging
   lower_longitude: -3.141592653589793                  # must match xgrid domain delta_x
   upper_longitude: 3.141592653589793
   lower_latitude: -0.1308996938995747                  # must match ygrid domain delta_y
