@@ -44,6 +44,10 @@ kokkos_settings:
 
 ### YAC Setttings / Initialization Parameters ###
 yac_settings:
+  yac_interp_stack: |                                                       # yaml string for yac_cget_interp_stack_config_from_string_yaml
+    [{"nnn":
+       {"n": 1,
+        "weighted": "arithmetic_average"}}]
   yac_debug_file: /home/k/k202203/CLEO/build/bin/yac_coupling_debug.yaml    # yac_cset_config_output_file useful for debugging
 
 ### SDM Runtime Parameters ###
