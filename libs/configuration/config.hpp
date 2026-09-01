@@ -79,6 +79,8 @@ struct Config {
     return optional.kokkos_settings.kokkos_initialization_settings;
   };
 
+  OptionalConfigParams::YacSettings get_yac_settings() const { return optional.yac_settings; }
+
   OptionalConfigParams::CondensationParams get_condensation() const {
     return optional.condensation;
   }
