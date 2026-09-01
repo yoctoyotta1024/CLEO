@@ -269,8 +269,8 @@ void CartesianDynamics::receive_yac_edge_field(unsigned int yac_field_id, double
 void CartesianDynamics::receive_fields_from_yac() {
   receive_yac_cell_field(temp_yac_id_recv, yac_raw_cell_data, temp, ndims[VERTICAL], dlc::TEMP0);
   receive_yac_cell_field(pressure_yac_id_recv, yac_raw_cell_data, press, ndims[VERTICAL], dlc::P0);
-  receive_yac_cell_field(qvap_yac_id_recv, yac_raw_cell_data, qvap, ndims[VERTICAL], dlc::QVAP);
-  receive_yac_cell_field(qcond_yac_id_recv, yac_raw_cell_data, qcond, ndims[VERTICAL], dlc::QCOND);
+  receive_yac_cell_field(qvap_yac_id_recv, yac_raw_cell_data, qvap, ndims[VERTICAL]);
+  receive_yac_cell_field(qcond_yac_id_recv, yac_raw_cell_data, qcond, ndims[VERTICAL]);
 
   receive_yac_cell_field(vertical_wind_yac_id_recv, yac_raw_vertical_wind_data, wvel,
                          ndims[VERTICAL] + 1, dlc::W0);
