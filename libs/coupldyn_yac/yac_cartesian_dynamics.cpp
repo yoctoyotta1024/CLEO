@@ -82,12 +82,12 @@ void create_vertex_coordinates(const Config& config, const std::array<size_t, 3>
                                std::array<std::array<double, 3>, 2> domain_bounds,
                                std::vector<double>& vertex_longitudes,
                                std::vector<double>& vertex_latitudes) {
-  const auto lower_longitude = config.get_yac_dynamics().lower_longitude;
-  // const auto upper_longitude = config.get_yac_dynamics().upper_longitude;
-  const auto lower_latitude = config.get_yac_dynamics().lower_latitude;
-  // const auto upper_latitude = config.get_yac_dynamics().upper_latitude;
-  const auto longitude_to_meters = config.get_yac_dynamics().longitude_to_meters;
-  const auto latitude_to_meters = config.get_yac_dynamics().latitude_to_meters;
+  const auto lower_longitude = config.get_yac_cartesian_dynamics().lower_longitude;
+  // const auto upper_longitude = config.get_yac_cartesian_dynamics().upper_longitude;
+  const auto lower_latitude = config.get_yac_cartesian_dynamics().lower_latitude;
+  // const auto upper_latitude = config.get_yac_cartesian_dynamics().upper_latitude;
+  const auto longitude_to_meters = config.get_yac_cartesian_dynamics().longitude_to_meters;
+  const auto latitude_to_meters = config.get_yac_cartesian_dynamics().latitude_to_meters;
 
   auto vertex_longitudes_new = std::vector<double>(partition_size[EASTWARD] + 1, 0);
   auto vertex_latitudes_new = std::vector<double>(partition_size[NORTHWARD] + 1, 0);
@@ -472,7 +472,7 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
                   interp_stack_id, cleo_lag, icon_lag);
 
   // ---------------------------------------------------------
-  const auto yac_debug_file = config.get_yac_dynamics().yac_debug_file.string();
+  const auto yac_debug_file = config.get_yac_cartesian_dynamics().yac_debug_file.string();
   yac_cset_config_output_file(yac_debug_file.c_str(), YAC_CONFIG_OUTPUT_FORMAT_YAML,
                               YAC_CONFIG_OUTPUT_SYNC_LOC_ENDDEF, 1);
   // --- End of YAC definitions ---

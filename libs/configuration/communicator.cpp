@@ -29,7 +29,7 @@ int init_communicator::comm_size = -1;
 int init_communicator::my_rank = -1;
 
 init_communicator::init_communicator(int argc, char* argv[], const Config& config) {
-  if (!(std::isnan(config.get_yac_dynamics().lower_longitude))) {
+  if (!(std::isnan(config.get_yac_cartesian_dynamics().lower_longitude))) {
     std::cout << "yac is present\n";
     // -- YAC initialization and calendar definitions ---
     yac_cinit();

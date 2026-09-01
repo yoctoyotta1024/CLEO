@@ -152,7 +152,7 @@ struct CartesianDynamics {
 /* type satisfying CoupledDyanmics solver concept
 specifically for thermodynamics and wind velocities
 that are received from YAC */
-struct YacDynamics {
+struct YacCartesianDynamics {
  private:
   const unsigned int interval;
   const unsigned int end_time;
@@ -164,8 +164,9 @@ struct YacDynamics {
   }
 
  public:
-  YacDynamics(const Config &config, const unsigned int couplstep, const std::array<size_t, 3> ndims,
-              const unsigned int nsteps, const CartesianDecomposition& decomp)
+  YacCartesianDynamics(const Config &config, const unsigned int couplstep,
+                       const std::array<size_t, 3> ndims, const unsigned int nsteps,
+                       const CartesianDecomposition &decomp)
       : interval(couplstep),
         end_time(config.get_timesteps().T_END),
         dynvars(std::make_shared<CartesianDynamics>(config, ndims, nsteps, decomp)) {}
@@ -202,7 +203,6 @@ struct YacDynamics {
   std::pair<double, double> get_vvel(const size_t ii) const { return dynvars->get_vvel(ii); }
 };
 
-// int YacDynamics::get_counter = 1;
-
+// int YacCartesianDynamics::get_counter = 1;
 
 #endif  // LIBS_COUPLDYN_YAC_YAC_CARTESIAN_DYNAMICS_HPP_

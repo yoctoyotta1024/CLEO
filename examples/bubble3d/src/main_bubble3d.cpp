@@ -65,8 +65,8 @@ inline CoupledDynamics auto create_coupldyn(const Config &config, const Cartesia
   const std::array<size_t, 3> ndims({h_ndims(0), h_ndims(1), h_ndims(2)});
 
   const auto nsteps = (unsigned int)(std::ceil(t_end / couplstep) + 1);
-  const CartesianDecomposition& decomp = gbxmaps.get_domain_decomposition();
-  return YacDynamics(config, couplstep, ndims, nsteps, decomp);
+  const CartesianDecomposition &decomp = gbxmaps.get_domain_decomposition();
+  return YacCartesianDynamics(config, couplstep, ndims, nsteps, decomp);
 }
 
 template <GridboxMaps GbxMaps>
@@ -195,7 +195,7 @@ int main(int argc, char *argv[]) {
         create_coupldyn(config, sdm.gbxmaps, tsteps.get_couplstep(), tsteps.get_t_end());
 
     /* coupling between coupldyn and SDM */
-    const CouplingComms<CartesianMaps, YacDynamics> auto comms = YacComms{};
+    const CouplingComms<CartesianMaps, YacCartesianDynamics> auto comms = YacComms{};
 
     /* Initial conditions for CLEO run */
     const InitialConditions auto initconds = create_initconds(config, sdm.gbxmaps);
