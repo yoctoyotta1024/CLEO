@@ -42,6 +42,10 @@ python_inputfiles:
 kokkos_settings:
   num_threads: 32                                          # number of threads for host parallel backend
 
+### YAC Setttings / Initialization Parameters ###
+yac_settings:
+  yac_debug_file: /home/k/k202203/CLEO/build/bin/yac_coupling_debug.yaml    # yac_cset_config_output_file useful for debugging
+
 ### SDM Runtime Parameters ###
 domain:
   nspacedims : 3                                          # no. of spatial dimensions to model
@@ -73,7 +77,6 @@ outputdata:
 
 coupled_dynamics:
   type: yac
-  yac_debug_file: /home/k/k202203/CLEO/build/bin/yac_coupling_debug.yaml    # yac_cset_config_output_file useful for debugging
   lower_longitude: -3.141592653589793                  # must match xgrid domain delta_x
   upper_longitude: 3.141592653589793
   lower_latitude: -0.1308996938995747                  # must match ygrid domain delta_y

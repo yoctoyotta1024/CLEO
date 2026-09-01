@@ -27,6 +27,11 @@ OptionalConfigParams::OptionalConfigParams(const std::filesystem::path config_fi
   }
   print_kokkos_settings();
 
+  if (config["yac_settings"]) {
+    yac_settings.set_params(config);
+    yac_settings.print_params();
+  }
+
   if (config["microphysics"]) {
     set_microphysics(config);
   }
@@ -85,6 +90,22 @@ void OptionalConfigParams::print_kokkos_settings() const {
   std::cout << "\n---------------------------------------------------------\n";
 }
 
+void OptionalConfigParams::YacSettings::set_params(const YAML::Node& config) {
+  const YAML::Node node = config["yac_settings"];
+
+  is_using_yac = true;
+
+  if (node["yac_debug_file"]) {
+    yac_debug_file = std::filesystem::path(node["yac_debug_file"].as<std::string>());
+  }
+}
+
+void OptionalConfigParams::YacSettings::print_params() const {
+  std::cout << "\n-------- Yac Settings / Initialization Parameters --------------"
+            << "\nyac_debug_file: " << yac_debug_file
+            << "\n---------------------------------------------------------\n";
+}
+
 void OptionalConfigParams::set_microphysics(const YAML::Node& config) {
   const YAML::Node node = config["microphysics"];
 
@@ -130,6 +151,9 @@ void OptionalConfigParams::set_coupled_dynamics(const YAML::Node& config) {
     cvodedynamics.set_params(config);
     cvodedynamics.print_params();
   } else if (type == "yac") {
+    if (!yac_settings.is_using_yac) {
+      throw std::runtime_error("YAC settings required to use yac coupled dynamics");
+    }
     yac_cartesian_dynamics.set_params(config);
     yac_cartesian_dynamics.print_params();
   } else {
@@ -299,7 +323,6 @@ void OptionalConfigParams::YacCartesianDynamicsParams::set_params(const YAML::No
     throw std::runtime_error("configuration type must be 'yac'");
   }
 
-  yac_debug_file = std::filesystem::path(node["yac_debug_file"].as<std::string>());
   lower_longitude = node["lower_longitude"].as<double>();
   upper_longitude = node["upper_longitude"].as<double>();
   lower_latitude = node["lower_latitude"].as<double>();

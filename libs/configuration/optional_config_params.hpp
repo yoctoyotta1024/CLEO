@@ -63,11 +63,21 @@ struct OptionalConfigParams {
 
   void set_python_bindings(const YAML::Node& config);
 
-  /*** Kokkos Initialization Parameters ***/
+  /*** Kokkos Settings / Initialization Parameters ***/
   struct KokkosSettings {
     bool is_default = true; /**< true = default kokkos initialization */
     Kokkos::InitializationSettings kokkos_initialization_settings; /**< is default unless config */
   } kokkos_settings;
+
+  /*** YAC Settings / Initialization Parameters ***/
+  struct YacSettings {
+    using fspath = std::filesystem::path;
+    void set_params(const YAML::Node& config);
+    void print_params() const;
+    bool is_using_yac = false; /**< true = use YAC coupling to/from CLEO (e.g. to set MPI comms) */
+    fspath yac_debug_file =
+        fspath(); /**< filename for yac_cset_config_output_file useful for debugging */
+  } yac_settings;
 
   /*** Super-Droplet Microphysics Parameters ***/
   struct CondensationParams {
@@ -144,11 +154,8 @@ struct OptionalConfigParams {
   } cvodedynamics;
 
   struct YacCartesianDynamicsParams {
-    using fspath = std::filesystem::path;
     void set_params(const YAML::Node& config);
     void print_params() const;
-    fspath yac_debug_file =
-        fspath(); /**< filename for yac_cset_config_output_file useful for debugging */
     double lower_longitude = NaNVals::dbl();
     double upper_longitude = NaNVals::dbl();
     double lower_latitude = NaNVals::dbl();
