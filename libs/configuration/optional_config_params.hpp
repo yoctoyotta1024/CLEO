@@ -143,7 +143,7 @@ struct OptionalConfigParams {
     double atol = NaNVals::dbl(); /**< absolute tolerances for integration of [P, T, qv, qc] ODEs */
   } cvodedynamics;
 
-  struct YacDynamicsParams {
+  struct YacCartesianDynamicsParams {
     using fspath = std::filesystem::path;
     void set_params(const YAML::Node& config);
     void print_params() const;
@@ -155,7 +155,7 @@ struct OptionalConfigParams {
     double upper_latitude = NaNVals::dbl();
     double longitude_to_meters = NaNVals::dbl();
     double latitude_to_meters = NaNVals::dbl();
-  } yac_dynamics;
+  } yac_cartesian_dynamics;
 
   /*** Bounday Conditions Parameters ***/
   struct AddSupersToDomainParams {
