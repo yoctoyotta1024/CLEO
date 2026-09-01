@@ -94,6 +94,7 @@ void OptionalConfigParams::YacSettings::set_params(const YAML::Node& config) {
   const YAML::Node node = config["yac_settings"];
 
   is_using_yac = true;
+  yac_interp_stack = node["yac_interp_stack"].as<std::string>();
 
   if (node["yac_debug_file"]) {
     yac_debug_file = std::filesystem::path(node["yac_debug_file"].as<std::string>());
@@ -102,7 +103,7 @@ void OptionalConfigParams::YacSettings::set_params(const YAML::Node& config) {
 
 void OptionalConfigParams::YacSettings::print_params() const {
   std::cout << "\n-------- Yac Settings / Initialization Parameters --------------"
-            << "\nyac_debug_file: " << yac_debug_file
+            << "\nyac_interp_stack: " << yac_interp_stack << "\nyac_debug_file: " << yac_debug_file
             << "\n---------------------------------------------------------\n";
 }
 

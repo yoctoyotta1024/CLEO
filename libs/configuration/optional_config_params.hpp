@@ -75,8 +75,9 @@ struct OptionalConfigParams {
     void set_params(const YAML::Node& config);
     void print_params() const;
     bool is_using_yac = false; /**< true = use YAC coupling to/from CLEO (e.g. to set MPI comms) */
-    fspath yac_debug_file =
-        fspath(); /**< filename for yac_cset_config_output_file useful for debugging */
+    fspath yac_debug_file = fspath(); /**< yac_cset_config_output_file useful for debugging */
+    std::string yac_interp_stack =
+        ""; /**< yaml string for yac_cget_interp_stack_config_from_string_yaml */
   } yac_settings;
 
   /*** Super-Droplet Microphysics Parameters ***/
