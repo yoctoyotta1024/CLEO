@@ -226,8 +226,15 @@ void CartesianDynamics::receive_yac_cell_field(unsigned int yac_field_id, double
  *
  * (see also receive_yac_cell_field)
  *
- * *NOTE*: eastward_edge boolean used for +-1 additions to indexing to get only
+ * *NOTE*: eastward_edge boolean == true (1) or == false (0)also used for indexing to get only
  * northward or eastwards edges from entire north- and east-wards edge points definitions
+ *
+ * *Hint*: for selected latitude rows of the edge points (i.e. if
+ * ``(lat_index % 2 == eastward_edge) == true``, ``j = lat_index``), and for longitude index within
+ * each selected row (``i = index``), ``target_index`` is equivalent to:
+ * ``ii = ((ndims[EASTWARD] + eastward_edge) * j + i) * ndims[VERTICAL] + k;``,
+ * and similarly ``source_idx`` is equivalent to:
+ * ``source_idx = j * (2 * ndims[EASTWARD] + 1) + eastward_edge * ndims[EASTWARD] + i;``
  * */
 void CartesianDynamics::receive_yac_edge_field(unsigned int yac_field_id, double** yac_raw_data,
                                                std::vector<double>& target_array,
@@ -245,17 +252,18 @@ void CartesianDynamics::receive_yac_edge_field(unsigned int yac_field_id, double
     std::cout << "Last Get Action: " << action << std::endl;
   }
 
-  std::vector<double>::iterator target_it = target_array.begin();
-  for (size_t vertical_index = 0; vertical_index < ndims[VERTICAL]; vertical_index++) {
-    unsigned int source_index = 0;
-    for (size_t lat_index = 0; lat_index < (ndims[NORTHWARD] + 1) * 2 - 1; lat_index++) {
-      if (lat_index % 2 == eastward_edge) {
-        for (size_t index = 0; index < ndims[EASTWARD] + eastward_edge;
-             index++, target_it++, source_index++)
-          *target_it = yac_raw_data[vertical_index][source_index] / conversion_factor;
-      } else
-        source_index += ndims[EASTWARD] + !eastward_edge;
-    }
+  unsigned int source_index = 0;
+  unsigned int target_index = 0;
+  for (size_t lat_index = 0; lat_index < (ndims[NORTHWARD] + 1) * 2 - 1; lat_index++) {
+    if (lat_index % 2 == eastward_edge) {
+      for (size_t long_index = 0; long_index < ndims[EASTWARD] + eastward_edge;
+           long_index++, source_index++)
+        for (size_t vertical_index = 0; vertical_index < ndims[VERTICAL];
+             vertical_index++, target_index++)
+          target_array[target_index] =
+              yac_raw_data[vertical_index][source_index] / conversion_factor;
+    } else
+      source_index += ndims[EASTWARD] + !eastward_edge;
   }
 }
 
