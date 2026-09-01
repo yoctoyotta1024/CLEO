@@ -101,7 +101,9 @@ struct Config {
     return optional.fromfiledynamics;
   }
 
-  OptionalConfigParams::YacDynamicsParams get_yac_dynamics() const { return optional.yac_dynamics; }
+  OptionalConfigParams::YacCartesianDynamicsParams get_yac_cartesian_dynamics() const {
+    return optional.yac_cartesian_dynamics;
+  }
 
   OptionalConfigParams::AddSupersToDomainParams get_addsuperstodomain() const {
     return optional.addsuperstodomain;
