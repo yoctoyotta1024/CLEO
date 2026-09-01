@@ -117,14 +117,14 @@ struct CartesianDynamics {
 
  public:
   CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
-                    const unsigned int nsteps, const CartesianDecomposition& decomp);
+                    const unsigned int nsteps, const CartesianDecomposition &decomp);
   ~CartesianDynamics();
 
   get_winds_func get_wvel;  // funcs to get velocity defined in construction of class
   get_winds_func get_uvel;  // warning: these functions are not const member funcs by default
   get_winds_func get_vvel;
 
-  int get_yac_coupling_flag() const {return yac_coupling_flag;}
+  int get_yac_coupling_flag() const { return yac_coupling_flag; }
 
   double get_press(const size_t ii) const { return press.at(ii); }
 
@@ -138,13 +138,11 @@ struct CartesianDynamics {
    * If the problem is 2D turns into a wrapper for receive_hor_slice_from_yac */
   void receive_fields_from_yac();
   void receive_yac_cell_field(unsigned int yac_field_id, double **yac_raw_data,
-                              std::vector<double> &target_array, const size_t ndims_north,
-                              const size_t ndims_east, const size_t vertical_levels,
+                              std::vector<double> &target_array, const size_t vertical_levels,
                               double conversion_factor) const;
   void receive_yac_edge_field(unsigned int yac_field_id, double **yac_raw_data,
-                              std::vector<double> &target_array, const size_t ndims_north,
-                              const size_t ndims_east, const size_t vertical_levels,
-                              double conversion_factor, bool eastward_edge) const;
+                              std::vector<double> &target_array, double conversion_factor,
+                              bool eastward_edge) const;
   void send_yac_field(int field_id, double *field_data, double conversion_factor);
   void send_fields_to_yac(double *temp_state, double *qvap_state, double *qcond_state);
 };
@@ -160,7 +158,7 @@ struct YacCartesianDynamics {
 
   /* Calls the get operations to receive data from YAC for each of the fields of interest */
   void run_dynamics(const unsigned int t_mdl) const {
-     // dynvars->receive_fields_from_yac();
+    // dynvars->receive_fields_from_yac();
   }
 
  public:
@@ -184,7 +182,7 @@ struct YacCartesianDynamics {
     }
   }
 
-  const std::shared_ptr<CartesianDynamics>& get_dynvars() const { return dynvars; }
+  const std::shared_ptr<CartesianDynamics> &get_dynvars() const { return dynvars; }
 
   int get_yac_coupling_flag() const { return dynvars->get_yac_coupling_flag(); }
 
