@@ -330,6 +330,25 @@ class SDMMethods {
       t_sdm = t_sdm_next;
     }
   }
+
+  /**
+   * @brief Execute at the last coupled model timestep.
+   *
+   * This function is called at the last coupled model timestep
+   * (i.e. at `t_mdl == t_end`) and includes calls to the observer's `at_start_step`
+   * function for both the domain and individual gridboxes to observe the simulation
+   * at the (start of the) last timestep.
+   *
+   * @param t_mdl Current timestep of the coupled model.
+   * @param gbxs Dualview of gridboxes (on host and on device).
+   * @param allsupers View of all (inside and outside of domain) superdroplets on device.
+   */
+  void at_last_step(const unsigned int t_mdl, const dualview_gbx gbxs,
+                    const SupersInDomain& allsupers) const {
+    const auto d_gbxs = gbxs.view_device();
+    const auto domainsupers = allsupers.domain_supers_readonly();
+    obs.at_start_step(t_mdl, d_gbxs, domainsupers);
+  }
 };
 
 #endif  // LIBS_RUNCLEO_SDMMETHODS_HPP_
