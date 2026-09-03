@@ -75,6 +75,8 @@ fi
 export CLEO_YACYAXTROOT=${yacyaxtroot}
 export CLEO_ENABLEDEBUG=${enabledebug}
 export CLEO_MAKE_JOBS=32
+export CLEO_PYTHON=${CLEO_PYTHON:-${path2CLEO}/.venv/bin/python3}
+
 ### ---------------------------------------------------- ###
 
 ### -------------------- check inputs ------------------ ###
