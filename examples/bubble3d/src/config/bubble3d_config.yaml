@@ -29,8 +29,8 @@ icon_yac_config:
 
 ### Initialization Parameters for bubble3d_inputfiles.py ###
 python_inputfiles:
-  xgrid_ngbxs: 40                              # x direction ngbxs <- note(!) num_vertical_levels * xgrid_ngbxs == ngbxs (see below)
-  ygrid_ngbxs: 5                               # y direction ngbxs <- note(!) num_vertical_levels * xgrid_ngbxs == ngbxs (see below)
+  xgrid_ngbxs: 20                              # x direction ngbxs <- note(!) num_vertical_levels * xgrid_ngbxs == ngbxs (see below)
+  ygrid_ngbxs: 4                               # y direction ngbxs <- note(!) num_vertical_levels * xgrid_ngbxs == ngbxs (see below)
   sd_zlim: 1000                                # max z coord of initial superdroplets
   nsupers_pergbx: 2                            # number of SDs per gridbox below sd_zlim <- note(!) must be consistent with maxnsupers (see below)
   monor: 1e-6                                  # all SDs have this same radius [m]
@@ -45,16 +45,27 @@ kokkos_settings:
 ### YAC Setttings / Initialization Parameters ###
 yac_settings:
   yac_interp_stack: |                                                       # yaml string for yac_cget_interp_stack_config_from_string_yaml
-    [{"nnn":
-       {"n": 1,
-        "weighted": "arithmetic_average"}}]
+    [
+    {"nnn":
+      {"n": 3,
+       "weighted": "distance_weighted",
+       "max_search_distance": 1.0
+      }
+    },
+    {"nnn":
+      {"n": 3,
+       "weighted": "distance_weighted",
+       "max_search_distance": 10.0
+      }
+    }
+    ]
   yac_debug_file: /home/k/k202203/CLEO/build/bin/yac_coupling_debug.yaml    # yac_cset_config_output_file useful for debugging
 
 ### SDM Runtime Parameters ###
 domain:
   nspacedims : 3                                          # no. of spatial dimensions to model
-  ngbxs : 4800                                            # total number of Gbxs
-  maxnsupers: 4800                                        # maximum number of SDs
+  ngbxs : 1920                                            # total number of Gbxs
+  maxnsupers: 1920                                        # maximum number of SDs
 
 timesteps:
   CONDTSTEP : 2                                           # time between SD condensation [s]
