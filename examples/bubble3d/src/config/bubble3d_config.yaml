@@ -44,7 +44,14 @@ kokkos_settings:
 
 ### YAC Setttings / Initialization Parameters ###
 yac_settings:
-  yac_interp_stack: |                                                       # yaml string for yac_cget_interp_stack_config_from_string_yaml
+  cleo_model_name: "cleo"
+  coupldyn_model_name: "atm"
+  cleo_grid_name: "cleo_cartesian_grid"                    # name to label cleo grid with
+  coupldyn_grid_name: "icon_atmos_grid"                    # name to label coupldyn grid with
+  yac_coupling_timestep: "PT30S"                           # coupling timestep of fields via YAC; note(!) this is not necessarily COUPLTSTEP
+  cleo_lag: 0                                              # lag (offset) in cleo coupling calls
+  coupldyn_lag: 0                                          # lag (offset) in coupled model calls
+  yac_interp_stack: |                                      # yaml string for yac_cget_interp_stack_config_from_string_yaml
     [
     {"nnn":
       {"n": 3,
