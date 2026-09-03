@@ -23,6 +23,7 @@
 #include <yaml-cpp/yaml.h>
 
 #include <Kokkos_Core.hpp>
+#include <cmath>
 #include <filesystem>
 #include <iostream>
 #include <limits>
@@ -76,17 +77,15 @@ struct OptionalConfigParams {
     void set_params(const YAML::Node& config);
     void print_params() const;
     bool is_using_yac = false; /**< true = use YAC coupling to/from CLEO (e.g. to set MPI comms) */
-    int cleo_lag = NaNVals::integer();     /**< lag (offset) in cleo coupling calls */
-    int coupldyn_lag = NaNVals::integer(); /**< lag (offset) in coupled model calls */
-    std::string cleo_model_name = "";      /**< name to label cleo model with */
-    std::string coupldyn_model_name = "";  /**< name to label coupled model with */
-    std::string cleo_grid_name = "";       /**< name to label cleo grid with */
-    std::string coupldyn_grid_name = "";   /**< name to label coupldyn grid with */
-    std::string yac_coupling_timestep =
-        ""; /**< coupling timestep of fields via YAC; note(!) this is not necessarily COUPLTSTEP */
-    std::string yac_interp_stack =
-        ""; /**< yaml string for yac_cget_interp_stack_config_from_string_yaml */
-    fspath yac_debug_file = fspath(); /**< yac_cset_config_output_file useful for debugging */
+    std::string cleo_component_name = ""; /**< name to label cleo component with */
+    std::string cleo_grid_name = "";      /**< name to label cleo grid with */
+    std::string field_timestep =
+        ""; /**< timestep to update YAC fields in Cleo, should match COUPLTSTEP */
+    fspath yac_config_file = fspath(); /**< path to YAC configuration file */
+    fspath yac_debug_config_file =
+        fspath(); /**< (optional) for debugging: yac_cset_config_output_file */
+    fspath yac_debug_grid_file =
+        fspath(); /**< (optional) for debugging: yac_cset_grid_output_file */
   } yac_settings;
 
   /*** Super-Droplet Microphysics Parameters ***/

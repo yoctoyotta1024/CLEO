@@ -18,6 +18,31 @@
 
 #include "configuration/optional_config_params.hpp"
 
+/* Converts a whole number of seconds into the ISO8601 duration string YAC's yac_cdef_field
+ * expects (e.g. 30.0 -> "PT30S"). Throws error if timestep isn't integer value rather than
+ * silently truncating, since a fractional COUPLTSTEP would otherwise desync CLEO's
+ * own coupling cadence from what it tells YAC.
+ */
+std::string config_iso8601_seconds_string(const double seconds) {
+  if (!std::isfinite(seconds) || seconds <= 0.0) {
+    throw std::invalid_argument("COUPLTSTEP must be a finite, positive number of seconds");
+  }
+
+  if (static_cast<double>(std::numeric_limits<size_t>::max()) < seconds) {
+    throw std::invalid_argument("COUPLTSTEP is too large to be represented as a size_t");
+  }
+
+  const double rounded = std::round(seconds);
+  constexpr double tol = 1e-6;
+  if (std::abs(seconds - rounded) > tol) {
+    throw std::invalid_argument(
+        "COUPLTSTEP = " + std::to_string(seconds) +
+        "s is not a whole number of seconds; yac_cdef_field's timestep here only supports "
+        "integer seconds (e.g. \"PT30S\")");
+  }
+  return "PT" + std::to_string(static_cast<size_t>(rounded)) + "S";
+}
+
 /* read configuration file given by config_filename to set members of required configuration */
 OptionalConfigParams::OptionalConfigParams(const std::filesystem::path config_filename) {
   const YAML::Node config = YAML::LoadFile(std::string{config_filename});
@@ -94,29 +119,27 @@ void OptionalConfigParams::YacSettings::set_params(const YAML::Node& config) {
   const YAML::Node node = config["yac_settings"];
 
   is_using_yac = true;
-  cleo_lag = node["cleo_lag"].as<int>();
-  coupldyn_lag = node["coupldyn_lag"].as<int>();
-  cleo_model_name = node["cleo_model_name"].as<std::string>();
-  coupldyn_model_name = node["coupldyn_model_name"].as<std::string>();
+  cleo_component_name = node["cleo_component_name"].as<std::string>();
   cleo_grid_name = node["cleo_grid_name"].as<std::string>();
-  coupldyn_grid_name = node["coupldyn_grid_name"].as<std::string>();
-  yac_coupling_timestep = node["yac_coupling_timestep"].as<std::string>();
-  yac_interp_stack = node["yac_interp_stack"].as<std::string>();
+  const auto COUPLTSTEP = config["timesteps"]["COUPLTSTEP"].as<double>();
+  field_timestep = config_iso8601_seconds_string(COUPLTSTEP);
+  yac_config_file = std::filesystem::path(node["yac_config_file"].as<std::string>());
 
-  if (node["yac_debug_file"]) {
-    yac_debug_file = std::filesystem::path(node["yac_debug_file"].as<std::string>());
+  if (node["yac_debug_config_file"]) {
+    yac_debug_config_file = std::filesystem::path(node["yac_debug_config_file"].as<std::string>());
+  }
+  if (node["yac_debug_grid_file"]) {
+    yac_debug_grid_file = std::filesystem::path(node["yac_debug_grid_file"].as<std::string>());
   }
 }
 
 void OptionalConfigParams::YacSettings::print_params() const {
   std::cout << "\n-------- Yac Settings / Initialization Parameters --------------"
-            << "\ncleo_model_name: " << cleo_model_name
-            << "\ncoupldyn_model_name: " << coupldyn_model_name
-            << "\ncleo_grid_name: " << cleo_grid_name
-            << "\ncoupldyn_grid_name: " << coupldyn_grid_name
-            << "\nyac_coupling_timestep: " << yac_coupling_timestep << "\ncleo_lag: " << cleo_lag
-            << "\ncoupldyn_lag: " << coupldyn_lag << "\nyac_interp_stack: " << yac_interp_stack
-            << "\nyac_debug_file: " << yac_debug_file
+            << "\ncleo_component_name: " << cleo_component_name
+            << "\ncleo_grid_name: " << cleo_grid_name << "\nfield_timestep: " << field_timestep
+            << "\nyac_config_file: " << yac_config_file
+            << "\nyac_debug_config_file: " << yac_debug_config_file
+            << "\nyac_debug_grid_file: " << yac_debug_grid_file
             << "\n---------------------------------------------------------\n";
 }
 
