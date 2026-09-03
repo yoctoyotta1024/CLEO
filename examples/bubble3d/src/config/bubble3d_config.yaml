@@ -44,29 +44,11 @@ kokkos_settings:
 
 ### YAC Setttings / Initialization Parameters ###
 yac_settings:
-  cleo_model_name: "cleo"
-  coupldyn_model_name: "atm"
-  cleo_grid_name: "cleo_cartesian_grid"                    # name to label cleo grid with
-  coupldyn_grid_name: "icon_atmos_grid"                    # name to label coupldyn grid with
-  yac_coupling_timestep: "PT30S"                           # coupling timestep of fields via YAC; note(!) this is not necessarily COUPLTSTEP
-  cleo_lag: 0                                              # lag (offset) in cleo coupling calls
-  coupldyn_lag: 0                                          # lag (offset) in coupled model calls
-  yac_interp_stack: |                                      # yaml string for yac_cget_interp_stack_config_from_string_yaml
-    [
-    {"nnn":
-      {"n": 3,
-       "weighted": "distance_weighted",
-       "max_search_distance": 1.0
-      }
-    },
-    {"nnn":
-      {"n": 3,
-       "weighted": "distance_weighted",
-       "max_search_distance": 10.0
-      }
-    }
-    ]
-  yac_debug_file: /home/k/k202203/CLEO/build/bin/yac_coupling_debug.yaml    # yac_cset_config_output_file useful for debugging
+  cleo_component_name: cleo                                                           # name to label cleo model with
+  cleo_grid_name: cleo_cartesian_grid                                                 # name to label cleo grid with
+  yac_config_file: /home/k/k202203/CLEO/build/tmp/yac_icon_cleo_coupling_config.yaml  # path to YAC configuration file
+  yac_debug_config_file: /home/k/k202203/CLEO/build/bin/cleo_coupling_debug.yaml      # (optional) for debugging: yac_cset_config_output_file
+  yac_debug_grid_file: /home/k/k202203/CLEO/build/bin/cleo_grid_debug.nc              # (optional) for debugging: yac_cset_grid_output_file
 
 ### SDM Runtime Parameters ###
 domain:
