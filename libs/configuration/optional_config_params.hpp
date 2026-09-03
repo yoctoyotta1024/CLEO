@@ -32,7 +32,7 @@
 namespace NaNVals {
 inline double dbl() { return std::numeric_limits<double>::signaling_NaN(); };
 inline unsigned int uint() { return std::numeric_limits<unsigned int>::signaling_NaN(); };
-inline int int() { return std::numeric_limits<int>::signaling_NaN(); };
+inline int integer() { return std::numeric_limits<int>::signaling_NaN(); };
 inline size_t sizet() { return std::numeric_limits<size_t>::signaling_NaN(); };
 }  // namespace NaNVals
 
@@ -76,12 +76,12 @@ struct OptionalConfigParams {
     void set_params(const YAML::Node& config);
     void print_params() const;
     bool is_using_yac = false; /**< true = use YAC coupling to/from CLEO (e.g. to set MPI comms) */
-    int cleo_lag = NaNVals::int();        /**< lag (offset) in cleo coupling calls */
-    int coupldyn_lag = NaNVals::int();    /**< lag (offset) in coupled model calls */
-    std::string cleo_model_name = "";     /**< name to label cleo model with */
-    std::string coupldyn_model_name = ""; /**< name to label coupled model with */
-    std::string cleo_grid_name = "";      /**< name to label cleo grid with */
-    std::string coupldyn_grid_name = "";  /**< name to label coupldyn grid with */
+    int cleo_lag = NaNVals::integer();     /**< lag (offset) in cleo coupling calls */
+    int coupldyn_lag = NaNVals::integer(); /**< lag (offset) in coupled model calls */
+    std::string cleo_model_name = "";      /**< name to label cleo model with */
+    std::string coupldyn_model_name = "";  /**< name to label coupled model with */
+    std::string cleo_grid_name = "";       /**< name to label cleo grid with */
+    std::string coupldyn_grid_name = "";   /**< name to label coupldyn grid with */
     std::string yac_coupling_timestep =
         ""; /**< coupling timestep of fields via YAC; note(!) this is not necessarily COUPLTSTEP */
     std::string yac_interp_stack =
