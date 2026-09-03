@@ -21,6 +21,7 @@
 #define LIBS_COUPLDYN_YAC_YAC_CARTESIAN_DYNAMICS_HPP_
 
 #include <array>
+#include <filesystem>
 #include <fstream>
 #include <functional>
 #include <iostream>

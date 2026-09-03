@@ -29,19 +29,20 @@ int init_communicator::comm_size = -1;
 int init_communicator::my_rank = -1;
 
 init_communicator::init_communicator(int argc, char* argv[], const Config& config) {
-  if (config.get_yac_settings().is_using_yac) {
+  is_using_yac = config.get_yac_settings().is_using_yac;
+  if (is_using_yac) {
     std::cout << "yac is present\n";
     // -- YAC initialization and calendar definitions ---
     yac_cinit();
+    yac_cread_config_yaml(config.get_yac_settings().yac_config_file.string().c_str());
     // --- Component definition ---
-    std::string component_name = "cleo";
-    yac_cdef_comp(component_name.c_str(), &init_communicator::yac_comp_id);
+    const auto cleo_component_name = config.get_yac_settings().cleo_component_name;
+    yac_cdef_comp(cleo_component_name.c_str(), &init_communicator::yac_comp_id);
     yac_cget_comp_comm(init_communicator::yac_comp_id, &comm);
-    yac_present = true;
     MPI_Comm_size(comm, &init_communicator::comm_size);
     MPI_Comm_rank(comm, &my_rank);
   } else {
-    std::cout << "yac is not present " << yac_present << "\n";
+    std::cout << "yac is not present " << is_using_yac << "\n";
 
     int mpi_initialized;
     MPI_Initialized(&mpi_initialized);
@@ -54,12 +55,11 @@ init_communicator::init_communicator(int argc, char* argv[], const Config& confi
     comm = MPI_COMM_WORLD;
     MPI_Comm_size(comm, &comm_size);
     MPI_Comm_rank(comm, &my_rank);
-    yac_present = false;
   }
 };
 
 init_communicator::~init_communicator() {
-  if (yac_present) {
+  if (is_using_yac) {
     std::cout << "yac_finalized elsewhere" << std::endl;
   } else {
     std::cout << "mpi finalizing" << std::endl;
