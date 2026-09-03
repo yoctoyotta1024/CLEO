@@ -121,7 +121,7 @@ void create_vertex_coordinates(const Config& config, const std::array<size_t, 3>
 
 /* Creates the YAC grid and defines the cell and edge points based on ndims data */
 void create_grid_and_points_definitions(const Config& config, const std::array<size_t, 3> ndims,
-                                        const std::string grid_name, int& grid_id,
+                                        const std::string cleo_grid_name, int& grid_id,
                                         int& cell_point_id, int& edge_point_id,
                                         std::array<size_t, 3> partition_size,
                                         std::array<size_t, 3> partition_origin,
@@ -147,8 +147,8 @@ void create_grid_and_points_definitions(const Config& config, const std::array<s
                             vertex_longitudes, vertex_latitudes);
 
   // Defines a regular 2D grid
-  yac_cdef_grid_reg2d(grid_name.c_str(), total_vertices, cyclic_dimension, vertex_longitudes.data(),
-                      vertex_latitudes.data(), &grid_id);
+  yac_cdef_grid_reg2d(cleo_grid_name.c_str(), total_vertices, cyclic_dimension,
+                      vertex_longitudes.data(), vertex_latitudes.data(), &grid_id);
   // --- Point definitions ---
   // Defines the cell center longitude and latitude values in radians
   // The values are later permuted by YAC to generate all cell center coordinates
@@ -344,14 +344,15 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
   int grid_id = -1;
   int cell_point_id = -1;
   int edge_point_id = -1;
-  std::string grid_name = "cleo_grid";
+  const auto cleo_grid_name = config.get_yac_settings().cleo_grid_name;
+  const auto coupldyn_grid_name = config.get_yac_settings().coupldyn_grid_name;
 
   partition_size = decomp.get_local_partition_size();
   partition_origin = decomp.get_local_partition_origin();
   gridbox_bounds = decomp.get_local_gridbox_bounds();
   domain_bounds = decomp.get_domain_bounds();
 
-  create_grid_and_points_definitions(config, ndims, grid_name, grid_id, cell_point_id,
+  create_grid_and_points_definitions(config, ndims, cleo_grid_name, grid_id, cell_point_id,
                                      edge_point_id, partition_size, partition_origin,
                                      gridbox_bounds, domain_bounds);
 
@@ -364,98 +365,107 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
   int num_point_sets = 1;
   int horizontal_fields_collection_size = ndims[VERTICAL];
   int vertical_winds_collection_size = ndims[VERTICAL] + 1;
+  const auto coupling_timestep = config.get_yac_settings().yac_coupling_timestep;
 
-  const char coupling_timestep[6] = "PT30S";  // TODO(CB): move these variables to config
-  const char coupldyn_grid_name[16] = "icon_atmos_grid";
-
-  // --- Field definitions for recieving data from ICON ---
+  // --- Field definitions for recieving data ---
 
   yac_cdef_field("pressure", component_id, &cell_point_id, num_point_sets,
-                 horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
-                 &pressure_yac_id_recv);
+                 horizontal_fields_collection_size, coupling_timestep.c_str(),
+                 YAC_TIME_UNIT_ISO_FORMAT, &pressure_yac_id_recv);
 
   yac_cdef_field("temperature", component_id, &cell_point_id, num_point_sets,
-                 horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
-                 &temp_yac_id_recv);
+                 horizontal_fields_collection_size, coupling_timestep.c_str(),
+                 YAC_TIME_UNIT_ISO_FORMAT, &temp_yac_id_recv);
 
   yac_cdef_field("qvap", component_id, &cell_point_id, num_point_sets,
-                 horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
-                 &qvap_yac_id_recv);
+                 horizontal_fields_collection_size, coupling_timestep.c_str(),
+                 YAC_TIME_UNIT_ISO_FORMAT, &qvap_yac_id_recv);
 
   yac_cdef_field("qcond", component_id, &cell_point_id, num_point_sets,
-                 horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
-                 &qcond_yac_id_recv);
+                 horizontal_fields_collection_size, coupling_timestep.c_str(),
+                 YAC_TIME_UNIT_ISO_FORMAT, &qcond_yac_id_recv);
 
   yac_cdef_field("eastward_wind", component_id, &edge_point_id, num_point_sets,
-                 horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
-                 &eastward_wind_yac_id_recv);
+                 horizontal_fields_collection_size, coupling_timestep.c_str(),
+                 YAC_TIME_UNIT_ISO_FORMAT, &eastward_wind_yac_id_recv);
 
   yac_cdef_field("northward_wind", component_id, &edge_point_id, num_point_sets,
-                 horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
-                 &northward_wind_yac_id_recv);
+                 horizontal_fields_collection_size, coupling_timestep.c_str(),
+                 YAC_TIME_UNIT_ISO_FORMAT, &northward_wind_yac_id_recv);
 
   yac_cdef_field("vertical_wind", component_id, &cell_point_id, num_point_sets,
-                 vertical_winds_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
-                 &vertical_wind_yac_id_recv);
+                 vertical_winds_collection_size, coupling_timestep.c_str(),
+                 YAC_TIME_UNIT_ISO_FORMAT, &vertical_wind_yac_id_recv);
 
-  // --- Field definitions for sending data to ICON ---
+  // --- Field definitions for sending data ---
 
   yac_cdef_field("temperature_send", component_id, &cell_point_id, num_point_sets,
-                 horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
-                 &temp_yac_id_send);
+                 horizontal_fields_collection_size, coupling_timestep.c_str(),
+                 YAC_TIME_UNIT_ISO_FORMAT, &temp_yac_id_send);
 
   yac_cdef_field("qvap_send", component_id, &cell_point_id, num_point_sets,
-                 horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
-                 &qvap_yac_id_send);
+                 horizontal_fields_collection_size, coupling_timestep.c_str(),
+                 YAC_TIME_UNIT_ISO_FORMAT, &qvap_yac_id_send);
 
   yac_cdef_field("qcond_send", component_id, &cell_point_id, num_point_sets,
-                 horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
-                 &qcond_yac_id_send);
+                 horizontal_fields_collection_size, coupling_timestep.c_str(),
+                 YAC_TIME_UNIT_ISO_FORMAT, &qcond_yac_id_send);
 
-  // --- Field coupling definitions for receiving from ICON ---
+  // --- Coupling definitions for receiving data ---
+  const auto cleo_model_name = config.get_yac_settings().cleo_model_name;
+  const auto coupldyn_model_name = config.get_yac_settings().coupldyn_model_name;
+  const auto cleo_lag = config.get_yac_settings().cleo_lag;
+  const auto coupldyn_lag = config.get_yac_settings().coupldyn_lag;
 
-  int icon_lag = 1;
-  int cleo_lag = 0;
+  yac_cdef_couple(coupldyn_model_name.c_str(), coupldyn_grid_name.c_str(), "pressure",
+                  cleo_model_name.c_str(), cleo_grid_name.c_str(), "pressure",
+                  coupling_timestep.c_str(), YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, coupldyn_lag, cleo_lag);
 
-  yac_cdef_couple("atm", coupldyn_grid_name, "pressure", "cleo", "cleo_grid", "pressure",
-                  coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
-                  interp_stack_id, icon_lag, cleo_lag);
+  yac_cdef_couple(coupldyn_model_name.c_str(), coupldyn_grid_name.c_str(), "temperature",
+                  cleo_model_name.c_str(), cleo_grid_name.c_str(), "temperature",
+                  coupling_timestep.c_str(), YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, coupldyn_lag, cleo_lag);
 
-  yac_cdef_couple("atm", coupldyn_grid_name, "temperature", "cleo", "cleo_grid", "temperature",
-                  coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
-                  interp_stack_id, icon_lag, cleo_lag);
+  yac_cdef_couple(coupldyn_model_name.c_str(), coupldyn_grid_name.c_str(), "qvap",
+                  cleo_model_name.c_str(), cleo_grid_name.c_str(), "qvap",
+                  coupling_timestep.c_str(), YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, coupldyn_lag, cleo_lag);
 
-  yac_cdef_couple("atm", coupldyn_grid_name, "qvap", "cleo", "cleo_grid", "qvap", coupling_timestep,
-                  YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE, interp_stack_id, icon_lag,
-                  cleo_lag);
+  yac_cdef_couple(coupldyn_model_name.c_str(), coupldyn_grid_name.c_str(), "qcond",
+                  cleo_model_name.c_str(), cleo_grid_name.c_str(), "qcond",
+                  coupling_timestep.c_str(), YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, coupldyn_lag, cleo_lag);
 
-  yac_cdef_couple("atm", coupldyn_grid_name, "qcond", "cleo", "cleo_grid", "qcond",
-                  coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
-                  interp_stack_id, icon_lag, cleo_lag);
+  yac_cdef_couple(coupldyn_model_name.c_str(), coupldyn_grid_name.c_str(), "eastward_wind",
+                  cleo_model_name.c_str(), cleo_grid_name.c_str(), "eastward_wind",
+                  coupling_timestep.c_str(), YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, coupldyn_lag, cleo_lag);
 
-  yac_cdef_couple("atm", coupldyn_grid_name, "eastward_wind", "cleo", "cleo_grid", "eastward_wind",
-                  coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
-                  interp_stack_id, icon_lag, cleo_lag);
+  yac_cdef_couple(coupldyn_model_name.c_str(), coupldyn_grid_name.c_str(), "northward_wind",
+                  cleo_model_name.c_str(), cleo_grid_name.c_str(), "northward_wind",
+                  coupling_timestep.c_str(), YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, coupldyn_lag, cleo_lag);
 
-  yac_cdef_couple("atm", coupldyn_grid_name, "northward_wind", "cleo", "cleo_grid",
-                  "northward_wind", coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
-                  YAC_REDUCTION_TIME_NONE, interp_stack_id, icon_lag, cleo_lag);
+  yac_cdef_couple(coupldyn_model_name.c_str(), coupldyn_grid_name.c_str(), "vertical_wind",
+                  cleo_model_name.c_str(), cleo_grid_name.c_str(), "vertical_wind",
+                  coupling_timestep.c_str(), YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, coupldyn_lag, cleo_lag);
 
-  yac_cdef_couple("atm", coupldyn_grid_name, "vertical_wind", "cleo", "cleo_grid", "vertical_wind",
-                  coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
-                  interp_stack_id, icon_lag, cleo_lag);
+  // --- Coupling definitions for sending data ---
 
-  // --- Field coupling definitions for sending to ICON ---
-
-  yac_cdef_couple("cleo", "cleo_grid", "temperature_send", "atm", coupldyn_grid_name,
-                  "temperature_receive", coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
-                  YAC_REDUCTION_TIME_NONE, interp_stack_id, cleo_lag, icon_lag);
-  yac_cdef_couple("cleo", "cleo_grid", "qvap_send", "atm", coupldyn_grid_name, "qvap_receive",
-                  coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
-                  interp_stack_id, cleo_lag, icon_lag);
-  yac_cdef_couple("cleo", "cleo_grid", "qcond_send", "atm", coupldyn_grid_name, "qcond_receive",
-                  coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
-                  interp_stack_id, cleo_lag, icon_lag);
+  yac_cdef_couple(cleo_model_name.c_str(), cleo_grid_name.c_str(), "temperature_send",
+                  coupldyn_model_name.c_str(), coupldyn_grid_name.c_str(), "temperature_receive",
+                  coupling_timestep.c_str(), YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, cleo_lag, coupldyn_lag);
+  yac_cdef_couple(cleo_model_name.c_str(), cleo_grid_name.c_str(), "qvap_send",
+                  coupldyn_model_name.c_str(), coupldyn_grid_name.c_str(), "qvap_receive",
+                  coupling_timestep.c_str(), YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, cleo_lag, coupldyn_lag);
+  yac_cdef_couple(cleo_model_name.c_str(), cleo_grid_name.c_str(), "qcond_send",
+                  coupldyn_model_name.c_str(), coupldyn_grid_name.c_str(), "qcond_receive",
+                  coupling_timestep.c_str(), YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, cleo_lag, coupldyn_lag);
 
   // ---------------------------------------------------------
   const auto yac_debug_file = config.get_yac_settings().yac_debug_file.string();
@@ -463,11 +473,12 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
                               YAC_CONFIG_OUTPUT_SYNC_LOC_ENDDEF, 1);
   // --- End of YAC definitions ---
 
-  // yac_cset_grid_output_file(grid_name.c_str(), "cleo_grid_vis.nc" );
+  // yac_cset_grid_output_file(cleo_grid_name.c_str(), "cleo_grid_vis.nc" );
   yac_cenddef();
 
   int yac_instance_id = yac_cget_default_instance_id();
-  auto comp_metadata = yac_cget_component_metadata_instance(yac_instance_id, "cleo");
+  auto comp_metadata =
+      yac_cget_component_metadata_instance(yac_instance_id, cleo_model_name.c_str());
 
   const char* string_onewaycoupling = "oneway_coupling";
   const char* string_twowaycoupling = "twoway_coupling";

@@ -94,6 +94,13 @@ void OptionalConfigParams::YacSettings::set_params(const YAML::Node& config) {
   const YAML::Node node = config["yac_settings"];
 
   is_using_yac = true;
+  cleo_lag = node["cleo_lag"].as<int>();
+  coupldyn_lag = node["coupldyn_lag"].as<int>();
+  cleo_model_name = node["cleo_model_name"].as<std::string>();
+  coupldyn_model_name = node["coupldyn_model_name"].as<std::string>();
+  cleo_grid_name = node["cleo_grid_name"].as<std::string>();
+  coupldyn_grid_name = node["coupldyn_grid_name"].as<std::string>();
+  yac_coupling_timestep = node["yac_coupling_timestep"].as<std::string>();
   yac_interp_stack = node["yac_interp_stack"].as<std::string>();
 
   if (node["yac_debug_file"]) {
@@ -103,7 +110,13 @@ void OptionalConfigParams::YacSettings::set_params(const YAML::Node& config) {
 
 void OptionalConfigParams::YacSettings::print_params() const {
   std::cout << "\n-------- Yac Settings / Initialization Parameters --------------"
-            << "\nyac_interp_stack: " << yac_interp_stack << "\nyac_debug_file: " << yac_debug_file
+            << "\ncleo_model_name: " << cleo_model_name
+            << "\ncoupldyn_model_name: " << coupldyn_model_name
+            << "\ncleo_grid_name: " << cleo_grid_name
+            << "\ncoupldyn_grid_name: " << coupldyn_grid_name
+            << "\nyac_coupling_timestep: " << yac_coupling_timestep << "\ncleo_lag: " << cleo_lag
+            << "\ncoupldyn_lag: " << coupldyn_lag << "\nyac_interp_stack: " << yac_interp_stack
+            << "\nyac_debug_file: " << yac_debug_file
             << "\n---------------------------------------------------------\n";
 }
 
