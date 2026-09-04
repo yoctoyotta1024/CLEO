@@ -35,6 +35,21 @@ def parse_arguments():
         "config_filename", type=Path, help="Absolute path to configuration YAML file"
     )
     parser.add_argument(
+        "--gen_gbxs",
+        action="store_true",  # default is False
+        help="Generate gridbox boundaries binary file conditions",
+    )
+    parser.add_argument(
+        "--gen_supers",
+        action="store_true",  # default is False
+        help="Generate initial superdroplet conditions binary file",
+    )
+    parser.add_argument(
+        "--copy_iconfiles",
+        action="store_true",  # default is False
+        help="Copy ICON files used by example into build's sharepath",
+    )
+    parser.add_argument(
         "--savefigpath",
         type=Path,
         default=None,
@@ -89,10 +104,15 @@ def main(
     path2CLEO,
     path2build,
     config_filename,
+    gen_gbxs=False,
+    gen_supers=False,
+    copy_iconfiles=False,
     savefigpath=None,
     show_figures=False,
     save_figures=False,
 ):
+    import numpy as np
+
     from pathlib import Path
     from ruamel.yaml import YAML
 
@@ -112,14 +132,17 @@ def main(
     yaml = YAML()
     with open(config_filename, "r") as file:
         config = yaml.load(file)
+    icon_yac_config = config["icon_yac_config"]
+    pyconfig = config["python_inputfiles"]
+    cdconfig = config["coupled_dynamics"]
 
     ### --- (optional) copy ICON files into build directory for safe-keeping --- ###
-    icon_yac_config = config["icon_yac_config"]
     orginal_icon_grid_file = Path(icon_yac_config["orginal_icon_grid_file"])
     orginal_icon_data_file = Path(icon_yac_config["orginal_icon_data_file"])
-    icon_grid_file, icon_data_file = copy_icon_files(
-        Path(path2build), orginal_icon_grid_file, orginal_icon_data_file
-    )
+    if copy_iconfiles:
+        copy_icon_files(
+            Path(path2build), orginal_icon_grid_file, orginal_icon_data_file
+        )
 
     ### ------------------------ INPUT PARAMETERS -------------------------- ###
     ### --- required CLEO cleoconstants.hpp file --- ###
@@ -136,69 +159,75 @@ def main(
 
     ### --- settings for 3-D gridbox boundaries --- ###
     num_vertical_levels = icon_yac_config["num_vertical_levels"]
-    zgrid = get_zgrid(icon_grid_file, num_vertical_levels)  # [m]
-    xgrid = [
-        0,
-        30000,
-        2500,
-    ]  # evenly spaced xhalf coords [m] # distance must match longitude in config file
-    ygrid = [
-        0,
-        6250,
-        1250,
-    ]  # evenly spaced xhalf coords [m] # distance must match latitudes in config file
+    zgrid = get_zgrid(orginal_icon_grid_file, num_vertical_levels)  # [m]
+
+    xgrid_max_radians = abs(cdconfig["upper_longitude"]) + abs(
+        cdconfig["lower_longitude"]
+    )
+    xgrid_max = xgrid_max_radians * cdconfig["longitude_to_meters"]
+    xgrid = np.linspace(0, xgrid_max, int(pyconfig["xgrid_ngbxs"]) + 1)
+
+    ygrid_max_radians = abs(cdconfig["upper_latitude"]) + abs(
+        cdconfig["lower_latitude"]
+    )
+    ygrid_max = ygrid_max_radians * cdconfig["latitude_to_meters"]
+    ygrid = np.linspace(0, ygrid_max, int(pyconfig["ygrid_ngbxs"]) + 1)
 
     ### --- settings for initial superdroplets --- ###
     # settings for initial coordinates
-    zlim = 1000  # max z coord of superdroplets
-    npergbx = 2  # number of superdroplets per gridbox
+    zlim = pyconfig["sd_zlim"]
+    npergbx = pyconfig["nsupers_pergbx"]
 
     # settings for initial radius and aerosol distributions
-    monor = 1e-6  # all SDs have this same radius [m]
-    dryr_sf = 1.0  # scale factor for dry radii [m]
-    numconc = 5e8  # total no. conc of real droplets [m^-3]
-    randcoord = False  # sample SD spatial coordinates randomly or not
+    monor = pyconfig["monor"]
+    dryr_sf = pyconfig["dryr_sf"]
+    numconc = pyconfig["numconc"]
+    randcoords = pyconfig["randcoords"]
 
     ### --------------------- BINARY FILES GENERATION ---------------------- ###
     ### ----- write gridbox boundaries binary ----- ###
     grid_filename = Path(config["inputfiles"]["grid_filename"])
-    geninitconds.generate_gridbox_boundaries(
-        grid_filename,
-        zgrid,
-        xgrid,
-        ygrid,
-        constants_filename,
-        isfigures=isfigures,
-        savefigpath=savefigpath,
-    )
+    if gen_gbxs:
+        geninitconds.generate_gridbox_boundaries(
+            grid_filename,
+            zgrid,
+            xgrid,
+            ygrid,
+            constants_filename,
+            isfigures=isfigures,
+            savefigpath=savefigpath,
+        )
 
     ### ----- write initial superdroplets binary ----- ###
-    initsupers_filename = Path(config["initsupers"]["initsupers_filename"])
-    nsupers = crdgens.nsupers_at_domain_base(
-        grid_filename, constants_filename, npergbx, zlim
-    )
-    radiigen = rgens.MonoAttrGen(monor)  # all SDs have the same radius [m]
-    dryradiigen = dryrgens.ScaledRadiiGen(dryr_sf)  # dryradii are 1/sf of radii [m]
-    coord3gen = crdgens.SampleCoordGen(randcoord)  # (not) random coord3 of SDs
-    coord1gen = crdgens.SampleCoordGen(randcoord)  # (not) random coord1 of SDs
-    coord2gen = crdgens.SampleCoordGen(randcoord)  # (not) random coord2 of SDs
-    xiprobdist = probdists.DiracDelta(monor)  # monodisperse droplet probability distrib
+    if gen_supers:
+        initsupers_filename = Path(config["initsupers"]["initsupers_filename"])
+        nsupers = crdgens.nsupers_at_domain_base(
+            grid_filename, constants_filename, npergbx, zlim
+        )
+        radiigen = rgens.MonoAttrGen(monor)  # all SDs have the same radius [m]
+        dryradiigen = dryrgens.ScaledRadiiGen(dryr_sf)  # dryradii are 1/sf of radii [m]
+        coord3gen = crdgens.SampleCoordGen(randcoords)  # (not) random coord3 of SDs
+        coord1gen = crdgens.SampleCoordGen(randcoords)  # (not) random coord1 of SDs
+        coord2gen = crdgens.SampleCoordGen(randcoords)  # (not) random coord2 of SDs
+        xiprobdist = probdists.DiracDelta(
+            monor
+        )  # monodisperse droplet probability distrib
 
-    initattrsgen = attrsgen.AttrsGenerator(
-        radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
-    )
-    geninitconds.generate_initial_superdroplet_conditions(
-        initattrsgen,
-        initsupers_filename,
-        config_filename,
-        constants_filename,
-        grid_filename,
-        nsupers,
-        numconc,
-        isfigures=isfigures,
-        savefigpath=savefigpath,
-        gbxs2plt=SDgbxs2plt,
-    )
+        initattrsgen = attrsgen.AttrsGenerator(
+            radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
+        )
+        geninitconds.generate_initial_superdroplet_conditions(
+            initattrsgen,
+            initsupers_filename,
+            config_filename,
+            constants_filename,
+            grid_filename,
+            nsupers,
+            numconc,
+            isfigures=isfigures,
+            savefigpath=savefigpath,
+            gbxs2plt=SDgbxs2plt,
+        )
 
 
 # %%
@@ -209,6 +238,9 @@ if __name__ == "__main__":
         args.path2CLEO,
         args.path2build,
         args.config_filename,
+        gen_gbxs=args.gen_gbxs,
+        gen_supers=args.gen_supers,
+        copy_iconfiles=args.copy_iconfiles,
         savefigpath=args.savefigpath,
         show_figures=args.show_figures,
         save_figures=args.save_figures,

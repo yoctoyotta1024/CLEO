@@ -1,0 +1,75 @@
+start_date: 2008-08-01T00:00:00.000
+end_date: 2008-08-01T01:00:00.000
+calendar: 360d # proleptic-gregorian
+timestep_unit: ISO_format
+
+definitions:
+  components:
+    atm: &atm
+      component: atm
+      grid: icon_atmos_grid
+    cleo: &cleo
+      component: cleo
+      grid: cleo_cartesian_grid
+  interp_stacks:
+    nnn_interp_stack: &nnn_interp_stack
+      interpolation:
+        - nnn:
+            n: 3
+            weighted: distance_weighted
+            max_search_distance: 1.0
+        - nnn:
+            n: 3
+            weighted: distance_weighted
+            max_search_distance: 10.0
+  time_config: &time_config
+    coupling_period: PT30S
+  component_configs:
+    atm2cleo: &atm2cleo
+      <<: *time_config
+      source: *atm
+      target: *cleo
+      src_lag: 0
+      tgt_lag: 0
+    cleo2atm: &cleo2atm
+      <<: *time_config
+      source: *cleo
+      target: *atm
+      src_lag: 0
+      tgt_lag: 0
+
+coupling:
+# ATM -> CLEO
+  - <<: [*atm2cleo, *nnn_interp_stack]
+    field:
+      - src: qcond_to_cleo
+        tgt: qcond_in
+      - src: qvap_to_cleo
+        tgt: qvap_in
+  - <<: [*atm2cleo, *nnn_interp_stack]
+    field:
+      - src: eastward_wind_to_cleo
+        tgt: eastward_wind_in
+      - src: northward_wind_to_cleo
+        tgt: northward_wind_in
+      - src: vertical_wind_to_cleo
+        tgt: vertical_wind_in
+  - <<: [*atm2cleo, *nnn_interp_stack]
+    field:
+      - src: pressure_to_cleo
+        tgt: pressure_in
+  - <<: [*atm2cleo, *nnn_interp_stack]
+    field:
+      - src: temperature_to_cleo
+        tgt: temperature_in
+# # CLEO -> ATM
+#   - <<: [*cleo2atm, *nnn_interp_stack]
+#     field:
+#       - src: qcond_out
+#         tgt: qcond_from_cleo
+#       - src: qvap_out
+#         tgt: qvap_from_cleo
+#   - <<: [*cleo2atm, *nnn_interp_stack]
+#     field:
+#       - src: temperature_out
+#         tgt: temperature_from_cleo
