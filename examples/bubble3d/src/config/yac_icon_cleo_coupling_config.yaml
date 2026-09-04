@@ -62,14 +62,14 @@ coupling:
     field:
       - src: temperature_to_cleo
         tgt: temperature_in
-# CLEO -> ATM
-  - <<: [*cleo2atm, *nnn_interp_stack]
-    field:
-      - src: qcond_out
-        tgt: qcond_from_cleo
-      - src: qvap_out
-        tgt: qvap_from_cleo
-  - <<: [*cleo2atm, *nnn_interp_stack]
-    field:
-      - src: temperature_out
-        tgt: temperature_from_cleo
+# # CLEO -> ATM
+#   - <<: [*cleo2atm, *nnn_interp_stack]
+#     field:
+#       - src: qcond_out
+#         tgt: qcond_from_cleo
+#       - src: qvap_out
+#         tgt: qvap_from_cleo
+#   - <<: [*cleo2atm, *nnn_interp_stack]
+#     field:
+#       - src: temperature_out
+#         tgt: temperature_from_cleo
