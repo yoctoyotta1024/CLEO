@@ -456,8 +456,20 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
         "Yac field roles to establish one-way or two-way coupling are not consistent");
   } else if (field_role == YAC_EXCHANGE_TYPE_SOURCE) {
     yac_coupling_flag = 2;
+    std::cout << "Cleo Two-Way Coupling: Finished setting up YAC for receiving:\n"
+                 "  pressure,\n  temperature,\n"
+                 "  water vapour mass mixing ratio,\n"
+                 "  liquid water mass mixing ratio;\n"
+                 "Finished setting up YAC for sending:\n"
+                 "  temperature,\n"
+                 "  water vapour mass mixing ratio,\n"
+                 "  liquid water mass mixing ratio\n";
   } else {
     yac_coupling_flag = 1;
+    std::cout << "Cleo One-Way Coupling: Finished setting up YAC for receiving:\n"
+                 "  pressure,\n  temperature,\n"
+                 "  water vapour mass mixing ratio,\n"
+                 "  liquid water mass mixing ratio\n";
   }
 
   size_t horizontal_cell_number = yac_cget_grid_size(YAC_LOCATION_CELL, grid_id);
@@ -483,14 +495,6 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
   uvel = std::vector<double>(ndims[NORTHWARD] * (ndims[EASTWARD] + 1) * ndims[VERTICAL], 0);
   vvel = std::vector<double>(ndims[EASTWARD] * (ndims[NORTHWARD] + 1) * ndims[VERTICAL], 0);
   wvel = std::vector<double>(horizontal_cell_number * (ndims[VERTICAL] + 1), 0);
-
-  // Calls the first data retrieval from YAC to have thermodynamic data for first timestep
-  // receive_fields_from_yac();
-
-  std::cout << "Finished setting up YAC for receiving:\n"
-               "  pressure,\n  temperature,\n"
-               "  water vapour mass mixing ratio,\n"
-               "  liquid water mass mixing ratio,\n";
 
   // Defines the functions that will be used to retrieve data from the containers
   // (Can probably be simplified)
