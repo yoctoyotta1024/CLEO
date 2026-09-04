@@ -573,7 +573,7 @@ def make_zx_plots(
     label: str = "",
     time_values: pd.DatetimeIndex = None,
 ):
-    sub_ds = ds_zx.sel(time=time_values)
+    sub_ds = ds_zx.sel(time=time_values, method="nearest")
 
     plot_winds(sub_ds, ds.time[0]).savefig(outdir / f"winds{label}.png")
     plot_thermo(sub_ds, ds.time[0]).savefig(outdir / f"thermo{label}.png")
@@ -591,7 +591,7 @@ def plot_zy_winds(
     label: str = "",
     time_values: pd.DatetimeIndex = None,
 ):
-    sub_ds = ds_zy.sel(time=time_values)
+    sub_ds = ds_zy.sel(time=time_values, method="nearest")
 
     plot_winds(sub_ds, ds.time[0], zyplane=True).savefig(
         outdir / f"winds_zyplane{label}.png"
@@ -675,11 +675,11 @@ print(
     f"(Hint: 5/160={5/160})",
 )
 
-# %%
-time_values = pd.date_range(
-    start="2008-08-01T01:58:00.000000000", end=ds.time.max().values, freq="30s"
-)
-make_zx_plots(ds, ds_zx, outdir, label="_2", time_values=time_values)
-plot_zy_winds(ds, ds_zyplane, outdir, label="_2", time_values=time_values)
-plt.close("all")
-# %%
+# # %%
+# time_values = pd.date_range(
+#     start="2008-08-01T01:58:00.000000000", end=ds.time.max().values, freq="30s"
+# )
+# make_zx_plots(ds, ds_zx, outdir, label="_2", time_values=time_values)
+# plot_zy_winds(ds, ds_zyplane, outdir, label="_2", time_values=time_values)
+# plt.close("all")
+# # %%
