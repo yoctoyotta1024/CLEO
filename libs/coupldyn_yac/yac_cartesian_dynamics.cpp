@@ -259,18 +259,31 @@ void CartesianDynamics::receive_yac_edge_field(unsigned int yac_field_id, double
     std::cout << "Last Get Action: " << action << std::endl;
   }
 
-  unsigned int source_index = 0;
-  unsigned int target_index = 0;
-  for (size_t lat_index = 0; lat_index < (ndims[NORTHWARD] + 1) * 2 - 1; lat_index++) {
-    if (lat_index % 2 == eastward_edge) {
-      for (size_t long_index = 0; long_index < ndims[EASTWARD] + eastward_edge;
-           long_index++, source_index++)
-        for (size_t vertical_index = 0; vertical_index < ndims[VERTICAL];
-             vertical_index++, target_index++)
-          target_array[target_index] =
-              yac_raw_data[vertical_index][source_index] / conversion_factor;
-    } else
-      source_index += ndims[EASTWARD] + !eastward_edge;
+  // if the current get is not beyond the end of the run
+  if (action != YAC_ACTION_OUT_OF_BOUND) {
+    // skip the last get action
+    if (action == YAC_ACTION_GET_FOR_RESTART) {
+      std::cout << "Last Get Action was skipped for field "
+                << yac_cget_field_name_from_field_id(yac_field_id) << "\n";
+    } else {
+      unsigned int source_index = 0;
+      unsigned int target_index = 0;
+      for (size_t lat_index = 0; lat_index < (ndims[NORTHWARD] + 1) * 2 - 1; lat_index++) {
+        if (lat_index % 2 == eastward_edge) {
+          for (size_t long_index = 0; long_index < ndims[EASTWARD] + eastward_edge;
+               long_index++, source_index++)
+            for (size_t vertical_index = 0; vertical_index < ndims[VERTICAL];
+                 vertical_index++, target_index++)
+              target_array[target_index] =
+                  yac_raw_data[vertical_index][source_index] / conversion_factor;
+        } else {
+          source_index += ndims[EASTWARD] + !eastward_edge;
+        }
+      }
+    }
+  } else {
+    std::cerr << "WARNING: Get Action out of bound for field "
+              << yac_cget_field_name_from_field_id(yac_field_id) << "\n";
   }
 }
 
