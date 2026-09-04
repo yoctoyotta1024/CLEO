@@ -39,6 +39,11 @@ parser.add_argument(
     help="Absolute path to source configuration YAML file",
 )
 parser.add_argument(
+    "src_yac_config_filename",
+    type=Path,
+    help="Absolute path to source YAC configuration YAML file",
+)
+parser.add_argument(
     "path2experiment",
     type=Path,
     help="Absolute path for directories for inputs and outputs of experiment",
@@ -69,7 +74,7 @@ path2build = args.path2build
 path2experiment = args.path2experiment
 path2iconfiles = args.path2iconfiles
 src_config_filename = args.src_config_filename
-
+src_yac_config_filename = args.src_yac_config_filename
 ### --- additional/derived arguments --- ###
 tmppath = path2experiment / "tmp"
 sharepath = path2experiment / "share"
@@ -83,12 +88,13 @@ config_params = {
     "initsupers_filename": str(sharepath / "bubble3d_dimlessSDsinit.dat"),
     "setup_filename": str(binpath / "bubble3d_setup.txt"),
     "zarrbasedir": str(binpath / "bubble3d_sol.zarr"),
+    "yac_config_file": str(tmppath / "yac_icon_cleo_coupling_config.yaml"),
     "yac_debug_config_file": str(binpath / "cleo_coupling_debug.yaml"),
     "yac_debug_grid_file": str(binpath / "cleo_grid_debug.nc"),
     "orginal_icon_grid_file": str(path2iconfiles / "bubble_1mom_atm_cgrid_ml.nc"),
     "orginal_icon_data_file": str(
-            path2iconfiles / "bubble_1mom_atm_3d_ml_20080801T000000Z.nc"
-        ),
+        path2iconfiles / "bubble_1mom_atm_3d_ml_20080801T000000Z.nc"
+    ),
 }
 
 isfigures = [False, True]  # booleans for [showing, saving] initialisation figures
@@ -104,9 +110,11 @@ def inputfiles(
     binpath,
     savefigpath,
     src_config_filename,
+    src_yac_config_filename,
     config_filename,
     config_params,
     gen_config,
+    gen_yac_files,
     gen_gbxs,
     gen_supers,
     copy_iconfiles,
@@ -134,6 +142,13 @@ def inputfiles(
     yaml = YAML()
     with open(config_filename, "r") as file:
         config = yaml.load(file)
+    if (
+        gen_yac_files
+    ):  # delete any existing yac config and debugging files and copy new yac config
+        Path(config["yac_settings"]["yac_config_file"]).unlink(missing_ok=True)
+        Path(config["yac_settings"]["yac_debug_config_file"]).unlink(missing_ok=True)
+        Path(config["yac_settings"]["yac_debug_grid_file"]).unlink(missing_ok=True)
+        shutil.copy(src_yac_config_filename, config["yac_settings"]["yac_config_file"])
     if gen_gbxs:
         Path(config["inputfiles"]["grid_filename"]).unlink(missing_ok=True)
     if gen_supers:
@@ -224,6 +239,7 @@ def plot_results(path2CLEO, config_filename, savefigpath):
 ### ----------------------------- RUN EXAMPLE ------------------------------ ###
 if args.do_inputfiles:
     gen_config = True
+    gen_yac_files = True
     gen_gbxs = True
     gen_supers = True
     copy_iconfiles = True
@@ -235,9 +251,11 @@ if args.do_inputfiles:
         binpath,
         savefigpath,
         src_config_filename,
+        src_yac_config_filename,
         config_filename,
         config_params,
         gen_config,
+        gen_yac_files,
         gen_gbxs,
         gen_supers,
         copy_iconfiles,
