@@ -6,11 +6,12 @@ endif()
 # fetch and make Kokkos library available
 set(FLAGS_B4 "${CMAKE_CXX_FLAGS}")
 include(FetchContent)
+include(CheckIncludeFileCXX)
 FetchContent_Declare(
   Kokkos
   DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-  URL https://github.com/kokkos/kokkos/archive/refs/tags/4.5.00.tar.gz
-  GIT_TAG 09e775bfc585840bb9ab1156cbd8d7d1c9e0cc6d
+  URL https://github.com/kokkos/kokkos/archive/refs/tags/4.7.03.tar.gz
+  GIT_TAG 0305d9f6225d6c95afe6ae678aca73dc9e6f62fd
 )
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC") # Kokkos needs -fPIC flag

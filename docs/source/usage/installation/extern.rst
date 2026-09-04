@@ -73,6 +73,12 @@ how we use Kokkos on :doc:`our page about Kokkos<../../intro/kokkos>`.
 
 The Kokkos libaries for Cleo are automatically built using CMAKE and compiled if required.
 
+For jupiter builds, the machine-specific configuration enables the Grace CPU architecture
+(``Kokkos_ARCH_ARMV9_GRACE``). CUDA builds additionally enable the Hopper GPU architecture
+(``Kokkos_ARCH_HOPPER90``) and OpenMP as the host parallel backend. If the Kokkos architecture
+or backend settings are changed, reconfigure from a clean build directory or clear the existing
+CMake cache first.
+
 yaml-cpp
 --------
 Cleo's ``configuration`` library depends on the ```yaml-cpp``` package to read and write YAML files. You

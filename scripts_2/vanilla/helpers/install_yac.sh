@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 ### ------------------------------------------------------- ###
 ### running script sucessfully installs YAC and YAXT for
 ### a gcc compiler with openmpi on a "vanilla" computer
@@ -15,13 +17,13 @@ yaxt_version=yaxt-${yaxt_tag}
 yaxt_release_tag=release-${yaxt_tag}
 yaxt_source=https://gitlab.dkrz.de/dkrz-sw/yaxt/-/archive/$yaxt_release_tag/$yaxt_version.tar.gz
 
-yac_tag=v3.19.0
+yac_tag=v3.20.2
 yac_version=yac_$yac_tag
 yac_source=https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/$yac_tag/$yac_version.tar.gz
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-bashsrc=${SCRIPT_DIR}/src
-source ${bashsrc}/vanilla_packages.sh
+bashsrc=${SCRIPT_DIR}
+source "${bashsrc}/vanilla_packages.sh"
 
 if [ "${compilername}" == "" ]
 then
