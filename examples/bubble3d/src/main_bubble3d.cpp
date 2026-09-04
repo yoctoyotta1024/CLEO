@@ -25,7 +25,9 @@
 #include <stdexcept>
 #include <string_view>
 
+#include "cartesiandomain/cartesian_decomposition.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
+#include "cartesiandomain/collect_data_for_collective_dataset.hpp"
 #include "cartesiandomain/createcartesianmaps.hpp"
 #include "cartesiandomain/movement/cartesian_motion.hpp"
 #include "cartesiandomain/movement/cartesian_movement.hpp"
@@ -35,60 +37,69 @@
 #include "coupldyn_yac/yac_comms.hpp"
 #include "gridboxes/boundary_conditions.hpp"
 #include "gridboxes/gridboxmaps.hpp"
-#include "initialise/init_all_supers_from_binary.hpp"
+#include "initialise/init_supers_from_binary.hpp"
 #include "initialise/initgbxsnull.hpp"
 #include "initialise/initialconditions.hpp"
 #include "initialise/timesteps.hpp"
-#include "observers/collect_data_for_simple_dataset.hpp"
+#include "mpi.h"
 #include "observers/gbxindex_observer.hpp"
+#include "observers/massmoments_observer.hpp"
 #include "observers/observers.hpp"
+#include "observers/sdmmonitor/monitor_precipitation_observer.hpp"
 #include "observers/state_observer.hpp"
 #include "observers/streamout_observer.hpp"
 #include "observers/superdrops_observer.hpp"
 #include "observers/time_observer.hpp"
+#include "observers/totnsupers_observer.hpp"
 #include "runcleo/coupleddynamics.hpp"
 #include "runcleo/couplingcomms.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
+#include "zarr/collective_dataset.hpp"
 #include "zarr/fsstore.hpp"
-#include "zarr/simple_dataset.hpp"
 
-inline CoupledDynamics auto create_coupldyn(const Config &config, const CartesianMaps &gbxmaps,
+inline CoupledDynamics auto create_coupldyn(const Config& config, const CartesianMaps& gbxmaps,
                                             const unsigned int couplstep,
                                             const unsigned int t_end) {
   const auto h_ndims = gbxmaps.get_global_ndims_hostcopy();
   const std::array<size_t, 3> ndims({h_ndims(0), h_ndims(1), h_ndims(2)});
 
   const auto nsteps = (unsigned int)(std::ceil(t_end / couplstep) + 1);
-
-  return YacDynamics(config, couplstep, ndims, nsteps);
+  const CartesianDecomposition &decomp = gbxmaps.get_domain_decomposition();
+  return YacCartesianDynamics(config, couplstep, ndims, nsteps, decomp);
 }
 
 template <GridboxMaps GbxMaps>
-inline InitialConditions auto create_initconds(const Config &config, const GbxMaps &gbxmaps) {
-  const auto initsupers = InitAllSupersFromBinary(config.get_initsupersfrombinary());
+inline InitialConditions auto create_initconds(const Config& config, const GbxMaps& gbxmaps) {
+  const auto initsupers = InitSupersFromBinary(config.get_initsupersfrombinary(), gbxmaps);
   const auto initgbxs = InitGbxsNull(gbxmaps.get_local_ngridboxes_hostcopy());
 
   return InitConds(initsupers, initgbxs);
 }
 
-inline GridboxMaps auto create_gbxmaps(const Config &config) {
+inline GridboxMaps auto create_gbxmaps(const Config& config) {
   const auto gbxmaps = create_cartesian_maps(config.get_ngbxs(), config.get_nspacedims(),
                                              config.get_grid_filename());
   return gbxmaps;
 }
 
-inline MicrophysicalProcess auto create_microphysics(const Config &config,
-                                                     const Timesteps &tsteps) {
+inline MicrophysicalProcess auto create_microphysics(const Config& config,
+                                                     const Timesteps& tsteps) {
   return NullMicrophysicalProcess{};
 }
+// inline auto create_movement(const unsigned int motionstep, const CartesianMaps &gbxmaps) {
+//   const Motion<CartesianMaps> auto motion = NullMotion{};
+//   const BoundaryConditions<CartesianMaps> auto boundary_conditions = NullBoundaryConditions{};
 
-inline auto create_movement(const unsigned int motionstep, const CartesianMaps &gbxmaps) {
+//  return cartesian_movement(gbxmaps, motion, boundary_conditions);
+// }
+
+inline auto create_movement(const unsigned int motionstep, const CartesianMaps& gbxmaps) {
   const auto terminalv = NullTerminalVelocity{};
   const Motion<CartesianMaps> auto motion =
-      CartesianMotion(motionstep, &step2dimlesstime, terminalv);
+       CartesianMotion(motionstep, &step2dimlesstime, terminalv);
 
   const BoundaryConditions<CartesianMaps> auto boundary_conditions = NullBoundaryConditions{};
 
@@ -96,10 +107,10 @@ inline auto create_movement(const unsigned int motionstep, const CartesianMaps &
 }
 
 template <typename Dataset, typename Store>
-inline Observer auto create_superdrops_observer(const unsigned int interval, Dataset &dataset,
-                                                Store &store, const int maxchunk) {
+inline Observer auto create_superdrops_observer(const unsigned int interval, Dataset& dataset,
+                                                Store& store, const int maxchunk) {
   CollectDataForDataset<Dataset> auto sdid = CollectSdId(dataset, maxchunk);
-  CollectDataForDataset<Dataset> auto sdgbxindex = CollectSdgbxindex(dataset, maxchunk);
+  // CollectDataForDataset<Dataset> auto sdgbxindex = CollectSdgbxindex(dataset, maxchunk);
   CollectDataForDataset<Dataset> auto coord3 = CollectCoord3(dataset, maxchunk);
   CollectDataForDataset<Dataset> auto coord1 = CollectCoord1(dataset, maxchunk);
   CollectDataForDataset<Dataset> auto coord2 = CollectCoord2(dataset, maxchunk);
@@ -107,17 +118,17 @@ inline Observer auto create_superdrops_observer(const unsigned int interval, Dat
   CollectDataForDataset<Dataset> auto radius = CollectRadius(dataset, maxchunk);
   CollectDataForDataset<Dataset> auto msol = CollectMsol(dataset, maxchunk);
 
-  const auto collect_sddata =
-      coord2 >> coord1 >> coord3 >> sdgbxindex >> sdid >> xi >> radius >> msol;
+  const auto collect_sddata = sdid >> coord2 >> coord1 >> coord3 >> xi >> radius >> msol;
+  // sdid >> sdgbxindex >> coord2 >> coord1 >> coord3 >> xi >> radius >> msol;
   return SuperdropsObserver(interval, dataset, store, maxchunk, collect_sddata);
 }
 
 template <typename Dataset, typename Store>
-inline Observer auto create_observer(const Config &config, const Timesteps &tsteps,
-                                     Dataset &dataset, Store &store) {
+inline Observer auto create_observer(const Config& config, const Timesteps& tsteps,
+                                     Dataset& dataset, Store& store, const CartesianMaps& gbxmaps) {
   const auto obsstep = tsteps.get_obsstep();
   const auto maxchunk = config.get_maxchunk();
-  const auto ngbxs = config.get_ngbxs();
+  const auto ngbxs = gbxmaps.get_local_ngridboxes();
 
   const Observer auto obs0 = StreamOutObserver(obsstep, &step2realtime);
 
@@ -125,26 +136,39 @@ inline Observer auto create_observer(const Config &config, const Timesteps &tste
 
   const Observer auto obs2 = GbxindexObserver(dataset, store, maxchunk, ngbxs);
 
-  const Observer auto obs3 = StateObserver(obsstep, dataset, maxchunk, ngbxs);
+  const Observer auto obs3 =
+      StateObserver(obsstep, dataset, maxchunk, gbxmaps.get_total_global_ngridboxes());
+
+  const Observer auto obs4 =
+      MassMomentsObserver(obsstep, dataset, store, maxchunk, gbxmaps.get_total_global_ngridboxes());
+
+  const Observer auto obs5 = MassMomentsRaindropsObserver(obsstep, dataset, store, maxchunk,
+                                                          gbxmaps.get_total_global_ngridboxes());
+
+  // const Observer auto obs6 = MonitorPrecipitationObserver(obsstep, dataset, store, maxchunk,
+  //                                                         gbxmaps.get_total_global_ngridboxes());
+
+  const Observer auto obs7 = TotNsupersObserver(obsstep, dataset, store, maxchunk);
 
   const Observer auto obssd = create_superdrops_observer(obsstep, dataset, store, maxchunk);
 
-  return obssd >> obs3 >> obs2 >> obs1 >> obs0;
+  // return obssd >> obs7 >> obs6 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
+  return obssd >> obs7 >> obs5 >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
 }
 
 template <typename Dataset, typename Store>
-inline auto create_sdm(const Config &config, const Timesteps &tsteps, Dataset &dataset,
-                       Store &store) {
+inline auto create_sdm(const Config& config, const Timesteps& tsteps, Dataset& dataset,
+                       Store& store) {
   const auto couplstep = (unsigned int)tsteps.get_couplstep();
   const GridboxMaps auto gbxmaps = create_gbxmaps(config);
   const MicrophysicalProcess auto microphys = create_microphysics(config, tsteps);
   const MoveSupersInDomain movesupers = create_movement(tsteps.get_motionstep(), gbxmaps);
-  const Observer auto obs = create_observer(config, tsteps, dataset, store);
+  const Observer auto obs = create_observer(config, tsteps, dataset, store, gbxmaps);
 
   return SDMMethods(couplstep, gbxmaps, microphys, movesupers, obs);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   if (argc < 2) {
     throw std::invalid_argument("configuration file(s) not specified");
   }
@@ -168,17 +192,21 @@ int main(int argc, char *argv[]) {
 
     /* Create Xarray dataset wit Zarr backend for writing output data to a store */
     auto store = FSStore(config.get_zarrbasedir());
-    auto dataset = SimpleDataset(store);
+    auto dataset = CollectiveDataset<FSStore, CartesianDecomposition>(store);
 
     /* CLEO Super-Droplet Model (excluding coupled dynamics solver) */
     const SDMMethods sdm = create_sdm(config, tsteps, dataset, store);
+
+    /* Adjust dataset given domain decomposition */
+    dataset.set_decomposition(sdm.gbxmaps.get_domain_decomposition());
+    dataset.set_max_superdroplets(config.get_maxnsupers());
 
     /* Solver of dynamics coupled to CLEO SDM */
     CoupledDynamics auto coupldyn =
         create_coupldyn(config, sdm.gbxmaps, tsteps.get_couplstep(), tsteps.get_t_end());
 
     /* coupling between coupldyn and SDM */
-    const CouplingComms<CartesianMaps, YacDynamics> auto comms = YacComms{};
+    const CouplingComms<CartesianMaps, YacCartesianDynamics> auto comms = YacComms{};
 
     /* Initial conditions for CLEO run */
     const InitialConditions auto initconds = create_initconds(config, sdm.gbxmaps);

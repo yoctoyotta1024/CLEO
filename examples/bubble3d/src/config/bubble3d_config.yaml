@@ -21,48 +21,69 @@
 ### ICON-YAC initialisation parameters ###
 ### Note: yac_bubble_data_reader.py reads icon_yac_config, including orginal_icon_[XXX] files ###
 icon_yac_config:
-  orginal_icon_grid_file: /work/mh0731/m300950/icon-mpim/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc
-  orginal_icon_data_file: /work/mh0731/m300950/icon-mpim/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc
+  orginal_icon_grid_file: /path/to/XXX_atm_cgrid_ml.nc
+  orginal_icon_data_file: /path/to/XXX_atm_3d_ml_20080801T000000Z.nc
   icon_grid_name: icon_atmos_grid                         # must match CLEO (see yac_cartesian_dynamics.cpp)
   icon_data_timestep: 30                                  # must match ICON data file [seconds]
   num_vertical_levels: 24                                 # number of vertical levels in CLEO (<= ICON)
+
+### Initialization Parameters for bubble3d_inputfiles.py ###
+python_inputfiles:
+  xgrid_ngbxs: 20                              # x direction ngbxs <- note(!) num_vertical_levels * xgrid_ngbxs == ngbxs (see below)
+  ygrid_ngbxs: 4                               # y direction ngbxs <- note(!) num_vertical_levels * xgrid_ngbxs == ngbxs (see below)
+  sd_zlim: 1000                                # max z coord of initial superdroplets
+  nsupers_pergbx: 2                            # number of SDs per gridbox below sd_zlim <- note(!) must be consistent with maxnsupers (see below)
+  monor: 1e-6                                  # all SDs have this same radius [m]
+  dryr_sf: 1.0                                 # scale factor for dry radii [m]
+  numconc: 5e8                                 # total no. conc of real droplets [m^-3]
+  randcoords: false                             # sample SD spatial coordinates randomly or not
 
 ### Kokkos Initialization Parameters ###
 kokkos_settings:
   num_threads: 32                                          # number of threads for host parallel backend
 
+### YAC Setttings / Initialization Parameters ###
+yac_settings:
+  cleo_component_name: cleo                                                           # name to label cleo model with
+  cleo_grid_name: cleo_cartesian_grid                                                 # name to label cleo grid with
+  yac_config_file: /path/to/tmp/yac_icon_cleo_coupling_config.yaml  # path to YAC configuration file
+  yac_debug_config_file: /path/to/bin/cleo_coupling_debug.yaml      # (optional) for debugging: yac_cset_config_output_file
+  yac_debug_grid_file: /path/to/bin/CLEO/build/bin/cleo_grid_debug.nc              # (optional) for debugging: yac_cset_grid_output_file
+
 ### SDM Runtime Parameters ###
 domain:
   nspacedims : 3                                          # no. of spatial dimensions to model
-  ngbxs : 1440                                            # total number of Gbxs
-  maxnsupers: 1440                                        # maximum number of SDs
+  ngbxs : 1920                                            # total number of Gbxs
+  maxnsupers: 1920                                        # maximum number of SDs
 
 timesteps:
   CONDTSTEP : 2                                           # time between SD condensation [s]
   COLLTSTEP : 2                                           # time between SD collision [s]
   MOTIONTSTEP : 3                                         # time between SDM motion [s]
-  COUPLTSTEP : 60                                         # time between dynamic couplings [s]
-  OBSTSTEP : 60                                           # time between SDM observations [s]
+  COUPLTSTEP : 30                                         # time between dynamic couplings [s]
+  OBSTSTEP : 30                                           # time between SDM observations [s]
   T_END : 7200                                            # time span of integration from 0s to T_END [s]
 
 ### Initialisation Parameters ###
 inputfiles:
-  constants_filename : ./libs/cleoconstants.hpp          # name of file for values of physical constants
-  grid_filename : ./build/share/bubble3d_dimlessGBxboundaries.dat   # binary filename for initialisation of GBxs / GbxMaps
+  constants_filename : /path/to/CLEO/libs/cleoconstants.hpp          # name of file for values of physical constants
+  grid_filename : /path/to/share/bubble3d_dimlessGBxboundaries.dat   # binary filename for initialisation of GBxs / GbxMaps
 
 initsupers:
   type: frombinary                                        # type of initialisation of super-droplets
-  initsupers_filename : ./build/share/bubble3d_dimlessSDsinit.dat   # binary filename for initialisation of SDs
+  initsupers_filename : /path/to/share/bubble3d_dimlessSDsinit.dat   # binary filename for initialisation of SDs
 
 ### Output Parameters ###
 outputdata:
-  setup_filename : ./build/bin/bubble3d_setup.txt    # .txt filename to copy configuration to
-  zarrbasedir : ./build/bin/bubble3d_sol.zarr        # zarr store base directory
+  setup_filename : /path/to/bin/bubble3d_setup.txt    # .txt filename to copy configuration to
+  zarrbasedir : /path/to/bin/bubble3d_sol.zarr        # zarr store base directory
   maxchunk : 2500000                                          # maximum no. of elements in chunks of zarr store array
 
 coupled_dynamics:
   type: yac
-  lower_longitude: -0.989601687                               # must match xgrid domain delta_x
-  upper_longitude: 0.895353906
-  lower_latitude: -0.392699082                                # must match ygrid domain delta_y
-  upper_latitude: 0.392699082
+  lower_longitude: -3.141592653589793                  # must match xgrid domain delta_x
+  upper_longitude: 3.141592653589793
+  lower_latitude: -0.1308996938995747                  # must match ygrid domain delta_y
+  upper_latitude: 0.06544984694978735
+  longitude_to_meters: 15915.494309189535              # conversion from longitude radians to km (100 km = 2*pi)
+  latitude_to_meters: 88212.62326748674                # conversion from latitude radians to km (17 km = 0.03125 * 2*pi)

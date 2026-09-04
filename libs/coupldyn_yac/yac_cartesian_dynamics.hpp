@@ -21,6 +21,7 @@
 #define LIBS_COUPLDYN_YAC_YAC_CARTESIAN_DYNAMICS_HPP_
 
 #include <array>
+#include <filesystem>
 #include <fstream>
 #include <functional>
 #include <iostream>
@@ -31,8 +32,10 @@
 #include <utility>
 #include <vector>
 
+#include "cartesiandomain/cartesian_decomposition.hpp"
 #include "configuration/communicator.hpp"
 #include "configuration/config.hpp"
+#include "superdrops/state.hpp"
 
 /* contains 1-D vector for each (thermo)dynamic
 variable which is ordered by gridbox at every timestep
@@ -47,6 +50,7 @@ struct CartesianDynamics {
   // number of (centres of) gridboxes in [coord3, coord1, coord2] directions
   const std::array<size_t, 3> ndims;
   const Config &config;
+  int yac_coupling_flag;
 
   /* --- (thermo)dynamic variables received from YAC --- */
 
@@ -61,18 +65,29 @@ struct CartesianDynamics {
   std::vector<double> wvel;
 
   // YAC field ids
-  int pressure_yac_id;
-  int temp_yac_id;
-  int qvap_yac_id;
-  int qcond_yac_id;
-  int eastward_wind_yac_id;
-  int northward_wind_yac_id;
-  int vertical_wind_yac_id;
+  int pressure_yac_id_recv;
+  int temp_yac_id_recv;
+  int temp_yac_id_send;
+  int qvap_yac_id_recv;
+  int qvap_yac_id_send;
+  int qcond_yac_id_recv;
+  int qcond_yac_id_send;
+  int eastward_wind_yac_id_recv;
+  int northward_wind_yac_id_recv;
+  int vertical_wind_yac_id_recv;
 
   // Containers to receive data from YAC
   double **yac_raw_cell_data;
   double **yac_raw_edge_data;
   double **yac_raw_vertical_wind_data;
+
+  // Container to send the data to YAC
+  double ***send_buffer;
+
+  std::array<size_t, 3> partition_origin;
+  std::array<size_t, 3> partition_size;
+  std::vector<std::vector<double>> gridbox_bounds;
+  std::array<std::array<double, 3>, 2> domain_bounds;
 
   /* --- Private functions --- */
 
@@ -103,12 +118,14 @@ struct CartesianDynamics {
 
  public:
   CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
-                    const unsigned int nsteps);
+                    const unsigned int nsteps, const CartesianDecomposition &decomp);
   ~CartesianDynamics();
 
   get_winds_func get_wvel;  // funcs to get velocity defined in construction of class
   get_winds_func get_uvel;  // warning: these functions are not const member funcs by default
   get_winds_func get_vvel;
+
+  int get_yac_coupling_flag() const { return yac_coupling_flag; }
 
   double get_press(const size_t ii) const { return press.at(ii); }
 
@@ -121,30 +138,37 @@ struct CartesianDynamics {
   /* Public call to receive data from YAC
    * If the problem is 2D turns into a wrapper for receive_hor_slice_from_yac */
   void receive_fields_from_yac();
-  void receive_yac_field(unsigned int yac_field_id, double **yac_raw_data,
-                         std::vector<double> &target_array, const size_t ndims_north,
-                         const size_t ndims_east, const size_t vertical_levels,
-                         double conversion_factor) const;
+  void receive_yac_cell_field(unsigned int yac_field_id, double **yac_raw_data,
+                              std::vector<double> &target_array, const size_t vertical_levels,
+                              double conversion_factor) const;
+  void receive_yac_edge_field(unsigned int yac_field_id, double **yac_raw_data,
+                              std::vector<double> &target_array, double conversion_factor,
+                              bool eastward_edge) const;
+  void send_yac_field(int field_id, double *field_data, double conversion_factor);
+  void send_fields_to_yac(double *temp_state, double *qvap_state, double *qcond_state);
 };
 
 /* type satisfying CoupledDyanmics solver concept
 specifically for thermodynamics and wind velocities
 that are received from YAC */
-struct YacDynamics {
+struct YacCartesianDynamics {
  private:
   const unsigned int interval;
   const unsigned int end_time;
   std::shared_ptr<CartesianDynamics> dynvars;  // pointer to (thermo)dynamic variables
 
   /* Calls the get operations to receive data from YAC for each of the fields of interest */
-  void run_dynamics(const unsigned int t_mdl) const { dynvars->receive_fields_from_yac(); }
+  void run_dynamics(const unsigned int t_mdl) const {
+    // dynvars->receive_fields_from_yac();
+  }
 
  public:
-  YacDynamics(const Config &config, const unsigned int couplstep, const std::array<size_t, 3> ndims,
-              const unsigned int nsteps)
+  YacCartesianDynamics(const Config &config, const unsigned int couplstep,
+                       const std::array<size_t, 3> ndims, const unsigned int nsteps,
+                       const CartesianDecomposition &decomp)
       : interval(couplstep),
         end_time(config.get_timesteps().T_END),
-        dynvars(std::make_shared<CartesianDynamics>(config, ndims, nsteps)) {}
+        dynvars(std::make_shared<CartesianDynamics>(config, ndims, nsteps, decomp)) {}
 
   auto get_couplstep() const { return interval; }
 
@@ -158,6 +182,10 @@ struct YacDynamics {
       run_dynamics(t_mdl);
     }
   }
+
+  const std::shared_ptr<CartesianDynamics> &get_dynvars() const { return dynvars; }
+
+  int get_yac_coupling_flag() const { return dynvars->get_yac_coupling_flag(); }
 
   double get_press(const size_t ii) const { return dynvars->get_press(ii); }
 
@@ -173,5 +201,7 @@ struct YacDynamics {
 
   std::pair<double, double> get_vvel(const size_t ii) const { return dynvars->get_vvel(ii); }
 };
+
+// int YacCartesianDynamics::get_counter = 1;
 
 #endif  // LIBS_COUPLDYN_YAC_YAC_CARTESIAN_DYNAMICS_HPP_

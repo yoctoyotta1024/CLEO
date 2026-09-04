@@ -34,6 +34,8 @@
 #include "superdrops/superdrop.hpp"
 #include "superdrops/terminalvelocity.hpp"
 
+namespace dlc = dimless_constants;
+
 /* wrapper of operator for use of function in PredCorrMotion's CheckBounds type */
 struct CartesianCheckBounds {
   /* raise error if superdrop not either out of domain
@@ -41,8 +43,10 @@ struct CartesianCheckBounds {
   KOKKOS_INLINE_FUNCTION void operator()(const unsigned int idx,
                                          const Kokkos::pair<double, double> bounds,
                                          const double coord) const {
+    const double atol = 1e-12;  // absolute tolerance [m] for SD coordinate to be "in-bound"
     const bool bad_gbxindex((idx != LIMITVALUES::oob_gbxindex) &&
-                            ((coord < bounds.first) | (coord >= bounds.second)));
+                            ((coord - bounds.first < -1.0 * atol / dlc::COORD0) |
+                             (coord - bounds.second >= atol / dlc::COORD0)));
 
     if (bad_gbxindex) {
       Kokkos::abort(
