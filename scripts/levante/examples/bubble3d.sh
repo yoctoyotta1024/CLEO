@@ -33,7 +33,8 @@ executables="bubble3d"
 
 pythonscript=${path2CLEO}/examples/bubble3d/bubble3d.py
 src_config_filename=${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml
-script_args="${src_config_filename} ${path2experiment} ${path2iconfiles} \
+src_yac_config_filename=${path2CLEO}/examples/bubble3d/src/config/yac_icon_cleo_coupling_config.yaml
+script_args="${src_config_filename} ${src_yac_config_filename} ${path2experiment} ${path2iconfiles} \
   --do_inputfiles --do_run_executable --do_plot_results"
 ### ---------------------------------------------------- ###
 ### ---------------------------------------------------- ###
