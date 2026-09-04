@@ -63,7 +63,7 @@ configure_machine_build_flags() {
     fi
 
     export CLEO_KOKKOS_BASIC_FLAGS="${CLEO_KOKKOS_BASIC_FLAGS} \
-        -DKokkos_ARCH_NATIVE=ON \
+        -DKokkos_ARCH_ARMV9_GRACE=ON \
         -DKokkos_ENABLE_SERIAL=ON"
 
     case "${CLEO_BUILDTYPE}" in
@@ -81,6 +81,10 @@ configure_machine_build_flags() {
         cuda)
             source "${COMMON_BASH_SRC}/build_cuda.sh"
             configure_cuda_build
+            export CLEO_KOKKOS_HOST_FLAGS="${CLEO_KOKKOS_HOST_FLAGS} \
+                -DKokkos_ENABLE_OPENMP=ON"
+            export CLEO_KOKKOS_DEVICE_FLAGS="${CLEO_KOKKOS_DEVICE_FLAGS} \
+                -DKokkos_ARCH_HOPPER90=ON"
             ;;
 
         *)
