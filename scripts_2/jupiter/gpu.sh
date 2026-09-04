@@ -37,13 +37,13 @@ check_args_not_empty "${CLEO_PATH2CLEO}" "${CLEO_PYTHON}" "${CLEO_YACYAXTROOT}"
 # build, compile, run, and plot.
 case "${mode}" in
     build)
-        "${CLEO_PATH2CLEO}/scripts_2/jupyter/build_compile_run_plot_cleo.sh" \
+        "${CLEO_PATH2CLEO}/scripts_2/jupiter/build_compile_run_plot_cleo.sh" \
             "${experiment}" "${buildtype}" "${compilername}" "${CLEO_PATH2CLEO}" \
             "" "" "${CLEO_YACYAXTROOT}" false false 204800 build,compile
         ;;
     run)
         echo "=== Running ${experiment} (${buildtype}, ${compilername}) ==="
-        "${CLEO_PATH2CLEO}/scripts_2/jupyter/build_compile_run_plot_cleo.sh" \
+        "${CLEO_PATH2CLEO}/scripts_2/jupiter/build_compile_run_plot_cleo.sh" \
             "${experiment}" "${buildtype}" "${compilername}" "${CLEO_PATH2CLEO}"
         ;;
     *)

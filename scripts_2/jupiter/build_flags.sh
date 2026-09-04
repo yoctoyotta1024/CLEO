@@ -5,12 +5,12 @@ set -e
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
 COMMON_BASH_SRC="${SCRIPT_DIR}/../common"
-JUPYTER_HELPERS_DIR="${SCRIPT_DIR}/helpers"
+jupiter_HELPERS_DIR="${SCRIPT_DIR}/helpers"
 
 configure_machine_build_flags() {
 
     source "${COMMON_BASH_SRC}/check_inputs.sh"
-    source "${JUPYTER_HELPERS_DIR}/jupiter_packages.sh"
+    source "${jupiter_HELPERS_DIR}/jupiter_packages.sh"
 
     check_args_not_empty \
         "${CLEO_COMPILERNAME}" \

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ### ============================================================ ###
-###                     Jupyter script                          ###
+###                     jupiter script                          ###
 ### ============================================================ ###
 ###
 ### Usage:
@@ -34,7 +34,7 @@
 
 set -e
 
-export CLEO_MACHINE=jupyter
+export CLEO_MACHINE=jupiter
 
 experiment=${1:-as2017}
 buildtype=${2:-openmp}
@@ -53,7 +53,7 @@ if [[ ! -d "${path2CLEO}" ]]; then
     exit 1
 fi
 if [[ "${compilername}" != gcc ]]; then
-    echo "Error: Jupyter currently supports compilername='gcc'."
+    echo "Error: jupiter currently supports compilername='gcc'."
     exit 1
 fi
 if [[ "${steps}" != all ]]; then
@@ -107,7 +107,7 @@ if step_enabled compile; then
 fi
 
 if step_enabled run || step_enabled plot; then
-    source "${path2CLEO}/scripts_2/jupyter/runtime_settings.sh"
+    source "${path2CLEO}/scripts_2/jupiter/runtime_settings.sh"
     configure_machine_runtime_settings "${stacksize_limit}"
 
     if [[ ! -f "${pythonscript}" ]]; then
