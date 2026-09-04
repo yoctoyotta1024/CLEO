@@ -68,7 +68,7 @@ run_cleo() {
     srun --exclusive \
         --ntasks=1 \
         --cpus-per-task="${SLURM_CPUS_PER_TASK}" \
-        "${CLEO_PATH2CLEO}/scripts_2/jupyter/build_compile_run_plot_cleo.sh" \
+        "${CLEO_PATH2CLEO}/scripts_2/jupiter/build_compile_run_plot_cleo.sh" \
         "${experiment}" \
         "${buildtype}" \
         "${compilername}" \
@@ -80,7 +80,7 @@ build_cleo() {
     echo "=== Building ${experiment} ==="
     echo
 
-    "${CLEO_PATH2CLEO}/scripts_2/jupyter/build_compile_run_plot_cleo.sh" \
+    "${CLEO_PATH2CLEO}/scripts_2/jupiter/build_compile_run_plot_cleo.sh" \
         "${experiment}" \
         "${buildtype}" \
         "${compilername}" \

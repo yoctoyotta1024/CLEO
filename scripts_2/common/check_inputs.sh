@@ -29,7 +29,7 @@ check_yac() {
 
 check_machine() {
   if [[ -z "${CLEO_MACHINE}" ]]; then
-    echo "Bad inputs: CLEO_MACHINE must be set (e.g. 'vanilla', 'levante', 'jupyter')"
+    echo "Bad inputs: CLEO_MACHINE must be set (e.g. 'vanilla', 'levante', 'jupiter')"
     exit 1
   fi
 }
