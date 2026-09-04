@@ -39,6 +39,17 @@ parser.add_argument(
     help="Absolute path to source configuration YAML file",
 )
 parser.add_argument(
+    "src_yac_config_filename",
+    type=Path,
+    help="Absolute path to source YAC configuration YAML file",
+)
+parser.add_argument(
+    "path2experiment",
+    type=Path,
+    help="Absolute path for directories for inputs and outputs of experiment",
+)
+parser.add_argument("path2iconfiles", type=Path, help="Absolute path to icon .nc files")
+parser.add_argument(
     "--do_inputfiles",
     action="store_true",  # default is False
     help="Generate initial condition binary files",
@@ -60,23 +71,30 @@ args = parser.parse_args()
 ### --- command line parsed arguments --- ###
 path2CLEO = args.path2CLEO
 path2build = args.path2build
+path2experiment = args.path2experiment
+path2iconfiles = args.path2iconfiles
 src_config_filename = args.src_config_filename
-
+src_yac_config_filename = args.src_yac_config_filename
 ### --- additional/derived arguments --- ###
-tmppath = path2build / "tmp"
-sharepath = path2build / "share"
-binpath = path2build / "bin"
+tmppath = path2experiment / "tmp"
+sharepath = path2experiment / "share"
+binpath = path2experiment / "bin"
 savefigpath = binpath
 
-config_filename = path2build / "tmp" / "bubble3d_config.yaml"
+config_filename = tmppath / "bubble3d_config.yaml"
 config_params = {
     "constants_filename": str(path2CLEO / "libs" / "cleoconstants.hpp"),
     "grid_filename": str(sharepath / "bubble3d_dimlessGBxboundaries.dat"),
     "initsupers_filename": str(sharepath / "bubble3d_dimlessSDsinit.dat"),
     "setup_filename": str(binpath / "bubble3d_setup.txt"),
     "zarrbasedir": str(binpath / "bubble3d_sol.zarr"),
-    "orginal_icon_grid_file": "/work/mh0731/m300950/icon-mpim/build/experiments/aes_bubble/aes_bubble_atm_cgrid_ml.nc",
-    "orginal_icon_data_file": "/work/mh0731/m300950/icon-mpim/build/experiments/aes_bubble/aes_bubble_atm_3d_ml_20080801T000000Z.nc",
+    "yac_config_file": str(tmppath / "yac_icon_cleo_coupling_config.yaml"),
+    "yac_debug_config_file": str(binpath / "cleo_coupling_debug.yaml"),
+    "yac_debug_grid_file": str(binpath / "cleo_grid_debug.nc"),
+    "orginal_icon_grid_file": str(path2iconfiles / "bubble_1mom_atm_cgrid_ml.nc"),
+    "orginal_icon_data_file": str(
+        path2iconfiles / "bubble_1mom_atm_3d_ml_20080801T000000Z.nc"
+    ),
 }
 
 isfigures = [False, True]  # booleans for [showing, saving] initialisation figures
@@ -92,8 +110,14 @@ def inputfiles(
     binpath,
     savefigpath,
     src_config_filename,
+    src_yac_config_filename,
     config_filename,
     config_params,
+    gen_config,
+    gen_yac_files,
+    gen_gbxs,
+    gen_supers,
+    copy_iconfiles,
     isfigures,
 ):
     from cleopy import editconfigfile
@@ -109,23 +133,39 @@ def inputfiles(
         savefigpath.mkdir(exist_ok=True)
 
     ### --- copy src_config_filename into tmp and edit parameters --- ###
-    config_filename.unlink(missing_ok=True)  # delete any existing config
-    shutil.copy(src_config_filename, config_filename)
-    editconfigfile.edit_config_params(config_filename, config_params)
+    if gen_config:
+        config_filename.unlink(missing_ok=True)  # delete any existing config
+        shutil.copy(src_config_filename, config_filename)
+        editconfigfile.edit_config_params(config_filename, config_params)
 
     ### --- delete any existing initial conditions --- ###
     yaml = YAML()
     with open(config_filename, "r") as file:
         config = yaml.load(file)
-    Path(config["inputfiles"]["grid_filename"]).unlink(missing_ok=True)
-    Path(config["initsupers"]["initsupers_filename"]).unlink(missing_ok=True)
+    if (
+        gen_yac_files
+    ):  # delete any existing yac config and debugging files and copy new yac config
+        Path(config["yac_settings"]["yac_config_file"]).unlink(missing_ok=True)
+        Path(config["yac_settings"]["yac_debug_config_file"]).unlink(missing_ok=True)
+        Path(config["yac_settings"]["yac_debug_grid_file"]).unlink(missing_ok=True)
+        shutil.copy(src_yac_config_filename, config["yac_settings"]["yac_config_file"])
+    if gen_gbxs:
+        Path(config["inputfiles"]["grid_filename"]).unlink(missing_ok=True)
+    if gen_supers:
+        Path(config["initsupers"]["initsupers_filename"]).unlink(missing_ok=True)
 
     ### --- input binary files generation --- ###
     # equivalent to ``import bubble3d_inputfiles`` followed by
-    # ``bubble3d_inputfiles.main(path2CLEO, path2build, ...)``
+    # ``bubble3d_inputfiles.main(path2CLEO, sharepath, ...)``
     inputfiles_script = path2CLEO / "examples" / "bubble3d" / "bubble3d_inputfiles.py"
     python = sys.executable
-    cmd = [python, inputfiles_script, path2CLEO, path2build, config_filename]
+    cmd = [python, inputfiles_script, path2CLEO, sharepath, config_filename]
+    if gen_gbxs:
+        cmd.append("--gen_gbxs")
+    if gen_supers:
+        cmd.append("--gen_supers")
+    if copy_iconfiles:
+        cmd.append("--copy_iconfiles")
     if isfigures[0]:
         cmd.append("--show_figures")
     if isfigures[1]:
@@ -198,6 +238,11 @@ def plot_results(path2CLEO, config_filename, savefigpath):
 # %%
 ### ----------------------------- RUN EXAMPLE ------------------------------ ###
 if args.do_inputfiles:
+    gen_config = True
+    gen_yac_files = True
+    gen_gbxs = True
+    gen_supers = True
+    copy_iconfiles = True
     inputfiles(
         path2CLEO,
         path2build,
@@ -206,8 +251,14 @@ if args.do_inputfiles:
         binpath,
         savefigpath,
         src_config_filename,
+        src_yac_config_filename,
         config_filename,
         config_params,
+        gen_config,
+        gen_yac_files,
+        gen_gbxs,
+        gen_supers,
+        copy_iconfiles,
         isfigures,
     )
 

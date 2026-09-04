@@ -23,6 +23,7 @@
 #include <yaml-cpp/yaml.h>
 
 #include <Kokkos_Core.hpp>
+#include <cmath>
 #include <filesystem>
 #include <iostream>
 #include <limits>
@@ -32,6 +33,7 @@
 namespace NaNVals {
 inline double dbl() { return std::numeric_limits<double>::signaling_NaN(); };
 inline unsigned int uint() { return std::numeric_limits<unsigned int>::signaling_NaN(); };
+inline int integer() { return std::numeric_limits<int>::signaling_NaN(); };
 inline size_t sizet() { return std::numeric_limits<size_t>::signaling_NaN(); };
 }  // namespace NaNVals
 
@@ -63,11 +65,28 @@ struct OptionalConfigParams {
 
   void set_python_bindings(const YAML::Node& config);
 
-  /*** Kokkos Initialization Parameters ***/
+  /*** Kokkos Settings / Initialization Parameters ***/
   struct KokkosSettings {
     bool is_default = true; /**< true = default kokkos initialization */
     Kokkos::InitializationSettings kokkos_initialization_settings; /**< is default unless config */
   } kokkos_settings;
+
+  /*** YAC Settings / Initialization Parameters ***/
+  struct YacSettings {
+    using fspath = std::filesystem::path;
+    void set_params(const YAML::Node& config);
+    void print_params() const;
+    bool is_using_yac = false; /**< true = use YAC coupling to/from CLEO (e.g. to set MPI comms) */
+    std::string cleo_component_name = ""; /**< name to label cleo component with */
+    std::string cleo_grid_name = "";      /**< name to label cleo grid with */
+    std::string field_timestep =
+        ""; /**< timestep to update YAC fields in Cleo, should match COUPLTSTEP */
+    fspath yac_config_file = fspath(); /**< path to YAC configuration file */
+    fspath yac_debug_config_file =
+        fspath(); /**< (optional) for debugging: yac_cset_config_output_file */
+    fspath yac_debug_grid_file =
+        fspath(); /**< (optional) for debugging: yac_cset_grid_output_file */
+  } yac_settings;
 
   /*** Super-Droplet Microphysics Parameters ***/
   struct CondensationParams {
@@ -143,14 +162,16 @@ struct OptionalConfigParams {
     double atol = NaNVals::dbl(); /**< absolute tolerances for integration of [P, T, qv, qc] ODEs */
   } cvodedynamics;
 
-  struct YacDynamicsParams {
+  struct YacCartesianDynamicsParams {
     void set_params(const YAML::Node& config);
     void print_params() const;
     double lower_longitude = NaNVals::dbl();
     double upper_longitude = NaNVals::dbl();
     double lower_latitude = NaNVals::dbl();
     double upper_latitude = NaNVals::dbl();
-  } yac_dynamics;
+    double longitude_to_meters = NaNVals::dbl();
+    double latitude_to_meters = NaNVals::dbl();
+  } yac_cartesian_dynamics;
 
   /*** Bounday Conditions Parameters ***/
   struct AddSupersToDomainParams {

@@ -93,6 +93,9 @@ class CartesianDecomposition {
   std::array<size_t, 3> get_local_partition_origin() const;
   std::array<size_t, 3> get_local_partition_size() const;
 
+  std::vector<std::vector<double>> get_local_gridbox_bounds() const;
+  std::array<std::array<double, 3>, 2> get_domain_bounds() const;
+
   // Get partition index and partition coordinates
   int get_partition_index_from_slice(std::array<int, 3> slice_indices) const;
   std::array<int, 3> get_slice_indices_from_partition(int partition_index) const;
