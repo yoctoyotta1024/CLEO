@@ -9,20 +9,22 @@ find_library(YAXT_C_LIBRARY
 mark_as_advanced(YAXT_C_INCLUDE_DIR
   YAXT_C_LIBRARY)
 
+# CLEO is C / C++ only and therefore links YAXT::YAXT_C. YAXT's Fortran interface is
+# optional: it is absent from C-only YAXT builds (e.g. one configured with FC=no).
 find_path(YAXT_Fortran_INCLUDE_DIR
   NAMES yaxt.mod
   HINTS ${YAXT_C_INCLUDE_DIR})
 
 find_library(YAXT_Fortran_LIBRARY
   NAMES libyaxt.a
-  DOC "YAXT Fortran Library")
+  DOC "YAXT Fortran Library (optional)")
 
 mark_as_advanced(YAXT_Fortran_INCLUDE_DIR
   YAXT_Fortran_LIBRARY)
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(YAXT
-REQUIRED_VARS YAXT_Fortran_LIBRARY YAXT_C_LIBRARY
+REQUIRED_VARS YAXT_C_LIBRARY YAXT_C_INCLUDE_DIR
 )
 
 if(YAXT_FOUND)
@@ -34,7 +36,7 @@ if(YAXT_FOUND)
       PROPERTY INTERFACE_LINK_LIBRARIES "${YAXT_C_LIBRARY}")
   endif()
 
-  if(NOT TARGET YAXT::YAXT_Fortran)
+  if(YAXT_Fortran_LIBRARY AND NOT TARGET YAXT::YAXT_Fortran)
     add_library(YAXT::YAXT_Fortran INTERFACE IMPORTED)
     set_property(TARGET YAXT::YAXT_Fortran
       PROPERTY INTERFACE_INCLUDE_DIRECTORIES "${YAXT_Fortran_INCLUDE_DIR}")
