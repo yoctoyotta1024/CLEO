@@ -6,6 +6,7 @@ endif()
 # subdirectories for specific examples of CLEO
 add_subdirectory(adiabaticparcel/src EXCLUDE_FROM_ALL)
 add_subdirectory(boxmodelcollisions EXCLUDE_FROM_ALL)
+add_subdirectory(boxmodel_condcoll EXCLUDE_FROM_ALL)
 add_subdirectory(constthermo2d/src EXCLUDE_FROM_ALL)
 add_subdirectory(divfreemotion/src EXCLUDE_FROM_ALL)
 add_subdirectory(eurec4a1d/src EXCLUDE_FROM_ALL)
