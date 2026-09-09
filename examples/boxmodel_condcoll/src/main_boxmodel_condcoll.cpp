@@ -109,9 +109,11 @@ inline MicrophysicalProcess auto create_microphysics(const Config& config,
                                                      const Timesteps& tsteps) {
   const MicrophysicalProcess auto cond = config_condensation(config, tsteps);
 
-  const MicrophysicalProcess auto colls = config_collisions(config, tsteps);
+  const MicrophysicalProcess auto colls =
+      config_collisions(config, tsteps);  // comment out to remove collisions
 
-  return cond >> colls;
+  return cond >> colls;  // comment out to remove collisions
+  // return cond;  // un-comment to model only condensation
 }
 
 template <typename Dataset, typename Store>
