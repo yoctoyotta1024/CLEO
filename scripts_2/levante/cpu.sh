@@ -12,39 +12,66 @@
 #SBATCH --output=./cleo_cpu.%j.out
 #SBATCH --error=./cleo_cpu.%j.out
 
+### ============================================================ ###
+###                    Levante CPU job script                    ###
+### ============================================================ ###
+###
+### Usage:
+###   ./scripts_2/levante/cpu.sh build [experiment] [buildtype] [compilername]
+###   sbatch scripts_2/levante/cpu.sh [all|run] [experiment] [buildtype] [compilername]
+###
+###   Run from (or submit from) the CLEO root directory.
+###
+### Modes:
+###   all    configure, compile, run + plot (default)    (steps: all)
+###   build  cmake configure + compile                   (steps: build,compile)
+###   run    recompile, run + plot (needs a prior build) (steps: compile,run,plot)
+###
+### Without an experiment, every entry in 'experiments' below is used.
+### An empty buildtype/compilername uses the machine default.
+###
+### Paths: edit the 'paths' section below before first use.
+### ============================================================ ###
+
 set -e
+
+### ------------- paths (EDIT THESE FOR YOUR SITE) ---------- ###
+# Resolve paths from the submission directory while allowing site-specific overrides.
+# Replace the <...> placeholders (or export the variables before running/submitting).
+# CLEO_PATH2BUILD is a build root: each experiment builds in <CLEO_PATH2BUILD>/build_xxx
+export CLEO_PATH2CLEO="${SLURM_SUBMIT_DIR:-$(pwd)}"
+export CLEO_PYTHON="${CLEO_PYTHON:-${CLEO_PATH2CLEO}/.venv/bin/python3}"
+export CLEO_YACYAXTROOT="${CLEO_YACYAXTROOT:-<PATH/TO/YACYAXT/INSTALL>}"
+export CLEO_PATH2BUILD="${CLEO_PATH2BUILD:-<PATH/TO/BUILD/ROOT>}"
+### -------------------------------------------------------- ###
+
+### ---------------------- environment --------------------- ###
 source /etc/profile
 module purge
 spack unload --all
+### -------------------------------------------------------- ###
 
-CLEO_PATH2CLEO="${SLURM_SUBMIT_DIR:-$(pwd)}"
+### --------------------- configuration -------------------- ###
+export CLEO_MACHINE="levante"
 
-source "${CLEO_PATH2CLEO}/scripts_2/common/check_inputs.sh"
-check_args_not_empty "${CLEO_PYTHON}" "${CLEO_YACYAXTROOT}"
+# "experiment buildtype compilername"
+experiments=(
+  "as2017 serial gcc"
+  "breakup serial gcc"
+  "constthermo2d openmp gcc"
+  "cuspbifurc threads gcc"
+  "divfree2d openmp gcc"
+  "eurec4a1d threads gcc"
+  "rainshaft1d threads gcc"
+  "shima2009 openmp gcc"
+  "python_bindings openmp gcc"
+  # for a later MPI-heavy test, you can add:
+  # "fromfile openmp gcc"
+)
 
-run_experiment() {
-  local experiment="$1"
-  local buildtype="$2"
-  local compilername="$3"
+# command prefix for run mode (e.g. srun), empty to run directly
+run_launcher=()
+### -------------------------------------------------------- ###
 
-  echo "=== Running ${experiment} (${buildtype}, ${compilername}) ==="
-  "${CLEO_PATH2CLEO}/scripts_2/levante/build_compile_run_plot_cleo.sh" \
-    "${experiment}" "${buildtype}" "${compilername}" "${CLEO_PATH2CLEO}"
-}
-
-for entry in \
-  "as2017 serial gcc" \
-  "breakup serial gcc" \
-  "constthermo2d openmp gcc" \
-  "cuspbifurc threads gcc" \
-  "divfree2d openmp gcc" \
-  "eurec4a1d threads gcc" \
-  "rainshaft1d threads gcc" \
-  "shima2009 openmp gcc" \
-  "python_bindings openmp gcc"; do
-  set -- $entry
-  run_experiment "$1" "$2" "$3"
-done
-
-# For a later MPI-heavy test, you can swap to:
-# run_experiment fromfile openmp gcc
+source "${CLEO_PATH2CLEO}/scripts_2/common/run_jobs.sh"
+run_cleo_jobs "$@"

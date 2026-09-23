@@ -89,3 +89,7 @@ install_kokkos_tools() {
 # E) Also note useful debugging tool to find where program crashed (e.g. inside kernel):
 #   export KOKKOS_TOOLS_LIBS=/path/to/tools/kokkostools/lib/libkp_kernel_logger.dylib
 ### ---------------------------------------------------------------- ###
+
+if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
+    install_kokkos_tools "$@"
+fi

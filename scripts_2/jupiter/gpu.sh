@@ -1,6 +1,4 @@
 #!/bin/bash
-
-# Slurm resources for the single-GPU CLEO job.
 #SBATCH --job-name=cleo_gpu
 #SBATCH --partition=booster
 #SBATCH --nodes=1
@@ -12,42 +10,56 @@
 #SBATCH --output=./cleo_gpu.%j.out
 #SBATCH --error=./cleo_gpu.%j.out
 
+### ============================================================ ###
+###                    Jupiter GPU job script                    ###
+### ============================================================ ###
+###
+### Usage:
+###   ./scripts_2/jupiter/gpu.sh build [experiment] [buildtype] [compilername]
+###   sbatch scripts_2/jupiter/gpu.sh [all|run] [experiment] [buildtype] [compilername]
+###
+###   Run from (or submit from) the CLEO root directory.
+###
+### Modes:
+###   all    configure, compile, run + plot (default)    (steps: all)
+###   build  cmake configure + compile                   (steps: build,compile)
+###   run    recompile, run + plot (needs a prior build) (steps: compile,run,plot)
+###
+### Without an experiment, every entry in 'experiments' below is used.
+### An empty buildtype/compilername uses the machine default.
+###
+### Paths: edit the 'paths' section below before first use.
+### ============================================================ ###
+
 set -e
 
-# Load the site environment and the Python runtime used by the helper script.
-source /etc/profile
-module load Stages/2026 Python/3.13.5
-
+### ------------- paths (EDIT THESE FOR YOUR SITE) ---------- ###
 # Resolve paths from the submission directory while allowing site-specific overrides.
+# Replace the <...> placeholders (or export the variables before running/submitting).
+# CLEO_PATH2BUILD is a build root: each experiment builds in <CLEO_PATH2BUILD>/build_xxx
 export CLEO_PATH2CLEO="${SLURM_SUBMIT_DIR:-$(pwd)}"
 export CLEO_PYTHON="${CLEO_PYTHON:-${CLEO_PATH2CLEO}/.venv/bin/python3}"
-export CLEO_YACYAXTROOT="${CLEO_YACYAXTROOT:-${HOME}/yacyaxt/gcc}"
+export CLEO_YACYAXTROOT="${CLEO_YACYAXTROOT:-<PATH/TO/YACYAXT/INSTALL>}"
+export CLEO_PATH2BUILD="${CLEO_PATH2BUILD:-<PATH/TO/BUILD/ROOT>}"
+### -------------------------------------------------------- ###
 
-# Use run mode unless the caller explicitly requests a build.
-mode="${1:-run}"
-experiment="constthermo2d"
-buildtype="cuda"
-compilername="gcc"
+### ---------------------- environment --------------------- ###
+source /etc/profile
+# Required if the .venv does not use the default environment.
+module load Stages/2026 Python/3.13.5
+### -------------------------------------------------------- ###
 
-source "${CLEO_PATH2CLEO}/scripts_2/common/check_inputs.sh"
-check_args_not_empty "${CLEO_PATH2CLEO}" "${CLEO_PYTHON}" "${CLEO_YACYAXTROOT}"
+### --------------------- configuration -------------------- ###
+export CLEO_MACHINE="jupiter"
 
-# The build mode performs only the build and compile stages.
-# The run mode omits the stages argument, so the helper defaults to all:
-# build, compile, run, and plot.
-case "${mode}" in
-    build)
-        "${CLEO_PATH2CLEO}/scripts_2/jupiter/build_compile_run_plot_cleo.sh" \
-            "${experiment}" "${buildtype}" "${compilername}" "${CLEO_PATH2CLEO}" \
-            "" "" "${CLEO_YACYAXTROOT}" false false 204800 build,compile
-        ;;
-    run)
-        echo "=== Running ${experiment} (${buildtype}, ${compilername}) ==="
-        "${CLEO_PATH2CLEO}/scripts_2/jupiter/build_compile_run_plot_cleo.sh" \
-            "${experiment}" "${buildtype}" "${compilername}" "${CLEO_PATH2CLEO}"
-        ;;
-    *)
-        echo "Usage: $0 [build|run]"
-        exit 1
-        ;;
-esac
+# "experiment buildtype compilername"
+experiments=(
+  "constthermo2d cuda gcc"
+)
+
+# command prefix for run mode (e.g. srun), empty to run directly
+run_launcher=()
+### -------------------------------------------------------- ###
+
+source "${CLEO_PATH2CLEO}/scripts_2/common/run_jobs.sh"
+run_cleo_jobs "$@"

@@ -26,10 +26,17 @@ fi
 ### Common CMake flags shared by most experiments
 cleo_common_flags="-DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
 
+### Build root: path2build_override (if given) or path2CLEO otherwise.
+### build_subdir below is always relative to this root, so an override
+### only replaces the root and never swallows the experiment's build_xxx suffix.
+path2build_root=${path2build_override:-${path2CLEO}}
+# strip trailing slashes so joining with build_subdir never gives '//'
+while [[ "${path2build_root}" == */ ]]; do path2build_root=${path2build_root%/}; done
+
 case "${experiment}" in
 
   as2017)
-    path2build=${path2CLEO}/build_adia0d/as2017
+    build_subdir=build_adia0d/as2017
     build_flags="-DCLEO_COUPLED_DYNAMICS=cvode -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
     executables="adia0d"
 
@@ -40,7 +47,7 @@ case "${experiment}" in
     ;;
 
   breakup)
-    path2build=${path2CLEO}/build_colls0d/breakup/
+    build_subdir=build_colls0d/breakup/
     build_flags="-DCLEO_COUPLED_DYNAMICS=null -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
     executables="longcolls lowlistcolls szakallurbichcolls testikstraubcolls"
 
@@ -51,7 +58,7 @@ case "${experiment}" in
     ;;
 
   bubble3d)
-    path2build=${path2CLEO}/build_bubble3d/
+    build_subdir=build_bubble3d/
     build_flags="-DCLEO_COUPLED_DYNAMICS=yac -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
     executables="bubble3d"
 
@@ -62,7 +69,7 @@ case "${experiment}" in
     ;;
 
   constthermo2d)
-    path2build=${path2CLEO}/build_const2d/
+    build_subdir=build_const2d/
     build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
     executables="const2d"
 
@@ -73,7 +80,7 @@ case "${experiment}" in
     ;;
 
   cuspbifurc)
-    path2build=${path2CLEO}/build_adia0d/cuspbifurc/
+    build_subdir=build_adia0d/cuspbifurc/
     build_flags="-DCLEO_COUPLED_DYNAMICS=cvode -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
     executables="adia0d"
 
@@ -84,7 +91,7 @@ case "${experiment}" in
     ;;
 
   divfree2d)
-    path2build=${path2CLEO}/build_divfree2d/
+    build_subdir=build_divfree2d/
     build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
     executables="divfree2d"
 
@@ -95,7 +102,7 @@ case "${experiment}" in
     ;;
 
   eurec4a1d)
-    path2build=${path2CLEO}/build_eurec4a1d/
+    build_subdir=build_eurec4a1d/
     build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
     executables="eurec4a1d"
 
@@ -106,7 +113,7 @@ case "${experiment}" in
     ;;
 
   fromfile)
-    path2build=${path2CLEO}/build_fromfile/
+    build_subdir=build_fromfile/
     build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
     executables="fromfile"
 
@@ -117,7 +124,7 @@ case "${experiment}" in
     ;;
 
   fromfile_irreg)
-    path2build=${path2CLEO}/build_fromfile_irreg/
+    build_subdir=build_fromfile_irreg/
     build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
     executables="fromfile_irreg"
 
@@ -128,7 +135,7 @@ case "${experiment}" in
     ;;
 
   python_bindings)
-    path2build=${path2CLEO}/build_pybind/
+    build_subdir=build_pybind/
     build_flags="-DCLEO_COUPLED_DYNAMICS=numpy -DCLEO_DOMAIN=cartesian \
       -DCLEO_NO_ROUGHPAPER=true -DCLEO_PYTHON=${CLEO_PYTHON}"
     executables="cleo_python_bindings"
@@ -140,7 +147,7 @@ case "${experiment}" in
     ;;
 
   rainshaft1d)
-    path2build=${path2CLEO}/build_rshaft1d/
+    build_subdir=build_rshaft1d/
     build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
     executables="rshaft1d"
 
@@ -151,7 +158,7 @@ case "${experiment}" in
     ;;
 
   shima2009)
-    path2build=${path2CLEO}/build_colls0d/shima2009/
+    build_subdir=build_colls0d/shima2009/
     build_flags="-DCLEO_COUPLED_DYNAMICS=null -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
     executables="golcolls longcolls"
 
@@ -170,8 +177,9 @@ case "${experiment}" in
     ;;
 esac
 
+path2build="${path2build_root}/${build_subdir}"
+
 ### Apply CLI overrides if provided (non-empty args take precedence over defaults)
-[[ -n "${path2build_override}" ]]  && path2build="${path2build_override}"
 [[ -n "${build_flags_override}" ]] && build_flags="${build_flags_override}"
 
 export CLEO_PATH2BUILD="${path2build}"

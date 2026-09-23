@@ -1,42 +1,34 @@
 #!/bin/bash
 
-### Please note: script may assume required CLEO_[XXX]
-### variables have already exported (!)
+### Configures CLEO with cmake.
+### Requires CLEO_* variables (incl. CLEO_MACHINE) to already be exported.
 
 set -e
 [ -f /etc/profile ] && source /etc/profile
 
 build_cleo() {
-  local common_dir="${CLEO_PATH2CLEO}/scripts_2/common"
-  local machine_dir="${CLEO_PATH2CLEO}/scripts_2/${CLEO_MACHINE}"
-
+  local common_dir
+  common_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
   source "${common_dir}/check_inputs.sh"
   check_machine
+  local machine_dir="${common_dir}/../${CLEO_MACHINE}"
 
   ### -------------- prepare to build CLEO --------------- ###
-  if [ -f "${machine_dir}/build_flags.sh" ]; then
-    source "${machine_dir}/build_flags.sh"
-    if declare -F configure_machine_build_flags >/dev/null; then
-      configure_machine_build_flags
-    fi
-  fi
+  source "${machine_dir}/build_flags.sh"
+  configure_machine_build_flags
 
-  if [ -f "${machine_dir}/helpers/build_yac.sh" ]; then
-    source "${machine_dir}/helpers/build_yac.sh"
-    if declare -F configure_machine_yac_flags >/dev/null; then
-      configure_machine_yac_flags
-    fi
-  fi
-
+  source "${machine_dir}/helpers/build_yac.sh"
+  configure_machine_yac_flags
   ### ---------------------------------------------------- ###
 
   ### ---------------- build CLEO with cmake ------------- ###
   echo "### --------------- Build Flags -------------- ###"
-
+  echo "CLEO_CXX_COMPILER: ${CLEO_CXX_COMPILER}"
+  echo "CLEO_CC_COMPILER: ${CLEO_CC_COMPILER}"
+  echo "CLEO_CXX_FLAGS: ${CLEO_CXX_FLAGS}"
   echo "CLEO_KOKKOS_BASIC_FLAGS: ${CLEO_KOKKOS_BASIC_FLAGS}"
   echo "CLEO_KOKKOS_HOST_FLAGS: ${CLEO_KOKKOS_HOST_FLAGS}"
   echo "CLEO_KOKKOS_DEVICE_FLAGS: ${CLEO_KOKKOS_DEVICE_FLAGS}"
-
   echo "CLEO_BUILD_FLAGS: ${CLEO_BUILD_FLAGS}"
   echo "CLEO_YAC_FLAGS: ${CLEO_YAC_FLAGS}"
   echo "CLEO_ENABLEDEBUG: ${CLEO_ENABLEDEBUG}"
@@ -55,6 +47,7 @@ build_cleo() {
       -S ${CLEO_PATH2CLEO} -B ${CLEO_PATH2BUILD} \
       ${CLEO_KOKKOS_BASIC_FLAGS} ${CLEO_KOKKOS_HOST_FLAGS} ${CLEO_KOKKOS_DEVICE_FLAGS} \
       ${CLEO_BUILD_FLAGS} ${CLEO_YAC_FLAGS}
+  ### ---------------------------------------------------- ###
 }
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then

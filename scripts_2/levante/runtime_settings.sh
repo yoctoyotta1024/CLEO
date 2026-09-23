@@ -1,32 +1,37 @@
 #!/bin/bash
 
+### Sets the runtime environment for running CLEO on levante.
+### Usage: configure_machine_runtime_settings [stacksize_limit (kB)]
+### Requires CLEO_BUILDTYPE, CLEO_COMPILERNAME and CLEO_YACYAXTROOT to be exported.
+
 set -e
 
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &>/dev/null && pwd )
-COMMON_BASH_SRC="${SCRIPT_DIR}/../common"
-LEVANTE_HELPERS_DIR="${SCRIPT_DIR}/helpers"
-
 configure_machine_runtime_settings() {
-  local stacksize_limit=${1}  # kB
+  local stacksize_limit="${1:-}"  # kB
+
+  local machine_dir
+  machine_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
+  local common_dir="${machine_dir}/../common"
 
   ### -------------------- check inputs ------------------ ###
-  source ${COMMON_BASH_SRC}/check_inputs.sh
-  check_args_not_empty "${stacksize_limit}" "${CLEO_BUILDTYPE}"
-  check_args_not_empty "${CLEO_COMPILERNAME}" "${CLEO_YACYAXTROOT}"
+  source "${common_dir}/check_inputs.sh"
+  check_args_not_empty "${CLEO_BUILDTYPE}" "${CLEO_COMPILERNAME}" "${CLEO_YACYAXTROOT}"
+  ### ---------------------------------------------------- ###
+
+  ### ------------ load compiler/runtime stack ------------ ###
+  source "${machine_dir}/helpers/levante_packages.sh"
+  levante_load_runtime_stack "${CLEO_COMPILERNAME}" "${CLEO_BUILDTYPE}"
   ### ---------------------------------------------------- ###
 
   ### --------------- YAC runtime settings --------------- ###
-  source "${LEVANTE_HELPERS_DIR}/levante_packages.sh"
-  levante_load_runtime_stack "${CLEO_COMPILERNAME}" "${CLEO_BUILDTYPE}"
-
+  local fyamllib
   fyamllib=$(levante_fyamllib_for_compiler "${CLEO_COMPILERNAME}")
   export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${fyamllib}
   export PYTHONPATH=${PYTHONPATH}:${CLEO_YACYAXTROOT}/yac/python
   ### ---------------------------------------------------- ###
 
-  ### --------------- set runtime optimisations ---------- ###
-  if [ "${CLEO_BUILDTYPE}" == "cuda" ]
-  then
+  ### ------------ communication runtime (MPI) ------------ ###
+  if [[ "${CLEO_BUILDTYPE}" == "cuda" ]]; then
     if [[ -z "${CLEO_CUDA_ROOT}" ]]; then
       echo "Error: CLEO_CUDA_ROOT is not set for cuda runtime."
       exit 1
@@ -40,23 +45,29 @@ configure_machine_runtime_settings() {
   else
     export UCX_TLS="shm,rc_mlx5,rc_x,self" # for jobs using LESS than 150 nodes
   fi
-
   export OMPI_MCA_osc="ucx"
   export OMPI_MCA_pml="ucx"
   export OMPI_MCA_btl="self"
-  export UCX_HANDLE_ERRORS="bt"
   export OMPI_MCA_pml_ucx_opal_mem_hooks=1
+  export UCX_HANDLE_ERRORS="bt"
   export OMPI_MCA_io="romio321"           # basic optimisation of I/O
+  ### ---------------------------------------------------- ###
 
+  ### ------------------ threading ----------------------- ###
   export OMP_PROC_BIND=spread  # (!) will be overridden by KMP_AFFINITY
   export OMP_PLACES=threads    # (!) will be overridden by KMP_AFFINITY
   export KMP_AFFINITY="granularity=fine,scatter" # similar to OMP_PROC_BIND=spread
   export KMP_LIBRARY="turnaround"
+  ### ---------------------------------------------------- ###
 
-  export MALLOC_TRIM_THRESHOLD_="-1"
-
-  ulimit -s ${stacksize_limit}
+  ### ------------------ process limits ------------------ ###
+  if [[ -n "${stacksize_limit}" ]]; then
+    ulimit -s "${stacksize_limit}"
+  fi
   ulimit -c 0
+
+  # Prevent glibc from automatically trimming the heap.
+  export MALLOC_TRIM_THRESHOLD_="-1"
   ### ---------------------------------------------------- ###
 }
 
