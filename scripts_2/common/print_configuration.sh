@@ -17,6 +17,7 @@ print_configuration() {
   echo "CLEO_BUILD_FLAGS = ${CLEO_BUILD_FLAGS}"
   echo "CLEO_YACYAXTROOT = ${CLEO_YACYAXTROOT}"
   echo "CLEO_ENABLEDEBUG = ${CLEO_ENABLEDEBUG}"
+  echo "MAKE_CLEAN = ${make_clean:-false}"
   echo "CLEO_PYTHON = ${CLEO_PYTHON}"
   echo "CLEO_MAKE_JOBS = ${CLEO_MAKE_JOBS}"
   echo "STACKSIZE_LIMIT = ${stacksize_limit:-(unchanged)}"

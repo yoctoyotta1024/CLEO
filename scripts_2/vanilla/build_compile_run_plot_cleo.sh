@@ -21,6 +21,7 @@
 ###   stacksize_limit  unchanged (kB)
 ###   CLEO_MAKE_JOBS   8
 ###
+###   make_clean       true deletes the build folder first (build from scratch).
 ###   steps            build,compile,run,plot,all (default: all)
 ###                    The run stage generates input files and runs the executable.
 ###                    Set NSYS_PREFIX to profile only the executable run.

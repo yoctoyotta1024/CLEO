@@ -15,6 +15,9 @@
 ###   build  cmake configure + compile                   (steps: build,compile)
 ###   run    recompile, run + plot (needs a prior build) (steps: compile,run,plot)
 ###
+### Set CLEO_MAKE_CLEAN=true below (or export it) to delete each
+### experiment's build folder and rebuild from scratch (all and build modes).
+###
 ### Without an experiment, every entry in 'experiments' below is used.
 ### An empty buildtype/compilername uses the machine default.
 ###
@@ -44,6 +47,9 @@ export CLEO_MACHINE="vanilla"
 experiments=(
   "as2017 serial gcc"
 )
+
+# true: delete each experiment's build folder first and rebuild from scratch
+export CLEO_MAKE_CLEAN="${CLEO_MAKE_CLEAN:-false}"
 
 # command prefix for run mode (e.g. srun), empty to run directly
 run_launcher=()
