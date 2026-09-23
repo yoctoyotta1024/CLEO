@@ -29,6 +29,8 @@
 ###   $7  yacyaxtroot      Path to YAC+YAXT installation       (default: $CLEO_YACYAXTROOT, else $HOME/yacyaxt/<compilername>)
 ###   $8  enabledebug      true | false                        (default: false)
 ###   $9  make_clean       true | false                        (default: false)
+###                        true deletes the experiment's build folder before the
+###                        build step, i.e. builds from scratch (needs the build step)
 ###   $10 stacksize_limit  ulimit -s value (kB)                (default: machine)
 ###   $11 steps            build,compile,run,plot,all          (default: all)
 ###
@@ -92,6 +94,10 @@ build_compile_run_plot_cleo() {
   check_value_in_list enabledebug "${enabledebug}" true false
   check_value_in_list make_clean "${make_clean}" true false
   check_steps "${steps}"
+  if [[ "${make_clean}" == true ]] && ! step_enabled build; then
+    echo "Bad inputs: make_clean=true deletes the build folder, so it needs the build step (steps: ${steps})."
+    exit 1
+  fi
   if declare -F machine_check_inputs >/dev/null; then
     machine_check_inputs
   fi
@@ -117,6 +123,13 @@ build_compile_run_plot_cleo() {
   print_configuration "${experiment}"
   ### ---------------------------------------------------- ###
 
+  ### ------------ make clean (build from scratch) ------- ###
+  if [[ "${make_clean}" == true ]]; then
+    source "${common_dir}/clean_build.sh"
+    clean_cleo_build
+  fi
+  ### ---------------------------------------------------- ###
+
   ### --------------------- build CLEO ------------------ ###
   if step_enabled build; then
     source "${common_dir}/build_cleo.sh"
@@ -127,7 +140,7 @@ build_compile_run_plot_cleo() {
   ### ---------------- compile experiment -------------- ###
   if step_enabled compile; then
     source "${common_dir}/compile_cleo.sh"
-    compile_cleo "${executables}" "${make_clean}"
+    compile_cleo "${executables}"
   fi
   ### ---------------------------------------------------- ###
 
