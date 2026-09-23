@@ -17,6 +17,12 @@ compile_cleo() {
 
   ### ---------------- compile executables --------------- ###
 
+  if [[ ! -f "${CLEO_PATH2BUILD}/Makefile" ]]; then
+    echo "Error: no configured build found in ${CLEO_PATH2BUILD}."
+    echo "Run the 'build' step (or build mode) first."
+    exit 1
+  fi
+
   cd ${CLEO_PATH2BUILD} && pwd
 
   if [ "${make_clean}" == "true" ]; then

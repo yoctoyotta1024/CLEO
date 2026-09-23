@@ -5,9 +5,12 @@
 ### gcc 11.2.0 with openmpi 4.1.2, or
 ### intel 2024.2.1 with openmpi 4.1.6 on Levante.
 ### Note: python version used to install yac must match version used to run model.
+###
+### Usage: ./install_yac.sh <root4YAC> [compilername] [python]
 ### ------------------------------------------------------- ###
 
 set -e
+set -o pipefail # surface curl failures instead of masking them behind tar's exit status
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &>/dev/null && pwd )
 
@@ -27,26 +30,28 @@ yac_source=https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/$yac_tag/$yac_version.ta
 source "${SCRIPT_DIR}/levante_packages.sh"
 levante_reset_modules
 
-if [ "${compilername}" == "" ]
-then
-  echo "Bad input, please specify compiler name to build yaxt and yac with"
-  exit 1
-elif [ "${compilername}" == "gcc" ]
-then
-  levante_load_build_stack "${compilername}" "openmp"
-  levante_load_yac_dependencies "${compilername}"
-  netcdf_root=${levante_gcc_netcdf_root}
-  fyaml_root=${levante_gcc_fyaml_root}
-elif [ "${compilername}" == "intel" ]
-then
-  levante_load_build_stack "${compilername}" "openmp"
-  levante_load_yac_dependencies "${compilername}"
-  netcdf_root=${levante_intel_netcdf_root}
-  fyaml_root=${levante_intel_fyaml_root}
-else
-  echo "Bad input, unrecognised compiler name '${compilername}'. Must be 'gcc' or 'intel'"
-  exit 1
-fi
+case "${compilername}" in
+  "")
+    echo "Bad input, please specify compiler name to build yaxt and yac with"
+    exit 1
+    ;;
+  gcc)
+    levante_load_build_stack "${compilername}" "openmp"
+    levante_load_yac_dependencies "${compilername}"
+    netcdf_root=${levante_gcc_netcdf_root}
+    fyaml_root=${levante_gcc_fyaml_root}
+    ;;
+  intel)
+    levante_load_build_stack "${compilername}" "openmp"
+    levante_load_yac_dependencies "${compilername}"
+    netcdf_root=${levante_intel_netcdf_root}
+    fyaml_root=${levante_intel_fyaml_root}
+    ;;
+  *)
+    echo "Bad input, unrecognised compiler name '${compilername}'. Must be 'gcc' or 'intel'"
+    exit 1
+    ;;
+esac
 
 if [[ "${root4YAC}" == "" || "${python}" == "" ]]
 then
@@ -67,7 +72,7 @@ FC="$(command -v mpifort)"
 ### --------------------- install YAXT ------------------- ###
 mkdir ${root4YAC}/${yaxt_version}
 cd ${root4YAC}/${yaxt_version} && pwd
-curl -s -L ${yaxt_source} | tar xvz --strip-components=1
+curl -sS -f -L --retry 5 --retry-all-errors --retry-delay 15 ${yaxt_source} | tar xvz --strip-components=1
 mkdir build && cd build
 ../configure \
   CC=${CC} FC=${FC} \
@@ -83,11 +88,11 @@ make install
 cd ${root4YAC} && rm -rf ${yaxt_version}
 ### ------------------------------------------------------ ###
 
-## --------------------- install YAC -------------------- ###
+### --------------------- install YAC -------------------- ###
 # python bindings made in yac_version directory (note this is not yac directory!)
 mkdir ${root4YAC}/${yac_version}
 cd ${root4YAC}/${yac_version} && pwd
-curl -s -L ${yac_source} | tar xvz --strip-components=1
+curl -sS -f -L --retry 5 --retry-all-errors --retry-delay 15 ${yac_source} | tar xvz --strip-components=1
 mkdir build && cd build
 ../configure \
   CC=${CC} FC=${FC} \

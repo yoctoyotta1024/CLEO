@@ -4,6 +4,8 @@
 ### Running script successfully installs YAC and YAXT for
 ### GCC 14.3.0 with OpenMPI 5.0.8 on Jupiter.
 ### Note: python version used to install yac must match version used to run model.
+###
+### Usage: ./install_yac.sh <root4YAC> [compilername] [python]
 ### ------------------------------------------------------- ###
 
 set -e
@@ -27,21 +29,23 @@ yac_source=https://gitlab.dkrz.de/dkrz-sw/yac/-/archive/$yac_tag/$yac_version.ta
 source "${SCRIPT_DIR}/jupiter_packages.sh"
 jupiter_reset_modules
 
-if [ "${compilername}" == "" ]
-then
-  echo "Bad input, please specify compiler name to build yaxt and yac with"
-  exit 1
-elif [ "${compilername}" == "gcc" ]
-then
-  jupiter_load_build_stack "${compilername}" "openmp"
-  jupiter_load_yac_dependencies "${compilername}"
-  jupiter_load_python "${compilername}" # so venv pythons linked against libpython resolve
-  netcdf_root=${jupiter_gcc_netcdf_root}
-  fyaml_root=${jupiter_gcc_fyaml_root}
-else
-  echo "Bad input, unrecognised compiler name '${compilername}'. Must be 'gcc'"
-  exit 1
-fi
+case "${compilername}" in
+  "")
+    echo "Bad input, please specify compiler name to build yaxt and yac with"
+    exit 1
+    ;;
+  gcc)
+    jupiter_load_build_stack "${compilername}" "openmp"
+    jupiter_load_yac_dependencies "${compilername}"
+    jupiter_load_python "${compilername}" # so venv pythons linked against libpython resolve
+    netcdf_root=${jupiter_gcc_netcdf_root}
+    fyaml_root=${jupiter_gcc_fyaml_root}
+    ;;
+  *)
+    echo "Bad input, unrecognised compiler name '${compilername}'. Must be 'gcc'"
+    exit 1
+    ;;
+esac
 
 if [[ "${root4YAC}" == "" || "${python}" == "" ]]
 then
@@ -78,7 +82,7 @@ make install
 cd ${root4YAC} && rm -rf ${yaxt_version}
 ### ------------------------------------------------------ ###
 
-## --------------------- install YAC -------------------- ###
+### --------------------- install YAC -------------------- ###
 # python bindings made in yac_version directory (note this is not yac directory!)
 mkdir ${root4YAC}/${yac_version}
 cd ${root4YAC}/${yac_version} && pwd

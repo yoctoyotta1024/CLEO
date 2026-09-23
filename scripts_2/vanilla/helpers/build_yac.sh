@@ -1,26 +1,37 @@
 #!/bin/bash
 
+### Sets the YAC cmake flags for building CLEO on vanilla.
+### Requires CLEO_COMPILERNAME, CLEO_CXX_COMPILER and CLEO_YACYAXTROOT to be exported.
+
 set -e
 
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &>/dev/null && pwd )
-
 configure_machine_yac_flags() {
-    source "${SCRIPT_DIR}/vanilla_packages.sh"
-    source "${CLEO_PATH2CLEO}/scripts_2/common/build_yac.sh"
+  local helpers_dir
+  helpers_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
+  local common_dir="${helpers_dir}/../../common"
 
-    case "${CLEO_COMPILERNAME}" in
-        gcc)
-            fyamllib="${vanilla_gcc_fyamllib}"
-            ;;
-        *)
-            echo "Unsupported compiler '${CLEO_COMPILERNAME}'."
-            exit 1
-            ;;
-    esac
+  source "${helpers_dir}/vanilla_packages.sh"
+  source "${common_dir}/build_yac.sh"
+  vanilla_load_yac_dependencies "${CLEO_COMPILERNAME}"
 
-    build_yac "${fyamllib}"
+  ### ---- check compiler is compatible with YAC install ---- ###
+  case "${CLEO_COMPILERNAME}" in
+    gcc)
+      # no fixed toolchain on a vanilla computer: the YAC install must
+      # have been built with the same mpicc/mpic++ found on PATH
+      ;;
+    *)
+      echo "Unsupported compiler '${CLEO_COMPILERNAME}' for YAC on vanilla."
+      exit 1
+      ;;
+  esac
+  ### ------------------------------------------------------ ###
+
+  local fyamllib
+  fyamllib=$(vanilla_fyamllib_for_compiler "${CLEO_COMPILERNAME}")
+  build_yac "${fyamllib}"
 }
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
-    configure_machine_yac_flags "$@"
+  configure_machine_yac_flags "$@"
 fi
