@@ -29,8 +29,7 @@
 ###   as2017 cuspbifurc breakup shima2009 constthermo2d divfree2d
 ###   eurec4a1d rainshaft1d python_bindings
 ###   Note: fromfile, fromfile_irreg and bubble3d need an HPC machine
-###   (levante or jupiter). To install Kokkos Tools use
-###   common/install_kokkos_tools.sh.
+###   (levante or jupiter).
 ### ============================================================ ###
 
 set -e
