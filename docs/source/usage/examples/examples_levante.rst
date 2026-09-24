@@ -57,6 +57,10 @@ You will need to configure ``cpu.sh`` and ``gpu.sh`` in the following ways:
   script with your project account and email address. You may also want to change e.g. the
   ``--time`` or ``--partition``.
 
+  *Note*: the number of threads each example uses is set by ``num_threads`` in its configuration
+  file (e.g. 128 for the constant 2-D thermodynamics example), so make sure it is not larger
+  than the job script's ``--cpus-per-task``.
+
 Instead of editing the job script, you can also set these variables in your terminal, or add them to
 your ``.bashrc`` or ``.bash_profile`` file, before using the job script, e.g.
 
