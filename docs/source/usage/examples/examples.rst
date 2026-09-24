@@ -27,7 +27,7 @@ Running Examples on Different Computers:
 ----------------------------------------
 
 Each example can be run by building Cleo, compiling the relevant executable, and then running the
-example's Python script. There are bash scripts in ``scripts_2/`` to help you to do all this
+example's Python script. There are bash scripts in ``scripts/`` to help you to do all this
 relatively smoothly on DKRZ's Levante HPC, on JSC's JUPITER HPC, or on a generic/arbitrary,
 so-called "vanilla", computer:
 
@@ -45,8 +45,8 @@ How the Bash Scripts Work:
 --------------------------
 
 The bash scripts are organised in the same way for every computer. The steps which are the same
-on all computers are in ``scripts_2/common/``, and each computer has its own directory
-(``scripts_2/vanilla/``, ``scripts_2/levante/`` or ``scripts_2/jupiter/``) containing:
+on all computers are in ``scripts/common/``, and each computer has its own directory
+(``scripts/vanilla/``, ``scripts/levante/`` or ``scripts/jupiter/``) containing:
 
 * ``cpu.sh`` (and ``gpu.sh`` on an HPC): the job script(s) you execute, or submit with ``sbatch``,
   to run one or more of the examples,
@@ -57,7 +57,7 @@ on all computers are in ``scripts_2/common/``, and each computer has its own dir
 * ``helpers/``: the packages (modules) used on that computer, and a script to
   :ref:`install YAC and YAXT<install_yac>`.
 
-Every example is described once, for all computers, in ``scripts_2/common/experiments.sh``. This is
+Every example is described once, for all computers, in ``scripts/common/experiments.sh``. This is
 where you can find (or change) an example's build directory, CMake flags, executable(s),
 Python script and the arguments given to its Python script.
 
@@ -87,7 +87,7 @@ safety, only build directories which contain a ``CMakeCache.txt`` file are delet
 
   .. code-block:: console
 
-    $ scripts_2/[computer]/build_compile_run_plot_cleo.sh [experiment] [buildtype] [compilername] \
+    $ scripts/[computer]/build_compile_run_plot_cleo.sh [experiment] [buildtype] [compilername] \
         [path2CLEO] [path2build] [build_flags] [yacyaxtroot] [enabledebug] [make_clean] \
         [stacksize_limit] [steps]
 
@@ -99,4 +99,4 @@ safety, only build directories which contain a ``CMakeCache.txt`` file are delet
 
   .. code-block:: console
 
-    $ scripts_2/vanilla/build_compile_run_plot_cleo.sh shima2009 openmp gcc $(pwd) /your/path/to/builds "" "" true "" "" build,compile
+    $ scripts/vanilla/build_compile_run_plot_cleo.sh shima2009 openmp gcc $(pwd) /your/path/to/builds "" "" true "" "" build,compile

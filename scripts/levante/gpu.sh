@@ -1,7 +1,8 @@
 #!/bin/bash
-#SBATCH --job-name=cleo_cpu
-#SBATCH --partition=compute
+#SBATCH --job-name=cleo_gpu
+#SBATCH --partition=gpu
 #SBATCH --nodes=1
+#SBATCH --gpus=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=10G
@@ -9,16 +10,16 @@
 #SBATCH --mail-user=<YOUR_EMAIL>
 #SBATCH --mail-type=FAIL
 #SBATCH --account=<YOUR_ACCOUNT>
-#SBATCH --output=./cleo_cpu.%j.out
-#SBATCH --error=./cleo_cpu.%j.out
+#SBATCH --output=./cleo_gpu.%j.out
+#SBATCH --error=./cleo_gpu.%j.out
 
 ### ============================================================ ###
-###                    Levante CPU job script                    ###
+###                    Levante GPU job script                    ###
 ### ============================================================ ###
 ###
 ### Usage:
-###   ./scripts_2/levante/cpu.sh build [experiment] [buildtype] [compilername]
-###   sbatch scripts_2/levante/cpu.sh [all|run] [experiment] [buildtype] [compilername]
+###   ./scripts/levante/gpu.sh build [experiment] [buildtype] [compilername]
+###   sbatch scripts/levante/gpu.sh [all|run] [experiment] [buildtype] [compilername]
 ###
 ###   Run from (or submit from) the CLEO root directory.
 ###
@@ -59,15 +60,15 @@ export CLEO_MACHINE="levante"
 
 # "experiment buildtype compilername"
 experiments=(
-  "as2017 serial gcc"
-  "breakup serial gcc"
-  "constthermo2d openmp gcc"
-  "cuspbifurc threads gcc"
-  "divfree2d openmp gcc"
-  "eurec4a1d threads gcc"
-  "rainshaft1d threads gcc"
-  "shima2009 openmp gcc"
-  "python_bindings openmp gcc"
+  "as2017 cuda gcc"
+  "breakup cuda gcc"
+  "constthermo2d cuda gcc"
+  "cuspbifurc cuda gcc"
+  "divfree2d cuda gcc"
+  "eurec4a1d cuda gcc"
+  "rainshaft1d cuda gcc"
+  "shima2009 cuda gcc"
+  "python_bindings cuda gcc"
   # for a later MPI-heavy test, you can add:
   # "fromfile openmp gcc"
 )
@@ -79,5 +80,5 @@ export CLEO_MAKE_CLEAN="${CLEO_MAKE_CLEAN:-false}"
 run_launcher=()
 ### -------------------------------------------------------- ###
 
-source "${CLEO_PATH2CLEO}/scripts_2/common/run_jobs.sh"
+source "${CLEO_PATH2CLEO}/scripts/common/run_jobs.sh"
 run_cleo_jobs "$@"

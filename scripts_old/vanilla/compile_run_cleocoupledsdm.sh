@@ -59,7 +59,7 @@ echo "### ------------------------------------------- ###"
 ### ---------------- compile executables --------------- ###
 make_clean=false
 rm -f ${executable2run}
-compilecmd="${CLEO_PATH2CLEO}/scripts/vanilla/bash/compile_cleo.sh ${executables} ${make_clean}"
+compilecmd="${CLEO_PATH2CLEO}/scripts_old/vanilla/bash/compile_cleo.sh ${executables} ${make_clean}"
 echo ${compilecmd}
 eval ${compilecmd}
 ### ---------------------------------------------------- ###
@@ -75,7 +75,7 @@ echo "### ------------------------------------------- ###"
 
 ### ------------------- run executable ----------------- ###
 cd ${CLEO_PATH2BUILD} && pwd
-runcmd="${CLEO_PATH2CLEO}/scripts/vanilla/bash/run_cleo.sh ${executable2run} ${configfile}"
+runcmd="${CLEO_PATH2CLEO}/scripts_old/vanilla/bash/run_cleo.sh ${executable2run} ${configfile}"
 echo ${runcmd}
 eval ${runcmd}
 ### -------------------------------------------------- ###

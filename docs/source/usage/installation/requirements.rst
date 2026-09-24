@@ -11,11 +11,11 @@ you to discover.
 
 The full list of packages Cleo uses for builds using the intel or gcc compiler
 on Levante can be found in our
-`levante packages script <https://github.com/yoctoyotta1024/CLEO/blob/main/scripts_2/levante/helpers/levante_packages.sh>`_
+`levante packages script <https://github.com/yoctoyotta1024/CLEO/blob/main/scripts/levante/helpers/levante_packages.sh>`_
 and similarly for JUPITER in our
-`jupiter packages script <https://github.com/yoctoyotta1024/CLEO/blob/main/scripts_2/jupiter/helpers/jupiter_packages.sh>`_.
+`jupiter packages script <https://github.com/yoctoyotta1024/CLEO/blob/main/scripts/jupiter/helpers/jupiter_packages.sh>`_.
 For a generic/arbitrary, so-called "vanilla", computer please refer to our
-`vanilla packages script <https://github.com/yoctoyotta1024/CLEO/blob/main/scripts_2/vanilla/helpers/vanilla_packages.sh>`_
+`vanilla packages script <https://github.com/yoctoyotta1024/CLEO/blob/main/scripts/vanilla/helpers/vanilla_packages.sh>`_
 
 Compilers and MPI
 -----------------

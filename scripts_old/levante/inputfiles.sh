@@ -1,14 +1,26 @@
 #!/bin/bash
+#SBATCH --job-name=inputfiles
+#SBATCH --partition=compute
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=940M
+#SBATCH --time=00:05:00
+#SBATCH --mail-user=clara.bayley@mpimet.mpg.de
+#SBATCH --mail-type=FAIL
+#SBATCH --account=mh0731
+#SBATCH --output=./build/bin/inputfiles_out.%j.out
+#SBATCH --error=./build/bin/inputfiles_err.%j.out
 
 ### ----- You need to edit these lines to set your ----- ###
 ### ----- default compiler and python environment   ---- ###
 ### ----  and paths for CLEO and build directories  ---- ###
 configfile=$1
-path2CLEO=${2:-${CLEO_PATH2CLEO}}
+path2CLEO=${2:-${HOME}/CLEO}
 path2build=${3:-${path2CLEO}/build}
-python=${4:-${CLEO_PYTHON}}
 
-path2scripts=${path2CLEO}/scripts
+path2scripts=${path2CLEO}/scripts_old
+python=/home/m/m300950/CLEO/.venv/bin/python3
 ### ---------------------------------------------------- ###
 
 if [ "${configfile}" == "" ]

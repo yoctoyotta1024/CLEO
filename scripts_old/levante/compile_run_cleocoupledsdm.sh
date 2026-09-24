@@ -77,7 +77,7 @@ echo "### ------------------------------------------- ###"
 ### ---------------- compile executables --------------- ###
 make_clean=false
 rm -f ${executable2run}
-compilecmd="${CLEO_PATH2CLEO}/scripts/levante/bash/compile_cleo.sh ${executables} ${make_clean}"
+compilecmd="${CLEO_PATH2CLEO}/scripts_old/levante/bash/compile_cleo.sh ${executables} ${make_clean}"
 echo ${compilecmd}
 eval ${compilecmd}
 ### ---------------------------------------------------- ###
@@ -93,7 +93,7 @@ echo "### ------------------------------------------- ###"
 
 ### ------------------- run executable ----------------- ###
 cd ${CLEO_PATH2BUILD} && pwd
-runcmd="${CLEO_PATH2CLEO}/scripts/levante/bash/run_cleo.sh ${executable2run} ${configfile} ${stacksize_limit}"
+runcmd="${CLEO_PATH2CLEO}/scripts_old/levante/bash/run_cleo.sh ${executable2run} ${configfile} ${stacksize_limit}"
 echo ${runcmd}
 eval ${runcmd}
 ### -------------------------------------------------- ###

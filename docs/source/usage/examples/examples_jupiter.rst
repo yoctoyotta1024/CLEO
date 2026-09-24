@@ -4,11 +4,11 @@ Examples on JUPITER
 ===================
 
 Having :ref:`installed plotcleo<install_plotcleo>`, the following instructions are intended to guide you
-through running each example using the bash scripts in ``scripts_2/jupiter/``. See
+through running each example using the bash scripts in ``scripts/jupiter/``. See
 :ref:`how the bash scripts work<bashscripts>` for an overview of these scripts.
 
 *Note*: on JUPITER, Cleo is built for the Grace CPUs and, with the GPU job script
-``scripts_2/jupiter/gpu.sh``, for the Hopper GPUs of the booster partition. Both job scripts
+``scripts/jupiter/gpu.sh``, for the Hopper GPUs of the booster partition. Both job scripts
 therefore run on the booster partition.
 
 .. _configurebash_jupiter:
@@ -16,8 +16,8 @@ therefore run on the booster partition.
 Configure the Bash Scripts
 --------------------------
 
-Every example is run with the same job script, ``scripts_2/jupiter/cpu.sh``
-(or ``scripts_2/jupiter/gpu.sh`` to use GPUs).
+Every example is run with the same job script, ``scripts/jupiter/cpu.sh``
+(or ``scripts/jupiter/gpu.sh`` to use GPUs).
 Before using it for the first time, you will need to set the paths in the section at the top of
 the script marked ``paths (EDIT THESE FOR YOUR SITE)``:
 
@@ -101,7 +101,7 @@ From your Cleo directory, submit the job script to Slurm:
 
 .. code-block:: console
 
-  $ sbatch scripts_2/jupiter/cpu.sh [mode] [experiment] [buildtype] [compilername]
+  $ sbatch scripts/jupiter/cpu.sh [mode] [experiment] [buildtype] [compilername]
 
 (or ``gpu.sh`` in place of ``cpu.sh`` to use GPUs). You must submit the job script from your
 Cleo directory, because this is how the job script finds Cleo.
@@ -119,15 +119,15 @@ All the arguments are optional:
   they are not given, the defaults for JUPITER are used.
 
   *Note*: this is also true for the GPU job script, so when you choose an example with ``gpu.sh``
-  also give the ``cuda`` build configuration, e.g. ``sbatch scripts_2/jupiter/gpu.sh all constthermo2d cuda``.
+  also give the ``cuda`` build configuration, e.g. ``sbatch scripts/jupiter/gpu.sh all constthermo2d cuda``.
 
 For example, to build Cleo and compile the executable for the constant 2-D thermodynamics
 example on a login node, and then submit a job to run and plot it:
 
 .. code-block:: console
 
-  $ scripts_2/jupiter/cpu.sh build constthermo2d
-  $ sbatch scripts_2/jupiter/cpu.sh run constthermo2d
+  $ scripts/jupiter/cpu.sh build constthermo2d
+  $ sbatch scripts/jupiter/cpu.sh run constthermo2d
 
 
 The Examples
@@ -151,7 +151,7 @@ The Examples
 
     .. code-block:: console
 
-      $ sbatch scripts_2/jupiter/cpu.sh all as2017
+      $ sbatch scripts/jupiter/cpu.sh all as2017
 
     The plot produced, by default called ``${CLEO_PATH2BUILD}/build_adia0d/as2017/bin/as2017fig.png``, should be
     similar to figure 5 from Arabas and Shima 2017 :cite:`arabasshima2017`.
@@ -165,7 +165,7 @@ The Examples
 
     .. code-block:: console
 
-      $ sbatch scripts_2/jupiter/cpu.sh all cuspbifurc
+      $ sbatch scripts/jupiter/cpu.sh all cuspbifurc
 
     The plots produced, by default called ``${CLEO_PATH2BUILD}/build_adia0d/cuspbifurc/bin/cuspbifurc_validation.png`` and
     ``${CLEO_PATH2BUILD}/build_adia0d/cuspbifurc/bin/cuspbifurc_SDgrowth.png`` illustrate an example of cusp bifurcation, analagous
@@ -242,11 +242,11 @@ The Examples
 
     .. code-block:: console
 
-      $ sbatch scripts_2/jupiter/cpu.sh all shima2009
+      $ sbatch scripts/jupiter/cpu.sh all shima2009
 
     By default the golovin exectuable and two examples using the long executable will be compiled and
     run. You can change this by editing ``--kernels golovin long1 long2`` in the ``shima2009`` entry
-    of ``scripts_2/common/experiments.sh``.
+    of ``scripts/common/experiments.sh``.
 
     **Golovin**
 
@@ -274,11 +274,11 @@ The Examples
 
     .. code-block:: console
 
-      $ sbatch scripts_2/jupiter/cpu.sh all breakup
+      $ sbatch scripts/jupiter/cpu.sh all breakup
 
     By default kernels including collision-coalescence, breakup and rebound will be compiled and
     run. You can change this by editing ``--kernels long lowlist szakallurbich testikstraub`` in the
-    ``breakup`` entry of ``scripts_2/common/experiments.sh``.
+    ``breakup`` entry of ``scripts/common/experiments.sh``.
 
 
 .. dropdown:: Divergence Free Motion
@@ -292,7 +292,7 @@ The Examples
 
   .. code-block:: console
 
-    $ sbatch scripts_2/jupiter/cpu.sh all divfree2d
+    $ sbatch scripts/jupiter/cpu.sh all divfree2d
 
   This example plots the motion of super-droplets without a terminal velocity in a 2-D divergence
   free wind field. It produces a plot showing the motion of a sample of super-droplets, by default
@@ -315,7 +315,7 @@ The Examples
 
     .. code-block:: console
 
-      $ sbatch scripts_2/jupiter/cpu.sh all rainshaft1d
+      $ sbatch scripts/jupiter/cpu.sh all rainshaft1d
 
     Several plots and animations are produced by this example. If you would like to compare to our
     reference solutions please :ref:`contact us <contact>`.
@@ -334,7 +334,7 @@ The Examples
 
     .. code-block:: console
 
-      $ sbatch scripts_2/jupiter/cpu.sh all eurec4a1d
+      $ sbatch scripts/jupiter/cpu.sh all eurec4a1d
 
 
 .. dropdown:: Constant 2-D Thermodynamics
@@ -348,7 +348,7 @@ The Examples
 
   .. code-block:: console
 
-    $ sbatch scripts_2/jupiter/cpu.sh all constthermo2d
+    $ sbatch scripts/jupiter/cpu.sh all constthermo2d
 
   Several plots and animations are produced by this example. If you would like to compare to our
   reference solutions please :ref:`contact us <contact>`.
@@ -361,7 +361,7 @@ The Examples
   ``examples/fromfile_irreg/`` are for a 3-D domain with time varying thermodynamics read from
   binary files. The ``fromfile_irreg.py`` example uses an irregular 3-D grid. These examples run
   the executable with MPI via ``srun``, by default with 4 MPI processes (``--ntasks=4`` in their
-  entries of ``scripts_2/common/experiments.sh``).
+  entries of ``scripts/common/experiments.sh``).
 
   .. dropdown:: a) Regular Grid
     :animate: fade-in-slide-down
@@ -372,7 +372,7 @@ The Examples
 
     .. code-block:: console
 
-      $ sbatch scripts_2/jupiter/cpu.sh all fromfile
+      $ sbatch scripts/jupiter/cpu.sh all fromfile
 
     The plots produced, by default called ``${CLEO_PATH2BUILD}/build_fromfile/bin/ntasks4/fromfile_motion2d_validation.png``
     and ``${CLEO_PATH2BUILD}/build_fromfile/bin/ntasks4/fromfile_maxnsupers_validation.png``, show the motion of a
@@ -387,7 +387,7 @@ The Examples
 
     .. code-block:: console
 
-      $ sbatch scripts_2/jupiter/cpu.sh all fromfile_irreg
+      $ sbatch scripts/jupiter/cpu.sh all fromfile_irreg
 
     The plots produced are analagous to the regular grid example's, by default in
     ``${CLEO_PATH2BUILD}/build_fromfile_irreg/bin/ntasks4/``.
@@ -408,7 +408,7 @@ The Examples
 
   .. code-block:: console
 
-    $ sbatch scripts_2/jupiter/cpu.sh all bubble3d
+    $ sbatch scripts/jupiter/cpu.sh all bubble3d
 
   Plots of the super-droplets' motion and of the thermodynamics are produced, by default called
   ``${CLEO_PATH2BUILD}/build_bubble3d/bin/bubble_motion.png`` and ``${CLEO_PATH2BUILD}/build_bubble3d/bin/bubble_[variable].png``.
@@ -425,7 +425,7 @@ The Examples
 
   .. code-block:: console
 
-    $ sbatch scripts_2/jupiter/cpu.sh all python_bindings
+    $ sbatch scripts/jupiter/cpu.sh all python_bindings
 
   *Note*: you may have issues with python versions >= 3.14, please
   see :ref:`this note<pybind11>` for details.

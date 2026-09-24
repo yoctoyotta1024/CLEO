@@ -62,7 +62,7 @@ run_cleo_jobs() {
       ;;
   esac
 
-  source "${CLEO_PATH2CLEO}/scripts_2/common/check_inputs.sh"
+  source "${CLEO_PATH2CLEO}/scripts/common/check_inputs.sh"
   check_machine
 
   local make_clean="${CLEO_MAKE_CLEAN:-false}"
@@ -91,7 +91,7 @@ run_cleo_jobs() {
     exit 1
   fi
 
-  local driver="${CLEO_PATH2CLEO}/scripts_2/${CLEO_MACHINE}/build_compile_run_plot_cleo.sh"
+  local driver="${CLEO_PATH2CLEO}/scripts/${CLEO_MACHINE}/build_compile_run_plot_cleo.sh"
 
   local entries=()
   if [[ -n "${experiment}" ]]; then

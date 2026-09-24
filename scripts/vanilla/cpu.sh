@@ -1,27 +1,14 @@
 #!/bin/bash
-#SBATCH --job-name=cleo_gpu
-#SBATCH --partition=gpu
-#SBATCH --nodes=1
-#SBATCH --gpus=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=1
-#SBATCH --mem=10G
-#SBATCH --time=00:30:00
-#SBATCH --mail-user=<YOUR_EMAIL>
-#SBATCH --mail-type=FAIL
-#SBATCH --account=<YOUR_ACCOUNT>
-#SBATCH --output=./cleo_gpu.%j.out
-#SBATCH --error=./cleo_gpu.%j.out
 
 ### ============================================================ ###
-###                    Levante GPU job script                    ###
+###                    Vanilla CPU job script                    ###
 ### ============================================================ ###
 ###
 ### Usage:
-###   ./scripts_2/levante/gpu.sh build [experiment] [buildtype] [compilername]
-###   sbatch scripts_2/levante/gpu.sh [all|run] [experiment] [buildtype] [compilername]
+###   ./scripts/vanilla/cpu.sh build [experiment] [buildtype] [compilername]
+###   ./scripts/vanilla/cpu.sh [all|run] [experiment] [buildtype] [compilername]
 ###
-###   Run from (or submit from) the CLEO root directory.
+###   Run from the CLEO root directory.
 ###
 ### Modes:
 ###   all    configure, compile, run + plot (default)    (steps: all)
@@ -50,27 +37,15 @@ export CLEO_PATH2BUILD="${CLEO_PATH2BUILD:-<PATH/TO/BUILD/ROOT>}"
 ### -------------------------------------------------------- ###
 
 ### ---------------------- environment --------------------- ###
-source /etc/profile
-module purge
-spack unload --all
+# no module system: mpic++, mpicc and cmake must already be on PATH
 ### -------------------------------------------------------- ###
 
 ### --------------------- configuration -------------------- ###
-export CLEO_MACHINE="levante"
+export CLEO_MACHINE="vanilla"
 
 # "experiment buildtype compilername"
 experiments=(
-  "as2017 cuda gcc"
-  "breakup cuda gcc"
-  "constthermo2d cuda gcc"
-  "cuspbifurc cuda gcc"
-  "divfree2d cuda gcc"
-  "eurec4a1d cuda gcc"
-  "rainshaft1d cuda gcc"
-  "shima2009 cuda gcc"
-  "python_bindings cuda gcc"
-  # for a later MPI-heavy test, you can add:
-  # "fromfile openmp gcc"
+  "as2017 serial gcc"
 )
 
 # true: delete each experiment's build folder first and rebuild from scratch
@@ -80,5 +55,5 @@ export CLEO_MAKE_CLEAN="${CLEO_MAKE_CLEAN:-false}"
 run_launcher=()
 ### -------------------------------------------------------- ###
 
-source "${CLEO_PATH2CLEO}/scripts_2/common/run_jobs.sh"
+source "${CLEO_PATH2CLEO}/scripts/common/run_jobs.sh"
 run_cleo_jobs "$@"
