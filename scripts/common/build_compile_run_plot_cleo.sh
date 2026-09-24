@@ -9,7 +9,7 @@
 ###   build_compile_run_plot_cleo "$@"
 ###
 ### Machine configuration (set by the machine script):
-###   CLEO_MACHINE                 machine name (folder in scripts_2/)
+###   CLEO_MACHINE                 machine name (folder in scripts/)
 ###   machine_default_buildtype    default for $2
 ###   machine_buildtypes=(...)     supported build types
 ###   machine_compilers=(...)      supported compiler names

@@ -1,21 +1,24 @@
 #!/bin/bash
 #SBATCH --job-name=cleo_cpu
-#SBATCH --partition=booster
+#SBATCH --partition=compute
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=288
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=10G
 #SBATCH --time=00:30:00
-#SBATCH --account=xspies
+#SBATCH --mail-user=<YOUR_EMAIL>
+#SBATCH --mail-type=FAIL
+#SBATCH --account=<YOUR_ACCOUNT>
 #SBATCH --output=./cleo_cpu.%j.out
 #SBATCH --error=./cleo_cpu.%j.out
 
 ### ============================================================ ###
-###                    Jupiter CPU job script                    ###
+###                    Levante CPU job script                    ###
 ### ============================================================ ###
 ###
 ### Usage:
-###   ./scripts_2/jupiter/cpu.sh build [experiment] [buildtype] [compilername]
-###   sbatch scripts_2/jupiter/cpu.sh [all|run] [experiment] [buildtype] [compilername]
+###   ./scripts/levante/cpu.sh build [experiment] [buildtype] [compilername]
+###   sbatch scripts/levante/cpu.sh [all|run] [experiment] [buildtype] [compilername]
 ###
 ###   Run from (or submit from) the CLEO root directory.
 ###
@@ -47,24 +50,34 @@ export CLEO_PATH2BUILD="${CLEO_PATH2BUILD:-<PATH/TO/BUILD/ROOT>}"
 
 ### ---------------------- environment --------------------- ###
 source /etc/profile
-# Required if the .venv does not use the default environment.
-module load Stages/2026 Python/3.13.5
+module purge
+spack unload --all
 ### -------------------------------------------------------- ###
 
 ### --------------------- configuration -------------------- ###
-export CLEO_MACHINE="jupiter"
+export CLEO_MACHINE="levante"
 
 # "experiment buildtype compilername"
 experiments=(
+  "as2017 serial gcc"
+  "breakup serial gcc"
   "constthermo2d openmp gcc"
+  "cuspbifurc threads gcc"
+  "divfree2d openmp gcc"
+  "eurec4a1d threads gcc"
+  "rainshaft1d threads gcc"
+  "shima2009 openmp gcc"
+  "python_bindings openmp gcc"
+  # for a later MPI-heavy test, you can add:
+  # "fromfile openmp gcc"
 )
 
 # true: delete each experiment's build folder first and rebuild from scratch
 export CLEO_MAKE_CLEAN="${CLEO_MAKE_CLEAN:-false}"
 
 # command prefix for run mode (e.g. srun), empty to run directly
-run_launcher=(srun --exclusive --ntasks=1 --cpus-per-task="${SLURM_CPUS_PER_TASK}")
+run_launcher=()
 ### -------------------------------------------------------- ###
 
-source "${CLEO_PATH2CLEO}/scripts_2/common/run_jobs.sh"
+source "${CLEO_PATH2CLEO}/scripts/common/run_jobs.sh"
 run_cleo_jobs "$@"

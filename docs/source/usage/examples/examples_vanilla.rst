@@ -4,7 +4,7 @@ Examples on "Vanilla" Computers
 ===============================
 
 Having :ref:`installed plotcleo<install_plotcleo>`, the following instructions are intended to guide you
-through running each example using the bash scripts in ``scripts_2/vanilla/``. See
+through running each example using the bash scripts in ``scripts/vanilla/``. See
 :ref:`how the bash scripts work<bashscripts>` for an overview of these scripts.
 
 *Note*: the ``fromfile``, ``fromfile_irreg`` and ``bubble3d`` examples need an HPC with Slurm
@@ -16,7 +16,7 @@ through running each example using the bash scripts in ``scripts_2/vanilla/``. S
 Configure the Bash Scripts
 --------------------------
 
-Every example is run with the same job script, ``scripts_2/vanilla/cpu.sh``.
+Every example is run with the same job script, ``scripts/vanilla/cpu.sh``.
 Before using it for the first time, you will need to set the paths in the section at the top of
 the script marked ``paths (EDIT THESE FOR YOUR SITE)``:
 
@@ -108,7 +108,7 @@ From your Cleo directory, execute the job script:
 
 .. code-block:: console
 
-  $ scripts_2/vanilla/cpu.sh [mode] [experiment] [buildtype] [compilername]
+  $ scripts/vanilla/cpu.sh [mode] [experiment] [buildtype] [compilername]
 
 All the arguments are optional:
 
@@ -127,14 +127,14 @@ example using OpenMP:
 
 .. code-block:: console
 
-  $ scripts_2/vanilla/cpu.sh all as2017 openmp
+  $ scripts/vanilla/cpu.sh all as2017 openmp
 
 and then, having changed e.g. the example's configuration file, to recompile, run and plot it
 again without reconfiguring Cleo:
 
 .. code-block:: console
 
-  $ scripts_2/vanilla/cpu.sh run as2017 openmp
+  $ scripts/vanilla/cpu.sh run as2017 openmp
 
 
 The Examples
@@ -158,7 +158,7 @@ The Examples
 
     .. code-block:: console
 
-      $ scripts_2/vanilla/cpu.sh all as2017
+      $ scripts/vanilla/cpu.sh all as2017
 
     The plot produced, by default called ``${CLEO_PATH2BUILD}/build_adia0d/as2017/bin/as2017fig.png``, should be
     similar to figure 5 from Arabas and Shima 2017 :cite:`arabasshima2017`.
@@ -172,7 +172,7 @@ The Examples
 
     .. code-block:: console
 
-      $ scripts_2/vanilla/cpu.sh all cuspbifurc
+      $ scripts/vanilla/cpu.sh all cuspbifurc
 
     The plots produced, by default called ``${CLEO_PATH2BUILD}/build_adia0d/cuspbifurc/bin/cuspbifurc_validation.png`` and
     ``${CLEO_PATH2BUILD}/build_adia0d/cuspbifurc/bin/cuspbifurc_SDgrowth.png`` illustrate an example of cusp bifurcation, analagous
@@ -249,11 +249,11 @@ The Examples
 
     .. code-block:: console
 
-      $ scripts_2/vanilla/cpu.sh all shima2009
+      $ scripts/vanilla/cpu.sh all shima2009
 
     By default the golovin exectuable and two examples using the long executable will be compiled and
     run. You can change this by editing ``--kernels golovin long1 long2`` in the ``shima2009`` entry
-    of ``scripts_2/common/experiments.sh``.
+    of ``scripts/common/experiments.sh``.
 
     **Golovin**
 
@@ -281,11 +281,11 @@ The Examples
 
     .. code-block:: console
 
-      $ scripts_2/vanilla/cpu.sh all breakup
+      $ scripts/vanilla/cpu.sh all breakup
 
     By default kernels including collision-coalescence, breakup and rebound will be compiled and
     run. You can change this by editing ``--kernels long lowlist szakallurbich testikstraub`` in the
-    ``breakup`` entry of ``scripts_2/common/experiments.sh``.
+    ``breakup`` entry of ``scripts/common/experiments.sh``.
 
 
 .. dropdown:: Divergence Free Motion
@@ -299,7 +299,7 @@ The Examples
 
   .. code-block:: console
 
-    $ scripts_2/vanilla/cpu.sh all divfree2d
+    $ scripts/vanilla/cpu.sh all divfree2d
 
   This example plots the motion of super-droplets without a terminal velocity in a 2-D divergence
   free wind field. It produces a plot showing the motion of a sample of super-droplets, by default
@@ -322,7 +322,7 @@ The Examples
 
     .. code-block:: console
 
-      $ scripts_2/vanilla/cpu.sh all rainshaft1d
+      $ scripts/vanilla/cpu.sh all rainshaft1d
 
     Several plots and animations are produced by this example. If you would like to compare to our
     reference solutions please :ref:`contact us <contact>`.
@@ -341,7 +341,7 @@ The Examples
 
     .. code-block:: console
 
-      $ scripts_2/vanilla/cpu.sh all eurec4a1d
+      $ scripts/vanilla/cpu.sh all eurec4a1d
 
 
 .. dropdown:: Constant 2-D Thermodynamics
@@ -355,7 +355,7 @@ The Examples
 
   .. code-block:: console
 
-    $ scripts_2/vanilla/cpu.sh all constthermo2d
+    $ scripts/vanilla/cpu.sh all constthermo2d
 
   Several plots and animations are produced by this example. If you would like to compare to our
   reference solutions please :ref:`contact us <contact>`.
@@ -372,7 +372,7 @@ The Examples
 
   .. code-block:: console
 
-    $ scripts_2/vanilla/cpu.sh all python_bindings
+    $ scripts/vanilla/cpu.sh all python_bindings
 
   *Note*: you may have issues with python versions >= 3.14, please
   see :ref:`this note<pybind11>` for details.

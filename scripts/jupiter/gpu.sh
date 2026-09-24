@@ -15,8 +15,8 @@
 ### ============================================================ ###
 ###
 ### Usage:
-###   ./scripts_2/jupiter/gpu.sh build [experiment] [buildtype] [compilername]
-###   sbatch scripts_2/jupiter/gpu.sh [all|run] [experiment] [buildtype] [compilername]
+###   ./scripts/jupiter/gpu.sh build [experiment] [buildtype] [compilername]
+###   sbatch scripts/jupiter/gpu.sh [all|run] [experiment] [buildtype] [compilername]
 ###
 ###   Run from (or submit from) the CLEO root directory.
 ###
@@ -67,5 +67,5 @@ export CLEO_MAKE_CLEAN="${CLEO_MAKE_CLEAN:-false}"
 run_launcher=()
 ### -------------------------------------------------------- ###
 
-source "${CLEO_PATH2CLEO}/scripts_2/common/run_jobs.sh"
+source "${CLEO_PATH2CLEO}/scripts/common/run_jobs.sh"
 run_cleo_jobs "$@"
