@@ -12,13 +12,16 @@ find more information about it from `its documentation <https://dkrz-sw.gitlab-p
 To build Cleo with dependency on YAC, you will first need to install YAXT and YAC manually.
 (YAXT is a dependency of YAC.)
 
+.. _install_yac:
+
 How to Install YAC (and YAXT)
 #############################
 
 To help install YAXT and YAC, we have created bash scripts for installation on
-DKRZ's Levante HPC or on a generic/arbitrary, so-called "vanilla", computer in
-``scripts/levante/bash/`` and ``scripts/vanilla/bash/`` respectively. First you need to ensure
-your python version has pip installed first, e.g. with ``uv`` via
+DKRZ's Levante HPC, on JSC's JUPITER HPC, or on a generic/arbitrary, so-called "vanilla", computer in
+``scripts_2/levante/helpers/``, ``scripts_2/jupiter/helpers/`` and ``scripts_2/vanilla/helpers/``
+respectively. First you need to ensure your python version has pip installed first, e.g. with
+``uv`` via
 
 .. code-block:: console
 
@@ -40,26 +43,36 @@ interpreter you want to use for YAC's python bindings.
   .. code-block:: console
 
     $ mkdir -p /work/mh0731/m300950/yacyaxt/intel/
-    $ scripts/levante/bash/install_yac.sh /work/mh0731/m300950/yacyaxt/intel/ intel /home/m/m300950/CLEO/.venv/bin/python3
+    $ scripts_2/levante/helpers/install_yac.sh /work/mh0731/m300950/yacyaxt/intel/ intel /home/m/m300950/CLEO/.venv/bin/python3
 
   for gcc:
 
   .. code-block:: console
 
     $ mkdir -p /work/mh0731/m300950/yacyaxt/gcc/
-    $ scripts/levante/bash/install_yac.sh /work/mh0731/m300950/yacyaxt/gcc/ gcc /home/m/m300950/CLEO/.venv/bin/python3
+    $ scripts_2/levante/helpers/install_yac.sh /work/mh0731/m300950/yacyaxt/gcc/ gcc /home/m/m300950/CLEO/.venv/bin/python3
+
+
+.. admonition:: E.g. On JUPITER
+
+  for gcc (the only compiler for YAC on JUPITER, with OpenMPI 5.0.8):
+
+  .. code-block:: console
+
+    $ mkdir -p /your/path/to/yacyaxt/gcc/
+    $ scripts_2/jupiter/helpers/install_yac.sh /your/path/to/yacyaxt/gcc/ gcc /your/path/to/CLEO/.venv/bin/python3
 
 
 .. admonition:: E.g. On "vanilla" computer
 
   (With a gcc compiler:) First you may need to edit the paths to certain packages
-  in ``scripts/vanilla/bash/vanilla_packages.sh`` to match your system setup. You may also need to install YAC/YAXT's
+  in ``scripts_2/vanilla/helpers/vanilla_packages.sh`` to match your system setup. You may also need to install YAC/YAXT's
   dependencies, `as described in YAC's documentation <https://dkrz-sw.gitlab-pages.dkrz.de/yac/d1/d9f/installing_yac.html>`_
   Then you should be able to run:
 
   .. code-block:: console
 
-    $ scripts/vanilla/bash/install_yac.sh ${CLEO_YACYAXTROOT} gcc ${CLEO_PYTHON}
+    $ scripts_2/vanilla/helpers/install_yac.sh ${CLEO_YACYAXTROOT} gcc ${CLEO_PYTHON}
 
 
 Alternatively you can download `YAXT <https://swprojects.dkrz.de/redmine/>`_ and
@@ -77,7 +90,8 @@ For jupiter builds, the machine-specific configuration enables the Grace CPU arc
 (``Kokkos_ARCH_ARMV9_GRACE``). CUDA builds additionally enable the Hopper GPU architecture
 (``Kokkos_ARCH_HOPPER90``) and OpenMP as the host parallel backend. If the Kokkos architecture
 or backend settings are changed, reconfigure from a clean build directory or clear the existing
-CMake cache first.
+CMake cache first (e.g. with ``CLEO_MAKE_CLEAN=true``, see
+:ref:`how the bash scripts work<bashscripts>`).
 
 yaml-cpp
 --------
