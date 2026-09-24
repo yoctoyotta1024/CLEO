@@ -11,6 +11,11 @@ through running each example using the bash scripts in ``scripts/jupiter/``. See
 ``scripts/jupiter/gpu.sh``, for the Hopper GPUs of the booster partition. Both job scripts
 therefore run on the booster partition.
 
+*Note*: JUPITER's compute nodes have no internet access, but building Cleo does (CMake downloads
+some of Cleo's dependencies, e.g. Kokkos). So always build Cleo and compile the examples on a
+login node with the ``build`` mode, and then submit a job with the ``run`` mode. This is also
+true when building from scratch with ``CLEO_MAKE_CLEAN=true``.
+
 .. _configurebash_jupiter:
 
 Configure the Bash Scripts
@@ -75,7 +80,7 @@ You can optionally configure the job script in the following ways:
 
 * Choose which examples to run:
 
-  edit the ``experiments`` list in the ``configuration`` section of the job script. Each entry
+  edit the ``examples`` list in the ``configuration`` section of the job script. Each entry
   states an example, its build configuration and its compiler, e.g. ``"as2017 serial gcc"``. You
   can instead choose one example when you submit the job script (see below).
 
@@ -105,7 +110,7 @@ From your Cleo directory, submit the job script to Slurm:
 
 .. code-block:: console
 
-  $ sbatch scripts/jupiter/cpu.sh [mode] [experiment] [buildtype] [compilername]
+  $ sbatch scripts/jupiter/cpu.sh [mode] [example] [buildtype] [compilername]
 
 (or ``gpu.sh`` in place of ``cpu.sh`` to use GPUs). You must submit the job script from your
 Cleo directory, because this is how the job script finds Cleo.
@@ -116,14 +121,15 @@ All the arguments are optional:
   compiles, and ``run`` recompiles, runs and plots using an existing build (see
   :ref:`how the bash scripts work<bashscripts>`).
 
-* ``experiment``: the example to run. If it is not given, every example in the job script's
-  ``experiments`` list is run.
+* ``example``: the example to run. If it is not given, every example in the job script's
+  ``examples`` list is run.
 
 * ``buildtype`` and ``compilername``: the build configuration and compiler for the example. If
   they are not given, the defaults for JUPITER are used.
 
   *Note*: this is also true for the GPU job script, so when you choose an example with ``gpu.sh``
-  also give the ``cuda`` build configuration, e.g. ``sbatch scripts/jupiter/gpu.sh all constthermo2d cuda``.
+  also give the ``cuda`` build configuration, e.g. ``scripts/jupiter/gpu.sh build constthermo2d cuda``
+  and then ``sbatch scripts/jupiter/gpu.sh run constthermo2d cuda``.
 
 For example, to build Cleo and compile the executable for the constant 2-D thermodynamics
 example on a login node, and then submit a job to run and plot it:
@@ -151,11 +157,13 @@ The Examples
 
     1. :ref:`Configure the bash scripts<configurebash_jupiter>`.
 
-    2. Submit the job script, e.g. from your Cleo directory:
+    2. Build Cleo and compile the example on a login node, then submit the job script to run
+    and plot it, e.g. from your Cleo directory:
 
     .. code-block:: console
 
-      $ sbatch scripts/jupiter/cpu.sh all as2017
+      $ scripts/jupiter/cpu.sh build as2017
+      $ sbatch scripts/jupiter/cpu.sh run as2017
 
     The plot produced, by default called ``${CLEO_PATH2BUILD}/build_adia0d/as2017/bin/as2017fig.png``, should be
     similar to figure 5 from Arabas and Shima 2017 :cite:`arabasshima2017`.
@@ -165,11 +173,13 @@ The Examples
 
     1. :ref:`Configure the bash scripts<configurebash_jupiter>`.
 
-    2. Submit the job script, e.g. from your Cleo directory:
+    2. Build Cleo and compile the example on a login node, then submit the job script to run
+    and plot it, e.g. from your Cleo directory:
 
     .. code-block:: console
 
-      $ sbatch scripts/jupiter/cpu.sh all cuspbifurc
+      $ scripts/jupiter/cpu.sh build cuspbifurc
+      $ sbatch scripts/jupiter/cpu.sh run cuspbifurc
 
     The plots produced, by default called ``${CLEO_PATH2BUILD}/build_adia0d/cuspbifurc/bin/cuspbifurc_validation.png`` and
     ``${CLEO_PATH2BUILD}/build_adia0d/cuspbifurc/bin/cuspbifurc_SDgrowth.png`` illustrate an example of cusp bifurcation, analagous
@@ -242,15 +252,17 @@ The Examples
 
     1. :ref:`Configure the bash scripts<configurebash_jupiter>`.
 
-    2. Submit the job script, e.g. from your Cleo directory:
+    2. Build Cleo and compile the example on a login node, then submit the job script to run
+    and plot it, e.g. from your Cleo directory:
 
     .. code-block:: console
 
-      $ sbatch scripts/jupiter/cpu.sh all shima2009
+      $ scripts/jupiter/cpu.sh build shima2009
+      $ sbatch scripts/jupiter/cpu.sh run shima2009
 
     By default the golovin exectuable and two examples using the long executable will be compiled and
     run. You can change this by editing ``--kernels golovin long1 long2`` in the ``shima2009`` entry
-    of ``scripts/common/experiments.sh``.
+    of ``scripts/common/examples.sh``.
 
     **Golovin**
 
@@ -274,15 +286,17 @@ The Examples
 
     1. :ref:`Configure the bash scripts<configurebash_jupiter>`.
 
-    2. Submit the job script, e.g. from your Cleo directory:
+    2. Build Cleo and compile the example on a login node, then submit the job script to run
+    and plot it, e.g. from your Cleo directory:
 
     .. code-block:: console
 
-      $ sbatch scripts/jupiter/cpu.sh all breakup
+      $ scripts/jupiter/cpu.sh build breakup
+      $ sbatch scripts/jupiter/cpu.sh run breakup
 
     By default kernels including collision-coalescence, breakup and rebound will be compiled and
     run. You can change this by editing ``--kernels long lowlist szakallurbich testikstraub`` in the
-    ``breakup`` entry of ``scripts/common/experiments.sh``.
+    ``breakup`` entry of ``scripts/common/examples.sh``.
 
 
 .. dropdown:: Divergence Free Motion
@@ -292,11 +306,13 @@ The Examples
 
   1. :ref:`Configure the bash scripts<configurebash_jupiter>`.
 
-  2. Submit the job script, e.g. from your Cleo directory:
+  2. Build Cleo and compile the example on a login node, then submit the job script to run
+  and plot it, e.g. from your Cleo directory:
 
   .. code-block:: console
 
-    $ sbatch scripts/jupiter/cpu.sh all divfree2d
+    $ scripts/jupiter/cpu.sh build divfree2d
+    $ sbatch scripts/jupiter/cpu.sh run divfree2d
 
   This example plots the motion of super-droplets without a terminal velocity in a 2-D divergence
   free wind field. It produces a plot showing the motion of a sample of super-droplets, by default
@@ -315,11 +331,13 @@ The Examples
 
     1. :ref:`Configure the bash scripts<configurebash_jupiter>`.
 
-    2. Submit the job script, e.g. from your Cleo directory:
+    2. Build Cleo and compile the example on a login node, then submit the job script to run
+    and plot it, e.g. from your Cleo directory:
 
     .. code-block:: console
 
-      $ sbatch scripts/jupiter/cpu.sh all rainshaft1d
+      $ scripts/jupiter/cpu.sh build rainshaft1d
+      $ sbatch scripts/jupiter/cpu.sh run rainshaft1d
 
     Several plots and animations are produced by this example. If you would like to compare to our
     reference solutions please :ref:`contact us <contact>`.
@@ -334,11 +352,13 @@ The Examples
 
     1. :ref:`Configure the bash scripts<configurebash_jupiter>`.
 
-    2. Submit the job script, e.g. from your Cleo directory:
+    2. Build Cleo and compile the example on a login node, then submit the job script to run
+    and plot it, e.g. from your Cleo directory:
 
     .. code-block:: console
 
-      $ sbatch scripts/jupiter/cpu.sh all eurec4a1d
+      $ scripts/jupiter/cpu.sh build eurec4a1d
+      $ sbatch scripts/jupiter/cpu.sh run eurec4a1d
 
 
 .. dropdown:: Constant 2-D Thermodynamics
@@ -348,11 +368,13 @@ The Examples
 
   1. :ref:`Configure the bash scripts<configurebash_jupiter>`.
 
-  2. Submit the job script, e.g. from your Cleo directory:
+  2. Build Cleo and compile the example on a login node, then submit the job script to run
+  and plot it, e.g. from your Cleo directory:
 
   .. code-block:: console
 
-    $ sbatch scripts/jupiter/cpu.sh all constthermo2d
+    $ scripts/jupiter/cpu.sh build constthermo2d
+    $ sbatch scripts/jupiter/cpu.sh run constthermo2d
 
   Several plots and animations are produced by this example. If you would like to compare to our
   reference solutions please :ref:`contact us <contact>`.
@@ -365,18 +387,20 @@ The Examples
   ``examples/fromfile_irreg/`` are for a 3-D domain with time varying thermodynamics read from
   binary files. The ``fromfile_irreg.py`` example uses an irregular 3-D grid. These examples run
   the executable with MPI via ``srun``, by default with 4 MPI processes (``--ntasks=4`` in their
-  entries of ``scripts/common/experiments.sh``).
+  entries of ``scripts/common/examples.sh``).
 
   .. dropdown:: a) Regular Grid
     :animate: fade-in-slide-down
 
     1. :ref:`Configure the bash scripts<configurebash_jupiter>`.
 
-    2. Submit the job script, e.g. from your Cleo directory:
+    2. Build Cleo and compile the example on a login node, then submit the job script to run
+    and plot it, e.g. from your Cleo directory:
 
     .. code-block:: console
 
-      $ sbatch scripts/jupiter/cpu.sh all fromfile
+      $ scripts/jupiter/cpu.sh build fromfile
+      $ sbatch scripts/jupiter/cpu.sh run fromfile
 
     The plots produced, by default called ``${CLEO_PATH2BUILD}/build_fromfile/bin/ntasks4/fromfile_motion2d_validation.png``
     and ``${CLEO_PATH2BUILD}/build_fromfile/bin/ntasks4/fromfile_maxnsupers_validation.png``, show the motion of a
@@ -387,11 +411,13 @@ The Examples
 
     1. :ref:`Configure the bash scripts<configurebash_jupiter>`.
 
-    2. Submit the job script, e.g. from your Cleo directory:
+    2. Build Cleo and compile the example on a login node, then submit the job script to run
+    and plot it, e.g. from your Cleo directory:
 
     .. code-block:: console
 
-      $ sbatch scripts/jupiter/cpu.sh all fromfile_irreg
+      $ scripts/jupiter/cpu.sh build fromfile_irreg
+      $ sbatch scripts/jupiter/cpu.sh run fromfile_irreg
 
     The plots produced are analagous to the regular grid example's, by default in
     ``${CLEO_PATH2BUILD}/build_fromfile_irreg/bin/ntasks4/``.
@@ -408,11 +434,13 @@ The Examples
 
   1. :ref:`Configure the bash scripts<configurebash_jupiter>`.
 
-  2. Submit the job script, e.g. from your Cleo directory:
+  2. Build Cleo and compile the example on a login node, then submit the job script to run
+  and plot it, e.g. from your Cleo directory:
 
   .. code-block:: console
 
-    $ sbatch scripts/jupiter/cpu.sh all bubble3d
+    $ scripts/jupiter/cpu.sh build bubble3d
+    $ sbatch scripts/jupiter/cpu.sh run bubble3d
 
   Plots of the super-droplets' motion and of the thermodynamics are produced, by default called
   ``${CLEO_PATH2BUILD}/build_bubble3d/bin/bubble_motion.png`` and ``${CLEO_PATH2BUILD}/build_bubble3d/bin/bubble_[variable].png``.
@@ -425,11 +453,13 @@ The Examples
 
   1. :ref:`Configure the bash scripts<configurebash_jupiter>`.
 
-  2. Submit the job script, e.g. from your Cleo directory:
+  2. Build Cleo and compile the example on a login node, then submit the job script to run
+  and plot it, e.g. from your Cleo directory:
 
   .. code-block:: console
 
-    $ sbatch scripts/jupiter/cpu.sh all python_bindings
+    $ scripts/jupiter/cpu.sh build python_bindings
+    $ sbatch scripts/jupiter/cpu.sh run python_bindings
 
   *Note*: you may have issues with python versions >= 3.14, please
   see :ref:`this note<pybind11>` for details.

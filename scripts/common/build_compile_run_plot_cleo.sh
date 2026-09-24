@@ -13,29 +13,29 @@
 ###   machine_default_buildtype    default for $2
 ###   machine_buildtypes=(...)     supported build types
 ###   machine_compilers=(...)      supported compiler names
-###   machine_experiments=(...)    supported experiments
+###   machine_examples=(...)    supported examples
 ###   machine_default_stacksize    default for $10 ("" = leave unchanged)
 ###   machine_default_make_jobs    default for CLEO_MAKE_JOBS
 ###   machine_check_inputs()       optional extra validation
 ###
 ### Arguments (identical on every machine, all optional):
-###   $1  experiment       Name of experiment                  (default: as2017)
+###   $1  example       Name of example                  (default: as2017)
 ###   $2  buildtype        see machine script                  (default: machine)
 ###   $3  compilername     see machine script                  (default: gcc)
 ###   $4  path2CLEO        Absolute path to CLEO source        (default: $CLEO_PATH2CLEO, else $HOME/CLEO)
-###   $5  path2build       Build root folder; the experiment builds in
+###   $5  path2build       Build root folder; the example builds in
 ###                        <path2build>/build_xxx  (default: path2CLEO)
-###   $6  build_flags      Extra CMake flags                   (default: experiment)
+###   $6  build_flags      Extra CMake flags                   (default: example)
 ###   $7  yacyaxtroot      Path to YAC+YAXT installation       (default: $CLEO_YACYAXTROOT, else $HOME/yacyaxt/<compilername>)
 ###   $8  enabledebug      true | false                        (default: false)
 ###   $9  make_clean       true | false                        (default: false)
-###                        true deletes the experiment's build folder before the
+###                        true deletes the example's build folder before the
 ###                        build step, i.e. builds from scratch (needs the build step)
 ###   $10 stacksize_limit  ulimit -s value (kB)                (default: machine)
 ###   $11 steps            build,compile,run,plot,all          (default: all)
 ###
 ### Environment:
-###   CLEO_PYTHON     python to run the experiment scripts (default: <path2CLEO>/.venv/bin/python3)
+###   CLEO_PYTHON     python to run the example scripts (default: <path2CLEO>/.venv/bin/python3)
 ###   CLEO_MAKE_JOBS  parallel make jobs                   (default: machine)
 ### ============================================================ ###
 
@@ -62,7 +62,7 @@ build_compile_run_plot_cleo() {
   check_machine
 
   ### ---------------- read arguments ------------------ ###
-  experiment=${1:-as2017}
+  example=${1:-as2017}
   buildtype=${2:-${machine_default_buildtype}}
   compilername=${3:-gcc}
   path2CLEO=${4:-${CLEO_PATH2CLEO:-${HOME}/CLEO}}
@@ -80,7 +80,7 @@ build_compile_run_plot_cleo() {
     echo "Error: CLEO source directory not found: ${path2CLEO}"
     exit 1
   fi
-  check_value_in_list experiment "${experiment}" "${machine_experiments[@]}"
+  check_value_in_list example "${example}" "${machine_examples[@]}"
   check_value_in_list buildtype "${buildtype}" "${machine_buildtypes[@]}"
   check_value_in_list compilername "${compilername}" "${machine_compilers[@]}"
   check_value_in_list enabledebug "${enabledebug}" true false
@@ -104,15 +104,15 @@ build_compile_run_plot_cleo() {
   export CLEO_MAKE_JOBS=${CLEO_MAKE_JOBS:-${machine_default_make_jobs}}
   export CLEO_PYTHON=${CLEO_PYTHON:-${path2CLEO}/.venv/bin/python3}
 
-  source "${common_dir}/experiments.sh"
-  load_experiment_config "${path2build_override}" "${build_flags_override}" "${experiment}"
+  source "${common_dir}/examples.sh"
+  load_example_config "${path2build_override}" "${build_flags_override}" "${example}"
 
   check_args_not_empty "${CLEO_BUILDTYPE}" "${CLEO_COMPILERNAME}" "${CLEO_PATH2CLEO}" \
                        "${CLEO_PATH2BUILD}" "${CLEO_BUILD_FLAGS}" "${CLEO_YACYAXTROOT}" \
                        "${CLEO_ENABLEDEBUG}"
 
   source "${common_dir}/print_configuration.sh"
-  print_configuration "${experiment}"
+  print_configuration "${example}"
   ### ---------------------------------------------------- ###
 
   ### ------------ make clean (build from scratch) ------- ###
@@ -129,7 +129,7 @@ build_compile_run_plot_cleo() {
   fi
   ### ---------------------------------------------------- ###
 
-  ### ---------------- compile experiment -------------- ###
+  ### ---------------- compile example -------------- ###
   if step_enabled compile; then
     if ! step_enabled build; then
       # the build step loads the machine's toolchain (modules), so without it
@@ -156,13 +156,13 @@ build_compile_run_plot_cleo() {
       exit 1
     fi
 
-    # experiment's python args (from experiments.sh); each stage adds its own --do_* flag
+    # example's python args (from examples.sh); each stage adds its own --do_* flag
     python_args=()
     read -r -a python_args <<< "${script_args:-}"
   fi
   ### ---------------------------------------------------- ###
 
-  ### ------------- run / plot experiment -------------- ###
+  ### ------------- run / plot example -------------- ###
   if step_enabled run; then
     run_python_stage --do_inputfiles
     run_python_stage --do_run_executable

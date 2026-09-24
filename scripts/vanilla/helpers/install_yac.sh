@@ -2,7 +2,7 @@
 
 ### ------------------------------------------------------- ###
 ### Running script successfully installs YAC and YAXT for
-### a gcc compiler with openmpi on a "vanilla" computer.
+### a gcc compiler with openmpi on a "vanilla" machine.
 ### Note: python version used to install yac must match version used to run model.
 ###
 ### Usage: ./install_yac.sh <root4YAC> [compilername] [python]

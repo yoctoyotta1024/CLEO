@@ -1,6 +1,6 @@
 .. _examples_vanilla:
 
-Examples on "Vanilla" Computers
+Examples on "Vanilla" Machines
 ===============================
 
 Having :ref:`installed plotcleo<install_plotcleo>`, the following instructions are intended to guide you
@@ -61,7 +61,7 @@ The job script stops with an error if any of these paths are still set to their 
 placeholders. *Note*: ``CLEO_PATH2CLEO`` is the directory you execute the job script from, so
 always execute it from your Cleo directory.
 
-.. admonition:: On a vanilla computer, Cleo uses the MPI compiler wrappers ``mpic++`` and ``mpicc``
+.. admonition:: On a vanilla machine, Cleo uses the MPI compiler wrappers ``mpic++`` and ``mpicc``
    (and ``cmake``) found in your ``PATH``, skipping any which do not work (e.g. broken wrappers
    from Anaconda). On some systems you may need to specify the compilers used by these wrappers.
    For example, on a Mac with Homebrew-installed OpenMPI and GCC-16, to prevent the clang
@@ -79,7 +79,7 @@ You can optionally configure the job script in the following ways:
 
 * Choose which examples to run:
 
-  edit the ``experiments`` list in the ``configuration`` section of the job script. Each entry
+  edit the ``examples`` list in the ``configuration`` section of the job script. Each entry
   states an example, its build configuration and its compiler, e.g. ``"as2017 serial gcc"``. You
   can instead choose one example when you execute the job script (see below).
 
@@ -91,7 +91,7 @@ You can optionally configure the job script in the following ways:
 * Choose your compiler:
 
   choose which compilers to use via the ``compilername``. The only option on a vanilla
-  computer is ``gcc`` (via MPI wrappers).
+  machine is ``gcc`` (via MPI wrappers).
 
 * Build from scratch:
 
@@ -108,7 +108,7 @@ From your Cleo directory, execute the job script:
 
 .. code-block:: console
 
-  $ scripts/vanilla/cpu.sh [mode] [experiment] [buildtype] [compilername]
+  $ scripts/vanilla/cpu.sh [mode] [example] [buildtype] [compilername]
 
 All the arguments are optional:
 
@@ -116,11 +116,11 @@ All the arguments are optional:
   compiles, and ``run`` recompiles, runs and plots using an existing build (see
   :ref:`how the bash scripts work<bashscripts>`).
 
-* ``experiment``: the example to run. If it is not given, every example in the job script's
-  ``experiments`` list is run.
+* ``example``: the example to run. If it is not given, every example in the job script's
+  ``examples`` list is run.
 
 * ``buildtype`` and ``compilername``: the build configuration and compiler for the example. If
-  they are not given, the defaults for a vanilla computer are used.
+  they are not given, the defaults for a vanilla machine are used.
 
 For example, to build Cleo, compile the executable, run and plot the Arabas and Shima 2017
 example using OpenMP:
@@ -253,7 +253,7 @@ The Examples
 
     By default the golovin exectuable and two examples using the long executable will be compiled and
     run. You can change this by editing ``--kernels golovin long1 long2`` in the ``shima2009`` entry
-    of ``scripts/common/experiments.sh``.
+    of ``scripts/common/examples.sh``.
 
     **Golovin**
 
@@ -285,7 +285,7 @@ The Examples
 
     By default kernels including collision-coalescence, breakup and rebound will be compiled and
     run. You can change this by editing ``--kernels long lowlist szakallurbich testikstraub`` in the
-    ``breakup`` entry of ``scripts/common/experiments.sh``.
+    ``breakup`` entry of ``scripts/common/examples.sh``.
 
 
 .. dropdown:: Divergence Free Motion

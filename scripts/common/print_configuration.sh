@@ -1,15 +1,15 @@
 #!/bin/bash
 
-### Usage: print_configuration <experiment>
+### Usage: print_configuration <example>
 ###
 ### Prints the current build configuration to stdout.
 
 print_configuration() {
-  local experiment_name=$1
+  local example_name=$1
 
   echo "### --------------- User Inputs -------------- ###"
   echo "CLEO_MACHINE = ${CLEO_MACHINE}"
-  echo "EXPERIMENT = ${experiment_name}"
+  echo "EXAMPLE = ${example_name}"
   echo "CLEO_BUILDTYPE = ${CLEO_BUILDTYPE}"
   echo "CLEO_COMPILERNAME = ${CLEO_COMPILERNAME}"
   echo "CLEO_PATH2CLEO = ${CLEO_PATH2CLEO}"

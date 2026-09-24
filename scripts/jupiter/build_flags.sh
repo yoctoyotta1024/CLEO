@@ -20,6 +20,7 @@ configure_machine_build_flags() {
   source "${machine_dir}/helpers/jupiter_packages.sh"
   jupiter_reset_modules
   jupiter_load_build_stack "${CLEO_COMPILERNAME}" "${CLEO_BUILDTYPE}"
+  jupiter_load_python "${CLEO_COMPILERNAME}" # so a venv python linked against libpython runs (e.g. for CMake)
 
   source "${common_dir}/mpi_compilers.sh"
   configure_mpi_compilers
