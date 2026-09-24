@@ -382,42 +382,6 @@ The Examples
   time-stepping may not be ordered due to parallel execution.
 
 
-.. dropdown:: (*Removed since v0.68.3*) Kokkos Tools Profiling Test
-  :animate: fade-in
-
-  This example, ``kokkostools.py``, in ``examples/kokkostools/`` compiles and runs the same
-  executable ``kokkostools`` for three different build configurations, (1) "openmp" with only OpenMP
-  parallelism, (2) "threads" with only C++ threads parallelism, and (3) "serial" without parallelism.
-  Using the (pre-installed) Kokkos tooks' Kernel Timer profiler, this example then outputs the time
-  taken for each run in various ones of Cleo's kernels.
-
-  Before running this example, you must first install the Kokkos tools libraries. You can use the
-  bash script ``scripts/vanilla/bash/install_kokkos_tools.sh`` to help you. E.g. with a gcc compiler:
-
-  .. code-block:: console
-
-    $ cd /your/path/to/kokkos-tools-repo/ && git clone git@github.com:kokkos/kokkos-tools.git
-    $ scripts/vanilla/bash/install_kokkos_tools.sh /your/path/to/kokkos-tools-repo/ gcc ${CLEO_KOKKOSTOOLS}
-
-
-  1. :ref:`Configure the bash scripts<configurebash_vanilla>`, ``scripts/vanilla/examples/build_compile_run_plot.sh``
-  and ``scripts/vanilla/examples/kokkostools.sh``. You will need to set the
-  ``path2kokkostools`` variable to the path where you installed your Kokkos tools
-  (path to ``lib`` or ``lib64`` and ``bin``).
-
-  2. Execute the bash script ``kokkostools.sh``, e.g.
-
-  .. code-block:: console
-
-    $ scripts/vanilla/examples/kokkostools.sh
-
-  By default, a .txt file with Kokkos' simple kernel timer profiling tool data for two runs of each
-  of the four different build configurations is written to
-  ``~/CLEO/build_kokkostools/bin/[build_type]_[run_number]_[process_info].txt``.
-  The time spent in the "timestep" region can be compared with the ones
-  in ``~/CLEO/examples/kokkostools/kokkostools_kpkerneltimer_example_solution``.
-
-
 Extension
 ---------
 Explore ``examples/exampleplotting`` which gives examples of how to plot output from Cleo

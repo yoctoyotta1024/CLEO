@@ -37,7 +37,6 @@
 ### Environment:
 ###   CLEO_PYTHON     python to run the experiment scripts (default: <path2CLEO>/.venv/bin/python3)
 ###   CLEO_MAKE_JOBS  parallel make jobs                   (default: machine)
-###   NSYS_PREFIX     command prefix (e.g. a profiler) for the executable run only
 ### ============================================================ ###
 
 set -e
@@ -48,16 +47,9 @@ step_enabled() {
 
 run_python_stage() {
   local flag="$1"
-  local prefix=()
 
-  if [[ "${flag}" == --do_run_executable && -n "${NSYS_PREFIX:-}" ]]; then
-    read -r -a prefix <<< "${NSYS_PREFIX}"
-    echo "Running (profiled): ${NSYS_PREFIX} ${CLEO_PYTHON} ${pythonscript} ${flag}"
-  else
-    echo "Running: ${CLEO_PYTHON} ${pythonscript} ${flag}"
-  fi
-
-  "${prefix[@]}" "${CLEO_PYTHON}" "${pythonscript}" \
+  echo "Running: ${CLEO_PYTHON} ${pythonscript} ${flag}"
+  "${CLEO_PYTHON}" "${pythonscript}" \
     "${path2CLEO}" "${CLEO_PATH2BUILD}" "${python_args[@]}" "${flag}"
 }
 
