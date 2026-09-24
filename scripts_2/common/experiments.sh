@@ -42,8 +42,7 @@ case "${experiment}" in
 
     pythonscript=${path2CLEO}/examples/adiabaticparcel/as2017.py
     src_config_filename=${path2CLEO}/examples/adiabaticparcel/src/config/as2017_config.yaml
-    script_args="${src_config_filename} \
-      --do_inputfiles --do_run_executable --do_plot_results"
+    script_args="${src_config_filename}"
     ;;
 
   breakup)
@@ -53,8 +52,7 @@ case "${experiment}" in
 
     pythonscript=${path2CLEO}/examples/boxmodelcollisions/breakup.py
     src_config_filename=${path2CLEO}/examples/boxmodelcollisions/src/config/breakup_config.yaml
-    script_args="${src_config_filename} --kernels long lowlist szakallurbich testikstraub \
-      --do_inputfiles --do_run_executable --do_plot_results"
+    script_args="${src_config_filename} --kernels long lowlist szakallurbich testikstraub"
     ;;
 
   bubble3d)
@@ -64,8 +62,7 @@ case "${experiment}" in
 
     pythonscript=${path2CLEO}/examples/bubble3d/bubble3d.py
     src_config_filename=${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml
-    script_args="${src_config_filename} \
-      --do_inputfiles --do_run_executable --do_plot_results"
+    script_args="${src_config_filename}"
     ;;
 
   constthermo2d)
@@ -75,8 +72,7 @@ case "${experiment}" in
 
     pythonscript=${path2CLEO}/examples/constthermo2d/constthermo2d.py
     src_config_filename=${path2CLEO}/examples/constthermo2d/src/config/const2d_config.yaml
-    script_args="${src_config_filename} \
-      --do_inputfiles --do_run_executable --do_plot_results"
+    script_args="${src_config_filename}"
     ;;
 
   cuspbifurc)
@@ -86,8 +82,7 @@ case "${experiment}" in
 
     pythonscript=${path2CLEO}/examples/adiabaticparcel/cuspbifurc.py
     src_config_filename=${path2CLEO}/examples/adiabaticparcel/src/config/cuspbifurc_config.yaml
-    script_args="${src_config_filename} \
-      --do_inputfiles --do_run_executable --do_plot_results"
+    script_args="${src_config_filename}"
     ;;
 
   divfree2d)
@@ -97,8 +92,7 @@ case "${experiment}" in
 
     pythonscript=${path2CLEO}/examples/divfreemotion/divfree2d.py
     src_config_filename=${path2CLEO}/examples/divfreemotion/src/config/divfree2d_config.yaml
-    script_args="${src_config_filename} \
-      --do_inputfiles --do_run_executable --do_plot_results"
+    script_args="${src_config_filename}"
     ;;
 
   eurec4a1d)
@@ -108,8 +102,7 @@ case "${experiment}" in
 
     pythonscript=${path2CLEO}/examples/eurec4a1d/eurec4a1d.py
     src_config_filename=${path2CLEO}/examples/eurec4a1d/src/config/eurec4a1d_config.yaml
-    script_args="${src_config_filename} \
-      --do_inputfiles --do_run_executable --do_plot_results"
+    script_args="${src_config_filename}"
     ;;
 
   fromfile)
@@ -119,8 +112,7 @@ case "${experiment}" in
 
     pythonscript=${path2CLEO}/examples/fromfile/fromfile.py
     src_config_filename=${path2CLEO}/examples/fromfile/src/config/fromfile_config.yaml
-    script_args="${src_config_filename} \
-      --do_inputfiles --do_run_executable --do_plot_results --ntasks=4"
+    script_args="${src_config_filename} --ntasks=4"
     ;;
 
   fromfile_irreg)
@@ -130,8 +122,7 @@ case "${experiment}" in
 
     pythonscript=${path2CLEO}/examples/fromfile_irreg/fromfile_irreg.py
     src_config_filename=${path2CLEO}/examples/fromfile_irreg/src/config/fromfile_irreg_config.yaml
-    script_args="${src_config_filename} \
-      --do_inputfiles --do_run_executable --do_plot_results --ntasks=4"
+    script_args="${src_config_filename} --ntasks=4"
     ;;
 
   python_bindings)
@@ -142,8 +133,7 @@ case "${experiment}" in
 
     pythonscript=${path2CLEO}/examples/python_bindings/python_bindings.py
     src_config_filename=${path2CLEO}/examples/python_bindings/src/config/pybind_config.yaml
-    script_args="${src_config_filename} \
-      --do_inputfiles --do_run_executable --do_plot_results"
+    script_args="${src_config_filename}"
     ;;
 
   rainshaft1d)
@@ -153,8 +143,7 @@ case "${experiment}" in
 
     pythonscript=${path2CLEO}/examples/rainshaft1d/rainshaft1d.py
     src_config_filename=${path2CLEO}/examples/rainshaft1d/src/config/rshaft1d_config.yaml
-    script_args="${src_config_filename} \
-      --do_inputfiles --do_run_executable --do_plot_results"
+    script_args="${src_config_filename}"
     ;;
 
   shima2009)
@@ -164,8 +153,7 @@ case "${experiment}" in
 
     pythonscript=${path2CLEO}/examples/boxmodelcollisions/shima2009.py
     src_config_filename=${path2CLEO}/examples/boxmodelcollisions/src/config/shima2009_config.yaml
-    script_args="${src_config_filename} --kernels golovin long1 long2 \
-      --do_inputfiles --do_run_executable --do_plot_results"
+    script_args="${src_config_filename} --kernels golovin long1 long2"
     ;;
 
   *)
