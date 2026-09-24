@@ -131,6 +131,12 @@ build_compile_run_plot_cleo() {
 
   ### ---------------- compile experiment -------------- ###
   if step_enabled compile; then
+    if ! step_enabled build; then
+      # the build step loads the machine's toolchain (modules), so without it
+      # load the toolchain here before compiling
+      source "${machine_dir}/build_flags.sh"
+      configure_machine_build_flags
+    fi
     source "${common_dir}/compile_cleo.sh"
     compile_cleo "${executables}"
   fi
