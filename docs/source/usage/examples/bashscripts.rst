@@ -58,14 +58,13 @@ For example, ``sbatch scripts/levante/cpu.sh all constthermo2d`` does the follow
 
 1) ``scripts/levante/cpu.sh`` sets the paths (``CLEO_PATH2CLEO``, ``CLEO_PYTHON``,
    ``CLEO_YACYAXTROOT`` and ``CLEO_PATH2BUILD``), the computer's environment (e.g. modules), its
-   ``experiments`` list, ``CLEO_MAKE_CLEAN`` and its ``run_launcher``, and then calls
-   ``run_cleo_jobs`` from ``scripts/common/run_jobs.sh``.
+   ``experiments`` list and ``CLEO_MAKE_CLEAN``, and then calls ``run_cleo_jobs`` from
+   ``scripts/common/run_jobs.sh``.
 
 2) ``run_cleo_jobs`` turns the mode into steps (``all``, ``build,compile`` or
    ``compile,run,plot``), checks the paths are not ``<...>`` placeholders, and then, for the given
    example or every entry of the ``experiments`` list, calls the computer's
-   ``build_compile_run_plot_cleo.sh`` (prefixed by ``run_launcher``, e.g. ``srun``, in the ``all``
-   and ``run`` modes).
+   ``build_compile_run_plot_cleo.sh``.
 
 3) ``scripts/levante/build_compile_run_plot_cleo.sh`` sets which build types, compilers and
    examples Levante supports and its defaults, and then calls ``build_compile_run_plot_cleo`` from
@@ -137,8 +136,7 @@ Where Do I Change...?
      - the example's entry in ``load_experiment_config`` in ``scripts/common/experiments.sh``
    * - the CMake flags common to most examples
      - ``cleo_common_flags`` in ``scripts/common/experiments.sh``
-   * - the Slurm options, which examples a job runs, the paths, ``CLEO_MAKE_CLEAN`` or the
-       ``run_launcher``
+   * - the Slurm options, which examples a job runs, the paths or ``CLEO_MAKE_CLEAN``
      - the job script, ``scripts/[computer]/cpu.sh`` or ``gpu.sh``
    * - the modes of the job scripts
      - ``run_cleo_jobs`` in ``scripts/common/run_jobs.sh``
@@ -248,8 +246,8 @@ Adding a New Computer
    ``machine_compilers``, ``machine_experiments``, ``machine_default_stacksize`` and
    ``machine_default_make_jobs``. Optionally define ``machine_check_inputs`` for any extra checks.
 
-5. In the job script(s), set ``CLEO_MACHINE``, the Slurm options, the environment, the
-   ``experiments`` list and the ``run_launcher``.
+5. In the job script(s), set ``CLEO_MACHINE``, the Slurm options, the environment and the
+   ``experiments`` list.
 
 6. Update ``helpers/install_yac.sh`` for the computer, and add a page for it to these docs.
 

@@ -4,7 +4,8 @@
 #SBATCH --nodes=1
 #SBATCH --gpus=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=1
+#SBATCH --cpus-per-task=32
+#SBATCH --hint=nomultithread
 #SBATCH --mem=10G
 #SBATCH --time=00:30:00
 #SBATCH --mail-user=<YOUR_EMAIL>
@@ -75,9 +76,6 @@ experiments=(
 
 # true: delete each experiment's build folder first and rebuild from scratch
 export CLEO_MAKE_CLEAN="${CLEO_MAKE_CLEAN:-false}"
-
-# command prefix for run mode (e.g. srun), empty to run directly
-run_launcher=()
 ### -------------------------------------------------------- ###
 
 source "${CLEO_PATH2CLEO}/scripts/common/run_jobs.sh"

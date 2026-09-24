@@ -62,9 +62,6 @@ experiments=(
 
 # true: delete each experiment's build folder first and rebuild from scratch
 export CLEO_MAKE_CLEAN="${CLEO_MAKE_CLEAN:-false}"
-
-# command prefix for run mode (e.g. srun), empty to run directly
-run_launcher=()
 ### -------------------------------------------------------- ###
 
 source "${CLEO_PATH2CLEO}/scripts/common/run_jobs.sh"

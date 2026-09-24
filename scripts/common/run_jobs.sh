@@ -27,7 +27,6 @@
 ###   CLEO_PATH2BUILD    build root: experiments build in <CLEO_PATH2BUILD>/build_xxx
 ###   CLEO_MAKE_CLEAN    true | false: delete build folders first (default: false)
 ###   experiments=(...)  default list of "experiment buildtype compilername"
-###   run_launcher=(...) optional command prefix for run mode (e.g. srun ...)
 ### ============================================================ ###
 
 set -e
@@ -40,7 +39,6 @@ run_cleo_jobs() {
 
   local steps
   local action
-  local launcher=()
   case "${mode}" in
     build)
       steps="build,compile"
@@ -49,12 +47,10 @@ run_cleo_jobs() {
     run)
       steps="compile,run,plot"
       action="Running"
-      launcher=("${run_launcher[@]}")
       ;;
     all)
       steps="all"
       action="Building + running"
-      launcher=("${run_launcher[@]}")
       ;;
     *)
       echo "Usage: $0 [all|build|run] [experiment] [buildtype] [compilername]"
@@ -108,7 +104,7 @@ run_cleo_jobs() {
     echo
     echo "=== ${action} ${e} (${b:-default buildtype}, ${c:-default compiler}) ==="
     echo
-    "${launcher[@]}" "${driver}" "${e}" "${b}" "${c}" "${CLEO_PATH2CLEO}" \
+    "${driver}" "${e}" "${b}" "${c}" "${CLEO_PATH2CLEO}" \
       "${CLEO_PATH2BUILD}" "" "${CLEO_YACYAXTROOT}" "" "${make_clean}" "" "${steps}"
   done
 }
