@@ -158,17 +158,9 @@ build_compile_run_plot_cleo() {
       exit 1
     fi
 
-    # strip stage flags from the experiment's args; each stage adds its own
-    local experiment_args
-    read -r -a experiment_args <<< "${script_args:-}"
+    # experiment's python args (from experiments.sh); each stage adds its own --do_* flag
     python_args=()
-    local arg
-    for arg in "${experiment_args[@]}"; do
-      case "${arg}" in
-        --do_inputfiles|--do_run_executable|--do_plot_results) ;;
-        *) python_args+=("${arg}") ;;
-      esac
-    done
+    read -r -a python_args <<< "${script_args:-}"
   fi
   ### ---------------------------------------------------- ###
 
