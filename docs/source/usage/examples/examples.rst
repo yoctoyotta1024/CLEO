@@ -100,6 +100,3 @@ safety, only build directories which contain a ``CMakeCache.txt`` file are delet
   .. code-block:: console
 
     $ scripts_2/vanilla/build_compile_run_plot_cleo.sh shima2009 openmp gcc $(pwd) /your/path/to/builds "" "" true "" "" build,compile
-
-  *hint*: to profile only the run of the executable(s), e.g. with Nsight Systems, set
-  ``NSYS_PREFIX`` to the command which should prefix it, e.g. ``export NSYS_PREFIX="nsys profile"``.

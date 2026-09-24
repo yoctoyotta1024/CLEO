@@ -24,7 +24,6 @@
 ###   make_clean       true deletes the build folder first (build from scratch).
 ###   steps            build,compile,run,plot,all (default: all)
 ###                    The run stage generates input files and runs the executable.
-###                    Set NSYS_PREFIX to profile only the executable run.
 ###
 ### Supported experiments (see common/experiments.sh for full details):
 ###   as2017 cuspbifurc breakup shima2009 constthermo2d divfree2d
