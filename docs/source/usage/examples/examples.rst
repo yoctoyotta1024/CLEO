@@ -79,6 +79,14 @@ To build an example from scratch, i.e. to delete its build directory before conf
 with CMake again, set ``CLEO_MAKE_CLEAN=true`` when using the ``all`` or ``build`` modes. For
 safety, only build directories which contain a ``CMakeCache.txt`` file are deleted.
 
+For a detailed description of the bash scripts, e.g. where to change the compiler flags or how to
+add a new example or computer, see:
+
+.. toctree::
+   :maxdepth: 1
+
+   bashscripts
+
 .. dropdown:: Using ``build_compile_run_plot_cleo.sh`` directly
   :animate: fade-in
 
