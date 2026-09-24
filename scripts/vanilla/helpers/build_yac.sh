@@ -17,7 +17,7 @@ configure_machine_yac_flags() {
   ### ---- check compiler is compatible with YAC install ---- ###
   case "${CLEO_COMPILERNAME}" in
     gcc)
-      # no fixed toolchain on a vanilla computer: the YAC install must
+      # no fixed toolchain on a vanilla machine: the YAC install must
       # have been built with the same mpicc/mpic++ found on PATH
       ;;
     *)

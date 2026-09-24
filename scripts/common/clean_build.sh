@@ -1,6 +1,6 @@
 #!/bin/bash
 
-### Deletes an experiment's build folder so the next build starts from scratch.
+### Deletes an example's build folder so the next build starts from scratch.
 ### Requires CLEO_PATH2BUILD and CLEO_PATH2CLEO to be exported.
 ###
 ### For safety it only deletes a folder that contains a CMakeCache.txt, and

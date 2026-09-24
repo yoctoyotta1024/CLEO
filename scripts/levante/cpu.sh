@@ -18,8 +18,8 @@
 ### ============================================================ ###
 ###
 ### Usage:
-###   ./scripts/levante/cpu.sh build [experiment] [buildtype] [compilername]
-###   sbatch scripts/levante/cpu.sh [all|run] [experiment] [buildtype] [compilername]
+###   ./scripts/levante/cpu.sh build [example] [buildtype] [compilername]
+###   sbatch scripts/levante/cpu.sh [all|run] [example] [buildtype] [compilername]
 ###
 ###   Run from (or submit from) the CLEO root directory.
 ###
@@ -29,9 +29,9 @@
 ###   run    recompile, run + plot (needs a prior build) (steps: compile,run,plot)
 ###
 ### Set CLEO_MAKE_CLEAN=true below (or export it) to delete each
-### experiment's build folder and rebuild from scratch (all and build modes).
+### example's build folder and rebuild from scratch (all and build modes).
 ###
-### Without an experiment, every entry in 'experiments' below is used.
+### Without an example, every entry in 'examples' below is used.
 ### An empty buildtype/compilername uses the machine default.
 ###
 ### Paths: edit the 'paths' section below before first use.
@@ -42,7 +42,7 @@ set -e
 ### ------------- paths (EDIT THESE FOR YOUR SITE) ---------- ###
 # Resolve paths from the submission directory while allowing site-specific overrides.
 # Replace the <...> placeholders (or export the variables before running/submitting).
-# CLEO_PATH2BUILD is a build root: each experiment builds in <CLEO_PATH2BUILD>/build_xxx
+# CLEO_PATH2BUILD is a build root: each example builds in <CLEO_PATH2BUILD>/build_xxx
 export CLEO_PATH2CLEO="${SLURM_SUBMIT_DIR:-$(pwd)}"
 export CLEO_PYTHON="${CLEO_PYTHON:-${CLEO_PATH2CLEO}/.venv/bin/python3}"
 export CLEO_YACYAXTROOT="${CLEO_YACYAXTROOT:-<PATH/TO/YACYAXT/INSTALL>}"
@@ -58,8 +58,8 @@ spack unload --all
 ### --------------------- configuration -------------------- ###
 export CLEO_MACHINE="levante"
 
-# "experiment buildtype compilername"
-experiments=(
+# "example buildtype compilername"
+examples=(
   "as2017 serial gcc"
   "breakup serial gcc"
   "constthermo2d openmp gcc"
@@ -73,7 +73,7 @@ experiments=(
   # "fromfile openmp gcc"
 )
 
-# true: delete each experiment's build folder first and rebuild from scratch
+# true: delete each example's build folder first and rebuild from scratch
 export CLEO_MAKE_CLEAN="${CLEO_MAKE_CLEAN:-false}"
 ### -------------------------------------------------------- ###
 

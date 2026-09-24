@@ -5,13 +5,13 @@
 ### ============================================================ ###
 ###
 ### Usage:
-###   ./build_compile_run_plot_cleo.sh [experiment] [buildtype] [compilername] \
+###   ./build_compile_run_plot_cleo.sh [example] [buildtype] [compilername] \
 ###                                    [path2CLEO] [path2build] [build_flags] \
 ###                                    [yacyaxtroot] [enabledebug] [make_clean] \
 ###                                    [stacksize_limit] [steps]
 ###
 ###   All arguments are optional; pass "" to keep a default.
-###   path2build is a build root: the experiment builds in <path2build>/build_xxx.
+###   path2build is a build root: the example builds in <path2build>/build_xxx.
 ###   The arguments are the same on every machine, see
 ###   common/build_compile_run_plot_cleo.sh for their full description.
 ###
@@ -25,7 +25,7 @@
 ###   steps            build,compile,run,plot,all (default: all)
 ###                    The run stage generates input files and runs the executable.
 ###
-### Supported experiments (see common/experiments.sh for full details):
+### Supported examples (see common/examples.sh for full details):
 ###   as2017 cuspbifurc breakup shima2009 constthermo2d divfree2d
 ###   eurec4a1d rainshaft1d python_bindings
 ###   Note: fromfile, fromfile_irreg and bubble3d need an HPC machine
@@ -39,7 +39,7 @@ export CLEO_MACHINE="vanilla"
 machine_default_buildtype="serial"
 machine_buildtypes=(serial threads openmp)
 machine_compilers=(gcc)
-machine_experiments=(
+machine_examples=(
   as2017 cuspbifurc breakup shima2009 constthermo2d divfree2d
   eurec4a1d rainshaft1d python_bindings
 )

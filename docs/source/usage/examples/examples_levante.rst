@@ -77,7 +77,7 @@ You can optionally configure the job script in the following ways:
 
 * Choose which examples to run:
 
-  edit the ``experiments`` list in the ``configuration`` section of the job script. Each entry
+  edit the ``examples`` list in the ``configuration`` section of the job script. Each entry
   states an example, its build configuration and its compiler, e.g. ``"as2017 serial gcc"``. You
   can instead choose one example when you submit the job script (see below).
 
@@ -108,7 +108,7 @@ From your Cleo directory, submit the job script to Slurm:
 
 .. code-block:: console
 
-  $ sbatch scripts/levante/cpu.sh [mode] [experiment] [buildtype] [compilername]
+  $ sbatch scripts/levante/cpu.sh [mode] [example] [buildtype] [compilername]
 
 (or ``gpu.sh`` in place of ``cpu.sh`` to use GPUs). You must submit the job script from your
 Cleo directory, because this is how the job script finds Cleo.
@@ -119,8 +119,8 @@ All the arguments are optional:
   compiles, and ``run`` recompiles, runs and plots using an existing build (see
   :ref:`how the bash scripts work<bashscripts>`).
 
-* ``experiment``: the example to run. If it is not given, every example in the job script's
-  ``experiments`` list is run.
+* ``example``: the example to run. If it is not given, every example in the job script's
+  ``examples`` list is run.
 
 * ``buildtype`` and ``compilername``: the build configuration and compiler for the example. If
   they are not given, the defaults for Levante are used.
@@ -253,7 +253,7 @@ The Examples
 
     By default the golovin exectuable and two examples using the long executable will be compiled and
     run. You can change this by editing ``--kernels golovin long1 long2`` in the ``shima2009`` entry
-    of ``scripts/common/experiments.sh``.
+    of ``scripts/common/examples.sh``.
 
     **Golovin**
 
@@ -285,7 +285,7 @@ The Examples
 
     By default kernels including collision-coalescence, breakup and rebound will be compiled and
     run. You can change this by editing ``--kernels long lowlist szakallurbich testikstraub`` in the
-    ``breakup`` entry of ``scripts/common/experiments.sh``.
+    ``breakup`` entry of ``scripts/common/examples.sh``.
 
 
 .. dropdown:: Divergence Free Motion
@@ -368,7 +368,7 @@ The Examples
   ``examples/fromfile_irreg/`` are for a 3-D domain with time varying thermodynamics read from
   binary files. The ``fromfile_irreg.py`` example uses an irregular 3-D grid. These examples run
   the executable with MPI via ``srun``, by default with 4 MPI processes (``--ntasks=4`` in their
-  entries of ``scripts/common/experiments.sh``).
+  entries of ``scripts/common/examples.sh``).
 
   .. dropdown:: a) Regular Grid
     :animate: fade-in-slide-down

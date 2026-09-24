@@ -18,7 +18,7 @@ How to Install YAC (and YAXT)
 #############################
 
 To help install YAXT and YAC, we have created bash scripts for installation on
-DKRZ's Levante HPC, on JSC's JUPITER HPC, or on a generic/arbitrary, so-called "vanilla", computer in
+DKRZ's Levante HPC, on JSC's JUPITER HPC, or on a generic/arbitrary, so-called "vanilla", machine in
 ``scripts/levante/helpers/``, ``scripts/jupiter/helpers/`` and ``scripts/vanilla/helpers/``
 respectively. First you need to ensure your python version has pip installed first, e.g. with
 ``uv`` via
@@ -63,7 +63,7 @@ interpreter you want to use for YAC's python bindings.
     $ scripts/jupiter/helpers/install_yac.sh /your/path/to/yacyaxt/gcc/ gcc /your/path/to/CLEO/.venv/bin/python3
 
 
-.. admonition:: E.g. On "vanilla" computer
+.. admonition:: E.g. On "vanilla" machine
 
   (With a gcc compiler:) First you may need to edit the paths to certain packages
   in ``scripts/vanilla/helpers/vanilla_packages.sh`` to match your system setup. You may also need to install YAC/YAXT's

@@ -11,7 +11,7 @@ vanilla_gcc_fyamllib="${vanilla_gcc_fyaml_root}/lib"
 vanilla_gcc_netcdf_root="/opt/homebrew" # match netcdf
 ### ---------------------------------------------------- ###
 
-### A vanilla computer has no module system: the toolchain (mpic++, mpicc,
+### A vanilla machine has no module system: the toolchain (mpic++, mpicc,
 ### cmake) must already be on PATH. These functions keep the same interface
 ### as the other machines' packages files.
 
@@ -39,7 +39,7 @@ vanilla_load_build_stack() {
   case "${compilername}" in
     gcc)
       if [[ "${buildtype}" == "cuda" ]]; then
-        echo "Error: CUDA builds are not supported on a vanilla computer."
+        echo "Error: CUDA builds are not supported on a vanilla machine."
         return 1
       fi
       ;;

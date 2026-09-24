@@ -1,39 +1,39 @@
 #!/bin/bash
 
-### Central experiment parameter lookup.
-### Set 'experiment' before sourcing this file, or pass the experiment name as $3.
+### Central example parameter lookup.
+### Set 'example' before sourcing this file, or pass the example name as $3.
 ### Positional args allow CLI overrides:
 ###   $1 = path2build  override (optional, leave empty to use default)
 ###   $2 = build_flags override (optional, leave empty to use default)
-###   $3 = experiment  name     (optional, overrides the 'experiment' variable)
+###   $3 = example  name     (optional, overrides the 'example' variable)
 ###
 
-load_experiment_config() {
+load_example_config() {
 path2build_override=${1:-""}
 build_flags_override=${2:-""}
-experiment=${3:-${experiment}}
+example=${3:-${example}}
 
 if [[ -z "${path2CLEO}" ]]; then
   echo "Please provide path to CLEO source directory"
   exit 1
 fi
 
-if [[ -z "${experiment}" ]]; then
-  echo "Error: 'experiment' must be set before sourcing experiments.sh (or passed as \$3)"
+if [[ -z "${example}" ]]; then
+  echo "Error: 'example' must be set before sourcing examples.sh (or passed as \$3)"
   exit 1
 fi
 
-### Common CMake flags shared by most experiments
+### Common CMake flags shared by most examples
 cleo_common_flags="-DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
 
 ### Build root: path2build_override (if given) or path2CLEO otherwise.
 ### build_subdir below is always relative to this root, so an override
-### only replaces the root and never swallows the experiment's build_xxx suffix.
+### only replaces the root and never swallows the example's build_xxx suffix.
 path2build_root=${path2build_override:-${path2CLEO}}
 # strip trailing slashes so joining with build_subdir never gives '//'
 while [[ "${path2build_root}" == */ ]]; do path2build_root=${path2build_root%/}; done
 
-case "${experiment}" in
+case "${example}" in
 
   as2017)
     build_subdir=build_adia0d/as2017
@@ -157,7 +157,7 @@ case "${experiment}" in
     ;;
 
   *)
-    echo "Error: unknown experiment '${experiment}'."
+    echo "Error: unknown example '${example}'."
     echo "Available: as2017 cuspbifurc breakup shima2009 constthermo2d divfree2d"
     echo "           eurec4a1d rainshaft1d python_bindings"
     echo "           fromfile fromfile_irreg bubble3d"
@@ -175,5 +175,5 @@ export CLEO_BUILD_FLAGS="${build_flags}"
 }
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
-  load_experiment_config "$@"
+  load_example_config "$@"
 fi

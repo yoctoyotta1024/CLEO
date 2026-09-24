@@ -14,7 +14,7 @@ on Levante can be found in our
 `levante packages script <https://github.com/yoctoyotta1024/CLEO/blob/main/scripts/levante/helpers/levante_packages.sh>`_
 and similarly for JUPITER in our
 `jupiter packages script <https://github.com/yoctoyotta1024/CLEO/blob/main/scripts/jupiter/helpers/jupiter_packages.sh>`_.
-For a generic/arbitrary, so-called "vanilla", computer please refer to our
+For a generic/arbitrary, so-called "vanilla", machine please refer to our
 `vanilla packages script <https://github.com/yoctoyotta1024/CLEO/blob/main/scripts/vanilla/helpers/vanilla_packages.sh>`_
 
 Compilers and MPI
