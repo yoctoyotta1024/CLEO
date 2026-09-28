@@ -174,7 +174,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -368,7 +368,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
@@ -377,94 +377,10 @@
 <h1>Kokkos Aliases<a class="headerlink" href="#kokkos-aliases" title="Link to this heading">¶</a></h1>
 <p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/kokkosaliases.hpp&gt;</span></code>
 <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/kokkosaliases.hpp">[source]</a></p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-typedefs">Typedefs</p>
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv412dualview_gbx">
-<span id="_CPPv312dualview_gbx"></span><span id="_CPPv212dualview_gbx"></span><span class="target" id="kokkosaliases_8hpp_1aa1e281892765626abbf9c370adcaf69a"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dualview_gbx</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">DualView</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">Gridbox</span></span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv412dualview_gbx" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Dual view of gridboxes. </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv417dualview_constgbx">
-<span id="_CPPv317dualview_constgbx"></span><span id="_CPPv217dualview_constgbx"></span><span class="target" id="kokkosaliases_8hpp_1a4fbb94149656c621bb574d4d1b01df9c"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dualview_constgbx</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">DualView</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">Gridbox</span></span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv417dualview_constgbx" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Dual view of const gridboxe. </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv49viewh_gbx">
-<span id="_CPPv39viewh_gbx"></span><span id="_CPPv29viewh_gbx"></span><span class="target" id="kokkosaliases_8hpp_1a9d4e7954c894d10ce59339f1ce741223"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">viewh_gbx</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv412dualview_gbx" title="dualview_gbx"><span class="n"><span class="pre">dualview_gbx</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">t_host</span></span><a class="headerlink" href="#_CPPv49viewh_gbx" title="Link to this definition">¶</a><br /></dt>
-<dd><p>View in host memory of gridboxes. </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv414viewh_constgbx">
-<span id="_CPPv314viewh_constgbx"></span><span id="_CPPv214viewh_constgbx"></span><span class="target" id="kokkosaliases_8hpp_1a6ed922161ce18e94177e014bf2b3dd3d"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">viewh_constgbx</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv417dualview_constgbx" title="dualview_constgbx"><span class="n"><span class="pre">dualview_constgbx</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">t_host</span></span><a class="headerlink" href="#_CPPv414viewh_constgbx" title="Link to this definition">¶</a><br /></dt>
-<dd><p>view in host memory of const gridboxes. </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv49viewd_gbx">
-<span id="_CPPv39viewd_gbx"></span><span id="_CPPv29viewd_gbx"></span><span class="target" id="kokkosaliases_8hpp_1ac6199cf8a1f6872116eb6d200c5ddc7b"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">viewd_gbx</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv412dualview_gbx" title="dualview_gbx"><span class="n"><span class="pre">dualview_gbx</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">t_dev</span></span><a class="headerlink" href="#_CPPv49viewd_gbx" title="Link to this definition">¶</a><br /></dt>
-<dd><p>View in device memory of gridboxes. </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv414viewd_constgbx">
-<span id="_CPPv314viewd_constgbx"></span><span id="_CPPv214viewd_constgbx"></span><span class="target" id="kokkosaliases_8hpp_1a16aaba60fe176ba6d808fd011a0c09e3"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">viewd_constgbx</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv417dualview_constgbx" title="dualview_constgbx"><span class="n"><span class="pre">dualview_constgbx</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">t_dev</span></span><a class="headerlink" href="#_CPPv414viewd_constgbx" title="Link to this definition">¶</a><br /></dt>
-<dd><p>View in device memory of const gridboxes. </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv414kokkos_pairmap">
-<span id="_CPPv314kokkos_pairmap"></span><span id="_CPPv214kokkos_pairmap"></span><span class="target" id="kokkosaliases_8hpp_1a9c2b4bf9256b8553dfa5129718152f4a"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kokkos_pairmap</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">UnorderedMap</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="superdrops/kokkosaliases_sd.html#_CPPv49ExecSpace" title="ExecSpace"><span class="n"><span class="pre">ExecSpace</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv414kokkos_pairmap" title="Link to this definition">¶</a><br /></dt>
-<dd><p>E.g. for map from unsigned int gbxindex to gridbox boundaries </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv414kokkos_uintmap">
-<span id="_CPPv314kokkos_uintmap"></span><span id="_CPPv214kokkos_uintmap"></span><span class="target" id="kokkosaliases_8hpp_1ac44f876cd09a22969d20ed19301bd7ed"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kokkos_uintmap</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">UnorderedMap</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="superdrops/kokkosaliases_sd.html#_CPPv49ExecSpace" title="ExecSpace"><span class="n"><span class="pre">ExecSpace</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv414kokkos_uintmap" title="Link to this definition">¶</a><br /></dt>
-<dd><p>E.g. for map from one unsigned int gbxindex to another </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv414kokkos_dblmaph">
-<span id="_CPPv314kokkos_dblmaph"></span><span id="_CPPv214kokkos_dblmaph"></span><span class="target" id="kokkosaliases_8hpp_1a7fb5fe31e3fd3bda9669a68866814d01"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kokkos_dblmaph</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">UnorderedMap</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="superdrops/kokkosaliases_sd.html#_CPPv49HostSpace" title="HostSpace"><span class="n"><span class="pre">HostSpace</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv414kokkos_dblmaph" title="Link to this definition">¶</a><br /></dt>
-<dd><p>E.g. for map from unsigned int gbxindex to gridbox area/volume on host </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv411viewd_ndims">
-<span id="_CPPv311viewd_ndims"></span><span id="_CPPv211viewd_ndims"></span><span class="target" id="kokkosaliases_8hpp_1aa7ca01d6a46824d4422d426873643aab"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">viewd_ndims</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">View</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv411viewd_ndims" title="Link to this definition">¶</a><br /></dt>
-<dd><p>View in device memory for number of gridboxes in CartesianMaps. </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv412viewd_counts">
-<span id="_CPPv312viewd_counts"></span><span id="_CPPv212viewd_counts"></span><span class="target" id="kokkosaliases_8hpp_1abf403a2db73152fd022335bf3f10cce7"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">viewd_counts</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">View</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv412viewd_counts" title="Link to this definition">¶</a><br /></dt>
-<dd><p>View in device memory for sorting superdroplets Scatter view for abstracted use of atomics/duplicates when computing sums for <a class="reference internal" href="#kokkosaliases_8hpp_1abf403a2db73152fd022335bf3f10cce7"><span class="std std-ref">viewd_counts</span></a></p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv419scatterviewd_counts">
-<span id="_CPPv319scatterviewd_counts"></span><span id="_CPPv219scatterviewd_counts"></span><span class="target" id="kokkosaliases_8hpp_1ae3cd8479d4c08fd019f88e8da6bc9646"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">scatterviewd_counts</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Experimental</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">ScatterView</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv419scatterviewd_counts" title="Link to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenfile: Cannot find file “libs/kokkosaliases.hpp </p>
 </div>
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv418KokkosCleoSettings">
-<span id="_CPPv318KokkosCleoSettings"></span><span id="_CPPv218KokkosCleoSettings"></span><span id="KokkosCleoSettings"></span><span class="target" id="namespaceKokkosCleoSettings"></span><span class="k"><span class="pre">namespace</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">KokkosCleoSettings</span></span></span><a class="headerlink" href="#_CPPv418KokkosCleoSettings" title="Link to this definition">¶</a><br /></dt>
-<dd><div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-variables">Variables</p>
-<dl class="cpp var">
-<dt class="sig sig-object cpp" id="_CPPv4N18KokkosCleoSettings9team_sizeE">
-<span id="_CPPv3N18KokkosCleoSettings9team_sizeE"></span><span id="_CPPv2N18KokkosCleoSettings9team_sizeE"></span><span id="KokkosCleoSettings::team_size__auto"></span><span class="target" id="namespaceKokkosCleoSettings_1a54269a1acacded56b06a0cd8ad7ec011"></span><span class="kt"><span class="pre">auto</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">team_size</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">AUTO</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><a class="headerlink" href="#_CPPv4N18KokkosCleoSettings9team_sizeE" title="Link to this definition">¶</a><br /></dt>
-<dd><p>configurable number threads per team for hierarchical parallelism over superdroplets </p>
-</dd></dl>
-
-</div>
-</dd></dl>
-
 </section>
 
         </article>
@@ -502,7 +418,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 25 August 2026</div>
+              Last updated on 28 September 2026</div>
           </div>
           <div class="right-details">
             
@@ -511,42 +427,8 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Kokkos Aliases</a><ul>
-<li><a class="reference internal" href="#_CPPv412dualview_gbx"><code class="docutils literal notranslate"><span class="pre">dualview_gbx</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv417dualview_constgbx"><code class="docutils literal notranslate"><span class="pre">dualview_constgbx</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv49viewh_gbx"><code class="docutils literal notranslate"><span class="pre">viewh_gbx</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv414viewh_constgbx"><code class="docutils literal notranslate"><span class="pre">viewh_constgbx</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv49viewd_gbx"><code class="docutils literal notranslate"><span class="pre">viewd_gbx</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv414viewd_constgbx"><code class="docutils literal notranslate"><span class="pre">viewd_constgbx</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv414kokkos_pairmap"><code class="docutils literal notranslate"><span class="pre">kokkos_pairmap</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv414kokkos_uintmap"><code class="docutils literal notranslate"><span class="pre">kokkos_uintmap</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv414kokkos_dblmaph"><code class="docutils literal notranslate"><span class="pre">kokkos_dblmaph</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv411viewd_ndims"><code class="docutils literal notranslate"><span class="pre">viewd_ndims</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv412viewd_counts"><code class="docutils literal notranslate"><span class="pre">viewd_counts</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv419scatterviewd_counts"><code class="docutils literal notranslate"><span class="pre">scatterviewd_counts</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv418KokkosCleoSettings"><code class="docutils literal notranslate"><span class="pre">KokkosCleoSettings</span></code></a><ul>
-<li><a class="reference internal" href="#_CPPv4N18KokkosCleoSettings9team_sizeE"><code class="docutils literal notranslate"><span class="pre">team_size</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

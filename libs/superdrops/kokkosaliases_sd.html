@@ -174,7 +174,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
       </label>
     </div>
@@ -368,7 +368,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
           </label>
         </div>
@@ -377,92 +377,9 @@
 <h1>Super-Droplet Kokkos Aliases<a class="headerlink" href="#super-droplet-kokkos-aliases" title="Link to this heading">¶</a></h1>
 <p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/superdrops/kokkosaliases_sd.hpp&gt;</span></code>
 <a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/superdrops/kokkosaliases_sd.hpp">[source]</a></p>
-<div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric" id="breathe-section-title-typedefs">Typedefs</p>
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv49ExecSpace">
-<span id="_CPPv39ExecSpace"></span><span id="_CPPv29ExecSpace"></span><span class="target" id="kokkosaliases__sd_8hpp_1aa6b988145116ac4782d74379afcb8153"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExecSpace</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">DefaultExecutionSpace</span></span><a class="headerlink" href="#_CPPv49ExecSpace" title="Link to this definition">¶</a><br /></dt>
-<dd><p>(default) execution space for device parallelism </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv49HostSpace">
-<span id="_CPPv39HostSpace"></span><span id="_CPPv29HostSpace"></span><span class="target" id="kokkosaliases__sd_8hpp_1a330b8c207cdea76b247d2e6f4d85c3e8"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">HostSpace</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">DefaultHostExecutionSpace</span></span><a class="headerlink" href="#_CPPv49HostSpace" title="Link to this definition">¶</a><br /></dt>
-<dd><p>(default) execution space for host parallelism </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv412viewd_supers">
-<span id="_CPPv312viewd_supers"></span><span id="_CPPv212viewd_supers"></span><span class="target" id="kokkosaliases__sd_8hpp_1af91c12943629dc4fcd0597eecc5a76a1"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">viewd_supers</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">View</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv412viewd_supers" title="Link to this definition">¶</a><br /></dt>
-<dd><p>View in device memory of superdrops. </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv417viewd_constsupers">
-<span id="_CPPv317viewd_constsupers"></span><span id="_CPPv217viewd_constsupers"></span><span class="target" id="kokkosaliases__sd_8hpp_1aa20a478779b9cfa20d18b5bfb0f3a43f"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">viewd_constsupers</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">View</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="superdrop.html#_CPPv49Superdrop" title="Superdrop"><span class="n"><span class="pre">Superdrop</span></span></a><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv417viewd_constsupers" title="Link to this definition">¶</a><br /></dt>
-<dd><p>View in device memory of const superdrops. </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv413kkpair_size_t">
-<span id="_CPPv313kkpair_size_t"></span><span id="_CPPv213kkpair_size_t"></span><span class="target" id="kokkosaliases__sd_8hpp_1af01517b8206116d4866571c3e7435e19"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kkpair_size_t</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv413kkpair_size_t" title="Link to this definition">¶</a><br /></dt>
-<dd><p>size_t pair (e.g. see supersingbx refs). </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv415subviewd_supers">
-<span id="_CPPv315subviewd_supers"></span><span id="_CPPv215subviewd_supers"></span><span class="target" id="kokkosaliases__sd_8hpp_1a0c8d3731c0129bed5cbbe249552cbaf9"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">subviewd_supers</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Subview</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv412viewd_supers" title="viewd_supers"><span class="n"><span class="pre">viewd_supers</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv413kkpair_size_t" title="kkpair_size_t"><span class="n"><span class="pre">kkpair_size_t</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv415subviewd_supers" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Sub-View of supers (e.g. for instance in a gridbox). </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv420subviewd_constsupers">
-<span id="_CPPv320subviewd_constsupers"></span><span id="_CPPv220subviewd_constsupers"></span><span class="target" id="kokkosaliases__sd_8hpp_1a5eedf2b76fa12abff618bfa4b9671cc1"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">subviewd_constsupers</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Subview</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv417viewd_constsupers" title="viewd_constsupers"><span class="n"><span class="pre">viewd_constsupers</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv413kkpair_size_t" title="kkpair_size_t"><span class="n"><span class="pre">kkpair_size_t</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv420subviewd_constsupers" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Const supers subview (e.g. for instance in a gridbox). </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv410TeamPolicy">
-<span id="_CPPv310TeamPolicy"></span><span id="_CPPv210TeamPolicy"></span><span class="target" id="kokkosaliases__sd_8hpp_1addb93c70ba14ecfb25513ae6ba367d8d"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TeamPolicy</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">TeamPolicy</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv49ExecSpace" title="ExecSpace"><span class="n"><span class="pre">ExecSpace</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv410TeamPolicy" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Team policy in the execution space. </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv410TeamMember">
-<span id="_CPPv310TeamMember"></span><span id="_CPPv210TeamMember"></span><span class="target" id="kokkosaliases__sd_8hpp_1ab02120a9c957a48cd55484101345ee4b"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">TeamMember</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv410TeamPolicy" title="TeamPolicy"><span class="n"><span class="pre">TeamPolicy</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">member_type</span></span><a class="headerlink" href="#_CPPv410TeamMember" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Member in device parallel execution team. </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv414HostTeamPolicy">
-<span id="_CPPv314HostTeamPolicy"></span><span id="_CPPv214HostTeamPolicy"></span><span class="target" id="kokkosaliases__sd_8hpp_1adc9ead2292aa9b290aa4978552d126b1"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">HostTeamPolicy</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">TeamPolicy</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv49HostSpace" title="HostSpace"><span class="n"><span class="pre">HostSpace</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv414HostTeamPolicy" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Team policy in the host space. </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv414HostTeamMember">
-<span id="_CPPv314HostTeamMember"></span><span id="_CPPv214HostTeamMember"></span><span class="target" id="kokkosaliases__sd_8hpp_1a13b7937dd750b03c5b0828b4ac70181b"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">HostTeamMember</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv414HostTeamPolicy" title="HostTeamPolicy"><span class="n"><span class="pre">HostTeamPolicy</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">member_type</span></span><a class="headerlink" href="#_CPPv414HostTeamMember" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Member in host parallel execution team. </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv413GenRandomPool">
-<span id="_CPPv313GenRandomPool"></span><span id="_CPPv213GenRandomPool"></span><span class="target" id="kokkosaliases__sd_8hpp_1a03e45e8988cca6ad6f0a17792f161d90"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GenRandomPool</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Random_XorShift64_Pool</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv49ExecSpace" title="ExecSpace"><span class="n"><span class="pre">ExecSpace</span></span></a><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv413GenRandomPool" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Thread-safe random number generation. </p>
-<p>Defines an alias for a pool of Kokkos random number generators in the execution space. </p>
-</dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv417viewd_constcoords">
-<span id="_CPPv317viewd_constcoords"></span><span id="_CPPv217viewd_constcoords"></span><span class="target" id="kokkosaliases__sd_8hpp_1a40179e415dc7af7aeda58ea5cdca1a26"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">viewd_constcoords</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">View</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv417viewd_constcoords" title="Link to this definition">¶</a><br /></dt>
-<dd></dd></dl>
-
-<dl class="cpp type">
-<dt class="sig sig-object cpp" id="_CPPv412viewd_coords">
-<span id="_CPPv312viewd_coords"></span><span id="_CPPv212viewd_coords"></span><span class="target" id="kokkosaliases__sd_8hpp_1a4ca3a4f52bb07db7f1f3144e5d1d37d7"></span><span class="k"><span class="pre">using</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">viewd_coords</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">View</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv412viewd_coords" title="Link to this definition">¶</a><br /></dt>
-<dd><p>Helper type for view in device memory for superdroplet coords: (coord3, coord1, coord2). </p>
-</dd></dl>
-
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>doxygenfile: Cannot find file “libs/superdrops/kokkosaliases_sd.hpp </p>
 </div>
 </section>
 
@@ -501,7 +418,7 @@
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
             <div class="last-updated">
-              Last updated on 25 August 2026</div>
+              Last updated on 28 September 2026</div>
           </div>
           <div class="right-details">
             
@@ -510,40 +427,8 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            On this page
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">Super-Droplet Kokkos Aliases</a><ul>
-<li><a class="reference internal" href="#_CPPv49ExecSpace"><code class="docutils literal notranslate"><span class="pre">ExecSpace</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv49HostSpace"><code class="docutils literal notranslate"><span class="pre">HostSpace</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv412viewd_supers"><code class="docutils literal notranslate"><span class="pre">viewd_supers</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv417viewd_constsupers"><code class="docutils literal notranslate"><span class="pre">viewd_constsupers</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv413kkpair_size_t"><code class="docutils literal notranslate"><span class="pre">kkpair_size_t</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv415subviewd_supers"><code class="docutils literal notranslate"><span class="pre">subviewd_supers</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv420subviewd_constsupers"><code class="docutils literal notranslate"><span class="pre">subviewd_constsupers</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv410TeamPolicy"><code class="docutils literal notranslate"><span class="pre">TeamPolicy</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv410TeamMember"><code class="docutils literal notranslate"><span class="pre">TeamMember</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv414HostTeamPolicy"><code class="docutils literal notranslate"><span class="pre">HostTeamPolicy</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv414HostTeamMember"><code class="docutils literal notranslate"><span class="pre">HostTeamMember</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv413GenRandomPool"><code class="docutils literal notranslate"><span class="pre">GenRandomPool</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv417viewd_constcoords"><code class="docutils literal notranslate"><span class="pre">viewd_constcoords</span></code></a></li>
-<li><a class="reference internal" href="#_CPPv412viewd_coords"><code class="docutils literal notranslate"><span class="pre">viewd_coords</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>
