@@ -52,10 +52,3 @@ Contents:
 Questions?
 ----------
 Yes please! Simply :ref:`contact us! <contact>`
-
-
-Indices and Tables
-------------------
-
-* :ref:`genindex`
-* :ref:`modindex`
