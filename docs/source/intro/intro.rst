@@ -2,8 +2,8 @@ Programming Guide
 =================
 
 This programming guide gives a short summary of what is explained more thoroughly in Cleo's model
-description papers :cite:`bayley2026a, bayley2026b`, but mainly focusses on Cleo's fundamental
-design and code strcuture rather than it's microphysics capabilities.
+description papers :cite:`bayley2026a, bayley2026b`, and mainly focusses on Cleo's fundamental
+design and code structure rather than its microphysics capabilities.
 
 Motivation
 ----------
