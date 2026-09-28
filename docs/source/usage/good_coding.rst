@@ -29,7 +29,7 @@ Or, if you would like to have the dependencies Cleo's examples and for Cleo's de
   $ uv sync --extra examples --extra yac
 
 Sometimes it is useful to know where uv has installed your python
-(e.g. for :ref:`CLEO's examples <examples>`), in which case you can run
+(e.g. for :ref:`Cleo's examples <examples>`), in which case you can run
 
 .. code-block:: console
 
