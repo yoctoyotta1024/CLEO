@@ -128,9 +128,9 @@ class RunCLEO {
     std::cout << "\n--- timestepping ---\n";
 
     unsigned int t_mdl(0);
-    while (t_mdl <= t_end) {
+    while (t_mdl < t_end) {
       /* start step (in general involves coupling) */
-      const auto t_next = (unsigned int)start_step(t_mdl, gbxs, allsupers);
+      const auto t_next = (unsigned int)start_step(t_mdl, t_end, gbxs, allsupers);
 
       /* advance dynamics solver (optionally concurrent to SDM) */
       coupldyn_step(t_mdl, t_next);
@@ -141,6 +141,8 @@ class RunCLEO {
       /* proceed to next step (in general involves coupling) */
       t_mdl = proceed_to_next_step(t_next, gbxs);
     }
+    /* act on last timestep t_mdl = t_end */
+    at_last_step(t_mdl, t_end, gbxs, allsupers);
 
     std::cout << "--- timestepping: success ---\n";
     return 0;
@@ -156,11 +158,12 @@ class RunCLEO {
    * take now given the current timestep `t_mdl`.
    *
    * @param t_mdl Current timestep of the coupled model.
+   * @param t_end End time for timestepping.
    * @param gbxs DualView of gridboxes.
    * @param allsupers View of all (inside and outside of domain) superdroplets.
    * @return Size of the next timestep.
    */
-  unsigned int start_step(const unsigned int t_mdl, dualview_gbx gbxs,
+  unsigned int start_step(const unsigned int t_mdl, const unsigned int t_end, dualview_gbx gbxs,
                           const SupersInDomain& allsupers) const {
     if (t_mdl % sdm.get_couplstep() == 0) {
       gbxs.sync_host();
@@ -171,7 +174,7 @@ class RunCLEO {
     gbxs.sync_device();
     sdm.at_start_step(t_mdl, gbxs, allsupers);
 
-    return get_next_step(t_mdl);
+    return get_next_step(t_mdl, t_end);
   }
 
   /**
@@ -182,6 +185,7 @@ class RunCLEO {
    * obtained from the `sdm` object; `t_coupl` and `t_obs` respectively.
    *
    * @param t_mdl The current timestep of the model.
+   * @param t_end The end time for timestepping.
    * @return The size of the next timestep.
    *
    * @details
@@ -195,11 +199,11 @@ class RunCLEO {
    *
    * @see SDMMethods::get_couplstep()
    */
-  unsigned int get_next_step(const unsigned int t_mdl) const {
+  unsigned int get_next_step(const unsigned int t_mdl, const unsigned int t_end) const {
     /* t_next is sooner out of time for next coupl or obs */
     const auto next_coupl = (unsigned int)sdm.next_couplstep(t_mdl);
     const auto next_obs = (unsigned int)sdm.obs.next_obs(t_mdl);
-    const auto t_next = Kokkos::min(next_coupl, next_obs);
+    const auto t_next = Kokkos::min(Kokkos::min(next_coupl, next_obs), t_end);
 
     return t_next;  // stepsize = t_next - t_mdl
   }
@@ -261,6 +265,29 @@ class RunCLEO {
     }
 
     return t_next;
+  }
+
+  /**
+   * @brief Execute at the last timestep.
+   *
+   * This function is called at the last timestep, i.e. at time `t_end`. It synchronises the
+   * gridboxes on device with the host and then calls the `at_last_step` function of
+   * SDMMethods (e.g. to make observations).
+   *
+   * @param t_mdl Current timestep of the coupled model.
+   * @param t_end End time for timestepping.
+   * @param gbxs DualView of gridboxes.
+   * @param allsupers View of all (inside and outside of domain) superdroplets.
+   * @return Size of the next timestep.
+   */
+  void at_last_step(const unsigned int t_mdl, const unsigned int t_end, dualview_gbx gbxs,
+                    const SupersInDomain& allsupers) const {
+    if (!(t_mdl == t_end)) {
+      Kokkos::abort("Timestepping didn't reach the last timestep correctly: t_mdl != t_end");
+    }
+
+    gbxs.sync_device();
+    sdm.at_last_step(t_mdl, gbxs, allsupers);
   }
 
  public:
