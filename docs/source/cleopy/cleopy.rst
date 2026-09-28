@@ -31,8 +31,8 @@ Contents:
    readbinary
    writebinary
 
-Indices and tables
-------------------
+API and Module Lookups
+----------------------
 
-* :ref:`genindex`
-* :ref:`modindex`
+* :ref:`API Index (C++ and Python)<genindex>`
+* :ref:`Python Module Index<modindex>`
