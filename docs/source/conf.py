@@ -35,7 +35,7 @@ sys.path.insert(0, pathlib.Path(__file__).parents[2].resolve().as_posix())
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = "CLEO"
+project = "Cleo"
 license = "BSD 3-Clause"
 copyright = "(2023) MPI-M, Clara Bayley"
 author = "Clara Bayley & Other Developers"
