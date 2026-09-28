@@ -1,10 +1,9 @@
-.. CLEO documentation master file, created by
-   sphinx-quickstart on Mon Nov 20 12:27:54 2023.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Welcome to Cleo's Documentation!
 ================================
+
+**Cleo** (/ˌkliːə/ ) is a library for Super-Droplet Model (SDM) cloud microphysics. The name, Cleo, is a tribute to
+`Cleopatra <https://www.britannica.com/biography/Cleopatra-queen-of-Egypt>`_ as well as the
+anonymous mathematician `Cleo <https://en.wikipedia.org/wiki/Cleo_(mathematician)>`_.
 
 .. note::
    Please consider that this project is under active development
@@ -16,15 +15,25 @@ Welcome to Cleo's Documentation!
    this or if there is anything you wish to report please do :ref:`contact us <contact>` or
    `open a new issue <https://github.com/yoctoyotta1024/CLEO/issues/new>`_ on our repository.
 
-**Cleo** (/ˌkliːə/ ) is a library for Super-Droplet Model (SDM) cloud microphysics.
+Time to get involved!
+---------------------
 
-The name, Cleo, is a tribute to
-`Cleopatra <https://www.britannica.com/biography/Cleopatra-queen-of-Egypt>`_ as well as the
-anonymous mathematician `Cleo <https://en.wikipedia.org/wiki/Cleo_(mathematician)>`_.
+Start with Cleo's :doc:`installation<usage/installation/installation>` and then by
+exploring some of Cleo's :doc:`examples<usage/examples/examples>`.
 
-Time to get involved! Start with CLEO's :doc:`installation<usage/installation/installation>` and
-then exploring some :doc:`examples<usage/examples/examples>`. Or jump straight in with the :doc:`quickstart<usage/quickstart>`.
+Once you're ready to look inside Cleo's code, perhaps to understand your ``main.cpp``
+or to setup a new simulation, explore our :doc:`deep dive<deep_dive/index>`.
 
+You can also find further information about the motivation behind Cleo and its code
+structure from our :doc:`programming guide<intro/intro>`, as well as Cleo's model description
+papers. `Bayley et al., 2026a <https://gmd.copernicus.org/articles/19/6099/2026/>`_ describes Cleo's
+fundamental design, whilst `Bayley et al., 2026b <https://gmd.copernicus.org/articles/19/6121/2026/>`_ details
+its numerical methods for warm-cloud microphysics.
+
+
+Questions?
+----------
+Yes please! Simply :ref:`contact us! <contact>`
 
 Contents:
 ---------
@@ -33,22 +42,20 @@ Contents:
    :maxdepth: 1
 
    intro/intro
+
    usage/installation/installation
    usage/examples/examples
-   usage/quickstart
+
+   deep_dive/index
 
    cleopy/cleopy
    libs/libs
 
+   GitHub Repo <https://github.com/yoctoyotta1024/CLEO.git>
+
    usage/ourdocs
    usage/contributing
 
-   GitHub Repo <https://github.com/yoctoyotta1024/CLEO.git>
    usage/good_coding
    usage/contact
    references
-
-
-Questions?
-----------
-Yes please! Simply :ref:`contact us! <contact>`
