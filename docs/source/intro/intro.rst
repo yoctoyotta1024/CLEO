@@ -1,6 +1,10 @@
 Programming Guide
 =================
 
+This programming guide gives a short summary of what is explained more thoroughly in Cleo's model
+description papers :cite:`bayley2026a, bayley2026b`, but mainly focusses on Cleo's fundamental
+design and code strcuture rather than it's microphysics capabilities.
+
 Motivation
 ----------
 It seems apparent that a new implementation of SDM is required; capable of modelling warm rain
