@@ -28,8 +28,7 @@ Contents:
    cleoconstants
    kokkosaliases
 
-Indices and tables
-------------------
+API Lookup
+----------
 
-* :ref:`genindex`
-* :ref:`modindex`
+* :ref:`API Index (C++ and Python)<genindex>`
