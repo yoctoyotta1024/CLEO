@@ -92,5 +92,5 @@ you will have to install them too. We kindly ask that you also :ref:`contact us 
 or `open a new issue <https://github.com/yoctoyotta1024/CLEO/issues/new>`_ on our GitHub
 repository to notify us.
 
-To run your python for Cleo or find it's location you can do  ``uv run python`` and
+To run your python for Cleo or find its location you can do  ``uv run python`` and
 ``uv python find`` respectively.\
