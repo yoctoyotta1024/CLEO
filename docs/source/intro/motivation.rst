@@ -1,12 +1,18 @@
+.. _motivation:
+
 Motivation for Cleo
 ===================
+
+This page explains the motivation behind Cleo, explained properly in the
+introductions to Cleo's model description papers :cite:`bayley2026a, bayley2026b`,
+and in :cite:`bayleythesis2026`.
 
 In light of :ref:`such attractive properties<sdmadvatages>`, a natural
 question to raise is whether SDM can be used to model warm rain more
 accurately than conventional models. The discrepancies between bulk models
 and observations of tropical warm rain is well documented, for example
-as discussed in Schulz and Stevens 2023 :cite:`schulzstevens2023`
-and vanZanten et al. 2011 :cite:`vanzanten2011`. Already SDM has been
+as discussed in relation to the EUREC4A :cite:`schulzstevens2023`
+and RICO :cite:`vanzanten2011` field campaigns. Already SDM has been
 used to improve our understanding of how precipitation formation
 depends on small scale influences, for example the choice of turbulent
 scheme, strength of entrainment and mixing, and the CCN size and

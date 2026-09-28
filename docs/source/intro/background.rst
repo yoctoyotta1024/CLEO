@@ -1,5 +1,11 @@
+.. _background:
+
 Background to the Super-Droplet Model (SDM)
 ===========================================
+
+This page explains the background to Cleo's creation, explained properly in the
+introductions to Cleo's model description papers :cite:`bayley2026a, bayley2026b`,
+and in :cite:`bayleythesis2026`.
 
 Cloud microphysics remains an integral and under-represented element of
 the climate system. Not only does this limit our understanding of clouds
@@ -7,8 +13,8 @@ themselves, but also causes some of the largest uncertainties in climate
 modelling as a whole. Such a predicament is only exacerbated by Global
 Storm Resolving Models (GSRMs), the new generation of climate
 models which have storm-resolving resolutions O(1km) and parametrise
-radiation, sub-grid turbulence, and microphysics :cite:`slingo2022`
-:cite:`satoh2019` :cite:`stevens2019` :cite:`schulthess2019`. GSRMs have
+radiation, sub-grid turbulence, and microphysics
+:cite:`slingo2022, satoh2019, stevens2019, schulthess2019`. GSRMs have
 all but irradicated their parametrisations of convection, leaving
 microphysical parametrisations to replace them as one of their leading
 sources of uncertainty :cite:`morrison2019`. State of the art climate
@@ -22,8 +28,8 @@ with Lagrangian particles, so called ‘super-droplets’, that act as
 representatives for the condensate populations of a cloud.
 A super-droplet has a multiplicity which defines how many ordinary
 condensate particles it represents. Whilst most microphysical processes,
-for example condensation and evaporation, are modelled exactly how
-ordinary condensates would be, some processes are modelled probabilistically
+for example condensation and evaporation, are modelled exactly how ordinary
+condensates would be, collisional processes are modelled probabilistically
 instead. Indeed, the defining feature of SDM is that collisions of
 super-droplets are determined Monte-Carlo simulation such that the
 outcome of collisions converges towards the stochastic behaviour of a
@@ -31,8 +37,7 @@ direct numerical simulation (DNS) as the number of super-droplets increases.
 As has been shown in numerous studies, SDM can reproduce the results of
 bin models at comparable computational cost, but without suffering from
 the spatial and spectral broadening caused by numerical diffusion
-:cite:`dziekan2019` :cite:`arabasshima2013`
-:cite:`andrejczuk2010` :cite:`andrejczuk2008`.
+:cite:`dziekan2019, arabasshima2013, andrejczuk2010, andrejczuk2008`.
 
 .. _sdmadvatages:
 
@@ -62,7 +67,7 @@ advances in HPC. The underlying simplicity of the model renders it highly
 parallelisable and well matched to trends favouring the use of many,
 extremely fast lightweight processors. As has been shown recently, this
 makes SDM ideally suited to supercomputers with graphics processing units
-(GPUs) :cite:`bartmanarabas2021` :cite:`dziekan2019` :cite:`arabas2015`.
+(GPUs) :cite:`bartmanarabas2021, dziekan2019, arabas2015`.
 The growth of random access memory (RAM) is also favourable for SDM.
 Not only does it make SDM’s high memory usage less demanding, but it
 allows for the improvement of the model’s precision by enabling more

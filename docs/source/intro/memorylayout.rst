@@ -1,5 +1,10 @@
+.. _memlayout:
+
 Memory Layout
 =============
+
+This page describes Cleo's memory layout, which is also explained more thoroughly in
+:cite:`bayley2026a` (Sect. 2).
 
 The key structures which compose Cleo and their memory layout are shown schematically below.
 
