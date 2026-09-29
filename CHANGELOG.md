@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.69.2](https://github.com/yoctoyotta1024/CLEO/compare/4103a7618729425bf5152360ad7f0cb9968e8e43..v0.69.2) - 2026-09-29
+#### Bug Fixes
+- link libyac_pak when present - ([9fd34d5](https://github.com/yoctoyotta1024/CLEO/commit/9fd34d58a08d7253f7f77a1a1564923d40e80f56)) - Benjamin Rodenberg
+- find YAC and YAXT without deprecated artifacts - ([e683f52](https://github.com/yoctoyotta1024/CLEO/commit/e683f521927b5f6f9b7953523bd45aab3ad2e271)) - Moritz Hanke
+#### Refactoring
+- change to cleo time-stepping so last time-step doesn't occur - ([4103a76](https://github.com/yoctoyotta1024/CLEO/commit/4103a7618729425bf5152360ad7f0cb9968e8e43)) - clara.bayley
+
+- - -
+
 ## [v0.69.1](https://github.com/yoctoyotta1024/CLEO/compare/c2b88382472f3c0cdb3921a36bea63235f5fe910..v0.69.1) - 2026-08-25
 #### Bug Fixes
 - require yac only after yac_root is set - ([b1b8a7c](https://github.com/yoctoyotta1024/CLEO/commit/b1b8a7cc5c7cdcce44386ee94d13fdf85014dabe)) - clara.bayley
