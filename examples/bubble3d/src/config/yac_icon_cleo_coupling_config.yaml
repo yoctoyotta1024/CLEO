@@ -42,34 +42,34 @@ coupling:
 # ATM -> CLEO
   - <<: [*atm2cleo, *nnn_interp_stack]
     field:
-      - src: qcond_to_cleo
-        tgt: qcond_in
-      - src: qvap_to_cleo
-        tgt: qvap_in
+      - src: liquid_water_mixing_ratio_to_cleo
+        tgt: liquid_water_mixing_ratio_in
+      - src: humidity_mixing_ratio_to_cleo
+        tgt: humidity_mixing_ratio_in
   - <<: [*atm2cleo, *nnn_interp_stack]
     field:
       - src: eastward_wind_to_cleo
         tgt: eastward_wind_in
       - src: northward_wind_to_cleo
         tgt: northward_wind_in
-      - src: vertical_wind_to_cleo
-        tgt: vertical_wind_in
+      - src: upward_air_velocity_to_cleo
+        tgt: upward_air_velocity_in
   - <<: [*atm2cleo, *nnn_interp_stack]
     field:
-      - src: pressure_to_cleo
-        tgt: pressure_in
+      - src: air_pressure_to_cleo
+        tgt: air_pressure_in
   - <<: [*atm2cleo, *nnn_interp_stack]
     field:
-      - src: temperature_to_cleo
-        tgt: temperature_in
+      - src: air_temperature_to_cleo
+        tgt: air_temperature_in
 # # CLEO -> ATM
 #   - <<: [*cleo2atm, *nnn_interp_stack]
 #     field:
-#       - src: qcond_out
-#         tgt: qcond_from_cleo
-#       - src: qvap_out
-#         tgt: qvap_from_cleo
+#       - src: liquid_water_mixing_ratio_out
+#         tgt: liquid_water_mixing_ratio_from_cleo
+#       - src: humidity_mixing_ratio_out
+#         tgt: humidity_mixing_ratio_from_cleo
 #   - <<: [*cleo2atm, *nnn_interp_stack]
 #     field:
-#       - src: temperature_out
-#         tgt: temperature_from_cleo
+#       - src: air_temperature_out
+#         tgt: air_temperature_from_cleo
