@@ -292,51 +292,49 @@ void CartesianDynamics::receive_fields_from_yac() {
   receive_yac_edge_field(northward_wind_yac_id_recv, yac_raw_edge_data, vvel, dlc::W0, false);
 }
 
-void CartesianDynamics::send_yac_field(int field_id, double* field_data,
-                                       double conversion_factor = 1.0) {
-  auto ndims_vertical = ndims[VERTICAL];
-  auto ndims_north = ndims[NORTHWARD];
-  auto ndims_east = ndims[EASTWARD];
-  auto ncells = ndims_north * ndims_east;
+void CartesianDynamics::send_yac_cell_field(int yac_field_id, double* field_data,
+                                            double conversion_factor = 1.0) {
+  int info, ierror;
+  int action;
+  yac_cget_action(yac_field_id, &action);
 
-  int info, ierror, action;
-
-  send_buffer = new double**[ndims_vertical];
-
-  for (size_t j = 0; j < ndims_vertical; ++j) {
-    send_buffer[j] = new double*[1];
-    send_buffer[j][0] = new double[ncells];
-  }
-
-  for (size_t j = 0; j < ndims_north; j++) {
-    for (size_t i = 0; i < ndims_east; i++) {
-      for (size_t k = 0; k < ndims_vertical; k++) {
-        auto ii = (ndims_east * j + i) * ndims_vertical + k;
-        auto vertical_idx = k;
-        auto source_idx = j * ndims_east + i;
-        send_buffer[vertical_idx][0][source_idx] = field_data[ii] * conversion_factor;
+  // if the next put operation is "active"
+  if (action != YAC_ACTION_NONE) {
+    // skip the last put
+    if (action == YAC_ACTION_GET_FOR_RESTART) {
+      std::cout << "Skipped last Put Action of field "
+                << yac_cget_field_name_from_field_id(yac_field_id) << "\n";
+    } else {
+      for (size_t j = 0; j < ndims[NORTHWARD]; j++) {
+        for (size_t i = 0; i < ndims[EASTWARD]; i++) {
+          for (size_t k = 0; k < ndims[VERTICAL]; k++) {
+            auto ii = (ndims[EASTWARD] * j + i) * ndims[VERTICAL] + k;
+            auto vertical_idx = k;
+            auto source_idx = j * ndims[EASTWARD] + i;
+            send_buffer[vertical_idx][0][source_idx] = field_data[ii] * conversion_factor;
+          }
+        }
       }
+
+      yac_cput(yac_field_id, ndims[VERTICAL], send_buffer, &info, &ierror);
+
+      delete[] send_buffer;
+    }
+  } else {
+    if (action != YAC_ACTION_OUT_OF_BOUND) {
+      // only update internal field time
+      yac_cupdate(yac_field_id);
+    } else {
+      std::cout << "WARNING: Put action is out of bound for field "
+                << yac_cget_field_name_from_field_id(yac_field_id) << "\n";
     }
   }
-  yac_cget_action(field_id, &action);
-
-  if (action != YAC_ACTION_PUT_FOR_RESTART) {
-    yac_cput(field_id, ndims_vertical, send_buffer, &info, &ierror);
-  } else {
-    std::cout << "Last Put Action: " << action << std::endl;
-  }
-
-  for (size_t j = 0; j < ndims_vertical; ++j) {
-    delete send_buffer[j][0];
-    delete send_buffer[j];
-  }
-  delete[] send_buffer;
 }
 
 void CartesianDynamics::send_fields_to_yac(double* h_temp, double* h_qvap, double* h_qcond) {
-  send_yac_field(temp_yac_id_send, h_temp, dlc::TEMP0);
-  send_yac_field(qvap_yac_id_send, h_qvap);
-  send_yac_field(qcond_yac_id_send, h_qcond);
+  send_yac_cell_field(temp_yac_id_send, h_temp, dlc::TEMP0);
+  send_yac_cell_field(qvap_yac_id_send, h_qvap);
+  send_yac_cell_field(qcond_yac_id_send, h_qcond);
 }
 
 CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size_t, 3> i_ndims,
