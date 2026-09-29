@@ -199,12 +199,6 @@ void CartesianDynamics::receive_yac_cell_field(unsigned int yac_field_id, double
   int action;
   yac_cget_action(yac_field_id, &action);
 
-  if (action != YAC_ACTION_GET_FOR_RESTART) {
-    yac_cget(yac_field_id, vertical_levels, yac_raw_data, &info, &error);
-  } else {
-    std::cout << "Last Get Action: " << action << std::endl;
-  }
-
   // if the current get is not beyond the end of the run
   if (action != YAC_ACTION_OUT_OF_BOUND) {
     // skip the last get action
@@ -212,14 +206,13 @@ void CartesianDynamics::receive_yac_cell_field(unsigned int yac_field_id, double
       std::cout << "Last Get Action was skipped for field "
                 << yac_cget_field_name_from_field_id(yac_field_id) << "\n";
     } else {
-      for (size_t j = 0; j < ndims[NORTHWARD]; j++) {
-        for (size_t i = 0; i < ndims[EASTWARD]; i++) {
-          for (size_t k = 0; k < vertical_levels; k++) {
-            auto vertical_idx = k;
-            auto source_idx = j * ndims[EASTWARD] + i;
-            auto ii = (ndims[EASTWARD] * j + i) * vertical_levels + k;
-            target_array[ii] = yac_raw_data[vertical_idx][source_idx] / conversion_factor;
-          }
+      yac_cget(yac_field_id, vertical_levels, yac_raw_data, &info, &error);
+
+      size_t num_points = ndims[NORTHWARD] * ndims[EASTWARD];
+      for (size_t point_idx = 0; point_idx < num_points; point_idx++) {
+        for (size_t k = 0; k < vertical_levels; k++) {
+          auto ii = point_idx * vertical_levels + k;
+          target_array[ii] = yac_raw_data[k][point_idx] / conversion_factor;
         }
       }
     }
@@ -253,12 +246,6 @@ void CartesianDynamics::receive_yac_edge_field(unsigned int yac_field_id, double
   int action;
   yac_cget_action(yac_field_id, &action);
 
-  if (action != YAC_ACTION_GET_FOR_RESTART) {
-    yac_cget(yac_field_id, ndims[VERTICAL], yac_raw_data, &info, &error);
-  } else {
-    std::cout << "Last Get Action: " << action << std::endl;
-  }
-
   // if the current get is not beyond the end of the run
   if (action != YAC_ACTION_OUT_OF_BOUND) {
     // skip the last get action
@@ -266,6 +253,8 @@ void CartesianDynamics::receive_yac_edge_field(unsigned int yac_field_id, double
       std::cout << "Last Get Action was skipped for field "
                 << yac_cget_field_name_from_field_id(yac_field_id) << "\n";
     } else {
+      yac_cget(yac_field_id, ndims[VERTICAL], yac_raw_data, &info, &error);
+
       unsigned int source_index = 0;
       unsigned int target_index = 0;
       for (size_t lat_index = 0; lat_index < (ndims[NORTHWARD] + 1) * 2 - 1; lat_index++) {
