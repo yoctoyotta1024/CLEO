@@ -23,6 +23,11 @@ if(YAXT_FOUND AND NetCDF_FOUND AND LAPACK_FOUND)
     NAMES libyac_core.a
     DOC "YAC C core Library")
 
+  # libyac_pak.a is required by libyac_mci.a in YAC >= 3.18 and absent in older versions
+  find_library(YAC_PAK_LIBRARY
+    NAMES libyac_pak.a
+    DOC "YAC C pak Library (optional)")
+
   # bundled by YAC as libyac_mtime.a, or external (--with-external-mtime) as libmtime.a
   find_library(YAC_C_MTIME_LIBRARY
     NAMES libyac_mtime.a libmtime.a
@@ -31,6 +36,7 @@ if(YAXT_FOUND AND NetCDF_FOUND AND LAPACK_FOUND)
   mark_as_advanced(YAC_C_INCLUDE_DIR
     YAC_MCI_LIBRARY
     YAC_CORE_LIBRARY
+    YAC_PAK_LIBRARY
     YAC_C_MTIME_LIBRARY)
 
   include(FindPackageHandleStandardArgs)
@@ -39,10 +45,16 @@ if(YAXT_FOUND AND NetCDF_FOUND AND LAPACK_FOUND)
   )
 
   if(YAC_FOUND)
+    set(YAC_C_LIBRARIES "${YAC_MCI_LIBRARY}")
+    if(YAC_PAK_LIBRARY)
+      list(APPEND YAC_C_LIBRARIES "${YAC_PAK_LIBRARY}")
+    endif()
+    list(APPEND YAC_C_LIBRARIES "${YAC_CORE_LIBRARY}")
+
     if(NOT TARGET YAC::YAC)
       add_library(YAC::YAC INTERFACE IMPORTED)
       target_include_directories(YAC::YAC INTERFACE "${YAC_C_INCLUDE_DIR}")
-      target_link_libraries(YAC::YAC INTERFACE "${YAC_MCI_LIBRARY}" "${YAC_CORE_LIBRARY}" "${YAC_C_MTIME_LIBRARY}" YAXT::YAXT_C NetCDF::NetCDF_C MPI::MPI_C LAPACK::LAPACK fyaml m "-L${CLEO_FYAMLLIB}")
+      target_link_libraries(YAC::YAC INTERFACE ${YAC_C_LIBRARIES} "${YAC_C_MTIME_LIBRARY}" YAXT::YAXT_C NetCDF::NetCDF_C MPI::MPI_C LAPACK::LAPACK fyaml m "-L${CLEO_FYAMLLIB}")
     endif()
   endif()
 endif()
