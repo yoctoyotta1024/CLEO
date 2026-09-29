@@ -386,19 +386,19 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
 
   // --- Field definitions for receiving data ---
 
-  yac_cdef_field("pressure_in", component_id, &cell_point_id, num_point_sets,
+  yac_cdef_field("air_pressure_in", component_id, &cell_point_id, num_point_sets,
                  horizontal_fields_collection_size, field_timestep.c_str(),
                  YAC_TIME_UNIT_ISO_FORMAT, &pressure_yac_id_recv);
 
-  yac_cdef_field("temperature_in", component_id, &cell_point_id, num_point_sets,
+  yac_cdef_field("air_temperature_in", component_id, &cell_point_id, num_point_sets,
                  horizontal_fields_collection_size, field_timestep.c_str(),
                  YAC_TIME_UNIT_ISO_FORMAT, &temp_yac_id_recv);
 
-  yac_cdef_field("qvap_in", component_id, &cell_point_id, num_point_sets,
+  yac_cdef_field("humidity_mixing_ratio_in", component_id, &cell_point_id, num_point_sets,
                  horizontal_fields_collection_size, field_timestep.c_str(),
                  YAC_TIME_UNIT_ISO_FORMAT, &qvap_yac_id_recv);
 
-  yac_cdef_field("qcond_in", component_id, &cell_point_id, num_point_sets,
+  yac_cdef_field("liquid_water_mixing_ratio_in", component_id, &cell_point_id, num_point_sets,
                  horizontal_fields_collection_size, field_timestep.c_str(),
                  YAC_TIME_UNIT_ISO_FORMAT, &qcond_yac_id_recv);
 
@@ -410,21 +410,21 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
                  horizontal_fields_collection_size, field_timestep.c_str(),
                  YAC_TIME_UNIT_ISO_FORMAT, &northward_wind_yac_id_recv);
 
-  yac_cdef_field("vertical_wind_in", component_id, &cell_point_id, num_point_sets,
+  yac_cdef_field("upward_air_velocity_in", component_id, &cell_point_id, num_point_sets,
                  vertical_winds_collection_size, field_timestep.c_str(), YAC_TIME_UNIT_ISO_FORMAT,
                  &vertical_wind_yac_id_recv);
 
   // --- Field definitions for sending data ---
 
-  yac_cdef_field("temperature_out", component_id, &cell_point_id, num_point_sets,
+  yac_cdef_field("air_temperature_out", component_id, &cell_point_id, num_point_sets,
                  horizontal_fields_collection_size, field_timestep.c_str(),
                  YAC_TIME_UNIT_ISO_FORMAT, &temp_yac_id_send);
 
-  yac_cdef_field("qvap_out", component_id, &cell_point_id, num_point_sets,
+  yac_cdef_field("humidity_mixing_ratio_out", component_id, &cell_point_id, num_point_sets,
                  horizontal_fields_collection_size, field_timestep.c_str(),
                  YAC_TIME_UNIT_ISO_FORMAT, &qvap_yac_id_send);
 
-  yac_cdef_field("qcond_out", component_id, &cell_point_id, num_point_sets,
+  yac_cdef_field("liquid_water_mixing_ratio_out", component_id, &cell_point_id, num_point_sets,
                  horizontal_fields_collection_size, field_timestep.c_str(),
                  YAC_TIME_UNIT_ISO_FORMAT, &qcond_yac_id_send);
   // ---------------------------------------------------------
