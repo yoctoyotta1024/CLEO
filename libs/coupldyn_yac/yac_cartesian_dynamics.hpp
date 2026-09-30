@@ -76,7 +76,7 @@ struct CartesianDynamics {
   int northward_wind_yac_id_recv;
   int vertical_wind_yac_id_recv;
 
-  // Containers to receive data from YAC
+  // Containers to receive data via YAC
   double **yac_raw_cell_data;
   double **yac_raw_edge_data;
   double **yac_raw_vertical_wind_data;
@@ -138,10 +138,10 @@ struct CartesianDynamics {
   /* Public call to receive data from YAC
    * If the problem is 2D turns into a wrapper for receive_hor_slice_from_yac */
   void receive_fields_from_yac();
-  void receive_yac_cell_field(unsigned int yac_field_id, double **yac_raw_data,
+  void receive_yac_cell_field(unsigned int yac_field_id, double **yac_raw_cell_data,
                               std::vector<double> &target_array, const size_t vertical_levels,
                               double conversion_factor) const;
-  void receive_yac_edge_field(unsigned int yac_field_id, double **yac_raw_data,
+  void receive_yac_edge_field(unsigned int yac_field_id, double **yac_raw_edge_data,
                               std::vector<double> &target_array, double conversion_factor,
                               bool eastward_edge) const;
   void send_yac_cell_field(int field_id, double *field_data, double conversion_factor);
