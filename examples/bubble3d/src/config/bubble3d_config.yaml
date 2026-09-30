@@ -27,16 +27,26 @@ icon_yac_config:
   icon_data_timestep: 30                                  # must match ICON data file [seconds]
   num_vertical_levels: 24                                 # number of vertical levels in CLEO (<= ICON)
 
-### Initialization Parameters for bubble3d_inputfiles.py ###
+### Initialization Parameters for bubble3d_inputfiles.py (bimondal distrib. from RICO vanZanten) ###
 python_inputfiles:
   xgrid_ngbxs: 20                              # x direction ngbxs <- note(!) num_vertical_levels * xgrid_ngbxs == ngbxs (see below)
   ygrid_ngbxs: 4                               # y direction ngbxs <- note(!) num_vertical_levels * xgrid_ngbxs == ngbxs (see below)
-  sd_zlim: 1000                                # max z coord of initial superdroplets
-  nsupers_pergbx: 2                            # number of SDs per gridbox below sd_zlim <- note(!) must be consistent with maxnsupers (see below)
-  monor: 1e-6                                  # all SDs have this same radius [m]
-  dryr_sf: 1.0                                 # scale factor for dry radii [m]
-  numconc: 5e8                                 # total no. conc of real droplets [m^-3]
-  randcoords: false                             # sample SD spatial coordinates randomly or not
+  nsupers_pergbx: 32                           # number of SDs per gridbox <- note(!) must be consistent with maxnsupers (see below)
+  rspan:                                       # [min, max] range of radii to sample [m]
+    - 4e-9
+    - 8e-6
+  geomeans:                                    # geometric means of bimodal Lognormal distribution
+    - 0.03e-6
+    - 0.14e-6
+  geosigs:                                     # geometric stddevs of bimodal Lognormal distribution
+    - 1.28
+    - 1.75
+  scalefacs:                                   # scale factors of peaks in bimodal Lognormal distribution
+    - 0.85714285714
+    - 0.14285714285
+  numconc: 1.05e8                              # total no. conc of real droplets [m^-3]
+  randradii: true                             # sample SD radii in log10r bins randomly or not
+  randcoords: true                            # sample SD spatial coordinates randomly or not
 
 ### Kokkos Initialization Parameters ###
 kokkos_settings:
@@ -54,11 +64,11 @@ yac_settings:
 domain:
   nspacedims : 3                                          # no. of spatial dimensions to model
   ngbxs : 1920                                            # total number of Gbxs
-  maxnsupers: 1920                                        # maximum number of SDs
+  maxnsupers: 61440                                       # maximum number of SDs
 
 timesteps:
-  CONDTSTEP : 2                                           # time between SD condensation [s]
-  COLLTSTEP : 2                                           # time between SD collision [s]
+  CONDTSTEP : 0.1                                         # time between SD condensation [s]
+  COLLTSTEP : 1                                           # time between SD collision [s]
   MOTIONTSTEP : 3                                         # time between SDM motion [s]
   COUPLTSTEP : 30                                         # time between dynamic couplings [s]
   OBSTSTEP : 30                                           # time between SDM observations [s]
@@ -79,6 +89,19 @@ outputdata:
   zarrbasedir : /path/to/bin/bubble3d_sol.zarr        # zarr store base directory
   maxchunk : 2500000                                          # maximum no. of elements in chunks of zarr store array
 
+### Microphysics Parameters ###
+microphysics:
+  condensation:
+    do_alter_thermo : false                                   # true = cond/evap alters the thermodynamic state
+    maxniters : 50                                            # maximum no. iterations of Newton Raphson Method
+    MINSUBTSTEP : 0.001                                       # minimum subtimestep in cases of substepping [s]
+    rtol : 0.0                                                # relative tolerance for implicit Euler integration
+    atol : 0.01                                               # absolute tolerance for implicit Euler integration
+  coalescence:
+    constcoaleff:
+      coaleff: 1.0                                            # coalescence efficiency (not collision efficiency!)
+
+### Coupled Dynamics Parameters ###
 coupled_dynamics:
   type: yac
   lower_longitude: -3.141592653589793                  # must match xgrid domain delta_x
