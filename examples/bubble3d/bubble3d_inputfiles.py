@@ -108,7 +108,7 @@ def main(
     save_figures=False,
 ):
     import numpy as np
-
+    import random
     from pathlib import Path
     from ruamel.yaml import YAML
 
@@ -136,9 +136,7 @@ def main(
     orginal_icon_grid_file = Path(icon_yac_config["orginal_icon_grid_file"])
     orginal_icon_data_file = Path(icon_yac_config["orginal_icon_data_file"])
     if copy_iconfiles:
-        copy_icon_files(
-            Path(sharepath), orginal_icon_grid_file, orginal_icon_data_file
-        )
+        copy_icon_files(Path(sharepath), orginal_icon_grid_file, orginal_icon_data_file)
 
     ### ------------------------ INPUT PARAMETERS -------------------------- ###
     ### --- required CLEO cleoconstants.hpp file --- ###
@@ -149,9 +147,12 @@ def main(
         show_figures,
         save_figures,
     ]  # booleans for [showing, saving] initialisation figures
-    SDgbxs2plt = [
-        0
-    ]  # gbxindex of initial SDs to plot if any(isfigures) (nb. "all" can be very slow)
+    SDgbxs2plt = list(
+        range(min(0, config["domain"]["ngbxs"]), config["domain"]["ngbxs"])
+    )  # gbxindex of initial SDs to plot if any(isfigures) (nb. "all" can be very slow)
+    SDgbxs2plt = random.sample(
+        list(SDgbxs2plt), 5
+    )  # choose 5 random gbxs from list to plot
 
     ### --- settings for 3-D gridbox boundaries --- ###
     num_vertical_levels = icon_yac_config["num_vertical_levels"]
@@ -171,13 +172,19 @@ def main(
 
     ### --- settings for initial superdroplets --- ###
     # settings for initial coordinates
-    zlim = pyconfig["sd_zlim"]
-    npergbx = pyconfig["nsupers_pergbx"]
+    nsupers = pyconfig["nsupers_pergbx"]
 
-    # settings for initial radius and aerosol distributions
-    monor = pyconfig["monor"]
-    dryr_sf = pyconfig["dryr_sf"]
+    # [min, max] range of initial superdroplet radii (and implicitly solute masses)
+    randradii = pyconfig["randradii"]
+    rspan = list(pyconfig["rspan"])
+
+    # settings for initial superdroplet multiplicies (from bimodal Lognormal distribution)
+    geomeans = list(pyconfig["geomeans"])
+    geosigs = list(pyconfig["geosigs"])
+    scalefacs = list(pyconfig["scalefacs"])
     numconc = pyconfig["numconc"]
+
+    # settings for initial superdroplet coordinates
     randcoords = pyconfig["randcoords"]
 
     ### --------------------- BINARY FILES GENERATION ---------------------- ###
@@ -197,17 +204,12 @@ def main(
     ### ----- write initial superdroplets binary ----- ###
     if gen_supers:
         initsupers_filename = Path(config["initsupers"]["initsupers_filename"])
-        nsupers = crdgens.nsupers_at_domain_base(
-            grid_filename, constants_filename, npergbx, zlim
-        )
-        radiigen = rgens.MonoAttrGen(monor)  # all SDs have the same radius [m]
-        dryradiigen = dryrgens.ScaledRadiiGen(dryr_sf)  # dryradii are 1/sf of radii [m]
         coord3gen = crdgens.SampleCoordGen(randcoords)  # (not) random coord3 of SDs
         coord1gen = crdgens.SampleCoordGen(randcoords)  # (not) random coord1 of SDs
         coord2gen = crdgens.SampleCoordGen(randcoords)  # (not) random coord2 of SDs
-        xiprobdist = probdists.DiracDelta(
-            monor
-        )  # monodisperse droplet probability distrib
+        xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
+        radiigen = rgens.SampleLog10RadiiGen(rspan, is_random=randradii)
+        dryradiigen = dryrgens.ScaledRadiiGen(1.0)  # sf=1.0, initial radii are dry
 
         initattrsgen = attrsgen.AttrsGenerator(
             radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
@@ -220,6 +222,7 @@ def main(
             grid_filename,
             nsupers,
             numconc,
+            isprintinfo=False,
             isfigures=isfigures,
             savefigpath=savefigpath,
             gbxs2plt=SDgbxs2plt,
