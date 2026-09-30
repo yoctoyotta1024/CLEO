@@ -22,6 +22,10 @@ definitions:
             n: 3
             weighted: distance_weighted
             max_search_distance: 10.0
+        - nnn:
+            n: 5
+            weighted: distance_weighted
+            # no max_search_distance = unbounded: guarantees SOME match is always found
   time_config: &time_config
     coupling_period: PT30S
   component_configs:
