@@ -55,8 +55,12 @@
 #include "runcleo/couplingcomms.hpp"
 #include "runcleo/runcleo.hpp"
 #include "runcleo/sdmmethods.hpp"
+#include "superdrops/collisions/coalescence.hpp"
+#include "superdrops/collisions/longhydroprob.hpp"
+#include "superdrops/condensation.hpp"
 #include "superdrops/microphysicalprocess.hpp"
 #include "superdrops/motion.hpp"
+#include "superdrops/terminalvelocity.hpp"
 #include "zarr/collective_dataset.hpp"
 #include "zarr/fsstore.hpp"
 
@@ -67,7 +71,7 @@ inline CoupledDynamics auto create_coupldyn(const Config& config, const Cartesia
   const std::array<size_t, 3> ndims({h_ndims(0), h_ndims(1), h_ndims(2)});
 
   const auto nsteps = (unsigned int)(std::ceil(t_end / couplstep) + 1);
-  const CartesianDecomposition &decomp = gbxmaps.get_domain_decomposition();
+  const CartesianDecomposition& decomp = gbxmaps.get_domain_decomposition();
   return YacCartesianDynamics(config, couplstep, ndims, nsteps, decomp);
 }
 
@@ -85,25 +89,37 @@ inline GridboxMaps auto create_gbxmaps(const Config& config) {
   return gbxmaps;
 }
 
-inline MicrophysicalProcess auto create_microphysics(const Config& config,
-                                                     const Timesteps& tsteps) {
-  return NullMicrophysicalProcess{};
-}
-// inline auto create_movement(const unsigned int motionstep, const CartesianMaps &gbxmaps) {
-//   const Motion<CartesianMaps> auto motion = NullMotion{};
-//   const BoundaryConditions<CartesianMaps> auto boundary_conditions = NullBoundaryConditions{};
-
-//  return cartesian_movement(gbxmaps, motion, boundary_conditions);
-// }
-
 inline auto create_movement(const unsigned int motionstep, const CartesianMaps& gbxmaps) {
-  const auto terminalv = NullTerminalVelocity{};
+  const auto terminalv = RogersGKTerminalVelocity{};
   const Motion<CartesianMaps> auto motion =
-       CartesianMotion(motionstep, &step2dimlesstime, terminalv);
+      CartesianMotion(motionstep, &step2dimlesstime, terminalv);
 
   const BoundaryConditions<CartesianMaps> auto boundary_conditions = NullBoundaryConditions{};
 
   return cartesian_movement(gbxmaps, motion, boundary_conditions);
+}
+
+inline MicrophysicalProcess auto config_condensation(const Config& config,
+                                                     const Timesteps& tsteps) {
+  const auto c = config.get_condensation();
+
+  return Condensation(tsteps.get_condstep(), &step2dimlesstime, c.do_alter_thermo, c.maxniters,
+                      c.rtol, c.atol, c.MINSUBTSTEP, &realtime2dimless);
+}
+
+inline MicrophysicalProcess auto config_collisions(const Config& config, const Timesteps& tsteps) {
+  const PairProbability auto prob = LongHydroProb(config.get_coalescence().constcoaleff.coaleff);
+  const MicrophysicalProcess auto colls = CollCoal(tsteps.get_collstep(), &step2realtime, prob);
+  return colls;
+}
+
+inline MicrophysicalProcess auto create_microphysics(const Config& config,
+                                                     const Timesteps& tsteps) {
+  const MicrophysicalProcess auto cond = config_condensation(config, tsteps);
+
+  const MicrophysicalProcess auto colls = config_collisions(config, tsteps);
+
+  return cond >> colls;
 }
 
 template <typename Dataset, typename Store>
