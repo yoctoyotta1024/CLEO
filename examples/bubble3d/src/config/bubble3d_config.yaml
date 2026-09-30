@@ -33,8 +33,8 @@ python_inputfiles:
   ygrid_ngbxs: 4                               # y direction ngbxs <- note(!) num_vertical_levels * xgrid_ngbxs == ngbxs (see below)
   nsupers_pergbx: 32                           # number of SDs per gridbox <- note(!) must be consistent with maxnsupers (see below)
   rspan:                                       # [min, max] range of radii to sample [m]
-    - 4e-9
-    - 8e-6
+    - 5e-9
+    - 4e-6
   geomeans:                                    # geometric means of bimodal Lognormal distribution
     - 0.03e-6
     - 0.14e-6
@@ -69,7 +69,7 @@ domain:
 timesteps:
   CONDTSTEP : 0.1                                         # time between SD condensation [s]
   COLLTSTEP : 1                                           # time between SD collision [s]
-  MOTIONTSTEP : 3                                         # time between SDM motion [s]
+  MOTIONTSTEP : 1                                         # time between SDM motion [s]
   COUPLTSTEP : 30                                         # time between dynamic couplings [s]
   OBSTSTEP : 30                                           # time between SDM observations [s]
   T_END : 7200                                            # time span of integration from 0s to T_END [s]
@@ -93,10 +93,10 @@ outputdata:
 microphysics:
   condensation:
     do_alter_thermo : false                                   # true = cond/evap alters the thermodynamic state
-    maxniters : 50                                            # maximum no. iterations of Newton Raphson Method
+    maxniters : 100                                           # maximum no. iterations of Newton Raphson Method
     MINSUBTSTEP : 0.001                                       # minimum subtimestep in cases of substepping [s]
-    rtol : 0.0                                                # relative tolerance for implicit Euler integration
-    atol : 0.01                                               # absolute tolerance for implicit Euler integration
+    rtol : 0.01                                               # relative tolerance for implicit Euler integration
+    atol : 0.1                                                # absolute tolerance for implicit Euler integration
   coalescence:
     constcoaleff:
       coaleff: 1.0                                            # coalescence efficiency (not collision efficiency!)
