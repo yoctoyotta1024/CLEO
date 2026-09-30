@@ -309,20 +309,17 @@ void CartesianDynamics::send_yac_cell_field(int yac_field_id, double* field_data
       std::cout << "Skipped last Put Action of field "
                 << yac_cget_field_name_from_field_id(yac_field_id) << "\n";
     } else {
-      for (size_t j = 0; j < ndims[NORTHWARD]; j++) {
-        for (size_t i = 0; i < ndims[EASTWARD]; i++) {
-          for (size_t k = 0; k < ndims[VERTICAL]; k++) {
-            auto ii = (ndims[EASTWARD] * j + i) * ndims[VERTICAL] + k;
-            auto vertical_idx = k;
-            auto source_idx = j * ndims[EASTWARD] + i;
-            send_buffer[vertical_idx][0][source_idx] = field_data[ii] * conversion_factor;
-          }
+      // YAC expects dimensions as [lev][1][cell] but CLEO stores it
+      // as [cell*lev], therefore we apply a transposition here
+      size_t num_points = ndims[NORTHWARD] * ndims[EASTWARD];
+      for (size_t point_idx = 0; point_idx < num_points; ++point_idx) {
+        for (size_t k = 0; k < ndims[VERTICAL]; ++k) {
+          auto ii = point_idx * ndims[VERTICAL] + k;
+          yac_raw_cell_data_send[k][0][point_idx] = field_data[ii] * conversion_factor;
         }
       }
 
-      yac_cput(yac_field_id, ndims[VERTICAL], send_buffer, &info, &ierror);
-
-      delete[] send_buffer;
+      yac_cput(yac_field_id, ndims[VERTICAL], yac_raw_cell_data_send, &info, &ierror);
     }
   } else {
     if (action != YAC_ACTION_OUT_OF_BOUND) {
@@ -482,10 +479,13 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
   yac_raw_cell_data = new double*[ndims[VERTICAL]];
   yac_raw_edge_data = new double*[ndims[VERTICAL]];
   yac_raw_vertical_wind_data = new double*[ndims[VERTICAL] + 1];
+  yac_raw_cell_data_send = new double**[ndims[VERTICAL]];
 
   for (size_t i = 0; i < ndims[VERTICAL]; i++) {
     yac_raw_cell_data[i] = new double[horizontal_cell_number];
     yac_raw_edge_data[i] = new double[horizontal_edge_number];
+    yac_raw_cell_data_send[i] = new double*[1];
+    yac_raw_cell_data_send[i][0] = new double[horizontal_cell_number];
   }
 
   for (size_t i = 0; i < ndims[VERTICAL] + 1; i++)
@@ -508,14 +508,19 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
 
 CartesianDynamics::~CartesianDynamics() {
   for (size_t i = 0; i < ndims[VERTICAL]; i++) {
-    delete yac_raw_cell_data[i];
-    delete yac_raw_edge_data[i];
+    delete[] yac_raw_cell_data[i];
+    delete[] yac_raw_edge_data[i];
+    delete[] yac_raw_cell_data_send[i][0];
+    delete[] yac_raw_cell_data_send[i];
   }
-  for (size_t i = 0; i < ndims[VERTICAL] + 1; i++) delete yac_raw_vertical_wind_data[i];
+  for (size_t i = 0; i < ndims[VERTICAL] + 1; i++) {
+    delete[] yac_raw_vertical_wind_data[i];
+  }
 
   delete[] yac_raw_cell_data;
   delete[] yac_raw_edge_data;
   delete[] yac_raw_vertical_wind_data;
+  delete[] yac_raw_cell_data_send;
 
   yac_cfinalize();
 }

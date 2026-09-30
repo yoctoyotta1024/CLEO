@@ -81,8 +81,8 @@ struct CartesianDynamics {
   double **yac_raw_edge_data;
   double **yac_raw_vertical_wind_data;
 
-  // Container to send the data to YAC
-  double ***send_buffer;
+  // Containers to send data via YAC
+  double ***yac_raw_cell_data_send;
 
   std::array<size_t, 3> partition_origin;
   std::array<size_t, 3> partition_size;
