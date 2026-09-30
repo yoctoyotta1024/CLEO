@@ -186,12 +186,13 @@ void create_grid_and_points_definitions(const Config& config, const std::array<s
 }
 
 /*
- * fill's target_array with values from yac_raw_data at multiplied by their conversion factor
+ * fill's target_array with values from yac_raw_cell_data at multiplied by their conversion factor
  * for array on cell points of grid
  *
  * (see also receive_yac_edge_field)
  * */
-void CartesianDynamics::receive_yac_cell_field(unsigned int yac_field_id, double** yac_raw_data,
+void CartesianDynamics::receive_yac_cell_field(unsigned int yac_field_id,
+                                               double** yac_raw_cell_data,
                                                std::vector<double>& target_array,
                                                const size_t vertical_levels,
                                                double conversion_factor = 1.0) const {
@@ -206,13 +207,15 @@ void CartesianDynamics::receive_yac_cell_field(unsigned int yac_field_id, double
       std::cout << "Last Get Action was skipped for field "
                 << yac_cget_field_name_from_field_id(yac_field_id) << "\n";
     } else {
-      yac_cget(yac_field_id, vertical_levels, yac_raw_data, &info, &error);
+      yac_cget(yac_field_id, vertical_levels, yac_raw_cell_data, &info, &error);
 
+      // YAC gives dimensions as [lev][cell] but CLEO stores it
+      // as [cell*lev], therefore we apply a transposition here
       size_t num_points = ndims[NORTHWARD] * ndims[EASTWARD];
       for (size_t point_idx = 0; point_idx < num_points; point_idx++) {
         for (size_t k = 0; k < vertical_levels; k++) {
           auto ii = point_idx * vertical_levels + k;
-          target_array[ii] = yac_raw_data[k][point_idx] / conversion_factor;
+          target_array[ii] = yac_raw_cell_data[k][point_idx] / conversion_factor;
         }
       }
     }
@@ -223,7 +226,7 @@ void CartesianDynamics::receive_yac_cell_field(unsigned int yac_field_id, double
 }
 
 /*
- * fill's target_array with values from yac_raw_data at multiplied by their conversion factor
+ * fill's target_array with values from yac_raw_edge_data at multiplied by their conversion factor
  * for array on edge points of grid
  *
  * (see also receive_yac_cell_field)
@@ -238,7 +241,8 @@ void CartesianDynamics::receive_yac_cell_field(unsigned int yac_field_id, double
  * and similarly ``source_idx`` is equivalent to:
  * ``source_idx = j * (2 * ndims[EASTWARD] + 1) + eastward_edge * ndims[EASTWARD] + i;``
  * */
-void CartesianDynamics::receive_yac_edge_field(unsigned int yac_field_id, double** yac_raw_data,
+void CartesianDynamics::receive_yac_edge_field(unsigned int yac_field_id,
+                                               double** yac_raw_edge_data,
                                                std::vector<double>& target_array,
                                                double conversion_factor = 1.0,
                                                bool eastward_edge = false) const {
@@ -253,7 +257,7 @@ void CartesianDynamics::receive_yac_edge_field(unsigned int yac_field_id, double
       std::cout << "Last Get Action was skipped for field "
                 << yac_cget_field_name_from_field_id(yac_field_id) << "\n";
     } else {
-      yac_cget(yac_field_id, ndims[VERTICAL], yac_raw_data, &info, &error);
+      yac_cget(yac_field_id, ndims[VERTICAL], yac_raw_edge_data, &info, &error);
 
       unsigned int source_index = 0;
       unsigned int target_index = 0;
@@ -264,7 +268,7 @@ void CartesianDynamics::receive_yac_edge_field(unsigned int yac_field_id, double
             for (size_t vertical_index = 0; vertical_index < ndims[VERTICAL];
                  vertical_index++, target_index++)
               target_array[target_index] =
-                  yac_raw_data[vertical_index][source_index] / conversion_factor;
+                  yac_raw_edge_data[vertical_index][source_index] / conversion_factor;
         } else {
           source_index += ndims[EASTWARD] + !eastward_edge;
         }
