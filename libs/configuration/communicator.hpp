@@ -34,7 +34,7 @@
 class init_communicator {
   static int yac_comp_id;
   static MPI_Comm comm;
-  bool yac_present;
+  bool is_using_yac;
   static int comm_size;
   static int my_rank;
 
