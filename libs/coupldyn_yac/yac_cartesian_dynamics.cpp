@@ -33,7 +33,7 @@ extern "C" {
 enum { VERTICAL = 0, EASTWARD = 1, NORTHWARD = 2 };
 
 namespace dlc = dimless_constants;
-
+int YacDynamics::get_counter = 1;
 /* return (k,i,j) indicies from idx for a flattened 3D array
 with ndims [nz, nx, ny]. kij is useful for then getting
 position in of a variable in a flattened array defined on
@@ -131,14 +131,16 @@ void create_grid_and_points_definitions(const Config &config, const std::array<s
 /*
 fill's target_array with values from yac_raw_data at multiplied by their conversion factor
 */
+
 void CartesianDynamics::receive_yac_field(unsigned int yac_field_id, double **yac_raw_data,
                                           std::vector<double> &target_array,
                                           const size_t ndims_north, const size_t ndims_east,
                                           const size_t vertical_levels,
                                           double conversion_factor = 1.0) const {
   int info, error;
+  int action;
+  yac_cget_action(yac_field_id, &action);
   yac_cget(yac_field_id, vertical_levels, yac_raw_data, &info, &error);
-
   for (size_t j = 0; j < ndims_north; j++) {
     for (size_t i = 0; i < ndims_east; i++) {
       for (size_t k = 0; k < vertical_levels; k++) {
@@ -173,6 +175,57 @@ void CartesianDynamics::receive_fields_from_yac() {
                     ndims[EASTWARD], ndims[VERTICAL], dlc::W0);
 }
 
+void CartesianDynamics::send_yac_field(int field_id, double* field_data,
+    double conversion_factor = 1.0) {
+  auto ndims_vertical = ndims[VERTICAL];
+  auto ndims_north = ndims[NORTHWARD];
+  auto ndims_east = ndims[EASTWARD];
+  auto ncells = ndims_north * ndims_east;
+
+  int info, ierror;
+  // auto field_size = ncells*ndims_vertical;
+  // double **collection_data;
+
+  send_buffer = new double **[ndims_vertical];
+
+  for (size_t j = 0; j < ndims_vertical; ++j) {
+    send_buffer[j] = new double*[1];
+    send_buffer[j][0] = new double[ncells];
+  }
+
+  for (size_t j = 0; j < ndims_north; j++) {
+    for (size_t i = 0; i < ndims_east; i++) {
+      for (size_t k = 0; k < ndims_vertical; k++) {
+        auto ii = (ndims_east * j + i) * ndims_vertical + k;
+        auto vertical_idx = k;
+        auto source_idx = j * ndims_east + i;
+        send_buffer[vertical_idx][0][source_idx] = field_data[ii] * conversion_factor;
+      }
+    }
+  }
+
+  // for (size_t i = 0; i < field_size; i++) {
+  //  field_data[i] = field_data[i]*conversion_factor;
+  // }
+  yac_cput(field_id, ndims_vertical, send_buffer, &info, &ierror);
+
+  std::cout << "yac_cput_ completed with info as: " << info << std::endl;
+
+  for (size_t j = 0; j < ndims_vertical; ++j) {
+    delete send_buffer[j][0];
+    delete send_buffer[j];
+  }
+  delete[] send_buffer;
+}
+void CartesianDynamics::send_fields_to_yac(double* h_temp,
+                               double* h_qvap,
+                               double* h_qcond) {
+  // double temp_field = h_temp;
+  send_yac_field(temp_yac_id2, h_temp, dlc::TEMP0);
+  send_yac_field(qvap_yac_id2, h_qvap);
+  send_yac_field(qcond_yac_id2, h_qcond);
+}
+
 CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size_t, 3> i_ndims,
                                      const unsigned int nsteps)
     : ndims(i_ndims),
@@ -184,7 +237,6 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
 
   // Get YAC Component id from the communicator init class
   int component_id = init_communicator::get_yac_comp_id();
-  std::cout << "yac comp id in cart_dyn:" << component_id << std::endl;
 
   // --- Grid definition ---
   int grid_id = -1;
@@ -205,8 +257,10 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   int horizontal_fields_collection_size = ndims[VERTICAL];
   int vertical_winds_collection_size = ndims[VERTICAL] + 1;
 
-  const char coupling_timestep[6] = "PT60S";  // TODO(CB): move these variables to config
+  const char coupling_timestep[6] = "PT30S";  // TODO(CB): move these variables to config
   const char coupldyn_grid_name[16] = "icon_atmos_grid";
+
+  // --- Field definitions for recieving data from ICON ---
 
   yac_cdef_field("pressure", component_id, &cell_point_id, num_point_sets,
                  horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
@@ -236,7 +290,21 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
                  vertical_winds_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
                  &vertical_wind_yac_id);
 
-  // --- Field coupling definitions ---
+  // --- Field definitions for sending data to ICON ---
+
+  yac_cdef_field("temperature_send", component_id, &cell_point_id, num_point_sets,
+                 horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
+                 &temp_yac_id2);
+
+  yac_cdef_field("qvap_send", component_id, &cell_point_id, num_point_sets,
+                 horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
+                 &qvap_yac_id2);
+
+  yac_cdef_field("qcond_send", component_id, &cell_point_id, num_point_sets,
+                 horizontal_fields_collection_size, coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
+                 &qcond_yac_id2);
+
+  // --- Field coupling definitions for receiving from ICON ---
   yac_cdef_couple("atm", coupldyn_grid_name, "pressure", "cleo", "cleo_grid", "pressure",
                   coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
                   interp_stack_id, 0, 0);
@@ -264,6 +332,23 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
                   coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
                   interp_stack_id, 0, 0);
 
+  // --- Field coupling definitions for sending to ICON ---
+
+  yac_cdef_couple("cleo", "cleo_grid", "temperature_send", "atm", coupldyn_grid_name,
+                  "temperature_receive", coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT,
+                  YAC_REDUCTION_TIME_NONE, interp_stack_id, 0, 0);
+  yac_cdef_couple("cleo", "cleo_grid", "qvap_send", "atm", coupldyn_grid_name, "qvap_receive",
+                  coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, 0, 0);
+  yac_cdef_couple("cleo", "cleo_grid", "qcond_send", "atm", coupldyn_grid_name, "qcond_receive",
+                  coupling_timestep, YAC_TIME_UNIT_ISO_FORMAT, YAC_REDUCTION_TIME_NONE,
+                  interp_stack_id, 0, 0);
+
+  // ---------------------------------------------------------
+
+  yac_cset_config_output_file(
+  "coupling_debug.yaml", YAC_CONFIG_OUTPUT_FORMAT_YAML,
+  YAC_CONFIG_OUTPUT_SYNC_LOC_ENDDEF, 1);
   // --- End of YAC definitions ---
   yac_cenddef();
 
@@ -292,7 +377,7 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   wvel = std::vector<double>(horizontal_cell_number * (ndims[VERTICAL] + 1), 0);
 
   // Calls the first data retrieval from YAC to have thermodynamic data for first timestep
-  receive_fields_from_yac();
+  // receive_fields_from_yac();
 
   std::cout << "Finished setting up YAC for receiving:\n"
                "  pressure,\n  temperature,\n"
@@ -302,7 +387,6 @@ CartesianDynamics::CartesianDynamics(const Config &config, const std::array<size
   // Defines the functions that will be used to retrieve data from the containers
   // (Can probably be simplified)
   set_winds(config);
-
   std::cout << "--- cartesian dynamics from YAC: success ---\n";
 }
 
@@ -311,7 +395,6 @@ CartesianDynamics::~CartesianDynamics() {
     delete yac_raw_cell_data[i];
     delete yac_raw_edge_data[i];
   }
-
   for (size_t i = 0; i < ndims[VERTICAL] + 1; i++) delete yac_raw_vertical_wind_data[i];
 
   delete[] yac_raw_cell_data;
