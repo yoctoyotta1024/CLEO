@@ -31,22 +31,22 @@ receive any back. Struct obeys coupling comms concept */
 struct YacComms {
  private:
   /* updates the state of a gridbox using information
-  received from YacDynamics solver for 1-way
+  received from YacCartesianDynamics solver for 1-way
   coupling to CLEO SDM */
-  void update_gridbox_state(const YacDynamics &ffdyn, const size_t ii, Gridbox &gbx) const;
+  void update_gridbox_state(const YacCartesianDynamics &ffdyn, const size_t ii, Gridbox &gbx) const;
 
  public:
   /* send information from Gridboxes' states
-  to coupldyn is null for YacDynamics*/
-  template <typename GbxMaps, typename CD = YacDynamics>
-  void send_dynamics(const GbxMaps &gbxmaps, const viewh_constgbx h_gbxs,
-                     YacDynamics &ffdyn) const {}
+  to coupldyn is null for YacCartesianDynamics*/
+  template <typename GbxMaps, typename CD = YacCartesianDynamics>
+  void send_dynamics(const GbxMaps &, const viewh_constgbx,
+                     const YacCartesianDynamics &ffdyn) const;
 
   /* update Gridboxes' states using information
-  received from YacDynamics solver for
+  received from YacCartesianDynamics solver for
   1-way coupling to CLEO SDM */
-  template <typename GbxMaps, typename CD = YacDynamics>
-  void receive_dynamics(const GbxMaps &gbxmaps, const YacDynamics &ffdyn,
+  template <typename GbxMaps, typename CD = YacCartesianDynamics>
+  void receive_dynamics(const GbxMaps &gbxmaps, const YacCartesianDynamics &ffdyn,
                         const viewh_gbx h_gbxs) const;
 };
 
