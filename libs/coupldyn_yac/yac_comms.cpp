@@ -50,9 +50,9 @@ void YacComms::send_dynamics(const GbxMaps &gbxmaps, const viewh_constgbx h_gbxs
   Kokkos::parallel_for("send_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
                        [=, *this](const size_t ii) {
                          State& state(h_gbxs(ii).state);
-                         temp_send[ii] = state.temp;
-                         qvap_send[ii] = state.qvap;
-                         qcond_send[ii] = state.qcond;
+                         temp_send(ii) = state.temp;
+                         qvap_send(ii) = state.qvap;
+                         qcond_send(ii) = state.qcond;
                        });
   const int coupling_flag = ffdyn.get_dynvars()->get_yac_coupling_flag();
 
