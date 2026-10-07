@@ -28,7 +28,7 @@
 ### Supported examples (see common/examples.sh for full details):
 ###   as2017 cuspbifurc breakup shima2009 constthermo2d divfree2d
 ###   eurec4a1d rainshaft1d python_bindings fromfile
-###   fromfile_irreg bubble3d
+###   fromfile_irreg bubble3d roughpaper
 ###   Note: cuda requires compilername=gcc.
 ### ============================================================ ###
 
@@ -42,7 +42,7 @@ machine_compilers=(gcc intel)
 machine_examples=(
   as2017 cuspbifurc breakup shima2009 constthermo2d divfree2d
   eurec4a1d rainshaft1d python_bindings fromfile
-  fromfile_irreg bubble3d
+  fromfile_irreg bubble3d roughpaper
 )
 machine_default_stacksize="204800"
 machine_default_make_jobs=32

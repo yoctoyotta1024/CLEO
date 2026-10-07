@@ -27,7 +27,7 @@
 ###
 ### Supported examples (see common/examples.sh for full details):
 ###   as2017 cuspbifurc breakup shima2009 constthermo2d divfree2d
-###   eurec4a1d rainshaft1d python_bindings
+###   eurec4a1d rainshaft1d python_bindings roughpaper
 ###   Note: fromfile, fromfile_irreg and bubble3d need an HPC machine
 ###   (levante or jupiter).
 ### ============================================================ ###
@@ -41,7 +41,7 @@ machine_buildtypes=(serial threads openmp)
 machine_compilers=(gcc)
 machine_examples=(
   as2017 cuspbifurc breakup shima2009 constthermo2d divfree2d
-  eurec4a1d rainshaft1d python_bindings
+  eurec4a1d rainshaft1d python_bindings roughpaper
 )
 machine_default_stacksize=""
 machine_default_make_jobs=8

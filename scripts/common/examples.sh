@@ -146,6 +146,18 @@ case "${example}" in
     script_args="${src_config_filename}"
     ;;
 
+  roughpaper)
+    # your own executable: roughpaper/src/main.cpp (note: roughpaper must not be
+    # excluded, so cleo_common_flags with -DCLEO_NO_ROUGHPAPER=true is not used)
+    build_subdir=build_roughpaper/
+    build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian -DCLEO_NO_PYBINDINGS=true"
+    executables="cleocoupledsdm"
+
+    pythonscript=${path2CLEO}/roughpaper/roughpaper.py
+    src_config_filename=${path2CLEO}/roughpaper/src/config/config.yaml
+    script_args="${src_config_filename}"
+    ;;
+
   shima2009)
     build_subdir=build_colls0d/shima2009/
     build_flags="-DCLEO_COUPLED_DYNAMICS=null -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
@@ -160,7 +172,7 @@ case "${example}" in
     echo "Error: unknown example '${example}'."
     echo "Available: as2017 cuspbifurc breakup shima2009 constthermo2d divfree2d"
     echo "           eurec4a1d rainshaft1d python_bindings"
-    echo "           fromfile fromfile_irreg bubble3d"
+    echo "           fromfile fromfile_irreg bubble3d roughpaper"
     exit 1
     ;;
 esac
