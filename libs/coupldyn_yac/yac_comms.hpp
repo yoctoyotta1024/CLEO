@@ -30,12 +30,22 @@ coupldyn sends information to h_gbxs but doesn't
 receive any back. Struct obeys coupling comms concept */
 struct YacComms {
  private:
+  Kokkos::View<double*, HostSpace> temp_send;
+  Kokkos::View<double*, HostSpace> qvap_send;
+  Kokkos::View<double*, HostSpace> qcond_send;
+
   /* updates the state of a gridbox using information
   received from YacCartesianDynamics solver for 1-way
   coupling to CLEO SDM */
   void update_gridbox_state(const YacCartesianDynamics &ffdyn, const size_t ii, Gridbox &gbx) const;
 
  public:
+  /* initialise YacComms with capacity in send buffers of ngbxs. */
+  explicit YacComms(const size_t ngbxs)
+      : temp_send("temp_send", ngbxs),
+        qvap_send("qvap_send", ngbxs),
+        qcond_send("qcond_send", ngbxs) {}
+
   /* send information from Gridboxes' states
   to coupldyn is null for YacCartesianDynamics*/
   template <typename GbxMaps, typename CD = YacCartesianDynamics>
