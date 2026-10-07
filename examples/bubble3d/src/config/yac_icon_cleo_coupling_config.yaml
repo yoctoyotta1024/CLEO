@@ -12,7 +12,21 @@ definitions:
       component: cleo
       grid: cleo_cartesian_grid
   interp_stacks:
-    nnn_interp_stack: &nnn_interp_stack
+    interp_stack_to_cleo: &interp_stack_to_cleo
+      interpolation:
+        - nnn:
+            n: 3
+            weighted: distance_weighted
+            max_search_distance: 1.0
+        - nnn:
+            n: 3
+            weighted: distance_weighted
+            max_search_distance: 10.0
+        - nnn:
+            n: 5
+            weighted: distance_weighted
+            # no max_search_distance = unbounded: guarantees SOME match is always found
+    interp_stack_from_cleo: &interp_stack_from_cleo
       interpolation:
         - nnn:
             n: 3
@@ -44,7 +58,7 @@ definitions:
 
 coupling:
 # ATM -> CLEO
-  - <<: [*atm2cleo, *nnn_interp_stack]
+  - <<: [*atm2cleo, *interp_stack_to_cleo]
     field:
       - src: eastward_wind_to_cleo
         tgt: eastward_wind_in
@@ -52,7 +66,7 @@ coupling:
         tgt: northward_wind_in
       - src: upward_air_velocity_to_cleo
         tgt: upward_air_velocity_in
-  - <<: [*atm2cleo, *nnn_interp_stack]
+  - <<: [*atm2cleo, *interp_stack_to_cleo]
     field:
       - src: humidity_mixing_ratio_to_cleo
         tgt: humidity_mixing_ratio_in
@@ -64,12 +78,10 @@ coupling:
     field:
       - src: air_pressure_to_cleo
         tgt: air_pressure_in
-  - <<: [*atm2cleo, *nnn_interp_stack]
-    field:
       - src: air_temperature_to_cleo
         tgt: air_temperature_in
 # # CLEO -> ATM
-#   - <<: [*cleo2atm, *nnn_interp_stack]
+#   - <<: [*cleo2atm, *interp_stack_from_cleo]
 #     field:
 #       - src: humidity_mixing_ratio_out
 #         tgt: humidity_mixing_ratio_from_cleo
