@@ -25,8 +25,8 @@ buildtype="openmp"
 compilername="gcc"
 path2CLEO=${HOME}/CLEO/
 path2build=${HOME}/CLEO/build_bubble3d/
-path2experiment="/work/mh0731/m300950/icon-mpim/experiments/bubble_cleo"
-path2iconfiles="/work/mh0731/m300950/icon-mpim/experiments/bubble_1mom/outdata"
+path2experiment="/work/mh0731/m300950/icon/icon/experiments/bubble_cleo"
+path2iconfiles="/work/mh0731/m300950/icon/icon/experiments/bubble_1mom/outdata"
 build_flags="-DCLEO_COUPLED_DYNAMICS=yac -DCLEO_DOMAIN=cartesian \
   -DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
 executables="bubble3d"
