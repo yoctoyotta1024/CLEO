@@ -89,8 +89,8 @@ config_params = {
     "setup_filename": str(binpath / "bubble3d_setup.txt"),
     "zarrbasedir": str(binpath / "bubble3d_sol.zarr"),
     "yac_config_file": str(tmppath / "yac_icon_cleo_coupling_config.yaml"),
-    "yac_debug_config_file": str(binpath / "cleo_coupling_debug.yaml"),
-    "yac_debug_grid_file": str(binpath / "cleo_grid_debug.nc"),
+    # "yac_debug_config_file": str(binpath / "cleo_coupling_debug.yaml"),
+    # "yac_debug_grid_file": str(binpath / "cleo_grid_debug.nc"),
     "orginal_icon_grid_file": str(path2iconfiles / "bubble_1mom_atm_cgrid_ml.nc"),
     "orginal_icon_data_file": str(
         path2iconfiles / "bubble_1mom_atm_3d_ml_20080801T000000Z.nc"
@@ -146,8 +146,8 @@ def inputfiles(
         gen_yac_files
     ):  # delete any existing yac config and debugging files and copy new yac config
         Path(config["yac_settings"]["yac_config_file"]).unlink(missing_ok=True)
-        Path(config["yac_settings"]["yac_debug_config_file"]).unlink(missing_ok=True)
-        Path(config["yac_settings"]["yac_debug_grid_file"]).unlink(missing_ok=True)
+        # Path(config["yac_settings"]["yac_debug_config_file"]).unlink(missing_ok=True)
+        # Path(config["yac_settings"]["yac_debug_grid_file"]).unlink(missing_ok=True)
         shutil.copy(src_yac_config_filename, config["yac_settings"]["yac_config_file"])
     if gen_gbxs:
         Path(config["inputfiles"]["grid_filename"]).unlink(missing_ok=True)

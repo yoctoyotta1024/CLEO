@@ -5,6 +5,13 @@ timestep_unit: ISO_format
 
 debug:
   coordinates_mismatch_is_fatal: false   # warns instead of aborting
+  global_config:
+    enddef: /work/mh0731/m300950/icon/icon/experiments/bubble_cleo/bin/coupling_config_debug.yaml
+  output_grids:
+    - grid_name: cleo_cartesian_grid
+      file_name: /work/mh0731/m300950/icon/icon/experiments/bubble_cleo/bin/all_grids_debug.nc
+    - grid_name: icon_atmos_grid
+      file_name: /work/mh0731/m300950/icon/icon/experiments/bubble_cleo/bin/all_grids_debug.nc
 
 definitions:
   components:
@@ -77,6 +84,9 @@ coupling:
         tgt: air_pressure_in
       - src: air_temperature_to_cleo
         tgt: air_temperature_in
+    weight_file:
+      name: /work/mh0731/m300950/icon/icon/experiments/bubble_cleo/bin/weights_cells_debug.nc
+      on_existing: overwrite
 # # CLEO -> ATM
 #   - <<: [*cleo2atm, *interp_stack_from_cleo]
 #     field:
