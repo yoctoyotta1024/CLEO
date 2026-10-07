@@ -7,6 +7,8 @@ To use Cleo as an SDM coupled to a dynamics solver, essentially your task is to 
 ``main.cpp`` file.
 
 Have a look at ``roughpaper/src/main.cpp`` and ``roughpaper/src/main_impl.hpp`` for inspiration.
+(To build, compile and run this ``main.cpp`` with our bash scripts, see the *Your Own Executable
+(roughpaper)* example for your machine, e.g. :ref:`on a "vanilla" machine<examples_vanilla>`.)
 Depending on the setup you desire, you need to include different instantiations of the core concepts
 of Cleo in your main.cpp. For example for the SDM part of Cleo you need to specify the coupling
 timestep, the gridbox maps for the domain, and the type of super-droplet motion, microphysics and

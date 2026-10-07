@@ -469,6 +469,36 @@ The Examples
   time-stepping may not be ordered due to parallel execution.
 
 
+.. dropdown:: Your Own Executable (roughpaper)
+  :animate: fade-in
+
+  This is not an example with a reference solution, but a starting point for running your own
+  setup of Cleo. It builds and runs the executable ``cleocoupledsdm`` from
+  ``roughpaper/src/main.cpp`` (see the :doc:`quickstart <../quickstart>`) with the configuration
+  file ``roughpaper/src/config/config.yaml``. Its input files are made by
+  ``roughpaper/roughpaper_inputfiles.py``, which is also an example of various ways to use
+  ``cleopy`` to create them. The run is driven by ``roughpaper/roughpaper.py``.
+
+  1. :ref:`Configure the bash scripts<configurebash_jupiter>`.
+
+  2. Build Cleo and compile the executable on a login node, then submit the job script to run
+  it, e.g. from your Cleo directory:
+
+  .. code-block:: console
+
+    $ scripts/jupiter/cpu.sh build roughpaper
+    $ sbatch scripts/jupiter/cpu.sh run roughpaper
+
+  To run your own setup, edit ``main.cpp``, ``config.yaml`` and ``roughpaper_inputfiles.py``
+  and run it again. If your ``main.cpp`` uses different coupled dynamics (e.g. ``cvode`` or
+  ``yac``), also change ``-DCLEO_COUPLED_DYNAMICS`` in the ``roughpaper`` entry of
+  ``scripts/common/examples.sh`` and build from scratch (``CLEO_MAKE_CLEAN=true``).
+
+  Figures of the initial conditions are saved in ``${CLEO_PATH2BUILD}/build_roughpaper/bin/``
+  and the output dataset is ``${CLEO_PATH2BUILD}/build_roughpaper/bin/SDMdata.zarr``. No plots
+  of the results are made.
+
+
 Extension
 ---------
 Explore ``examples/exampleplotting`` which gives examples of how to plot output from Cleo
