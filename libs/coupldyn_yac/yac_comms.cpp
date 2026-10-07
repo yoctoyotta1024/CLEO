@@ -47,22 +47,17 @@ void YacComms::send_dynamics(const GbxMaps &gbxmaps, const viewh_constgbx h_gbxs
                              const YacCartesianDynamics &ffdyn) const {
   const size_t ngbxs(h_gbxs.extent(0));
 
-  Kokkos::View<double*, HostSpace> temp_state("temp_state", ngbxs);
-  Kokkos::View<double*, HostSpace> qvap_state("qvap_state", ngbxs);
-  Kokkos::View<double*, HostSpace> qcond_state("qcond_state", ngbxs);
-
-  Kokkos::parallel_for(
-      "send_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
-      [=, *this](const size_t ii) {
-      State &state(h_gbxs(ii).state);
-      temp_state[ii] = state.temp;
-      qvap_state[ii] = state.qvap;
-      qcond_state[ii] = state.qcond;
-      });
+  Kokkos::parallel_for("send_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
+                       [=, *this](const size_t ii) {
+                         State& state(h_gbxs(ii).state);
+                         temp_send[ii] = state.temp;
+                         qvap_send[ii] = state.qvap;
+                         qcond_send[ii] = state.qcond;
+                       });
   const int coupling_flag = ffdyn.get_dynvars()->get_yac_coupling_flag();
 
-  if (coupling_flag ==2) {
-  ffdyn.get_dynvars()->send_fields_to_yac(temp_state.data(), qvap_state.data(), qcond_state.data());
+  if (coupling_flag == 2) {
+    ffdyn.get_dynvars()->send_fields_to_yac(temp_send.data(), qvap_send.data(), qcond_send.data());
   }
 }
 
@@ -76,7 +71,6 @@ void YacComms::update_gridbox_state(const YacCartesianDynamics &ffdyn, const siz
   state.press = ffdyn.get_press(ii);
   state.temp = ffdyn.get_temp(ii);
   state.qvap = ffdyn.get_qvap(ii);
-  state.qcond = ffdyn.get_qcond(ii);
 
   state.wvel = ffdyn.get_wvel(ii);
   state.uvel = ffdyn.get_uvel(ii);

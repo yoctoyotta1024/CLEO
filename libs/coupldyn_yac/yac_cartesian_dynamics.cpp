@@ -286,7 +286,6 @@ void CartesianDynamics::receive_fields_from_yac() {
   receive_yac_cell_field(temp_yac_id_recv, yac_raw_cell_data, temp, ndims[VERTICAL], dlc::TEMP0);
   receive_yac_cell_field(pressure_yac_id_recv, yac_raw_cell_data, press, ndims[VERTICAL], dlc::P0);
   receive_yac_cell_field(qvap_yac_id_recv, yac_raw_cell_data, qvap, ndims[VERTICAL]);
-  receive_yac_cell_field(qcond_yac_id_recv, yac_raw_cell_data, qcond, ndims[VERTICAL]);
 
   receive_yac_cell_field(vertical_wind_yac_id_recv, yac_raw_vertical_wind_data, wvel,
                          ndims[VERTICAL] + 1, dlc::W0);
@@ -386,10 +385,6 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
                  horizontal_fields_collection_size, field_timestep.c_str(),
                  YAC_TIME_UNIT_ISO_FORMAT, &qvap_yac_id_recv);
 
-  yac_cdef_field("liquid_water_mixing_ratio_in", component_id, &cell_point_id, num_point_sets,
-                 horizontal_fields_collection_size, field_timestep.c_str(),
-                 YAC_TIME_UNIT_ISO_FORMAT, &qcond_yac_id_recv);
-
   yac_cdef_field("eastward_wind_in", component_id, &edge_point_id, num_point_sets,
                  horizontal_fields_collection_size, field_timestep.c_str(),
                  YAC_TIME_UNIT_ISO_FORMAT, &eastward_wind_yac_id_recv);
@@ -441,7 +436,6 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
   if ((yac_cget_role_from_field_id(temp_yac_id_recv) != YAC_EXCHANGE_TYPE_TARGET) ||
       (yac_cget_role_from_field_id(pressure_yac_id_recv) != YAC_EXCHANGE_TYPE_TARGET) ||
       (yac_cget_role_from_field_id(qvap_yac_id_recv) != YAC_EXCHANGE_TYPE_TARGET) ||
-      (yac_cget_role_from_field_id(qcond_yac_id_recv) != YAC_EXCHANGE_TYPE_TARGET) ||
       (yac_cget_role_from_field_id(vertical_wind_yac_id_recv) != YAC_EXCHANGE_TYPE_TARGET) ||
       (yac_cget_role_from_field_id(eastward_wind_yac_id_recv) != YAC_EXCHANGE_TYPE_TARGET) ||
       (yac_cget_role_from_field_id(northward_wind_yac_id_recv) != YAC_EXCHANGE_TYPE_TARGET)) {
@@ -459,8 +453,7 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
     yac_coupling_flag = 2;
     std::cout << "Cleo Two-Way Coupling: Finished setting up YAC for receiving:\n"
                  "  pressure,\n  temperature,\n"
-                 "  water vapour mass mixing ratio,\n"
-                 "  liquid water mass mixing ratio;\n"
+                 "  water vapour mass mixing ratio;\n"
                  "Finished setting up YAC for sending:\n"
                  "  temperature,\n"
                  "  water vapour mass mixing ratio,\n"
@@ -469,8 +462,7 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
     yac_coupling_flag = 1;
     std::cout << "Cleo One-Way Coupling: Finished setting up YAC for receiving:\n"
                  "  pressure,\n  temperature,\n"
-                 "  water vapour mass mixing ratio,\n"
-                 "  liquid water mass mixing ratio\n";
+                 "  water vapour mass mixing ratio\n";
   }
 
   size_t horizontal_cell_number = yac_cget_grid_size(YAC_LOCATION_CELL, grid_id);
@@ -495,7 +487,6 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
   press = std::vector<double>(horizontal_cell_number * ndims[VERTICAL], 0);
   temp = std::vector<double>(horizontal_cell_number * ndims[VERTICAL], 0);
   qvap = std::vector<double>(horizontal_cell_number * ndims[VERTICAL], 0);
-  qcond = std::vector<double>(horizontal_cell_number * ndims[VERTICAL], 0);
   uvel = std::vector<double>(ndims[NORTHWARD] * (ndims[EASTWARD] + 1) * ndims[VERTICAL], 0);
   vvel = std::vector<double>(ndims[EASTWARD] * (ndims[NORTHWARD] + 1) * ndims[VERTICAL], 0);
   wvel = std::vector<double>(horizontal_cell_number * (ndims[VERTICAL] + 1), 0);

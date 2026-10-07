@@ -55,7 +55,7 @@ struct CartesianDynamics {
   /* --- (thermo)dynamic variables received from YAC --- */
 
   // Containers for cell-centered fields
-  std::vector<double> press, temp, qvap, qcond;
+  std::vector<double> press, temp, qvap;
 
   // Target for lon and lat edge data respectively
   // (these are copied from united_edge_data after receiving from YAC)
@@ -70,7 +70,6 @@ struct CartesianDynamics {
   int temp_yac_id_send;
   int qvap_yac_id_recv;
   int qvap_yac_id_send;
-  int qcond_yac_id_recv;
   int qcond_yac_id_send;
   int eastward_wind_yac_id_recv;
   int northward_wind_yac_id_recv;
@@ -133,8 +132,6 @@ struct CartesianDynamics {
 
   double get_qvap(const size_t ii) const { return qvap.at(ii); }
 
-  double get_qcond(const size_t ii) const { return qcond.at(ii); }
-
   /* Public call to receive data from YAC
    * If the problem is 2D turns into a wrapper for receive_hor_slice_from_yac */
   void receive_fields_from_yac();
@@ -144,8 +141,8 @@ struct CartesianDynamics {
   void receive_yac_edge_field(unsigned int yac_field_id, double **yac_raw_edge_data,
                               std::vector<double> &target_array, double conversion_factor,
                               bool eastward_edge) const;
-  void send_yac_cell_field(int field_id, double *field_data, double conversion_factor);
-  void send_fields_to_yac(double *temp_state, double *qvap_state, double *qcond_state);
+  void send_yac_cell_field(int field_id, double* field_data, double conversion_factor);
+  void send_fields_to_yac(double* temp_send, double* qvap_send, double* qcond_send);
 };
 
 /* type satisfying CoupledDyanmics solver concept
@@ -192,8 +189,6 @@ struct YacCartesianDynamics {
   double get_temp(const size_t ii) const { return dynvars->get_temp(ii); }
 
   double get_qvap(const size_t ii) const { return dynvars->get_qvap(ii); }
-
-  double get_qcond(const size_t ii) const { return dynvars->get_qcond(ii); }
 
   std::pair<double, double> get_wvel(const size_t ii) const { return dynvars->get_wvel(ii); }
 

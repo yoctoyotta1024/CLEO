@@ -46,18 +46,16 @@ coupling:
 # ATM -> CLEO
   - <<: [*atm2cleo, *nnn_interp_stack]
     field:
-      - src: liquid_water_mixing_ratio_to_cleo
-        tgt: liquid_water_mixing_ratio_in
-      - src: humidity_mixing_ratio_to_cleo
-        tgt: humidity_mixing_ratio_in
-  - <<: [*atm2cleo, *nnn_interp_stack]
-    field:
       - src: eastward_wind_to_cleo
         tgt: eastward_wind_in
       - src: northward_wind_to_cleo
         tgt: northward_wind_in
       - src: upward_air_velocity_to_cleo
         tgt: upward_air_velocity_in
+  - <<: [*atm2cleo, *nnn_interp_stack]
+    field:
+      - src: humidity_mixing_ratio_to_cleo
+        tgt: humidity_mixing_ratio_in
   - <<: [*atm2cleo, *nnn_interp_stack]
     field:
       - src: air_pressure_to_cleo
