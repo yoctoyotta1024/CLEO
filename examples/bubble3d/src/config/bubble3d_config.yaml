@@ -29,8 +29,8 @@ icon_yac_config:
 
 ### Initialization Parameters for bubble3d_inputfiles.py (bimondal distrib. from RICO vanZanten) ###
 python_inputfiles:
-  xgrid_ngbxs: 20                              # x direction ngbxs <- note(!) num_vertical_levels * xgrid_ngbxs == ngbxs (see below)
-  ygrid_ngbxs: 4                               # y direction ngbxs <- note(!) num_vertical_levels * xgrid_ngbxs == ngbxs (see below)
+  xgrid_ngbxs: 32                              # x direction ngbxs <- note(!) num_vertical_levels * xgrid_ngbxs == ngbxs (see below)
+  ygrid_ngbxs: 2                               # y direction ngbxs <- note(!) num_vertical_levels * xgrid_ngbxs == ngbxs (see below)
   nsupers_pergbx: 32                           # number of SDs per gridbox <- note(!) must be consistent with maxnsupers (see below)
   rspan:                                       # [min, max] range of radii to sample [m]
     - 5e-9
@@ -63,8 +63,8 @@ yac_settings:
 ### SDM Runtime Parameters ###
 domain:
   nspacedims : 3                                          # no. of spatial dimensions to model
-  ngbxs : 1920                                            # total number of Gbxs
-  maxnsupers: 61440                                       # maximum number of SDs
+  ngbxs : 1536                                            # total number of Gbxs
+  maxnsupers: 49152                                       # maximum number of SDs
 
 timesteps:
   CONDTSTEP : 0.1                                         # time between SD condensation [s]
@@ -104,9 +104,9 @@ microphysics:
 ### Coupled Dynamics Parameters ###
 coupled_dynamics:
   type: yac
-  lower_longitude: -3.141592653589793                  # must match xgrid domain delta_x
-  upper_longitude: 3.141592653589793
-  lower_latitude: -0.1308996938995747                  # must match ygrid domain delta_y
-  upper_latitude: 0.06544984694978735
+  lower_longitude: -2.51327412287                      # must match xgrid domain delta_x
+  upper_longitude: 2.51327412287
+  lower_latitude: -0.06544984694                       # must match ygrid domain delta_y
+  upper_latitude: 0.03272492347
   longitude_to_meters: 15915.494309189535              # conversion from longitude radians to km (100 km = 2*pi)
   latitude_to_meters: 88212.62326748674                # conversion from latitude radians to km (17 km = 0.03125 * 2*pi)
