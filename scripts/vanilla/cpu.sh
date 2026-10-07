@@ -46,6 +46,16 @@ export CLEO_MACHINE="vanilla"
 # "example buildtype compilername"
 examples=(
   "as2017 serial gcc"
+  "cuspbifurc openmp gcc"
+  "breakup serial gcc"
+  "shima2009 openmp gcc"
+  "constthermo2d serial gcc"
+  "divfree2d openmp gcc"
+  "eurec4a1d serial gcc"
+  "rainshaft1d openmp gcc"
+  # known to fail at the moment, so last (the job stops at the first failure):
+  "roughpaper serial gcc"
+  "python_bindings openmp gcc"
 )
 
 # true: delete each example's build folder first and rebuild from scratch
