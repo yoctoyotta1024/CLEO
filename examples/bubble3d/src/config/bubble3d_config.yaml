@@ -29,7 +29,7 @@ icon_yac_config:
 
 ### Initialization Parameters for bubble3d_inputfiles.py (bimondal distrib. from RICO vanZanten) ###
 python_inputfiles:
-  xgrid_ngbxs: 32                              # x direction ngbxs <- note(!) num_vertical_levels * xgrid_ngbxs == ngbxs (see below)
+  xgrid_ngbxs: 16                              # x direction ngbxs <- note(!) num_vertical_levels * xgrid_ngbxs == ngbxs (see below)
   ygrid_ngbxs: 2                               # y direction ngbxs <- note(!) num_vertical_levels * xgrid_ngbxs == ngbxs (see below)
   nsupers_pergbx: 32                           # number of SDs per gridbox <- note(!) must be consistent with maxnsupers (see below)
   rspan:                                       # [min, max] range of radii to sample [m]
@@ -63,8 +63,8 @@ yac_settings:
 ### SDM Runtime Parameters ###
 domain:
   nspacedims : 3                                          # no. of spatial dimensions to model
-  ngbxs : 1536                                            # total number of Gbxs
-  maxnsupers: 49152                                       # maximum number of SDs
+  ngbxs : 768                                             # total number of Gbxs
+  maxnsupers: 24576                                       # maximum number of SDs
 
 timesteps:
   CONDTSTEP : 0.1                                         # time between SD condensation [s]
