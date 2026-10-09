@@ -56,12 +56,13 @@ struct CartesianDynamics {
   /* --- (thermo)dynamic variables sent/received via YAC --- */
 
   // Containers for sending cell-centered fields
-  Kokkos::View<double*, Kokkos::HostSpace> delta_temp_send;  // send change in temp
-  Kokkos::View<double*, Kokkos::HostSpace> delta_qvap_send;  // send change in qvap
-  Kokkos::View<double*, Kokkos::HostSpace> qcond_send;       // send qcond not(!) change
+  Kokkos::View<double*, Kokkos::HostSpace> delta_temp_send;
+  Kokkos::View<double*, Kokkos::HostSpace> delta_qvap_send;
+  Kokkos::View<double*, Kokkos::HostSpace> delta_qcloud_send;
+  Kokkos::View<double*, Kokkos::HostSpace> delta_qrain_send;
 
   // Containers for receiving cell-centered fields
-  std::vector<double> press_recv, temp_recv, qvap_recv;
+  std::vector<double> press_recv, temp_recv, qvap_recv, qcloud_recv, qrain_recv;
 
   // Containers for receiving edge datat on lon and lat edges respectively
   // (these are copied from united_edge_data after receiving from YAC)
@@ -76,7 +77,10 @@ struct CartesianDynamics {
   int temp_yac_id_send;
   int qvap_yac_id_recv;
   int qvap_yac_id_send;
-  int qcond_yac_id_send;
+  int qcloud_yac_id_recv;
+  int qcloud_yac_id_send;
+  int qrain_yac_id_send;
+  int qrain_yac_id_recv;
   int eastward_wind_yac_id_recv;
   int northward_wind_yac_id_recv;
   int vertical_wind_yac_id_recv;
@@ -151,7 +155,13 @@ struct CartesianDynamics {
     delta_qvap_send(ii) = new_qvap - qvap_recv.at(ii);
   }
 
-  void set_qcond(const size_t ii, const double new_qcond) const { qcond_send(ii) = new_qcond; }
+  void set_qcloud_delta(const size_t ii, const double new_qcloud) const {
+    delta_qcloud_send(ii) = 0.0;  // new_qcloud - qcloud_recv.at(ii);
+  }
+
+  void set_qrain_delta(const size_t ii, const double new_qrain) const {
+    delta_qrain_send(ii) = 0.0;  // new_qrain - qrain_recv.at(ii);
+  }
 
   /* Public calls to send/receive data via YAC */
   void receive_fields_from_yac();
@@ -204,8 +214,12 @@ struct YacCartesianDynamics {
     dynvars->set_qvap_delta(ii, new_qvap);
   }
 
-  void set_qcond(const size_t ii, const double new_qcond) const {
-    dynvars->set_qcond(ii, new_qcond);
+  void set_qcloud_delta(const size_t ii, const double new_qcloud) const {
+    dynvars->set_qcloud_delta(ii, new_qcloud);
+  }
+
+  void set_qrain_delta(const size_t ii, const double new_qrain) const {
+    dynvars->set_qrain_delta(ii, new_qrain);
   }
 
   std::pair<double, double> get_wvel(const size_t ii) const { return dynvars->get_wvel(ii); }
