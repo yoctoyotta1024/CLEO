@@ -1,3 +1,5 @@
+.. _kokkos:
+
 Kokkos Thread Parallelism
 =========================
 
