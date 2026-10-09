@@ -31,11 +31,12 @@ when in serial
 template <typename GbxMaps, typename CD>
 void YacComms::receive_dynamics(const GbxMaps& gbxmaps, const YacCartesianDynamics& ffdyn,
                                 const viewh_gbx h_gbxs) const {
-  const size_t ngbxs(h_gbxs.extent(0));
   const int coupling_flag = ffdyn.get_yac_coupling_flag();
 
   if ((coupling_flag == 2) || (coupling_flag == 1)) {
     ffdyn.receive_fields_from_yac();
+
+    const size_t ngbxs(h_gbxs.extent(0));
     Kokkos::parallel_for(
         "receive_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
         [=, *this](const size_t ii) { update_gridbox_state(ffdyn, ii, h_gbxs(ii)); });
@@ -45,13 +46,19 @@ void YacComms::receive_dynamics(const GbxMaps& gbxmaps, const YacCartesianDynami
 template <typename GbxMaps, typename CD>
 void YacComms::send_dynamics(const GbxMaps& gbxmaps, const viewh_constgbx h_gbxs,
                              const YacCartesianDynamics& ffdyn) const {
-  const size_t ngbxs(h_gbxs.extent(0));
   const int coupling_flag = ffdyn.get_yac_coupling_flag();
 
   if (coupling_flag == 2) {
-    Kokkos::parallel_for(
-        "send_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
-        [=, *this](const size_t ii) { update_send_buffers(h_gbxs(ii), ii, ffdyn); });
+    const size_t ngbxs(h_gbxs.extent(0));
+    Kokkos::parallel_for("send_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
+                         [=, *this](const size_t ii) {
+                           const State& state(h_gbxs(ii).state);
+                           const auto temp = state.temp;
+                           const auto qvap = state.qvap;
+                           const auto qcloud = 0.0;  // total mass of "cloud"
+                           const auto qrain = 0.0;   // total mass of "rain"
+                           update_send_buffers(ffdyn, ii, temp, qvap, qcloud, qrain);
+                         });
     ffdyn.send_fields_to_yac();
   }
 }
@@ -73,14 +80,13 @@ void YacComms::update_gridbox_state(const YacCartesianDynamics& ffdyn, const siz
 
 /* fills YacComms send buffers with the state of a gridbox for a 2-way
 coupling to CLEO SDM */
-void YacComms::update_send_buffers(const Gridbox& gbx, const size_t ii,
-                                   const YacCartesianDynamics& ffdyn) const {
-  const State& state(gbx.state);
-
-  ffdyn.set_temp_delta(ii, state.temp);
-  ffdyn.set_qvap_delta(ii, state.qvap);
-  ffdyn.set_qcloud_delta(ii, 0.0);
-  ffdyn.set_qrain_delta(ii, 0.0);
+void YacComms::update_send_buffers(const YacCartesianDynamics& ffdyn, const size_t ii,
+                                   const double temp, const double qvap, const double qcloud,
+                                   const double qrain) const {
+  ffdyn.set_temp_delta(ii, temp - ffdyn.get_temp(ii));
+  ffdyn.set_qvap_delta(ii, qvap - ffdyn.get_qvap(ii));
+  ffdyn.set_qcloud_delta(ii, qcloud - ffdyn.get_qcloud(ii));
+  ffdyn.set_qrain_delta(ii, qrain - ffdyn.get_qrain(ii));
 }
 
 template void YacComms::send_dynamics<CartesianMaps, YacCartesianDynamics>(

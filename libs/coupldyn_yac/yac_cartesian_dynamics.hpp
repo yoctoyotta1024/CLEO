@@ -147,20 +147,24 @@ struct CartesianDynamics {
 
   double get_qvap(const size_t ii) const { return qvap_recv.at(ii); }
 
-  void set_temp_delta(const size_t ii, const double new_temp) const {
-    delta_temp_send(ii) = new_temp - temp_recv.at(ii);
+  double get_qcloud(const size_t ii) const { return qcloud_recv.at(ii); }
+
+  double get_qrain(const size_t ii) const { return qrain_recv.at(ii); }
+
+  void set_temp_delta(const size_t ii, const double delta_temp) const {
+    delta_temp_send(ii) = delta_temp;
   }
 
-  void set_qvap_delta(const size_t ii, const double new_qvap) const {
-    delta_qvap_send(ii) = new_qvap - qvap_recv.at(ii);
+  void set_qvap_delta(const size_t ii, const double delta_qvap) const {
+    delta_qvap_send(ii) = delta_qvap;
   }
 
-  void set_qcloud_delta(const size_t ii, const double new_qcloud) const {
-    delta_qcloud_send(ii) = 0.0;  // new_qcloud - qcloud_recv.at(ii);
+  void set_qcloud_delta(const size_t ii, const double delta_qcloud) const {
+    delta_qcloud_send(ii) = delta_qcloud;
   }
 
-  void set_qrain_delta(const size_t ii, const double new_qrain) const {
-    delta_qrain_send(ii) = 0.0;  // new_qrain - qrain_recv.at(ii);
+  void set_qrain_delta(const size_t ii, const double delta_qrain) const {
+    delta_qrain_send(ii) = delta_qrain;
   }
 
   /* Public calls to send/receive data via YAC */
@@ -206,20 +210,24 @@ struct YacCartesianDynamics {
 
   double get_qvap(const size_t ii) const { return dynvars->get_qvap(ii); }
 
-  void set_temp_delta(const size_t ii, const double new_temp) const {
-    dynvars->set_temp_delta(ii, new_temp);
+  double get_qcloud(const size_t ii) const { return dynvars->get_qcloud(ii); }
+
+  double get_qrain(const size_t ii) const { return dynvars->get_qrain(ii); }
+
+  void set_temp_delta(const size_t ii, const double delta_temp) const {
+    dynvars->set_temp_delta(ii, delta_temp);
   }
 
-  void set_qvap_delta(const size_t ii, const double new_qvap) const {
-    dynvars->set_qvap_delta(ii, new_qvap);
+  void set_qvap_delta(const size_t ii, const double delta_qvap) const {
+    dynvars->set_qvap_delta(ii, delta_qvap);
   }
 
-  void set_qcloud_delta(const size_t ii, const double new_qcloud) const {
-    dynvars->set_qcloud_delta(ii, new_qcloud);
+  void set_qcloud_delta(const size_t ii, const double delta_qcloud) const {
+    dynvars->set_qcloud_delta(ii, delta_qcloud);
   }
 
-  void set_qrain_delta(const size_t ii, const double new_qrain) const {
-    dynvars->set_qrain_delta(ii, new_qrain);
+  void set_qrain_delta(const size_t ii, const double delta_qrain) const {
+    dynvars->set_qrain_delta(ii, delta_qrain);
   }
 
   std::pair<double, double> get_wvel(const size_t ii) const { return dynvars->get_wvel(ii); }
