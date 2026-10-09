@@ -54,7 +54,19 @@ export CLEO_MACHINE="jupiter"
 
 # "example buildtype compilername"
 examples=(
-  "constthermo2d openmp gcc"
+  "as2017 openmp gcc"
+  "cuspbifurc serial gcc"
+  "breakup threads gcc"
+  "shima2009 openmp gcc"
+  "constthermo2d serial gcc"
+  "divfree2d threads gcc"
+  "eurec4a1d openmp gcc"
+  "rainshaft1d serial gcc"
+  "fromfile threads gcc"
+  "fromfile_irreg openmp gcc"
+  "python_bindings serial gcc"
+  "bubble3d openmp gcc"         # needs the ICON grid/data files set in bubble3d.py
+  "roughpaper openmp gcc"       # roughpaper config has breakup nfrags commented out
 )
 
 # true: delete each example's build folder first and rebuild from scratch
