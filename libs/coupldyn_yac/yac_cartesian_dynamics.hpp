@@ -21,6 +21,7 @@
 #define LIBS_COUPLDYN_YAC_YAC_CARTESIAN_DYNAMICS_HPP_
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_DualView.hpp>
 #include <array>
 #include <filesystem>
 #include <fstream>
@@ -60,6 +61,8 @@ struct CartesianDynamics {
   Kokkos::View<double*, Kokkos::HostSpace> delta_qvap_send;
   Kokkos::View<double*, Kokkos::HostSpace> delta_qcloud_send;
   Kokkos::View<double*, Kokkos::HostSpace> delta_qrain_send;
+  Kokkos::DualView<double*> mass_cloud;  // device buffer to calculate dimensionles "cloud" water
+  Kokkos::DualView<double*> mass_rain;   // device buffer to calculate dimensionless "rain" water
 
   // Containers for receiving cell-centered fields
   std::vector<double> press_recv, temp_recv, qvap_recv, qcloud_recv, qrain_recv;
@@ -151,6 +154,10 @@ struct CartesianDynamics {
 
   double get_qrain(const size_t ii) const { return qrain_recv.at(ii); }
 
+  Kokkos::DualView<double*> get_mass_cloud() const { return mass_cloud; }
+
+  Kokkos::DualView<double*> get_mass_rain() const { return mass_rain; }
+
   void set_temp_delta(const size_t ii, const double delta_temp) const {
     delta_temp_send(ii) = delta_temp;
   }
@@ -213,6 +220,10 @@ struct YacCartesianDynamics {
   double get_qcloud(const size_t ii) const { return dynvars->get_qcloud(ii); }
 
   double get_qrain(const size_t ii) const { return dynvars->get_qrain(ii); }
+
+  Kokkos::DualView<double*> get_mass_cloud() const { return dynvars->get_mass_cloud(); }
+
+  Kokkos::DualView<double*> get_mass_rain() const { return dynvars->get_mass_rain(); }
 
   void set_temp_delta(const size_t ii, const double delta_temp) const {
     dynvars->set_temp_delta(ii, delta_temp);

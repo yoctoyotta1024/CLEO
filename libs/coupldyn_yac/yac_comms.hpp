@@ -21,30 +21,87 @@
 #define LIBS_COUPLDYN_YAC_YAC_COMMS_HPP_
 
 #include <Kokkos_Core.hpp>
+#include <Kokkos_DualView.hpp>
 
 #include "../kokkosaliases.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "coupldyn_yac/yac_cartesian_dynamics.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "gridboxes/supersindomain.hpp"
 #include "superdrops/state.hpp"
+#include "superdrops/thermodynamic_equations.hpp"
+
+namespace KCS = KokkosCleoSettings;
 
 /* 1-way coupling from coupldyn to CLEO's gridboxes where
 coupldyn sends information to h_gbxs but doesn't
 receive any back. Struct obeys coupling comms concept */
 struct YacComms {
  private:
+  KOKKOS_INLINE_FUNCTION double mass_to_mixing_ratio(const State& state,
+                                                     const double totmass) const {
+    constexpr double R0cubed_VOL0 = dlc::R0 * dlc::R0 * dlc::R0 / dlc::VOL0;
+    const auto rho_cond = totmass / state.get_volume() * R0cubed_VOL0;  // rho_condensed
+    const auto rho_dry = dry_air_density(state.press, state.temp, state.qvap);
+    return rho_cond / rho_dry;
+  }
+
+  void calculate_cloud_rain_masses(const viewd_constgbx d_gbxs, const SupersInDomain& allsupers,
+                                   Kokkos::DualView<double*> mass_cloud,
+                                   Kokkos::DualView<double*> mass_rain) const;
+
   /* updates the state of a gridbox using information received from YacCartesianDynamics solver
   for 1-way or 2-way coupling to from Dynamics to CLEO SDM */
   void update_gridbox_state(const YacCartesianDynamics& ffdyn, const size_t ii, Gridbox& gbx) const;
 
-  void update_send_buffers(const Gridbox& gbx, const size_t ii,
-                           const YacCartesianDynamics& ffdyn) const;
+  void update_send_buffers(const YacCartesianDynamics& ffdyn, const size_t ii, const double temp,
+                           const double qvap, const double qcloud, const double qrain) const;
 
  public:
+  /* functor for calculate mass of "cloud" and "rain" water in each gridbox
+   * "cloud" water is defined as droplets with radius < 0.38 mm (equivalent to ICON 1-mom scheme)
+   */
+  struct CalculateCloudRainMassesFunctor {
+    subviewd_constsupers domainsupers;
+    viewd_constgbx d_gbxs;
+    Kokkos::DualView<double*>::t_dev d_mass_cloud;
+    Kokkos::DualView<double*>::t_dev d_mass_rain;
+
+    KOKKOS_INLINE_FUNCTION
+    void operator()(const TeamMember& team_member) const {
+      constexpr double cloud_radius = 0.38e-3 / dlc::R0;  // 0.38 mm (as in ICON 1-mom scheme)
+      const auto ii = team_member.league_rank();
+      const auto supers = d_gbxs(ii).supersingbx.readonly(domainsupers);
+      const size_t nsupers(supers.extent(0));
+
+      double mass_cloud = 0.0;
+      double mass_rain = 0.0;
+      Kokkos::parallel_reduce(
+          Kokkos::TeamThreadRange(team_member, nsupers),
+          [=](const size_t kk, double& m_cloud, double& m_rain) {
+            const auto& drop = supers(kk);
+            if (drop.get_radius() < cloud_radius) {
+              // "cloud" water is defined as droplets with radius < 0.38 mm (ICON 1-mom)
+              m_cloud += drop.condensate_mass() * drop.get_xi();
+            } else {
+              // "rain" water is any water in droplets > "cloud" radius 0.38 mm
+              m_rain += drop.condensate_mass() * drop.get_xi();
+            }
+          },
+          mass_cloud, mass_rain);
+
+      Kokkos::single(Kokkos::PerTeam(team_member), [=, this]() {
+        d_mass_cloud(ii) = mass_cloud;
+        d_mass_rain(ii) = mass_rain;
+      });
+    }
+  };
+
   /* send information from Gridboxes' states
   to coupldyn is null for YacCartesianDynamics*/
   template <typename GbxMaps, typename CD = YacCartesianDynamics>
-  void send_dynamics(const GbxMaps&, const viewh_constgbx, const YacCartesianDynamics& ffdyn) const;
+  void send_dynamics(const GbxMaps& gbxmaps, const dualview_constgbx gbxs,
+                     const SupersInDomain& allsupers, const YacCartesianDynamics& ffdyn) const;
 
   /* update Gridboxes' states using information
   received from YacCartesianDynamics solver for

@@ -351,6 +351,8 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
       delta_qvap_send("delta_qvap_send", decomp.get_total_local_gridboxes()),
       delta_qcloud_send("delta_qcloud_send", decomp.get_total_local_gridboxes()),
       delta_qrain_send("delta_qrain_send", decomp.get_total_local_gridboxes()),
+      mass_cloud("mass_cloud", decomp.get_total_local_gridboxes()),
+      mass_rain("mass_rain", decomp.get_total_local_gridboxes()),
       get_wvel(nullwinds()),
       get_uvel(nullwinds()),
       get_vvel(nullwinds()) {

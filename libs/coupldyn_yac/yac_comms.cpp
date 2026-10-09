@@ -44,19 +44,29 @@ void YacComms::receive_dynamics(const GbxMaps& gbxmaps, const YacCartesianDynami
 }
 
 template <typename GbxMaps, typename CD>
-void YacComms::send_dynamics(const GbxMaps& gbxmaps, const viewh_constgbx h_gbxs,
+void YacComms::send_dynamics(const GbxMaps& gbxmaps, const dualview_constgbx gbxs,
+                             const SupersInDomain& allsupers,
                              const YacCartesianDynamics& ffdyn) const {
   const int coupling_flag = ffdyn.get_yac_coupling_flag();
 
   if (coupling_flag == 2) {
+    const viewh_constgbx h_gbxs = gbxs.view_host();
+    const viewd_constgbx d_gbxs = gbxs.view_device();
+
+    calculate_cloud_rain_masses(d_gbxs, allsupers, ffdyn.get_mass_cloud(),
+                                ffdyn.get_mass_rain());  // potentially on device
+
+    // update dynamics on host
     const size_t ngbxs(h_gbxs.extent(0));
+    const auto h_mass_cloud = ffdyn.get_mass_cloud().view_host();
+    const auto h_mass_rain = ffdyn.get_mass_rain().view_host();
     Kokkos::parallel_for("send_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
-                         [=, *this](const size_t ii) {
+                         [=, this](const size_t ii) {
                            const State& state(h_gbxs(ii).state);
                            const auto temp = state.temp;
                            const auto qvap = state.qvap;
-                           const auto qcloud = 0.0;  // total mass of "cloud"
-                           const auto qrain = 0.0;   // total mass of "rain"
+                           const auto qcloud = mass_to_mixing_ratio(state, h_mass_cloud(ii));
+                           const auto qrain = mass_to_mixing_ratio(state, h_mass_rain(ii));
                            update_send_buffers(ffdyn, ii, temp, qvap, qcloud, qrain);
                          });
     ffdyn.send_fields_to_yac();
@@ -89,8 +99,33 @@ void YacComms::update_send_buffers(const YacCartesianDynamics& ffdyn, const size
   ffdyn.set_qrain_delta(ii, qrain - ffdyn.get_qrain(ii));
 }
 
+/* calculate mixing ratios for "cloud" water and "rain" water
+ * calculation could potentially be on device instead of host
+ */
+void YacComms::calculate_cloud_rain_masses(const viewd_constgbx d_gbxs,
+                                           const SupersInDomain& allsupers,
+                                           Kokkos::DualView<double*> mass_cloud,
+                                           Kokkos::DualView<double*> mass_rain) const {
+  const size_t ngbxs(d_gbxs.extent(0));
+
+  // reset device buffers to zero
+  Kokkos::deep_copy(mass_cloud.view_device(), 0.0);
+  Kokkos::deep_copy(mass_rain.view_device(), 0.0);
+
+  const auto functor =
+      CalculateCloudRainMassesFunctor{allsupers.domain_supers_readonly(), d_gbxs,
+                                      mass_cloud.view_device(), mass_rain.view_device()};
+  Kokkos::parallel_for("calc_cloud_rain_masses", TeamPolicy(ngbxs, KCS::team_size), functor);
+  mass_cloud.modify_device();
+  mass_rain.modify_device();
+
+  mass_cloud.sync_host();
+  mass_rain.sync_host();
+}
+
 template void YacComms::send_dynamics<CartesianMaps, YacCartesianDynamics>(
-    const CartesianMaps&, const viewh_constgbx, const YacCartesianDynamics&) const;
+    const CartesianMaps&, const dualview_constgbx, const SupersInDomain&,
+    const YacCartesianDynamics&) const;
 
 template void YacComms::receive_dynamics<CartesianMaps, YacCartesianDynamics>(
     const CartesianMaps&, const YacCartesianDynamics&, const viewh_gbx) const;
