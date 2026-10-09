@@ -56,9 +56,9 @@ struct CartesianDynamics {
   /* --- (thermo)dynamic variables sent/received via YAC --- */
 
   // Containers for sending cell-centered fields
-  Kokkos::View<double*, Kokkos::HostSpace> temp_send;
-  Kokkos::View<double*, Kokkos::HostSpace> qvap_send;
-  Kokkos::View<double*, Kokkos::HostSpace> qcond_send;
+  Kokkos::View<double*, Kokkos::HostSpace> delta_temp_send;  // send change in temp
+  Kokkos::View<double*, Kokkos::HostSpace> delta_qvap_send;  // send change in qvap
+  Kokkos::View<double*, Kokkos::HostSpace> qcond_send;       // send qcond not(!) change
 
   // Containers for receiving cell-centered fields
   std::vector<double> press_recv, temp_recv, qvap_recv;
@@ -143,11 +143,15 @@ struct CartesianDynamics {
 
   double get_qvap(const size_t ii) const { return qvap_recv.at(ii); }
 
-  void set_temp_send(const size_t ii, const double temp) const { temp_send(ii) = temp; }
+  void set_temp_delta(const size_t ii, const double new_temp) const {
+    delta_temp_send(ii) = new_temp - temp_recv.at(ii);
+  }
 
-  void set_qvap_send(const size_t ii, const double qvap) const { qvap_send(ii) = qvap; }
+  void set_qvap_delta(const size_t ii, const double new_qvap) const {
+    delta_qvap_send(ii) = new_qvap - qvap_recv.at(ii);
+  }
 
-  void set_qcond_send(const size_t ii, const double qcond) const { qcond_send(ii) = qcond; }
+  void set_qcond(const size_t ii, const double new_qcond) const { qcond_send(ii) = new_qcond; }
 
   /* Public calls to send/receive data via YAC */
   void receive_fields_from_yac();
@@ -192,12 +196,16 @@ struct YacCartesianDynamics {
 
   double get_qvap(const size_t ii) const { return dynvars->get_qvap(ii); }
 
-  void set_temp_send(const size_t ii, const double temp) const { dynvars->set_temp_send(ii, temp); }
+  void set_temp_delta(const size_t ii, const double new_temp) const {
+    dynvars->set_temp_delta(ii, new_temp);
+  }
 
-  void set_qvap_send(const size_t ii, const double qvap) const { dynvars->set_qvap_send(ii, qvap); }
+  void set_qvap_delta(const size_t ii, const double new_qvap) const {
+    dynvars->set_qvap_delta(ii, new_qvap);
+  }
 
-  void set_qcond_send(const size_t ii, const double qcond) const {
-    dynvars->set_qcond_send(ii, qcond);
+  void set_qcond(const size_t ii, const double new_qcond) const {
+    dynvars->set_qcond(ii, new_qcond);
   }
 
   std::pair<double, double> get_wvel(const size_t ii) const { return dynvars->get_wvel(ii); }

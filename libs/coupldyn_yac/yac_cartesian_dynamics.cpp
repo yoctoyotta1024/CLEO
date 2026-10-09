@@ -334,8 +334,8 @@ void CartesianDynamics::send_yac_cell_field(int yac_field_id, double* field_data
 }
 
 void CartesianDynamics::send_fields_to_yac() {
-  send_yac_cell_field(temp_yac_id_send, temp_send.data(), dlc::TEMP0);
-  send_yac_cell_field(qvap_yac_id_send, qvap_send.data());
+  send_yac_cell_field(temp_yac_id_send, delta_temp_send.data(), dlc::TEMP0);
+  send_yac_cell_field(qvap_yac_id_send, delta_qvap_send.data());
   send_yac_cell_field(qcond_yac_id_send, qcond_send.data());
 }
 
@@ -344,8 +344,8 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
                                      const CartesianDecomposition& decomp)
     : ndims(i_ndims),
       config(config),
-      temp_send("temp_send", decomp.get_total_local_gridboxes()),
-      qvap_send("qvap_send", decomp.get_total_local_gridboxes()),
+      delta_temp_send("delta_temp_send", decomp.get_total_local_gridboxes()),
+      delta_qvap_send("delta_qvap_send", decomp.get_total_local_gridboxes()),
       qcond_send("qcond_send", decomp.get_total_local_gridboxes()),
       get_wvel(nullwinds()),
       get_uvel(nullwinds()),

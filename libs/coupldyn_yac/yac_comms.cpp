@@ -77,9 +77,9 @@ void YacComms::update_send_buffers(const Gridbox& gbx, const size_t ii,
                                    const YacCartesianDynamics& ffdyn) const {
   const State& state(gbx.state);
 
-  ffdyn.set_temp_send(ii, state.temp);
-  ffdyn.set_qvap_send(ii, state.qvap);
-  ffdyn.set_qcond_send(ii, state.qcond);
+  ffdyn.set_temp_delta(ii, state.temp);
+  ffdyn.set_qvap_delta(ii, state.qvap);
+  ffdyn.set_qcond(ii, state.qcond);
 }
 
 template void YacComms::send_dynamics<CartesianMaps, YacCartesianDynamics>(
