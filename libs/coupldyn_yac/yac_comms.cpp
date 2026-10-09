@@ -29,44 +29,38 @@ when in serial
 */
 
 template <typename GbxMaps, typename CD>
-void YacComms::receive_dynamics(const GbxMaps &gbxmaps, const YacCartesianDynamics &ffdyn,
+void YacComms::receive_dynamics(const GbxMaps& gbxmaps, const YacCartesianDynamics& ffdyn,
                                 const viewh_gbx h_gbxs) const {
   const size_t ngbxs(h_gbxs.extent(0));
-  const int coupling_flag = ffdyn.get_dynvars()->get_yac_coupling_flag();
+  const int coupling_flag = ffdyn.get_yac_coupling_flag();
 
-  if ((coupling_flag ==2) || (coupling_flag ==1)) {
-  ffdyn.get_dynvars()->receive_fields_from_yac();
+  if ((coupling_flag == 2) || (coupling_flag == 1)) {
+    ffdyn.receive_fields_from_yac();
+    Kokkos::parallel_for(
+        "receive_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
+        [=, *this](const size_t ii) { update_gridbox_state(ffdyn, ii, h_gbxs(ii)); });
   }
-  Kokkos::parallel_for(
-      "receive_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
-      [=, *this](const size_t ii) { update_gridbox_state(ffdyn, ii, h_gbxs(ii)); });
 }
 
 template <typename GbxMaps, typename CD>
-void YacComms::send_dynamics(const GbxMaps &gbxmaps, const viewh_constgbx h_gbxs,
-                             const YacCartesianDynamics &ffdyn) const {
+void YacComms::send_dynamics(const GbxMaps& gbxmaps, const viewh_constgbx h_gbxs,
+                             const YacCartesianDynamics& ffdyn) const {
   const size_t ngbxs(h_gbxs.extent(0));
-
-  Kokkos::parallel_for("send_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
-                       [=, *this](const size_t ii) {
-                         State& state(h_gbxs(ii).state);
-                         temp_send(ii) = state.temp;
-                         qvap_send(ii) = state.qvap;
-                         qcond_send(ii) = state.qcond;
-                       });
-  const int coupling_flag = ffdyn.get_dynvars()->get_yac_coupling_flag();
+  const int coupling_flag = ffdyn.get_yac_coupling_flag();
 
   if (coupling_flag == 2) {
-    ffdyn.get_dynvars()->send_fields_to_yac(temp_send.data(), qvap_send.data(), qcond_send.data());
+    Kokkos::parallel_for(
+        "send_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
+        [=, *this](const size_t ii) { update_send_buffers(h_gbxs(ii), ii, ffdyn); });
+    ffdyn.send_fields_to_yac();
   }
 }
 
-/* updates the state of a gridbox using information
-received from YacCartesianDynamics solver for 1-way
-coupling to CLEO SDM */
-void YacComms::update_gridbox_state(const YacCartesianDynamics &ffdyn, const size_t ii,
-                                    Gridbox &gbx) const {
-  State &state(gbx.state);
+/* updates the state of a gridbox using information received from YacCartesianDynamics solver
+for 1-way or 2-way coupling to from Dynamics to CLEO SDM */
+void YacComms::update_gridbox_state(const YacCartesianDynamics& ffdyn, const size_t ii,
+                                    Gridbox& gbx) const {
+  State& state(gbx.state);
 
   state.press = ffdyn.get_press(ii);
   state.temp = ffdyn.get_temp(ii);
@@ -77,8 +71,19 @@ void YacComms::update_gridbox_state(const YacCartesianDynamics &ffdyn, const siz
   state.vvel = ffdyn.get_vvel(ii);
 }
 
+/* fills YacComms send buffers with the state of a gridbox for a 2-way
+coupling to CLEO SDM */
+void YacComms::update_send_buffers(const Gridbox& gbx, const size_t ii,
+                                   const YacCartesianDynamics& ffdyn) const {
+  const State& state(gbx.state);
+
+  ffdyn.set_temp_send(ii, state.temp);
+  ffdyn.set_qvap_send(ii, state.qvap);
+  ffdyn.set_qcond_send(ii, state.qcond);
+}
+
 template void YacComms::send_dynamics<CartesianMaps, YacCartesianDynamics>(
-    const CartesianMaps &, const viewh_constgbx, const YacCartesianDynamics &) const;
+    const CartesianMaps&, const viewh_constgbx, const YacCartesianDynamics&) const;
 
 template void YacComms::receive_dynamics<CartesianMaps, YacCartesianDynamics>(
-    const CartesianMaps &, const YacCartesianDynamics &, const viewh_gbx) const;
+    const CartesianMaps&, const YacCartesianDynamics&, const viewh_gbx) const;

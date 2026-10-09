@@ -1,23 +1,26 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2023 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
- * File: yaccomms.hpp
+ * File: yac_comms.hpp
  * Project: coupldyn_yac
  * Created Date: Tuesday 31st October 2023
  * Author: Clara Bayley (CB)
- * Additional Contributors:
+ * Additional Contributors: Wilton Loch (WL); Aparna Dev (AD)
  * -----
  * License: BSD 3-Clause "New" or "Revised" License
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * send and receive dynamics functions
- * for SDM when coupled to the yac
+ * send and receive dynamics communication functions for SDM when coupled to the yac
  * dynamics solver
  */
 
 #ifndef LIBS_COUPLDYN_YAC_YAC_COMMS_HPP_
 #define LIBS_COUPLDYN_YAC_YAC_COMMS_HPP_
+
+#include <Kokkos_Core.hpp>
 
 #include "../kokkosaliases.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
@@ -30,33 +33,24 @@ coupldyn sends information to h_gbxs but doesn't
 receive any back. Struct obeys coupling comms concept */
 struct YacComms {
  private:
-  Kokkos::View<double*, HostSpace> temp_send;
-  Kokkos::View<double*, HostSpace> qvap_send;
-  Kokkos::View<double*, HostSpace> qcond_send;
+  /* updates the state of a gridbox using information received from YacCartesianDynamics solver
+  for 1-way or 2-way coupling to from Dynamics to CLEO SDM */
+  void update_gridbox_state(const YacCartesianDynamics& ffdyn, const size_t ii, Gridbox& gbx) const;
 
-  /* updates the state of a gridbox using information
-  received from YacCartesianDynamics solver for 1-way
-  coupling to CLEO SDM */
-  void update_gridbox_state(const YacCartesianDynamics &ffdyn, const size_t ii, Gridbox &gbx) const;
+  void update_send_buffers(const Gridbox& gbx, const size_t ii,
+                           const YacCartesianDynamics& ffdyn) const;
 
  public:
-  /* initialise YacComms with capacity in send buffers of ngbxs. */
-  explicit YacComms(const size_t ngbxs)
-      : temp_send("temp_send", ngbxs),
-        qvap_send("qvap_send", ngbxs),
-        qcond_send("qcond_send", ngbxs) {}
-
   /* send information from Gridboxes' states
   to coupldyn is null for YacCartesianDynamics*/
   template <typename GbxMaps, typename CD = YacCartesianDynamics>
-  void send_dynamics(const GbxMaps &, const viewh_constgbx,
-                     const YacCartesianDynamics &ffdyn) const;
+  void send_dynamics(const GbxMaps&, const viewh_constgbx, const YacCartesianDynamics& ffdyn) const;
 
   /* update Gridboxes' states using information
   received from YacCartesianDynamics solver for
   1-way coupling to CLEO SDM */
   template <typename GbxMaps, typename CD = YacCartesianDynamics>
-  void receive_dynamics(const GbxMaps &gbxmaps, const YacCartesianDynamics &ffdyn,
+  void receive_dynamics(const GbxMaps& gbxmaps, const YacCartesianDynamics& ffdyn,
                         const viewh_gbx h_gbxs) const;
 };
 
