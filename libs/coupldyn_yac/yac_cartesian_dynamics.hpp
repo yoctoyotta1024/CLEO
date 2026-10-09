@@ -61,14 +61,14 @@ struct CartesianDynamics {
   Kokkos::View<double*, Kokkos::HostSpace> qcond_send;
 
   // Containers for receiving cell-centered fields
-  std::vector<double> press, temp, qvap;
+  std::vector<double> press_recv, temp_recv, qvap_recv;
 
   // Containers for receiving edge datat on lon and lat edges respectively
   // (these are copied from united_edge_data after receiving from YAC)
-  std::vector<double> vvel, uvel;
+  std::vector<double> vvel_recv, uvel_recv;
 
   // Container for receiving cell-centered vertical wind velocities
-  std::vector<double> wvel;
+  std::vector<double> wvel_recv;
 
   // YAC field ids
   int pressure_yac_id_recv;
@@ -137,11 +137,11 @@ struct CartesianDynamics {
 
   int get_yac_coupling_flag() const { return yac_coupling_flag; }
 
-  double get_press(const size_t ii) const { return press.at(ii); }
+  double get_press(const size_t ii) const { return press_recv.at(ii); }
 
-  double get_temp(const size_t ii) const { return temp.at(ii); }
+  double get_temp(const size_t ii) const { return temp_recv.at(ii); }
 
-  double get_qvap(const size_t ii) const { return qvap.at(ii); }
+  double get_qvap(const size_t ii) const { return qvap_recv.at(ii); }
 
   void set_temp_send(const size_t ii, const double temp) const { temp_send(ii) = temp; }
 

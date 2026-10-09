@@ -283,16 +283,18 @@ void CartesianDynamics::receive_yac_edge_field(unsigned int yac_field_id,
 /* This subroutine is the main entry point for receiving data from the couplded dynamics via YAC.
  * It checks the dimensionality of the simulation based on the config data. */
 void CartesianDynamics::receive_fields_from_yac() {
-  receive_yac_cell_field(temp_yac_id_recv, yac_raw_cell_data, temp, ndims[VERTICAL], dlc::TEMP0);
-  receive_yac_cell_field(pressure_yac_id_recv, yac_raw_cell_data, press, ndims[VERTICAL], dlc::P0);
-  receive_yac_cell_field(qvap_yac_id_recv, yac_raw_cell_data, qvap, ndims[VERTICAL]);
+  receive_yac_cell_field(temp_yac_id_recv, yac_raw_cell_data, temp_recv, ndims[VERTICAL],
+                         dlc::TEMP0);
+  receive_yac_cell_field(pressure_yac_id_recv, yac_raw_cell_data, press_recv, ndims[VERTICAL],
+                         dlc::P0);
+  receive_yac_cell_field(qvap_yac_id_recv, yac_raw_cell_data, qvap_recv, ndims[VERTICAL]);
 
-  receive_yac_cell_field(vertical_wind_yac_id_recv, yac_raw_vertical_wind_data, wvel,
+  receive_yac_cell_field(vertical_wind_yac_id_recv, yac_raw_vertical_wind_data, wvel_recv,
                          ndims[VERTICAL] + 1, dlc::W0);
 
-  receive_yac_edge_field(eastward_wind_yac_id_recv, yac_raw_edge_data, uvel, dlc::W0, true);
+  receive_yac_edge_field(eastward_wind_yac_id_recv, yac_raw_edge_data, uvel_recv, dlc::W0, true);
 
-  receive_yac_edge_field(northward_wind_yac_id_recv, yac_raw_edge_data, vvel, dlc::W0, false);
+  receive_yac_edge_field(northward_wind_yac_id_recv, yac_raw_edge_data, vvel_recv, dlc::W0, false);
 }
 
 void CartesianDynamics::send_yac_cell_field(int yac_field_id, double* field_data,
@@ -487,12 +489,12 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
     yac_raw_vertical_wind_data[i] = new double[horizontal_cell_number];
 
   // Initialization of target containers for receiving data
-  press = std::vector<double>(horizontal_cell_number * ndims[VERTICAL], 0);
-  temp = std::vector<double>(horizontal_cell_number * ndims[VERTICAL], 0);
-  qvap = std::vector<double>(horizontal_cell_number * ndims[VERTICAL], 0);
-  uvel = std::vector<double>(ndims[NORTHWARD] * (ndims[EASTWARD] + 1) * ndims[VERTICAL], 0);
-  vvel = std::vector<double>(ndims[EASTWARD] * (ndims[NORTHWARD] + 1) * ndims[VERTICAL], 0);
-  wvel = std::vector<double>(horizontal_cell_number * (ndims[VERTICAL] + 1), 0);
+  press_recv = std::vector<double>(horizontal_cell_number * ndims[VERTICAL], 0);
+  temp_recv = std::vector<double>(horizontal_cell_number * ndims[VERTICAL], 0);
+  qvap_recv = std::vector<double>(horizontal_cell_number * ndims[VERTICAL], 0);
+  uvel_recv = std::vector<double>(ndims[NORTHWARD] * (ndims[EASTWARD] + 1) * ndims[VERTICAL], 0);
+  vvel_recv = std::vector<double>(ndims[EASTWARD] * (ndims[NORTHWARD] + 1) * ndims[VERTICAL], 0);
+  wvel_recv = std::vector<double>(horizontal_cell_number * (ndims[VERTICAL] + 1), 0);
 
   // Defines the functions that will be used to retrieve data from the containers
   // (Can probably be simplified)
@@ -589,7 +591,7 @@ CartesianDynamics::get_winds_func CartesianDynamics::get_wvel_from_yac() const {
                 kij[0]);           // position of z lower face in 1D wvel vector
     const size_t uppos(lpos + 1);  // position of z upper face
 
-    return std::pair(wvel.at(lpos), wvel.at(uppos));
+    return std::pair(wvel_recv.at(lpos), wvel_recv.at(uppos));
   };
 
   return func;
@@ -608,7 +610,7 @@ CartesianDynamics::get_winds_func CartesianDynamics::get_uvel_from_yac() const {
                 kij[0]);                  // position of x lower face in 1D uvel vector
     const size_t uppos(lpos + ndims[0]);  // position of x upper face
 
-    return std::pair(uvel.at(lpos), uvel.at(uppos));
+    return std::pair(uvel_recv.at(lpos), uvel_recv.at(uppos));
   };
 
   return func;
@@ -619,7 +621,7 @@ CartesianDynamics::get_winds_func CartesianDynamics::get_vvel_from_yac() const {
     const size_t lpos(static_cast<size_t>(gbxindex));  // position of y lower face in 1D vvel vector
     const size_t uppos(lpos + ndims[1] * ndims[0]);    // position of x upper face
 
-    return std::pair(vvel.at(lpos), vvel.at(uppos));
+    return std::pair(vvel_recv.at(lpos), vvel_recv.at(uppos));
   };
 
   return func;
