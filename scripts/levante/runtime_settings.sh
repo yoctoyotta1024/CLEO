@@ -21,6 +21,9 @@ configure_machine_runtime_settings() {
   ### ------------ load compiler/runtime stack ------------ ###
   source "${machine_dir}/helpers/levante_packages.sh"
   levante_load_runtime_stack "${CLEO_COMPILERNAME}" "${CLEO_BUILDTYPE}"
+  # every CLEO executable links YAC (libs/configuration), so YAC's dependencies
+  # (e.g. NetCDF, OpenBLAS) must also be loaded to run it
+  levante_load_yac_dependencies "${CLEO_COMPILERNAME}"
   ### ---------------------------------------------------- ###
 
   ### --------------- YAC runtime settings --------------- ###

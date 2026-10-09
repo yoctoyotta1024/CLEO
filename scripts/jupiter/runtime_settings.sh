@@ -21,6 +21,9 @@ configure_machine_runtime_settings() {
   ### ------------ load compiler/runtime stack ------------ ###
   source "${machine_dir}/helpers/jupiter_packages.sh"
   jupiter_load_runtime_stack "${CLEO_COMPILERNAME}" "${CLEO_BUILDTYPE}"
+  # every CLEO executable links YAC (libs/configuration), so YAC's dependencies
+  # (e.g. NetCDF, OpenBLAS) must also be loaded to run it
+  jupiter_load_yac_dependencies "${CLEO_COMPILERNAME}"
   jupiter_load_python "${CLEO_COMPILERNAME}"
   ### ---------------------------------------------------- ###
 

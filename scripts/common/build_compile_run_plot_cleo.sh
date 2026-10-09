@@ -132,10 +132,13 @@ build_compile_run_plot_cleo() {
   ### ---------------- compile example -------------- ###
   if step_enabled compile; then
     if ! step_enabled build; then
-      # the build step loads the machine's toolchain (modules), so without it
-      # load the toolchain here before compiling
+      # the build step loads the machine's toolchain and YAC's dependencies
+      # (modules), so without it load them here before compiling; the linker
+      # needs YAC's dependencies (e.g. NetCDF -> HDF5, PnetCDF) too
       source "${machine_dir}/build_flags.sh"
       configure_machine_build_flags
+      source "${machine_dir}/helpers/build_yac.sh"
+      configure_machine_yac_flags
     fi
     source "${common_dir}/compile_cleo.sh"
     compile_cleo "${executables}"
