@@ -80,6 +80,10 @@ dependencies (e.g. Kokkos) when it configures Cleo. On machines whose compute no
 internet access, such as JUPITER, first use the ``build`` mode on a login node, and then submit a
 job using the ``run`` mode.
 
+*Note*: currently, the examples which run with MPI, i.e. ``fromfile``, ``fromfile_irreg`` and
+``bubble3d``, only work on CPUs. They do not yet work on GPUs, i.e. with the ``cuda`` build
+configuration and the GPU job scripts.
+
 To build an example from scratch, i.e. to delete its build directory before configuring Cleo
 with CMake again, set ``CLEO_MAKE_CLEAN=true`` when using the ``all`` or ``build`` modes. For
 safety, only build directories which contain a ``CMakeCache.txt`` file are deleted.
