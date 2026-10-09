@@ -55,7 +55,16 @@ export CLEO_MACHINE="jupiter"
 
 # "example buildtype compilername"
 examples=(
+  "as2017 cuda gcc"
+  "cuspbifurc cuda gcc"
+  "breakup cuda gcc"
+  "shima2009 cuda gcc"
   "constthermo2d cuda gcc"
+  "divfree2d cuda gcc"
+  "eurec4a1d cuda gcc"
+  "rainshaft1d cuda gcc"
+  "python_bindings cuda gcc"
+  "roughpaper cuda gcc"       # roughpaper config has breakup nfrags commented out
 )
 
 # true: delete each example's build folder first and rebuild from scratch
