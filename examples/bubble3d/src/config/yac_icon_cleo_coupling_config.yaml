@@ -56,6 +56,10 @@ coupling:
     field:
       - src: humidity_mixing_ratio_to_cleo
         tgt: humidity_mixing_ratio_in
+      - src: cloud_liquid_water_mixing_ratio_to_cleo
+        tgt: cloud_liquid_water_mixing_ratio_in
+      - src: rain_liquid_water_mixing_ratio_to_cleo
+        tgt: rain_liquid_water_mixing_ratio_in
   - <<: [*atm2cleo, *nnn_interp_stack]
     field:
       - src: air_pressure_to_cleo
@@ -67,11 +71,11 @@ coupling:
 # # CLEO -> ATM
 #   - <<: [*cleo2atm, *nnn_interp_stack]
 #     field:
-#       - src: liquid_water_mixing_ratio_out
-#         tgt: liquid_water_mixing_ratio_from_cleo
 #       - src: humidity_mixing_ratio_out
 #         tgt: humidity_mixing_ratio_from_cleo
-#   - <<: [*cleo2atm, *nnn_interp_stack]
-#     field:
+#       - src: cloud_liquid_water_mixing_ratio_out
+#         tgt: cloud_liquid_water_mixing_ratio_from_cleo
+#       - src: rain_liquid_water_mixing_ratio_out
+#         tgt: rain_liquid_water_mixing_ratio_from_cleo
 #       - src: air_temperature_out
 #         tgt: air_temperature_from_cleo

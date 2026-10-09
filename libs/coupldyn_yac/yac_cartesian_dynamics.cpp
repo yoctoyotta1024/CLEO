@@ -288,6 +288,8 @@ void CartesianDynamics::receive_fields_from_yac() {
   receive_yac_cell_field(pressure_yac_id_recv, yac_raw_cell_data, press_recv, ndims[VERTICAL],
                          dlc::P0);
   receive_yac_cell_field(qvap_yac_id_recv, yac_raw_cell_data, qvap_recv, ndims[VERTICAL]);
+  receive_yac_cell_field(qcloud_yac_id_recv, yac_raw_cell_data, qcloud_recv, ndims[VERTICAL]);
+  receive_yac_cell_field(qrain_yac_id_recv, yac_raw_cell_data, qrain_recv, ndims[VERTICAL]);
 
   receive_yac_cell_field(vertical_wind_yac_id_recv, yac_raw_vertical_wind_data, wvel_recv,
                          ndims[VERTICAL] + 1, dlc::W0);
@@ -336,7 +338,8 @@ void CartesianDynamics::send_yac_cell_field(int yac_field_id, double* field_data
 void CartesianDynamics::send_fields_to_yac() {
   send_yac_cell_field(temp_yac_id_send, delta_temp_send.data(), dlc::TEMP0);
   send_yac_cell_field(qvap_yac_id_send, delta_qvap_send.data());
-  send_yac_cell_field(qcond_yac_id_send, qcond_send.data());
+  send_yac_cell_field(qcloud_yac_id_send, delta_qcloud_send.data());
+  send_yac_cell_field(qrain_yac_id_send, delta_qrain_send.data());
 }
 
 CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size_t, 3> i_ndims,
@@ -346,7 +349,8 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
       config(config),
       delta_temp_send("delta_temp_send", decomp.get_total_local_gridboxes()),
       delta_qvap_send("delta_qvap_send", decomp.get_total_local_gridboxes()),
-      qcond_send("qcond_send", decomp.get_total_local_gridboxes()),
+      delta_qcloud_send("delta_qcloud_send", decomp.get_total_local_gridboxes()),
+      delta_qrain_send("delta_qrain_send", decomp.get_total_local_gridboxes()),
       get_wvel(nullwinds()),
       get_uvel(nullwinds()),
       get_vvel(nullwinds()) {
@@ -390,6 +394,14 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
                  horizontal_fields_collection_size, field_timestep.c_str(),
                  YAC_TIME_UNIT_ISO_FORMAT, &qvap_yac_id_recv);
 
+  yac_cdef_field("cloud_liquid_water_mixing_ratio_in", component_id, &cell_point_id, num_point_sets,
+                 horizontal_fields_collection_size, field_timestep.c_str(),
+                 YAC_TIME_UNIT_ISO_FORMAT, &qcloud_yac_id_recv);
+
+  yac_cdef_field("rain_liquid_water_mixing_ratio_in", component_id, &cell_point_id, num_point_sets,
+                 horizontal_fields_collection_size, field_timestep.c_str(),
+                 YAC_TIME_UNIT_ISO_FORMAT, &qrain_yac_id_recv);
+
   yac_cdef_field("eastward_wind_in", component_id, &edge_point_id, num_point_sets,
                  horizontal_fields_collection_size, field_timestep.c_str(),
                  YAC_TIME_UNIT_ISO_FORMAT, &eastward_wind_yac_id_recv);
@@ -412,9 +424,13 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
                  horizontal_fields_collection_size, field_timestep.c_str(),
                  YAC_TIME_UNIT_ISO_FORMAT, &qvap_yac_id_send);
 
-  yac_cdef_field("liquid_water_mixing_ratio_out", component_id, &cell_point_id, num_point_sets,
+  yac_cdef_field("cloud_liquid_water_mixing_ratio_out", component_id, &cell_point_id,
+                 num_point_sets, horizontal_fields_collection_size, field_timestep.c_str(),
+                 YAC_TIME_UNIT_ISO_FORMAT, &qcloud_yac_id_send);
+
+  yac_cdef_field("rain_liquid_water_mixing_ratio_out", component_id, &cell_point_id, num_point_sets,
                  horizontal_fields_collection_size, field_timestep.c_str(),
-                 YAC_TIME_UNIT_ISO_FORMAT, &qcond_yac_id_send);
+                 YAC_TIME_UNIT_ISO_FORMAT, &qrain_yac_id_send);
   // ---------------------------------------------------------
 
   // --- YAC Debugging Files (optional) ---
@@ -441,6 +457,8 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
   if ((yac_cget_role_from_field_id(temp_yac_id_recv) != YAC_EXCHANGE_TYPE_TARGET) ||
       (yac_cget_role_from_field_id(pressure_yac_id_recv) != YAC_EXCHANGE_TYPE_TARGET) ||
       (yac_cget_role_from_field_id(qvap_yac_id_recv) != YAC_EXCHANGE_TYPE_TARGET) ||
+      (yac_cget_role_from_field_id(qcloud_yac_id_recv) != YAC_EXCHANGE_TYPE_TARGET) ||
+      (yac_cget_role_from_field_id(qrain_yac_id_recv) != YAC_EXCHANGE_TYPE_TARGET) ||
       (yac_cget_role_from_field_id(vertical_wind_yac_id_recv) != YAC_EXCHANGE_TYPE_TARGET) ||
       (yac_cget_role_from_field_id(eastward_wind_yac_id_recv) != YAC_EXCHANGE_TYPE_TARGET) ||
       (yac_cget_role_from_field_id(northward_wind_yac_id_recv) != YAC_EXCHANGE_TYPE_TARGET)) {
@@ -451,7 +469,8 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
   // determine whether this is a one or two way coupled run, and perform consistency check
   const int field_role = yac_cget_role_from_field_id(temp_yac_id_send);
   if ((field_role != yac_cget_role_from_field_id(qvap_yac_id_send)) ||
-      (field_role != yac_cget_role_from_field_id(qcond_yac_id_send))) {
+      (field_role != yac_cget_role_from_field_id(qcloud_yac_id_send)) ||
+      (field_role != yac_cget_role_from_field_id(qrain_yac_id_send))) {
     throw std::invalid_argument(
         "Yac field roles to establish one-way or two-way coupling are not consistent");
   } else if (field_role == YAC_EXCHANGE_TYPE_SOURCE) {
@@ -462,12 +481,15 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
                  "Finished setting up YAC for sending:\n"
                  "  temperature,\n"
                  "  water vapour mass mixing ratio,\n"
-                 "  liquid water mass mixing ratio\n";
+                 "  cloud liquid water mass mixing ratio,\n"
+                 "  rain liquid water mass mixing ratio\n";
   } else {
     yac_coupling_flag = 1;
     std::cout << "Cleo One-Way Coupling: Finished setting up YAC for receiving:\n"
                  "  pressure,\n  temperature,\n"
-                 "  water vapour mass mixing ratio\n";
+                 "  water vapour mass mixing ratio,\n"
+                 "  cloud liquid water mass mixing ratio,\n"
+                 "  rain liquid water mass mixing ratio\n";
   }
 
   size_t horizontal_cell_number = yac_cget_grid_size(YAC_LOCATION_CELL, grid_id);
@@ -492,6 +514,8 @@ CartesianDynamics::CartesianDynamics(const Config& config, const std::array<size
   press_recv = std::vector<double>(horizontal_cell_number * ndims[VERTICAL], 0);
   temp_recv = std::vector<double>(horizontal_cell_number * ndims[VERTICAL], 0);
   qvap_recv = std::vector<double>(horizontal_cell_number * ndims[VERTICAL], 0);
+  qcloud_recv = std::vector<double>(horizontal_cell_number * ndims[VERTICAL], 0);
+  qrain_recv = std::vector<double>(horizontal_cell_number * ndims[VERTICAL], 0);
   uvel_recv = std::vector<double>(ndims[NORTHWARD] * (ndims[EASTWARD] + 1) * ndims[VERTICAL], 0);
   vvel_recv = std::vector<double>(ndims[EASTWARD] * (ndims[NORTHWARD] + 1) * ndims[VERTICAL], 0);
   wvel_recv = std::vector<double>(horizontal_cell_number * (ndims[VERTICAL] + 1), 0);
