@@ -12,6 +12,9 @@ GPUs. It must therefore run on a node in the GPU partition of Levante
 (`see here <https://docs.dkrz.de/doc/levante/running-jobs/partitions-and-limits.html>`_
 for documentation on Levante's partitions).
 
+*Note*: currently, the examples which run with MPI (``fromfile``, ``fromfile_irreg`` and
+``bubble3d``) only work on CPUs, so run them with ``cpu.sh`` and not with ``gpu.sh``.
+
 .. _configurebash_levante:
 
 Configure the Bash Scripts

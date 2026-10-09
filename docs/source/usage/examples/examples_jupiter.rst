@@ -11,6 +11,9 @@ through running each example using the bash scripts in ``scripts/jupiter/``. See
 ``scripts/jupiter/gpu.sh``, for the Hopper GPUs of the booster partition. Both job scripts
 therefore run on the booster partition.
 
+*Note*: currently, the examples which run with MPI (``fromfile``, ``fromfile_irreg`` and
+``bubble3d``) only work on CPUs, so run them with ``cpu.sh`` and not with ``gpu.sh``.
+
 *Note*: JUPITER's compute nodes have no internet access, but building Cleo does (CMake downloads
 some of Cleo's dependencies, e.g. Kokkos). So always build Cleo and compile the examples on a
 login node with the ``build`` mode, and then submit a job with the ``run`` mode. This is also
