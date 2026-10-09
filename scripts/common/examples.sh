@@ -127,8 +127,11 @@ case "${example}" in
 
   python_bindings)
     build_subdir=build_pybind/
+    # pybind11 turns on link-time optimisation (LTO) for Release builds unless
+    # CMAKE_INTERPROCEDURAL_OPTIMIZATION is set; LTO fails to link CUDA (nvcc) objects
     build_flags="-DCLEO_COUPLED_DYNAMICS=numpy -DCLEO_DOMAIN=cartesian \
-      -DCLEO_NO_ROUGHPAPER=true -DCLEO_PYTHON=${CLEO_PYTHON}"
+      -DCLEO_NO_ROUGHPAPER=true -DCLEO_PYTHON=${CLEO_PYTHON} \
+      -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF"
     executables="cleo_python_bindings"
 
     pythonscript=${path2CLEO}/examples/python_bindings/python_bindings.py
