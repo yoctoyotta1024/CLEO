@@ -24,6 +24,7 @@
 
 #include "../kokkosaliases.hpp"
 #include "coupldyn_null/nulldynamics.hpp"
+#include "gridboxes/supersindomain.hpp"
 
 /* empty (no) coupling to/from to CLEO's gridboxes.
 Struct obeys coupling comms concept */
@@ -37,7 +38,8 @@ struct NullDynComms {
   /* send information from Gridboxes' states
   to coupldyn is null for NullDynamics */
   template <typename GbxMaps, typename CD = NullDynComms>
-  KOKKOS_INLINE_FUNCTION void send_dynamics(const GbxMaps& gbxmaps, const viewh_constgbx h_gbxs,
+  KOKKOS_INLINE_FUNCTION void send_dynamics(const GbxMaps& gbxmaps, const dualview_constgbx gbxs,
+                                            const SupersInDomain& allsupers,
                                             const NullDynamics& nulldyn) const {}
 };
 
