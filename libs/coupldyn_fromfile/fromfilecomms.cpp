@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2023 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: fromfilecomms.cpp
@@ -11,8 +13,7 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * send and receive dynamics functions
- * for SDM when coupled to the fromfile
+ * send and receive dynamics functions for SDM when coupled to the fromfile
  * dynamics solver
  */
 
@@ -52,7 +53,7 @@ void FromFileComms::update_gridbox_state(const FromFileDynamics& ffdyn, const si
 }
 
 template void FromFileComms::send_dynamics<CartesianMaps, FromFileDynamics>(
-    const CartesianMaps&, const viewh_constgbx, FromFileDynamics&) const;
+    const CartesianMaps&, const dualview_constgbx, const SupersInDomain&, FromFileDynamics&) const;
 
 template void FromFileComms::receive_dynamics<CartesianMaps, FromFileDynamics>(
     const CartesianMaps&, const FromFileDynamics&, const viewh_gbx) const;

@@ -78,11 +78,13 @@ struct NullComms {
    *
    * @tparam CD The coupled dynamics solver type.
    * @param gbxmaps The Gridbox Maps.
-   * @param h_gbxs The view of Gridboxes.
+   * @param gbxs The view of Gridboxes (on device and host).
+   * @param allsupers View of all, inside and outside of domain, superdroplets (on device).
    * @param coupldyn The coupled dynamics solver object.
    */
   template <GridboxMaps GbxMaps, CoupledDynamics CD>
-  void send_dynamics(const GbxMaps& gbxmaps, const viewh_constgbx h_gbxs, CD& coupldyn) const {}
+  void send_dynamics(const GbxMaps& gbxmaps, const dualview_constgbx gbxs,
+                     const SupersInDomain& allsupers, CD& coupldyn) const {}
 };
 
 #endif  // LIBS_RUNCLEO_COUPLINGCOMMS_HPP_

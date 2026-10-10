@@ -25,6 +25,7 @@
 #include "../../kokkosaliases.hpp"
 #include "./numpy_dynamics.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
+#include "gridboxes/supersindomain.hpp"
 
 void pyNumpyComms(py::module& m);
 
@@ -37,7 +38,8 @@ struct NumpyComms {
 
   /* send information from Gridboxes' states to NumpyDynamics */
   template <typename GbxMaps, typename CD = NumpyComms>
-  KOKKOS_FUNCTION void send_dynamics(const GbxMaps& gbxmaps, const viewh_constgbx h_gbxs,
+  KOKKOS_FUNCTION void send_dynamics(const GbxMaps& gbxmaps, const dualview_constgbx gbxs,
+                                     const SupersInDomain& allsupers,
                                      NumpyDynamics& numpydyn) const;
 };
 
