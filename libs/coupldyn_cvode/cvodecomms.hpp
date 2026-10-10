@@ -25,6 +25,7 @@
 #include "../kokkosaliases.hpp"
 #include "coupldyn_cvode/cvodedynamics.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "gridboxes/supersindomain.hpp"
 #include "superdrops/state.hpp"
 
 struct CvodeComms {
@@ -65,10 +66,11 @@ struct CvodeComms {
   Note: ii indexing for cvode isn't compatible with MPI domain decompositon.
   */
   template <typename GbxMaps, typename CD = CvodeDynamics>
-  void send_dynamics(const GbxMaps& gbxmaps, const viewh_constgbx h_gbxs,
-                     CvodeDynamics& cvode) const {
+  void send_dynamics(const GbxMaps& gbxmaps, const dualview_constgbx gbxs,
+                     const SupersInDomain& allsupers, CvodeDynamics& cvode) const {
+    const viewh_constgbx h_gbxs = gbxs.view_host();
     std::vector<double> delta_y;
-    bool is_delta_y(false);
+    bool is_delta_y = false;
 
     const size_t ngbxs(h_gbxs.extent(0));
     for (size_t ii(0); ii < ngbxs; ++ii) {

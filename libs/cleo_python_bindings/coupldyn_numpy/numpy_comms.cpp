@@ -45,8 +45,10 @@ KOKKOS_FUNCTION void NumpyComms::receive_dynamics(const GbxMaps& gbxmaps,
 
 /* send information from Gridboxes' states to NumpyDynamics */
 template <typename GbxMaps, typename CD>
-KOKKOS_FUNCTION void NumpyComms::send_dynamics(const GbxMaps& gbxmaps, const viewh_constgbx h_gbxs,
+KOKKOS_FUNCTION void NumpyComms::send_dynamics(const GbxMaps& gbxmaps, const dualview_constgbx gbxs,
+                                               const SupersInDomain& allsupers,
                                                NumpyDynamics& numpydyn) const {
+  const viewh_constgbx h_gbxs = gbxs.view_host();
   const size_t ngbxs(h_gbxs.extent(0));
 
   Kokkos::parallel_for("send_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
@@ -66,7 +68,8 @@ template void NumpyComms::receive_dynamics<CartesianMaps, NumpyComms>(const Cart
                                                                       const viewh_gbx) const;
 
 template void NumpyComms::send_dynamics<CartesianMaps, NumpyComms>(const CartesianMaps&,
-                                                                   const viewh_constgbx,
+                                                                   const dualview_constgbx,
+                                                                   const SupersInDomain&,
                                                                    NumpyDynamics&) const;
 
 void pyNumpyComms(py::module& m) {
@@ -78,10 +81,11 @@ void pyNumpyComms(py::module& m) {
              const dualview_gbx gbxs) {
             self.receive_dynamics(gbxmaps, numpydyn, gbxs.view_host());
           },
-          py::arg("gbxmaps"), py::arg("numpydyn"), py::arg("h_gbxs"))
+          py::arg("gbxmaps"), py::arg("numpydyn"), py::arg("gbxs"))
       .def(
           "send_dynamics",
           [](const NumpyComms& self, const CartesianMaps& gbxmaps, const dualview_gbx gbxs,
-             NumpyDynamics& numpydyn) { self.send_dynamics(gbxmaps, gbxs.view_host(), numpydyn); },
-          py::arg("gbxmaps"), py::arg("h_gbxs"), py::arg("numpydyn"));
+             const SupersInDomain& allsupers,
+             NumpyDynamics& numpydyn) { self.send_dynamics(gbxmaps, gbxs, allsupers, numpydyn); },
+          py::arg("gbxmaps"), py::arg("gbxs"), py::arg("allsupers"), py::arg("numpydyn"));
 }

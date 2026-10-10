@@ -1,4 +1,6 @@
-/* Copyright (c) 2023 MPI-M, Clara Bayley
+/*
+ * Copyright (c) 2023 MPI-M, Clara Bayley
+ *
  *
  * ----- CLEO -----
  * File: fromfilecomms.hpp
@@ -11,8 +13,7 @@
  * https://opensource.org/licenses/BSD-3-Clause
  * -----
  * File Description:
- * send and receive dynamics functions
- * for SDM when coupled to the fromfile
+ * send and receive dynamics functions for SDM when coupled to the fromfile
  * dynamics solver
  */
 
@@ -23,6 +24,7 @@
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "gridboxes/supersindomain.hpp"
 #include "superdrops/state.hpp"
 
 /* 1-way coupling from coupldyn to CLEO's gridboxes where
@@ -39,8 +41,8 @@ struct FromFileComms {
   /* send information from Gridboxes' states
   to coupldyn is null for FromFileDynamics*/
   template <typename GbxMaps, typename CD = FromFileDynamics>
-  void send_dynamics(const GbxMaps& gbxmaps, const viewh_constgbx h_gbxs,
-                     FromFileDynamics& ffdyn) const {}
+  void send_dynamics(const GbxMaps& gbxmaps, const dualview_constgbx gbxs,
+                     const SupersInDomain& allsupers, FromFileDynamics& ffdyn) const {}
 
   /* update Gridboxes' states using information
   received from FromFileDynamics solver for

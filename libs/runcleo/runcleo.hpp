@@ -139,7 +139,7 @@ class RunCLEO {
       sdm_step(t_mdl, t_next, gbxs, allsupers);
 
       /* proceed to next step (in general involves coupling) */
-      t_mdl = proceed_to_next_step(t_next, gbxs);
+      t_mdl = proceed_to_next_step(t_next, gbxs, allsupers);
     }
     /* act on last timestep t_mdl = t_end */
     at_last_step(t_mdl, t_end, gbxs, allsupers);
@@ -258,10 +258,11 @@ class RunCLEO {
    * @param gbxs DualView of gridboxes.
    * @return Incremented timestep.
    */
-  unsigned int proceed_to_next_step(unsigned int t_next, dualview_gbx gbxs) const {
+  unsigned int proceed_to_next_step(unsigned int t_next, dualview_gbx gbxs,
+                                    const SupersInDomain& allsupers) const {
     if (t_next % sdm.get_couplstep() == 0) {
       gbxs.sync_host();
-      comms.send_dynamics(sdm.gbxmaps, gbxs.view_host(), coupldyn);
+      comms.send_dynamics(sdm.gbxmaps, gbxs, allsupers, coupldyn);
     }
 
     return t_next;
