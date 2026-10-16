@@ -108,6 +108,12 @@ levante_load_runtime_stack() {
       return 1
       ;;
   esac
+
+  # Levante's openmpi modules don't add libmpi.so to LD_LIBRARY_PATH, but
+  # mpi4py (e.g. in the python_bindings example) loads it at runtime
+  local mpi_libdir
+  mpi_libdir="$(dirname "$(dirname "$(command -v mpicc)")")/lib"
+  export LD_LIBRARY_PATH="${mpi_libdir}:${LD_LIBRARY_PATH}"
 }
 
 levante_load_yac_dependencies() {
