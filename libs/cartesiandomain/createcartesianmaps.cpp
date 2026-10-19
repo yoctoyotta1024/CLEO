@@ -296,7 +296,7 @@ void set_null_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromB
     Kokkos::Rank<3>>;
 
   Kokkos::parallel_for(
-    "set_cartesian_maps",
+    "set_null_cartesian_maps",
     MDPolicy({0, 0, 0},
              {partition_size[0],
               partition_size[1],
