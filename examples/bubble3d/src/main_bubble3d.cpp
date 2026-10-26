@@ -86,10 +86,22 @@ inline InitialConditions auto create_initconds(const Config& config, const GbxMa
 inline GridboxMaps auto create_gbxmaps(const Config& config) {
   const auto gbxmaps = create_cartesian_maps(config.get_ngbxs(), config.get_nspacedims(),
                                              config.get_grid_filename());
+  // for (size_t ii = 0; ii < gbxmaps.get_total_global_ngridboxes(); ii++) {
+  //   if (ii % 24 == 0 && ii >= 2352 && ii < 2400) {
+  //     std::cout << "CLEO_DEBUG ii = " << ii << " (z,x,y) bounds " <<
+  //     gbxmaps.coord3bounds(ii).first
+  //               << "-" << gbxmaps.coord3bounds(ii).second << ", " <<
+  //               gbxmaps.coord1bounds(ii).first
+  //               << "-" << gbxmaps.coord1bounds(ii).second << ", " <<
+  //               gbxmaps.coord2bounds(ii).first
+  //               << "-" << gbxmaps.coord2bounds(ii).second << std::endl;
+  //   }
+  // }
   return gbxmaps;
 }
 
 inline auto create_movement(const unsigned int motionstep, const CartesianMaps& gbxmaps) {
+  // const Motion<CartesianMaps> auto motion = NullMotion{};
   const auto terminalv = RogersGKTerminalVelocity{};
   const Motion<CartesianMaps> auto motion =
       CartesianMotion(motionstep, &step2dimlesstime, terminalv);
@@ -120,6 +132,7 @@ inline MicrophysicalProcess auto create_microphysics(const Config& config,
   const MicrophysicalProcess auto colls = config_collisions(config, tsteps);
 
   return cond >> colls;
+  // return NullMicrophysicalProcess{};
 }
 
 template <typename Dataset, typename Store>

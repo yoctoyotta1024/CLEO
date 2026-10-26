@@ -96,6 +96,15 @@ coupling to CLEO SDM */
 void YacComms::update_send_buffers(const YacCartesianDynamics& ffdyn, const size_t ii,
                                    const double temp, const double qvap, const double qcloud,
                                    const double qrain) const {
+  // if (ii % 24 == 0 && ii >= 2352 && ii < 2400) {
+  //   std::cout << "CLEO_DEBUG qvap update (ii = state, ffdyn, delta): " << ii << " = " << qvap
+  //             << ", " << ffdyn.get_qvap(ii) << ", " << qvap - ffdyn.get_qvap(ii) << std::endl;
+  // }
+  // if (ii % 24 == 0 && ii >= 2352 && ii < 2400) {
+  //   std::cout << "CLEO_DEBUG qcloud update (ii = state, ffdyn, delta): " << ii << " = " << qcloud
+  //             << ", " << ffdyn.get_qcloud(ii) << ", " << qcloud - ffdyn.get_qcloud(ii) <<
+  //             std::endl;
+  // }
   ffdyn.set_temp_delta(ii, temp - ffdyn.get_temp(ii));
   ffdyn.set_qvap_delta(ii, qvap - ffdyn.get_qvap(ii));
   ffdyn.set_qcloud_delta(ii, qcloud - ffdyn.get_qcloud(ii));

@@ -216,6 +216,13 @@ void CartesianDynamics::receive_yac_cell_field(unsigned int yac_field_id,
         for (size_t k = 0; k < vertical_levels; k++) {
           auto ii = point_idx * vertical_levels + k;
           target_array[ii] = yac_raw_cell_data[k][point_idx] / conversion_factor;
+          // if (yac_field_id == 8) {  // (temp, qvap, qcloud, qrain) : 6, 7, 8, 9
+          //   if (ii % 24 == 0 && ii >= 2352 && ii < 2400) {
+          //     std::cout << "CLEO_DEBUG receive (ii = buffer, data): " << ii << " = "
+          //               << yac_raw_cell_data[k][point_idx] << ", "
+          //               << target_array[ii] * conversion_factor << std::endl;
+          //   }
+          // }
         }
       }
     }
@@ -283,6 +290,9 @@ void CartesianDynamics::receive_yac_edge_field(unsigned int yac_field_id,
 /* This subroutine is the main entry point for receiving data from the couplded dynamics via YAC.
  * It checks the dimensionality of the simulation based on the config data. */
 void CartesianDynamics::receive_fields_from_yac() {
+  // std::cout << "CLEO_DEBUG *_yac_id_recv: " << temp_yac_id_recv << ", " << qvap_yac_id_recv << ",
+  // "
+  //           << qcloud_yac_id_recv << ", " << qrain_yac_id_recv << std::endl;
   receive_yac_cell_field(temp_yac_id_recv, yac_raw_cell_data, temp_recv, ndims[VERTICAL],
                          dlc::TEMP0);
   receive_yac_cell_field(pressure_yac_id_recv, yac_raw_cell_data, press_recv, ndims[VERTICAL],
@@ -319,6 +329,13 @@ void CartesianDynamics::send_yac_cell_field(int yac_field_id, double* field_data
         for (size_t k = 0; k < ndims[VERTICAL]; ++k) {
           auto ii = point_idx * ndims[VERTICAL] + k;
           yac_raw_cell_data_send[k][0][point_idx] = field_data[ii] * conversion_factor;
+          // if (yac_field_id == 15) {  // (temp, qvap, qcloud, qrain): 13, 14, 15, 16
+          //   if (ii % 24 == 0 && ii >= 2352 && ii < 2400) {
+          //     std::cout << "CLEO_DEBUG send (ii = buffer, data): " << ii << " = "
+          //               << yac_raw_cell_data_send[k][0][point_idx] << ", "
+          //               << field_data[ii] * conversion_factor << std::endl;
+          //   }
+          // }
         }
       }
 
@@ -336,6 +353,9 @@ void CartesianDynamics::send_yac_cell_field(int yac_field_id, double* field_data
 }
 
 void CartesianDynamics::send_fields_to_yac() {
+  // std::cout << "CLEO_DEBUG *_yac_id_send: " << temp_yac_id_send << ", " << qvap_yac_id_send << ",
+  // "
+  //           << qcloud_yac_id_send << ", " << qrain_yac_id_send << std::endl;
   send_yac_cell_field(temp_yac_id_send, delta_temp_send.data(), dlc::TEMP0);
   send_yac_cell_field(qvap_yac_id_send, delta_qvap_send.data());
   send_yac_cell_field(qcloud_yac_id_send, delta_qcloud_send.data());
