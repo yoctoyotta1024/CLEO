@@ -49,6 +49,24 @@ double dry_air_density(const double press, const double temp, const double qvap)
 }
 
 /**
+ * @brief Calculate the mixing ratio of a condensed water mass in a moist volume.
+ *
+ * This function calculates the mass mixing ratio of condensed liquid water by
+ * dividing the dimensionless density of the condensate by the dry air density.
+ *
+ * @param volume volume [dimensionless]
+ * @param mass mass of condensed water [dimensionless]
+ * @param press pressure [dimensionless]
+ * @param temp temperature [dimensionless]
+ * @param qvap mass mixing ratio of water vapor [dimensionless]
+ *
+ * @return dimensionless mixing ratio of condensed water
+ */
+KOKKOS_FUNCTION double mass_to_mixing_ratio(const double volume, const double mass,
+                                            const double press, const double temp,
+                                            const double qvap);
+
+/**
  * @brief Calculate the specific heat capacity of moist air.
  *
  * This function calculates the specific heat capacity of a moist parcel of air using the specific

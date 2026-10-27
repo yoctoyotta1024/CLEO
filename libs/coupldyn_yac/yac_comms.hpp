@@ -38,14 +38,6 @@ coupldyn sends information to h_gbxs but doesn't
 receive any back. Struct obeys coupling comms concept */
 struct YacComms {
  private:
-  KOKKOS_INLINE_FUNCTION double mass_to_mixing_ratio(const State& state,
-                                                     const double totmass) const {
-    constexpr double R0cubed_VOL0 = dlc::R0 * dlc::R0 * dlc::R0 / dlc::VOL0;
-    const auto rho_cond = totmass / state.get_volume() * R0cubed_VOL0;  // rho_condensed
-    const auto rho_dry = dry_air_density(state.press, state.temp, state.qvap);
-    return rho_cond / rho_dry;
-  }
-
   void calculate_cloud_rain_masses(const viewd_constgbx d_gbxs, const SupersInDomain& allsupers,
                                    Kokkos::DualView<double*> mass_cloud,
                                    Kokkos::DualView<double*> mass_rain) const;
