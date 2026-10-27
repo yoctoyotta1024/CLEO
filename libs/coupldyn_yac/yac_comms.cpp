@@ -60,15 +60,18 @@ void YacComms::send_dynamics(const GbxMaps& gbxmaps, const dualview_constgbx gbx
     const size_t ngbxs(h_gbxs.extent(0));
     const auto h_mass_cloud = ffdyn.get_mass_cloud().view_host();
     const auto h_mass_rain = ffdyn.get_mass_rain().view_host();
-    Kokkos::parallel_for("send_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
-                         [=, this](const size_t ii) {
-                           const State& state(h_gbxs(ii).state);
-                           const auto temp = state.temp;
-                           const auto qvap = state.qvap;
-                           const auto qcloud = mass_to_mixing_ratio(state, h_mass_cloud(ii));
-                           const auto qrain = mass_to_mixing_ratio(state, h_mass_rain(ii));
-                           update_send_buffers(ffdyn, ii, temp, qvap, qcloud, qrain);
-                         });
+    Kokkos::parallel_for(
+        "send_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs), [=, this](const size_t ii) {
+          const State& state(h_gbxs(ii).state);
+          const auto press = state.press;
+          const auto temp = state.temp;
+          const auto qvap = state.qvap;
+          const auto qcloud =
+              mass_to_mixing_ratio(state.get_volume(), h_mass_cloud(ii), press, temp, qvap);
+          const auto qrain =
+              mass_to_mixing_ratio(state.get_volume(), h_mass_rain(ii), press, temp, qvap);
+          update_send_buffers(ffdyn, ii, temp, qvap, qcloud, qrain);
+        });
     ffdyn.send_fields_to_yac();
   }
 }
