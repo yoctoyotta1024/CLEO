@@ -32,13 +32,13 @@ definitions:
             # no max_search_distance = unbounded: guarantees SOME match is always found
     interp_stack_from_cleo_thermo: &interp_stack_from_cleo_thermo
       interpolation:
-        - average:
-            weighted: barycentric_coordinate
+        - conservative:
+            order: 1
+            enforced_conservation: false
             partial_coverage: true
-        - nnn:
-            n: 4
-            weighted: distance_weighted
-            # no max_search_distance = unbounded: guarantees SOME match is always found
+            normalisation: destarea
+        - fixed:
+            user_value: 0.0
   time_config: &time_config
     coupling_period: PT30S
   component_configs:
