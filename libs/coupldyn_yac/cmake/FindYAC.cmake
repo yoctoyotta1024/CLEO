@@ -1,60 +1,53 @@
-find_package(YAXT REQUIRED)
-find_package(NetCDF REQUIRED)
-find_package(LAPACK REQUIRED)
+# Finds YAC through its pkg-config file yac-mci.pc, which requires yac-core.pc.
+# Together they list YAC's libraries in link order, including the transitive
+# dependencies (NetCDF, YAXT, LAPACK, mtime, fyaml). YAC_ROOT is searched first.
+#
+# Defines the imported target YAC::YAC and the variable YAC_C_INCLUDE_DIR.
+#
+# MPI is linked separately because the .pc files omit it when YAC was built
+# with CC=mpicc. A .pc file whose prefix no longer matches the install location
+# (e.g. a relocated install) can be used by passing
+# -DPKG_CONFIG_ARGN=--define-prefix (CMake >= 3.22).
+
 enable_language(C)
 find_package(MPI REQUIRED COMPONENTS C)
+find_package(PkgConfig REQUIRED)
 
-if(YAXT_FOUND AND NetCDF_FOUND AND LAPACK_FOUND)
-  # yac.h is YAC's supported C interface. Note yac_interface.h is the deprecated
-  # interface and is only installed by YAC builds configured --enable-deprecated.
+set(_yac_saved_prefix_path "${CMAKE_PREFIX_PATH}")
+if(YAC_ROOT)
+  list(PREPEND CMAKE_PREFIX_PATH "${YAC_ROOT}")
+endif()
+pkg_check_modules(YAC_PC QUIET IMPORTED_TARGET yac-mci)
+set(CMAKE_PREFIX_PATH "${_yac_saved_prefix_path}")
+unset(_yac_saved_prefix_path)
+
+if(YAC_PC_FOUND)
+  # yac.h is YAC's supported C interface (yac_interface.h is deprecated)
   find_path(YAC_C_INCLUDE_DIR
     NAMES yac.h
+    PATHS "${YAC_PC_INCLUDEDIR}"
+    NO_DEFAULT_PATH
     DOC "YAC include dir")
+  mark_as_advanced(YAC_C_INCLUDE_DIR)
 
-  # YAC always installs its C libraries split into the message coupling interface
-  # (libyac_mci.a) and the core (libyac_core.a). The combined libyac.a is only
-  # produced by YAC builds configured --enable-deprecated. Link order matters:
-  # libyac_mci.a depends on libyac_core.a.
-  find_library(YAC_MCI_LIBRARY
-    NAMES libyac_mci.a
-    DOC "YAC C message coupling interface Library")
-
-  find_library(YAC_CORE_LIBRARY
-    NAMES libyac_core.a
-    DOC "YAC C core Library")
-
-  # libyac_pak.a is required by libyac_mci.a in YAC >= 3.18 and absent in older versions
-  find_library(YAC_PAK_LIBRARY
-    NAMES libyac_pak.a
-    DOC "YAC C pak Library (optional)")
-
-  # bundled by YAC as libyac_mtime.a, or external (--with-external-mtime) as libmtime.a
-  find_library(YAC_C_MTIME_LIBRARY
-    NAMES libyac_mtime.a libmtime.a
-    DOC "YAC C mtime Library")
-
-  mark_as_advanced(YAC_C_INCLUDE_DIR
-    YAC_MCI_LIBRARY
-    YAC_CORE_LIBRARY
-    YAC_PAK_LIBRARY
-    YAC_C_MTIME_LIBRARY)
-
-  include(FindPackageHandleStandardArgs)
-  find_package_handle_standard_args(YAC
-    REQUIRED_VARS YAC_MCI_LIBRARY YAC_CORE_LIBRARY YAC_C_INCLUDE_DIR YAC_C_MTIME_LIBRARY
-  )
-
-  if(YAC_FOUND)
-    set(YAC_C_LIBRARIES "${YAC_MCI_LIBRARY}")
-    if(YAC_PAK_LIBRARY)
-      list(APPEND YAC_C_LIBRARIES "${YAC_PAK_LIBRARY}")
-    endif()
-    list(APPEND YAC_C_LIBRARIES "${YAC_CORE_LIBRARY}")
-
-    if(NOT TARGET YAC::YAC)
-      add_library(YAC::YAC INTERFACE IMPORTED)
-      target_include_directories(YAC::YAC INTERFACE "${YAC_C_INCLUDE_DIR}")
-      target_link_libraries(YAC::YAC INTERFACE ${YAC_C_LIBRARIES} "${YAC_C_MTIME_LIBRARY}" YAXT::YAXT_C NetCDF::NetCDF_C MPI::MPI_C LAPACK::LAPACK fyaml m "-L${CLEO_FYAMLLIB}")
-    endif()
+  # YAC's own CMake build writes incomplete .pc files in these versions
+  if(NOT YAC_PC_LIBRARIES MATCHES "mtime")
+    message(FATAL_ERROR "yac-mci.pc of YAC ${YAC_PC_VERSION} does not link mtime. "
+      "This is a bug of YAC 3.20.x built with CMake; use YAC >= 3.21 or build YAC with autotools.")
   endif()
+  if(YAC_PC_VERSION VERSION_LESS 3.19 AND EXISTS "${YAC_PC_LIBDIR}/cmake/yac/yac-config.cmake")
+    message(FATAL_ERROR "yac-core.pc of YAC ${YAC_PC_VERSION} built with CMake does not link LAPACK. "
+      "This is a bug of YAC 3.15 to 3.18 built with CMake; use YAC >= 3.19 or build YAC with autotools.")
+  endif()
+endif()
+
+include(FindPackageHandleStandardArgs)
+find_package_handle_standard_args(YAC
+  REQUIRED_VARS YAC_C_INCLUDE_DIR YAC_PC_FOUND
+  VERSION_VAR YAC_PC_VERSION
+)
+
+if(YAC_FOUND AND NOT TARGET YAC::YAC)
+  add_library(YAC::YAC INTERFACE IMPORTED)
+  target_link_libraries(YAC::YAC INTERFACE PkgConfig::YAC_PC MPI::MPI_C)
 endif()
