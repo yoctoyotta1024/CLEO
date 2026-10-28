@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.69.3](https://github.com/yoctoyotta1024/CLEO/compare/09f9f976478e7f7246e0e515c60fb83fcb397c59..v0.69.3) - 2026-10-28
+#### Bug Fixes
+- restore set_null_cartesian_maps kernel label - ([8b2ad45](https://github.com/yoctoyotta1024/CLEO/commit/8b2ad45dc798f6f1d4adbcaf86d62e209ee3a899)) - Harshada Balasubramanian
+- optimisations to fix CLEO performance - ([980ef8e](https://github.com/yoctoyotta1024/CLEO/commit/980ef8e66af583ee81e1bab67a96e9a0da7e4473)) - Harshada Balasubramanian
+#### Refactoring
+- find YAC via its pkg-config files - ([09f9f97](https://github.com/yoctoyotta1024/CLEO/commit/09f9f976478e7f7246e0e515c60fb83fcb397c59)) - Benjamin Rodenberg
+
+- - -
+
 ## [v0.69.2](https://github.com/yoctoyotta1024/CLEO/compare/4103a7618729425bf5152360ad7f0cb9968e8e43..v0.69.2) - 2026-09-29
 #### Bug Fixes
 - link libyac_pak when present - ([9fd34d5](https://github.com/yoctoyotta1024/CLEO/commit/9fd34d58a08d7253f7f77a1a1564923d40e80f56)) - Benjamin Rodenberg
