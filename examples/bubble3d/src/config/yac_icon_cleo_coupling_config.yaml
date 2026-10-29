@@ -90,14 +90,14 @@ coupling:
     weight_file:
       name: /work/mh0731/m300950/icon/icon/experiments/bubble_cleo/bin/weights_cells_debug.nc
       on_existing: overwrite
-# # CLEO -> ATM
-#   - <<: [*cleo2atm, *interp_stack_from_cleo_thermo]
-#     field:
-#       - src: humidity_mixing_ratio_out
-#         tgt: humidity_mixing_ratio_from_cleo
-#       - src: cloud_liquid_water_mixing_ratio_out
-#         tgt: cloud_liquid_water_mixing_ratio_from_cleo
-#       - src: rain_liquid_water_mixing_ratio_out
-#         tgt: rain_liquid_water_mixing_ratio_from_cleo
-#       - src: air_temperature_out
-#         tgt: air_temperature_from_cleo
+# CLEO -> ATM
+  - <<: [*cleo2atm, *interp_stack_from_cleo_thermo]
+    field:
+      - src: humidity_mixing_ratio_out
+        tgt: humidity_mixing_ratio_from_cleo
+      - src: cloud_liquid_water_mixing_ratio_out
+        tgt: cloud_liquid_water_mixing_ratio_from_cleo
+      - src: rain_liquid_water_mixing_ratio_out
+        tgt: rain_liquid_water_mixing_ratio_from_cleo
+      - src: air_temperature_out
+        tgt: air_temperature_from_cleo
