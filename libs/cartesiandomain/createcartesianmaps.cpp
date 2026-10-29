@@ -185,48 +185,40 @@ void set_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromBinary
   to_gbxvolumes.insert(oob, 0.0);
 
   using HostExecSpace = Kokkos::DefaultHostExecutionSpace;
-  using MDPolicy = Kokkos::MDRangePolicy<
-    HostExecSpace,
-    Kokkos::Rank<3>>;
+  using MDPolicy = Kokkos::MDRangePolicy<HostExecSpace, Kokkos::Rank<3>>;
 
   Kokkos::parallel_for(
-    "set_cartesian_maps",
-    MDPolicy({0, 0, 0},
-             {partition_size[0],
-              partition_size[1],
-              partition_size[2]}),
-    KOKKOS_LAMBDA(const size_t k,
-                  const size_t i,
-                  const size_t j) {
-      int idx = get_index_from_coordinates(ndims, partition_origin[0] + k,
-                                            partition_origin[1] + i,
-                                            partition_origin[2] + j);
+      "set_cartesian_maps",
+      MDPolicy({0, 0, 0}, {partition_size[0], partition_size[1], partition_size[2]}),
+      KOKKOS_LAMBDA(const size_t k, const size_t i, const size_t j) {
+        int idx = get_index_from_coordinates(ndims, partition_origin[0] + k,
+                                             partition_origin[1] + i, partition_origin[2] + j);
 
-                    int local_gbx_index = domain_decomposition.global_to_local_gridbox_index(idx);
+        int local_gbx_index = domain_decomposition.global_to_local_gridbox_index(idx);
 
-                    const auto c3bs = gfb.get_coord3gbxbounds(idx);
-                    h_to_coord3bounds.insert(local_gbx_index, c3bs);
-                    auto c3nghbrs = DoublyPeriodicDomain::cartesian_coord3nghbrs(idx, ndims);
-                    c3nghbrs = correct_neighbor_indices(c3nghbrs, ndims, domain_decomposition);
-                    h_to_back_coord3nghbr.insert(local_gbx_index, c3nghbrs.first);
-                    h_to_forward_coord3nghbr.insert(local_gbx_index, c3nghbrs.second);
+        const auto c3bs = gfb.get_coord3gbxbounds(idx);
+        h_to_coord3bounds.insert(local_gbx_index, c3bs);
+        auto c3nghbrs = DoublyPeriodicDomain::cartesian_coord3nghbrs(idx, ndims);
+        c3nghbrs = correct_neighbor_indices(c3nghbrs, ndims, domain_decomposition);
+        h_to_back_coord3nghbr.insert(local_gbx_index, c3nghbrs.first);
+        h_to_forward_coord3nghbr.insert(local_gbx_index, c3nghbrs.second);
 
-                    const auto c1bs = gfb.get_coord1gbxbounds(idx);
-                    h_to_coord1bounds.insert(local_gbx_index, c1bs);
-                    auto c1nghbrs = DoublyPeriodicDomain::cartesian_coord1nghbrs(idx, ndims);
-                    c1nghbrs = correct_neighbor_indices(c1nghbrs, ndims, domain_decomposition);
-                    h_to_back_coord1nghbr.insert(local_gbx_index, c1nghbrs.first);
-                    h_to_forward_coord1nghbr.insert(local_gbx_index, c1nghbrs.second);
+        const auto c1bs = gfb.get_coord1gbxbounds(idx);
+        h_to_coord1bounds.insert(local_gbx_index, c1bs);
+        auto c1nghbrs = DoublyPeriodicDomain::cartesian_coord1nghbrs(idx, ndims);
+        c1nghbrs = correct_neighbor_indices(c1nghbrs, ndims, domain_decomposition);
+        h_to_back_coord1nghbr.insert(local_gbx_index, c1nghbrs.first);
+        h_to_forward_coord1nghbr.insert(local_gbx_index, c1nghbrs.second);
 
-                    const auto c2bs = gfb.get_coord2gbxbounds(idx);
-                    h_to_coord2bounds.insert(local_gbx_index, c2bs);
-                    auto c2nghbrs = DoublyPeriodicDomain::cartesian_coord2nghbrs(idx, ndims);
-                    c2nghbrs = correct_neighbor_indices(c2nghbrs, ndims, domain_decomposition);
-                    h_to_back_coord2nghbr.insert(local_gbx_index, c2nghbrs.first);
-                    h_to_forward_coord2nghbr.insert(local_gbx_index, c2nghbrs.second);
+        const auto c2bs = gfb.get_coord2gbxbounds(idx);
+        h_to_coord2bounds.insert(local_gbx_index, c2bs);
+        auto c2nghbrs = DoublyPeriodicDomain::cartesian_coord2nghbrs(idx, ndims);
+        c2nghbrs = correct_neighbor_indices(c2nghbrs, ndims, domain_decomposition);
+        h_to_back_coord2nghbr.insert(local_gbx_index, c2nghbrs.first);
+        h_to_forward_coord2nghbr.insert(local_gbx_index, c2nghbrs.second);
 
-                    to_gbxareas.insert(local_gbx_index, gfb.gbxarea(idx));
-                    to_gbxvolumes.insert(local_gbx_index, gfb.gbxvol(idx));
+        to_gbxareas.insert(local_gbx_index, gfb.gbxarea(idx));
+        to_gbxvolumes.insert(local_gbx_index, gfb.gbxvol(idx));
       });
 
   switch (nspacedims) {
@@ -291,29 +283,21 @@ void set_null_cartesian_maps(const unsigned int nspacedims, const GbxBoundsFromB
   // TODO(ALL): perform on GPUs once domain_decomposition is GPU compatible (then after loop assign
   // gbxmaps in switch rather than use deep_copy)
   using HostExecSpace = Kokkos::DefaultHostExecutionSpace;
-  using MDPolicy = Kokkos::MDRangePolicy<
-    HostExecSpace,
-    Kokkos::Rank<3>>;
+  using MDPolicy = Kokkos::MDRangePolicy<HostExecSpace, Kokkos::Rank<3>>;
 
   Kokkos::parallel_for(
-    "set_null_cartesian_maps",
-    MDPolicy({0, 0, 0},
-             {partition_size[0],
-              partition_size[1],
-              partition_size[2]}),
-    KOKKOS_LAMBDA(const size_t k,
-                  const size_t i,
-                  const size_t j) {
-                    int idx = get_index_from_coordinates(ndims, partition_origin[0] + k,
-                                                         partition_origin[1] + i,
-                                                         partition_origin[2] + j);
+      "set_null_cartesian_maps",
+      MDPolicy({0, 0, 0}, {partition_size[0], partition_size[1], partition_size[2]}),
+      KOKKOS_LAMBDA(const size_t k, const size_t i, const size_t j) {
+        int idx = get_index_from_coordinates(ndims, partition_origin[0] + k,
+                                             partition_origin[1] + i, partition_origin[2] + j);
 
-                    int local_gbx_index = domain_decomposition.global_to_local_gridbox_index(idx);
+        int local_gbx_index = domain_decomposition.global_to_local_gridbox_index(idx);
 
-                    h_nullbounds.insert(local_gbx_index, nullbounds());
-                    const auto nullnghbr = nullnghbrs(local_gbx_index);
-                    h_back_nullnghbr.insert(local_gbx_index, nullnghbr.first);
-                    h_forward_nullnghbr.insert(local_gbx_index, nullnghbr.second);
+        h_nullbounds.insert(local_gbx_index, nullbounds());
+        const auto nullnghbr = nullnghbrs(local_gbx_index);
+        h_back_nullnghbr.insert(local_gbx_index, nullnghbr.first);
+        h_forward_nullnghbr.insert(local_gbx_index, nullnghbr.second);
       });
 
   switch (nspacedims) {

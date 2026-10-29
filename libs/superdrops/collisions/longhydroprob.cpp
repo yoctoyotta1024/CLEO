@@ -27,7 +27,7 @@
   coaleff(R,r) = 1, ie. eff = colleff, which also means that for
   collisions where R > rlim, eff(R,r) = colleff(R,r) = 1). */
 KOKKOS_FUNCTION
-double LongHydroProb::kerneleff(const Superdrop &drop1, const Superdrop &drop2) const {
+double LongHydroProb::kerneleff(const Superdrop& drop1, const Superdrop& drop2) const {
   constexpr double k1 = 4.5e4 * dlc::R0 * dlc::R0 * 100 * 100;
   constexpr double k2 = 3e-4 / dlc::R0 / 100;
   constexpr double rlim = 5e-5 / dlc::R0;
