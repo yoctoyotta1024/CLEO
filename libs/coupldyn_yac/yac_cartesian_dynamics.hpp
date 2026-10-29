@@ -248,6 +248,4 @@ struct YacCartesianDynamics {
   std::pair<double, double> get_vvel(const size_t ii) const { return dynvars->get_vvel(ii); }
 };
 
-// int YacCartesianDynamics::get_counter = 1;
-
 #endif  // LIBS_COUPLDYN_YAC_YAC_CARTESIAN_DYNAMICS_HPP_
