@@ -4,7 +4,7 @@ set -e
 source /etc/profile
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 bashsrc=${SCRIPT_DIR}
-cleo_yac_module_path="${CLEO_PATH2CLEO}/libs/coupldyn_yac/cmake"
+cleo_yac_module_path="${CLEO_PATH2CLEO}/libs/configuration/cmake"
 
 ### -------------------- check inputs ------------------ ###
 source ${bashsrc}/check_inputs.sh
