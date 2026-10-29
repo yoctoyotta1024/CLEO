@@ -79,6 +79,8 @@ struct Config {
     return optional.kokkos_settings.kokkos_initialization_settings;
   };
 
+  OptionalConfigParams::YacSettings get_yac_settings() const { return optional.yac_settings; }
+
   OptionalConfigParams::CondensationParams get_condensation() const {
     return optional.condensation;
   }
@@ -101,7 +103,9 @@ struct Config {
     return optional.fromfiledynamics;
   }
 
-  OptionalConfigParams::YacDynamicsParams get_yac_dynamics() const { return optional.yac_dynamics; }
+  OptionalConfigParams::YacCartesianDynamicsParams get_yac_cartesian_dynamics() const {
+    return optional.yac_cartesian_dynamics;
+  }
 
   OptionalConfigParams::AddSupersToDomainParams get_addsuperstodomain() const {
     return optional.addsuperstodomain;
