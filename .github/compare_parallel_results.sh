@@ -8,6 +8,7 @@ if [ ! -d $zarr1 ]; then
   exit 1
 fi
 
+
 for processes in 2 4 8; do
     if [ -s "diffs" ]; then
         rm diffs
