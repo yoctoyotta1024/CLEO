@@ -1,0 +1,59 @@
+#!/bin/bash
+
+### ============================================================ ###
+###                        Levante script                        ###
+### ============================================================ ###
+###
+### Usage:
+###   ./build_compile_run_plot_cleo.sh [example] [buildtype] [compilername] \
+###                                    [path2CLEO] [path2build] [build_flags] \
+###                                    [yacyaxtroot] [enabledebug] [make_clean] \
+###                                    [stacksize_limit] [steps]
+###
+###   All arguments are optional; pass "" to keep a default.
+###   path2build is a build root: the example builds in <path2build>/build_xxx.
+###   The arguments are the same on every machine, see
+###   common/build_compile_run_plot_cleo.sh for their full description.
+###
+### Machine defaults / supported values:
+###   buildtype        serial threads openmp cuda (default: openmp)
+###   compilername     gcc intel (default: gcc)
+###   stacksize_limit  204800 (kB)
+###   CLEO_MAKE_JOBS   32
+###
+###   make_clean       true deletes the build folder first (build from scratch).
+###   steps            build,compile,run,plot,all (default: all)
+###                    The run stage generates input files and runs the executable.
+###
+### Supported examples (see common/examples.sh for full details):
+###   as2017 cuspbifurc breakup shima2009 constthermo2d divfree2d
+###   eurec4a1d rainshaft1d python_bindings fromfile
+###   fromfile_irreg bubble3d roughpaper
+###   Note: cuda requires compilername=gcc.
+### ============================================================ ###
+
+set -e
+
+### ---------------- machine configuration ------------- ###
+export CLEO_MACHINE="levante"
+machine_default_buildtype="openmp"
+machine_buildtypes=(serial threads openmp cuda)
+machine_compilers=(gcc intel)
+machine_examples=(
+  as2017 cuspbifurc breakup shima2009 constthermo2d divfree2d
+  eurec4a1d rainshaft1d python_bindings fromfile
+  fromfile_irreg bubble3d roughpaper
+)
+machine_default_stacksize="204800"
+machine_default_make_jobs=32
+
+machine_check_inputs() {
+  if [[ "${buildtype}" == "cuda" && "${compilername}" != "gcc" ]]; then
+    echo "Error: CUDA build on Levante requires compilername='gcc'."
+    exit 1
+  fi
+}
+### ---------------------------------------------------- ###
+
+source "$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../common" &>/dev/null && pwd)/build_compile_run_plot_cleo.sh"
+build_compile_run_plot_cleo "$@"
