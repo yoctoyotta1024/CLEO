@@ -2,6 +2,22 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.70.0](https://github.com/yoctoyotta1024/CLEO/compare/2b138ab2eab7e4df4080b7db7c78124bb357cc18..v0.70.0) - 2026-10-29
+#### Bug Fixes
+- comparison of integer expressions of different signedness: ‘int’ and ‘long unsigned int’ - ([6d12e8b](https://github.com/yoctoyotta1024/CLEO/commit/6d12e8b55a053f67354f125d449efe677217f736)) - clara.bayley
+- unused variable ‘field_size’ and ‘collection_data’ - ([60e1bb5](https://github.com/yoctoyotta1024/CLEO/commit/60e1bb5f7e52b0dd37eb0a0b9adeaff68c1a43b7)) - clara.bayley
+#### Continuous Integration
+- better diffs comparison script on parallel execution test - ([ed8ec74](https://github.com/yoctoyotta1024/CLEO/commit/ed8ec748e03f4c9834d883c995935cd1f888eaf2)) - clara.bayley
+- allow oversubscripbed cores - ([6a5c0ad](https://github.com/yoctoyotta1024/CLEO/commit/6a5c0ad5ee4a7aece88ecc661cbd5fe7dbdb268b)) - clara.bayley
+#### Features
+- Further development of two-way coupling - ([1a4dbb7](https://github.com/yoctoyotta1024/CLEO/commit/1a4dbb7cb6ca886a9f0059684638c79659bd91f4)) - dlaparna7
+- Initial draft of two way coupling. - ([412d7a7](https://github.com/yoctoyotta1024/CLEO/commit/412d7a7267ad3a1b2e9b2cb9089d014f0c456e22)) - dlaparna7
+#### Refactoring
+- reduce coupling and obs timestep - ([46c7af5](https://github.com/yoctoyotta1024/CLEO/commit/46c7af55e36108fb32b37752272e940952acccc6)) - clara.bayley
+- add more observers to bubble test case - ([2b138ab](https://github.com/yoctoyotta1024/CLEO/commit/2b138ab2eab7e4df4080b7db7c78124bb357cc18)) - clara.bayley
+
+- - -
+
 ## [v0.69.3](https://github.com/yoctoyotta1024/CLEO/compare/09f9f976478e7f7246e0e515c60fb83fcb397c59..v0.69.3) - 2026-10-28
 #### Bug Fixes
 - restore set_null_cartesian_maps kernel label - ([8b2ad45](https://github.com/yoctoyotta1024/CLEO/commit/8b2ad45dc798f6f1d4adbcaf86d62e209ee3a899)) - Harshada Balasubramanian
