@@ -2,6 +2,64 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.71.0](https://github.com/yoctoyotta1024/CLEO/compare/d2b7de5e844eefef26c6f0fbb8b3f1aa797bae36..v0.71.0) - 2026-10-29
+#### Bug Fixes
+- missing cartesiandomain library dependency - ([aecbd37](https://github.com/yoctoyotta1024/CLEO/commit/aecbd37022ba9eda6451e98cb205f3783e159d05)) - clara.bayley
+- add fallback nnn in case max distance exceeded - ([f880676](https://github.com/yoctoyotta1024/CLEO/commit/f880676042b2ec46876d6d0d42e8913019963256)) - clara.bayley
+- fix two-way coupling filling and deleting of buffer - ([21467a3](https://github.com/yoctoyotta1024/CLEO/commit/21467a37528e5baad90f3be18c02f8818d550028)) - clara.bayley
+- correct sending of fields function - ([38d8613](https://github.com/yoctoyotta1024/CLEO/commit/38d861387dc005e3e5e7a12f247d51aa732e1cd3)) - clara.bayley
+- bad naming of function - ([fd98449](https://github.com/yoctoyotta1024/CLEO/commit/fd98449c2e0e07e084dc319ec0735ebb94869686)) - clara.bayley
+- don't need conversion for qcond and qvap - ([1907c0f](https://github.com/yoctoyotta1024/CLEO/commit/1907c0f1ce32f83ff4e4e639d8f14b18c7cea4bf)) - clara.bayley
+- further correcting receiving of horizontal wind fields - ([bddd7cd](https://github.com/yoctoyotta1024/CLEO/commit/bddd7cdfd85d576d0c924a01c7cb0a0fc65776fd)) - clara.bayley
+- correct receiving of horizontal wind fields - ([a26466c](https://github.com/yoctoyotta1024/CLEO/commit/a26466c6c4a60f1dcfddfa465f1fef429d414b74)) - clara.bayley
+- revert f496c6efb1e7528c992bc205c2242099d00b338b - ([cd6a3c0](https://github.com/yoctoyotta1024/CLEO/commit/cd6a3c01cf6779f05fdbb8184fe815197e8f5157)) - clara.bayley
+- division to convert to radians from meters - ([d9f3f95](https://github.com/yoctoyotta1024/CLEO/commit/d9f3f95ea35e13ac11acb152128b74ebfff1a180)) - clara.bayley
+- add error tolerance on CartesianCheckBounds i.e. check_bounds - ([adb50c0](https://github.com/yoctoyotta1024/CLEO/commit/adb50c01d51418809b5cd6bda0458091c9520516)) - clara.bayley
+- incorrect grid setting with rounding errors - ([e0a8294](https://github.com/yoctoyotta1024/CLEO/commit/e0a8294b50ac6c4e1dc65d5ed24dc3c850e8b813)) - clara.bayley
+- remove broken unique cell ids check - ([dd85231](https://github.com/yoctoyotta1024/CLEO/commit/dd852313cfbd234583c078153114ad7c7bd0aeb1)) - clara.bayley
+- compile time warnings - ([e05a778](https://github.com/yoctoyotta1024/CLEO/commit/e05a778abbd540726795d9d15f91f243085a57ce)) - clara.bayley
+- adapt cleo domain for bubble of icon x-y domain - ([7fd9189](https://github.com/yoctoyotta1024/CLEO/commit/7fd9189d6a943c3db3c960e1d56334655f4b68d5)) - clara.bayley
+- correct domain dimensions to be consistent with sub-section of bubble domain - ([b1a7f19](https://github.com/yoctoyotta1024/CLEO/commit/b1a7f19110c8e5a9df8eef024ff59533fc29eb92)) - clara.bayley
+#### Features
+- functions to calculate rain and cloud mass in each gbx - ([e69d6c2](https://github.com/yoctoyotta1024/CLEO/commit/e69d6c22a67ad2ae554fcc40337dc8a640082b69)) - clara.bayley
+- use seperate yac coupling config instead of settings within cleo - ([e397c68](https://github.com/yoctoyotta1024/CLEO/commit/e397c684e15dc91c251cded592ee2a79edb96377)) - clara.bayley
+- new struct for yac settings seperate from yac cartesian dynamics - ([c83d15d](https://github.com/yoctoyotta1024/CLEO/commit/c83d15d4ddba4bf3356335144b22b2bc2c9b091c)) - clara.bayley
+- add yac debug_file to config params - ([4ecf495](https://github.com/yoctoyotta1024/CLEO/commit/4ecf495bd11e159be5a2d1f707cc68ea54feab28)) - clara.bayley
+- use long/lat to meters conversion from config for yac grid defs - ([fd9065d](https://github.com/yoctoyotta1024/CLEO/commit/fd9065d21d1a022864297a57c6a98016ff402a20)) - clara.bayley
+- Added a feature to read component metadata and interpret it as a coupling flag to switch between oneway and twoway coupling with ICON. - ([d9c2646](https://github.com/yoctoyotta1024/CLEO/commit/d9c26469702f4406ccbd230c025ad9aef9075373)) - dlaparna7
+- Further development of modified grid definitions. - ([47caea4](https://github.com/yoctoyotta1024/CLEO/commit/47caea4cd32e5134fb794b7c4b3dd8ec70d0a3e3)) - dlaparna7
+- First draft of modified grid definition with local sizes - ([6d0f3c2](https://github.com/yoctoyotta1024/CLEO/commit/6d0f3c2d72c69de21deda0d312446ab95733c925)) - dlaparna7
+#### Miscellaneous Chores
+- rename received variables for clarity - ([fa23ac1](https://github.com/yoctoyotta1024/CLEO/commit/fa23ac11e9f0b0c17efd5031ab5e8004d8cf443f)) - clara.bayley
+- formatting - ([102881e](https://github.com/yoctoyotta1024/CLEO/commit/102881eb8cb7767babb31a1a895caad80666c351)) - clara.bayley
+- rename buffer for clarity - ([76e5ae3](https://github.com/yoctoyotta1024/CLEO/commit/76e5ae330c69e75998b072989339a49e995619c8)) - clara.bayley
+- rename YacDynamics to YacCartesianDynamics - ([458f91e](https://github.com/yoctoyotta1024/CLEO/commit/458f91eca7fd69b852546b2aad7fe54817db5dd6)) - clara.bayley
+- Renamed yac field ids appropriately and cleaned up unnecessary debugging comments - ([17db1ca](https://github.com/yoctoyotta1024/CLEO/commit/17db1ca9b7523416c8228eecb31674000a5ae4bc)) - dlaparna7
+#### Performance Improvements
+- remove redundant arguments - ([c86748e](https://github.com/yoctoyotta1024/CLEO/commit/c86748ebe110e3332a331e783e4463e65394c586)) - clara.bayley
+#### Refactoring
+- move FindYAC.cmake into configuration libs - ([4907fcf](https://github.com/yoctoyotta1024/CLEO/commit/4907fcf72e065ba31d14edc343c1822cd8fcc9d2)) - clara.bayley
+- move mass to mixing ratio calculation into thermodynamic equations - ([cc065b1](https://github.com/yoctoyotta1024/CLEO/commit/cc065b1922e6456d0a88de6100894b19ad23207c)) - clara.bayley
+- clearer calculation of deltas in send_dynamics - ([0600fcc](https://github.com/yoctoyotta1024/CLEO/commit/0600fcc37688e745329ebfa4968913a63a4c22f0)) - clara.bayley
+- send back tendencies for cloud and rain seperately - ([ea9e412](https://github.com/yoctoyotta1024/CLEO/commit/ea9e41226ecdf39d2d62f24584576da9a545d112)) - clara.bayley
+- send temp and qvap deltas not whole fields - ([7819c56](https://github.com/yoctoyotta1024/CLEO/commit/7819c560536fe7e2dd45817c8bc059cbd0639060)) - clara.bayley
+- tidy up send/receiving - ([0b63418](https://github.com/yoctoyotta1024/CLEO/commit/0b634185bc41b73718a9d08841c0f1a12f50e3f0)) - clara.bayley
+- do not send cloud liquid water from ICON to Cleo - ([a1104ce](https://github.com/yoctoyotta1024/CLEO/commit/a1104cefd9581a5b56f0566231712ada284ef019)) - clara.bayley
+- cleanup receive functions - ([d70d49a](https://github.com/yoctoyotta1024/CLEO/commit/d70d49a99b2f951b6921b8141a3599c59b7ab70b)) - clara.bayley
+- use CF naming conventions for variable names - ([02dde4b](https://github.com/yoctoyotta1024/CLEO/commit/02dde4b407a873a495748540168f65c54d52dc43)) - clara.bayley
+- add action checks on edge field receives like those for cells - ([ab62f2f](https://github.com/yoctoyotta1024/CLEO/commit/ab62f2f20eb43fbcf0d2968310f96a882c298faf)) - clara.bayley
+- de-acivate the two-way coupling - ([5dfe8df](https://github.com/yoctoyotta1024/CLEO/commit/5dfe8df304dcacb80306b5392282ff43a5a80377)) - clara.bayley
+- move field and grid and coupling parameters into yac settings - ([6debfc0](https://github.com/yoctoyotta1024/CLEO/commit/6debfc0958f4c61e50c727b593477ee61014d361)) - clara.bayley
+- change yac interpolation method and cleo bubble resolution - ([616b81b](https://github.com/yoctoyotta1024/CLEO/commit/616b81b0f1cb1747643d617bcc3756e9fa768270)) - clara.bayley
+- move yac interpolation stack settings into config file - ([4d530f2](https://github.com/yoctoyotta1024/CLEO/commit/4d530f28d9c0e864bfab299a1215175daec0e6b3)) - clara.bayley
+- set Cleo bubble domain to match ICON bubble - ([a20c899](https://github.com/yoctoyotta1024/CLEO/commit/a20c899237abd69835dcdd21d2a1d1235c9a32d2)) - clara.bayley
+- Increased the penalization for decomposition in vertical dimension - ([ca4578e](https://github.com/yoctoyotta1024/CLEO/commit/ca4578ed7e95bed1bfc0b191b71b340c495f0074)) - dlaparna7
+- Improved the yac interpolation stack call - ([e21a970](https://github.com/yoctoyotta1024/CLEO/commit/e21a9705e97cee23f0a150f0a1a1cc0410b96c26)) - dlaparna7
+- make coupled dyanmics compatible with new coupling comms concept - ([44fdc88](https://github.com/yoctoyotta1024/CLEO/commit/44fdc88eb081d485ddba8b10eccbf8e4d744dd0a)) - clara.bayley
+- send_dyanmics function in CouplingComms takes gbxs and superdroplets - ([d2b7de5](https://github.com/yoctoyotta1024/CLEO/commit/d2b7de5e844eefef26c6f0fbb8b3f1aa797bae36)) - clara.bayley
+
+- - -
+
 ## [v0.70.0](https://github.com/yoctoyotta1024/CLEO/compare/2b138ab2eab7e4df4080b7db7c78124bb357cc18..v0.70.0) - 2026-10-29
 #### Bug Fixes
 - comparison of integer expressions of different signedness: ‘int’ and ‘long unsigned int’ - ([6d12e8b](https://github.com/yoctoyotta1024/CLEO/commit/6d12e8b55a053f67354f125d449efe677217f736)) - clara.bayley
