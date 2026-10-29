@@ -105,10 +105,8 @@ struct EffectOnHydrometeorStatesFunctor {
      * parallel (Single PerTeam Policy) in order to change qcond of state
      */
     KOKKOS_INLINE_FUNCTION void operator()(State& state) const {
-      constexpr double R0cubed_VOL0 = dlc::R0 * dlc::R0 * dlc::R0 / dlc::VOL0;
-      const auto rho_cond = totmass_cond / state.get_volume() * R0cubed_VOL0;  // rho_condensed
-      const auto rho_dry = dry_air_density(state.press, state.temp, state.qvap);
-      state.qcond = rho_cond / rho_dry;
+      state.qcond = mass_to_mixing_ratio(state.get_volume(), totmass_cond, state.press, state.temp,
+                                         state.qvap);
     }
   };
 

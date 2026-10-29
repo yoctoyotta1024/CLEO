@@ -104,7 +104,7 @@ jobs:
           -DCLEO_FYAMLLIB=/usr/lib/x86_64-linux-gnu \
           -DCLEO_YAXT_ROOT=${{ runner.temp }}/yaxt \
           -DCLEO_YAC_ROOT=${{ runner.temp }}/yac \
-          -DCMAKE_MODULE_PATH=${PWD}/libs/coupldyn_yac/cmake
+          -DCMAKE_MODULE_PATH=${PWD}/libs/configuration/cmake
 
       - name: Compile Example
         run: cd build && make ${{ matrix.target }}
@@ -153,7 +153,7 @@ jobs:
           -DCLEO_FYAMLLIB=/usr/lib/x86_64-linux-gnu \
           -DCLEO_YAXT_ROOT=${{ runner.temp }}/yaxt \
           -DCLEO_YAC_ROOT=${{ runner.temp }}/yac \
-          -DCMAKE_MODULE_PATH=${PWD}/libs/coupldyn_yac/cmake
+          -DCMAKE_MODULE_PATH=${PWD}/libs/configuration/cmake
 
       - name: Compile Parallel Execution Test
         run: cd build && make ${{ matrix.target }}

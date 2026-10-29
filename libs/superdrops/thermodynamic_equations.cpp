@@ -23,6 +23,29 @@
 #include "thermodynamic_equations.hpp"
 
 /**
+ * @brief Calculate the mixing ratio of a condensed water mass in a moist volume.
+ *
+ * This function calculates the mass mixing ratio of condensed liquid water by
+ * dividing the dimensionless density of the condensate by the dry air density.
+ *
+ * @param volume volume [dimensionless]
+ * @param mass mass of condensed water [dimensionless]
+ * @param press pressure [dimensionless]
+ * @param temp temperature [dimensionless]
+ * @param qvap mass mixing ratio of water vapor [dimensionless]
+ *
+ * @return dimensionless mixing ratio of condensed water
+ */
+KOKKOS_FUNCTION double mass_to_mixing_ratio(const double volume, const double mass,
+                                            const double press, const double temp,
+                                            const double qvap) {
+  constexpr double R0cubed_VOL0 = dlc::R0 * dlc::R0 * dlc::R0 / dlc::VOL0;
+  const auto rho_cond = mass / volume * R0cubed_VOL0;  // rho_condensed
+  const auto rho_dry = dry_air_density(press, temp, qvap);
+  return rho_cond / rho_dry;
+}
+
+/**
  * @brief Calculate the equilibrium vapor pressure of water over liquid water,
  * i.e. the saturation pressure.
  *

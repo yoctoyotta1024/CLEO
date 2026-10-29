@@ -25,6 +25,7 @@
 
 #include "../kokkosaliases.hpp"
 #include "gridboxes/gridboxmaps.hpp"
+#include "gridboxes/supersindomain.hpp"
 #include "runcleo/coupleddynamics.hpp"
 
 /**
@@ -32,18 +33,20 @@
  * Concept representing types that handle communication between SDM and coupled dynamics solver.
  *
  * A type satisfies the CouplingComms concept if it provides the following functions:
- * - `send_dynamics(h_gbxs, coupldyn)`: Sends dynamics information from SDM view of Gridboxes
- * `h_gbxs` to coupled dynamics solver `coupldyn`.
- * - `receive_dynamics(coupldyn, h_gbxs)`: Receives dynamics information from coupled dynamics
- * solver `coupldyn` into SDM view of Gridboxes `h_gbxs`.
+ * - `send_dynamics(...)`: Sends dynamics information from SDM to coupled dynamics solver
+ * - `receive_dynamics(...)`: Receives dynamics information from coupled dynamics
+ * solver into SDM Gridboxes
  *
  * @tparam Comms The type for communication to check against the CouplingComms concept.
  * @tparam GbxMaps The type for gridbox maps to check against the GridboxMaps concept.
  * @tparam CD The type for the dyanmics solver to check against the CoupledDynamics concept.
  */
 template <typename Comms, typename GbxMaps, typename CD>
-concept CouplingComms = requires(Comms s, GbxMaps& gbxmaps, CD& coupldyn, viewh_gbx h_gbxs) {
-  { s.template send_dynamics<GbxMaps, CD>(gbxmaps, h_gbxs, coupldyn) } -> std::same_as<void>;
+concept CouplingComms = requires(Comms s, GbxMaps& gbxmaps, CD& coupldyn, viewh_gbx h_gbxs,
+                                 dualview_constgbx gbxs, SupersInDomain& allsupers) {
+  {
+    s.template send_dynamics<GbxMaps, CD>(gbxmaps, gbxs, allsupers, coupldyn)
+  } -> std::same_as<void>;
   { s.template receive_dynamics<GbxMaps, CD>(gbxmaps, coupldyn, h_gbxs) } -> std::same_as<void>;
 };
 
@@ -75,11 +78,13 @@ struct NullComms {
    *
    * @tparam CD The coupled dynamics solver type.
    * @param gbxmaps The Gridbox Maps.
-   * @param h_gbxs The view of Gridboxes.
+   * @param gbxs The view of Gridboxes (on device and host).
+   * @param allsupers View of all, inside and outside of domain, superdroplets (on device).
    * @param coupldyn The coupled dynamics solver object.
    */
   template <GridboxMaps GbxMaps, CoupledDynamics CD>
-  void send_dynamics(const GbxMaps& gbxmaps, const viewh_constgbx h_gbxs, CD& coupldyn) const {}
+  void send_dynamics(const GbxMaps& gbxmaps, const dualview_constgbx gbxs,
+                     const SupersInDomain& allsupers, CD& coupldyn) const {}
 };
 
 #endif  // LIBS_RUNCLEO_COUPLINGCOMMS_HPP_

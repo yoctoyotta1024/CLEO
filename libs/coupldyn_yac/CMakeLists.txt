@@ -38,7 +38,7 @@ target_include_directories(${LIBNAME} PRIVATE ${YAC_C_INCLUDE_DIR}) # YAC source
 target_include_directories(${LIBNAME} PRIVATE "${CLEO_SOURCE_DIR}/libs" ${MPI_INCLUDE_PATH})
 
 # Link libraries to target library
-set(LINKLIBS configuration gridboxes superdrops)
+set(LINKLIBS configuration gridboxes superdrops cartesiandomain)
 target_link_libraries("${LIBNAME}" PUBLIC ${LINKLIBS})
 target_link_libraries("${LIBNAME}" PRIVATE YAC::YAC MPI::MPI_C)
 
