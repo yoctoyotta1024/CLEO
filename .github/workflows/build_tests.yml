@@ -125,7 +125,7 @@ jobs:
           sudo apt-get install -y \
           cmake libopenmpi-dev openmpi-bin \
           libnetcdff-dev liblapack-dev libfyaml-dev \
-          python3-dev python3-numpy python3-mpi4py python3-pip curl
+          python3-dev python3-numpy python3-mpi4py python3-pip python3-zarr curl
           apt list --installed
 
       - name: Restore YAXT Cache
@@ -176,5 +176,5 @@ jobs:
           mv ./build/bin ./build/bin_4
           mpiexec --oversubscribe --bind-to none -n 8 --host localhost:64 ./build/examples/${{ matrix.target }}/src/${{ matrix.target }} ./examples/${{ matrix.target }}/src/config/${{ matrix.target }}_config.yaml
           mv ./build/bin ./build/bin_8
-          bash -l .github/compare_parallel_results.sh ${{ matrix.target }}_sol.zarr
+          bash -l .github/compare_zarrs.sh ${{ matrix.target }}_sol.zarr
           rm -rf ./build/bin_*
