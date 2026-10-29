@@ -52,7 +52,7 @@ struct MonitorMassMomentsChangeXarrays {
   XarrayZarrArray<Store, float>
       delta_mom2_motion; /**< change in 2nd mass moment from motion Xarray */
 
-  MonitorMassMomentsChangeXarrays(const Dataset &dataset, Store &store, const size_t maxchunk,
+  MonitorMassMomentsChangeXarrays(const Dataset& dataset, Store& store, const size_t maxchunk,
                                   const size_t ngbxs)
       : delta_mom0_microphys(
             create_massmom0_xarray(dataset, store, "delta_massmom0_microphys", maxchunk, ngbxs)),
@@ -83,7 +83,7 @@ struct MonitorRainMassMomentsChangeXarrays {
   XarrayZarrArray<Store, float>
       delta_mom2_motion; /**< change in 2nd mass moment from motion Xarray */
 
-  MonitorRainMassMomentsChangeXarrays(const Dataset &dataset, Store &store, const size_t maxchunk,
+  MonitorRainMassMomentsChangeXarrays(const Dataset& dataset, Store& store, const size_t maxchunk,
                                       const size_t ngbxs)
       : delta_mom0_microphys(create_massmom0_xarray(
             dataset, store, "delta_massmom0_raindrops_microphys", maxchunk, ngbxs)),
@@ -110,7 +110,7 @@ struct MonitorRainMassMomentsChangeXarrays {
 template <typename Dataset, typename Store, typename MonitorXarraysType, typename MonitorViewsType>
 class DoMonitorMassMomentsChangeObs {
  private:
-  Dataset &dataset;                               /**< Dataset to write time data to. */
+  Dataset& dataset;                               /**< Dataset to write time data to. */
   std::shared_ptr<MonitorXarraysType> xzarrs_ptr; /**< Pointer to arrays in dataset. */
   MonitorMassMomentsChange<MonitorViewsType> monitor;
 
@@ -120,7 +120,7 @@ class DoMonitorMassMomentsChangeObs {
    */
   template <typename T>
   void write_to_array(const Buffer<T>::mirrorviewd_buffer d_data,
-                      XarrayZarrArray<Store, T> &xzarr) const {
+                      XarrayZarrArray<Store, T>& xzarr) const {
     using viewh_buffer = Buffer<T>::viewh_buffer;
     const auto h_data = viewh_buffer("h_data", d_data.extent(0));
     Kokkos::deep_copy(h_data, d_data);
@@ -150,7 +150,7 @@ class DoMonitorMassMomentsChangeObs {
    * @param maxchunk The maximum chunk size (number of elements) for Xarrays.
    * @param ngbxs The number of gridboxes.
    */
-  DoMonitorMassMomentsChangeObs(Dataset &dataset, Store &store, const size_t maxchunk,
+  DoMonitorMassMomentsChangeObs(Dataset& dataset, Store& store, const size_t maxchunk,
                                 const size_t ngbxs)
       : dataset(dataset),
         xzarrs_ptr(std::make_shared<MonitorXarraysType>(dataset, store, maxchunk, ngbxs)),
@@ -179,7 +179,7 @@ class DoMonitorMassMomentsChangeObs {
     const size_t ngbxs(d_gbxs.extent(0));
     Kokkos::parallel_for(
         "monitor_before_timestepping", TeamPolicy(ngbxs, KCS::team_size),
-        KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
+        KOKKOS_CLASS_LAMBDA(const TeamMember& team_member) {
           const auto ii = team_member.league_rank();
           const auto supers = d_gbxs(ii).supersingbx.readonly(domainsupers);
           monitor.before_timestepping(team_member, supers);
@@ -226,8 +226,8 @@ class DoMonitorMassMomentsChangeObs {
  * @return Constructed type satisfying observer concept.
  */
 template <typename Dataset, typename Store>
-inline Observer auto MonitorMassMomentsChangeObserver(const unsigned int interval, Dataset &dataset,
-                                                      Store &store, const size_t maxchunk,
+inline Observer auto MonitorMassMomentsChangeObserver(const unsigned int interval, Dataset& dataset,
+                                                      Store& store, const size_t maxchunk,
                                                       const size_t ngbxs) {
   const auto do_obs =
       DoMonitorMassMomentsChangeObs<Dataset, Store, MonitorMassMomentsChangeXarrays<Dataset, Store>,
@@ -249,8 +249,8 @@ inline Observer auto MonitorMassMomentsChangeObserver(const unsigned int interva
  * @return Constructed type satisfying observer concept.
  */
 template <typename Dataset, typename Store>
-inline Observer auto MonitorRainMassMomentsObserver(const unsigned int interval, Dataset &dataset,
-                                                    Store &store, const size_t maxchunk,
+inline Observer auto MonitorRainMassMomentsObserver(const unsigned int interval, Dataset& dataset,
+                                                    Store& store, const size_t maxchunk,
                                                     const size_t ngbxs) {
   const auto do_obs =
       DoMonitorMassMomentsChangeObs<Dataset, Store,

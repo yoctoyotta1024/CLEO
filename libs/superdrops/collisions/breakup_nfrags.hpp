@@ -30,7 +30,7 @@ take a pair of superdroplets and returns
 something convertible to a double (such as
 the number of fragments from a breakup event) */
 template <typename F>
-concept NFragments = requires(F f, const Superdrop &d1, const Superdrop &d2) {
+concept NFragments = requires(F f, const Superdrop& d1, const Superdrop& d2) {
   { f(d1, d2) } -> std::convertible_to<double>;
 };
 
@@ -46,7 +46,7 @@ struct ConstNFrags {
 
   /* always returns constant number of fragments 'nfrags' */
   KOKKOS_INLINE_FUNCTION
-  double operator()(const Superdrop &d1, const Superdrop &d2) const { return nfrags; }
+  double operator()(const Superdrop& d1, const Superdrop& d2) const { return nfrags; }
 };
 
 /* operator returns number of fragments based on collision

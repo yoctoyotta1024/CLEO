@@ -47,7 +47,7 @@ struct HydrodynamicProb {
   example as expressed in equation 11 of Simmel at al. 2002 for
   collision-coalescence */
   KOKKOS_FUNCTION
-  double operator()(const Superdrop &drop1, const Superdrop &drop2, const double eff,
+  double operator()(const Superdrop& drop1, const Superdrop& drop2, const double eff,
                     const double DELT, const double VOLUME) const {
     /* time interval / volume for which
     probability is calculated [s/m^3] */

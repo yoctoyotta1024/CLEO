@@ -29,7 +29,7 @@ Prob equation is : prob_jk = K(drop1, drop2) * delta_t/delta_vol where
 K(drop1, drop2) := C(drop1, drop2) * |v1−v2|, (see Shima 2009 eqn 3),
 and K(drop1, drop2) is Golovin 1963 (coalescence) kernel */
 KOKKOS_FUNCTION
-double GolovinProb::operator()(const Superdrop &drop1, const Superdrop &drop2, const double DELT,
+double GolovinProb::operator()(const Superdrop& drop1, const Superdrop& drop2, const double DELT,
                                const double VOLUME) const {
   const auto DELT_DELVOL = double{
       DELT /

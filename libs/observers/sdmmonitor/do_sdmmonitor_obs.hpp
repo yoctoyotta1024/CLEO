@@ -42,7 +42,7 @@ template <typename Dataset, typename Store, SDMMonitor SDMMo, typename T>
 class DoSDMMonitorObs {
  private:
   using viewh_buffer = Buffer<T>::viewh_buffer;
-  Dataset &dataset;                                     /**< Dataset to write time data to. */
+  Dataset& dataset;                                     /**< Dataset to write time data to. */
   std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr; /**< Pointer to array in dataset. */
   SDMMo monitor;
 
@@ -65,7 +65,7 @@ class DoSDMMonitorObs {
    * @param xzarr_ptr Pointer to zarr array in xarray dataset.
    * @param monitor SDMMonitor to use.
    */
-  DoSDMMonitorObs(Dataset &dataset, Store &store,
+  DoSDMMonitorObs(Dataset& dataset, Store& store,
                   const std::shared_ptr<XarrayZarrArray<Store, T>> xzarr_ptr, const SDMMo monitor)
       : dataset(dataset), xzarr_ptr(xzarr_ptr), monitor(monitor) {}
 
@@ -85,7 +85,7 @@ class DoSDMMonitorObs {
     const size_t ngbxs(d_gbxs.extent(0));
     Kokkos::parallel_for(
         "monitor_before_timestepping", TeamPolicy(ngbxs, KCS::team_size),
-        KOKKOS_CLASS_LAMBDA(const TeamMember &team_member) {
+        KOKKOS_CLASS_LAMBDA(const TeamMember& team_member) {
           const auto ii = team_member.league_rank();
           const auto supers = d_gbxs(ii).supersingbx.readonly(domainsupers);
           monitor.before_timestepping(team_member, supers);

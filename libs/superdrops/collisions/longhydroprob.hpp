@@ -46,7 +46,7 @@ struct LongHydroProb {
   coaleff(R,r) = 1, ie. eff = colleff, which also means that for
   collisions where R > rlim, eff(R,r) = colleff(R,r) = 1). */
   KOKKOS_FUNCTION
-  double kerneleff(const Superdrop &drop1, const Superdrop &drop2) const;
+  double kerneleff(const Superdrop& drop1, const Superdrop& drop2) const;
 
  public:
   LongHydroProb() : hydroprob(SimmelTerminalVelocity{}), coaleff(1.0) {}
@@ -58,7 +58,7 @@ struct LongHydroProb {
   using Simmel et al. 2002's formulation of Long's
   hydrodynamic, ie. gravitational, Kernel */
   KOKKOS_FUNCTION
-  double operator()(const Superdrop &drop1, const Superdrop &drop2, const double DELT,
+  double operator()(const Superdrop& drop1, const Superdrop& drop2, const double DELT,
                     const double VOLUME) const {
     const auto eff = kerneleff(drop1, drop2);
     return hydroprob(drop1, drop2, eff, DELT, VOLUME);

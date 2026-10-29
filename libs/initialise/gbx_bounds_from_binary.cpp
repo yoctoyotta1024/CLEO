@@ -154,8 +154,7 @@ bool GbxBoundsFromBinary::check_3Dmodel_gbxbounds() const {
 /* returns distance (number of hops) from start of
 gbxidxs vector to position where gbxidx matches idx
 (ie. *it = idx) */
-size_t GbxBoundsFromBinary::find_idx_in_gbxidxs(
-    const unsigned int idx) const {
+size_t GbxBoundsFromBinary::find_idx_in_gbxidxs(const unsigned int idx) const {
   if (idx < gbxidxs.size() && gbxidxs[idx] == idx) {
     return idx;
   }

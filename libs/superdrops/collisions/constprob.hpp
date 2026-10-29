@@ -42,7 +42,7 @@ struct ConstProb {
   according to constant collision kernel, K(drop1, drop2) = const.
   Prob equation is : prob_jk = K(drop1, drop2) * delta_t/delta_vol */
   KOKKOS_INLINE_FUNCTION
-  double operator()(const Superdrop &drop1, const Superdrop &drop2, const double DELT,
+  double operator()(const Superdrop& drop1, const Superdrop& drop2, const double DELT,
                     const double VOLUME) const {
     return kernel * DELT / VOLUME;  // prob_jk * time interval / volume [s/m^3]
   }
