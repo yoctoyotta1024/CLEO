@@ -10,7 +10,7 @@ build_yac() {
 
   local common_dir
   common_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
-  local cleo_yac_module_path="${CLEO_PATH2CLEO}/libs/coupldyn_yac/cmake"
+  local cleo_yac_module_path="${CLEO_PATH2CLEO}/libs/configuration/cmake"
 
   source "${common_dir}/check_inputs.sh"
   check_args_not_empty "${CLEO_YACYAXTROOT}" "${fyamllib}"
