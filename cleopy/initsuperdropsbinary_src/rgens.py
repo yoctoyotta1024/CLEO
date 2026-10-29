@@ -43,7 +43,8 @@ class SampleLog10RadiiGen:
     sampling from bins that are linearly spaced in log10(r)
     between rspan[0] and rspan[1]"""
 
-    def __init__(self, rspan):
+    def __init__(self, rspan, is_random=True):
+        self.is_random = is_random
         self.rspan = rspan
 
     def __call__(self, nsupers):
@@ -62,7 +63,10 @@ class SampleLog10RadiiGen:
                 np.log10(self.rspan[0]), np.log10(self.rspan[1]), nbins + 1
             )  # log10(r) bin edges
 
-            radii = self.randomlysample_log10rbins(nbins, log10redgs)
+            if self.is_random:
+                radii = self.randomlysample_log10rbins(nbins, log10redgs)
+            else:
+                radii = self.evenlysample_log10rbins(log10redgs)
             return radii  # [m]
         else:
             return np.array([])
@@ -77,5 +81,16 @@ class SampleLog10RadiiGen:
         randlog10r = log10redgs[:-1] + randlog10deltar
 
         radii = 10 ** (randlog10r)
+
+        return radii  # [m]
+
+    def evenlysample_log10rbins(self, log10redgs):
+        """given the bin edges, evenly samples each bin of log10(radius /m),
+        by calculating the geometric mean radius of the two edges,
+        returns the resultant radii [m]"""
+
+        log10r_geomeanbin = (log10redgs[1:] + log10redgs[:-1]) / 2
+
+        radii = 10 ** (log10r_geomeanbin)
 
         return radii  # [m]

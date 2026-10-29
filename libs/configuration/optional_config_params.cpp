@@ -18,6 +18,31 @@
 
 #include "configuration/optional_config_params.hpp"
 
+/* Converts a whole number of seconds into the ISO8601 duration string YAC's yac_cdef_field
+ * expects (e.g. 30.0 -> "PT30S"). Throws error if timestep isn't integer value rather than
+ * silently truncating, since a fractional COUPLTSTEP would otherwise desync CLEO's
+ * own coupling cadence from what it tells YAC.
+ */
+std::string config_iso8601_seconds_string(const double seconds) {
+  if (!std::isfinite(seconds) || seconds <= 0.0) {
+    throw std::invalid_argument("COUPLTSTEP must be a finite, positive number of seconds");
+  }
+
+  if (static_cast<double>(std::numeric_limits<size_t>::max()) < seconds) {
+    throw std::invalid_argument("COUPLTSTEP is too large to be represented as a size_t");
+  }
+
+  const double rounded = std::round(seconds);
+  constexpr double tol = 1e-6;
+  if (std::abs(seconds - rounded) > tol) {
+    throw std::invalid_argument(
+        "COUPLTSTEP = " + std::to_string(seconds) +
+        "s is not a whole number of seconds; yac_cdef_field's timestep here only supports "
+        "integer seconds (e.g. \"PT30S\")");
+  }
+  return "PT" + std::to_string(static_cast<size_t>(rounded)) + "S";
+}
+
 /* read configuration file given by config_filename to set members of required configuration */
 OptionalConfigParams::OptionalConfigParams(const std::filesystem::path config_filename) {
   const YAML::Node config = YAML::LoadFile(std::string{config_filename});
@@ -26,6 +51,11 @@ OptionalConfigParams::OptionalConfigParams(const std::filesystem::path config_fi
     set_kokkos_settings(config);
   }
   print_kokkos_settings();
+
+  if (config["yac_settings"]) {
+    yac_settings.set_params(config);
+    yac_settings.print_params();
+  }
 
   if (config["microphysics"]) {
     set_microphysics(config);
@@ -85,6 +115,34 @@ void OptionalConfigParams::print_kokkos_settings() const {
   std::cout << "\n---------------------------------------------------------\n";
 }
 
+void OptionalConfigParams::YacSettings::set_params(const YAML::Node& config) {
+  const YAML::Node node = config["yac_settings"];
+
+  is_using_yac = true;
+  cleo_component_name = node["cleo_component_name"].as<std::string>();
+  cleo_grid_name = node["cleo_grid_name"].as<std::string>();
+  const auto COUPLTSTEP = config["timesteps"]["COUPLTSTEP"].as<double>();
+  field_timestep = config_iso8601_seconds_string(COUPLTSTEP);
+  yac_config_file = std::filesystem::path(node["yac_config_file"].as<std::string>());
+
+  if (node["yac_debug_config_file"]) {
+    yac_debug_config_file = std::filesystem::path(node["yac_debug_config_file"].as<std::string>());
+  }
+  if (node["yac_debug_grid_file"]) {
+    yac_debug_grid_file = std::filesystem::path(node["yac_debug_grid_file"].as<std::string>());
+  }
+}
+
+void OptionalConfigParams::YacSettings::print_params() const {
+  std::cout << "\n-------- Yac Settings / Initialization Parameters --------------"
+            << "\ncleo_component_name: " << cleo_component_name
+            << "\ncleo_grid_name: " << cleo_grid_name << "\nfield_timestep: " << field_timestep
+            << "\nyac_config_file: " << yac_config_file
+            << "\nyac_debug_config_file: " << yac_debug_config_file
+            << "\nyac_debug_grid_file: " << yac_debug_grid_file
+            << "\n---------------------------------------------------------\n";
+}
+
 void OptionalConfigParams::set_microphysics(const YAML::Node& config) {
   const YAML::Node node = config["microphysics"];
 
@@ -130,8 +188,11 @@ void OptionalConfigParams::set_coupled_dynamics(const YAML::Node& config) {
     cvodedynamics.set_params(config);
     cvodedynamics.print_params();
   } else if (type == "yac") {
-    yac_dynamics.set_params(config);
-    yac_dynamics.print_params();
+    if (!yac_settings.is_using_yac) {
+      throw std::runtime_error("YAC settings required to use yac coupled dynamics");
+    }
+    yac_cartesian_dynamics.set_params(config);
+    yac_cartesian_dynamics.print_params();
   } else {
     throw std::invalid_argument("unknown coupled_dynamics 'type': " + type);
   }
@@ -292,7 +353,7 @@ void OptionalConfigParams::CvodeDynamicsParams::print_params() const {
             << "\n---------------------------------------------------------\n";
 }
 
-void OptionalConfigParams::YacDynamicsParams::set_params(const YAML::Node& config) {
+void OptionalConfigParams::YacCartesianDynamicsParams::set_params(const YAML::Node& config) {
   const YAML::Node node = config["coupled_dynamics"];
 
   if (node["type"].as<std::string>() != "yac") {
@@ -303,12 +364,16 @@ void OptionalConfigParams::YacDynamicsParams::set_params(const YAML::Node& confi
   upper_longitude = node["upper_longitude"].as<double>();
   lower_latitude = node["lower_latitude"].as<double>();
   upper_latitude = node["upper_latitude"].as<double>();
+  longitude_to_meters = node["longitude_to_meters"].as<double>();
+  latitude_to_meters = node["latitude_to_meters"].as<double>();
 }
 
-void OptionalConfigParams::YacDynamicsParams::print_params() const {
-  std::cout << "\n-------- YacDynamics Configuration Parameters --------------"
+void OptionalConfigParams::YacCartesianDynamicsParams::print_params() const {
+  std::cout << "\n-------- YacCartesianDynamics Configuration Parameters --------------"
             << "\nlower_longitude: " << lower_longitude << "\nupper_longitude: " << upper_longitude
             << "\nlower_latitude: " << lower_latitude << "\nupper_latitude: " << upper_latitude
+            << "\nlongitude_to_meters: " << longitude_to_meters
+            << "\nlatitude_to_meters: " << latitude_to_meters
             << "\n---------------------------------------------------------\n";
 }
 

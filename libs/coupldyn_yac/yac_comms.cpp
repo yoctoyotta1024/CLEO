@@ -21,42 +21,114 @@
 #include "coupldyn_yac/yac_comms.hpp"
 
 /* update Gridboxes' states using information received
-from YacDynamics solver for 1-way coupling to CLEO SDM.
+from YacCartesianDynamics solver for 1-way coupling to CLEO SDM.
 Kokkos::parallel_for([...]) (on host) is equivalent to:
 for (size_t ii(0); ii < ngbxs; ++ii){[...]}
 when in serial
 // TODO(ALL): make ii indexing compatible with MPI domain decomposition
 */
-template <typename GbxMaps, typename CD>
-void YacComms::receive_dynamics(const GbxMaps &gbxmaps, const YacDynamics &ffdyn,
-                                const viewh_gbx h_gbxs) const {
-  const size_t ngbxs(h_gbxs.extent(0));
 
-  Kokkos::parallel_for(
-      "receive_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
-      [=, *this](const size_t ii) { update_gridbox_state(ffdyn, ii, h_gbxs(ii)); });
+template <typename GbxMaps, typename CD>
+void YacComms::receive_dynamics(const GbxMaps& gbxmaps, const YacCartesianDynamics& ffdyn,
+                                const viewh_gbx h_gbxs) const {
+  const int coupling_flag = ffdyn.get_yac_coupling_flag();
+
+  if ((coupling_flag == 2) || (coupling_flag == 1)) {
+    ffdyn.receive_fields_from_yac();
+
+    const size_t ngbxs(h_gbxs.extent(0));
+    Kokkos::parallel_for(
+        "receive_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs),
+        [=, *this](const size_t ii) { update_gridbox_state(ffdyn, ii, h_gbxs(ii)); });
+  }
 }
 
-/* updates the state of a gridbox using information
-received from YacDynamics solver for 1-way
-coupling to CLEO SDM */
-void YacComms::update_gridbox_state(const YacDynamics &ffdyn, const size_t ii, Gridbox &gbx) const {
-  State &state(gbx.state);
+template <typename GbxMaps, typename CD>
+void YacComms::send_dynamics(const GbxMaps& gbxmaps, const dualview_constgbx gbxs,
+                             const SupersInDomain& allsupers,
+                             const YacCartesianDynamics& ffdyn) const {
+  const int coupling_flag = ffdyn.get_yac_coupling_flag();
+
+  if (coupling_flag == 2) {
+    const viewh_constgbx h_gbxs = gbxs.view_host();
+    const viewd_constgbx d_gbxs = gbxs.view_device();
+
+    calculate_cloud_rain_masses(d_gbxs, allsupers, ffdyn.get_mass_cloud(),
+                                ffdyn.get_mass_rain());  // potentially on device
+
+    // update dynamics on host
+    const size_t ngbxs(h_gbxs.extent(0));
+    const auto h_mass_cloud = ffdyn.get_mass_cloud().view_host();
+    const auto h_mass_rain = ffdyn.get_mass_rain().view_host();
+    Kokkos::parallel_for(
+        "send_dynamics", Kokkos::RangePolicy<HostSpace>(0, ngbxs), [=, this](const size_t ii) {
+          const State& state(h_gbxs(ii).state);
+          const auto press = state.press;
+          const auto temp = state.temp;
+          const auto qvap = state.qvap;
+          const auto qcloud =
+              mass_to_mixing_ratio(state.get_volume(), h_mass_cloud(ii), press, temp, qvap);
+          const auto qrain =
+              mass_to_mixing_ratio(state.get_volume(), h_mass_rain(ii), press, temp, qvap);
+          update_send_buffers(ffdyn, ii, temp, qvap, qcloud, qrain);
+        });
+    ffdyn.send_fields_to_yac();
+  }
+}
+
+/* updates the state of a gridbox using information received from YacCartesianDynamics solver
+for 1-way or 2-way coupling to from Dynamics to CLEO SDM */
+void YacComms::update_gridbox_state(const YacCartesianDynamics& ffdyn, const size_t ii,
+                                    Gridbox& gbx) const {
+  State& state(gbx.state);
 
   state.press = ffdyn.get_press(ii);
   state.temp = ffdyn.get_temp(ii);
   state.qvap = ffdyn.get_qvap(ii);
-  state.qcond = ffdyn.get_qcond(ii);
 
   state.wvel = ffdyn.get_wvel(ii);
   state.uvel = ffdyn.get_uvel(ii);
   state.vvel = ffdyn.get_vvel(ii);
 }
 
-template void YacComms::send_dynamics<CartesianMaps, YacDynamics>(const CartesianMaps &,
-                                                                  const viewh_constgbx,
-                                                                  YacDynamics &) const;
+/* fills YacComms send buffers with the state of a gridbox for a 2-way
+coupling to CLEO SDM */
+void YacComms::update_send_buffers(const YacCartesianDynamics& ffdyn, const size_t ii,
+                                   const double temp, const double qvap, const double qcloud,
+                                   const double qrain) const {
+  ffdyn.set_temp_delta(ii, temp - ffdyn.get_temp(ii));
+  ffdyn.set_qvap_delta(ii, qvap - ffdyn.get_qvap(ii));
+  ffdyn.set_qcloud_delta(ii, qcloud - ffdyn.get_qcloud(ii));
+  ffdyn.set_qrain_delta(ii, qrain - ffdyn.get_qrain(ii));
+}
 
-template void YacComms::receive_dynamics<CartesianMaps, YacDynamics>(const CartesianMaps &,
-                                                                     const YacDynamics &,
-                                                                     const viewh_gbx) const;
+/* calculate mixing ratios for "cloud" water and "rain" water
+ * calculation could potentially be on device instead of host
+ */
+void YacComms::calculate_cloud_rain_masses(const viewd_constgbx d_gbxs,
+                                           const SupersInDomain& allsupers,
+                                           Kokkos::DualView<double*> mass_cloud,
+                                           Kokkos::DualView<double*> mass_rain) const {
+  const size_t ngbxs(d_gbxs.extent(0));
+
+  // reset device buffers to zero
+  Kokkos::deep_copy(mass_cloud.view_device(), 0.0);
+  Kokkos::deep_copy(mass_rain.view_device(), 0.0);
+
+  const auto functor =
+      CalculateCloudRainMassesFunctor{allsupers.domain_supers_readonly(), d_gbxs,
+                                      mass_cloud.view_device(), mass_rain.view_device()};
+  Kokkos::parallel_for("calc_cloud_rain_masses", TeamPolicy(ngbxs, KCS::team_size), functor);
+  mass_cloud.modify_device();
+  mass_rain.modify_device();
+
+  mass_cloud.sync_host();
+  mass_rain.sync_host();
+}
+
+template void YacComms::send_dynamics<CartesianMaps, YacCartesianDynamics>(
+    const CartesianMaps&, const dualview_constgbx, const SupersInDomain&,
+    const YacCartesianDynamics&) const;
+
+template void YacComms::receive_dynamics<CartesianMaps, YacCartesianDynamics>(
+    const CartesianMaps&, const YacCartesianDynamics&, const viewh_gbx) const;
