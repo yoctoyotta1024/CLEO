@@ -4,18 +4,20 @@ Combining Microphysics and Observers
 =======================================
 
 This page assumes you've read the conceptual introduction to monoids in
-:doc:`../intro/monoids` and the note on C++ concepts in :doc:`code_structure`. Here we go one
+:doc:`../intro/monoids` and the note on C++ concepts in :ref:`deep_dive`. Here we go one
 level more concrete: what ``MicrophysicalProcess`` and ``Observer`` actually require, how the
 ``>>`` operator combines them, and a fully worked, annotated example of each.
 
 Microphysics and Observers as Software Abstractions
 -----------------------------------------------------
 
-Physically, a "microphysical process" is something that changes droplets — condensation,
-collision-coalescence, breakup. Physically, an "observer" is something that reports on the
-state of the simulation — writing super-droplet radii to disk, say. As **software**
-abstractions in Cleo, both are C++20 concepts: named sets of required member functions, checked
-by the compiler, with no shared base class or inheritance involved.
+Physically, a "microphysical process" is something that changes droplets — e.g.
+condensation/evaporation or collision-coalescence. Physically, an "observer" is something that
+observes the state of a simulation — e.g. writing out super-droplet radii. As **software**
+abstractions in Cleo, both are C++20 concepts: named sets of requirements on a type, checked
+by the compiler during compilation. Microphysical processes and Observers are entirely independent of each other, they
+only share the same basic idea in that they are defined as monoids and thus are arbitrarily
+combinable with themselves.
 
 The ``MicrophysicalProcess`` concept (``libs/superdrops/microphysicalprocess.hpp``):
 
@@ -30,15 +32,18 @@ The ``MicrophysicalProcess`` concept (``libs/superdrops/microphysicalprocess.hpp
           { p.run_step(tm, t, supers, state, mo) } -> std::same_as<subviewd_supers>;
         };
 
-Any type with these three functions *is* a microphysical process — regardless of what physics it
-implements. ``next_step`` says when it next wants to run; ``on_step`` says whether "now" is one
-of those times; ``run_step`` actually mutates the super-droplets in one gridbox's ``State`` and
-returns the (possibly resized, e.g. after coalescence removes a droplet) view of super-droplets.
-This is the same "action" pattern used for the outer timestepping loop, described in
-:doc:`../intro/timestepping`.
+These requirements define if a type is a valid ``MicrophysicalProcess``: any type with these three
+functions *is* a microphysical process — regardless of what physics it implements.
+``next_step`` says when it next wants to run; ``on_step`` says whether the current
+timestep is one of those times; ``run_step`` actually mutates the super-droplets in one gridbox's
+``State`` and returns the view of super-droplets (possibly resized, e.g. after the edge-case where
+the coalescence of two superdroplets with multiplicity of 1 creates a super-droplet of multiplicity
+0). The requirements that make up the concept of a ``MicrophysicalProcess`` ensure that any type
+that is a microphysical process will fit into the (sub-)timestepping routines in ``RunCleo`` and
+``SDMMethods``, as depicted in :doc:`../intro/timestepping`.
 
 The ``Observer`` concept (``libs/observers/observers.hpp``) is structurally similar but larger,
-because an observer also needs one-time setup/teardown hooks around the whole run:
+because an observer also needs one-time before/after timestepping entry points:
 
 .. code-block:: cpp
 
@@ -54,12 +59,13 @@ because an observer also needs one-time setup/teardown hooks around the whole ru
     };
 
 ``before_timestepping``/``after_timestepping`` run once, at the very start/end of a run (e.g. to
-write fixed metadata). ``at_start_step`` is where an observer actually does its
+write fixed metadata). ``at_start_step`` is where an observer may do its
 observing/writing, called once per outer-loop timestep (see :doc:`main_cpp`).
 ``get_sdmmonitor()`` returns an ``SDMMonitor`` — a separate, smaller concept
-(``libs/superdrops/sdmmonitor.hpp``) for observers that need to record something *during*
-microphysics itself (e.g. how much mass condensed), rather than only at the start of a step; if
-an observer doesn't need this it returns ``NullSDMMonitor{}``.
+(see ``libs/superdrops/sdmmonitor.hpp``) for a sub-component of observers that need to
+record something *during* the microphysics sub-timestepping itself (e.g. how much mass condensed
+or precipitated), rather than only at the start of a step; if an observer doesn't need this it
+returns ``NullSDMMonitor{}``.
 
 How Combination Works: the Monoid Machinery
 -----------------------------------------------
@@ -101,16 +107,22 @@ microphysics (``microphysicalprocess.hpp``):
 it a **monoid**: combining two members of the set produces another member of the same set, so you
 can chain arbitrarily many together (``a >> b >> c`` combines left-to-right). Note the order
 matters for ``run_step``: ``a >> b`` means *a runs, then b runs on a's result* — not that they
-run simultaneously or in some unspecified order.
+run simultaneously or in some unspecified order. For this reason it makes sense to combine "fast"
+processes (e.g. condensation) before "slow" ones (e.g. collision-coalescence).
 
-``NullMicrophysicalProcess`` is the monoid's null element — it satisfies the concept but its
-``run_step`` is a no-op — completing the three monoid properties (create, combine, null) from
-:doc:`../intro/monoids`.
+The final property of the monoid for microphysical processes, that of the null element which does
+nothing under combination with another microphysical processes (see :doc:`../intro/monoids`), is
+fulfilled by the ``NullMicrophysicalProcess`` struct. Itss ``on_step`` always
+returns ``false``, its ``next_step`` returns the largest possible integer, and its ``run_step``
+is a no-op.
 
-``Observer`` follows exactly the same pattern (``CombinedObserver``/``CombineObservers``/
-``operator>>`` in ``observers.hpp``), with one extra piece: combining two observers also combines
-their ``SDMMonitor``s via ``CombinedSDMMonitor``, so that ``get_sdmmonitor()`` on the combination
-returns a monitor that runs *both* constituent monitors.
+
+``Observer`` follows exactly the same notions as the ``MicrophysicalProcess`` explained above,
+with ``CombinedObserver`` and its ``operator>>`` overload. This is however one extra piece:
+combining two observers also combines their ``SDMMonitor``s via ``CombinedSDMMonitor``, so
+that ``get_sdmmonitor()`` of the combined observer returns a monitor that runs *both* constituent
+monitors -  in escence allowing monitors to act as monoids nested inside observers. (Both observers
+and monitors also have their own null elements, ``NullObserver`` and ``NullSDMMonitor``.)
 
 Worked Example: Combining Two Microphysical Processes
 --------------------------------------------------------
@@ -150,11 +162,11 @@ Line by line:
    ``MicrophysicalProcess``.
 3. ``cond >> colls`` produces a single ``CombinedMicrophysicalProcess<Condensation, CollCoal>``
    value. Its exact C++ type is long and you never need to write it out — this is exactly what
-   the ``MicrophysicalProcess auto`` return-type syntax buys you (see :doc:`code_structure`'s
+   the ``MicrophysicalProcess auto`` return-type syntax allows (see :doc:`code_structure`'s
    note on concepts). At runtime, on every sub-timestep of the combined process, condensation
-   runs on whatever sub-timestep multiple it's due, and collision-coalescence runs on whatever
-   (in general different) sub-timestep multiple *it's* due — each governed independently by its
-   own ``next_step``/``on_step``, combined adaptively as shown above.
+   runs on whatever sub-timestep multiple it should, and collision-coalescence runs on whatever
+   (in general different) sub-timestep multiple *it* should — each governed independently by its
+   own ``next_step``/``on_step``.
 
 Worked Example: Combining Observers
 --------------------------------------
@@ -197,20 +209,25 @@ itself builds one observer out of several smaller "data-collector" pieces:
       return obssd >> obs4 >> obs3 >> obs2 >> obs1 >> obs0;
     }
 
-There are two levels of combination happening here: ``CollectDataForDataset`` is a *third*, more
-specialised monoid (satisfying a concept of the same name, defined in
-``observers/collect_data_for_dataset.hpp``) used specifically to build up which columns get
-written into one Zarr dataset. ``coord3 >> msol >> radius >> xi >> sdgbxindex >> sdid`` combines
-six single-attribute collectors into one, which ``SuperdropsObserver`` then wraps to actually
-satisfy the full ``Observer`` concept. That resulting ``Observer`` is then itself combined with
-five other independent observers (progress printing, time, gridbox indices, super-droplet counts,
-mass moments) via the *same* ``>>`` you saw for microphysics — because ``Observer`` is a monoid
-in exactly the same structural sense.
+There are two levels of combination happening here. In ``create_superdrops_observer``,
+``CollectDataForDataset`` is another monoid (i.e. is a set with a null element in which the set is
+defined by a concept as well as an associated class which can combine types satisfy that
+concept into a new type which also satisfies the concept). The ``create_superdrops_observer``
+function combines several ``CollectDataForDataset`` types, each of which collects data for a
+different superdroplet attribute, into a single ``CollectDataForDataset`` type:
+``coord3 >> msol >> radius >> xi`` etc., and then returns a ``SuperdropsObserver`` observer
+which wraps that combined collector in functions which output the superdroplet attribute data
+to a Zarr dataset and satisfy the full ``Observer`` concept. That resulting ``Observer`` type
+is then itself combined with five other independent observers (``StreamOutObserver``,
+``TimeObserver``, ``GbxindexObserver``, etc.) via the ``>>`` overload for observers
+(analogous to the one you saw for microphysics above) to create the single ``Observer`` type
+which is returned from ``create_observer`` and used in the simulation.
 
 .. tip::
-   Order matters for readability even when it doesn't change results: it's common in Cleo's
-   examples to build the "innermost"/most specific observer or process first and combine
-   outward, as shown above, so the final ``return`` statement reads as a short summary of
+   For observers, order matters for readability even when it doesn't change results: it's
+   usual in Cleo's examples to build the "innermost"/most specific observer or process first, as
+   done here in the ``create_superdrops_observer`` function, and then combine outward, as shown
+   above, so the final ``return`` statement reads as a short summary of
    everything being combined.
 
 Compatibility Rules and Constraints
@@ -222,20 +239,19 @@ Compatibility Rules and Constraints
   reject a call whose argument types don't match any overload's constraints.
 * Order is significant for the *effect* of combination (as noted above for microphysics), even
   though it doesn't matter for which sub-timestep the combination runs on (``next_step`` and
-  ``on_step`` use ``min``/logical-``or``, which are commutative).
+  ``on_step`` use ``min``/logical-``or``). Monoids are commutative but not associative!
 * An empty/no-op branch of a combination should use the monoid's null member
   (``NullMicrophysicalProcess{}``, ``NullObserver{}``) rather than, say, an ``if`` statement
   guarding whether to call ``create_microphysics`` at all — this keeps the *type* of your SDM
   fixed at compile time regardless of runtime configuration choices, which is the whole point of
-  the monoid pattern (design paper, Sect. 2.3).
+  the monoid pattern (B2026a :cite:`bayley2026a`, Sect. 2.3).
 * Because combination happens via templates, the *type* of your combined microphysics/observer
   is fixed once you write your ``main.cpp`` and compile — you cannot pick a different combination
   at runtime from the YAML config file alone (though you can, and generally should, use the YAML
   config to set the *parameters* of each already-selected process — see
   :doc:`tutorial_new_example`).
 
-See also :doc:`code_structure` for what a C++ concept/template is if any of this is unfamiliar,
-and :doc:`main_cpp` for how ``create_microphysics``/``create_observer`` fit into the rest of
+Next, see :doc:`main_cpp` for how ``create_microphysics``/``create_observer`` fit into the rest of
 ``main.cpp``.
 
 ----

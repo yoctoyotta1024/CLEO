@@ -19,7 +19,7 @@ thermodynamic state. Computationally, it matters because it is what decides whet
 running "one-way coupled" (dynamics affects the super-droplets, but the super-droplets' effect on
 the dynamics is discarded — sometimes called *piggybacking*), "two-way coupled" (the
 super-droplets' effect feeds back into the dynamics solver), or fully standalone (no dynamics at
-all, useful for box-model microphysics tests). See the design paper, Sect. 2.4, and the numerics
+all, useful for box-model microphysics tests). See B2026a :cite:`bayley2026a`, Sect. 2.4, and the numerics
 paper, Sect. 2, for the physical framing of these modes.
 
 The Two Concepts Involved
@@ -57,6 +57,8 @@ both the solver's own representation and the domain's geometry):
 the dynamics solver. One-way coupling is simply the case where ``send_dynamics`` (and/or the
 dynamics solver's own response to it) does nothing.
 
+.. _coupled_dynamics_available_options:
+
 The Available Options
 ------------------------
 
@@ -93,8 +95,8 @@ selected at CMake configuration time via ``-DCLEO_COUPLED_DYNAMICS=<option>``
      - ``yac``
      - Coupling via `YAC <https://dkrz-sw.gitlab-pages.dkrz.de/yac>`_ to an external dynamical
        core (e.g. ICON), for large-domain, large-eddy-simulation-scale two-way coupled runs — the
-       regime the design paper's Sect. 1 motivates Cleo for. Requires YAC and YAXT to be
-       installed (:doc:`../usage/installation/extern`).
+       motivaiton for this setup is explained in B2026a :cite:`bayley2026a`, Sect. 1.
+       Requires YAC and YAXT to be installed (:doc:`../usage/installation/extern`).
    * - (``cleo_python_bindings``)
      - ``numpy``
      - Not a separate ``coupldyn_*`` directory, but a related option: exposes Cleo via pybind11
