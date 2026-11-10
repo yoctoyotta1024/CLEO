@@ -3,89 +3,7 @@
 Cleo's Code Structure
 ======================
 
-This page maps the repository and introduces the handful of C++ ideas you need in order to read
-that map. If you already know what a header file is and what a C++ concept is, skip ahead to
-:ref:`repo_map`.
-
-C++ Ideas You'll Meet
-----------------------
-
-Cleo is written in C++20 and makes heavy use of a small number of language features. None of them
-have an exact Python equivalent, but each has a reasonable analogy.
-
-Header (``.hpp``) and source (``.cpp``) files
-    In Python, a module's interface and its implementation live in the same ``.py`` file. In C++
-    they are conventionally split in two: a **header file** (``.hpp``) *declares* what a class or
-    function looks like (its name, its parameters, its return type) so that other files can use it
-    without seeing how it works; a **source file** (``.cpp``) *defines* how it actually works.
-    Anywhere Cleo does a substantial piece of work you'll find a ``foo.hpp``/``foo.cpp`` pair
-    (e.g. ``superdrops/condensation.hpp`` and ``superdrops/condensation.cpp``). Templated code
-    (see below) is usually written entirely in the header, because the compiler needs the full
-    definition available at every place it's used.
-
-Compilation and templates
-    Python is interpreted: the same function can be called with an ``int`` or a ``str`` and the
-    interpreter figures out what to do at call-time. C++ is compiled ahead of time, and a
-    **template** is C++'s way of writing one piece of code that the compiler turns into many
-    concrete versions, one per type it's used with, before the program ever runs. You will see
-    template code everywhere in Cleo, for example::
-
-        template <MicrophysicalProcess Microphys>
-        class SDMMethods { ... };
-
-    reads as "``SDMMethods`` is a class parameterised by some type ``Microphys``, and that type
-    must satisfy the ``MicrophysicalProcess`` concept". Nothing here is decided at runtime — when
-    you write your ``main.cpp`` and pick, say, ``Condensation`` as your microphysics, the compiler
-    generates a version of ``SDMMethods`` specifically for ``Condensation``. This is why swapping
-    microphysics or observers costs nothing at runtime (see :doc:`../intro/kokkos` and the design
-    paper, Sect. 2): there is no dynamic dispatch, no virtual function calls, no ``if``/``else``
-    branching on "which kind of microphysics is this" anywhere in the timestepping loop.
-
-Concepts
-    A **concept** names a set of requirements — usually, "has a member function with this
-    signature" — that a type must satisfy. It is checked by the compiler, not at runtime. It's the
-    closest C++ analogue to Python's duck typing ("if it walks like a duck and quacks like a
-    duck..."), except the check happens when you compile, not when you run. For example, from
-    ``libs/superdrops/microphysicalprocess.hpp``::
-
-        template <typename P>
-        concept MicrophysicalProcess =
-            requires(P p, const TeamMember& tm, const unsigned int t, subviewd_supers supers,
-                     State& state, const NullSDMMonitor mo) {
-              { p.next_step(t) } -> std::convertible_to<unsigned int>;
-              { p.on_step(t) } -> std::same_as<bool>;
-              { p.run_step(tm, t, supers, state, mo) } -> std::same_as<subviewd_supers>;
-            };
-
-    Any type — ``Condensation``, ``CollCoal``, or one you write yourself — that has these three
-    member functions with these signatures automatically *is* a ``MicrophysicalProcess``, with no
-    inheritance or registration needed. Cleo defines one such concept for each kind of
-    "pluggable" component: ``GridboxMaps``, ``MicrophysicalProcess``, ``Observer``,
-    ``CoupledDynamics``, ``CouplingComms``, ``Motion``, and more. Wherever you see
-    ``SomeConcept auto x = ...;`` in Cleo's code, read it as "``x`` is some type that satisfies
-    ``SomeConcept`` — I don't need to know or write out its exact (often very long,
-    template-instantiated) type name".
-
-Monoids
-    Building on concepts, Cleo defines **monoids**: sets of types that can (a) be created, (b) be
-    combined pairwise into another member of the same set, and (c) have a "do nothing" null
-    member. Microphysical processes and observers are both monoids in Cleo. This is covered in
-    depth, with worked examples, in :doc:`microphysics_and_observers`; the conceptual
-    introduction (with the "wet oil paint" analogy) is in :doc:`../intro/monoids`.
-
-Namespaces
-    A C++ ``namespace`` groups related names to avoid clashes, similar to how a Python package
-    groups modules. ``KokkosCleoSettings`` (aliased ``KCS``) and ``LIMITVALUES`` are examples
-    you'll see used in Cleo.
-
-Kokkos views and ``KOKKOS_INLINE_FUNCTION``
-    Cleo uses the `Kokkos <https://github.com/kokkos>`_ library for performance-portable thread
-    parallelism (see :doc:`../intro/kokkos`); a ``Kokkos::View`` is roughly an array that can live
-    on CPU or GPU memory, and ``KOKKOS_INLINE_FUNCTION`` marks a function so it can run inside a
-    parallel region on either. You don't need to understand Kokkos internals to read
-    ``main.cpp``, but you will see its types (``viewd_gbx``, ``subviewd_supers``, ...) passed
-    around — these are Cleo's own aliases defined in ``libs/kokkosaliases.hpp`` and
-    ``libs/superdrops/kokkosaliases_sd.hpp``.
+This page introduces Cleo's code/library structure.
 
 .. _repo_map:
 
@@ -95,56 +13,86 @@ Top-Level Repository Map
 ::
 
     CLEO/
-    ├── libs/                    # Cleo's C++ library code (the model itself)
-    │   ├── configuration/       # reading YAML config files into typed C++ structs
-    │   ├── initialise/          # turning config + binary input files into initial conditions
-    │   ├── superdrops/          # super-droplets themselves and microphysical processes
-    │   │   └── collisions/      # collision-coalescence, breakup and rebound schemes
-    │   ├── gridboxes/           # gridboxes, super-droplet motion between/within them
-    │   ├── cartesiandomain/     # a concrete GridboxMaps: a Cartesian (C-grid) domain
-    │   ├── runcleo/             # the concepts/classes that tie SDM to coupled dynamics
-    │   ├── coupldyn_null/       # coupled dynamics: no dynamics at all
-    │   ├── coupldyn_fromfile/   # coupled dynamics: read from binary files (one-way)
-    │   ├── coupldyn_cvode/      # coupled dynamics: 0-D CVODE ODE solver (two-way)
-    │   ├── coupldyn_yac/        # coupled dynamics: YAC-coupled external dynamical core
-    │   ├── cleo_python_bindings/# pybind11 bindings exposing parts of Cleo to Python/numpy
-    │   ├── observers/           # observers: writing/streaming data out during a run
-    │   └── zarr/                # a minimal Zarr writer used by observers for output
-    ├── examples/                # one directory per example, each with its own main*.cpp,
-    │   │                        #   CMakeLists.txt, and Python driver script(s)
-    │   └── exampleplotting/     # the `plotcleo` Python package used to plot example output
-    ├── roughpaper/src/          # main.cpp / main_impl.hpp used as a template/scratchpad —
-    │                            #   see :doc:`main_cpp`
-    ├── cleopy/                  # Cleo's installable Python package: config editing, binary
-    │                            #   input-file generation, output reading
-    ├── scripts/                 # bash scripts to build/compile/run on Levante, JUWELS or a
-    │                            #   generic ("vanilla") computer
-    ├── docs/                    # this documentation (Sphinx + Doxygen/Breathe)
-    ├── extern/                  # vendored third-party dependencies (Kokkos, yaml-cpp, ...)
-    └── CMakeLists.txt           # top-level build configuration, see :doc:`external_project`
+    ├── libs/                      # Cleo's C++ library code (the model itself)
+    │   ├── configuration/         # reading YAML config files into typed C++ structs
+    │   ├── initialise/            # turning config + input files into initial conditions
+    │   ├── runcleo/               # the concepts/classes that run Cleo SDM with CoupledDynamics
+    │   ├── superdrops/            # super-droplets definitions and microphysical processes
+    │   │   └── collisions/        # collision-coalescence, breakup and rebound schemes
+    │   ├── gridboxes/             # gridboxes (as in volumes of space) and their super-droplet
+    |   |                             handling
+    │   ├── cartesiandomain/       # an implementatation of the GridboxMaps concept: a Cartesian
+    |   |                             (C-grid) domain, including droplet motion and MPI domain
+    |   |                             decomposition
+    │   ├── coupldyn_null/         # an implementatation of the CoupledDynamics concept:
+    |   |                             no dynamics at all
+    │   ├── coupldyn_fromfile/     # an implementatation of the CoupledDynamics concept:
+    |   |                             read from binary files (one-way)
+    │   ├── coupldyn_cvode/        # an implementatation of the CoupledDynamics concept:
+    |   |                             CVODE ODE solver (two-way; for a 0-D parcel model only)
+    │   ├── coupldyn_yac/          # an implementatation of the CoupledDynamics concept:
+    |   |                             YAC-coupled external dynamical core (one-way or two-way; ICON)
+    │   ├── observers/             # observers: for writing/streaming data output
+    │   ├── zarr/                  # a minimal Zarr dataset writer used by some observers for output
+    |   └── cleo_python_bindings/  # pybind11 bindings exposing parts of Cleo to Python and an
+    |                                 (one-way or two-way) implementatation of the CoupledDynamics
+    |                                 concept: for numpy arrays
+    ├── examples/                  # one directory per example, each with its own main*.cpp,
+    │   │                          #   CMakeLists.txt, and Python driver script(s)
+    │   └── exampleplotting/       # the `plotcleo` Python package used to plot example output
+    ├── roughpaper/src/            # main.cpp / main_impl.hpp used as a template/scratchpad
+    ├── cleopy/                    # Cleo's installable Python package: config editing, binary
+    │                              #   input-file generation, and reading output
+    ├── scripts/                   # bash scripts to build/compile/run on Levante, Jupiter or a
+    │                              #   generic "vanilla" computer
+    ├── docs/                      # this documentation (Sphinx + Doxygen/Breathe)
+    ├── extern/                    # third-party dependencies (Kokkos, yaml-cpp, ...)
+    └── CMakeLists.txt             # top-level build configuration
 
-Two directory names are easy to misread: ``libs/gridboxes`` contains the *generic* gridbox and
-super-droplet-transport machinery (the ``GridboxMaps`` concept, motion between gridboxes,
-boundary conditions), whereas ``libs/cartesiandomain`` contains one specific, concrete
-implementation of that machinery for a Cartesian C-grid domain (``CartesianMaps``). If Cleo grows
-another domain type in future (e.g. unstructured), it would live alongside
-``cartesiandomain``, implementing the same ``GridboxMaps`` concept.
-
-.. note::
-   Ignore any ``.patch`` files and any ``build*`` directories (e.g. ``build_bubble3d``) you see
-   at the repository root — these are local build artefacts and patches, not part of Cleo's
-   source.
+.. _why_code_structure:
 
 Why It's Structured This Way
 -------------------------------
 
-The split mirrors the physical/software separation the design paper draws out (Sect. 2): the
-things that are *always* needed regardless of setup (``configuration``, ``initialise``,
-``gridboxes``, ``runcleo``, ``observers``, ``zarr``, generic ``superdrops`` machinery) live in
-``libs/`` and are built into every executable, per ``libs/CMakeLists.txt``. The things that vary
-between setups — which coupled dynamics you use, which concrete domain/gridbox geometry — are
-each their own subdirectory, built only when selected, controlled by two CMake cache variables
-read in ``libs/CMakeLists.txt``:
+The directory structure and their dependencies are conceptually important. Superdroplets and their
+microphysical processes exist and act on a certain (thermodynamic) state, however, since
+superdroplets, microphysics, and a thermodynamic state are somewhat abstract numerical/physical
+descriptions, they are independent of the grid-boxes and domain geometries which we use in a
+simulation. Therefore they live, self-contained, in ``libs/superdrops``. The gridboxes depend on
+``libs/superdrops`` since they contain a state and (a view to) super-droplets, but they are
+independent of a particular domain geometry. Therefore, gridboxes they live in ``libs/gridboxes``,
+alongside the ``GridboxMaps`` concept which defines how gridboxes can be mapped to an arbitrary
+domain geometry (without specifying any specific geometry). A concrete domain geometry and
+its associated methods for super-droplet motion are dependent on the particular implementation of the
+GridboxMaps concept, they thus depend on ``libs/gridboxes`` and are stored in a seperate library,
+e.g. ``libs/cartesiandomain`` for a cartesian domain. If Cleo grows another domain type in the
+future (e.g. unstructured), it would live alongside ``cartesiandomain``, implementing its own
+version of the ``GridboxMaps`` concept. The directory for coupled dynamics
+implementations (``libs/coupldyn_*``) are separate from all the SDM libraries (superdroplets,
+gridboxes, observers etc.), because the coupled dynamics is independent of SDM. It is the
+``libs/runcleo`` library which ties everything together: the model configuration, initialisation,
+coupled dynamics (and coupler), superdroplets (including their motion and microphysics), gridboxes,
+domain, and observers (including Zarr dataset output).
+
+Occasionally this seperation between ``superdroplets``, ``gridboxes`` and a particular
+``GridboxMaps`` implementation (i.e. domain geometry) requires a component of the model
+to be divided into seperate parts across different libraries. This is the case for super-droplet
+motion. The abstract concept for super-droplet ``Motion`` is defined in ``libs/superdroplets``
+along with the ``VelocityFormula`` concept and several formulations of a superdroplet's terminal
+velocity which satisfy that concept. The structure for moving superdroplets through a domain,
+``MoveSupersInDomain``, is then defined in ``libs/gridboxes``, since this library handles how
+superdroplets relate to gridboxes, however, this is a templated structure which is agnostic to a
+particular domain geometry. Therefore, the actual implementation of the ``MoveSupersInDomain``
+structure only comes together in a particular domain geometry's library
+(e.g. in ``libs/cartesiandomain/movement``). This is where ``MoveSupersInDomain`` is filled-in with
+an implmentation of the ``Motion`` concept, as well as implementations for how to transport
+superdroplets across the domain and how to enact boundary conditions for that particular geometry.
+
+Some libraries are *always* needed regardless of setup: ``configuration``, ``initialise``,
+``gridboxes``, ``runcleo``, ``observers``, ``zarr``, and ``superdrops``, and are built into every
+executable, as per ``libs/CMakeLists.txt``. The libraries that can vary between setups —
+which coupled dynamics and which domain geometry you use — are built only when selected,
+controlled by two CMake cache variables read in ``libs/CMakeLists.txt``:
 
 .. code-block:: cmake
 
@@ -166,78 +114,10 @@ it links against:
     target_link_libraries(rshaft1d PRIVATE coupldyn_fromfile cartesiandomain "${CLEOLIBS}")
     target_link_libraries(rshaft1d PUBLIC Kokkos::kokkos)
 
-Subsystem-by-Subsystem
-------------------------
+Library Overview
+----------------
 
-``superdrops/`` — super-droplets and microphysics
-    Defines the ``Superdrop`` type and its attributes (radius, multiplicity, solute mass,
-    position, optional id), the ``MicrophysicalProcess`` concept and its monoid combinators
-    (``microphysicalprocess.hpp``), and concrete microphysical processes: ``Condensation``
-    (``condensation.hpp``/``.cpp``, using an implicit Euler solver in ``impliciteuler.hpp``) and,
-    under ``superdrops/collisions/``, collision-coalescence, breakup and rebound schemes. This is
-    where the physics described in the numerics paper is implemented. See
-    :doc:`microphysics_and_observers`.
-
-``gridboxes/`` — domain decomposition and super-droplet transport
-    Defines ``Gridbox`` (one cell's ``State`` — pressure, temperature, vapour/liquid mixing
-    ratio, wind — plus the super-droplets currently inside it), the ``GridboxMaps`` concept for
-    converting between gridbox index and physical coordinates, and ``MoveSupersInDomain`` /
-    ``movesupersindomain.hpp`` for moving super-droplets both within and between gridboxes each
-    sub-timestep (including across the boundary of the whole domain via ``BoundaryConditions``).
-    This is where the memory layout described in :doc:`../intro/memorylayout` is realised: all
-    gridboxes are one contiguous ``Kokkos::View``, all super-droplets are another, ordered by
-    gridbox, and each gridbox holds a reference/pointer-like object (``SupersInGbx``) into the
-    slice of the super-droplet array that belongs to it.
-
-``cartesiandomain/`` — a concrete Cartesian ``GridboxMaps``
-    Implements ``CartesianMaps``, satisfying the ``GridboxMaps`` concept for a structured C-grid
-    domain, plus ``CartesianMotion`` (satisfying the ``Motion`` concept) for advecting
-    super-droplets through that grid, and MPI domain-decomposition logic
-    (``cartesian_decomposition.hpp``) for splitting the domain across nodes.
-
-``observers/`` — getting data out
-    Defines the ``Observer`` concept and its monoid combinators (``observers.hpp``), plus
-    concrete observers for writing time, gridbox index, super-droplet attributes, mass moments,
-    wind and thermodynamic state to a Zarr dataset (via ``zarr/``), or for printing progress to
-    the screen (``StreamOutObserver``). ``observers/sdmmonitor/`` holds special observers that
-    "monitor" (record diagnostics on) the microphysics itself as it runs. See
-    :doc:`microphysics_and_observers`.
-
-``runcleo/`` — tying SDM to coupled dynamics
-    The smallest but most structurally important directory. Defines the ``CoupledDynamics`` and
-    ``CouplingComms`` concepts (see :doc:`coupled_dynamics`), the ``SDMMethods`` class (one
-    complete, self-contained SDM instance), and the ``RunCLEO`` class (the outer timestepping
-    loop). See :doc:`main_cpp`.
-
-``configuration/`` — reading YAML config into typed structs
-    Reads a YAML configuration file into a ``Config`` object built from two structs,
-    ``RequiredConfigParams`` (no sensible default — must be in the YAML) and
-    ``OptionalConfigParams`` (has a default). See :doc:`tutorial_new_example`.
-
-``initialise/`` — building the first Gridboxes and super-droplets
-    Reads Cleo's custom binary input-file format (produced by ``cleopy``, see
-    :doc:`tutorial_new_example`) to construct the initial ``Gridbox`` array and initial
-    ``Superdrop`` array before timestepping 0.
-
-``coupldyn_*/`` — coupled dynamics implementations
-    One directory per option for where the thermodynamic/wind fields come from. See
-    :doc:`coupled_dynamics` for what each one does and when to use it.
-
-``zarr/`` — output backend
-    A minimal, dependency-light implementation of the `Zarr <https://zarr.dev>`_ chunked-array
-    storage format, used by ``observers/`` to write output that ``cleopy`` (or ``xarray`` with
-    the ``zarr`` engine) can read back.
-
-``cleo_python_bindings/`` — pybind11 bindings
-    Exposes selected pieces of Cleo (enough to drive an SDM run) to Python via
-    `pybind11 <https://github.com/pybind/pybind11>`_, so Cleo can be driven and its state
-    inspected from a numpy/Python-based coupled model. This is what the ``"numpy"`` coupled
-    dynamics option (mentioned above) refers to.
-
-The Simulation Loop, One Level Up
------------------------------------
-
-Reading these subsystems in isolation can obscure how they fit together at runtime. In one
+Reading each library in isolation can obscure how they fit together at runtime. In one
 sentence: ``RunCLEO`` repeatedly calls ``CoupledDynamics::run_step`` to advance the external
 dynamics, calls ``SDMMethods::run_step`` to advance super-droplet motion and microphysics, and
 uses ``CouplingComms`` to exchange gridbox state between the two — with the whole loop's step
@@ -245,6 +125,89 @@ size chosen adaptively based on the coupling and observation timesteps. The full
 with the relevant code from ``libs/runcleo/runcleo.hpp`` and ``sdmmethods.hpp``, is in
 :doc:`main_cpp`; the adaptive-timestepping mechanism specifically is described in
 :doc:`../intro/timestepping`.
+
+Nevertheless, here is each library in a bit more detail...
+
+``superdrops/`` — super-droplets and microphysics
+    Defines the ``Superdrop`` type and its attributes (radius, multiplicity, solute mass,
+    position, optional identifier, etc.), the ``State`` (pressure, temperature, vapour  mixing
+    ratio, wind, etc.), and the ``MicrophysicalProcess`` concept. The monoid set definition for
+    microphysical processes is also defined here, as well as concrete microphysical
+    processes: ``Condensation`` (``condensation.hpp``/``.cpp``, using an implicit Euler solver
+    in ``impliciteuler.hpp``) and, under ``superdrops/collisions/``, collision-coalescence
+    (often denoted``CollCoal``), and  collision-coalescence,-breakup,-rebound (``CoalBuRe``).
+    This is where the physics described in the numerics paper (B2026b :cite:`bayley2026b`)
+    is implemented. Refer to :doc:`microphysics_and_observers` for how to combine different
+    microphysical processes monoidally.
+
+``gridboxes/`` — domain decomposition and super-droplet transport
+    Defines ``Gridbox`` (one cell's ``State`` and the super-droplets currently inside it),
+    the ``GridboxMaps`` concept for converting between gridbox indexes and physical coordinates,
+    and the ``MoveSupersInDomain`` framework for moving super-droplets both within and between
+    gridboxes each sub-timestep (including the ``BoundaryConditions`` concept for creating or
+    removing superdroplets at the boundaries of the domain). This is where
+    Cleo's :doc:`../intro/memorylayout` is realised: all gridboxes are one contiguous
+    ``Kokkos::View``, all super-droplets are another, ordered by gridbox, and each gridbox holds a
+    reference/pointer-like object (``SupersInGbx``) into the slice of the super-droplet array that
+    belongs to it.
+
+``cartesiandomain/`` — a concrete implementatation of the ``GridboxMaps`` concept
+    Implements ``CartesianMaps`` which satisfies the ``GridboxMaps`` concept for a structured
+    cartesian C-grid domain including MPI domain-decomposition logic for splitting the domain
+    across MPI processes. This library also includes a concrete implementation of
+    ``MoveSupersInDomain`` for this cartisian domain which pertains of ``CartesianMotion``
+    (satisfying the ``Motion`` concept) for advecting super-droplets through the cartesian grid,
+    ``CartesianTransportAcrossDomain`` for updating super-droplet gridbox-indexes when they move
+    across the domain (in x, y, or z), and additionally, an optional implementation of
+    the ``BoundaryConditions`` concept, ``AddSupersToDomain``, which removes and then adds
+    superdroplets to the top or bottom of the domain.
+
+``observers/`` — data output
+    Defines the ``Observer`` concept and its monoid combinators (``observers.hpp``), plus
+    concrete observers for writing output to a Zarr dataset (via ``zarr/``), e.g. for time,
+    gridbox indexes, super-droplet attributes, moments of the droplet mass distribution,
+    thermodynamic state or wind fields. ``observers/sdmmonitor/`` holds special observers that
+    "monitor" within the microphysics/motion sub-timestepping routine itself, rather than at the
+    start or end of each time-step, e.g. to record diagnostics of precipitation or
+    condenstaion/evaporation rates, and then output them to a Zarr dataset.
+    See :doc:`microphysics_and_observers` for more information. This library also contains methods
+    to output progress to the screen/terminal during a run (``StreamOutObserver``).
+
+``runcleo/`` — tying SDM to coupled dynamics
+    The smallest but most structurally important directory. Defines the ``CoupledDynamics`` and
+    ``CouplingComms`` concepts (see :doc:`coupled_dynamics`), the ``SDMMethods`` class (one
+    complete, self-contained SDM instance), and the ``RunCLEO`` class (the outer timestepping
+    loop). See :doc:`main_cpp`. Also defines how initial conditions are read in to create gridboxes
+    and super-droplets.
+
+``configuration/`` — reading YAML config into typed structs
+    Reads a YAML configuration file into a ``Config`` object built from two structs,
+    ``RequiredConfigParams`` (no sensible default — must be in the YAML) and
+    ``OptionalConfigParams`` (has a default). See :doc:`tutorial_new_example`.
+
+``initialise/`` — building the first Gridboxes and super-droplets
+    Reads Cleo's custom binary input-files (produced by ``cleopy``, see
+    :doc:`tutorial_new_example`) to construct the initial conditions (``InitConds``) comprised of
+    Gridbox initial-data arrays (``GbxInitConds``) and Superdroplet initial-data arrays
+    (``SuperdropInitConds``). These arrays are then used by ``RunCleo`` to create gridboxes
+    and superdroplets.
+
+``coupldyn_*/`` — coupled dynamics implementations
+    One directory per option for where the thermodynamic/wind fields come from. See
+    :doc:`coupled_dynamics` for what each one does and when to use it.
+
+``zarr/`` — output backend
+    A minimal, dependency-light implementation of the
+    `Zarr Storage Specification Version 2 <https://zarr-specs.readthedocs.io/en/v3.1.0/v2/v2.0.html>`_
+    chunked-array storage format, used by ``observers/`` to write output, e.g. that ``xarray`` with
+    the ``zarr`` engine (through ``cleopy`` helper modules) can read back.
+
+``cleo_python_bindings/`` — pybind11 bindings
+    Exposes selected pieces of Cleo to Python (enough to run CLEO-SDM coupled to numpy arrays) via
+    `pybind11 <https://github.com/pybind/pybind11>`_, so Cleo can be driven and its state
+    inspected from a numpy/Python-based coupled model. This is what the ``"numpy"`` coupled
+    dynamics option (mentioned above) refers to - see ``CLEO/examples/python_bindings/`` for a
+    working example of how these bindings can be used.
 
 ----
 
