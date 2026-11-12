@@ -1,5 +1,6 @@
-TIMEDATA
+timedata
 ========
 
 .. automodule:: cleopy.sdmout_src.timedata
-  :members:
+   :members:
+   :undoc-members:

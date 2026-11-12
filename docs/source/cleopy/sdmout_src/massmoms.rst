@@ -1,5 +1,6 @@
-MASSMOMS
+massmoms
 ========
 
 .. automodule:: cleopy.sdmout_src.massmoms
-  :members:
+   :members:
+   :undoc-members:

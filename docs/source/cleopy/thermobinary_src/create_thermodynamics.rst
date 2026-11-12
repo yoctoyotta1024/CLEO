@@ -1,5 +1,6 @@
-CREATE_THERMODYNAMICS
+create_thermodynamics
 =====================
 
 .. automodule:: cleopy.thermobinary_src.create_thermodynamics
-  :members:
+   :members:
+   :undoc-members:
