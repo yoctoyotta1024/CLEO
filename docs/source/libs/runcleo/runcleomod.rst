@@ -15,5 +15,6 @@ Contents:
    couplingcomms
    creategbxs
    createsupers
+   gensuperdrop
    runcleo
    sdmmethods

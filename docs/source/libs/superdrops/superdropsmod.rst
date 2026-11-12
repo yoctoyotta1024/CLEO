@@ -18,6 +18,8 @@ Contents:
    impliciteuler
    kokkosaliases_sd
    microphysical_process
+   motion
+   sdmmonitor
    state
    superdrop
    superdrop_ids
