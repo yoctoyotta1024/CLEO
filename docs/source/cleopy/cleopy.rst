@@ -21,6 +21,7 @@ Contents:
    thermobinary_src/thermobinary_src
    sdmout_src/sdmout_src
    cxx2py
+   geninitconds
    readconfigfile
    editconfigfile
    readbinary

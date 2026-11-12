@@ -1,5 +1,6 @@
-WRITEBINARY
+writebinary
 ===========
 
 .. automodule:: cleopy.writebinary
-  :members:
+   :members:
+   :undoc-members:
