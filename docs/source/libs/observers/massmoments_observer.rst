@@ -25,20 +25,11 @@ Header file: ``<libs/observers/massmoments_observer.hpp>``
    :members:
    :undoc-members:
 
-.. doxygenfunction:: create_massmoment_xarray
+.. doxygenfunction:: MassMomentsObserver
    :project: observers
 
-.. doxygenfunction:: create_massmom0_xarray
+.. doxygenfunction:: MassMomentsRaindropsObserver
    :project: observers
 
-.. doxygenfunction::create_massmom1_xarray
-   :project: observers
-
-.. doxygenfunction:: create_massmom2_xarray
-   :project: observers
-
-.. doxygenfunction::MassMomentsObserver
-   :project: observers
-
-.. doxygenfunction::MassMomentsRaindropsObserver
-   :project: observers
+The Zarr arrays these functors write into are created by the functions documented in
+:doc:`create_massmoments_arrays`.

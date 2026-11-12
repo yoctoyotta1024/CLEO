@@ -15,7 +15,15 @@ Contents:
    collisions
    collisionkinetics
    coalescence
+   coalescence_efficiency
    breakup
+   breakup_nfrags
    coalbure
+   coalbure_flag
+   constprob
+   golovinprob
+   hydrodynamicprob
+   longhydroprob
+   lowlistprob
    shuffle
    urbg

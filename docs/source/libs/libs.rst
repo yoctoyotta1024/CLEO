@@ -15,11 +15,19 @@ Contents:
 .. toctree::
    :maxdepth: 1
 
-   runcleo/runcleomod
+   configuration/configurationmod
+   gridboxes/gridboxesmod
+   cartesiandomain/cartesiandomainmod
    superdrops/superdropsmod
-   zarr/zarrmod
-   observers/observersmod
    initialise/initialisemod
+   runcleo/runcleomod
+   observers/observersmod
+   zarr/zarrmod
+   coupldyn_null/coupldynnullmod
+   coupldyn_fromfile/coupldynfromfilemod
+   coupldyn_cvode/coupldyncvodemod
+   coupldyn_yac/coupldynyacmod
+   cleo_python_bindings/cleopythonbindingsmod
    cleoconstants
    kokkosaliases
 

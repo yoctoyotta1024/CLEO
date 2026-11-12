@@ -17,6 +17,7 @@ Contents:
    write_to_dataset_observer.rst
    parallel_write_data.rst
    collect_data_for_dataset.rst
+   collect_data_for_simple_dataset
    generic_collect_data.rst
    time_observer.rst
    gbxindex_observer.rst
@@ -27,3 +28,5 @@ Contents:
    thermo_observer.rst
    windvel_observer.rst
    massmoments_observer.rst
+   create_massmoments_arrays
+   sdmmonitor/sdmmonitormod
