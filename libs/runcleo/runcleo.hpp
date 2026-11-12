@@ -256,6 +256,7 @@ class RunCLEO {
    *
    * @param t_next Next timestep of the coupled model.
    * @param gbxs DualView of gridboxes.
+   * @param allsupers Struct to handle all superdroplets (both in and out of bounds of domain).
    * @return Incremented timestep.
    */
   unsigned int proceed_to_next_step(unsigned int t_next, dualview_gbx gbxs,
