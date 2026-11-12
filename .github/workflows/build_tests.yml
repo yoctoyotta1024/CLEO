@@ -41,7 +41,7 @@ jobs:
         if: steps.cache_yaxt.outputs.cache-hit != 'true'
         run: |
           mkdir yaxt-0.12.1 && cd yaxt-0.12.1
-          curl -s -L https://owncloud.gwdg.de/index.php/s/wWQnb09qZFF4xYY/download | tar xvz --strip-components=1
+          curl -s -L "https://mpimet.files.academiccloud.de/s/NGgBGjDKkTyJonk/download?path=%2F&files=yaxt-gitlab-release-0.12.1.tar.gz" | tar xvz --strip-components=1
           ./configure --without-regard-for-quality --without-example-programs \
             --without-perf-programs --with-pic --prefix=${{ runner.temp }}/yaxt
           make -j 4
@@ -51,7 +51,7 @@ jobs:
         if: steps.cache_yac.outputs.cache-hit != 'true'
         run: |
           mkdir yac-v3.20.2 && cd yac-v3.20.2
-          curl -s -L https://owncloud.gwdg.de/index.php/s/v702ZKLjlHpvTPW/download | tar xvz --strip-components=1
+          curl -s -L "https://mpimet.files.academiccloud.de/s/NGgBGjDKkTyJonk/download?path=%2F&files=yac-v3.20.2.tar.gz" | tar xvz --strip-components=1
           ./configure CFLAGS="-fPIC" CC=mpicc FC=mpif90 --disable-mpi-checks \
             --with-yaxt-root=${{ runner.temp }}/yaxt --prefix=${{ runner.temp }}/yac
           make -j 4
