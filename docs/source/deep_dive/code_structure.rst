@@ -168,7 +168,7 @@ Nevertheless, here is each library in a bit more detail...
     gridbox indexes, super-droplet attributes, moments of the droplet mass distribution,
     thermodynamic state or wind fields. ``observers/sdmmonitor/`` holds special observers that
     "monitor" within the microphysics/motion sub-timestepping routine itself, rather than at the
-    start or end of each time-step, e.g. to record diagnostics of precipitation or
+    start or end of each timestep, e.g. to record diagnostics of precipitation or
     condenstaion/evaporation rates, and then output them to a Zarr dataset.
     See :doc:`microphysics_and_observers` for more information. This library also contains methods
     to output progress to the screen/terminal during a run (``StreamOutObserver``).
