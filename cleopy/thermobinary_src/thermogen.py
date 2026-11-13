@@ -18,10 +18,11 @@ Various ways of generating fields for Temp, Pressure, Qvap and Qcond to read int
 
 import numpy as np
 from scipy import integrate
+
 from .. import cxx2py
+from ..gbxboundariesbinary_src import read_gbxboundaries as rgrid
 from .create_thermodynamics import thermoinputsdict
 from .windsgen import DryAdiabat2DFlowField
-from ..gbxboundariesbinary_src import read_gbxboundaries as rgrid
 
 
 def get_Mrratio_from_constants_filename(constants_filename):
@@ -180,7 +181,7 @@ class Simple2TierRelativeHumidity:
         return rhotilda
 
     def generate_thermo(self, gbxbounds, ndims, ntime):
-        zfulls, xfulls, yfulls = rgrid.fullcoords_forallgridboxes(gbxbounds, ndims)
+        zfulls, _xfulls, _yfulls = rgrid.fullcoords_forallgridboxes(gbxbounds, ndims)
 
         qvap = self.generate_qvap_profile(zfulls)
 
@@ -306,7 +307,7 @@ class DryHydrostaticAdiabatic2TierRelH:
         return DryAdiabat2DFlowField(WMAX, Zlength, Xlength, VVEL, self)
 
     def generate_thermo(self, gbxbounds, ndims, ntime):
-        zfulls, xfulls, yfulls = rgrid.fullcoords_forallgridboxes(gbxbounds, ndims)
+        zfulls, xfulls, _yfulls = rgrid.fullcoords_forallgridboxes(gbxbounds, ndims)
         PRESS, TEMP = self.hydrostatic_adiabatic_thermo(zfulls)
 
         qvap = self.generate_qvap(zfulls, xfulls, PRESS, TEMP)
@@ -361,7 +362,7 @@ class HydrostaticLapseRates:
         """note unit conversion of input lapse rates:
         templapse rate = -dT/dz [K km^-1]  -->  [K m^-1]"""
         temp1 = self.TEMPz0 - self.TEMPlapses[0] / 1000 * z
-        if np.any((temp1 <= 0.0)):
+        if np.any(temp1 <= 0.0):
             raise ValueError("TEMP > 0.0K")
         return temp1
 
@@ -370,7 +371,7 @@ class HydrostaticLapseRates:
         templapse rate = -dT/dz [K km^-1]  -->  [K m^-1]"""
         T_Zbase = self.temp1(self.Zbase)  # TEMP at Zbase
         temp2 = T_Zbase - self.TEMPlapses[1] / 1000 * (z - self.Zbase)
-        if np.any((temp2 <= 0.0)):
+        if np.any(temp2 <= 0.0):
             raise ValueError("TEMP > 0.0K")
         return temp2
 
@@ -400,7 +401,7 @@ class HydrostaticLapseRates:
         else:
             qvap1 = self.qvapz0 - self.qvaplapses[0] / 1e6 * z
 
-        if np.any((qvap1 <= 0.0)):
+        if np.any(qvap1 <= 0.0):
             raise ValueError("TEMP > 0.0K")
         return qvap1
 
@@ -414,7 +415,7 @@ class HydrostaticLapseRates:
             qvap_Zbase = self.qvap1(self.Zbase)  # qvap at Zbase
             qvap2 = qvap_Zbase - self.qvaplapses[1] / 1e6 * (z - self.Zbase)
 
-        if np.any((qvap2 <= 0.0)):
+        if np.any(qvap2 <= 0.0):
             raise ValueError("TEMP > 0.0K")
         return qvap2
 
@@ -449,7 +450,7 @@ class HydrostaticLapseRates:
         return TEMP, PRESS, qvap
 
     def generate_thermo(self, gbxbounds, ndims, ntime):
-        zfulls, xfulls, yfulls = rgrid.fullcoords_forallgridboxes(gbxbounds, ndims)
+        zfulls, _xfulls, _yfulls = rgrid.fullcoords_forallgridboxes(gbxbounds, ndims)
 
         TEMP, PRESS, qvap = self.hydrostatic_lapserates_thermo(zfulls)
 

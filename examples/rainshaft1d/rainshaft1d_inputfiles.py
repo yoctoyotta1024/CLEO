@@ -87,20 +87,21 @@ def main(
     show_figures=False,
     save_figures=False,
 ):
-    import numpy as np
     import random
     from pathlib import Path
+
+    import numpy as np
     from ruamel.yaml import YAML
 
     from cleopy import geninitconds
     from cleopy.initsuperdropsbinary_src import (
+        attrsgen,
         crdgens,
-        rgens,
         dryrgens,
         probdists,
-        attrsgen,
+        rgens,
     )
-    from cleopy.thermobinary_src import thermogen, windsgen, thermodyngen
+    from cleopy.thermobinary_src import thermodyngen, thermogen, windsgen
 
     if path2CLEO == path2build:
         raise ValueError("build directory cannot be CLEO")

@@ -87,19 +87,20 @@ def main(
     show_figures=False,
     save_figures=False,
 ):
-    import numpy as np
     from pathlib import Path
+
+    import numpy as np
     from ruamel.yaml import YAML
 
     from cleopy import geninitconds
     from cleopy.initsuperdropsbinary_src import (
+        attrsgen,
         crdgens,
-        rgens,
         dryrgens,
         probdists,
-        attrsgen,
+        rgens,
     )
-    from cleopy.thermobinary_src import thermogen, thermodyngen
+    from cleopy.thermobinary_src import thermodyngen, thermogen
     from cleopy.thermobinary_src.read_thermodynamics import (
         read_initial_pressure_into_dict,
     )

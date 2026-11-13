@@ -16,7 +16,6 @@ File Description:
 Script to help with generating and plotting input files
 """
 
-
 import matplotlib.pyplot as plt
 
 
@@ -27,7 +26,7 @@ def generate_gridbox_boundaries(
     ygrid,
     constants_filename,
     isprintinfo=False,
-    isfigures=[False, False],
+    isfigures=None,
     savefigpath=None,
     savelabel="",
 ):
@@ -35,6 +34,8 @@ def generate_gridbox_boundaries(
     from .gbxboundariesbinary_src import create_gbxboundaries as cgrid
     from .gbxboundariesbinary_src import read_gbxboundaries as rgrid
 
+    if isfigures is None:
+        isfigures = [False, False]
     cgrid.write_gridboxboundaries_binary(
         grid_filename, zgrid, xgrid, ygrid, constants_filename
     )
@@ -65,7 +66,7 @@ def generate_initial_superdroplet_conditions(
     numconc,
     numconc_tolerance=0.0,
     isprintinfo=False,
-    isfigures=[False, False],
+    isfigures=None,
     savefigpath=None,
     gbxs2plt=0,
     savelabel="",
@@ -74,6 +75,8 @@ def generate_initial_superdroplet_conditions(
     from .initsuperdropsbinary_src import create_initsuperdrops as csupers
     from .initsuperdropsbinary_src import read_initsuperdrops as rsupers
 
+    if isfigures is None:
+        isfigures = [False, False]
     csupers.write_initsuperdrops_binary(
         initsupers_filename,
         initattrsgen,
@@ -113,7 +116,7 @@ def generate_thermodynamics_conditions_fromfile(
     config_filename,
     constants_filename,
     grid_filename,
-    isfigures=[False, False],
+    isfigures=None,
     savefigpath=None,
     savelabel="",
     press_ref=None,
@@ -122,6 +125,8 @@ def generate_thermodynamics_conditions_fromfile(
     from .thermobinary_src import create_thermodynamics as cthermo
     from .thermobinary_src import read_thermodynamics as rthermo
 
+    if isfigures is None:
+        isfigures = [False, False]
     cthermo.write_thermodynamics_binary(
         thermofiles,
         thermodyngen,

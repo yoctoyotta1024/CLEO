@@ -78,18 +78,21 @@ def initial_superdroplet_conditions_for_setup(
     radiigen,
     xiprobdist,
     numconc,
-    isfigures=[False, False],
+    isfigures=None,
     savefigpath=None,
     savelabel="",
     gbxs2plt="all",
 ):
     from pathlib import Path
+
     from ruamel.yaml import YAML
 
     from cleopy import geninitconds
-    from cleopy.initsuperdropsbinary_src import rgens, attrsgen
+    from cleopy.initsuperdropsbinary_src import attrsgen, rgens
 
     ### --- Load the config YAML file --- ###
+    if isfigures is None:
+        isfigures = [False, False]
     yaml = YAML()
     with open(config_filename, "r") as file:
         config = yaml.load(file)
@@ -139,11 +142,12 @@ def main(
     show_figures=False,
     save_figures=False,
 ):
-    import numpy as np
     from pathlib import Path
-    from ruamel.yaml import YAML
 
     import attrgens_shima2009
+    import numpy as np
+    from ruamel.yaml import YAML
+
     from cleopy import geninitconds
 
     if path2CLEO == path2build:

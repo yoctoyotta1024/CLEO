@@ -119,9 +119,9 @@ class CleoSDM:
         self.cleo = cleo
 
         tsteps = cleo.pycreate_timesteps(cleo_config)
-        assert (
-            cleo.realtime2step(timestep) == tsteps.get_couplstep()
-        ), "timestep and SDM coupling not equal"
+        assert cleo.realtime2step(timestep) == tsteps.get_couplstep(), (
+            "timestep and SDM coupling not equal"
+        )
 
         self.t_sdm = cleo.realtime2step(
             t_start
@@ -151,9 +151,9 @@ class CleoSDM:
             timestep
         )  # convert from seconds to model timesteps (!)
         t_mdl_next = self.t_sdm + timestep
-        assert t_mdl_next == self.sdm.next_couplstep(
-            self.t_sdm
-        ), "SDM out of sync with coupling"
+        assert t_mdl_next == self.sdm.next_couplstep(self.t_sdm), (
+            "SDM out of sync with coupling"
+        )
 
         print(f"CLEO STATUS: start t_sdm = {self.t_sdm} [model timesteps]")
         while self.t_sdm < t_mdl_next:

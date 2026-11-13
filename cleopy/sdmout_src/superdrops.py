@@ -17,14 +17,13 @@ python class(es) to handle superdroplet attributes data from SDM zarr store in r
 Non-compatible update on supersdata and sdtracing modules
 """
 
+import random
+import warnings
+from pathlib import Path
 
 import awkward as ak
 import numpy as np
-import random
-import warnings
 import xarray as xr
-
-from pathlib import Path
 
 
 class SuperdropProperties:
@@ -144,11 +143,7 @@ class Superdrops(SuperdropProperties):
             self._raw_data = dataset._raw_data
             self._units = dataset._units
 
-        elif (
-            isinstance(dataset, xr.Dataset)
-            or isinstance(dataset, str)
-            or isinstance(dataset, Path)
-        ):
+        elif isinstance(dataset, (xr.Dataset, str, Path)):
             if consts is not None:
                 SuperdropProperties.__init__(self, consts, is_print=is_print)
             else:
@@ -179,10 +174,10 @@ class Superdrops(SuperdropProperties):
                 "coord2_units": self.tryunits(ds, "coord2"),  # probably meters
             }
         else:
-            raise ValueError("unknow type of dataset to make superdroplets from")
+            raise TypeError("unknow type of dataset to make superdroplets from")
 
     def tryopen_dataset(self, dataset: Path):
-        if isinstance(dataset, str) or isinstance(dataset, Path):
+        if isinstance(dataset, (str, Path)):
             print("supers dataset: ", dataset)
             return xr.open_dataset(dataset, engine="zarr", consolidated=False)
         else:
@@ -410,12 +405,12 @@ class Superdrops(SuperdropProperties):
         if len(time) == ak.count(time):  # time is 1-D array
             time_indexes = []
             for t in times2select:
-                idx = ak.argmin(abs((time - t)))
+                idx = ak.argmin(abs(time - t))
                 time_indexes.append(idx)
         else:  # time assumed to be ragged array like superdrops data
             time_indexes = []
             for t in times2select:
-                idx = ak.nanargmin(abs((time - t)), axis=0)[0]
+                idx = ak.nanargmin(abs(time - t), axis=0)[0]
                 time_indexes.append(idx)
 
         return time_indexes

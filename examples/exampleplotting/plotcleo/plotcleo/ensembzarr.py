@@ -17,14 +17,14 @@ File Description:
 functions to write a new zarr dataset and setuptxt file for an ensemble of datasets
 """
 
-
 import shutil
 import sys
+
 import numpy as np
 import zarr
 
-from ....cleopy.sdmout_src import pyzarr
 from ....cleopy import editconfigfile
+from ....cleopy.sdmout_src import pyzarr
 
 
 def write_ensemble_info(ensembsetupfile, setupfile, datasets):

@@ -17,10 +17,10 @@ functions to create 1D or 2D animations
 of some output from CLEO e.g. mass moments
 """
 
-import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
+import numpy as np
 from matplotlib import animation
+from matplotlib.animation import FuncAnimation
 from matplotlib.cm import ScalarMappable
 
 
@@ -29,7 +29,7 @@ def animate_me(
 ):
     print("making animation")
     ani = FuncAnimation(
-        fig, update_frame, frames=range(0, frames), init_func=plot_init, fargs=fargs
+        fig, update_frame, frames=range(frames), init_func=plot_init, fargs=fargs
     )
 
     if saveani:
@@ -48,12 +48,14 @@ def animate1dprofile(
     timemins,
     nframes,
     xlabel=None,
-    xlims=[None, None],
+    xlims=None,
     color="black",
     saveani=False,
     savename=None,
     fps=10,
 ):
+    if xlims is None:
+        xlims = [None, None]
     fig, ax, plots, txt, zkm = prepare_1dprofile(
         gbxs, mom, timemins, xlabel, color=color
     )
@@ -69,7 +71,7 @@ def animate1dprofile(
 
         ax.set_xlim([xlims[0], xlims[1] * 1.1])
         xticks = np.linspace(xlims[0], xlims[1], 3)
-        xticklabels = xticklabels = ["{:.1f}".format(x) for x in xticks]
+        xticklabels = [f"{x:.1f}" for x in xticks]
         ax.set_xticks(xticks, xticklabels, fontsize=16)
 
         ax.tick_params(length=10, width=1)
@@ -101,7 +103,7 @@ def prepare_1dprofile(gbxs, massmom, timemins, xlabel, color):
     f = 0
     plots = ax.plot(massmom[f], zkm, color=color)[0]
 
-    timetext = "t = {:.0f}min".format(timemins[f])
+    timetext = f"t = {timemins[f]:.0f}min"
     txt = fig.text(0.7, 0.875, timetext, fontsize=16)
 
     ax.set_ylabel("z /km", fontsize=16)
@@ -115,7 +117,7 @@ def prepare_1dprofile(gbxs, massmom, timemins, xlabel, color):
 def update_1dprofileframe(f, plots, txt, zkm, timemins, massmom):
     plots.set_data(massmom[f], zkm)
 
-    timetext = "t = {:.0f}min".format(timemins[f])
+    timetext = f"t = {timemins[f]:.0f}min"
     txt.set_text(timetext)
 
     return (
@@ -177,7 +179,7 @@ def prepare_2dplot(gbxs, massmom, timemins, cmap, cmapnorm):
         gbxs["xxh"] / 1000, gbxs["zzh"] / 1000, data2d, cmap=cmap, norm=cmapnorm
     )
     plot.cmap.set_under("w")
-    timetext = "t = {:.0f}min".format(timemins[f])
+    timetext = f"t = {timemins[f]:.0f}min"
     txt = fig.text(0.765, 0.925, timetext, fontsize=16, ha="right")
 
     cbar = fig.colorbar(ScalarMappable(norm=cmapnorm, cmap=cmap), ax=ax, extend="both")
@@ -193,7 +195,7 @@ def prepare_2dplot(gbxs, massmom, timemins, cmap, cmapnorm):
 def update_2dcmapframe(f, plot, txt, timemins, massmom):
     plot.set_array(np.array(massmom[f, :, :]).ravel())
 
-    timetext = "t = {:.0f}min".format(timemins[f])
+    timetext = f"t = {timemins[f]:.0f}min"
     txt.set_text(timetext)
 
     return plot, txt

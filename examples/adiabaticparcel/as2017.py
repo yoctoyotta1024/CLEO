@@ -26,6 +26,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+
 from ruamel.yaml import YAML
 
 # %%
@@ -273,11 +274,11 @@ if args.do_inputfiles:
         )
 
 if args.do_run_executable:
-    cfs = list([cfgs[0] for cfgs in run_configs.values()])
+    cfs = [cfgs[0] for cfgs in run_configs.values()]
     for config_filename in cfs:
         run_exectuable(path2build, config_filename)
 
 if args.do_plot_results:
     runnums = list(run_configs.keys())
-    cfs = list([cfgs[0] for cfgs in run_configs.values()])
+    cfs = [cfgs[0] for cfgs in run_configs.values()]
     plot_results(path2CLEO, savefigpath, cfs, runnums)

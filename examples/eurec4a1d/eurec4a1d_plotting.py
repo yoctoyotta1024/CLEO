@@ -148,9 +148,9 @@ def main(
     dataset,
 ):
     import matplotlib.pyplot as plt
+    from plotcleo import pltmoms, pltsds
 
-    from plotcleo import pltsds, pltmoms
-    from cleopy.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
+    from cleopy.sdmout_src import pygbxsdat, pysetuptxt, pyzarr
 
     # read in constants and intial setup from setup .txt file
     config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)

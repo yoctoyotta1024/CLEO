@@ -14,6 +14,7 @@ https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
 """
+
 import importlib.metadata
 
 try:
