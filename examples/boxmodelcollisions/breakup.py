@@ -25,6 +25,7 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+
 from ruamel.yaml import YAML
 
 # %%
@@ -255,5 +256,5 @@ for kernel, [config_filename, config_params] in kernel_configs.items():
 
 if args.do_plot_results:
     kernels2plot = list(kernel_configs.keys())
-    config_filenames2plot = list([cfgs[0] for cfgs in kernel_configs.values()])
+    config_filenames2plot = [cfgs[0] for cfgs in kernel_configs.values()]
     plot_results(path2CLEO, savefigpath, kernels2plot, config_filenames2plot)

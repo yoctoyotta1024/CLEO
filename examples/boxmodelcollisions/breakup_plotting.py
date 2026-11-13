@@ -82,7 +82,7 @@ def parse_arguments():
 
 def get_results(path2CLEO, setupfile, dataset):
     """read in time, superdrops and setup for given dataset and setupfile"""
-    from cleopy.sdmout_src import pyzarr, pysetuptxt
+    from cleopy.sdmout_src import pysetuptxt, pyzarr
 
     # read in constants and intial setup from setup .txt file
     config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
@@ -105,8 +105,8 @@ def plot_onekernel_results(
     savename,
 ):
     import matplotlib.pyplot as plt
-
     from plotcleo import shima2009fig
+
     from cleopy.sdmout_src import pygbxsdat
 
     # read in data
@@ -143,8 +143,8 @@ def plot_allkernels_results(
 ):
     import awkward as ak
     import matplotlib.pyplot as plt
-
     from plotcleo import shima2009fig
+
     from cleopy.sdmout_src import pygbxsdat
 
     def blank_axis(ax, xlims, ylims):
@@ -197,7 +197,7 @@ def plot_allkernels_results(
             )
             if ker == "long":
                 t = superdrops_timeslice.time()[n]
-                tlab = "t = {:.2f}".format(t) + superdrops_timeslice.time_units()
+                tlab = f"t = {t:.2f}" + superdrops_timeslice.time_units()
                 ax2.plot(
                     hcens,
                     hist,
@@ -238,9 +238,9 @@ def plot_allkernels_results(
 
 
 def main(path2CLEO, savefigpath, grid_filename, setupfiles, datasets, kernels):
-    assert len(setupfiles) == len(datasets) and len(kernels) == len(
-        datasets
-    ), "number of items in lists of setupfiles, datasets and kernels should be equal"
+    assert len(setupfiles) == len(datasets) and len(kernels) == len(datasets), (
+        "number of items in lists of setupfiles, datasets and kernels should be equal"
+    )
 
     for ker, set, dat in zip(kernels, setupfiles, datasets):
         t2plts = [0, 600, 1200, 1800, 2400]

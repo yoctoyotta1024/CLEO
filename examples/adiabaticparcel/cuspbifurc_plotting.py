@@ -82,11 +82,11 @@ def main(
     setupfile,
     dataset,
 ):
-    import numpy as np
     import matplotlib.pyplot as plt
+    import numpy as np
+    from plotcleo import as2017fig, pltsds
 
-    from plotcleo import pltsds, as2017fig
-    from cleopy.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
+    from cleopy.sdmout_src import pygbxsdat, pysetuptxt, pyzarr
 
     ### load results
     # read in constants and intial setup from setup .txt file

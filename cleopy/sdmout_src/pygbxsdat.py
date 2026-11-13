@@ -17,8 +17,9 @@ boudnaries binary inputs files
 """
 
 import numpy as np
-from ..gbxboundariesbinary_src import read_gbxboundaries as rgrid
+
 from ..cxx2py import print_dict_statement
+from ..gbxboundariesbinary_src import read_gbxboundaries as rgrid
 
 
 def get_gridboxes(grid_filename, COORD0, isprint=True):

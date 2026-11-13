@@ -17,8 +17,11 @@ binary file for input to CLEO SDM
 """
 
 import argparse
-import numpy as np
 from pathlib import Path
+
+import numpy as np
+
+from cleopy import geninitconds
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
@@ -30,7 +33,6 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
-from cleopy import geninitconds
 
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### absolute or relative paths for build and CLEO directories

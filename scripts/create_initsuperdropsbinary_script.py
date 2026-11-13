@@ -18,6 +18,10 @@ initial superdroplet conditions to read into CLEO SDM
 
 import argparse
 from pathlib import Path
+
+from cleopy import geninitconds
+from cleopy.initsuperdropsbinary_src import attrsgen, crdgens, probdists, rgens
+
 # import numpy as np
 
 parser = argparse.ArgumentParser()
@@ -30,8 +34,6 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
-from cleopy import geninitconds
-from cleopy.initsuperdropsbinary_src import rgens, probdists, attrsgen, crdgens
 
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### --- absolute or relative paths for --- ###

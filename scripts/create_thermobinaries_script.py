@@ -20,6 +20,9 @@ for the dynamics to read into CLEO when using a from file data for coupled dynam
 import argparse
 from pathlib import Path
 
+from cleopy import geninitconds
+from cleopy.thermobinary_src import thermodyngen, thermogen, windsgen
+
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "path2CLEO", type=Path, help="Absolute path to CLEO directory (for cleopy)"
@@ -30,8 +33,6 @@ parser.add_argument(
 )
 args = parser.parse_args()
 
-from cleopy import geninitconds
-from cleopy.thermobinary_src import thermogen, windsgen, thermodyngen
 
 ### ----------------------- INPUT PARAMETERS ----------------------- ###
 ### --- absolute or relative paths for --- ###

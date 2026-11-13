@@ -16,9 +16,9 @@ functions for plotting similar to
 figure 2(a) from Shima et al. 2009
 """
 
-import numpy as np
 import awkward as ak
 import matplotlib.pyplot as plt
+import numpy as np
 from scipy.special import iv
 
 from .pltdist import logr_distribution
@@ -33,10 +33,12 @@ def plot_validation_figure(
     n_a,
     r_a,
     smoothsig,
-    xlims=[10, 5000],
+    xlims=None,
     savename="",
     withgol=False,
 ):
+    if xlims is None:
+        xlims = [10, 5000]
     variables2slice = ["time", "radius", "xi"]
     superdrops_timeslice = superdrops.time_slice(
         t2plts, variables2slice, attach_time=True, time=time.secs, time_units="s"
@@ -50,7 +52,7 @@ def plot_validation_figure(
 
     for n in range(len(superdrops_timeslice.time())):
         t = superdrops_timeslice.time()[n]
-        tlab = "t = {:.2f}".format(t) + superdrops_timeslice.time_units()
+        tlab = f"t = {t:.2f}" + superdrops_timeslice.time_units()
         c = "C" + str(n)
 
         if withgol:
@@ -90,7 +92,7 @@ def plot_validation_figure(
 
 def setup_validation_figure(witherr, xlims):
     if witherr:
-        gd = dict(height_ratios=[5, 1])
+        gd = {"height_ratios": [5, 1]}
         fig, [ax, ax_err] = plt.subplots(
             ncols=1, nrows=2, figsize=(8, 7), gridspec_kw=gd
         )
@@ -99,7 +101,7 @@ def setup_validation_figure(witherr, xlims):
 
     ax.set_xscale("log")
     ax.set_xlim(xlims)
-    ax.set_xlabel("radius, r, /\u03BCm")
+    ax.set_xlabel("radius, r, /\u03bcm")
 
     ax.set_ylabel("mass density distribution,\n g(lnR) /g m$^{-3}$ / unit lnR")
     ax.set_ylim([0, 1.8])
@@ -107,7 +109,7 @@ def setup_validation_figure(witherr, xlims):
     if witherr:
         ax_err.set_xscale("log")
         ax_err.set_xlim(xlims)
-        ax_err.set_xlabel("radius, r, /\u03BCm")
+        ax_err.set_xlabel("radius, r, /\u03bcm")
         ax.set_xlabel(None)
         ax.set_xticklabels([])
 
@@ -168,7 +170,7 @@ def calc_massdens_distrib(rspan, nbins, domainvol, xi, radius, superdrops, smoot
     )  # superdrops mass as if water [g]
     weights = xi * m_asif_water * 1000 / domainvol  # real droplets [g/m^3]
 
-    hist, hedges, hcens = logr_distribution(
+    hist, _hedges, hcens = logr_distribution(
         rspan, nbins, radius, weights, perlogR=True, smooth=smoothsig
     )
 

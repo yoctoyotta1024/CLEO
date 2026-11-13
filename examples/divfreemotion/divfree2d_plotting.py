@@ -67,9 +67,9 @@ def main(
     dataset,
 ):
     import matplotlib.pyplot as plt
+    from plotcleo import pltmoms, pltsds
 
-    from plotcleo import pltsds, pltmoms
-    from cleopy.sdmout_src import pyzarr, pysetuptxt
+    from cleopy.sdmout_src import pysetuptxt, pyzarr
 
     # read in constants and dataset
     consts = pysetuptxt.get_consts(setupfile, isprint=True)

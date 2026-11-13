@@ -16,12 +16,13 @@ File Description:
 """
 
 # %%
-import awkward as ak
-import matplotlib.pyplot as plt
 from pathlib import Path
 
-from cleopy.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
-from plotcleo.plotcleo import pltsds, pltdist
+import awkward as ak
+import matplotlib.pyplot as plt
+from plotcleo.plotcleo import pltdist, pltsds
+
+from cleopy.sdmout_src import pygbxsdat, pysetuptxt, pyzarr
 
 # %%
 ### ---------------------- input parameters ------------------------ ###

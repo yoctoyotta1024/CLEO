@@ -67,11 +67,11 @@ def main(
     setupfile,
     dataset,
 ):
-    import numpy as np
     import matplotlib.pyplot as plt
+    import numpy as np
+    from plotcleo import animations, pltmoms, pltsds
 
-    from plotcleo import pltsds, pltmoms, animations
-    from cleopy.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
+    from cleopy.sdmout_src import pygbxsdat, pysetuptxt, pyzarr
 
     # read in constants and intial setup from setup .txt file
     config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)

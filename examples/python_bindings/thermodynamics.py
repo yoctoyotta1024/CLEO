@@ -17,8 +17,9 @@ File copied from git@github.com:yoctoyotta1024/microphysics_testcases.git v0.7.2
 to use as example of pythonic version of thermodynamics which CLEO can couple to
 """
 
-import numpy as np
 from copy import deepcopy
+
+import numpy as np
 
 
 class Thermodynamics:

@@ -21,15 +21,15 @@ It is recommended to check that e.g. assets are included.
 from cleopy import (
     cxx2py,
     editconfigfile,
+    gbxboundariesbinary_src,
     geninitconds,
+    initsuperdropsbinary_src,
     readbinary,
     readconfigfile,
+    sdmout_src,
+    thermobinary_src,
     writebinary,
 )
-import cleopy.gbxboundariesbinary_src as gbxboundariesbinary_src
-import cleopy.initsuperdropsbinary_src as initsuperdropsbinary_src
-import cleopy.sdmout_src as sdmout_src
-import cleopy.thermobinary_src as thermobinary_src
 
 
 def test_import():

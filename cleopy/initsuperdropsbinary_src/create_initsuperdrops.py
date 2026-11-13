@@ -15,8 +15,10 @@ https://opensource.org/licenses/BSD-3-Clause
 File Description:
 """
 
-import numpy as np
 from os.path import isfile
+
+import numpy as np
+
 from .. import cxx2py, readconfigfile, writebinary
 from ..gbxboundariesbinary_src.read_gbxboundaries import (
     read_dimless_gbxboundaries_binary,
@@ -241,7 +243,7 @@ def check_datashape(data, ndata, nspacedims):
     attributes and superdroplets expected given ndata"""
 
     err = ""
-    if any([n != ndata[0] for n in ndata[: 4 + nspacedims]]):
+    if any(n != ndata[0] for n in ndata[: 4 + nspacedims]):
         err += (
             "\n------ ERROR! -----\n"
             + "not all variables in data are same length, ndata = "
@@ -268,7 +270,7 @@ def check_datashape(data, ndata, nspacedims):
 def nsupers_pergridboxdict(nsupers, gbxbounds):
     if isinstance(nsupers, int):
         nsupersdict = {}
-        for key in gbxbounds.keys():
+        for key in gbxbounds:
             nsupersdict[key] = nsupers
         return nsupersdict
 
@@ -281,7 +283,7 @@ def nsupers_pergridboxdict(nsupers, gbxbounds):
 
     else:
         errmsg = "nsupers must be either dict or int"
-        raise ValueError(errmsg)
+        raise TypeError(errmsg)
 
 
 def write_initsuperdrops_binary(

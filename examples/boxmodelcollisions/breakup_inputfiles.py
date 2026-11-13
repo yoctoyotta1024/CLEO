@@ -90,12 +90,13 @@ def main(
     show_figures=False,
     save_figures=False,
 ):
-    import numpy as np
     from pathlib import Path
+
+    import numpy as np
     from ruamel.yaml import YAML
 
     from cleopy import geninitconds
-    from cleopy.initsuperdropsbinary_src import rgens, probdists, attrsgen
+    from cleopy.initsuperdropsbinary_src import attrsgen, probdists, rgens
 
     if path2CLEO == path2build:
         raise ValueError("build directory cannot be CLEO")
