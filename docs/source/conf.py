@@ -58,6 +58,9 @@ extensions = [
     "sphinx_design",
 ]
 
+# copy buttons on code blocks: don't copy the console prompts ("$ "), only the commands
+copybutton_exclude = ".linenos, .gp"
+
 # configuration of citations using bibtex file(s)
 bibtex_bibfiles = ["./references.bib"]
 bibtex_reference_style = "label"
