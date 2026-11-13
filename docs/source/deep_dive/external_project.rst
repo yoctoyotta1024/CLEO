@@ -1,149 +1,234 @@
 .. _external_project:
 
-Using Cleo as a Dependency in an External Project
-=====================================================
+Using Cleo in an External Project
+===================================
 
-.. admonition:: Ground-truth gap
-   :class: warning
+This page covers two ways to use Cleo as a dependency in an external project.
 
-   As of the code inspected for this documentation, Cleo's top-level ``CMakeLists.txt`` and
-   ``libs/CMakeLists.txt`` do not define any ``install()`` rules or export a
-   ``CLEOConfig.cmake``/``find_package(CLEO)`` package. This means Cleo cannot currently be
-   consumed the way you'd consume, say, a system-installed library with
-   ``find_package(SomeLib REQUIRED)``. What follows describes the integration route that *is*
-   supported today — building Cleo's source tree as a CMake subdirectory of your own project,
-   the same way Cleo's own top-level ``CMakeLists.txt`` builds ``examples/`` and ``roughpaper/``
-   as subdirectories of itself — and flags where you would need to extend Cleo's build system
-   (adding ``install()``/export rules) if you want true "linked external library" style
-   packaging instead. If you need that and it doesn't exist yet, please
-   :ref:`contact us <contact>` or open an issue.
+.. note::
+   This page assumes you've already read the installation and dependencies documentation for
+   building Cleo itself (compiler, CMake, Kokkos, and MPI requirements) — the same requirements
+   apply when building Cleo as a dependency of your own project, since you are compiling exactly
+   the same Cleo source code either way.
 
-Fetching Cleo
-----------------
+Currently, Cleo's top-level ``CMakeLists.txt`` does not define any ``install()`` rules or export a
+``CLEOConfig.cmake`` / ``find_package(CLEO)`` package. This means Cleo cannot currently be used in
+the way you might recognise, e.g. for a system-installed library, with ``find_package(SomeLib REQUIRED)``.
+Instead, you build Cleo's libraries *as part of* your own project — the same way Cleo does for
+``Kokkos`` and ``yaml-cpp``, by pointing ``add_subdirectory()`` to a fetched, or cloned, checkout
+of their source code (see the ``CLEO/extern`` directory).
 
-Add Cleo as a Git submodule of your project (this also pins a specific version/commit, which is
-recommended given Cleo is under active development):
+There are two equivalent ways to get a copy of Cleo's source into your project so you can
+``add_subdirectory()`` it: a local clone/submodule, or CMake's ``FetchContent`` module to clone it
+automatically. Both end up doing the same thing — making Cleo's library targets (defined in
+``libs/CMakeLists.txt``) available for your executable to link against.
+
+Option A: Local Clone or Git Submodule
+---------------------------------------
+
+Clone Cleo (or add it as a ``git submodule``) somewhere inside your own project's repository, then
+point ``add_subdirectory()`` at it from your project's top-level ``CMakeLists.txt``, exactly as
+Cleo's own outermost ``CMakeLists.txt`` does for ``extern/kokkos`` and ``extern/yaml-cpp``:
 
 .. code-block:: console
 
-  $ git submodule add https://github.com/yoctoyotta1024/CLEO.git extern/CLEO
-  $ git -C extern/CLEO checkout <tag-or-commit>
-  $ git submodule update --init --recursive
+   ### from the root of your own project's repository
+   git submodule add https://github.com/yoctoyotta1024/CLEO.git extern/CLEO
+   git submodule update --init --recursive
 
-Alternatively, use CMake's ``FetchContent`` to pull Cleo directly in your ``CMakeLists.txt``
-(shown in the next section) instead of using a submodule — either works, since both end up
-giving CMake a path to Cleo's source tree.
-
-Building Against Cleo from an External CMake Project
----------------------------------------------------------
-
-Because Cleo has no installable package, the working pattern is: bring Cleo's source tree into
-your build with ``add_subdirectory`` (or ``FetchContent_MakeAvailable``, which does the same
-thing after downloading), exactly as Cleo's own top-level ``CMakeLists.txt`` does for its
-``libs/`` directory. A minimal external project's ``CMakeLists.txt``:
 
 .. code-block:: cmake
 
-    cmake_minimum_required(VERSION 3.18.0)
-    project(myclimateapp LANGUAGES CXX C)
+   # in your top-level CMakeLists.txt
+   add_subdirectory(extern/CLEO)
 
-    find_package(MPI REQUIRED COMPONENTS C)   # Cleo's own CMakeLists.txt also requires this
+.. tip::
+   Pin the version by checking out a specific tag or commit inside the submodule (``cd extern/CLEO &&
+   git checkout <tag_or_commit>``) and committing that submodule reference, so anyone who clones your
+   project gets the same Cleo version you built and tested against.
 
-    # Option A: submodule already present in extern/CLEO
-    set(CLEO_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/extern/CLEO)
-    set(CLEO_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/CLEO)
-    set(CLEO_NO_EXAMPLES true)      # don't build Cleo's own examples as part of your build
-    set(CLEO_NO_ROUGHPAPER true)    # don't build Cleo's roughpaper scratch executable either
-    add_subdirectory(${CLEO_SOURCE_DIR} ${CLEO_BINARY_DIR})
+Option B: FetchContent
+------------------------
 
-    # Option B (alternative to A): fetch Cleo instead of vendoring it as a submodule
-    # include(FetchContent)
-    # FetchContent_Declare(cleo
-    #   GIT_REPOSITORY https://github.com/yoctoyotta1024/CLEO.git
-    #   GIT_TAG <tag-or-commit>)
-    # set(CLEO_NO_EXAMPLES true)
-    # set(CLEO_NO_ROUGHPAPER true)
-    # FetchContent_MakeAvailable(cleo)
-    # # FetchContent_MakeAvailable sets cleo_SOURCE_DIR / cleo_BINARY_DIR for you;
-    # # Cleo's own CMakeLists.txt still expects CLEO_SOURCE_DIR / CLEO_BINARY_DIR to be set:
-    # set(CLEO_SOURCE_DIR ${cleo_SOURCE_DIR})
-    # set(CLEO_BINARY_DIR ${cleo_binary_dir})
+Alternatively, do exactly what Cleo does to install Kokkos and yaml-cpp. Let CMake fetch Cleo for
+you at configure time, with no manual clone or submodule bookkeeping, using the ``FetchContent``
+module. Inside your ``extern/CLEO`` directory, rather than keeping a full-clone of CLEO, have a
+single ``CMakeLists.txt`` with the following contents:
 
-    add_executable(myapp src/main.cpp)
+.. code-block:: cmake
 
-    # link exactly as Cleo's own examples do (see examples/rainshaft1d/src/CMakeLists.txt) -
-    # pick the CLEOLIBS + coupled-dynamics/domain libraries your code actually uses
-    set(CLEOLIBS configuration gridboxes initialise observers runcleo superdrops zarr)
-    target_link_libraries(myapp PRIVATE coupldyn_fromfile cartesiandomain "${CLEOLIBS}")
-    target_link_libraries(myapp PUBLIC Kokkos::kokkos)
-    target_include_directories(myapp PRIVATE "${CLEO_SOURCE_DIR}/libs")
+   # set cmake version
+   if(NOT DEFINED CMAKE_MINIMUM_REQUIRED_VERSION)
+      cmake_minimum_required(VERSION 3.18.0)
+   endif()
 
-    set_target_properties(myapp PROPERTIES
-      CMAKE_CXX_STANDARD_REQUIRED ON CMAKE_CXX_EXTENSIONS ON CXX_STANDARD 20)
+   include(FetchContent)
+   FetchContent_Declare(
+     CLEO
+     DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+     GIT_REPOSITORY https://github.com/yoctoyotta1024/CLEO.git
+     GIT_TAG        <tag_or_commit>   # pin a specific released version or commit
+   )
+   FetchContent_MakeAvailable(CLEO)
 
-Then configure and build your project the same way you would configure Cleo itself (see
-:doc:`../usage/installation/installation` and :doc:`../usage/installation/extern` for compiler,
-MPI, and optional-dependency requirements — YAC/YAXT, CVODE, or pybind11, only if your chosen
-Cleo libraries need them):
+   message(STATUS "CLEO installation in: ${CMAKE_CURRENT_BINARY_DIR}")
 
-.. code-block:: console
+.. tip::
+   ``GIT_TAG`` lets you pin the Cleo version you want to use — set it to a specific tag or
+   commit, never to a moving branch name like ``main``, so your build is reproducible.
 
-  $ cmake -S . -B build -DCMAKE_CXX_COMPILER=mpic++ -DCMAKE_C_COMPILER=mpicc \
-      -DKokkos_ARCH_NATIVE=ON -DKokkos_ENABLE_SERIAL=ON -DCLEO_COUPLED_DYNAMICS=fromfile
-  $ cmake --build build --target myapp
 
-Toolchain and Dependency Minimums
--------------------------------------
+What's Made Available
+----------------------
 
-Carried over from :doc:`../usage/installation/requirements`:
+Both of the above options gives you the same thing: during your project's build configuration,
+Cleo's outermost ``CMakeLists.txt`` will be run. In turn this will run the  ``CMakeLists.txt``
+files in ``libs``, ``extern``, ``examples``, etc. to define all of Cleo's library and
+executable targets for you to link against.
 
-* CMake >= 3.18.0
-* A C++ compiler with C++20 support, plus MPI (``find_package(MPI REQUIRED COMPONENTS C)``)
-* Kokkos and yaml-cpp are built automatically by Cleo's own ``CMakeLists.txt`` from
-  ``extern/kokkos``/``extern/yaml-cpp`` when you ``add_subdirectory`` it — you do not need to
-  install these yourself.
-* YAC/YAXT (only if you link ``coupldyn_yac``), CVODE (only if you link ``coupldyn_cvode``), and
-  pybind11 (only if you build ``cleo_python_bindings``) must be installed separately — see
-  :doc:`../usage/installation/extern`.
+If you want to exclude some of Cleo's targets from your configuration (e.g. those in Cleo's examples,
+roughpaper, or certain libraries) you can pass Cleo's CMake flags just like you would when you
+build Cleo standalone. Most likely, you will want to pass ``-DCLEO_NO_ROUGHPAPER=true``
+and ``-DCLEO_NO_EXAMPLES=true``, since you probably don't need Cleo's own executables, only its
+libraries. See :ref:`cleo_cmake_flags` for more information.
+
+
+Linking Cleo's Libraries For your Executable
+---------------------------------------------
+
+The following library targets are always built for you to link against:
+- ``configuration``
+- ``initialise``
+- ``superdrops``
+- ``gridboxes``
+- ``runcleo``
+- ``observers``
+- ``zarr``
+
+Depending on the CMake flags you pass for ``CLEO_DOMAIN``, ``CLEO_COUPLED_DYNAMICS`` and
+``CLEO_NO_PYBINDINGS`` (see :ref:`cleo_cmake_flags`), the following targets may also be built:
+- ``cartesiandomain``
+- ``coupldyn_cvode``
+- ``coupldyn_fromfile``
+- ``coupldyn_yac``
+- ``cleo_python_bindings``
+
+A minimal external executable links against all of Cleo's library targets which it uses in its own
+source code. E.g. via `target_link_libraries(your_executable PRIVATE configuration initialise [...])``.
+The worked example below shows how this can be done for one domain and one coupled-dynamics choice.
+
+.. caution::
+   **Common Pitfall:** forgetting to list one of these targets in your executable's
+   ``target_link_libraries()`` produces undefined-reference linker errors for the symbols that
+   library provides, not a configure-time error — since ``EXCLUDE_FROM_ALL`` targets are silently
+   skipped until something references them. If you get undefined-reference errors at link time,
+   check whether the missing symbol belongs to one of the domain/coupled-dynamics libraries above.
+
+Worked Example: an External Project's ``CMakeLists.txt``
+-------------------------------------------------------------
+
+A minimal external project with one executable, ``my_cleo_app.cpp``, that includes Cleo headers
+and links against Cleo's libraries, using the local-clone/submodule approach from Option A:
+
+.. code-block:: cmake
+
+   cmake_minimum_required(VERSION 3.18.0)
+
+   project(your_executable LANGUAGES CXX C)
+
+   set(CMAKE_CXX_STANDARD 20)
+   set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+   # skip Cleo's own examples/roughpaper/py-bindings; we only want its libraries
+   set(CLEO_NO_EXAMPLES ON)
+   set(CLEO_NO_ROUGHPAPER ON)
+   set(CLEO_NO_PYBINDINGS ON)
+
+   # choose which of Cleo's optional libraries to build
+   set(CLEO_DOMAIN "cartesian")
+   set(CLEO_COUPLED_DYNAMICS "fromfile")
+
+   # pull in Cleo's own CMakeLists.txt (either through clone or FetchContent; Option A/B above)
+   add_subdirectory(extern/CLEO)
+
+   add_executable(your_executable your_executable.cpp)
+   target_link_libraries(your_executable PRIVATE
+     configuration
+     initialise
+     superdrops
+     gridboxes
+     runcleo
+     zarr
+     observers
+     cartesiandomain
+     coupldyn_fromfile
+   )
+
+Annotated, block by block:
+
+1. ``cmake_minimum_required``/``project``: your own project's usual boilerplate; the CMake version
+   must still satisfy Cleo's own ``cmake_minimum_required(VERSION 3.18.0)``.
+2. ``CMAKE_CXX_STANDARD 20``: set *before* ``add_subdirectory(extern/CLEO)``, so your own sources
+   and Cleo's are compiled with the same C++ standard — Cleo sets this itself for its own targets,
+   but setting it in your own project too keeps your sources consistent with it.
+3. The three ``CLEO_NO_*`` variables: skip configuring parts of Cleo you don't need as a dependency
+   (Cleo's own examples, roughpaper, and Python bindings).
+4. ``CLEO_DOMAIN``/``CLEO_COUPLED_DYNAMICS``: choose which optional libraries get configured — here,
+   the Cartesian domain and the from-file coupled dynamics (see :doc:`code_structure`
+   for what these mean and how to pick between them).
+5. ``add_subdirectory(extern/CLEO)``: through either option A or option B above, runs Cleo's
+   top-level ``CMakeLists.txt`` (and therefore ``libs/CMakeLists.txt``) as part of your own
+   project's configure step — this is what actually defines all Cleo's library targets listed below.
+6. ``add_executable``/``target_link_libraries``: your own executable, linked against every Cleo
+   library target it needs — the seven "always built" targets, plus ``cartesiandomain`` and
+   ``coupldyn_fromfile``, which match the options set in step 4.
+
 
 Common Pitfalls
--------------------
+-----------------
 
-.. admonition:: Version mismatches
-   :class: warning
+Often people struggle to pass the correct flags (for Kokkos, MPI, YAC etc.) to configure their
+project with Cleo. To avoid this, we reccomend following similar scripting to build your project
+as we do for Cleo stand-alone (see :ref:`building_cleo`). Some common issues include:
 
-   Because there is no installed/versioned package, "which version of Cleo am I building against"
-   is entirely determined by which commit your submodule/``FetchContent`` points at. Pin it
-   explicitly (a tag or commit hash, not a moving branch) and record it in your own project's
-   version control, the same way you would a vendored dependency.
+- **Build type.** Set ``CMAKE_BUILD_TYPE`` (e.g. ``Release``) consistently for your whole
+  configure — if you don't set it at all, Cleo and your own project both fall back to CMake's
+  (unoptimized) default, which is a correctness-neutral but easy-to-miss performance pitfall for
+  Kokkos-based code in particular.
+- **Kokkos and YAC flags.** Any ``-DKokkos_ARCH_...``/``-DKokkos_ENABLE_...`` or ``YAC`` flags you
+  pass to ``cmake`` apply globally to the whole configure, including Cleo's fetched Kokkos — set
+  them once, when you configure your own project's build.
+- **MPI compiler wrappers.** Since Cleo's top-level ``CMakeLists.txt`` unconditionally requires MPI,
+  you'll generally want to configure your whole project with MPI compiler wrappers as you would
+  for building Cleo standalone (e.g. ``-DCMAKE_CXX_COMPILER=mpic++ -DCMAKE_C_COMPILER=mpicc``).
+- **Missing target causing linker error.** See the caution box above: an omitted
+  domain/coupled-dynamics target fails at link time with undefined references, not at
+  ``cmake``'s configure time.
 
-.. admonition:: Missing ``CLEO_SOURCE_DIR``/``CLEO_BINARY_DIR``
-   :class: warning
 
-   Cleo's ``CMakeLists.txt`` files reference ``${CLEO_SOURCE_DIR}``/``${CLEO_BINARY_DIR}``
-   directly (rather than CMake's automatic ``PROJECT_SOURCE_DIR``), so if you use
-   ``FetchContent`` you must set these two variables yourself from the ``..._SOURCE_DIR``/
-   ``..._BINARY_DIR`` variables ``FetchContent_MakeAvailable`` defines, exactly as shown as
-   Option B above — Cleo's build will otherwise fail with unset-variable or path errors.
+Using Cleo through Python
+---------------------------
 
-.. admonition:: Build-type / Kokkos backend mismatches
-   :class: warning
+To use Cleo through Python you will no longer need to create an executable or ``CMakeLists.txt``
+for your project, simply building and compiling Cleo alone is sufficient. You need to compile
+the ``cleo_python_bindings`` target.
 
-   If your outer project and Cleo's ``add_subdirectory`` end up configured with different Kokkos
-   backends (e.g. your project forces ``Kokkos_ENABLE_CUDA=ON`` globally while Cleo's inherited
-   cache still defaults to serial, or vice versa) you will typically see link-time errors deep in
-   Kokkos rather than an obvious top-level message. Set Kokkos-related ``-D`` flags once, at your
-   project's top-level ``cmake`` invocation, so they propagate consistently into Cleo's
-   ``add_subdirectory`` call.
+Once you've done that, you can import the bindings in Python just like a normal module, e.g.
 
-.. admonition:: Excluding Cleo's own examples/roughpaper
-   :class: warning
+.. code-block:: python
 
-   Forgetting ``CLEO_NO_EXAMPLES``/``CLEO_NO_ROUGHPAPER`` will pull Cleo's own example and
-   roughpaper targets into your build graph too (though, because Cleo adds them with
-   ``EXCLUDE_FROM_ALL``, they won't be built by a plain ``cmake --build build`` unless
-   explicitly named) — harmless, but worth knowing about if your build feels slower to configure
-   than expected.
+   import cleo_python_bindings as cleo
+   from cleo_python_bindings import coupldyn_numpy
+
+From there you can use the parts of Cleo which the bindings expose to drive Cleo through Python
+numpy arrays.
+
+Have a look at Cleo's ``python_bindings`` example to see how this can work in practice:
+``CLEO/examples/python_bindings/`` and :doc:`the instructions to run it<../usage/examples/examples>`.
+In this example (run twice, once with and once without microphysics), we also created a Python
+class, ``CleoSDM``, to control the time-stepping sequence in a similar way to how the class,
+``RunCleo``, works in Cleo's C++ code.
+
 
 ----
 

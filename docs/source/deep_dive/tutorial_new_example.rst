@@ -1,7 +1,7 @@
 .. _tutorial_new_example:
 
-Tutorial: Building a New Cleo Example From Scratch
-=====================================================
+Tutorial: Building a New Cleo Experiment From Scratch
+======================================================
 
 This tutorial walks through everything needed to create a new Cleo example, using one running
 example throughout: a minimal 1-D "rainshaft" — a column of gridboxes stacked vertically, with
@@ -420,28 +420,79 @@ That's it, that covers the creation of all of Cleo's input files!
    YAML config which the Cleo executable reads in.
 
 
-Step 5: Build and Run Cleo
----------------------------
+.. _building_cleo:
+
+Step 5: Build, Compile and Run Cleo
+-------------------------------------
+
+Use Cleo's scripts
+~~~~~~~~~~~~~~~~~~~
 
 You are now ready to build, compile and sucessfully run your Cleo experiment!
 
-To build, compile and run It's easiest to add you experiment to Cleo's ``.sh`` scripts and run those
-for the computer architecture you're using. Very roughly speaking, you can use those scripts to
-eventually call something like:
+To build and compile your executable, it's easiest to add your experiment to Cleo's bash
+scripts in ``CLEO/scripts``, like what's done for Cleo's examples. Then the handling of the
+compilers, modules, build flags, etc. for your computer architecture is sorted out by the
+scripts automatically. Very roughly speaking, those scripts eventually call something like:
 
 .. code-block:: console
 
-  $ cmake -S . -B ./build -DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian [...]
+  $ cmake -S . -B ./build -DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian [YAC_flags, Kokkos_flags, ...]
   $ cmake --build ./build --target your_executable
+
+To run your experiment, you then need to execute
+
+.. code-block:: console
+
   $ ./build/experiments/your_new_experiment/your_executable /path/to/your/config.yaml
 
 Where ``your_executable`` matches the name you used for your exectuable in your ``CMakeLists.txt``.
 
-Alternatively, you might want to write a Python driver script like in Cleo's examples (e.g.
-``rainshaft1d.py``) which includes not only running the executable (this step) but also
-generating the input data (step 4) and post-processing/plotting it (step 6) (with control via the
-``--do_inputfiles`` / ``--do_run_executable`` / ``--do_plot_results`` flags). You would then need
-to use the bash scripts in the same way as the examples.
+Rather than actually run Cleo from a bash script (``./[...]/your_executable /path/to/your/config.yaml``),
+and therefore have to ensure yourself that you load the relevant run-time modules/settings for
+your computer architecture, you might want to write a Python driver script like in Cleo's examples
+(e.g. ``rainshaft1d.py``), which includes not only running the executable (this step) but also
+generating the input data (step 4) and post-processing/plotting it (step 6) (with control over
+each steup via the ``--do_inputfiles`` / ``--do_run_executable`` / ``--do_plot_results`` flags).
+You would then use the bash scripts in exactly the same way as the examples, namely to build and
+compile Cleo and then to launch your python driver script.
+
+
+.. _cleo_cmake_flags:
+
+Cleo's CMake flags
+~~~~~~~~~~~~~~~~~~~
+
+During the build configuration step, ``cmake -S . -B ./build [...]``, you can set various CMake
+flags, e.g. with ``-D<VARIABLE>=<value>``, to have more control over which of Cleo's optional
+libraries, examples, and roughpaper targets get configured. The following flags are available:
+
+- ``CLEO_COUPLED_DYNAMICS``: Selects which :doc:`coupled dynamics <../deep_dive/coupled_dynamics>`
+  library/libraries to build. Options are ``null``, ``fromfile``, ``cvode``, ``yac``, ``numpy``, or
+  ``all``. The default (leaving the flag unset), builds both ``cvode`` and ``fromfile``.
+- ``CLEO_DOMAIN``: Selects domain geometry. Options are ``cartesian``. The default builds all
+  options (currently only ``cartesian``).
+- ``CLEO_NO_PYBINDINGS``: if true, skips configuring Cleo's Python bindings. Default is false.
+- ``CLEO_NO_EXAMPLES``: if true, skips configuring Cleo's ``examples`` targets. Default is false.
+- ``CLEO_NO_ROUGHPAPER``: if true, skips configuring Cleo's ``roughpaper`` targets. Default is false.
+
+Additionally...
+
+- You will also want to pass ``CLEO_CMAKE_BUILD_TYPE="Release"`` to benefit from performance
+  optimisations rather than debugging. The default is otherwise ``CLEO_CMAKE_BUILD_TYPE="Debug"``.
+- You must also pass various flags for Kokkos and YAC. See Cleo's bash scripts for the flags
+  Cleo currently uses.
+- Note: Cleo's configuration also requires ``MPI`` (``find_package(MPI REQUIRED COMPONENTS C)``),
+  ``YAC`` (``find_package(YAC REQUIRED)``), and ``CMAKE_CXX_STANDARD`` to ``20``.
+
+.. note::
+   Several of Cleo's subdirectories are added with ``EXCLUDE_FROM_ALL`` (e.g. the examples, the
+   domain and coupled-dynamics libraries, the Python bindings, ...) — this means even if your
+   configuration includes them, CMake will only build those targets if something explicitly depends
+   on them (e.g. in your executable's ``target_link_libraries()``). They will not be built
+   automatically as part of a plain ``make``/``cmake --build``. You don't need to do anything about
+   this other than make sure every target you link against is one you've actually named.
+
 
 
 Step 6: Post-Process / Plot the Output

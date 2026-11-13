@@ -10,7 +10,7 @@ to understand more are the code level (the actual C++ concepts and options).
 Cleo for SDM Microphyiscs, Dynamical Model for Dynamics
 -------------------------------------------------------
 
-Cleo is a stand-alone Super-Droplet Model (SDM): it models cloud microphysics and moves super-droplets
+Cleo is a standalone Super-Droplet Model (SDM): it models cloud microphysics and moves super-droplets
 through a domain based on the thermodynamics of each grid-box. It is *not* a fully-fledged climate
 model — it has no representation of how pressure, temperature, moisture and
 wind fields evolve under advection, nor any parameterisation of radiation or subgrid-scale turbulence.
