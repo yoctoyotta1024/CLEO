@@ -74,11 +74,19 @@ exclude_patterns = []
 # Integrate doxygen with sphinx via breathe
 breathe_projects = {
     "libs": "../build/doxygen/xml/",
+    "cartesiandomain": "../build/doxygen/xml/",
+    "cleo_python_bindings": "../build/doxygen/xml/",
+    "configuration": "../build/doxygen/xml/",
+    "coupldyn_cvode": "../build/doxygen/xml/",
+    "coupldyn_fromfile": "../build/doxygen/xml/",
+    "coupldyn_null": "../build/doxygen/xml/",
+    "coupldyn_yac": "../build/doxygen/xml/",
+    "gridboxes": "../build/doxygen/xml/",
+    "initialise": "../build/doxygen/xml/",
+    "observers": "../build/doxygen/xml/",
     "runcleo": "../build/doxygen/xml/",
     "superdrops": "../build/doxygen/xml/",
     "zarr": "../build/doxygen/xml/",
-    "observers": "../build/doxygen/xml/",
-    "initialise": "../build/doxygen/xml/",
 }
 
 breathe_default_project = "proj"
