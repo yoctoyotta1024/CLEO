@@ -25,8 +25,7 @@ repos:
 -   repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.17.5
     hooks:
-    -   id: ruff
-        args: ["--ignore=E402"]  # Ignore E402 error "Module level import not at top of file"
+    -   id: ruff-check
         description: python linter
     -   id: ruff-format
         description: python formatter
