@@ -12,8 +12,9 @@ thermodynamic and wind fields are received from an external dynamical core via Y
    holds the thermodynamics/wind arrays received via YAC (constructed internally by
    ``YacCartesianDynamics`` below) — unrelated to, but identically named to, the internal struct
    in :doc:`../coupldyn_fromfile/fromfile_cartesian_dynamics`. Because Sphinx's C++ domain cannot
-   distinguish two identically-named, non-namespaced structs, it is described here in prose only
-   (see that page if you want the generated API entry for the other one).
+   distinguish two identically-named, non-namespaced structs, we have given neither struct
+   a documented API entry; please see the source code itself for the ``CartesianDynamics`` API for
+   the struct in ``yac_cartesian_dynamics.hpp``.
 
 .. doxygenstruct:: YacCartesianDynamics
    :project: coupldyn_yac

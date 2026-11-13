@@ -13,9 +13,9 @@ fields for a Cartesian domain from binary files (see
    the thermodynamics/wind arrays read from file (constructed internally by
    ``FromFileDynamics`` below). :doc:`../coupldyn_yac/yac_cartesian_dynamics` defines an
    unrelated struct of the same name for the YAC coupling option. Because Sphinx's C++ domain
-   cannot distinguish two identically-named, non-namespaced structs, only one public type is
-   given a generated API entry per header here; the internal ``CartesianDynamics`` structs are
-   described in prose only.
+   cannot distinguish two identically-named, non-namespaced structs, we have given neither struct
+   a documented API entry; please see the source code itself for the ``CartesianDynamics`` API for
+   the struct in ``fromfile_cartesian_dynamics.hpp``.
 
 .. doxygenstruct:: FromFileDynamics
    :project: coupldyn_fromfile
