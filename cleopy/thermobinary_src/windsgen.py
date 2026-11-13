@@ -17,8 +17,9 @@ Various ways of generating wind fields (wvel, vvel and uvel) to read into Cleo
 """
 
 import numpy as np
-from .create_thermodynamics import thermoinputsdict
+
 from ..gbxboundariesbinary_src import read_gbxboundaries as rgrid
+from .create_thermodynamics import thermoinputsdict
 
 
 def empty_winds():

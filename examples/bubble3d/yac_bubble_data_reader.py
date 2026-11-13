@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 """
 Copyright (c) 2024 MPI-M, Clara Bayley
 
@@ -17,20 +19,20 @@ Python file for yac for a one-way coupling between ICON's
 output data and CLEO (e.g. for the bubble test case)
 """
 
-#!/usr/bin/env python3
-
 import argparse
-import numpy as np
-from yac import YAC, UnstructuredGrid, Field, Location, Calendar, TimeUnit, def_calendar
-from netCDF4 import Dataset
 from pathlib import Path
+
+import numpy as np
+from netCDF4 import Dataset
 from ruamel.yaml import YAML
+from yac import YAC, Calendar, Field, Location, TimeUnit, UnstructuredGrid, def_calendar
 
 
 def convert_seconds_to_isodate(seconds):
     """converts seconds interval into an ISO 8601 format string"""
-    import isodate
     from datetime import timedelta
+
+    import isodate
 
     duration = timedelta(seconds=seconds)
 
@@ -43,7 +45,7 @@ def add_seconds_to_isodate(iso, seconds):
 
     from datetime import datetime, timedelta
 
-    dt = datetime.fromisoformat(iso.replace("Z", "+00:00"))
+    dt = datetime.fromisoformat(iso)
     new_dt = dt + timedelta(seconds=seconds)
     new_iso = new_dt.isoformat().replace("+00:00", "Z")
 
@@ -113,9 +115,9 @@ def icon_data_slice(data, timeidx, num_vertical_levels):
     lowest height level to lowest+num_vertical_levels accounting for
     fact that ICON data height levels go from top to bottom"""
     num_data_vertical_levels = data.shape[1]
-    assert (
-        num_data_vertical_levels >= num_vertical_levels
-    ), "data must have at least as many vertical levels as desired for slice"
+    assert num_data_vertical_levels >= num_vertical_levels, (
+        "data must have at least as many vertical levels as desired for slice"
+    )
     heightidx = (
         num_data_vertical_levels - num_vertical_levels
     )  # index of uppermost desired level of ICON data
@@ -180,12 +182,12 @@ msg = (
 )
 print(msg)
 
-assert (
-    DATATSTEP <= COUPLTSTEP
-), "COUPLTSTEP [s] must be greater than or equal to DATATSTEP [s]"
-assert (
-    COUPLTSTEP % DATATSTEP == 0.0
-), "COUPLTSTEP [s] must be integer multiple of DATATSTEP [s]"
+assert DATATSTEP <= COUPLTSTEP, (
+    "COUPLTSTEP [s] must be greater than or equal to DATATSTEP [s]"
+)
+assert COUPLTSTEP % DATATSTEP == 0.0, (
+    "COUPLTSTEP [s] must be integer multiple of DATATSTEP [s]"
+)
 
 yac = YAC()
 

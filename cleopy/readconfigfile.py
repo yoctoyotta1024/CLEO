@@ -56,6 +56,5 @@ def read_configparams_into_floats(filename):
         floats["nspacedims"] = int(floats["nspacedims"])  # no spatial coords to SDs
     except KeyError as e:
         print("Warning, ignoring error", e)
-        pass
 
     return floats

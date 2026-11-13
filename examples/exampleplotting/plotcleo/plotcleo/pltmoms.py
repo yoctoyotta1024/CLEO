@@ -15,8 +15,8 @@ File Description:
 examples for ploting momments of the droplet distirbution
 """
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def plot_totnsupers(time, totnsupers, savename="", fig=None, ax=None):
@@ -50,10 +50,10 @@ def plot_domainmassmoments(time, massmoms, savename=""):
     axs[4].plot(time.mins, meaneffmass)
 
     axs[0].set_ylabel("number of\nsuperdroplets")
-    axs[1].set_ylabel("$\u03BB^{m}_{0}$, number\nof droplets")
-    axs[2].set_ylabel("$\u03BB^{m}_{1}$, droplet\nmass /g")
-    axs[3].set_ylabel("$\u03BB^{m}_{2}$\n~reflectivity /g$^2$")
-    ylab4 = "mean effective\ndroplet mass,\n<$\u03BB^{m}_{2}$/$\u03BB^{m}_{1}>$ /g"
+    axs[1].set_ylabel("$\u03bb^{m}_{0}$, number\nof droplets")
+    axs[2].set_ylabel("$\u03bb^{m}_{1}$, droplet\nmass /g")
+    axs[3].set_ylabel("$\u03bb^{m}_{2}$\n~reflectivity /g$^2$")
+    ylab4 = "mean effective\ndroplet mass,\n<$\u03bb^{m}_{2}$/$\u03bb^{m}_{1}>$ /g"
     axs[4].set_ylabel(ylab4)
 
     axs[-1].set_xlabel("time /min")

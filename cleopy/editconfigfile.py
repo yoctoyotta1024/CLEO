@@ -27,7 +27,7 @@ def update_param(node, param, new_value):
             node[param] = new_value  # update value
             return True
         else:
-            for key, val in node.items():
+            for val in node.values():
                 is_success = update_param(val, param, new_value)
                 if is_success:
                     return True

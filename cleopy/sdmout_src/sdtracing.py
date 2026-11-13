@@ -17,11 +17,11 @@ functions to extract attribute data for specifc superdroplets based on the sdIds
 e.g. for tracing their trajectories
 """
 
-
-import numpy as np
-import awkward as ak
 import random
 import warnings
+
+import awkward as ak
+import numpy as np
 
 warnings.warn(
     "sdtracing module is depreciated since CLEO v0.40.0,\nreplaced by superdrops"
@@ -67,7 +67,7 @@ def attributes_for1superdroplet(sddata, Id, attrs):
 
 
 def attribute_for_superdroplets_sample(
-    sddata, attr, ndrops2sample=0, minid=0, maxid=0, ids=[]
+    sddata, attr, ndrops2sample=0, minid=0, maxid=0, ids=None
 ):
     """returns 2D array with dimensions [time, SD]
     containing attribute data over time for a sample of
@@ -76,6 +76,8 @@ def attribute_for_superdroplets_sample(
     randomly selected superdrops with Ids in the range
     [minid, maxid]"""
 
+    if ids is None:
+        ids = []
     if np.any(ids):
         sample = ids
     else:  # ids == []
@@ -117,7 +119,7 @@ def attributes_at_times(sddata, time, times2sel, attrs2sel):
 
 
 def attrs_for_superdroplets_sample(
-    sddata, attrs, ndrops2sample=0, minid=0, maxid=0, ids=[]
+    sddata, attrs, ndrops2sample=0, minid=0, maxid=0, ids=None
 ):
     """returns dictionary of 2D arrays (with dimensions [time, SD])
     for each attribute in 'attrs' list for a sample of
@@ -126,6 +128,8 @@ def attrs_for_superdroplets_sample(
     randomly selected superdrops with Ids in the range
     [minid, maxid]"""
 
+    if ids is None:
+        ids = []
     if np.any(ids):
         sample = ids
     else:  # ids == []

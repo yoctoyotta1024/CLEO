@@ -15,12 +15,12 @@ https://opensource.org/licenses/BSD-3-Clause
 File Description:
 """
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
-from .create_initsuperdrops import initsupers_inputsdict, ManyAttrs
-from ..readbinary import readbinary
 from ..gbxboundariesbinary_src.read_gbxboundaries import get_gbxvols_from_gridfile
+from ..readbinary import readbinary
+from .create_initsuperdrops import ManyAttrs, initsupers_inputsdict
 
 
 def plot_initGBxs_distribs(
@@ -145,11 +145,11 @@ def print_initsupers_infos(
 
     inforstr = (
         "\n------ DOMAIN SUPERDROPLETS INFO ------\n"
-        + "total droplet number conc: {:3g}".format(numconc)
+        + f"total droplet number conc: {numconc:3g}"
         + " /cm^3\n"
-        + "total droplet mass:        {:3g}".format(massconc)
+        + f"total droplet mass:        {massconc:3g}"
         + " g/m^3\n"
-        + "       as if water:        {:3g}".format(m_w_conc)
+        + f"       as if water:        {m_w_conc:3g}"
         + " g/m^3"
         + "\n------------------------------------\n"
     )
@@ -210,7 +210,7 @@ def plot_initGBxs_attrdistribs(
         gbxidxs = [int(g) for g in gbxs2plt]
         savename = "initGBxs_distribs" + savelabel + ".png"
 
-    fig, axs, lines = plot_initdistribs(attrs, gbxvols, gbxidxs)
+    fig, _axs, _lines = plot_initdistribs(attrs, gbxvols, gbxidxs)
 
     fig.tight_layout()
 
@@ -269,7 +269,7 @@ def plot_radiusdistrib(ax, hedgs, radius, xi):
     l1 = ax.scatter(radius * 1e6, xi, zorder=1, label="multiplicities")
 
     ax2 = ax.twinx()
-    hist, hedgs, hwdths, hcens = log10r_frequency_distribution(radius, hedgs, 1)
+    hist, hedgs, _hwdths, hcens = log10r_frequency_distribution(radius, hedgs, 1)
     l2 = ax2.step(
         hcens,
         hist,
@@ -281,7 +281,7 @@ def plot_radiusdistrib(ax, hedgs, radius, xi):
     )
 
     ax.set_xscale("log")
-    ax.set_xlabel("radius, r, /\u03BCm")
+    ax.set_xlabel("radius, r, /\u03bcm")
     ax.set_yscale("log")
 
     ax.set_ylabel("superdroplet multiplicity")
@@ -298,11 +298,11 @@ def plot_numconcdistrib(ax, hedgs, xi, radius, vol):
     """get and plot frequency of real droplets in each log10(r) bin"""
 
     wghts = xi / vol / 1e6  # [cm^-3]
-    hist, hedgs, hwdths, hcens = log10r_frequency_distribution(radius, hedgs, wghts)
+    hist, hedgs, _hwdths, hcens = log10r_frequency_distribution(radius, hedgs, wghts)
 
     line = ax.step(hcens, hist, label="binned distribution", where="mid")
     ax.set_xscale("log")
-    ax.set_xlabel("radius, r, /\u03BCm")
+    ax.set_xlabel("radius, r, /\u03bcm")
     ax.set_ylabel("real droplet number\nconcentration / cm$^{-3}$")
 
     if not ax.get_legend():
@@ -315,11 +315,11 @@ def plot_masssolutedistrib(ax, hedgs, xi, radius, msol, vol):
     """get and plot frequency of real droplets in each log10(r) bin"""
 
     wghts = msol * xi / vol * 1000 / 1e6  # [g cm^-3]
-    hist, hedgs, hwdths, hcens = log10r_frequency_distribution(radius, hedgs, wghts)
+    hist, hedgs, _hwdths, hcens = log10r_frequency_distribution(radius, hedgs, wghts)
 
     line = ax.step(hcens, hist, where="mid")
     ax.set_xscale("log")
-    ax.set_xlabel("radius, r, /\u03BCm")
+    ax.set_xlabel("radius, r, /\u03bcm")
     ax.set_ylabel("solute mass per unit volume / g cm$^{-3}$")
 
     return line
@@ -330,11 +330,11 @@ def plot_totmassdistrib(ax, hedgs, xi, radius, msol, vol, RHO_L, RHO_SOL):
 
     mass = totmass(radius, msol, RHO_L, RHO_SOL)
     wghts = mass * xi / vol * 1000 / 1e6  # [g cm^-3]
-    hist, hedgs, hwdths, hcens = log10r_frequency_distribution(radius, hedgs, wghts)
+    hist, hedgs, _hwdths, hcens = log10r_frequency_distribution(radius, hedgs, wghts)
 
     line = ax.step(hcens, hist, where="mid")
     ax.set_xscale("log")
-    ax.set_xlabel("radius, r, /\u03BCm")
+    ax.set_xlabel("radius, r, /\u03bcm")
     ax.set_ylabel("droplet mass per unit volume / g cm$^{-3}$")
 
     return line
@@ -380,7 +380,7 @@ def plot_coorddist(ax, hedgs, coord3, radius, coordnum):
         line = ax.scatter(radius * 1e6, coord3)
 
     ax.set_xscale("log")
-    ax.set_xlabel("radius, r, /\u03BCm")
+    ax.set_xlabel("radius, r, /\u03bcm")
     ax.set_ylabel("superdroplet coord" + str(coordnum) + " / m")
 
     return line
@@ -418,7 +418,7 @@ def plot_initGBxs_dropletmasses(
         gbxidxs = [int(g) for g in gbxs2plt]
         savename = "initGBxs_dropletmasses" + savelabel + ".png"
 
-    fig, axs, lines = plot_massdistribs(
+    fig, _axs, _lines = plot_massdistribs(
         attrs, gbxvols, gbxidxs, inputs["RHO_L"], inputs["RHO_SOL"]
     )
 

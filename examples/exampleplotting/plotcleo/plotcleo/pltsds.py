@@ -15,11 +15,12 @@ File Description:
 examples for plotting individual superdroplets
 """
 
-import awkward as ak
-import numpy as np
-import matplotlib.pyplot as plt
 import random
 import warnings
+
+import awkward as ak
+import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib.markers import MarkerStyle
 
 
@@ -29,10 +30,10 @@ def maxmin_radii_label(r, allradii):
 
     label = None
     if r == np.amin(allradii):
-        label = "{:.2g}\u03BCm".format(r)
+        label = f"{r:.2g}\u03bcm"
         label = "min r0 = " + label
     elif r == np.amax(allradii):
-        label = "{:.2g}\u03BCm".format(r)
+        label = f"{r:.2g}\u03bcm"
         label = "max r0 = " + label
 
     return label
@@ -53,7 +54,7 @@ def individ_radiusgrowths_figure(time, radii, savename=""):
     ax.set_yscale("log")
     ax.legend(fontsize=13)
 
-    ax.set_ylabel("droplet radius /\u03BCm")
+    ax.set_ylabel("droplet radius /\u03bcm")
 
     fig.tight_layout()
 
@@ -117,8 +118,8 @@ def plot_randomsample_superdrops(time, superdrops, nsample, savename=""):
                 axs[1, a].plot(t, d, linestyle="", marker=mks, markersize=0.2)
 
     axs[0, 0].set_yscale("log")
-    axs[0, 0].set_ylabel("radius, r /\u03BCm")
-    axs[0, 1].set_ylabel("multiplicity, \u03BE")
+    axs[0, 0].set_ylabel("radius, r /\u03bcm")
+    axs[0, 1].set_ylabel("multiplicity, \u03be")
     axs[0, 2].set_ylabel("solute mass, msol /g")
     axs[1, 0].set_ylabel("zcoord /km")
     axs[1, 1].set_ylabel("xcoord /km")
@@ -142,12 +143,14 @@ def plot_randomsample_superdrops_2dmotion(
     arrows=False,
     ids2plot=None,
     israndom=True,
-    cmap_var=[None, None],
+    cmap_var=None,
     fig=None,
     ax=None,
 ):
     """plot timeseries of the attributes of a
     random sample of superdroplets"""
+    if cmap_var is None:
+        cmap_var = [None, None]
     if fig is None:
         fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(6, 6))
 
@@ -167,7 +170,7 @@ def plot_randomsample_superdrops_2dmotion(
     coordz = ak.flatten(sample.coord3()) / 1000  # [km]
     coordx = ak.flatten(sample.coord1()) / 1000  # [km]
 
-    if all([c is None for c in cmap_var]):
+    if all(c is None for c in cmap_var):
         cmap = "gist_earth"
         c = ak.flatten(sample.sdId())
     else:
