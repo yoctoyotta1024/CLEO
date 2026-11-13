@@ -278,11 +278,11 @@ In The Following Sections...
    :maxdepth: 1
 
    code_structure
-   microphysics_and_observers
-   coupled_dynamics
    main_cpp
    tutorial_new_example
    external_project
+   microphysics_and_observers
+   coupled_dynamics
 
 ----
 
