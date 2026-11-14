@@ -38,19 +38,30 @@ coupldyn sends information to h_gbxs but doesn't
 receive any back. Struct obeys coupling comms concept */
 struct YacComms {
  private:
+  /*
+   * calculate mixing ratios for "cloud" water and "rain" water
+   * calculation could potentially be on device instead of host
+   */
   void calculate_cloud_rain_masses(const viewd_constgbx d_gbxs, const SupersInDomain& allsupers,
                                    Kokkos::DualView<double*> mass_cloud,
                                    Kokkos::DualView<double*> mass_rain) const;
 
-  /* updates the state of a gridbox using information received from YacCartesianDynamics solver
-  for 1-way or 2-way coupling to from Dynamics to CLEO SDM */
+  /*
+   * updates the state of a gridbox using information received from YacCartesianDynamics solver
+   * for 1-way or 2-way coupling to from Dynamics to CLEO SDM
+   */
   void update_gridbox_state(const YacCartesianDynamics& ffdyn, const size_t ii, Gridbox& gbx) const;
 
+  /*
+   * fills YacComms send buffers for a 2-way coupling to CLEO SDM with the change in
+   * state of a gridbox compared to data in dynamics
+   */
   void update_send_buffers(const YacCartesianDynamics& ffdyn, const size_t ii, const double temp,
                            const double qvap, const double qcloud, const double qrain) const;
 
  public:
-  /* functor for calculate mass of "cloud" and "rain" water in each gridbox
+  /*
+   * functor for calculate mass of "cloud" and "rain" water in each gridbox
    * "cloud" water is defined as droplets with radius < 0.38 mm (equivalent to ICON 1-mom scheme)
    */
   struct CalculateCloudRainMassesFunctor {

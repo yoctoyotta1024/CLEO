@@ -27,7 +27,6 @@ for (size_t ii(0); ii < ngbxs; ++ii){[...]}
 when in serial
 // TODO(ALL): make ii indexing compatible with MPI domain decomposition
 */
-
 template <typename GbxMaps, typename CD>
 void YacComms::receive_dynamics(const GbxMaps& gbxmaps, const YacCartesianDynamics& ffdyn,
                                 const viewh_gbx h_gbxs) const {
@@ -76,8 +75,10 @@ void YacComms::send_dynamics(const GbxMaps& gbxmaps, const dualview_constgbx gbx
   }
 }
 
-/* updates the state of a gridbox using information received from YacCartesianDynamics solver
-for 1-way or 2-way coupling to from Dynamics to CLEO SDM */
+/*
+ * updates the state of a gridbox using information received from YacCartesianDynamics solver
+ * for 1-way or 2-way coupling to from Dynamics to CLEO SDM
+ */
 void YacComms::update_gridbox_state(const YacCartesianDynamics& ffdyn, const size_t ii,
                                     Gridbox& gbx) const {
   State& state(gbx.state);
@@ -91,8 +92,10 @@ void YacComms::update_gridbox_state(const YacCartesianDynamics& ffdyn, const siz
   state.vvel = ffdyn.get_vvel(ii);
 }
 
-/* fills YacComms send buffers with the state of a gridbox for a 2-way
-coupling to CLEO SDM */
+/*
+ * fills YacComms send buffers for a 2-way coupling to CLEO SDM with the change in
+ * state of a gridbox compared to data in dynamics
+ */
 void YacComms::update_send_buffers(const YacCartesianDynamics& ffdyn, const size_t ii,
                                    const double temp, const double qvap, const double qcloud,
                                    const double qrain) const {
@@ -102,7 +105,8 @@ void YacComms::update_send_buffers(const YacCartesianDynamics& ffdyn, const size
   ffdyn.set_qrain_delta(ii, qrain - ffdyn.get_qrain(ii));
 }
 
-/* calculate mixing ratios for "cloud" water and "rain" water
+/*
+ * calculate mixing ratios for "cloud" water and "rain" water
  * calculation could potentially be on device instead of host
  */
 void YacComms::calculate_cloud_rain_masses(const viewd_constgbx d_gbxs,

@@ -1,5 +1,5 @@
 start_date: 2008-08-01T00:00:00.000
-end_date: 2008-08-01T01:00:00.000
+end_date: 2008-08-01T02:00:00.000
 calendar: 360d # proleptic-gregorian
 timestep_unit: ISO_format
 
@@ -12,20 +12,33 @@ definitions:
       component: cleo
       grid: cleo_cartesian_grid
   interp_stacks:
-    nnn_interp_stack: &nnn_interp_stack
+    interp_stack_to_cleo_thermo: &interp_stack_to_cleo_thermo
       interpolation:
+        - average:
+            weighted: barycentric_coordinate
+            partial_coverage: true
         - nnn:
-            n: 3
-            weighted: distance_weighted
-            max_search_distance: 1.0
-        - nnn:
-            n: 3
-            weighted: distance_weighted
-            max_search_distance: 10.0
-        - nnn:
-            n: 5
+            n: 4
             weighted: distance_weighted
             # no max_search_distance = unbounded: guarantees SOME match is always found
+    interp_stack_to_cleo_winds: &interp_stack_to_cleo_winds
+      interpolation:
+        - rbf:
+            n: 4
+            rbf_kernel: gauss_kernel
+        - nnn:
+            n: 4
+            weighted: distance_weighted
+            # no max_search_distance = unbounded: guarantees SOME match is always found
+    interp_stack_from_cleo_thermo: &interp_stack_from_cleo_thermo
+      interpolation:
+        - conservative:
+            order: 1
+            enforced_conservation: false
+            partial_coverage: true
+            normalisation: destarea
+        - fixed:
+            user_value: 0.0
   time_config: &time_config
     coupling_period: PT30S
   component_configs:
@@ -44,7 +57,7 @@ definitions:
 
 coupling:
 # ATM -> CLEO
-  - <<: [*atm2cleo, *nnn_interp_stack]
+  - <<: [*atm2cleo, *interp_stack_to_cleo_winds]
     field:
       - src: eastward_wind_to_cleo
         tgt: eastward_wind_in
@@ -52,7 +65,7 @@ coupling:
         tgt: northward_wind_in
       - src: upward_air_velocity_to_cleo
         tgt: upward_air_velocity_in
-  - <<: [*atm2cleo, *nnn_interp_stack]
+  - <<: [*atm2cleo, *interp_stack_to_cleo_thermo]
     field:
       - src: humidity_mixing_ratio_to_cleo
         tgt: humidity_mixing_ratio_in
@@ -60,16 +73,12 @@ coupling:
         tgt: cloud_liquid_water_mixing_ratio_in
       - src: rain_liquid_water_mixing_ratio_to_cleo
         tgt: rain_liquid_water_mixing_ratio_in
-  - <<: [*atm2cleo, *nnn_interp_stack]
-    field:
       - src: air_pressure_to_cleo
         tgt: air_pressure_in
-  - <<: [*atm2cleo, *nnn_interp_stack]
-    field:
       - src: air_temperature_to_cleo
         tgt: air_temperature_in
 # # CLEO -> ATM
-#   - <<: [*cleo2atm, *nnn_interp_stack]
+#   - <<: [*cleo2atm, *interp_stack_from_cleo_thermo]
 #     field:
 #       - src: humidity_mixing_ratio_out
 #         tgt: humidity_mixing_ratio_from_cleo

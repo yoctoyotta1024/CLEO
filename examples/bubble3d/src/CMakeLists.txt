@@ -8,6 +8,9 @@ endif()
 project("bubble3d")
 message(STATUS "CLEO including ${PROJECT_NAME} with PROJECT_SOURCE_DIR: ${PROJECT_SOURCE_DIR}")
 
+# require MPI explicitly for this library
+find_package(MPI REQUIRED COMPONENTS C)
+
 # Set libraries from CLEO to link with executable
 set(CLEOLIBS configuration gridboxes initialise observers runcleo superdrops zarr)
 
@@ -15,9 +18,9 @@ set(CLEOLIBS configuration gridboxes initialise observers runcleo superdrops zar
 add_executable(bubble3d EXCLUDE_FROM_ALL "main_bubble3d.cpp")
 
 # Add directories and link libraries to target
+target_include_directories(bubble3d PRIVATE "${CLEO_SOURCE_DIR}/libs" ${MPI_INCLUDE_PATH})
 target_link_libraries(bubble3d PRIVATE coupldyn_yac cartesiandomain "${CLEOLIBS}")
-target_link_libraries(bubble3d PUBLIC Kokkos::kokkos)
-target_include_directories(bubble3d PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
+target_link_libraries(bubble3d PUBLIC Kokkos::kokkos MPI::MPI_C)
 
 # set specific C++ compiler options for target (optional)
 #target_compile_options(bubble3d PRIVATE)

@@ -28,9 +28,7 @@ def parse_arguments():
     parser.add_argument(
         "path2CLEO", type=Path, help="Absolute path to CLEO directory (for cleopy)"
     )
-    parser.add_argument(
-        "path2build", type=Path, help="Absolute path to build directory"
-    )
+    parser.add_argument("sharepath", type=Path, help="Absolute path to share directory")
     parser.add_argument(
         "config_filename", type=Path, help="Absolute path to configuration YAML file"
     )
@@ -82,17 +80,15 @@ def get_zgrid(icon_grid_file, num_vertical_levels):
     return zgrid  # [m]
 
 
-def copy_icon_files(path2build, orginal_icon_grid_file, orginal_icon_data_file):
+def copy_icon_files(sharepath, orginal_icon_grid_file, orginal_icon_data_file):
     import shutil
 
-    assert (
-        path2build / "share"
-    ).is_dir(), "share directory doesn't exist in build directory"
+    assert (sharepath).is_dir(), "share directory doesn't exist in build directory"
 
-    icon_grid_file = path2build / "share" / orginal_icon_grid_file.name
+    icon_grid_file = sharepath / orginal_icon_grid_file.name
     shutil.copyfile(orginal_icon_grid_file, icon_grid_file)
 
-    icon_data_file = path2build / "share" / orginal_icon_data_file.name
+    icon_data_file = sharepath / orginal_icon_data_file.name
     shutil.copyfile(orginal_icon_data_file, icon_data_file)
 
     return icon_grid_file, icon_data_file
@@ -102,7 +98,7 @@ def copy_icon_files(path2build, orginal_icon_grid_file, orginal_icon_data_file):
 ### -------------------------------- MAIN ---------------------------------- ###
 def main(
     path2CLEO,
-    path2build,
+    sharepath,
     config_filename,
     gen_gbxs=False,
     gen_supers=False,
@@ -112,7 +108,7 @@ def main(
     save_figures=False,
 ):
     import numpy as np
-
+    import random
     from pathlib import Path
     from ruamel.yaml import YAML
 
@@ -125,8 +121,8 @@ def main(
         attrsgen,
     )
 
-    if path2CLEO == path2build:
-        raise ValueError("build directory cannot be CLEO")
+    if path2CLEO == sharepath.parent:
+        raise ValueError("share directory parent cannot be CLEO")
 
     ### --- Load the config YAML file --- ###
     yaml = YAML()
@@ -140,9 +136,7 @@ def main(
     orginal_icon_grid_file = Path(icon_yac_config["orginal_icon_grid_file"])
     orginal_icon_data_file = Path(icon_yac_config["orginal_icon_data_file"])
     if copy_iconfiles:
-        copy_icon_files(
-            Path(path2build), orginal_icon_grid_file, orginal_icon_data_file
-        )
+        copy_icon_files(Path(sharepath), orginal_icon_grid_file, orginal_icon_data_file)
 
     ### ------------------------ INPUT PARAMETERS -------------------------- ###
     ### --- required CLEO cleoconstants.hpp file --- ###
@@ -153,9 +147,12 @@ def main(
         show_figures,
         save_figures,
     ]  # booleans for [showing, saving] initialisation figures
-    SDgbxs2plt = [
-        0
-    ]  # gbxindex of initial SDs to plot if any(isfigures) (nb. "all" can be very slow)
+    SDgbxs2plt = list(
+        range(min(0, config["domain"]["ngbxs"]), config["domain"]["ngbxs"])
+    )  # gbxindex of initial SDs to plot if any(isfigures) (nb. "all" can be very slow)
+    SDgbxs2plt = random.sample(
+        list(SDgbxs2plt), 5
+    )  # choose 5 random gbxs from list to plot
 
     ### --- settings for 3-D gridbox boundaries --- ###
     num_vertical_levels = icon_yac_config["num_vertical_levels"]
@@ -175,13 +172,19 @@ def main(
 
     ### --- settings for initial superdroplets --- ###
     # settings for initial coordinates
-    zlim = pyconfig["sd_zlim"]
-    npergbx = pyconfig["nsupers_pergbx"]
+    nsupers = pyconfig["nsupers_pergbx"]
 
-    # settings for initial radius and aerosol distributions
-    monor = pyconfig["monor"]
-    dryr_sf = pyconfig["dryr_sf"]
+    # [min, max] range of initial superdroplet radii (and implicitly solute masses)
+    randradii = pyconfig["randradii"]
+    rspan = list(pyconfig["rspan"])
+
+    # settings for initial superdroplet multiplicies (from bimodal Lognormal distribution)
+    geomeans = list(pyconfig["geomeans"])
+    geosigs = list(pyconfig["geosigs"])
+    scalefacs = list(pyconfig["scalefacs"])
     numconc = pyconfig["numconc"]
+
+    # settings for initial superdroplet coordinates
     randcoords = pyconfig["randcoords"]
 
     ### --------------------- BINARY FILES GENERATION ---------------------- ###
@@ -201,17 +204,12 @@ def main(
     ### ----- write initial superdroplets binary ----- ###
     if gen_supers:
         initsupers_filename = Path(config["initsupers"]["initsupers_filename"])
-        nsupers = crdgens.nsupers_at_domain_base(
-            grid_filename, constants_filename, npergbx, zlim
-        )
-        radiigen = rgens.MonoAttrGen(monor)  # all SDs have the same radius [m]
-        dryradiigen = dryrgens.ScaledRadiiGen(dryr_sf)  # dryradii are 1/sf of radii [m]
         coord3gen = crdgens.SampleCoordGen(randcoords)  # (not) random coord3 of SDs
         coord1gen = crdgens.SampleCoordGen(randcoords)  # (not) random coord1 of SDs
         coord2gen = crdgens.SampleCoordGen(randcoords)  # (not) random coord2 of SDs
-        xiprobdist = probdists.DiracDelta(
-            monor
-        )  # monodisperse droplet probability distrib
+        xiprobdist = probdists.LnNormal(geomeans, geosigs, scalefacs)
+        radiigen = rgens.SampleLog10RadiiGen(rspan, is_random=randradii)
+        dryradiigen = dryrgens.ScaledRadiiGen(1.0)  # sf=1.0, initial radii are dry
 
         initattrsgen = attrsgen.AttrsGenerator(
             radiigen, dryradiigen, xiprobdist, coord3gen, coord1gen, coord2gen
@@ -224,6 +222,7 @@ def main(
             grid_filename,
             nsupers,
             numconc,
+            isprintinfo=False,
             isfigures=isfigures,
             savefigpath=savefigpath,
             gbxs2plt=SDgbxs2plt,
@@ -236,7 +235,7 @@ if __name__ == "__main__":
     args = parse_arguments()
     main(
         args.path2CLEO,
-        args.path2build,
+        args.sharepath,
         args.config_filename,
         gen_gbxs=args.gen_gbxs,
         gen_supers=args.gen_supers,
