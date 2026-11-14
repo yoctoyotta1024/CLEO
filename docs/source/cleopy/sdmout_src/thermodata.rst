@@ -1,5 +1,6 @@
-THERMODATA
+thermodata
 ==========
 
 .. automodule:: cleopy.sdmout_src.thermodata
-  :members:
+   :members:
+   :undoc-members:

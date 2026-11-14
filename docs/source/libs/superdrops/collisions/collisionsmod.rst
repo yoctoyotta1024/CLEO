@@ -1,8 +1,3 @@
-.. CLEO C++ documentation master file, created by
-   sphinx-quickstart on Mon Nov 20 12:27:54 2023.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Collisions Module
 =================
 
@@ -20,7 +15,15 @@ Contents:
    collisions
    collisionkinetics
    coalescence
+   coalescence_efficiency
    breakup
+   breakup_nfrags
    coalbure
+   coalbure_flag
+   constprob
+   golovinprob
+   hydrodynamicprob
+   longhydroprob
+   lowlistprob
    shuffle
    urbg

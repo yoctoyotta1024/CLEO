@@ -35,7 +35,7 @@ sys.path.insert(0, pathlib.Path(__file__).parents[2].resolve().as_posix())
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = "CLEO"
+project = "Cleo"
 license = "BSD 3-Clause"
 copyright = "(2023) MPI-M, Clara Bayley"
 author = "Clara Bayley & Other Developers"
@@ -60,7 +60,8 @@ extensions = [
 
 # configuration of citations using bibtex file(s)
 bibtex_bibfiles = ["./references.bib"]
-bibtex_reference_style = "label"
+bibtex_default_style = "plain"
+bibtex_reference_style = "author_year"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -73,11 +74,19 @@ exclude_patterns = []
 # Integrate doxygen with sphinx via breathe
 breathe_projects = {
     "libs": "../build/doxygen/xml/",
+    "cartesiandomain": "../build/doxygen/xml/",
+    "cleo_python_bindings": "../build/doxygen/xml/",
+    "configuration": "../build/doxygen/xml/",
+    "coupldyn_cvode": "../build/doxygen/xml/",
+    "coupldyn_fromfile": "../build/doxygen/xml/",
+    "coupldyn_null": "../build/doxygen/xml/",
+    "coupldyn_yac": "../build/doxygen/xml/",
+    "gridboxes": "../build/doxygen/xml/",
+    "initialise": "../build/doxygen/xml/",
+    "observers": "../build/doxygen/xml/",
     "runcleo": "../build/doxygen/xml/",
     "superdrops": "../build/doxygen/xml/",
     "zarr": "../build/doxygen/xml/",
-    "observers": "../build/doxygen/xml/",
-    "initialise": "../build/doxygen/xml/",
 }
 
 breathe_default_project = "proj"

@@ -1,5 +1,6 @@
-READ_THERMODYNAMICS
+read_thermodynamics
 ===================
 
 .. automodule:: cleopy.thermobinary_src.read_thermodynamics
-  :members:
+   :members:
+   :undoc-members:

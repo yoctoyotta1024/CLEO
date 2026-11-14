@@ -1,5 +1,6 @@
-THERMOEQNS
+thermoeqns
 ==========
 
 .. automodule:: cleopy.sdmout_src.thermoeqns
-  :members:
+   :members:
+   :undoc-members:

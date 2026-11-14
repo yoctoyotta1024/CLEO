@@ -1,8 +1,3 @@
-.. CLEO cleopy documentation master file, created by
-   sphinx-quickstart on Mon Nov 20 12:27:54 2023.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 API: Cleo Python Package, cleopy
 ================================
 
@@ -26,13 +21,14 @@ Contents:
    thermobinary_src/thermobinary_src
    sdmout_src/sdmout_src
    cxx2py
+   geninitconds
    readconfigfile
    editconfigfile
    readbinary
    writebinary
 
-Indices and tables
-------------------
+API and Module Lookups
+----------------------
 
-* :ref:`genindex`
-* :ref:`modindex`
+* :ref:`API Index (C++ and Python)<genindex>`
+* :ref:`Python Module Index<modindex>`

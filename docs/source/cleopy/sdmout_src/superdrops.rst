@@ -1,5 +1,6 @@
-SUPERDROPS
+superdrops
 ==========
 
 .. automodule:: cleopy.sdmout_src.superdrops
-  :members:
+   :members:
+   :undoc-members:

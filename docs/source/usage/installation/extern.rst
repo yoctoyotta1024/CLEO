@@ -95,7 +95,7 @@ libraries. You can find more information about it from `the pybind11 repository:
 .. _pybind11:
 .. admonition:: Using python bindings with python version >= 3.14
 
-  CLEO's python bindings may not work with python versions higher than 3.13.*. One way
+  Cleo's python bindings may not work with python versions higher than 3.13.*. One way
   to ensure you have a reasonable version of python for the bindings is to change the python
   requirement to ``requires-python=">=3.13,<3.14"`` in the  ``cleopy`` ``pyproject.toml`` and then
   update your python environment, e.g. with ``uv sync --extra examples --extra yac``
