@@ -25,7 +25,7 @@ Once you're ready to look inside Cleo's code, perhaps to understand your ``main.
 or to setup a new simulation, explore our :doc:`deep dive<deep_dive/index>`.
 
 You can also find further information about the motivation behind Cleo and its code
-structure from our :doc:`programming guide<intro/intro>`, as well as Cleo's model description
+structure from our :doc:`general introduction<intro/intro>`, as well as Cleo's model description
 papers. `Bayley et al., 2026a <https://gmd.copernicus.org/articles/19/6099/2026/>`_ describes Cleo's
 fundamental design, whilst `Bayley et al., 2026b <https://gmd.copernicus.org/articles/19/6121/2026/>`_
 details its numerical methods for warm-cloud microphysics.
