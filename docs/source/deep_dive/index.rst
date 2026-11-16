@@ -20,13 +20,13 @@ That is the gap this section fills.
 
 Concretely, this section explains:
 
-1. (This page) Scope and a glossary of terms used throughout.
+1. Scope and a glossary of common terms (this page).
 2. :doc:`code_structure` — a map of the repository and the C++ ideas you'll meet in it.
-3. :doc:`microphysics_and_observers` — how microphysics and observers are combined in code.
-4. :doc:`coupled_dynamics` — what "coupled dynamics" means and the available options.
-5. :doc:`main_cpp` — a walkthrough of ``main.cpp``/``main_impl.hpp`` and how to adapt them.
-6. :doc:`tutorial_new_example` — a start-to-finish tutorial building a new example.
-7. :doc:`external_project` — fetching and building Cleo as a dependency of another project.
+3. :doc:`main_cpp` — a walkthrough of ``main.cpp`` and how to adapt it.
+4. :doc:`tutorial_new_example` — a start-to-finish tutorial building a new experiment.
+5. :doc:`external_project` — fetching and building Cleo as a dependency of another project.
+6. :doc:`microphysics_and_observers` — deeper look into how microphysics and observers are combined in code.
+7. :doc:`coupled_dynamics` — deeper look into what "coupled dynamics" means and the available options.
 
 It deliberately does not re-explain the physics of warm-cloud microphysics nor Cleo's computational
 performance in depth — for that, see the two papers describing Cleo:
