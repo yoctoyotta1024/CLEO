@@ -1,68 +1,116 @@
 Contributing Guidelines
 ==========================
 
-Good Coding Practices
+How to Contribute?
+-------------------
+
+To contribute to the Cleo repository: fork the repository, create a branch for your
+contribution, and align with the following practices:
+
+1. :ref:`Be consistent with our general coding rules<general_code_rules>`
+
+2. :ref:`Format and lint your code correctly<format_lint>`
+
+3. :ref:`Use pre-commit to check your commits<pre_commit>`
+
+4. :ref:`Use conventional commit messages<conventional_commits>`
+
+5. :ref:`Create unit tests for your code<unit_tests>`
+
+6. :ref:`Update Cleo's documentation with your contributions<contrib_our_docs>`
+
+You can then contribute via pull request (PR) back into Cleo's main code repository.
+
+The Rules on Pull Requests
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* **Your PRs *must* obey the practices listed above** (see more details below).
+
+* **Keep your PRs *up-to-date* by rebasing against main**. Until a PR is merged into Cleo's main
+  branch, is the responsibilty of the owner of the PR to keep it up-to-date and resolve any
+  code-conflicts.
+
+* ***Note the 3x1 Rule:* One Branch; One Contribution; One PR**
+    * One branch should contain one "contribution".
+    * One "contribution" may be large, but should be as small as reasonably possible.
+    * One PR should contain one "contribution". A PR will not be accepted if it is deemed
+      to contain many contributions that could instead logically be split into smaller PRs from
+      seperate branches.
+
+* **Contributions from a ``main`` branch will never be accepted.**
+
+
+.. _general_code_rules:
+
+General Coding Rules
 ----------------------
 
-.. _environment:
+* Blend-in with whatever you change or add to.
 
-Packages and Environment
-------------------------
-We provide a ``pyproject.toml`` file for version control over the python and pip-installable
-packages you need to use Cleo (e.g to use our ``cleopy`` python package, to run the examples,
-to build the documentation, or to run pre-commit etc.).
+* A new class/struct deserves a new file.
 
-The recommended way to setup your python environment with all the correct packages is with
-`uv <https://docs.astral.sh/uv/>`_. To install ``uv``, if you want, you can use our
-Conda/Micromamba environment e.g. via
+* As much code should be in ``.cpp`` rather than ``.hpp`` files as is reasonably possible.
 
-.. code-block:: console
+* Improve code readability wherever possible, but take caution not to be overly verbose.
 
-  $ mamba create --file=environment.yml
+* Favour more-involved structral changes which will make the overall code better over more-elongated
+  code and exceptional case handling.
 
-which addionally installs Cleo's non-python dependencies available on conda-forge, e.g.
-doxygen (which is a non-python requirement for locally building Cleo's documentation).
+* Name variables/functions/classes appropriately. Favour readable and descriptive names over shorter
+  code. At the same time, take caution not to be overly verbose.
 
-Once you have installed ``uv`` you can install Cleo's python version and required dependencies.
-For only the dependencies required by ``cleopy`` you can do
+* All formulas, constants, physical values, numerical methods, etc. should be referenced (to
+  papers, people or other code-bases, etc.) in clearly visible doc-strings near the relevant code.
 
-.. code-block:: console
+* Correct and improve doc-strings wherever possible. Keep comments and doc-strings short.
 
-  $ uv sync --no-dev
+* Avoid adding comments about future actions.
 
-Or, if you would like to have the dependencies for Cleo's examples and for Cleo's development
-(e.g. for ``pre-commit`` and documentation), you can do
+* Never add commented-out code to the code base. You need a *very* good reason to do this.
 
-.. code-block:: console
 
-  $ uv sync --extra examples --extra yac
+.. _format_lint:
 
-Sometimes it is useful to know where uv has installed your python
-(e.g. for :ref:`Cleo's examples <examples>`), in which case you can run
+Formatting and Linting your Code
+----------------------------------
 
-.. code-block:: console
+Python
+~~~~~~~
 
-  $ uv python find
+For Python, we use `ruff <https://docs.astral.sh/ruff/>`_ for formatting and linting. Ruff checks
+are something like the combination of several Python linters (Flake8, isort, pydocstyle etc.) and
+the black formatter. We obey the default settings of ruff and these are automatically enforced for
+you if you use our pre-commit hooks (see below).
 
-We kindly ask that you also :ref:`contact us <contact>` or `open a new
-issue <https://github.com/yoctoyotta1024/CLEO/issues/new>`_ on our GitHub repository if you discover
-this environment is missing any packages.
+C++
+~~~~
+
+For C++, we obey the Google C++ Style Guide with:
+  | IndentWidth: 2
+  | TabWidth: 2
+  | UseTab: Never
+  | ColumnLimit: 100
+
+We recommend to enforce these rules with the `ClangFormat <https://clang.llvm.org/docs/ClangFormat.html>`_
+tool, which can be integrated in several text/code editors (e.g. Vim, Emacs, VSCode, ...).
+
+
+.. _pre_commit:
 
 Pre-Commit
 ----------
 We use pre-commit to check our code for simple issues before submission to code review, such as
-before pushing to a GitHub repository. We reccomend you use it too.
+before pushing to a GitHub repository. Pull requests that fail our pre-commit checks will fail
+in our continuous integration, therefore, you must use pre-commit too if you want to contribute
+to Cleo's code base.
 
 Pre-Commit has "hooks" which can be used for a vast range of measures to ensure you follow good
 coding practices. For example, we use pre-commit to find and correct mistakes such as missing
 semicolons, trailing whitespaces, bad indentations etc., and to ensure we conform to
 our chosen code style guide.
 
-You can learn more by checking out `pre-commit <https://pre-commit.com/>`_'s comprehensive
-documentation.
-
-In case you want to use our pre-commit hooks, first load your environment with pre-commit installed,
-then install the pre-commit hooks, e.g.
+To use our pre-commit hooks, first load your environment with pre-commit installed
+(see e.g. :ref:`environment`), then install the pre-commit hooks, with ``pre-commit install``, e.g.
 
 .. code-block:: console
 
@@ -70,41 +118,55 @@ then install the pre-commit hooks, e.g.
 
 Pre-commit should then run automatically upon ``git commit``.
 
+You can learn more by checking out `pre-commit <https://pre-commit.com/>`_'s comprehensive
+documentation.
+
+
+.. _conventional_commits:
 
 Commit Specification
 --------------------
 We use `conventional commits <https://www.conventionalcommits.org/>`_ as a a lightweight convention
 on top of commit messages to ensure they are meaningful, provide a useful history and can be used
-by automated tools such as `Cocogitto <https://github.com/cocogitto/cocogitto>`_.
+by automated versioning tools such as `Cocogitto <https://github.com/cocogitto/cocogitto>`_.
+
+In short, all your commits must be structured as follows:
+
+.. code-block:: console
+
+  <type>[optional scope]: <description>
+
+  [optional body]
+
+  [optional footer(s)]
 
 
-Code Style / Formatting
------------------------
-For Python, we use `ruff <https://docs.astral.sh/ruff/>`_ for formatting and linting. Ruff checks
-are something like the combination of several Python linters (Flake8, isort, pydocstyle etc.) and
-the black formatter. We obey the default settings of ruff.
+* The ``<type>`` may be ``fix:``, ``feat:``, ``refactor:``, ``chore:``,  ``ci:``, ``test:``,  ``perf:``, ...
+  (see `conventional commits <https://www.conventionalcommits.org/>`_ for more options).
 
-For C++ we obey the Google C++ Style Guide with:
-  | IndentWidth: 2
-  | TabWidth: 2
-  | UseTab: Never
-  | ColumnLimit: 100
+* A breaking change must be marked with a footer ``BREAKING CHANGE: <description>`` and/or a ``!`` after
+  the type/scope.
+
+* AI generated commits must be marked with a footer: ``generated with <AI model>``.
 
 
-Auto-Updating Packages
------------------------
+.. _unit_tests:
 
-We use dependabot to try to keep our our CI, python (through ``uv``) and pre-commit
-dependencies up-to-date. Nevertheless, things can become out of date.
+Unit Tests
+----------
 
-To automatically update some of Cleo's dependencies to their latest versions, run the
-following commands:
+More on this comming soon! (Last updated: Nov. 2026.)
 
-* for python package dependencies (controlled by Cleo's ``uv.lock``), run ``uv lock --upgrade``
 
-* for pre-commit hook repositories (controlled by ``.pre-commit-config.yaml``),
-  run ``pre-commit autoupdate``
+.. _contrib_our_docs:
 
-*Note:* these commands do not update any manually-installed dependencies, e.g. Kokkos or YAC, nor
-the packages installed in a mamba environment (controlled by ``environment.yml``). These commands
-also do not update any of the CI ``uses`` dependencies, e.g. for GitHub ``actions`` or ``astral-sh``.
+Contributing to Cleo's Documentation
+--------------------------------------
+
+Your PR *must* also update Cleo's docs if your code contribution requires new documentation or
+corrections to the existing documentation. If you do not believe your PR should update Cleo's
+docs, you will need to explain why compellingly in your PR description.
+
+You can see :doc:`the documentation on the docs<ourdocs>` for instructions how to locally
+build the documentation. This enables you to visualise, as if it were published, the documentation
+you edit.

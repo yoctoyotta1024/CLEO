@@ -48,12 +48,12 @@ Contents:
 
    prog_guide/prog_guide
 
+   usage/for_develop/for_develop
+
    cleopy/cleopy
    libs/libs
 
    GitHub Repo <https://github.com/yoctoyotta1024/CLEO.git>
-
-   usage/for_develop/for_develop
 
    contact
    references
