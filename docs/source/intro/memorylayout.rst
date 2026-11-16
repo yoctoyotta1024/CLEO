@@ -6,30 +6,27 @@ Memory Layout
 This page describes Cleo's memory layout, which is also explained more thoroughly in
 :cite:`bayley2026a` (Sect. 2).
 
-The key structures which compose Cleo and their memory layout are shown schematically below.
+The key structures which compose Cleo and their memory layout on each MPI process are
+shown schematically here:
 
-.. figure:: ./figs/cleomemlayout1.png
-   :alt: Schematic for Cleo's memory layout part 1
+.. figure:: ../figs/cleomemlayout.png
+   :alt: Schematic for Cleo's memory layout
    :align: center
 
-.. figure:: ./figs/cleomemlayout2.png
-   :alt: Schematic for Cleo's memory layout part 2
-   :align: center
+   A schematic for the memory layout of Cleo's key structures.
 
-   A schematic for memory layout of Cleo's key structures. The superdroplets follow on
-   in the bottom panel from the right-hand side of the figure above.
-
-Each node of a computer allocated to the program contains a portion of the simulated domain
-that is composed of gridboxes. The gridboxes exist in a contigous block of memory (managed
-by a Kokkos view-like type) and each gridbox exchanges information about its dynamical
-state (thermodynamics and wind velocity) with "Dynamics-Solver" via a "Coupler". The "Dynamics-Solver"
-and "Coupler" are abstract ideas (i.e. they are C++ concepts for constraining templated types), but
-get instantiated at compilation, for example as `ICON <https://www.icon-model.org>`_ and
-`YAC <https://dkrz-sw.gitlab-pages.dkrz.de/yac/index.html>`_ respectively.
+Each MPI process simulates a sub-portion of the total domain composed of superdroplets and gridboxes.
+The gridboxes exist in an ordered, contigous block of memory (managed by a Kokkos view-like type)
+and each gridbox contains a "view" to a seperate contigous block of memory of superdroplets, also
+ordered by gridbox-index. The gridboxes exchange information about their dynamical state
+(thermodynamics and wind velocity) via a "Coupler" to/from a coupled "host" dynamical model. The
+coupled dynamics and coupler are abstract ideas (i.e. they are C++ concepts for constraining
+templated types; see :doc:`coupling`), but get instantiated at compilation, for example as
+`ICON <https://www.icon-model.org>`_ and `YAC <https://dkrz-sw.gitlab-pages.dkrz.de/yac/index.html>`_ respectively.
 
 Each gridbox is composed of certain elements:
 
-.. figure:: ./figs/gridbox.png
+.. figure:: ../figs/gridbox.png
    :alt: Schematic showing the elements of a gridbox in Cleo
    :align: center
 
@@ -50,7 +47,7 @@ droplet it represents (e.g. the superdroplet may have the attributes to define i
 multiplicity). Additionally, to aid analysis involving Lagrangian particle tracking, each superdroplet
 can optionally be given a unique identifier. This is illustrated in the schematic below.
 
-.. figure:: ./figs/superdroplet.png
+.. figure:: ../figs/superdroplet.png
    :alt: Schematic showing the elements of a superdroplet in Cleo
    :align: center
 
