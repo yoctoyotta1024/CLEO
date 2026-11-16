@@ -348,3 +348,10 @@ Extension
 Explore ``examples/exampleplotting`` which gives examples of how to plot output from Cleo
 with ``cleopy`` and ``plotcleo``, a few examples are demonstrated in the
 ``examples/exampleplotting/exampleplotting.py`` script.
+
+
+Finished!
+---------
+
+Want to learn more? Edit an example or create your own simulation? Take a look into Cleo's
+:doc:`programming guide<../../prog_guide/prog_guide>` to find out how...

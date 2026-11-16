@@ -5,14 +5,8 @@ Header file: ``<libs/runcleo/createsupers.hpp>``
 `[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/runcleo/createsupers.hpp>`_
 
 This sub-module defines functions and classes called by RunCLEO to create and initialise
-super-droplets in Kokkos view (on device).
-
-.. doxygenclass:: GenSuperdrop
-   :project: runcleo
-   :private-members:
-   :protected-members:
-   :members:
-   :undoc-members:
+super-droplets in Kokkos view (on device). Generating a single super-droplet's initial
+attributes is delegated to :doc:`gensuperdrop`.
 
 .. doxygenfunction:: create_supers
    :project: runcleo

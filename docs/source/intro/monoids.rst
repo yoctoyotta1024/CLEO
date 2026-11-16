@@ -1,5 +1,10 @@
+.. _monoids:
+
 Monoids
 =======
+
+This page explains the concept of monoids which Cleo uses for microphysical processes and observers.
+Cleo's monoids are explained more thoroughly in :cite:`bayley2026a` (Sect. 4).
 
 Concepts for Templated-Types
 --------------------------------

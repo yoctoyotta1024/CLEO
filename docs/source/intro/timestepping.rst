@@ -1,9 +1,14 @@
+.. _timestepping:
+
 Timestepping
 ============
 
+This page describes Cleo's timestepping routine, which is also explained more thoroughly in
+:cite:`bayley2026a` (Sect. 5).
+
 The core elements of Cleo's routine calling is summarised below.
 
-.. figure:: ./figs/timestepping.png
+.. figure:: ../figs/timestepping.png
    :alt: Diagram for Cleo's timestepping routine
    :align: right
 

@@ -1,5 +1,6 @@
-PYZARR
+pyzarr
 ======
 
 .. automodule:: cleopy.sdmout_src.pyzarr
-  :members:
+   :members:
+   :undoc-members:

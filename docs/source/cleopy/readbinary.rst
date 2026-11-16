@@ -1,5 +1,6 @@
-READBINARY
+readbinary
 ==========
 
 .. automodule:: cleopy.readbinary
-  :members:
+   :members:
+   :undoc-members:
