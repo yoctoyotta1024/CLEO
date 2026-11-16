@@ -23,4 +23,5 @@ Contents:
    :maxdepth: 1
 
    contributing
+   good_code
    ourdocs
