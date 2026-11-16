@@ -53,9 +53,9 @@ Contents:
 
    GitHub Repo <https://github.com/yoctoyotta1024/CLEO.git>
 
-   usage/ourdocs
-   usage/contributing
+   usage/for_develop/ourdocs
+   usage/for_develop/contributing
 
-   usage/good_coding
-   usage/contact
+   usage/for_develop/good_coding
+   contact
    references
