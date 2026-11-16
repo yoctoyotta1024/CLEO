@@ -13,7 +13,7 @@ in large regional domains, with horizontal extents O(100km). Cleo is an attempt 
 a SDM. It strives to be a library for SDM to model warm clouds with exceptional computational
 performance.
 
-Read more about Cleo's :ref:`background <background>` and :ref:`motivation <motivation>`.
+Read more about Cleo's :ref:`motivation <background>`.
 
 Memory Layout
 -------------
@@ -79,7 +79,6 @@ In More Detail:
    :maxdepth: 1
 
    background
-   motivation
    memorylayout
    coupling
    timestepping
