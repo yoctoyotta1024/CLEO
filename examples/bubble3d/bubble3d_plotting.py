@@ -20,14 +20,15 @@ for bubble test case output
 # %%
 ### -------------------------------- IMPORTS ------------------------------- ###
 import argparse
-import awkward as ak
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.colors as mcolors
-from matplotlib.cm import ScalarMappable
 from pathlib import Path
 
-from cleopy.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
+import awkward as ak
+import matplotlib.colors as mcolors
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.cm import ScalarMappable
+
+from cleopy.sdmout_src import pygbxsdat, pysetuptxt, pyzarr
 
 
 # %%
@@ -85,10 +86,10 @@ def plot_2d_var(
     cmap = plt.get_cmap(cmap)
     norm = mcolors.Normalize(vmin=vmin, vmax=vmax)
 
-    for m in range(0, nplots):
+    for m in range(nplots):
         tidx = np.argmin(abs(time.mins - t2plts[m]))
         axs[m].contourf(xxh_km, zzh_km, data[var][tidx, 0, :, :], cmap=cmap, norm=norm)
-        axs[m].set_title("t={:.0f}mins".format(time.mins[tidx]), fontsize=10)
+        axs[m].set_title(f"t={time.mins[tidx]:.0f}mins", fontsize=10)
         axs[m].set_xlabel("x /km")
         axs[m].sharey(axs[0])
         axs[m].sharex(axs[0])
@@ -130,7 +131,7 @@ def plot_2d_supers(xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlims, xlims)
     coord1 = ak.Array(sample["coord1"])
     shift = xlims[1]
 
-    for m in range(0, nplots):
+    for m in range(nplots):
         t = t2plts[m]  # [mins]
         tidx = np.argmin(abs(time.mins - t))
         axs[m].contourf(xxh_km, zzh_km, wind_var[tidx, 0, :, :], cmap=cmap, norm=norm)
@@ -147,9 +148,7 @@ def plot_2d_supers(xxh_km, zzh_km, wind_var, t2plts, sample, cmap, vlims, xlims)
         coord1_km = ak.flatten(ak.where(bad_time, np.nan, coord1[idx])) / 1000 - shift
         axs[m].scatter(coord1_km, coord3_km, s=size, color="lightblue")
 
-        axs[m].set_title(
-            "{:.0f} mins".format(time.mins[tidx]), fontsize=fontsize, y=1.025
-        )
+        axs[m].set_title(f"{time.mins[tidx]:.0f} mins", fontsize=fontsize, y=1.025)
         axs[m].set_xlim(xlims)
         axs[m].set_ylim([0, 2.5])
         axs[m].spines["top"].set_visible(False)
@@ -214,7 +213,7 @@ def plot_2d_supers_contours(
     sd_norm = mcolors.Normalize(vmin=time.mins[0], vmax=time.mins[tidx + 1])
     sd_cmap = "plasma"
 
-    for m in range(0, nplots):
+    for m in range(nplots):
         t = t2plts[m]
         tidx = np.argmin(abs(time.mins - t))
         axs[m].contourf(xxh_km, zzh_km, wind_var[tidx, 0, :, :], cmap=cmap, norm=norm)
@@ -233,9 +232,7 @@ def plot_2d_supers_contours(
             norm=sd_norm,
         )
 
-        axs[m].set_title(
-            "{:.0f} mins".format(time.mins[tidx]), fontsize=fontsize, y=1.025
-        )
+        axs[m].set_title(f"{time.mins[tidx]:.0f} mins", fontsize=fontsize, y=1.025)
         axs[m].set_xlim(xlims)
         axs[m].set_ylim([0, 2.5])
         axs[m].spines["top"].set_visible(False)

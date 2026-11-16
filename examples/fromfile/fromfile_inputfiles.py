@@ -88,16 +88,17 @@ def main(
     save_figures=False,
 ):
     from pathlib import Path
-    from ruamel.yaml import YAML
 
+    from ruamel.yaml import YAML
     from src import gen_input_thermo
+
     from cleopy import geninitconds
     from cleopy.initsuperdropsbinary_src import (
+        attrsgen,
         crdgens,
-        rgens,
         dryrgens,
         probdists,
-        attrsgen,
+        rgens,
     )
 
     if path2CLEO == path2build:

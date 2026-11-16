@@ -17,8 +17,8 @@ functions for plotting similar to figure 5 of
 S. Arabas and S. Shima 2017
 """
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def kohler_curve(r, msol, temp, ionic, Mr_sol, criticalpoints=False):
@@ -56,7 +56,7 @@ def plot_kohlercurve_with_criticalpoints(ax, r, solutemass, temperature, IONIC, 
     l1 = ax.plot(
         rkoh,
         s_eq * 100,
-        label="K\u00F6hler curve",
+        label="K\u00f6hler curve",
         color="grey",
         linestyle="-",
         linewidth=3,
@@ -116,7 +116,7 @@ def condensation_validation_subplots(
         linestyle=lstyle_b,
         linewidth=lwdth,
     )[0]
-    axs[1].set_xlabel("radius /\u03BCm")
+    axs[1].set_xlabel("radius /\u03bcm")
     axs[1].set_ylabel("supersaturation /%")
 
     l5 = axs[2].plot(
@@ -129,7 +129,7 @@ def condensation_validation_subplots(
         linestyle=lstyle_b,
         linewidth=lwdth,
     )[0]
-    axs[2].set_xlabel("radius /\u03BCm")
+    axs[2].set_xlabel("radius /\u03bcm")
     axs[2].set_ylabel("displacement /m")
 
     return [l1, l2, l3, l4, l5, l6]
@@ -162,8 +162,8 @@ def arabas_shima_2017_fig(
 
         condensation_validation_subplots(axs, time, radius[i], supersat, zprof)
 
-        rlab = "r$_{dry}$ = " + "{:.2g}\u03BCm\n".format(
-            radius[i][0]
+        rlab = (
+            "r$_{dry}$ = " + f"{radius[i][0]:.2g}\u03bcm\n"
         )  # should be same for all i
 
     axs[0].legend(loc="lower right")
@@ -174,7 +174,7 @@ def arabas_shima_2017_fig(
         + str(numconc)
         + "cm$^{-3}$\n"
         + rlab
-        + "<w> = {:.1f}".format(W_avg * 100)
+        + f"<w> = {W_avg * 100:.1f}"
         + "cm s$^{-1}$"
     )
     axs[0].text(0.03, 0.82, textlab, transform=axs[0].transAxes)

@@ -80,9 +80,9 @@ def plot_shima2009_plot_validation_figure(
     savename,
 ):
     import matplotlib.pyplot as plt
-
     from plotcleo import shima2009fig
-    from cleopy.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
+
+    from cleopy.sdmout_src import pygbxsdat, pysetuptxt, pyzarr
 
     # read in constants and intial setup from setup .txt file
     config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)

@@ -15,9 +15,9 @@ https://opensource.org/licenses/BSD-3-Clause
 File Description:
 """
 
+import struct
 
 import numpy as np
-import struct
 
 from .writebinary import DataTypeCodes, MetadataPerVariable
 
@@ -41,7 +41,7 @@ def read_metadata(filename, isprint=True):
 
     dtc = DataTypeCodes()
 
-    metabytes, gblmeta_bytes, nvars, mpv_bytes = first4uints(filename, dtc)
+    metabytes, gblmeta_bytes, nvars, _mpv_bytes = first4uints(filename, dtc)
 
     gblmetadata, metapervar = get_metadatapervar(
         filename, dtc, gblmeta_bytes, nvars, metabytes
@@ -66,7 +66,7 @@ def first4uints(filename, dtc):
 def get_metadatapervar(filename, dtc, gblmeta_bytes, nvars, metabytes):
     mpv_format = MetadataPerVariable().mpv_format
 
-    nchars = int(gblmeta_bytes / dtc.dtype2bytesize(type("c")))
+    nchars = int(gblmeta_bytes / dtc.dtype2bytesize(str))
     format = "<" + "c" * nchars + mpv_format * nvars
 
     skipbytes = dtc.format_size("IIII")

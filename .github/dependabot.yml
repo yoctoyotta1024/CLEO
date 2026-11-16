@@ -1,0 +1,27 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    groups:
+      actions:
+        patterns: ["*"]
+
+  - package-ecosystem: "uv"
+    directory: "/"            # where pyproject.toml / uv.lock live
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7         # only propose releases at least 1 week old
+    groups:
+      python-minor-patch:
+        update-types: ["minor", "patch"]   # bundle small bumps; majors get their own PRs
+
+  - package-ecosystem: "pre-commit"
+    directory: "/"            # where .pre-commit-config.yaml lives
+    schedule:
+      interval: "weekly"
+    groups:
+      pre-commit-hooks:
+        patterns: ["*"]       # all hook bumps in one PR

@@ -13,6 +13,7 @@ Copyright (c) 2023 MPI-M, Clara Bayley
 -----
 File Description:
 """
+
 import importlib.metadata
 
 try:

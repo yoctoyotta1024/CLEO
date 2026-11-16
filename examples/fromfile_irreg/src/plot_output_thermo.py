@@ -17,11 +17,12 @@ Python functions used to make plots of CLEO's thermodynamics output for
 fromfile_irreg example.
 """
 
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.gridspec import GridSpec
-from matplotlib import colors
 from pathlib import Path
+
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib import colors
+from matplotlib.gridspec import GridSpec
 
 
 def plot_domain_thermodynamics_timeseries(time, gbxs, thermo, winds, savedir, do_show):
@@ -53,7 +54,7 @@ def plot_domain_thermodynamics_timeseries(time, gbxs, thermo, winds, savedir, do
     )  # dims [xdims, zdims]
     t2plts = np.linspace(time.mins[0], time.mins[-1], 5)
 
-    for key in labels.keys():
+    for key, lab in labels.items():
         try:
             data4d = thermo[key]
         except ValueError:
@@ -61,7 +62,7 @@ def plot_domain_thermodynamics_timeseries(time, gbxs, thermo, winds, savedir, do
 
         plot_timeseries_domain_slices(
             key,
-            labels[key],
+            lab,
             cmaps[key][0],
             cmaps[key][1],
             time,
@@ -115,9 +116,7 @@ def plot_domain_slices(
         data3d = data4d[t, :, :, :]
         for n in range(nrows):
             ax = fig.add_subplot(gs[n + 1, m])
-            ax.set_title(
-                "t={:.0f}min,\ny={:.2f}km".format(time.mins[t], yfull[n] / 1000)
-            )
+            ax.set_title(f"t={time.mins[t]:.0f}min,\ny={yfull[n] / 1000:.2f}km")
             pcm = ax_colormap(ax, xxh, zzh, data3d[n, :, :], cmap, norm)
 
     return pcm
