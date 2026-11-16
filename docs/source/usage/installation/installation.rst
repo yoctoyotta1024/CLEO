@@ -78,5 +78,5 @@ requirements and dependencies as well. The following pages will guide you throug
 Finished!
 ---------
 
-Now maybe you want to run some of Cleo's :doc:`examples <../examples/examples>` or take a
-:doc:`deep dive<../../deep_dive/index>` into Cleo's code-base...
+Now maybe you want to run some of Cleo's :doc:`examples <../examples/examples>` or explore
+Cleo's :doc:`programming guide<../../prog_guide/index>`...

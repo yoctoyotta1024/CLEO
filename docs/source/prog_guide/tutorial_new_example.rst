@@ -467,7 +467,7 @@ During the build configuration step, ``cmake -S . -B ./build [...]``, you can se
 flags, e.g. with ``-D<VARIABLE>=<value>``, to have more control over which of Cleo's optional
 libraries, examples, and roughpaper targets get configured. The following flags are available:
 
-- ``CLEO_COUPLED_DYNAMICS``: Selects which :doc:`coupled dynamics <../deep_dive/coupled_dynamics>`
+- ``CLEO_COUPLED_DYNAMICS``: Selects which :doc:`coupled dynamics <../prog_guide/coupled_dynamics>`
   library/libraries to build. Options are ``null``, ``fromfile``, ``cvode``, ``yac``, ``numpy``, or
   ``all``. The default (leaving the flag unset), builds both ``cvode`` and ``fromfile``.
 - ``CLEO_DOMAIN``: Selects domain geometry. Options are ``cartesian``. The default builds all

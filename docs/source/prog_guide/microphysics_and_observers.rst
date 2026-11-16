@@ -4,7 +4,7 @@ Combining Microphysics and Observers
 =======================================
 
 This page assumes you've read the conceptual introduction to monoids in
-:doc:`../intro/monoids` and the note on C++ concepts in :ref:`deep_dive`. Here we go one
+:doc:`../intro/monoids` and the note on C++ concepts in :ref:`prog_guide`. Here we go one
 level more concrete: what ``MicrophysicalProcess`` and ``Observer`` actually require, how the
 ``>>`` operator combines them, and a fully worked, annotated example of each.
 

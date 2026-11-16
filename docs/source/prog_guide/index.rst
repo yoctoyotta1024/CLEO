@@ -1,7 +1,7 @@
-.. _deep_dive:
+.. _prog_guide:
 
-Cleo Deep Dive
-================
+Programming Guide
+==================
 
 This section is aimed at climate researchers or software engineers who are comfortable with
 Python and scientific computing, but have little or no C++ experience and have not yet worked inside
@@ -24,9 +24,9 @@ Concretely, this section explains:
 2. :doc:`code_structure` — a map of the repository and the C++ ideas you'll meet in it.
 3. :doc:`main_cpp` — a walkthrough of ``main.cpp`` and how to adapt it.
 4. :doc:`tutorial_new_example` — a start-to-finish tutorial building a new experiment.
-5. :doc:`external_project` — fetching and building Cleo as a dependency of another project.
-6. :doc:`microphysics_and_observers` — deeper look into how microphysics and observers are combined in code.
-7. :doc:`coupled_dynamics` — deeper look into what "coupled dynamics" means and the available options.
+5. :doc:`external_project` — how to fetch and build Cleo as a dependency of another project.
+6. :doc:`microphysics_and_observers` — a deeper dive into how microphysics and observers are combined in code.
+7. :doc:`coupled_dynamics` — a deeper dive into what "coupled dynamics" means and the available options.
 
 It deliberately does not re-explain the physics of warm-cloud microphysics nor Cleo's computational
 performance in depth — for that, see the two papers describing Cleo:

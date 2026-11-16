@@ -4,7 +4,7 @@ Coupling to Dynamics
 ====================
 
 This page explains the concept of Cleo's coupling to a dynamical model, as explained in more detail
-in :cite:`bayley2026a` (Sect. 3.3). See the :doc:`coupled dynamics deep dive<../deep_dive/coupled_dynamics>`
+in :cite:`bayley2026a` (Sect. 3.3). See the :doc:`coupled dynamics programming guide<../prog_guide/coupled_dynamics>`
 to understand more are the code level (the actual C++ concepts and options).
 
 Cleo for SDM Microphyiscs, Dynamical Model for Dynamics
@@ -74,7 +74,7 @@ Why the Coupler?
   were tightly integrated into one program with one decomposition. This is however, worthwhile,
   because it maximises the freedom to load-balance and allocate computational
   resources independently for the two very different workloads (SDM's is superdroplet-based;
-  a dynamical core's is grid-based) — see :doc:`../deep_dive/code_structure` for how this
+  a dynamical core's is grid-based) — see :doc:`../prog_guide/code_structure` for how this
   independence is reflected in Cleo's own MPI domain decomposition.
 
 From Theory to Code
@@ -88,7 +88,7 @@ work. Cleo currently ships four concrete ``CoupledDynamics`` options (no dynamic
 reading from file, a 0-D CVODE solver, and YAC coupling to an external dynamical core such as ICON)
 plus a fifth route via Python/numpy bindings. For the concept definitions themselves, a table of
 all the options and when to use each, and a worked, annotated code example switching between two of
-them, see :doc:`../deep_dive/coupled_dynamics`.
+them, see :doc:`../prog_guide/coupled_dynamics`.
 
 ----
 
