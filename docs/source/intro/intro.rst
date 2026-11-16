@@ -1,9 +1,9 @@
-Programming Guide
-=================
+General Introduction
+======================
 
-This programming guide gives a short summary of what is explained more thoroughly in Cleo's model
-description papers :cite:`bayley2026a, bayley2026b`, and mainly focusses on Cleo's fundamental
-design and code structure rather than its microphysics capabilities.
+This general introduction to Cleo gives a short summary of what is explained more thoroughly in
+Cleo's model description papers :cite:`bayley2026a, bayley2026b`, and mainly focusses on Cleo's
+fundamental design and code structure rather than its microphysics capabilities.
 
 Motivation
 ----------
@@ -25,19 +25,6 @@ low cost at run-time.
 
 Read more about Cleo's :ref:`memory layout <memlayout>`.
 
-Timestepping
-------------
-Cleo's monoidal structures (see below) are designed to allow adaptive-timestepping,
-meaning different microphysical processes and observers may have arbitrary time-steps which bare
-no relation to one another and can in general change during run-time. This flexibility is contained
-in the logic for how different microphysical processes and observers are combined. Cleo's overall
-timestepping routine therefore calls a single (combined) observer and a single (combined)
-microphysical process. Overall, the outermost timestepping routine calls the observer, the dynamics
-Cleo is coupled to, and SDM. Within the call to SDM there is a sub-timestepping routine which
-calls superdroplet motion and the microphysical process.
-
-Read more about Cleo's :ref:`timestepping <timestepping>`.
-
 Coupling to Dynamics
 --------------------
 Cleo is pretty much agnostic to the thermodynamics model it is coupled to. The coupled thermodynamics
@@ -51,6 +38,19 @@ handles the transport of super-droplets throughout the domain, it cannot perform
 advection of Gridboxes' thermodynamical variables itself (temperature, pressure, winds etc.). For
 thermodynamic advection, Cleo must be coupled to a thermodynamics model capable of advection.
 Read more about Cleo's :ref:`coupling to dynamics <dynamics_coupling>`.
+
+Timestepping
+------------
+Cleo's monoidal structures (see below) are designed to allow adaptive-timestepping,
+meaning different microphysical processes and observers may have arbitrary time-steps which bare
+no relation to one another and can in general change during run-time. This flexibility is contained
+in the logic for how different microphysical processes and observers are combined. Cleo's overall
+timestepping routine therefore calls a single (combined) observer and a single (combined)
+microphysical process. Overall, the outermost timestepping routine calls the observer, the dynamics
+Cleo is coupled to, and SDM. Within the call to SDM there is a sub-timestepping routine which
+calls superdroplet motion and the microphysical process.
+
+Read more about Cleo's :ref:`timestepping <timestepping>`.
 
 Monoids
 -------
@@ -81,8 +81,8 @@ In More Detail:
    background
    motivation
    memorylayout
-   timestepping
    coupling
+   timestepping
    monoids
    kokkos
 

@@ -12,9 +12,9 @@ not responsible for advecting thermodynamics, nor parameterising radiation nor t
 the job of whatever Cleo is *coupled* to. Cleo calls this "external" source of thermodynamic and
 wind fields its ``CoupledDynamics``, and the bridge between the coupled dynamics and Cleo's SDM,
 is called the ``CouplingComms``. The coupling comms communicates fields either to Cleo
-(in a one-way coupling) or both to and from Cleo (in a two-way coupling) . See the programming
-guide's :ref:`dynamics_coupling` page, or B2026a :cite:`bayley2026a`, Sect. 2.4, for more detail
-on this coupling framework.
+(in a one-way coupling) or both to and from Cleo (in a two-way coupling) . See the general
+introduction to Cleo's :ref:`dynamics_coupling` page, or B2026a :cite:`bayley2026a`, Sect. 2.4, for
+more detail on this coupling framework.
 
 The Two C++ Concepts Involved
 -------------------------------

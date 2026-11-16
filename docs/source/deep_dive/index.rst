@@ -101,8 +101,9 @@ Monoids
     Building on concepts, Cleo defines **monoids**: sets of types that can (a) be created, (b) be
     combined pairwise into another member of the same set, and (c) have a "do nothing" null
     member. Microphysical processes and observers are both monoids in Cleo. This is covered in
-    depth, with worked examples, in :doc:`microphysics_and_observers`; the :doc:`conceptual
-    introduction to monoids<../intro/monoids>` is found in the programming guide.
+    depth, with worked examples, in :doc:`microphysics_and_observers`; the
+    :doc:`introduction to monoids<../intro/monoids>` also gives the motivation for Cleo's monoids
+    and a more general introduction.
 
 Namespaces
     A C++ ``namespace`` groups related names to avoid clashes, similar to how a Python package
