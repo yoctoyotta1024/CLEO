@@ -22,7 +22,7 @@ Start with Cleo's :doc:`installation<usage/installation/installation>` and then 
 exploring some of Cleo's :doc:`examples<usage/examples/examples>`.
 
 Once you're ready to look inside Cleo's code, perhaps to understand your ``main.cpp``
-or to setup a new simulation, explore our :doc:`programming guide <prog_guide/index>`.
+or to setup a new simulation, explore our :doc:`programming guide <prog_guide/prog_guide>`.
 
 You can also find further information about the motivation behind Cleo and its code
 structure from our :doc:`general introduction<intro/intro>`, as well as Cleo's model description
@@ -46,7 +46,7 @@ Contents:
    usage/installation/installation
    usage/examples/examples
 
-   prog_guide/index
+   prog_guide/prog_guide
 
    cleopy/cleopy
    libs/libs
