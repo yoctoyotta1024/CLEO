@@ -424,7 +424,7 @@ adaptive sub-timestep, down to the granularity of ``t_next - t_mdl``.
 
 Recall this diagram?
 
-.. figure:: ../intro/figs/timestepping.png
+.. figure:: ../figs/timestepping.png
    :alt: Diagram for Cleo's timestepping routine
    :align: center
 
