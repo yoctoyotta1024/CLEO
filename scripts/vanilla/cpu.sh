@@ -22,6 +22,7 @@
 ### An empty buildtype/compilername uses the machine default.
 ###
 ### Paths: edit the 'paths' section below before first use.
+### Optional: debug build, make jobs and stack size in 'optional settings'.
 ### ============================================================ ###
 
 set -e
@@ -34,6 +35,13 @@ export CLEO_PATH2CLEO="${SLURM_SUBMIT_DIR:-$(pwd)}"
 export CLEO_PYTHON="${CLEO_PYTHON:-${CLEO_PATH2CLEO}/.venv/bin/python3}"
 export CLEO_YACYAXTROOT="${CLEO_YACYAXTROOT:-<PATH/TO/YACYAXT/INSTALL>}"
 export CLEO_PATH2BUILD="${CLEO_PATH2BUILD:-<PATH/TO/BUILD/ROOT>}"
+### -------------------------------------------------------- ###
+
+### ----------- optional settings (defaults are fine) ------- ###
+# Edit here, or export before running/submitting. Empty uses the machine default.
+export CLEO_ENABLEDEBUG="${CLEO_ENABLEDEBUG:-false}"   # true: debug build (-O0 -g)
+export CLEO_MAKE_JOBS="${CLEO_MAKE_JOBS:-}"            # parallel make jobs
+export CLEO_STACKSIZE_LIMIT="${CLEO_STACKSIZE_LIMIT:-}" # ulimit -s for runs (kB)
 ### -------------------------------------------------------- ###
 
 ### ---------------------- environment --------------------- ###

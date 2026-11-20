@@ -133,7 +133,8 @@ Where Do I Change...?
      - the example's entry in ``load_example_config`` in ``scripts/common/examples.sh``
    * - the CMake flags common to most examples
      - ``cleo_common_flags`` in ``scripts/common/examples.sh``
-   * - the Slurm options, which examples a job runs or the paths
+   * - the Slurm options, which examples a job runs, the paths, or whether to make a debug build,
+       the number of make jobs or the stack size for one job
      - the job script, ``scripts/[machine]/cpu.sh`` or ``gpu.sh``
    * - the modes of the job scripts
      - ``run_cleo_jobs`` in ``scripts/common/run_jobs.sh``
@@ -170,12 +171,18 @@ Environment Variables
      - the job script (a ``<...>`` placeholder you must replace), then ``load_example_config``
      - in the job script, the directory in which examples are built; afterwards the example's own
        build directory, e.g. ``[CLEO_PATH2BUILD]/build_const2d/``
+   * - ``CLEO_ENABLEDEBUG``
+     - the job script's optional settings (default ``false``)
+     - ``true`` makes a debug build (no optimisation, debug symbols)
    * - ``CLEO_MAKE_JOBS``
-     - you (optional), else the machine's default
+     - the job script's optional settings, else the machine's default
      - number of parallel ``make`` jobs
-   * - ``CLEO_BUILDTYPE``, ``CLEO_COMPILERNAME``, ``CLEO_ENABLEDEBUG``
+   * - ``CLEO_STACKSIZE_LIMIT``
+     - the job script's optional settings, else the machine's default
+     - stack size limit (``ulimit -s``, in kB) for running the examples
+   * - ``CLEO_BUILDTYPE``, ``CLEO_COMPILERNAME``
      - the pipeline, from its arguments
-     - build type, compiler and whether to make a debug build
+     - build type and compiler
    * - ``CLEO_BUILD_FLAGS``
      - ``load_example_config``
      - the example's CMake flags

@@ -25,6 +25,9 @@
 ###   CLEO_PYTHON        python used to run the examples
 ###   CLEO_YACYAXTROOT   YAC + YAXT installation
 ###   CLEO_PATH2BUILD    build root: examples build in <CLEO_PATH2BUILD>/build_xxx
+###   CLEO_ENABLEDEBUG   true | false: debug build (optional, default: false)
+###   CLEO_MAKE_JOBS     parallel make jobs (optional, default: machine)
+###   CLEO_STACKSIZE_LIMIT  ulimit -s for runs in kB (optional, default: machine)
 ###   examples=(...)  default list of "example buildtype compilername"
 ### ============================================================ ###
 
