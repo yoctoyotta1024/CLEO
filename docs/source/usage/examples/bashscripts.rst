@@ -264,8 +264,6 @@ Safety Checks and Things to Know
 * If you choose an example when running a job script but not its build type, the machine's
   default build type is used, also for ``gpu.sh``. So for GPUs also give the ``cuda`` build type.
 
-* ``CLEO_YACYAXTROOT`` must be set even if no example needs YAC.
-
 * The ``build`` step needs internet access, because CMake downloads some of Cleo's dependencies
   (e.g. Kokkos). On machines whose compute nodes have no internet access, such as JUPITER, use the
   ``build`` mode on a login node and then submit a job with the ``run`` mode.
