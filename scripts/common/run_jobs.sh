@@ -13,8 +13,8 @@
 ###   build  cmake configure + compile                   (steps: build,compile)
 ###   run    recompile, run + plot (needs a prior build) (steps: compile,run,plot)
 ###
-### Set CLEO_MAKE_CLEAN=true to delete each example's build folder before
-### building (build and all modes only).
+### To build an example from scratch, delete its build folder
+### (<CLEO_PATH2BUILD>/build_xxx) before using the all or build mode.
 ###
 ### If an example is given only that one is used, otherwise every entry of
 ### the job script's 'examples' list ("example buildtype compilername").
@@ -25,7 +25,6 @@
 ###   CLEO_PYTHON        python used to run the examples
 ###   CLEO_YACYAXTROOT   YAC + YAXT installation
 ###   CLEO_PATH2BUILD    build root: examples build in <CLEO_PATH2BUILD>/build_xxx
-###   CLEO_MAKE_CLEAN    true | false: delete build folders first (default: false)
 ###   examples=(...)  default list of "example buildtype compilername"
 ### ============================================================ ###
 
@@ -61,15 +60,6 @@ run_cleo_jobs() {
   source "${CLEO_PATH2CLEO}/scripts/common/check_inputs.sh"
   check_machine
 
-  local make_clean="${CLEO_MAKE_CLEAN:-false}"
-  check_value_in_list CLEO_MAKE_CLEAN "${make_clean}" true false
-  if [[ "${make_clean}" == true ]]; then
-    if [[ "${mode}" == run ]]; then
-      echo "Error: CLEO_MAKE_CLEAN=true needs 'all' or 'build' mode ('run' reuses an existing build)."
-      exit 1
-    fi
-    action="${action} from scratch"
-  fi
   check_args_not_empty "${CLEO_PATH2CLEO}" "${CLEO_PYTHON}" "${CLEO_YACYAXTROOT}" "${CLEO_PATH2BUILD}"
 
   # catch paths that were left as <...> placeholders in the job script
@@ -105,6 +95,6 @@ run_cleo_jobs() {
     echo "=== ${action} ${e} (${b:-default buildtype}, ${c:-default compiler}) ==="
     echo
     "${driver}" "${e}" "${b}" "${c}" "${CLEO_PATH2CLEO}" \
-      "${CLEO_PATH2BUILD}" "" "${CLEO_YACYAXTROOT}" "" "${make_clean}" "" "${steps}"
+      "${CLEO_PATH2BUILD}" "" "${CLEO_YACYAXTROOT}" "" "" "${steps}"
   done
 }

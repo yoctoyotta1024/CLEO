@@ -27,7 +27,6 @@ Layout
   │   │                                    Python script and its arguments
   │   ├── build_cleo.sh                    configures Cleo with CMake
   │   ├── compile_cleo.sh                  compiles the executables with make
-  │   ├── clean_build.sh                   deletes a build directory (make_clean)
   │   ├── build_openmp.sh                  Kokkos flags for OpenMP on the host
   │   ├── build_threads.sh                 Kokkos flags for C++ threads on the host
   │   ├── build_cuda.sh                    Kokkos flags for CUDA on the device
@@ -57,8 +56,8 @@ What Happens When You Run a Job Script
 For example, ``sbatch scripts/levante/cpu.sh all constthermo2d`` does the following:
 
 1) ``scripts/levante/cpu.sh`` sets the paths (``CLEO_PATH2CLEO``, ``CLEO_PYTHON``,
-   ``CLEO_YACYAXTROOT`` and ``CLEO_PATH2BUILD``), the machine's environment (e.g. modules), its
-   ``examples`` list and ``CLEO_MAKE_CLEAN``, and then calls ``run_cleo_jobs`` from
+   ``CLEO_YACYAXTROOT`` and ``CLEO_PATH2BUILD``), the machine's environment (e.g. modules) and
+   its ``examples`` list, and then calls ``run_cleo_jobs`` from
    ``scripts/common/run_jobs.sh``.
 
 2) ``run_cleo_jobs`` turns the mode into steps (``all``, ``build,compile`` or
@@ -79,9 +78,7 @@ For example, ``sbatch scripts/levante/cpu.sh all constthermo2d`` does the follow
 
    c) prints the configuration,
 
-   d) if ``make_clean`` is ``true``, deletes the example's build directory (``clean_cleo_build``),
-
-   e) the ``build`` step: calls ``build_cleo`` from ``scripts/common/build_cleo.sh``, which calls
+   d) the ``build`` step: calls ``build_cleo`` from ``scripts/common/build_cleo.sh``, which calls
       ``configure_machine_build_flags`` (``levante/build_flags.sh``) and
       ``configure_machine_yac_flags`` (``levante/helpers/build_yac.sh``), and then configures Cleo
       with CMake,
@@ -136,7 +133,7 @@ Where Do I Change...?
      - the example's entry in ``load_example_config`` in ``scripts/common/examples.sh``
    * - the CMake flags common to most examples
      - ``cleo_common_flags`` in ``scripts/common/examples.sh``
-   * - the Slurm options, which examples a job runs, the paths or ``CLEO_MAKE_CLEAN``
+   * - the Slurm options, which examples a job runs or the paths
      - the job script, ``scripts/[machine]/cpu.sh`` or ``gpu.sh``
    * - the modes of the job scripts
      - ``run_cleo_jobs`` in ``scripts/common/run_jobs.sh``
@@ -144,7 +141,7 @@ Where Do I Change...?
      - ``build_compile_run_plot_cleo`` in ``scripts/common/build_compile_run_plot_cleo.sh``
 
 *Note*: if you change the compiler, build type or Kokkos flags of an existing build, build it from
-scratch (``CLEO_MAKE_CLEAN=true``) so that CMake does not reuse its old cache.
+scratch (delete its build directory first) so that CMake does not reuse its old cache.
 
 
 Environment Variables
@@ -173,9 +170,6 @@ Environment Variables
      - the job script (a ``<...>`` placeholder you must replace), then ``load_example_config``
      - in the job script, the directory in which examples are built; afterwards the example's own
        build directory, e.g. ``[CLEO_PATH2BUILD]/build_const2d/``
-   * - ``CLEO_MAKE_CLEAN``
-     - the job script (default ``false``)
-     - ``true`` deletes each example's build directory before building it
    * - ``CLEO_MAKE_JOBS``
      - you (optional), else the machine's default
      - number of parallel ``make`` jobs
@@ -259,12 +253,6 @@ Safety Checks and Things to Know
 
 * ``CLEO_PATH2CLEO`` is the directory you run or submit a job script from, so always run or submit
   the job scripts from your Cleo directory.
-
-* When building from scratch, only build directories which contain a ``CMakeCache.txt`` file are
-  deleted, and never ``/``, your home directory, your Cleo directory or a directory containing it.
-
-* ``make_clean=true`` needs the ``build`` step, and the ``run`` mode reuses an existing build, so
-  building from scratch is not possible in the ``run`` mode.
 
 * If you choose an example when running a job script but not its build type, the machine's
   default build type is used, also for ``gpu.sh``. So for GPUs also give the ``cuda`` build type.

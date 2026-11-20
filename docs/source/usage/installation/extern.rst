@@ -90,7 +90,7 @@ For jupiter builds, the machine-specific configuration enables the Grace CPU arc
 (``Kokkos_ARCH_ARMV9_GRACE``). CUDA builds additionally enable the Hopper GPU architecture
 (``Kokkos_ARCH_HOPPER90``) and OpenMP as the host parallel backend. If the Kokkos architecture
 or backend settings are changed, reconfigure from a clean build directory or clear the existing
-CMake cache first (e.g. with ``CLEO_MAKE_CLEAN=true``, see
+CMake cache first (e.g. by deleting the example's build directory, see
 :ref:`how the bash scripts work<bashscripts>`).
 
 yaml-cpp

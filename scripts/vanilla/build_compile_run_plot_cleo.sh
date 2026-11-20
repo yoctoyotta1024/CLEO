@@ -7,7 +7,7 @@
 ### Usage:
 ###   ./build_compile_run_plot_cleo.sh [example] [buildtype] [compilername] \
 ###                                    [path2CLEO] [path2build] [build_flags] \
-###                                    [yacyaxtroot] [enabledebug] [make_clean] \
+###                                    [yacyaxtroot] [enabledebug] \
 ###                                    [stacksize_limit] [steps]
 ###
 ###   All arguments are optional; pass "" to keep a default.
@@ -21,7 +21,6 @@
 ###   stacksize_limit  unchanged (kB)
 ###   CLEO_MAKE_JOBS   8
 ###
-###   make_clean       true deletes the build folder first (build from scratch).
 ###   steps            build,compile,run,plot,all (default: all)
 ###                    The run stage generates input files and runs the executable.
 ###

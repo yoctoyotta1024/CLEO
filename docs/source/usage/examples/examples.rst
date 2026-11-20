@@ -84,9 +84,9 @@ job using the ``run`` mode.
 ``bubble3d``, only work on CPUs. They do not yet work on GPUs, i.e. with the ``cuda`` build
 configuration and the GPU job scripts.
 
-To build an example from scratch, i.e. to delete its build directory before configuring Cleo
-with CMake again, set ``CLEO_MAKE_CLEAN=true`` when using the ``all`` or ``build`` modes. For
-safety, only build directories which contain a ``CMakeCache.txt`` file are deleted.
+To build an example from scratch, delete its build directory (e.g.
+``rm -rf [CLEO_PATH2BUILD]/build_const2d``) and then use the ``all`` or ``build`` modes, so that
+CMake configures Cleo again without reusing its old cache.
 
 For a detailed description of the bash scripts, e.g. where to change the compiler flags or how to
 add a new example or machine, see:
@@ -105,7 +105,7 @@ add a new example or machine, see:
   .. code-block:: console
 
     $ scripts/[machine]/build_compile_run_plot_cleo.sh [example] [buildtype] [compilername] \
-        [path2CLEO] [path2build] [build_flags] [yacyaxtroot] [enabledebug] [make_clean] \
+        [path2CLEO] [path2build] [build_flags] [yacyaxtroot] [enabledebug] \
         [stacksize_limit] [steps]
 
   All the arguments are optional; use ``""`` to keep an argument's default. ``path2build`` is the
@@ -116,4 +116,4 @@ add a new example or machine, see:
 
   .. code-block:: console
 
-    $ scripts/vanilla/build_compile_run_plot_cleo.sh shima2009 openmp gcc $(pwd) /your/path/to/builds "" "" true "" "" build,compile
+    $ scripts/vanilla/build_compile_run_plot_cleo.sh shima2009 openmp gcc $(pwd) /your/path/to/builds "" "" true "" build,compile

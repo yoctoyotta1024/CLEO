@@ -95,8 +95,8 @@ You can optionally configure the job script in the following ways:
 
 * Build from scratch:
 
-  set ``CLEO_MAKE_CLEAN=true`` to delete each example's build directory before configuring Cleo
-  with CMake again, e.g. after changing your compiler or build configuration.
+  delete the example's build directory, e.g. ``rm -rf [CLEO_PATH2BUILD]/build_const2d``, before
+  configuring Cleo with CMake again, e.g. after changing your compiler or build configuration.
 
 
 .. _executebash_vanilla:
@@ -403,7 +403,7 @@ The Examples
   To run your own setup, edit ``main.cpp``, ``config.yaml`` and ``roughpaper_inputfiles.py``
   and run it again. If your ``main.cpp`` uses different coupled dynamics (e.g. ``cvode`` or
   ``yac``), also change ``-DCLEO_COUPLED_DYNAMICS`` in the ``roughpaper`` entry of
-  ``scripts/common/examples.sh`` and build from scratch (``CLEO_MAKE_CLEAN=true``).
+  ``scripts/common/examples.sh`` and build from scratch (delete ``build_roughpaper`` first).
 
   Figures of the initial conditions are saved in ``${CLEO_PATH2BUILD}/build_roughpaper/bin/``
   and the output dataset is ``${CLEO_PATH2BUILD}/build_roughpaper/bin/SDMdata.zarr``. No plots

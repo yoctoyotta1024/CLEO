@@ -28,11 +28,8 @@
 ###   $6  build_flags      Extra CMake flags                   (default: example)
 ###   $7  yacyaxtroot      Path to YAC+YAXT installation       (default: $CLEO_YACYAXTROOT, else $HOME/yacyaxt/<compilername>)
 ###   $8  enabledebug      true | false                        (default: false)
-###   $9  make_clean       true | false                        (default: false)
-###                        true deletes the example's build folder before the
-###                        build step, i.e. builds from scratch (needs the build step)
-###   $10 stacksize_limit  ulimit -s value (kB)                (default: machine)
-###   $11 steps            build,compile,run,plot,all          (default: all)
+###   $9  stacksize_limit  ulimit -s value (kB)                (default: machine)
+###   $10 steps            build,compile,run,plot,all          (default: all)
 ###
 ### Environment:
 ###   CLEO_PYTHON     python to run the example scripts (default: <path2CLEO>/.venv/bin/python3)
@@ -70,9 +67,8 @@ build_compile_run_plot_cleo() {
   local build_flags_override=${6:-}
   yacyaxtroot=${7:-${CLEO_YACYAXTROOT:-${HOME}/yacyaxt/${compilername}}}
   enabledebug=${8:-false}
-  make_clean=${9:-false}
-  stacksize_limit=${10:-${machine_default_stacksize}}
-  steps=${11:-all}
+  stacksize_limit=${9:-${machine_default_stacksize}}
+  steps=${10:-all}
   ### ---------------------------------------------------- ###
 
   ### ------------------ check arguments --------------- ###
@@ -84,12 +80,7 @@ build_compile_run_plot_cleo() {
   check_value_in_list buildtype "${buildtype}" "${machine_buildtypes[@]}"
   check_value_in_list compilername "${compilername}" "${machine_compilers[@]}"
   check_value_in_list enabledebug "${enabledebug}" true false
-  check_value_in_list make_clean "${make_clean}" true false
   check_steps "${steps}"
-  if [[ "${make_clean}" == true ]] && ! step_enabled build; then
-    echo "Bad inputs: make_clean=true deletes the build folder, so it needs the build step (steps: ${steps})."
-    exit 1
-  fi
   if declare -F machine_check_inputs >/dev/null; then
     machine_check_inputs
   fi
@@ -113,13 +104,6 @@ build_compile_run_plot_cleo() {
 
   source "${common_dir}/print_configuration.sh"
   print_configuration "${example}"
-  ### ---------------------------------------------------- ###
-
-  ### ------------ make clean (build from scratch) ------- ###
-  if [[ "${make_clean}" == true ]]; then
-    source "${common_dir}/clean_build.sh"
-    clean_cleo_build
-  fi
   ### ---------------------------------------------------- ###
 
   ### --------------------- build CLEO ------------------ ###
