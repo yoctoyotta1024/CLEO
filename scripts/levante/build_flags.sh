@@ -68,6 +68,8 @@ configure_machine_build_flags() {
     cuda)
       source "${common_dir}/build_cuda.sh"
       configure_cuda_build
+      export CLEO_KOKKOS_DEVICE_FLAGS="${CLEO_KOKKOS_DEVICE_FLAGS} \
+        -DKokkos_ARCH_AMPERE80=ON"
       ;;
     *)
       echo "Error: unsupported build type '${CLEO_BUILDTYPE}' on levante."
