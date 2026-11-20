@@ -130,13 +130,12 @@ All the arguments are optional:
   *Note*: this is also true for the GPU job script, so when you choose an example with ``gpu.sh``
   also give the ``cuda`` build configuration, e.g. ``sbatch scripts/levante/gpu.sh all as2017 cuda``.
 
-For example, to build Cleo and compile the executable for the Arabas and Shima 2017 example on
-a login node, and then submit a job to run and plot it:
+For example, to submit a job which builds Cleo, compiles the executable, and runs and plots the
+Arabas and Shima 2017 example:
 
 .. code-block:: console
 
-  $ scripts/levante/cpu.sh build as2017
-  $ sbatch scripts/levante/cpu.sh run as2017
+  $ sbatch scripts/levante/cpu.sh all as2017
 
 
 The Examples

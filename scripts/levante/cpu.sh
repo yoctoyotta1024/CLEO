@@ -18,8 +18,7 @@
 ### ============================================================ ###
 ###
 ### Usage:
-###   ./scripts/levante/cpu.sh build [example] [buildtype] [compilername]
-###   sbatch scripts/levante/cpu.sh [all|run] [example] [buildtype] [compilername]
+###   sbatch scripts/levante/cpu.sh [all|build|run] [example] [buildtype] [compilername]
 ###
 ###   Run from (or submit from) the CLEO root directory.
 ###

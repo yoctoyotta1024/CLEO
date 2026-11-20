@@ -19,8 +19,7 @@
 ### ============================================================ ###
 ###
 ### Usage:
-###   ./scripts/levante/gpu.sh build [example] [buildtype] [compilername]
-###   sbatch scripts/levante/gpu.sh [all|run] [example] [buildtype] [compilername]
+###   sbatch scripts/levante/gpu.sh [all|build|run] [example] [buildtype] [compilername]
 ###
 ###   Run from (or submit from) the CLEO root directory.
 ###

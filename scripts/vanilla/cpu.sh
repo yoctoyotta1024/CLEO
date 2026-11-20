@@ -5,8 +5,7 @@
 ### ============================================================ ###
 ###
 ### Usage:
-###   ./scripts/vanilla/cpu.sh build [example] [buildtype] [compilername]
-###   ./scripts/vanilla/cpu.sh [all|run] [example] [buildtype] [compilername]
+###   ./scripts/vanilla/cpu.sh [all|build|run] [example] [buildtype] [compilername]
 ###
 ###   Run from the CLEO root directory.
 ###
