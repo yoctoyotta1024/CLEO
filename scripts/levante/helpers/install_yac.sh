@@ -72,7 +72,7 @@ FC="$(command -v mpifort)"
 ### --------------------- install YAXT ------------------- ###
 mkdir ${root4YAC}/${yaxt_version}
 cd ${root4YAC}/${yaxt_version} && pwd
-curl -sS -f -L --retry 5 --retry-all-errors --retry-delay 15 ${yaxt_source} | tar xvz --strip-components=1
+curl -sS -f -L --retry 5 --retry-delay 15 ${yaxt_source} | tar xvz --strip-components=1
 mkdir build && cd build
 ../configure \
   CC=${CC} FC=${FC} \
@@ -92,7 +92,7 @@ cd ${root4YAC} && rm -rf ${yaxt_version}
 # python bindings made in yac_version directory (note this is not yac directory!)
 mkdir ${root4YAC}/${yac_version}
 cd ${root4YAC}/${yac_version} && pwd
-curl -sS -f -L --retry 5 --retry-all-errors --retry-delay 15 ${yac_source} | tar xvz --strip-components=1
+curl -sS -f -L --retry 5 --retry-delay 15 ${yac_source} | tar xvz --strip-components=1
 mkdir build && cd build
 ../configure \
   CC=${CC} FC=${FC} \
