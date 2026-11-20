@@ -110,7 +110,7 @@ Where Do I Change...?
 
    * - To change...
      - Edit...
-   * - the compiler flags (for debug and release builds)
+   * - the compiler flags
      - ``configure_machine_build_flags`` in ``scripts/[machine]/build_flags.sh``, the
        ``CLEO_CXX_FLAGS`` for each compiler
    * - the Kokkos architecture and basic Kokkos flags
