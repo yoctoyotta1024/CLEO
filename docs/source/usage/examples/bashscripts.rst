@@ -257,8 +257,8 @@ Safety Checks and Things to Know
 
 * The job scripts stop with an error if any of the paths are still ``<...>`` placeholders.
 
-* ``CLEO_PATH2CLEO`` is the directory you run or submit a job script from, so always run or submit
-  the job scripts from your Cleo directory.
+* Unless you export ``CLEO_PATH2CLEO``, it is the directory you run or submit a job script from, so
+  then run or submit the job scripts from your Cleo directory.
 
 * If you choose an example when running a job script but not its build type, the machine's
   default build type is used. ``gpu.sh`` always uses the ``cuda`` build type.

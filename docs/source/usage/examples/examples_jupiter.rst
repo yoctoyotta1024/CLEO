@@ -31,7 +31,7 @@ the script marked ``paths (EDIT THESE FOR YOUR SITE)``:
 
 .. code-block:: console
 
-  export CLEO_PATH2CLEO="${SLURM_SUBMIT_DIR:-$(pwd)}"
+  export CLEO_PATH2CLEO="${CLEO_PATH2CLEO:-${SLURM_SUBMIT_DIR:-$(pwd)}}"
   export CLEO_PYTHON="${CLEO_PYTHON:-${CLEO_PATH2CLEO}/.venv/bin/python3}"
   export CLEO_YACYAXTROOT="${CLEO_YACYAXTROOT:-<PATH/TO/YACYAXT/INSTALL>}"
   export CLEO_PATH2BUILD="${CLEO_PATH2BUILD:-<PATH/TO/BUILD/ROOT>}"
@@ -75,8 +75,8 @@ your ``.bashrc`` or ``.bash_profile`` file, before using the job script, e.g.
   export CLEO_PATH2BUILD=your/path/to/builds
 
 The job script stops with an error if any of these paths are still set to their ``<...>``
-placeholders. *Note*: ``CLEO_PATH2CLEO`` is the directory you submit the job script from, so
-always submit it from your Cleo directory.
+placeholders. *Note*: unless you export ``CLEO_PATH2CLEO``, it is the directory you submit the
+job script from, so then submit it from your Cleo directory.
 
 You can optionally configure the job script in the following ways:
 
@@ -114,8 +114,8 @@ From your Cleo directory, submit the job script to Slurm:
 
   $ sbatch scripts/jupiter/cpu.sh [steps] [example] [buildtype] [compilername]
 
-(or ``gpu.sh`` in place of ``cpu.sh`` to use GPUs). You must submit the job script from your
-Cleo directory, because this is how the job script finds Cleo.
+(or ``gpu.sh`` in place of ``cpu.sh`` to use GPUs). Submit the job script from your Cleo
+directory, because this is how the job script finds Cleo, or export ``CLEO_PATH2CLEO`` first.
 
 All the arguments are optional:
 

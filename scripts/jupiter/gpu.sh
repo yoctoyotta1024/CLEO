@@ -18,7 +18,7 @@
 ###   ./scripts/jupiter/gpu.sh configure,compile [example] [buildtype] [compilername]
 ###   sbatch scripts/jupiter/gpu.sh inputs,run,plot [example] [buildtype] [compilername]
 ###
-###   Run from (or submit from) the CLEO root directory.
+###   Run from (or submit from) the CLEO root directory, or export CLEO_PATH2CLEO.
 ###
 ### Steps (comma-separated, always done in this order; default: all):
 ###   configure  cmake configure
@@ -44,7 +44,7 @@ set -e
 # Resolve paths from the submission directory while allowing site-specific overrides.
 # Replace the <...> placeholders (or export the variables before running/submitting).
 # CLEO_PATH2BUILD is a build root: each example builds in <CLEO_PATH2BUILD>/build_xxx
-export CLEO_PATH2CLEO="${SLURM_SUBMIT_DIR:-$(pwd)}"
+export CLEO_PATH2CLEO="${CLEO_PATH2CLEO:-${SLURM_SUBMIT_DIR:-$(pwd)}}"
 export CLEO_PYTHON="${CLEO_PYTHON:-${CLEO_PATH2CLEO}/.venv/bin/python3}"
 export CLEO_YACYAXTROOT="${CLEO_YACYAXTROOT:-<PATH/TO/YACYAXT/INSTALL>}"
 export CLEO_PATH2BUILD="${CLEO_PATH2BUILD:-<PATH/TO/BUILD/ROOT>}"

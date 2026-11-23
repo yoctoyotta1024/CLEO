@@ -22,7 +22,7 @@ the script marked ``paths (EDIT THESE FOR YOUR SITE)``:
 
 .. code-block:: console
 
-  export CLEO_PATH2CLEO="${SLURM_SUBMIT_DIR:-$(pwd)}"
+  export CLEO_PATH2CLEO="${CLEO_PATH2CLEO:-${SLURM_SUBMIT_DIR:-$(pwd)}}"
   export CLEO_PYTHON="${CLEO_PYTHON:-${CLEO_PATH2CLEO}/.venv/bin/python3}"
   export CLEO_YACYAXTROOT="${CLEO_YACYAXTROOT:-<PATH/TO/YACYAXT/INSTALL>}"
   export CLEO_PATH2BUILD="${CLEO_PATH2BUILD:-<PATH/TO/BUILD/ROOT>}"
@@ -57,8 +57,8 @@ your ``.bashrc`` or ``.bash_profile`` file, before using the job script, e.g.
   export CLEO_PATH2BUILD=your/path/to/builds
 
 The job script stops with an error if any of these paths are still set to their ``<...>``
-placeholders. *Note*: ``CLEO_PATH2CLEO`` is the directory you execute the job script from, so
-always execute it from your Cleo directory.
+placeholders. *Note*: unless you export ``CLEO_PATH2CLEO``, it is the directory you execute
+the job script from, so then execute it from your Cleo directory.
 
 .. admonition:: On a vanilla machine, Cleo uses the MPI compiler wrappers ``mpic++`` and ``mpicc``
    (and ``cmake``) found in your ``PATH``, skipping any which do not work (e.g. broken wrappers
@@ -103,7 +103,7 @@ You can optionally configure the job script in the following ways:
 Execute the Bash Scripts
 ------------------------
 
-From your Cleo directory, execute the job script:
+From your Cleo directory (or anywhere, if you exported ``CLEO_PATH2CLEO``), execute the job script:
 
 .. code-block:: console
 
