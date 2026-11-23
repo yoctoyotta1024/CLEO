@@ -36,8 +36,9 @@ You will need to configure ``cpu.sh`` and ``gpu.sh`` in the following ways:
 
 * Set the path to your YAC and YAXT installations:
 
-  replace ``<PATH/TO/YACYAXT/INSTALL>`` with the path to the directory containing your yac and yaxt
-  directories (see :ref:`how to install YAC and YAXT<install_yac>`).
+  replace ``<PATH/TO/YACYAXT/INSTALL>`` with the path to the directory containing a directory for each
+  compiler (e.g. ``gcc/``), each with your yac and yaxt directories inside (see
+  :ref:`how to install YAC and YAXT<install_yac>`).
 
 * Choose your build directory:
 

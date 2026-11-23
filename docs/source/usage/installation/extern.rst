@@ -72,7 +72,7 @@ interpreter you want to use for YAC's python bindings.
 
   .. code-block:: console
 
-    $ scripts/vanilla/helpers/install_yac.sh ${CLEO_YACYAXTROOT} gcc ${CLEO_PYTHON}
+    $ scripts/vanilla/helpers/install_yac.sh ${CLEO_YACYAXTROOT}/gcc gcc ${CLEO_PYTHON}
 
 
 Alternatively you can download `YAXT <https://swprojects.dkrz.de/redmine/>`_ and

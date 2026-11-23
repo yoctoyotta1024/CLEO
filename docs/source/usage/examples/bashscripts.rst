@@ -165,7 +165,8 @@ Environment Variables
      - Python interpreter which runs the examples' Python scripts
    * - ``CLEO_YACYAXTROOT``
      - the job script (a ``<...>`` placeholder you must replace)
-     - directory containing your ``yac`` and ``yaxt`` installations
+     - directory with one directory per compiler (e.g. ``gcc/``) containing your ``yac`` and ``yaxt``
+       installations
    * - ``CLEO_PATH2BUILD``
      - the job script (a ``<...>`` placeholder you must replace), then ``load_example_config``
      - in the job script, the directory in which examples are built; afterwards the example's own

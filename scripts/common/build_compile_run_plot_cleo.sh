@@ -26,7 +26,8 @@
 ###   $5  path2build       Build root folder; the example builds in
 ###                        <path2build>/build_xxx  (default: path2CLEO)
 ###   $6  build_flags      Extra CMake flags                   (default: example)
-###   $7  yacyaxtroot      Path to YAC+YAXT installation       (default: $CLEO_YACYAXTROOT, else $HOME/yacyaxt/<compilername>)
+###   $7  yacyaxtroot      YAC+YAXT root, with yac and yaxt in <yacyaxtroot>/<compilername>
+###                        (default: $CLEO_YACYAXTROOT, else $HOME/yacyaxt)
 ###   $8  enabledebug      true | false                        (default: $CLEO_ENABLEDEBUG, else false)
 ###   $9  stacksize_limit  ulimit -s value (kB)                (default: $CLEO_STACKSIZE_LIMIT, else machine)
 ###   $10 steps            configure,compile,inputs,run,plot,all (default: all)
@@ -65,7 +66,9 @@ build_compile_run_plot_cleo() {
   path2CLEO=${4:-${CLEO_PATH2CLEO:-${HOME}/CLEO}}
   local path2build_override=${5:-}
   local build_flags_override=${6:-}
-  yacyaxtroot=${7:-${CLEO_YACYAXTROOT:-${HOME}/yacyaxt/${compilername}}}
+  # yac and yaxt for each compiler are in <yacyaxtroot>/<compilername>
+  yacyaxtroot=${7:-${CLEO_YACYAXTROOT:-${HOME}/yacyaxt}}
+  yacyaxtroot="${yacyaxtroot%/}/${compilername}"
   enabledebug=${8:-${CLEO_ENABLEDEBUG:-false}}
   stacksize_limit=${9:-${CLEO_STACKSIZE_LIMIT:-${machine_default_stacksize}}}
   steps=${10:-all}
