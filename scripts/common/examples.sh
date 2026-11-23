@@ -3,7 +3,7 @@
 ### Central example parameter lookup.
 ### Set 'example' before sourcing this file, or pass the example name as $3.
 ### Positional args allow CLI overrides:
-###   $1 = path2build  override (optional, leave empty to use default)
+###   $1 = path2build  exact build directory (optional, empty: <path2CLEO>/build_xxx)
 ###   $2 = build_flags override (optional, leave empty to use default)
 ###   $3 = example  name     (optional, overrides the 'example' variable)
 ###
@@ -26,12 +26,8 @@ fi
 ### Common CMake flags shared by most examples
 cleo_common_flags="-DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
 
-### Build root: path2build_override (if given) or path2CLEO otherwise.
-### build_subdir below is always relative to this root, so an override
-### only replaces the root and never swallows the example's build_xxx suffix.
-path2build_root=${path2build_override:-${path2CLEO}}
-# strip trailing slashes so joining with build_subdir never gives '//'
-while [[ "${path2build_root}" == */ ]]; do path2build_root=${path2build_root%/}; done
+### build_subdir below is the example's default build directory inside path2CLEO,
+### used only when no exact build directory (path2build_override) is given.
 
 case "${example}" in
 
@@ -180,7 +176,7 @@ case "${example}" in
     ;;
 esac
 
-path2build="${path2build_root}/${build_subdir}"
+path2build=${path2build_override:-${path2CLEO%/}/${build_subdir}}
 
 ### Apply CLI overrides if provided (non-empty args take precedence over defaults)
 [[ -n "${build_flags_override}" ]] && build_flags="${build_flags_override}"

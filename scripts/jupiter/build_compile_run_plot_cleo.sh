@@ -11,7 +11,7 @@
 ###                                    [stacksize_limit] [steps]
 ###
 ###   All arguments are optional; pass "" to keep a default.
-###   path2build is a build root: the example builds in <path2build>/build_xxx.
+###   path2build is the exact build directory (default: <path2CLEO>/build_xxx).
 ###   The arguments are the same on every machine, see
 ###   common/build_compile_run_plot_cleo.sh for their full description.
 ###

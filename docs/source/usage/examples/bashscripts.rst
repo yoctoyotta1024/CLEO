@@ -56,7 +56,7 @@ What Happens When You Run a Job Script
 For example, ``sbatch scripts/levante/cpu.sh all constthermo2d`` does the following:
 
 1) ``scripts/levante/cpu.sh`` sets the paths (``CLEO_PATH2CLEO``, ``CLEO_PYTHON``,
-   ``CLEO_YACYAXTROOT`` and ``CLEO_PATH2BUILD``), the machine's environment (e.g. modules) and
+   ``CLEO_YACYAXTROOT`` and optionally ``CLEO_PATH2BUILD``), the machine's environment (e.g. modules) and
    its ``examples`` list, and then calls ``run_cleo_jobs`` from
    ``scripts/common/run_jobs.sh``.
 
@@ -168,9 +168,9 @@ Environment Variables
      - directory with one directory per compiler (e.g. ``gcc/``) containing your ``yac`` and ``yaxt``
        installations
    * - ``CLEO_PATH2BUILD``
-     - the job script (a ``<...>`` placeholder you must replace), then ``load_example_config``
-     - in the job script, the directory in which examples are built; afterwards the example's own
-       build directory, e.g. ``[CLEO_PATH2BUILD]/build_const2d/``
+     - the job script's optional settings (default empty), then ``load_example_config``
+     - the example's build directory: exactly ``CLEO_PATH2BUILD`` if it is set (only for a single
+       example), otherwise the example's default, e.g. ``[CLEO_PATH2CLEO]/build_const2d/``
    * - ``CLEO_ENABLEDEBUG``
      - the job script's optional settings (default ``false``)
      - ``true`` makes a debug build (no optimisation, debug symbols)

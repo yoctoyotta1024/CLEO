@@ -18,7 +18,7 @@
 ###   e.g. configure,compile or compile,run or plot
 ###
 ### To build an example from scratch, delete its build folder
-### (<CLEO_PATH2BUILD>/build_xxx) before the configure step.
+### (by default <CLEO_PATH2CLEO>/build_xxx) before the configure step.
 ###
 ### Without an example, every entry in 'examples' below is used.
 ### An empty buildtype/compilername uses the machine default.
@@ -32,15 +32,16 @@ set -e
 ### ------------- paths (EDIT THESE FOR YOUR SITE) ---------- ###
 # Resolve paths from the submission directory while allowing site-specific overrides.
 # Replace the <...> placeholders (or export the variables before running/submitting).
-# CLEO_PATH2BUILD is a build root: each example builds in <CLEO_PATH2BUILD>/build_xxx
 export CLEO_PATH2CLEO="${CLEO_PATH2CLEO:-${SLURM_SUBMIT_DIR:-$(pwd)}}"
 export CLEO_PYTHON="${CLEO_PYTHON:-${CLEO_PATH2CLEO}/.venv/bin/python3}"
 export CLEO_YACYAXTROOT="${CLEO_YACYAXTROOT:-<PATH/TO/YACYAXT/INSTALL>}"
-export CLEO_PATH2BUILD="${CLEO_PATH2BUILD:-<PATH/TO/BUILD/ROOT>}"
 ### -------------------------------------------------------- ###
 
 ### ----------- optional settings (defaults are fine) ------- ###
 # Edit here, or export before running/submitting. Empty uses the machine default.
+# exact build directory, only for a single example; empty builds each example
+# in its default directory, <CLEO_PATH2CLEO>/build_xxx
+export CLEO_PATH2BUILD="${CLEO_PATH2BUILD:-}"
 export CLEO_ENABLEDEBUG="${CLEO_ENABLEDEBUG:-false}"   # true: debug build (-O0 -g)
 export CLEO_MAKE_JOBS="${CLEO_MAKE_JOBS:-}"            # parallel make jobs
 export CLEO_STACKSIZE_LIMIT="${CLEO_STACKSIZE_LIMIT:-}" # ulimit -s for runs (kB)

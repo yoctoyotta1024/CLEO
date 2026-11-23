@@ -23,8 +23,8 @@
 ###   $2  buildtype        see machine script                  (default: machine)
 ###   $3  compilername     see machine script                  (default: gcc)
 ###   $4  path2CLEO        Absolute path to CLEO source        (default: $CLEO_PATH2CLEO, else $HOME/CLEO)
-###   $5  path2build       Build root folder; the example builds in
-###                        <path2build>/build_xxx  (default: path2CLEO)
+###   $5  path2build       Exact build directory for the example
+###                        (default: <path2CLEO>/build_xxx from examples.sh)
 ###   $6  build_flags      Extra CMake flags                   (default: example)
 ###   $7  yacyaxtroot      YAC+YAXT root, with yac and yaxt in <yacyaxtroot>/<compilername>
 ###                        (default: $CLEO_YACYAXTROOT, else $HOME/yacyaxt)

@@ -17,7 +17,7 @@
 ###   e.g. configure,compile or compile,run or plot
 ###
 ### To build an example from scratch, delete its build folder
-### (<CLEO_PATH2BUILD>/build_xxx) before the configure step.
+### (by default <CLEO_PATH2CLEO>/build_xxx) before the configure step.
 ###
 ### If an example is given only that one is used, otherwise every entry of
 ### the job script's 'examples' list ("example buildtype compilername").
@@ -27,7 +27,8 @@
 ###   CLEO_PATH2CLEO     CLEO source directory
 ###   CLEO_PYTHON        python used to run the examples
 ###   CLEO_YACYAXTROOT   YAC + YAXT installation
-###   CLEO_PATH2BUILD    build root: examples build in <CLEO_PATH2BUILD>/build_xxx
+###   CLEO_PATH2BUILD    exact build directory, only for a single example (optional,
+###                      default: each example in <CLEO_PATH2CLEO>/build_xxx)
 ###   CLEO_ENABLEDEBUG   true | false: debug build (optional, default: false)
 ###   CLEO_MAKE_JOBS     parallel make jobs (optional, default: machine)
 ###   CLEO_STACKSIZE_LIMIT  ulimit -s for runs in kB (optional, default: machine)
@@ -46,7 +47,7 @@ run_cleo_jobs() {
   check_steps "${steps}"
   check_machine
 
-  check_args_not_empty "${CLEO_PATH2CLEO}" "${CLEO_PYTHON}" "${CLEO_YACYAXTROOT}" "${CLEO_PATH2BUILD}"
+  check_args_not_empty "${CLEO_PATH2CLEO}" "${CLEO_PYTHON}" "${CLEO_YACYAXTROOT}"
 
   # catch paths that were left as <...> placeholders in the job script
   local var
@@ -71,6 +72,13 @@ run_cleo_jobs() {
     entries=("${example} ${buildtype:--} ${compilername:--}")
   else
     entries=("${examples[@]}")
+  fi
+
+  # one exact build directory would be shared (and overwritten) by every example
+  if [[ -n "${CLEO_PATH2BUILD:-}" && ${#entries[@]} -gt 1 ]]; then
+    echo "Error: CLEO_PATH2BUILD is set, so give a single example to run."
+    echo "Leave CLEO_PATH2BUILD empty to build each example in its default directory."
+    exit 1
   fi
 
   local entry e b c

@@ -89,7 +89,7 @@ job which does ``inputs,run,plot``.
 configuration and the GPU job scripts.
 
 To build an example from scratch, delete its build directory (e.g.
-``rm -rf [CLEO_PATH2BUILD]/build_const2d``) and then do the ``configure`` step (e.g. with ``all``), so that
+``rm -rf [CLEO_PATH2CLEO]/build_const2d``) and then do the ``configure`` step (e.g. with ``all``), so that
 CMake configures Cleo again without reusing its old cache.
 
 For a detailed description of the bash scripts, e.g. where to change the compiler flags or how to
@@ -113,7 +113,8 @@ add a new example or machine, see:
         [stacksize_limit] [steps]
 
   All the arguments are optional; use ``""`` to keep an argument's default. ``path2build`` is the
-  directory in which each example's build directory is made (by default your Cleo directory) and
+  example's exact build directory (by default its directory inside your Cleo directory, e.g.
+  ``build_colls0d/shima2009``) and
   ``steps`` is a comma-separated list of the steps above, or ``all``. E.g. to only configure and
   compile the Shima et al. 2009 example with OpenMP and in debug mode on a vanilla machine, from
   your Cleo directory:

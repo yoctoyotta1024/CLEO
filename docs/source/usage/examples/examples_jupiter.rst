@@ -34,7 +34,6 @@ the script marked ``paths (EDIT THESE FOR YOUR SITE)``:
   export CLEO_PATH2CLEO="${CLEO_PATH2CLEO:-${SLURM_SUBMIT_DIR:-$(pwd)}}"
   export CLEO_PYTHON="${CLEO_PYTHON:-${CLEO_PATH2CLEO}/.venv/bin/python3}"
   export CLEO_YACYAXTROOT="${CLEO_YACYAXTROOT:-<PATH/TO/YACYAXT/INSTALL>}"
-  export CLEO_PATH2BUILD="${CLEO_PATH2BUILD:-<PATH/TO/BUILD/ROOT>}"
 
 You will need to configure ``cpu.sh`` and ``gpu.sh`` in the following ways:
 
@@ -43,13 +42,6 @@ You will need to configure ``cpu.sh`` and ``gpu.sh`` in the following ways:
   replace ``<PATH/TO/YACYAXT/INSTALL>`` with the path to the directory containing a directory for each
   compiler (e.g. ``gcc/``), each with your yac and yaxt directories inside (see
   :ref:`how to install YAC and YAXT<install_yac>`).
-
-* Choose your build directory:
-
-  replace ``<PATH/TO/BUILD/ROOT>`` with the directory in which you want Cleo to be built. Each
-  example is built in its own directory inside this one, e.g. the Arabas and Shima 2017 example is
-  built in ``<PATH/TO/BUILD/ROOT>/build_adia0d/as2017/``. (*hint*: to build in your Cleo directory
-  use ``${CLEO_PATH2CLEO}``.)
 
 * Use your Python version:
 
@@ -73,7 +65,6 @@ your ``.bashrc`` or ``.bash_profile`` file, before using the job script, e.g.
 .. code-block:: console
 
   export CLEO_YACYAXTROOT=your/path/to/yacyaxtroot
-  export CLEO_PATH2BUILD=your/path/to/builds
 
 The job script stops with an error if any of these paths are still set to their ``<...>``
 placeholders. *Note*: unless you export ``CLEO_PATH2CLEO``, it is the directory you submit the
@@ -98,9 +89,17 @@ You can optionally configure the job script in the following ways:
   choose which compilers to use via the ``compilername``. The only option on JUPITER is
   ``gcc`` (via MPI wrappers).
 
+* Choose your build directory:
+
+  by default each example is built in its own directory inside your Cleo directory, e.g. the
+  Arabas and Shima 2017 example in ``[CLEO_PATH2CLEO]/build_adia0d/as2017/``. To use a different
+  directory, set ``CLEO_PATH2BUILD`` in the job script's optional settings (or export it) to that
+  exact directory. Because every example would then share it, this only works when you run a
+  single example.
+
 * Build from scratch:
 
-  delete the example's build directory, e.g. ``rm -rf [CLEO_PATH2BUILD]/build_const2d``, before
+  delete the example's build directory, e.g. ``rm -rf [CLEO_PATH2CLEO]/build_const2d``, before
   configuring Cleo with CMake again, e.g. after changing your compiler or build configuration.
 
 
@@ -165,7 +164,7 @@ The Examples
       $ scripts/jupiter/cpu.sh configure,compile as2017
       $ sbatch scripts/jupiter/cpu.sh inputs,run,plot as2017
 
-    The plot produced, by default called ``${CLEO_PATH2BUILD}/build_adia0d/as2017/bin/as2017fig.png``, should be
+    The plot produced, by default called ``${CLEO_PATH2CLEO}/build_adia0d/as2017/bin/as2017fig.png``, should be
     similar to figure 5 from Arabas and Shima 2017 :cite:`arabasshima2017`.
 
   .. dropdown:: b) Cusp Bifurcation
@@ -181,8 +180,8 @@ The Examples
       $ scripts/jupiter/cpu.sh configure,compile cuspbifurc
       $ sbatch scripts/jupiter/cpu.sh inputs,run,plot cuspbifurc
 
-    The plots produced, by default called ``${CLEO_PATH2BUILD}/build_adia0d/cuspbifurc/bin/cuspbifurc_validation.png`` and
-    ``${CLEO_PATH2BUILD}/build_adia0d/cuspbifurc/bin/cuspbifurc_SDgrowth.png`` illustrate an example of cusp bifurcation, analagous
+    The plots produced, by default called ``${CLEO_PATH2CLEO}/build_adia0d/cuspbifurc/bin/cuspbifurc_validation.png`` and
+    ``${CLEO_PATH2CLEO}/build_adia0d/cuspbifurc/bin/cuspbifurc_SDgrowth.png`` illustrate an example of cusp bifurcation, analagous
     to the third column of figure 5 from Arabas and Shima 2017 :cite:`arabasshima2017`.
 
 
@@ -203,7 +202,7 @@ The Examples
 
   The ``shima2009.py`` example models collision-coalescence using Golovin's kernel.
 
-  The plot produced, by default called ``${CLEO_PATH2BUILD}/build_colls0d/shima2009/bin/golovin_validation.png``,
+  The plot produced, by default called ``${CLEO_PATH2CLEO}/build_colls0d/shima2009/bin/golovin_validation.png``,
   should be similar to Fig.2(a) of Shima et al. 2009 :cite:p:`shima2009`.
 
   *Long*
@@ -211,7 +210,7 @@ The Examples
   The ``shima2009.py`` example models collision-coalescence using Long's collision efficiency as
   given by equation 13 of Simmel et al. 2002 :cite:`simmel2002`.
 
-  The plot produced, by default called ``${CLEO_PATH2BUILD}/build_colls0d/shima2009/bin/long_validation_[X].png``,
+  The plot produced, by default called ``${CLEO_PATH2CLEO}/build_colls0d/shima2009/bin/long_validation_[X].png``,
   should be similar to Fig.2(b) of Shima et al. 2009 :cite:p:`shima2009`.
 
   *Low and List*
@@ -222,7 +221,7 @@ The Examples
   (see also McFarquhar 2004 :cite:`mcfarquhar2004`). If breakup occurs, a constant
   number of fragments is produced.
 
-  This example produces a plot, by default called ``${CLEO_PATH2BUILD}/build_colls0d/breakup/bin/lowlist_validation.png``.
+  This example produces a plot, by default called ``${CLEO_PATH2CLEO}/build_colls0d/breakup/bin/lowlist_validation.png``.
 
   *Szakáll and Urbich*
 
@@ -231,7 +230,7 @@ The Examples
   coalescence/breakup/rebound probability from Szakáll and Urbich 2018 :cite:`szakall2018`.
   If breakup occurs, a constant number of fragments is produced.
 
-  This example produces a plot, by default called ``${CLEO_PATH2BUILD}/build_colls0d/breakup/bin/szakallurbich_validation.png``.
+  This example produces a plot, by default called ``${CLEO_PATH2CLEO}/build_colls0d/breakup/bin/szakallurbich_validation.png``.
 
   *Testik and Straub*
 
@@ -241,7 +240,7 @@ The Examples
   :cite:`testik2011` (first proposed in :cite:`testik2009`), as well as coalescence efficiency and number of fragements
   produced from Straub et al. 2010 and Schlottke et al. 2010 respectively (:cite:`schlottke2010`, :cite:`straub2010`).
 
-  This example produces a plot, by default called ``${CLEO_PATH2BUILD}/build_colls0d/breakup/bin/testikstraub_validation.png``.
+  This example produces a plot, by default called ``${CLEO_PATH2CLEO}/build_colls0d/breakup/bin/testikstraub_validation.png``.
 
   .. container:: large-text
 
@@ -268,7 +267,7 @@ The Examples
 
     This example models collision-coalescence using Golovin's kernel.
 
-    The plot produced, by default called ``${CLEO_PATH2BUILD}/build_colls0d/shima2009/bin/golovin_validation.png``, should be
+    The plot produced, by default called ``${CLEO_PATH2CLEO}/build_colls0d/shima2009/bin/golovin_validation.png``, should be
     comparable to Fig.2(a) of Shima et al. 2009 :cite:p:`shima2009`.
 
     **Long1 and Long2**
@@ -277,8 +276,8 @@ The Examples
     13 of Simmel et al. 2002 :cite:`simmel2002`. The two examples use almost identical initial
     conditions and collision timesteps, as in Shima et al. 2009 :cite:p:`shima2009`.
 
-    The plots produced, by default called ``${CLEO_PATH2BUILD}/build_colls0d/shima2009/bin/long_validation_1.png`` and
-    ``${CLEO_PATH2BUILD}/build_colls0d/shima2009/bin/long_validation_2.png``, should be comparable to
+    The plots produced, by default called ``${CLEO_PATH2CLEO}/build_colls0d/shima2009/bin/long_validation_1.png`` and
+    ``${CLEO_PATH2CLEO}/build_colls0d/shima2009/bin/long_validation_2.png``, should be comparable to
     Fig.2(b) and Fig.2(c) of Shima et al. 2009 :cite:p:`shima2009`.
 
   .. dropdown:: b) Breakup
@@ -316,9 +315,9 @@ The Examples
 
   This example plots the motion of super-droplets without a terminal velocity in a 2-D divergence
   free wind field. It produces a plot showing the motion of a sample of super-droplets, by default
-  called ``${CLEO_PATH2BUILD}/build_divfree2d/bin/divfree2d_motion2d_validation.png``. The number of super-droplets in the domain
+  called ``${CLEO_PATH2CLEO}/build_divfree2d/bin/divfree2d_motion2d_validation.png``. The number of super-droplets in the domain
   should remain constant over time, as shown in the plot produced and by default called
-  ``${CLEO_PATH2BUILD}/build_divfree2d/bin/divfree2d_maxnsupers_validation.png``.
+  ``${CLEO_PATH2CLEO}/build_divfree2d/bin/divfree2d_maxnsupers_validation.png``.
 
 
 .. dropdown:: 1-D Rainshafts
@@ -402,8 +401,8 @@ The Examples
       $ scripts/jupiter/cpu.sh configure,compile fromfile
       $ sbatch scripts/jupiter/cpu.sh inputs,run,plot fromfile
 
-    The plots produced, by default called ``${CLEO_PATH2BUILD}/build_fromfile/bin/ntasks4/fromfile_motion2d_validation.png``
-    and ``${CLEO_PATH2BUILD}/build_fromfile/bin/ntasks4/fromfile_maxnsupers_validation.png``, show the motion of a
+    The plots produced, by default called ``${CLEO_PATH2CLEO}/build_fromfile/bin/ntasks4/fromfile_motion2d_validation.png``
+    and ``${CLEO_PATH2CLEO}/build_fromfile/bin/ntasks4/fromfile_maxnsupers_validation.png``, show the motion of a
     sample of super-droplets and the number of super-droplets in the domain over time.
 
   .. dropdown:: b) Irregular Grid
@@ -420,7 +419,7 @@ The Examples
       $ sbatch scripts/jupiter/cpu.sh inputs,run,plot fromfile_irreg
 
     The plots produced are analagous to the regular grid example's, by default in
-    ``${CLEO_PATH2BUILD}/build_fromfile_irreg/bin/ntasks4/``.
+    ``${CLEO_PATH2CLEO}/build_fromfile_irreg/bin/ntasks4/``.
 
 
 .. dropdown:: 3-D Bubble (Coupled to ICON via YAC)
@@ -443,7 +442,7 @@ The Examples
     $ sbatch scripts/jupiter/cpu.sh inputs,run,plot bubble3d
 
   Plots of the super-droplets' motion and of the thermodynamics are produced, by default called
-  ``${CLEO_PATH2BUILD}/build_bubble3d/bin/bubble_motion.png`` and ``${CLEO_PATH2BUILD}/build_bubble3d/bin/bubble_[variable].png``.
+  ``${CLEO_PATH2CLEO}/build_bubble3d/bin/bubble_motion.png`` and ``${CLEO_PATH2CLEO}/build_bubble3d/bin/bubble_[variable].png``.
 
 
 .. dropdown:: Python Bindings
@@ -494,8 +493,8 @@ The Examples
   ``yac``), also change ``-DCLEO_COUPLED_DYNAMICS`` in the ``roughpaper`` entry of
   ``scripts/common/examples.sh`` and build from scratch (delete ``build_roughpaper`` first).
 
-  Figures of the initial conditions are saved in ``${CLEO_PATH2BUILD}/build_roughpaper/bin/``
-  and the output dataset is ``${CLEO_PATH2BUILD}/build_roughpaper/bin/SDMdata.zarr``. No plots
+  Figures of the initial conditions are saved in ``${CLEO_PATH2CLEO}/build_roughpaper/bin/``
+  and the output dataset is ``${CLEO_PATH2CLEO}/build_roughpaper/bin/SDMdata.zarr``. No plots
   of the results are made.
 
 
