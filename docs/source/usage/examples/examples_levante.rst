@@ -434,6 +434,8 @@ The Examples
 
     $ sbatch scripts/levante/cpu.sh all python_bindings
 
+  *Note*: on Levante this example currently only works with the ``gcc`` compiler.
+
   *Note*: you may have issues with python versions >= 3.14, please
   see :ref:`this note<pybind11>` for details.
 
