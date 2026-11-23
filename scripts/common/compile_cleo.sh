@@ -22,7 +22,7 @@ compile_cleo() {
     exit 1
   fi
 
-  cd ${CLEO_PATH2BUILD} && pwd
+  cd "${CLEO_PATH2BUILD}" && pwd
 
   if [ "${executables}" == "NONE" ]; then
     cmd="make -j ${make_jobs}"
