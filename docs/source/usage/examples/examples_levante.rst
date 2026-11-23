@@ -110,16 +110,16 @@ From your Cleo directory, submit the job script to Slurm:
 
 .. code-block:: console
 
-  $ sbatch scripts/levante/cpu.sh [mode] [example] [buildtype] [compilername]
+  $ sbatch scripts/levante/cpu.sh [steps] [example] [buildtype] [compilername]
 
 (or ``gpu.sh`` in place of ``cpu.sh`` to use GPUs). You must submit the job script from your
 Cleo directory, because this is how the job script finds Cleo.
 
 All the arguments are optional:
 
-* ``mode``: ``all`` (the default) builds, compiles, runs and plots, ``build`` only builds and
-  compiles, and ``run`` recompiles, runs and plots using an existing build (see
-  :ref:`how the bash scripts work<bashscripts>`).
+* ``steps``: a comma-separated list of the steps to do, ``configure``, ``compile``, ``inputs``,
+  ``run`` and ``plot``, or ``all`` (the default) for all of them (see
+  :ref:`running the examples<examples>`).
 
 * ``example``: the example to run. If it is not given, every example in the job script's
   ``examples`` list is run.

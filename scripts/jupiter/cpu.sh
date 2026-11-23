@@ -14,19 +14,21 @@
 ### ============================================================ ###
 ###
 ### Usage:
-###   ./scripts/jupiter/cpu.sh build [example] [buildtype] [compilername]
-###   sbatch scripts/jupiter/cpu.sh [all|run] [example] [buildtype] [compilername]
+###   ./scripts/jupiter/cpu.sh configure,compile [example] [buildtype] [compilername]
+###   sbatch scripts/jupiter/cpu.sh inputs,run,plot [example] [buildtype] [compilername]
 ###
 ###   Run from (or submit from) the CLEO root directory.
 ###
-### Modes:
-###   all    configure, compile, run + plot (default)    (steps: all)
-###   build  cmake configure + compile                   (steps: build,compile)
-###   run    recompile, make inputs, run + plot (needs a prior build)
-###          (steps: compile,inputs,run,plot)
+### Steps (comma-separated, always done in this order; default: all):
+###   configure  cmake configure
+###   compile    compile the executable(s)
+###   inputs     generate the input files
+###   run        run the executable(s)
+###   plot       plot the results
+###   e.g. configure,compile or compile,run or plot
 ###
 ### To build an example from scratch, delete its build folder
-### (<CLEO_PATH2BUILD>/build_xxx) before using the all or build mode.
+### (<CLEO_PATH2BUILD>/build_xxx) before the configure step.
 ###
 ### Without an example, every entry in 'examples' below is used.
 ### An empty buildtype/compilername uses the machine default.

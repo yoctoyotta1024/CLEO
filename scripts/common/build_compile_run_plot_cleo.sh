@@ -29,7 +29,7 @@
 ###   $7  yacyaxtroot      Path to YAC+YAXT installation       (default: $CLEO_YACYAXTROOT, else $HOME/yacyaxt/<compilername>)
 ###   $8  enabledebug      true | false                        (default: $CLEO_ENABLEDEBUG, else false)
 ###   $9  stacksize_limit  ulimit -s value (kB)                (default: $CLEO_STACKSIZE_LIMIT, else machine)
-###   $10 steps            build,compile,inputs,run,plot,all   (default: all)
+###   $10 steps            configure,compile,inputs,run,plot,all (default: all)
 ###
 ### Environment:
 ###   CLEO_PYTHON     python to run the example scripts (default: <path2CLEO>/.venv/bin/python3)
@@ -107,7 +107,7 @@ build_compile_run_plot_cleo() {
   ### ---------------------------------------------------- ###
 
   ### --------------------- build CLEO ------------------ ###
-  if step_enabled build; then
+  if step_enabled configure; then
     source "${common_dir}/build_cleo.sh"
     build_cleo
   fi
@@ -115,8 +115,8 @@ build_compile_run_plot_cleo() {
 
   ### ---------------- compile example -------------- ###
   if step_enabled compile; then
-    if ! step_enabled build; then
-      # the build step loads the machine's toolchain and YAC's dependencies
+    if ! step_enabled configure; then
+      # the configure step loads the machine's toolchain and YAC's dependencies
       # (modules), so without it load them here before compiling; the linker
       # needs YAC's dependencies (e.g. NetCDF -> HDF5, PnetCDF) too
       source "${machine_dir}/build_flags.sh"

@@ -21,7 +21,7 @@ Layout
 
   scripts/
   ├── common/                              the same on every machine
-  │   ├── run_jobs.sh                      logic of the job scripts (modes, examples list)
+  │   ├── run_jobs.sh                      logic of the job scripts (steps, examples list)
   │   ├── build_compile_run_plot_cleo.sh   the pipeline: checks, build, compile, run and plot
   │   ├── examples.sh                      every example: build directory, CMake flags, executables,
   │   │                                    Python script and its arguments
@@ -60,8 +60,7 @@ For example, ``sbatch scripts/levante/cpu.sh all constthermo2d`` does the follow
    its ``examples`` list, and then calls ``run_cleo_jobs`` from
    ``scripts/common/run_jobs.sh``.
 
-2) ``run_cleo_jobs`` turns the mode into steps (``all``, ``build,compile`` or
-   ``compile,inputs,run,plot``), checks the paths are not ``<...>`` placeholders, and then, for the given
+2) ``run_cleo_jobs`` checks the steps (here ``all``), checks the paths are not ``<...>`` placeholders, and then, for the given
    example or every entry of the ``examples`` list, calls the machine's
    ``build_compile_run_plot_cleo.sh``.
 
@@ -78,13 +77,13 @@ For example, ``sbatch scripts/levante/cpu.sh all constthermo2d`` does the follow
 
    c) prints the configuration,
 
-   d) the ``build`` step: calls ``build_cleo`` from ``scripts/common/build_cleo.sh``, which calls
+   d) the ``configure`` step: calls ``build_cleo`` from ``scripts/common/build_cleo.sh``, which calls
       ``configure_machine_build_flags`` (``levante/build_flags.sh``) and
       ``configure_machine_yac_flags`` (``levante/helpers/build_yac.sh``), and then configures Cleo
       with CMake,
 
    f) the ``compile`` step: calls ``compile_cleo`` from ``scripts/common/compile_cleo.sh``, which
-      runs ``make`` for the example's executables. If there is no ``build`` step, it first calls
+      runs ``make`` for the example's executables. If there is no ``configure`` step, it first calls
       ``configure_machine_build_flags`` to load the machine's compilers,
 
    g) the ``inputs``, ``run`` and ``plot`` steps: call ``configure_machine_runtime_settings``
@@ -136,7 +135,7 @@ Where Do I Change...?
    * - the Slurm options, which examples a job runs, the paths, or whether to make a debug build,
        the number of make jobs or the stack size for one job
      - the job script, ``scripts/[machine]/cpu.sh`` or ``gpu.sh``
-   * - the modes of the job scripts
+   * - how the job scripts handle the steps and the examples list
      - ``run_cleo_jobs`` in ``scripts/common/run_jobs.sh``
    * - the steps, the order they run in or how the Python script is called
      - ``build_compile_run_plot_cleo`` in ``scripts/common/build_compile_run_plot_cleo.sh``
@@ -264,6 +263,6 @@ Safety Checks and Things to Know
 * If you choose an example when running a job script but not its build type, the machine's
   default build type is used. ``gpu.sh`` always uses the ``cuda`` build type.
 
-* The ``build`` step needs internet access, because CMake downloads some of Cleo's dependencies
-  (e.g. Kokkos). On machines whose compute nodes have no internet access, such as JUPITER, use the
-  ``build`` mode on a login node and then submit a job with the ``run`` mode.
+* The ``configure`` step needs internet access, because CMake downloads some of Cleo's dependencies
+  (e.g. Kokkos). On machines whose compute nodes have no internet access, such as JUPITER, do
+  ``configure,compile`` on a login node and then submit a job which does ``inputs,run,plot``.

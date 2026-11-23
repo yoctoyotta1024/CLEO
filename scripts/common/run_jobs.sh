@@ -6,16 +6,18 @@
 ### ============================================================ ###
 ###
 ### Usage (from a job script, after setting the configuration):
-###   run_cleo_jobs [all|build|run] [example] [buildtype] [compilername]
+###   run_cleo_jobs [steps] [example] [buildtype] [compilername]
 ###
-### Modes:
-###   all    configure, compile, run + plot (default)    (steps: all)
-###   build  cmake configure + compile                   (steps: build,compile)
-###   run    recompile, make inputs, run + plot (needs a prior build)
-###          (steps: compile,inputs,run,plot)
+### Steps (comma-separated, always done in this order; default: all):
+###   configure  cmake configure
+###   compile    compile the executable(s)
+###   inputs     generate the input files
+###   run        run the executable(s)
+###   plot       plot the results
+###   e.g. configure,compile or compile,run or plot
 ###
 ### To build an example from scratch, delete its build folder
-### (<CLEO_PATH2BUILD>/build_xxx) before using the all or build mode.
+### (<CLEO_PATH2BUILD>/build_xxx) before the configure step.
 ###
 ### If an example is given only that one is used, otherwise every entry of
 ### the job script's 'examples' list ("example buildtype compilername").
@@ -35,33 +37,13 @@
 set -e
 
 run_cleo_jobs() {
-  local mode="${1:-all}"
+  local steps="${1:-all}"
   local example="${2:-}"
   local buildtype="${3:-}"
   local compilername="${4:-}"
 
-  local steps
-  local action
-  case "${mode}" in
-    build)
-      steps="build,compile"
-      action="Building"
-      ;;
-    run)
-      steps="compile,inputs,run,plot"
-      action="Running"
-      ;;
-    all)
-      steps="all"
-      action="Building + running"
-      ;;
-    *)
-      echo "Usage: $0 [all|build|run] [example] [buildtype] [compilername]"
-      exit 1
-      ;;
-  esac
-
   source "${CLEO_PATH2CLEO}/scripts/common/check_inputs.sh"
+  check_steps "${steps}"
   check_machine
 
   check_args_not_empty "${CLEO_PATH2CLEO}" "${CLEO_PYTHON}" "${CLEO_YACYAXTROOT}" "${CLEO_PATH2BUILD}"
@@ -75,7 +57,8 @@ run_cleo_jobs() {
       exit 1
     fi
   done
-  if [[ "${mode}" != build && ! -x "${CLEO_PYTHON}" ]] && ! command -v "${CLEO_PYTHON}" &>/dev/null; then
+  if [[ "${steps}" == all || ",${steps}," =~ ,(inputs|run|plot), ]] &&
+     [[ ! -x "${CLEO_PYTHON}" ]] && ! command -v "${CLEO_PYTHON}" &>/dev/null; then
     echo "Error: CLEO Python executable not found:"
     echo "  ${CLEO_PYTHON}"
     exit 1
@@ -96,7 +79,7 @@ run_cleo_jobs() {
     [[ "${b}" == "-" ]] && b=""
     [[ "${c}" == "-" ]] && c=""
     echo
-    echo "=== ${action} ${e} (${b:-default buildtype}, ${c:-default compiler}) ==="
+    echo "=== ${steps}: ${e} (${b:-default buildtype}, ${c:-default compiler}) ==="
     echo
     "${driver}" "${e}" "${b}" "${c}" "${CLEO_PATH2CLEO}" \
       "${CLEO_PATH2BUILD}" "" "${CLEO_YACYAXTROOT}" "" "" "${steps}"

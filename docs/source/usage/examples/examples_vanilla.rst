@@ -107,13 +107,13 @@ From your Cleo directory, execute the job script:
 
 .. code-block:: console
 
-  $ scripts/vanilla/cpu.sh [mode] [example] [buildtype] [compilername]
+  $ scripts/vanilla/cpu.sh [steps] [example] [buildtype] [compilername]
 
 All the arguments are optional:
 
-* ``mode``: ``all`` (the default) builds, compiles, runs and plots, ``build`` only builds and
-  compiles, and ``run`` recompiles, runs and plots using an existing build (see
-  :ref:`how the bash scripts work<bashscripts>`).
+* ``steps``: a comma-separated list of the steps to do, ``configure``, ``compile``, ``inputs``,
+  ``run`` and ``plot``, or ``all`` (the default) for all of them (see
+  :ref:`running the examples<examples>`).
 
 * ``example``: the example to run. If it is not given, every example in the job script's
   ``examples`` list is run.
@@ -128,12 +128,12 @@ example using OpenMP:
 
   $ scripts/vanilla/cpu.sh all as2017 openmp
 
-and then, having changed e.g. the example's configuration file, to recompile, run and plot it
-again without reconfiguring Cleo:
+and then, having changed e.g. the example's configuration file, to recompile, generate the input
+files, run and plot it again without reconfiguring Cleo:
 
 .. code-block:: console
 
-  $ scripts/vanilla/cpu.sh run as2017 openmp
+  $ scripts/vanilla/cpu.sh compile,inputs,run,plot as2017 openmp
 
 
 The Examples

@@ -21,7 +21,7 @@
 ###   stacksize_limit  204800 (kB)
 ###   CLEO_MAKE_JOBS   32
 ###
-###   steps            build,compile,inputs,run,plot,all (default: all)
+###   steps            configure,compile,inputs,run,plot,all (default: all)
 ###                    The run stage generates input files and runs the executable.
 ###
 ### Supported examples (see common/examples.sh for full details):
