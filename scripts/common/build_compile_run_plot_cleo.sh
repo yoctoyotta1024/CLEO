@@ -100,6 +100,7 @@ build_compile_run_plot_cleo() {
 
   source "${common_dir}/examples.sh"
   load_example_config "${path2build_override}" "${build_flags_override}" "${example}"
+  check_source_and_build_paths
 
   check_args_not_empty "${CLEO_BUILDTYPE}" "${CLEO_COMPILERNAME}" "${CLEO_PATH2CLEO}" \
                        "${CLEO_PATH2BUILD}" "${CLEO_BUILD_FLAGS}" "${CLEO_YACYAXTROOT}" \

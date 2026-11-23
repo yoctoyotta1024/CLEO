@@ -45,7 +45,8 @@ check_steps() {
 }
 
 check_source_and_build_paths() {
-  if [ "${CLEO_PATH2CLEO}" == "${CLEO_PATH2BUILD}" ]; then
+  # strip trailing slashes, since .../CLEO/ is the same directory as .../CLEO
+  if [[ "${CLEO_PATH2CLEO%/}" == "${CLEO_PATH2BUILD%/}" ]]; then
     echo "Bad inputs: build directory cannot match the path to CLEO source"
     exit 1
   fi
