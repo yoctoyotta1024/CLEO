@@ -29,8 +29,8 @@ configure_machine_runtime_settings() {
   ### --------------- YAC runtime settings --------------- ###
   local fyamllib
   fyamllib=$(vanilla_fyamllib_for_compiler "${CLEO_COMPILERNAME}")
-  export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${fyamllib}
-  export PYTHONPATH=${PYTHONPATH}:${CLEO_YACYAXTROOT}/yac/python
+  export LD_LIBRARY_PATH=${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${fyamllib}
+  export PYTHONPATH=${PYTHONPATH:+${PYTHONPATH}:}${CLEO_YACYAXTROOT}/yac/python
   ### ---------------------------------------------------- ###
 
   ### ------------ communication runtime (MPI) ------------ ###

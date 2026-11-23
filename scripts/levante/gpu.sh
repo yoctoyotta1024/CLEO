@@ -20,6 +20,7 @@
 ###
 ### Usage:
 ###   sbatch scripts/levante/gpu.sh [steps] [example] [buildtype] [compilername]
+###   (buildtype is always cuda; any other value is ignored)
 ###
 ###   Run from (or submit from) the CLEO root directory, or export CLEO_PATH2CLEO.
 ###

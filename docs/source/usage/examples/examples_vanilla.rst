@@ -22,7 +22,7 @@ the script marked ``paths (EDIT THESE FOR YOUR SITE)``:
 
 .. code-block:: console
 
-  export CLEO_PATH2CLEO="${CLEO_PATH2CLEO:-${SLURM_SUBMIT_DIR:-$(pwd)}}"
+  export CLEO_PATH2CLEO="${CLEO_PATH2CLEO:-$(pwd)}"
   export CLEO_PYTHON="${CLEO_PYTHON:-${CLEO_PATH2CLEO}/.venv/bin/python3}"
   export CLEO_YACYAXTROOT="${CLEO_YACYAXTROOT:-<PATH/TO/YACYAXT/INSTALL>}"
 

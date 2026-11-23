@@ -41,7 +41,7 @@ def parse_arguments():
     parser.add_argument(
         "thermofiles",
         type=Path,
-        help="Absolute path to derive thermoynamics binary files",
+        help="Absolute path to derive thermodynamics binary files",
     )
     parser.add_argument(
         "--gen_gbxs",
@@ -62,17 +62,17 @@ def parse_arguments():
         "--savefigpath",
         type=Path,
         default=None,
-        help="Directory to save initialiation figures in (is save_figures is True)",
+        help="Directory to save initialisation figures in (if save_figures is True)",
     )
     parser.add_argument(
         "--show_figures",
         action="store_true",  # default is False
-        help="Show initialiation figures",
+        help="Show initialisation figures",
     )
     parser.add_argument(
         "--save_figures",
         action="store_true",  # default is False
-        help="Save initialiation figures in savefigpath",
+        help="Save initialisation figures in savefigpath",
     )
     return parser.parse_args()
 

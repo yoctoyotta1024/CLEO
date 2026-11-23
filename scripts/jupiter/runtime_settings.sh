@@ -30,8 +30,8 @@ configure_machine_runtime_settings() {
   ### --------------- YAC runtime settings --------------- ###
   local fyamllib
   fyamllib=$(jupiter_fyamllib_for_compiler "${CLEO_COMPILERNAME}")
-  export LD_LIBRARY_PATH="${fyamllib}:${LD_LIBRARY_PATH}"
-  export PYTHONPATH="${PYTHONPATH}:${CLEO_PATH2CLEO}/examples/exampleplotting/plotcleo:${CLEO_YACYAXTROOT}/yac/python"
+  export LD_LIBRARY_PATH="${fyamllib}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+  export PYTHONPATH="${PYTHONPATH:+${PYTHONPATH}:}${CLEO_PATH2CLEO}/examples/exampleplotting/plotcleo:${CLEO_YACYAXTROOT}/yac/python"
   ### ---------------------------------------------------- ###
 
   ### ------------ communication runtime (MPI) ------------ ###
@@ -40,7 +40,7 @@ configure_machine_runtime_settings() {
       echo "Error: CLEO_CUDA_ROOT is not set for cuda runtime."
       exit 1
     fi
-    export LD_LIBRARY_PATH="${CLEO_CUDA_ROOT}/lib64:${LD_LIBRARY_PATH}"
+    export LD_LIBRARY_PATH="${CLEO_CUDA_ROOT}/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
     export UCX_RNDV_SCHEME=put_zcopy                        # Preferred communication scheme with Rendezvous protocol
     export UCX_RNDV_THRESH=16384                            # Threshold when to switch transport from TCP to NVLINK
     export UCX_IB_GPU_DIRECT_RDMA=yes                       # Allow remote direct memory access from/to GPU

@@ -90,7 +90,7 @@ levante_load_runtime_stack() {
   case "${compilername}" in
     gcc)
       module load "${levante_gcc_openmpi}"
-      export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${levante_gcc_libs}"
+      export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:+${LD_LIBRARY_PATH}:}${levante_gcc_libs}"
       if [[ "${buildtype}" == "cuda" ]]; then
         spack load "${levante_gcc_cuda}"
         export CLEO_CUDA_ROOT="${CLEO_CUDA_ROOT:-${levante_gcc_cuda_root}}"
@@ -113,7 +113,7 @@ levante_load_runtime_stack() {
   # mpi4py (e.g. in the python_bindings example) loads it at runtime
   local mpi_libdir
   mpi_libdir="$(dirname "$(dirname "$(command -v mpicc)")")/lib"
-  export LD_LIBRARY_PATH="${mpi_libdir}:${LD_LIBRARY_PATH}"
+  export LD_LIBRARY_PATH="${mpi_libdir}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
 }
 
 levante_load_yac_dependencies() {

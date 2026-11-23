@@ -17,6 +17,7 @@
 ### Usage:
 ###   ./scripts/jupiter/gpu.sh configure,compile [example] [buildtype] [compilername]
 ###   sbatch scripts/jupiter/gpu.sh inputs,run,plot [example] [buildtype] [compilername]
+###   (buildtype is always cuda; any other value is ignored)
 ###
 ###   Run from (or submit from) the CLEO root directory, or export CLEO_PATH2CLEO.
 ###

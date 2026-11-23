@@ -82,11 +82,11 @@ For example, ``sbatch scripts/levante/cpu.sh all constthermo2d`` does the follow
       ``configure_machine_yac_flags`` (``levante/helpers/build_yac.sh``), and then configures Cleo
       with CMake,
 
-   f) the ``compile`` step: calls ``compile_cleo`` from ``scripts/common/compile_cleo.sh``, which
+   e) the ``compile`` step: calls ``compile_cleo`` from ``scripts/common/compile_cleo.sh``, which
       runs ``make`` for the example's executables. If there is no ``configure`` step, it first calls
       ``configure_machine_build_flags`` to load the machine's compilers,
 
-   g) the ``inputs``, ``run`` and ``plot`` steps: call ``configure_machine_runtime_settings``
+   f) the ``inputs``, ``run`` and ``plot`` steps: call ``configure_machine_runtime_settings``
       (``levante/runtime_settings.sh``) and then the example's Python script, with
       ``--do_inputfiles`` for the ``inputs`` step, ``--do_run_executable`` for the ``run`` step,
       and ``--do_plot_results`` for the ``plot`` step.

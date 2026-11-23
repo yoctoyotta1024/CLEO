@@ -32,7 +32,7 @@ set -e
 ### ------------- paths (EDIT THESE FOR YOUR SITE) ---------- ###
 # Resolve paths from the submission directory while allowing site-specific overrides.
 # Replace the <...> placeholders (or export the variables before running/submitting).
-export CLEO_PATH2CLEO="${CLEO_PATH2CLEO:-${SLURM_SUBMIT_DIR:-$(pwd)}}"
+export CLEO_PATH2CLEO="${CLEO_PATH2CLEO:-$(pwd)}"
 export CLEO_PYTHON="${CLEO_PYTHON:-${CLEO_PATH2CLEO}/.venv/bin/python3}"
 export CLEO_YACYAXTROOT="${CLEO_YACYAXTROOT:-<PATH/TO/YACYAXT/INSTALL>}"
 ### -------------------------------------------------------- ###

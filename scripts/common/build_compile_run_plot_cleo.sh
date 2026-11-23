@@ -13,13 +13,13 @@
 ###   machine_default_buildtype    default for $2
 ###   machine_buildtypes=(...)     supported build types
 ###   machine_compilers=(...)      supported compiler names
-###   machine_examples=(...)    supported examples
-###   machine_default_stacksize    default for $10 ("" = leave unchanged)
+###   machine_examples=(...)       supported examples
+###   machine_default_stacksize    default for $9 ("" = leave unchanged)
 ###   machine_default_make_jobs    default for CLEO_MAKE_JOBS
 ###   machine_check_inputs()       optional extra validation
 ###
 ### Arguments (identical on every machine, all optional):
-###   $1  example       Name of example                  (default: as2017)
+###   $1  example          Name of example                     (default: as2017)
 ###   $2  buildtype        see machine script                  (default: machine)
 ###   $3  compilername     see machine script                  (default: gcc)
 ###   $4  path2CLEO        Absolute path to CLEO source        (default: $CLEO_PATH2CLEO, else $HOME/CLEO)
@@ -46,9 +46,10 @@ step_enabled() {
 run_python_stage() {
   local flag="$1"
 
-  echo "Running: ${CLEO_PYTHON} ${pythonscript} ${flag}"
-  "${CLEO_PYTHON}" "${pythonscript}" \
-    "${path2CLEO}" "${CLEO_PATH2BUILD}" "${python_args[@]}" "${flag}"
+  local cmd=("${CLEO_PYTHON}" "${pythonscript}" \
+    "${path2CLEO}" "${CLEO_PATH2BUILD}" "${python_args[@]}" "${flag}")
+  echo "Running: ${cmd[*]}"
+  "${cmd[@]}"
 }
 
 build_compile_run_plot_cleo() {
