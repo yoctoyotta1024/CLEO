@@ -1,188 +1,175 @@
 #!/bin/bash
 
 ### Central example parameter lookup.
-### Set 'example' before sourcing this file, or pass the example name as $3.
-### Positional args allow CLI overrides:
-###   $1 = path2build  exact build directory (optional, empty: <path2CLEO>/build_xxx)
-###   $2 = build_flags override (optional, leave empty to use default)
-###   $3 = example  name     (optional, overrides the 'example' variable)
-###
+### Usage: load_example_config <example> [path2build] [build_flags]
+###   example      name of the example
+###   path2build   exact build directory (optional, empty: <CLEO_PATH2CLEO>/build_xxx)
+###   build_flags  CMake flags replacing the example's own (optional)
+### Requires CLEO_PATH2CLEO to be exported. Exports CLEO_PATH2BUILD and
+### CLEO_BUILD_FLAGS, and sets executables, pythonscript and script_args.
 
 load_example_config() {
-path2build_override=${1:-""}
-build_flags_override=${2:-""}
-example=${3:-${example}}
+  example=$1
+  local path2build_override=${2:-}
+  local build_flags_override=${3:-}
 
-if [[ -z "${path2CLEO}" ]]; then
-  echo "Please provide path to CLEO source directory"
-  exit 1
-fi
+  ### Common CMake flags shared by most examples
+  cleo_common_flags="-DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
 
-if [[ -z "${example}" ]]; then
-  echo "Error: 'example' must be set before sourcing examples.sh (or passed as \$3)"
-  exit 1
-fi
+  ### build_subdir below is the example's default build directory inside CLEO_PATH2CLEO,
+  ### used only when no exact build directory (path2build_override) is given.
 
-### Common CMake flags shared by most examples
-cleo_common_flags="-DCLEO_NO_ROUGHPAPER=true -DCLEO_NO_PYBINDINGS=true"
+  case "${example}" in
 
-### build_subdir below is the example's default build directory inside path2CLEO,
-### used only when no exact build directory (path2build_override) is given.
+    as2017)
+      build_subdir=build_adia0d/as2017
+      build_flags="-DCLEO_COUPLED_DYNAMICS=cvode -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
+      executables="adia0d"
 
-case "${example}" in
+      pythonscript=${CLEO_PATH2CLEO}/examples/adiabaticparcel/as2017.py
+      src_config_filename=${CLEO_PATH2CLEO}/examples/adiabaticparcel/src/config/as2017_config.yaml
+      script_args="${src_config_filename}"
+      ;;
 
-  as2017)
-    build_subdir=build_adia0d/as2017
-    build_flags="-DCLEO_COUPLED_DYNAMICS=cvode -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
-    executables="adia0d"
+    breakup)
+      build_subdir=build_colls0d/breakup/
+      build_flags="-DCLEO_COUPLED_DYNAMICS=null -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
+      executables="longcolls lowlistcolls szakallurbichcolls testikstraubcolls"
 
-    pythonscript=${path2CLEO}/examples/adiabaticparcel/as2017.py
-    src_config_filename=${path2CLEO}/examples/adiabaticparcel/src/config/as2017_config.yaml
-    script_args="${src_config_filename}"
-    ;;
+      pythonscript=${CLEO_PATH2CLEO}/examples/boxmodelcollisions/breakup.py
+      src_config_filename=${CLEO_PATH2CLEO}/examples/boxmodelcollisions/src/config/breakup_config.yaml
+      script_args="${src_config_filename} --kernels long lowlist szakallurbich testikstraub"
+      ;;
 
-  breakup)
-    build_subdir=build_colls0d/breakup/
-    build_flags="-DCLEO_COUPLED_DYNAMICS=null -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
-    executables="longcolls lowlistcolls szakallurbichcolls testikstraubcolls"
+    bubble3d)
+      build_subdir=build_bubble3d/
+      build_flags="-DCLEO_COUPLED_DYNAMICS=yac -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
+      executables="bubble3d"
 
-    pythonscript=${path2CLEO}/examples/boxmodelcollisions/breakup.py
-    src_config_filename=${path2CLEO}/examples/boxmodelcollisions/src/config/breakup_config.yaml
-    script_args="${src_config_filename} --kernels long lowlist szakallurbich testikstraub"
-    ;;
+      pythonscript=${CLEO_PATH2CLEO}/examples/bubble3d/bubble3d.py
+      src_config_filename=${CLEO_PATH2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml
+      script_args="${src_config_filename}"
+      ;;
 
-  bubble3d)
-    build_subdir=build_bubble3d/
-    build_flags="-DCLEO_COUPLED_DYNAMICS=yac -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
-    executables="bubble3d"
+    constthermo2d)
+      build_subdir=build_const2d/
+      build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
+      executables="const2d"
 
-    pythonscript=${path2CLEO}/examples/bubble3d/bubble3d.py
-    src_config_filename=${path2CLEO}/examples/bubble3d/src/config/bubble3d_config.yaml
-    script_args="${src_config_filename}"
-    ;;
+      pythonscript=${CLEO_PATH2CLEO}/examples/constthermo2d/constthermo2d.py
+      src_config_filename=${CLEO_PATH2CLEO}/examples/constthermo2d/src/config/const2d_config.yaml
+      script_args="${src_config_filename}"
+      ;;
 
-  constthermo2d)
-    build_subdir=build_const2d/
-    build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
-    executables="const2d"
+    cuspbifurc)
+      build_subdir=build_adia0d/cuspbifurc/
+      build_flags="-DCLEO_COUPLED_DYNAMICS=cvode -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
+      executables="adia0d"
 
-    pythonscript=${path2CLEO}/examples/constthermo2d/constthermo2d.py
-    src_config_filename=${path2CLEO}/examples/constthermo2d/src/config/const2d_config.yaml
-    script_args="${src_config_filename}"
-    ;;
+      pythonscript=${CLEO_PATH2CLEO}/examples/adiabaticparcel/cuspbifurc.py
+      src_config_filename=${CLEO_PATH2CLEO}/examples/adiabaticparcel/src/config/cuspbifurc_config.yaml
+      script_args="${src_config_filename}"
+      ;;
 
-  cuspbifurc)
-    build_subdir=build_adia0d/cuspbifurc/
-    build_flags="-DCLEO_COUPLED_DYNAMICS=cvode -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
-    executables="adia0d"
+    divfree2d)
+      build_subdir=build_divfree2d/
+      build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
+      executables="divfree2d"
 
-    pythonscript=${path2CLEO}/examples/adiabaticparcel/cuspbifurc.py
-    src_config_filename=${path2CLEO}/examples/adiabaticparcel/src/config/cuspbifurc_config.yaml
-    script_args="${src_config_filename}"
-    ;;
+      pythonscript=${CLEO_PATH2CLEO}/examples/divfreemotion/divfree2d.py
+      src_config_filename=${CLEO_PATH2CLEO}/examples/divfreemotion/src/config/divfree2d_config.yaml
+      script_args="${src_config_filename}"
+      ;;
 
-  divfree2d)
-    build_subdir=build_divfree2d/
-    build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
-    executables="divfree2d"
+    eurec4a1d)
+      build_subdir=build_eurec4a1d/
+      build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
+      executables="eurec4a1d"
 
-    pythonscript=${path2CLEO}/examples/divfreemotion/divfree2d.py
-    src_config_filename=${path2CLEO}/examples/divfreemotion/src/config/divfree2d_config.yaml
-    script_args="${src_config_filename}"
-    ;;
+      pythonscript=${CLEO_PATH2CLEO}/examples/eurec4a1d/eurec4a1d.py
+      src_config_filename=${CLEO_PATH2CLEO}/examples/eurec4a1d/src/config/eurec4a1d_config.yaml
+      script_args="${src_config_filename}"
+      ;;
 
-  eurec4a1d)
-    build_subdir=build_eurec4a1d/
-    build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
-    executables="eurec4a1d"
+    fromfile)
+      build_subdir=build_fromfile/
+      build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
+      executables="fromfile"
 
-    pythonscript=${path2CLEO}/examples/eurec4a1d/eurec4a1d.py
-    src_config_filename=${path2CLEO}/examples/eurec4a1d/src/config/eurec4a1d_config.yaml
-    script_args="${src_config_filename}"
-    ;;
+      pythonscript=${CLEO_PATH2CLEO}/examples/fromfile/fromfile.py
+      src_config_filename=${CLEO_PATH2CLEO}/examples/fromfile/src/config/fromfile_config.yaml
+      script_args="${src_config_filename} --ntasks=4"
+      ;;
 
-  fromfile)
-    build_subdir=build_fromfile/
-    build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
-    executables="fromfile"
+    fromfile_irreg)
+      build_subdir=build_fromfile_irreg/
+      build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
+      executables="fromfile_irreg"
 
-    pythonscript=${path2CLEO}/examples/fromfile/fromfile.py
-    src_config_filename=${path2CLEO}/examples/fromfile/src/config/fromfile_config.yaml
-    script_args="${src_config_filename} --ntasks=4"
-    ;;
+      pythonscript=${CLEO_PATH2CLEO}/examples/fromfile_irreg/fromfile_irreg.py
+      src_config_filename=${CLEO_PATH2CLEO}/examples/fromfile_irreg/src/config/fromfile_irreg_config.yaml
+      script_args="${src_config_filename} --ntasks=4"
+      ;;
 
-  fromfile_irreg)
-    build_subdir=build_fromfile_irreg/
-    build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
-    executables="fromfile_irreg"
+    python_bindings)
+      build_subdir=build_pybind/
+      # pybind11 turns on link-time optimisation (LTO) for Release builds unless
+      # CMAKE_INTERPROCEDURAL_OPTIMIZATION is set; LTO fails to link CUDA (nvcc) objects
+      build_flags="-DCLEO_COUPLED_DYNAMICS=numpy -DCLEO_DOMAIN=cartesian \
+        -DCLEO_NO_ROUGHPAPER=true -DCLEO_PYTHON=${CLEO_PYTHON} \
+        -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF"
+      executables="cleo_python_bindings"
 
-    pythonscript=${path2CLEO}/examples/fromfile_irreg/fromfile_irreg.py
-    src_config_filename=${path2CLEO}/examples/fromfile_irreg/src/config/fromfile_irreg_config.yaml
-    script_args="${src_config_filename} --ntasks=4"
-    ;;
+      pythonscript=${CLEO_PATH2CLEO}/examples/python_bindings/python_bindings.py
+      src_config_filename=${CLEO_PATH2CLEO}/examples/python_bindings/src/config/pybind_config.yaml
+      script_args="${src_config_filename}"
+      ;;
 
-  python_bindings)
-    build_subdir=build_pybind/
-    # pybind11 turns on link-time optimisation (LTO) for Release builds unless
-    # CMAKE_INTERPROCEDURAL_OPTIMIZATION is set; LTO fails to link CUDA (nvcc) objects
-    build_flags="-DCLEO_COUPLED_DYNAMICS=numpy -DCLEO_DOMAIN=cartesian \
-      -DCLEO_NO_ROUGHPAPER=true -DCLEO_PYTHON=${CLEO_PYTHON} \
-      -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF"
-    executables="cleo_python_bindings"
+    rainshaft1d)
+      build_subdir=build_rshaft1d/
+      build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
+      executables="rshaft1d"
 
-    pythonscript=${path2CLEO}/examples/python_bindings/python_bindings.py
-    src_config_filename=${path2CLEO}/examples/python_bindings/src/config/pybind_config.yaml
-    script_args="${src_config_filename}"
-    ;;
+      pythonscript=${CLEO_PATH2CLEO}/examples/rainshaft1d/rainshaft1d.py
+      src_config_filename=${CLEO_PATH2CLEO}/examples/rainshaft1d/src/config/rshaft1d_config.yaml
+      script_args="${src_config_filename}"
+      ;;
 
-  rainshaft1d)
-    build_subdir=build_rshaft1d/
-    build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
-    executables="rshaft1d"
+    roughpaper)
+      # your own executable: roughpaper/src/main.cpp (note: roughpaper must not be
+      # excluded, so cleo_common_flags with -DCLEO_NO_ROUGHPAPER=true is not used)
+      build_subdir=build_roughpaper/
+      build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian -DCLEO_NO_PYBINDINGS=true"
+      executables="cleocoupledsdm"
 
-    pythonscript=${path2CLEO}/examples/rainshaft1d/rainshaft1d.py
-    src_config_filename=${path2CLEO}/examples/rainshaft1d/src/config/rshaft1d_config.yaml
-    script_args="${src_config_filename}"
-    ;;
+      pythonscript=${CLEO_PATH2CLEO}/roughpaper/roughpaper.py
+      src_config_filename=${CLEO_PATH2CLEO}/roughpaper/src/config/config.yaml
+      script_args="${src_config_filename}"
+      ;;
 
-  roughpaper)
-    # your own executable: roughpaper/src/main.cpp (note: roughpaper must not be
-    # excluded, so cleo_common_flags with -DCLEO_NO_ROUGHPAPER=true is not used)
-    build_subdir=build_roughpaper/
-    build_flags="-DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian -DCLEO_NO_PYBINDINGS=true"
-    executables="cleocoupledsdm"
+    shima2009)
+      build_subdir=build_colls0d/shima2009/
+      build_flags="-DCLEO_COUPLED_DYNAMICS=null -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
+      executables="golcolls longcolls"
 
-    pythonscript=${path2CLEO}/roughpaper/roughpaper.py
-    src_config_filename=${path2CLEO}/roughpaper/src/config/config.yaml
-    script_args="${src_config_filename}"
-    ;;
+      pythonscript=${CLEO_PATH2CLEO}/examples/boxmodelcollisions/shima2009.py
+      src_config_filename=${CLEO_PATH2CLEO}/examples/boxmodelcollisions/src/config/shima2009_config.yaml
+      script_args="${src_config_filename} --kernels golovin long1 long2"
+      ;;
 
-  shima2009)
-    build_subdir=build_colls0d/shima2009/
-    build_flags="-DCLEO_COUPLED_DYNAMICS=null -DCLEO_DOMAIN=cartesian ${cleo_common_flags}"
-    executables="golcolls longcolls"
+    *)
+      echo "Error: unknown example '${example}'."
+      exit 1
+      ;;
+  esac
 
-    pythonscript=${path2CLEO}/examples/boxmodelcollisions/shima2009.py
-    src_config_filename=${path2CLEO}/examples/boxmodelcollisions/src/config/shima2009_config.yaml
-    script_args="${src_config_filename} --kernels golovin long1 long2"
-    ;;
+  path2build=${path2build_override:-${CLEO_PATH2CLEO%/}/${build_subdir}}
 
-  *)
-    echo "Error: unknown example '${example}'."
-    echo "Available: as2017 cuspbifurc breakup shima2009 constthermo2d divfree2d"
-    echo "           eurec4a1d rainshaft1d python_bindings"
-    echo "           fromfile fromfile_irreg bubble3d roughpaper"
-    exit 1
-    ;;
-esac
+  ### Apply CLI overrides if provided (non-empty args take precedence over defaults)
+  [[ -n "${build_flags_override}" ]] && build_flags="${build_flags_override}"
 
-path2build=${path2build_override:-${path2CLEO%/}/${build_subdir}}
-
-### Apply CLI overrides if provided (non-empty args take precedence over defaults)
-[[ -n "${build_flags_override}" ]] && build_flags="${build_flags_override}"
-
-export CLEO_PATH2BUILD="${path2build}"
-export CLEO_BUILD_FLAGS="${build_flags}"
+  export CLEO_PATH2BUILD="${path2build}"
+  export CLEO_BUILD_FLAGS="${build_flags}"
 }
 
 if [[ "${BASH_SOURCE[0]}" == "$0" ]]; then
