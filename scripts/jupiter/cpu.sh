@@ -58,7 +58,9 @@ export CLEO_STACKSIZE_LIMIT="${CLEO_STACKSIZE_LIMIT:-}" # ulimit -s for runs (kB
 ### -------------------------------------------------------- ###
 
 ### ---------------------- environment --------------------- ###
-source /etc/profile
+# start from a clean module environment, as on Levante
+source "${CLEO_PATH2CLEO}/scripts/jupiter/helpers/jupiter_packages.sh"
+jupiter_reset_modules
 ### -------------------------------------------------------- ###
 
 ### --------------------- configuration -------------------- ###
