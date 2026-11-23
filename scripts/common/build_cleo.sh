@@ -1,26 +1,12 @@
 #!/bin/bash
 
 ### Configures CLEO with cmake.
-### Requires CLEO_* variables (incl. CLEO_MACHINE) to already be exported.
+### Requires CLEO_* variables to already be exported and the machine's toolchain
+### to be loaded (configure_machine_build_flags and configure_machine_yac_flags).
 
 set -e
-[ -f /etc/profile ] && source /etc/profile
 
 build_cleo() {
-  local common_dir
-  common_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
-  source "${common_dir}/check_inputs.sh"
-  check_machine
-  local machine_dir="${common_dir}/../${CLEO_MACHINE}"
-
-  ### -------------- prepare to build CLEO --------------- ###
-  source "${machine_dir}/build_flags.sh"
-  configure_machine_build_flags
-
-  source "${machine_dir}/helpers/build_yac.sh"
-  configure_machine_yac_flags
-  ### ---------------------------------------------------- ###
-
   ### ---------------- build CLEO with cmake ------------- ###
   echo "### --------------- Build Flags -------------- ###"
   echo "CLEO_CXX_COMPILER: ${CLEO_CXX_COMPILER}"
