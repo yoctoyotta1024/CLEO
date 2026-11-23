@@ -54,11 +54,11 @@ export CLEO_MACHINE="vanilla"
 examples=(
   "as2017 serial gcc"
   "cuspbifurc openmp gcc"
-  "breakup serial gcc"
+  "breakup threads gcc"
   "shima2009 openmp gcc"
   "constthermo2d serial gcc"
   "divfree2d openmp gcc"
-  "eurec4a1d serial gcc"
+  "eurec4a1d threads gcc"
   "rainshaft1d openmp gcc"
   # known to fail at the moment, so last (the job stops at the first failure):
   "roughpaper serial gcc"
