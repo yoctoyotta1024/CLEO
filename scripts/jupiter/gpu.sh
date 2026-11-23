@@ -76,7 +76,6 @@ examples=(
   "eurec4a1d cuda gcc"
   "rainshaft1d cuda gcc"
   "python_bindings cuda gcc"
-  "roughpaper cuda gcc"       # roughpaper config has breakup nfrags commented out
 )
 ### -------------------------------------------------------- ###
 

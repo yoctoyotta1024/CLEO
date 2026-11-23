@@ -65,7 +65,6 @@ examples=(
   "eurec4a1d threads gcc"
   "rainshaft1d openmp gcc"
   # known to fail at the moment, so last (the job stops at the first failure):
-  "roughpaper serial gcc"
   "python_bindings openmp gcc"
 )
 ### -------------------------------------------------------- ###

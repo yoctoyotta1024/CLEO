@@ -478,6 +478,9 @@ The Examples
   ``roughpaper/roughpaper_inputfiles.py``, which is also an example of various ways to use
   ``cleopy`` to create them. The run is driven by ``roughpaper/roughpaper.py``.
 
+  *Note*: roughpaper is not in the job scripts' default ``examples`` lists, because it is a
+  starting point you have to adapt and it does not currently run out of the box.
+
   1. :ref:`Configure the bash scripts<configurebash_jupiter>`.
 
   2. Build Cleo and compile the executable on a login node, then submit the job script to run

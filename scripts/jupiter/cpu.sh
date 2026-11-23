@@ -78,7 +78,6 @@ examples=(
   "fromfile_irreg openmp gcc"
   "python_bindings serial gcc"
   "bubble3d openmp gcc"         # needs the ICON grid/data files set in bubble3d.py
-  "roughpaper openmp gcc"       # roughpaper config has breakup nfrags commented out
 )
 ### -------------------------------------------------------- ###
 
