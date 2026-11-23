@@ -52,8 +52,8 @@ You will need to configure ``cpu.sh`` and ``gpu.sh`` in the following ways:
 
 * Set your Slurm options:
 
-  replace the project account in the ``#SBATCH --account=[...]`` line at the top of the job
-  script with your own. You may also want to change e.g. the ``--time``.
+  replace ``<YOUR_ACCOUNT>`` in the ``#SBATCH --account`` line at the top of the job script with
+  your project account. You may also want to change e.g. the ``--time``.
 
   *Note*: the number of threads each example uses is set by ``num_threads`` in its configuration
   file (e.g. 128 for the constant 2-D thermodynamics example), so make sure it is not larger

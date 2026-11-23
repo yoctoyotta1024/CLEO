@@ -5,7 +5,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=288
 #SBATCH --time=00:30:00
-#SBATCH --account=xspies
+#SBATCH --account=<YOUR_ACCOUNT>
 #SBATCH --output=./cleo_cpu.%j.out
 #SBATCH --error=./cleo_cpu.%j.out
 

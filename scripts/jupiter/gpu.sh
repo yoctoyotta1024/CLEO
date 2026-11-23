@@ -6,7 +6,7 @@
 #SBATCH --cpus-per-task=72
 #SBATCH --gpus-per-node=1
 #SBATCH --time=00:30:00
-#SBATCH --account=xspies
+#SBATCH --account=<YOUR_ACCOUNT>
 #SBATCH --output=./cleo_gpu.%j.out
 #SBATCH --error=./cleo_gpu.%j.out
 
