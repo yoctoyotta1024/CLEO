@@ -127,11 +127,8 @@ All the arguments are optional:
   ``examples`` list is run.
 
 * ``buildtype`` and ``compilername``: the build configuration and compiler for the example. If
-  they are not given, the defaults for JUPITER are used.
-
-  *Note*: this is also true for the GPU job script, so when you choose an example with ``gpu.sh``
-  also give the ``cuda`` build configuration, e.g. ``scripts/jupiter/gpu.sh build constthermo2d cuda``
-  and then ``sbatch scripts/jupiter/gpu.sh run constthermo2d cuda``.
+  they are not given, the defaults for JUPITER are used, except that ``gpu.sh`` always uses the
+  ``cuda`` build configuration.
 
 For example, to build Cleo and compile the executable for the constant 2-D thermodynamics
 example on a login node, and then submit a job to run and plot it:

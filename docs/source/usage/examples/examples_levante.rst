@@ -125,10 +125,8 @@ All the arguments are optional:
   ``examples`` list is run.
 
 * ``buildtype`` and ``compilername``: the build configuration and compiler for the example. If
-  they are not given, the defaults for Levante are used.
-
-  *Note*: this is also true for the GPU job script, so when you choose an example with ``gpu.sh``
-  also give the ``cuda`` build configuration, e.g. ``sbatch scripts/levante/gpu.sh all as2017 cuda``.
+  they are not given, the defaults for Levante are used, except that ``gpu.sh`` always uses the
+  ``cuda`` build configuration.
 
 For example, to submit a job which builds Cleo, compiles the executable, and runs and plots the
 Arabas and Shima 2017 example:

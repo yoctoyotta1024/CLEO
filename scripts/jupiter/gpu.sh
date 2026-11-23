@@ -77,4 +77,5 @@ examples=(
 ### -------------------------------------------------------- ###
 
 source "${CLEO_PATH2CLEO}/scripts/common/run_jobs.sh"
-run_cleo_jobs "$@"
+# always a cuda build, whatever build type is given
+run_cleo_jobs "${1:-}" "${2:-}" cuda "${4:-}"

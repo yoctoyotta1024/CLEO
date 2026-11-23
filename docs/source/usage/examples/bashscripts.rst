@@ -262,7 +262,7 @@ Safety Checks and Things to Know
   the job scripts from your Cleo directory.
 
 * If you choose an example when running a job script but not its build type, the machine's
-  default build type is used, also for ``gpu.sh``. So for GPUs also give the ``cuda`` build type.
+  default build type is used. ``gpu.sh`` always uses the ``cuda`` build type.
 
 * The ``build`` step needs internet access, because CMake downloads some of Cleo's dependencies
   (e.g. Kokkos). On machines whose compute nodes have no internet access, such as JUPITER, use the
