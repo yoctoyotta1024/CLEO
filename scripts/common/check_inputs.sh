@@ -26,7 +26,7 @@ check_value_in_list() {
   exit 1
 }
 
-# usage: check_steps <steps>  (comma-separated build,compile,run,plot, or all)
+# usage: check_steps <steps>  (comma-separated build,compile,inputs,run,plot, or all)
 check_steps() {
   local steps="$1"
   local step
@@ -35,9 +35,9 @@ check_steps() {
   IFS=',' read -r -a requested_steps <<< "${steps}"
   for step in "${requested_steps[@]}"; do
     case "${step}" in
-      build|compile|run|plot) ;;
+      build|compile|inputs|run|plot) ;;
       *)
-        echo "Bad inputs: invalid step '${step}'. Use build, compile, run, plot, or all."
+        echo "Bad inputs: invalid step '${step}'. Use build, compile, inputs, run, plot, or all."
         exit 1
         ;;
     esac

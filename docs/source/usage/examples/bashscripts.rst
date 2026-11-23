@@ -61,7 +61,7 @@ For example, ``sbatch scripts/levante/cpu.sh all constthermo2d`` does the follow
    ``scripts/common/run_jobs.sh``.
 
 2) ``run_cleo_jobs`` turns the mode into steps (``all``, ``build,compile`` or
-   ``compile,run,plot``), checks the paths are not ``<...>`` placeholders, and then, for the given
+   ``compile,inputs,run,plot``), checks the paths are not ``<...>`` placeholders, and then, for the given
    example or every entry of the ``examples`` list, calls the machine's
    ``build_compile_run_plot_cleo.sh``.
 
@@ -87,10 +87,10 @@ For example, ``sbatch scripts/levante/cpu.sh all constthermo2d`` does the follow
       runs ``make`` for the example's executables. If there is no ``build`` step, it first calls
       ``configure_machine_build_flags`` to load the machine's compilers,
 
-   g) the ``run`` and ``plot`` steps: call ``configure_machine_runtime_settings``
-      (``levante/runtime_settings.sh``) and then the example's Python script, once with
-      ``--do_inputfiles`` and once with ``--do_run_executable`` for the ``run`` step, and once
-      with ``--do_plot_results`` for the ``plot`` step.
+   g) the ``inputs``, ``run`` and ``plot`` steps: call ``configure_machine_runtime_settings``
+      (``levante/runtime_settings.sh``) and then the example's Python script, with
+      ``--do_inputfiles`` for the ``inputs`` step, ``--do_run_executable`` for the ``run`` step,
+      and ``--do_plot_results`` for the ``plot`` step.
 
 Inside ``configure_machine_build_flags``, the machine's modules are reset and loaded
 (``[machine]_reset_modules`` and ``[machine]_load_build_stack`` from

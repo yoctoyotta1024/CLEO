@@ -61,19 +61,20 @@ Every example is described once, for all machines, in ``scripts/common/examples.
 where you can find (or change) an example's build directory, CMake flags, executable(s),
 Python script and the arguments given to its Python script.
 
-Running an example has four steps:
+Running an example has five steps:
 
 1) ``build``: configure Cleo with CMake in the example's build directory,
 2) ``compile``: compile the example's executable(s),
-3) ``run``: generate the input files and run the executable(s) by calling the example's Python script,
-4) ``plot``: plot the results by calling the example's Python script again.
+3) ``inputs``: generate the input files by calling the example's Python script,
+4) ``run``: run the executable(s) by calling the example's Python script again,
+5) ``plot``: plot the results by calling the example's Python script again.
 
 The job scripts combine these steps into three modes:
 
-* ``all`` (the default): all four steps,
+* ``all`` (the default): all five steps,
 * ``build``: only the ``build`` and ``compile`` steps, e.g. on an HPC's login node before submitting
   a job to run the example,
-* ``run``: recompile, then run and plot, reusing an existing build.
+* ``run``: recompile, then generate the input files, run and plot, reusing an existing build.
 
 *Note*: the ``build`` step needs internet access, because CMake downloads some of Cleo's
 dependencies (e.g. Kokkos) when it configures Cleo. On machines whose compute nodes have no

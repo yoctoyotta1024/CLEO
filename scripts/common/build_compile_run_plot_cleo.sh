@@ -29,7 +29,7 @@
 ###   $7  yacyaxtroot      Path to YAC+YAXT installation       (default: $CLEO_YACYAXTROOT, else $HOME/yacyaxt/<compilername>)
 ###   $8  enabledebug      true | false                        (default: $CLEO_ENABLEDEBUG, else false)
 ###   $9  stacksize_limit  ulimit -s value (kB)                (default: $CLEO_STACKSIZE_LIMIT, else machine)
-###   $10 steps            build,compile,run,plot,all          (default: all)
+###   $10 steps            build,compile,inputs,run,plot,all   (default: all)
 ###
 ### Environment:
 ###   CLEO_PYTHON     python to run the example scripts (default: <path2CLEO>/.venv/bin/python3)
@@ -130,7 +130,7 @@ build_compile_run_plot_cleo() {
   ### ---------------------------------------------------- ###
 
   ### ------ load runtime environment + python args ----- ###
-  if step_enabled run || step_enabled plot; then
+  if step_enabled inputs || step_enabled run || step_enabled plot; then
     source "${machine_dir}/runtime_settings.sh"
     configure_machine_runtime_settings "${stacksize_limit}"
 
@@ -149,9 +149,12 @@ build_compile_run_plot_cleo() {
   fi
   ### ---------------------------------------------------- ###
 
-  ### ------------- run / plot example -------------- ###
-  if step_enabled run; then
+  ### --------- inputs / run / plot example --------- ###
+  if step_enabled inputs; then
     run_python_stage --do_inputfiles
+  fi
+
+  if step_enabled run; then
     run_python_stage --do_run_executable
   fi
 

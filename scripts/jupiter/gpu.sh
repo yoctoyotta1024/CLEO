@@ -23,7 +23,8 @@
 ### Modes:
 ###   all    configure, compile, run + plot (default)    (steps: all)
 ###   build  cmake configure + compile                   (steps: build,compile)
-###   run    recompile, run + plot (needs a prior build) (steps: compile,run,plot)
+###   run    recompile, make inputs, run + plot (needs a prior build)
+###          (steps: compile,inputs,run,plot)
 ###
 ### To build an example from scratch, delete its build folder
 ### (<CLEO_PATH2BUILD>/build_xxx) before using the all or build mode.
