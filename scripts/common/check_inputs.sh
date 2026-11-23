@@ -52,13 +52,6 @@ check_source_and_build_paths() {
   fi
 }
 
-check_yac() {
-  if [[ ${CLEO_YACYAXTROOT} == "" ]]; then
-    echo "Bad inputs: yacyaxtroot directory must be specified if YAC is enabled"
-    exit 1
-  fi
-}
-
 check_machine() {
   if [[ -z "${CLEO_MACHINE}" ]]; then
     echo "Bad inputs: CLEO_MACHINE must be set (e.g. 'vanilla', 'levante', 'jupiter')"

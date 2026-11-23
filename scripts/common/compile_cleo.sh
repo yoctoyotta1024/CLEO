@@ -9,7 +9,7 @@ set -e
 
 compile_cleo() {
 
-  local executables=$1   # space-separated list, or "NONE" to build all libraries
+  local executables=$1   # space-separated list (empty builds everything)
   local make_jobs=${CLEO_MAKE_JOBS:-8}  # override by setting CLEO_MAKE_JOBS (e.g. 128 on Levante)
 
   ### ---------------------------------------------------- ###
@@ -24,13 +24,8 @@ compile_cleo() {
 
   cd "${CLEO_PATH2BUILD}" && pwd
 
-  if [ "${executables}" == "NONE" ]; then
-    cmd="make -j ${make_jobs}"
-  else
-    cmd="make -j ${make_jobs} ${executables}"
-  fi
-  echo ${cmd}
-  eval ${cmd}
+  echo "make -j ${make_jobs} ${executables}"
+  make -j "${make_jobs}" ${executables}
   ### ---------------------------------------------------- ###
 }
 
