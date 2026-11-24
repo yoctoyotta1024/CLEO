@@ -29,7 +29,7 @@ configure_machine_build_flags() {
   case "${CLEO_COMPILERNAME}" in
     gcc)
       if [[ "${CLEO_ENABLEDEBUG}" == "true" ]]; then
-        export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wno-unused-parameter -Wall -Wextra -pedantic -g -gdwarf-4 -O0 -mpc64"
+        export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wno-unused-parameter -Wall -Wextra -pedantic -g -gdwarf-4 -O0" # -mpc64 (x86 only) not compatible with apple silicon arch
       else
         export CLEO_CXX_FLAGS="${CLEO_CXX_FLAGS} -Werror -Wall -Wextra -pedantic -Wno-unused-parameter -O3" # -mfma not compatible with apple silicon arch
       fi
