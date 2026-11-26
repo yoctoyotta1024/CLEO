@@ -16,8 +16,8 @@ mass, number concentration etc. plots against
 radius in evenly spaced ln(radius) bins
 """
 
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def gaussian_kernel_smoothing(hist, hcens, sig):
@@ -65,7 +65,7 @@ def logr_distribution(rspan, nbins, radius, wghts, perlogR=False, smooth=False):
 def massdens_distrib(radius, xi, mass, vol, rspan, nbins, perlogR, smooth):
     weights = xi * mass / vol  # real droplets [g/m^3]
 
-    hist, hedges, hcens = logr_distribution(
+    hist, _hedges, hcens = logr_distribution(
         rspan, nbins, radius, weights, perlogR=perlogR, smooth=smooth
     )
 
@@ -74,7 +74,7 @@ def massdens_distrib(radius, xi, mass, vol, rspan, nbins, perlogR, smooth):
 
 def nsupers_distrib(radius, xi, mass, vol, rspan, nbins, perlogR, smooth):
     weights = None  # number superdroplets []
-    hist, hedges, hcens = logr_distribution(
+    hist, _hedges, hcens = logr_distribution(
         rspan, nbins, radius, weights, perlogR=perlogR, smooth=smooth
     )
 
@@ -84,7 +84,7 @@ def nsupers_distrib(radius, xi, mass, vol, rspan, nbins, perlogR, smooth):
 def numconc_distrib(radius, xi, mass, vol, rspan, nbins, perlogR, smooth):
     weights = xi / vol / 1e6  # real droplets [/cm^3]
 
-    hist, hedges, hcens = logr_distribution(
+    hist, _hedges, hcens = logr_distribution(
         rspan, nbins, radius, weights, perlogR=perlogR, smooth=smooth
     )
 
@@ -104,7 +104,7 @@ def plot_dists(
     ylog=False,
 ):
     for t in range(len(superdroplet_timeslice.time())):
-        tlab = "t = {:.2f}s".format(superdroplet_timeslice.time()[t])
+        tlab = f"t = {superdroplet_timeslice.time()[t]:.2f}s"
         c = "C" + str(t)
 
         radius = superdroplet_timeslice["radius"][t]
@@ -126,7 +126,7 @@ def plot_dists(
     if ylog:
         ax.set_yscale("log")
     ax.set_xscale("log")
-    ax.set_xlabel("radius, r, /\u03BCm")
+    ax.set_xlabel("radius, r, /\u03bcm")
     ax.legend()
 
     return ax

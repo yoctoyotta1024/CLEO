@@ -85,9 +85,9 @@ def get_zgrid(icon_grid_file, num_vertical_levels):
 def copy_icon_files(path2build, orginal_icon_grid_file, orginal_icon_data_file):
     import shutil
 
-    assert (
-        path2build / "share"
-    ).is_dir(), "share directory doesn't exist in build directory"
+    assert (path2build / "share").is_dir(), (
+        "share directory doesn't exist in build directory"
+    )
 
     icon_grid_file = path2build / "share" / orginal_icon_grid_file.name
     shutil.copyfile(orginal_icon_grid_file, icon_grid_file)
@@ -111,18 +111,18 @@ def main(
     show_figures=False,
     save_figures=False,
 ):
-    import numpy as np
-
     from pathlib import Path
+
+    import numpy as np
     from ruamel.yaml import YAML
 
     from cleopy import geninitconds
     from cleopy.initsuperdropsbinary_src import (
+        attrsgen,
         crdgens,
-        rgens,
         dryrgens,
         probdists,
-        attrsgen,
+        rgens,
     )
 
     if path2CLEO == path2build:

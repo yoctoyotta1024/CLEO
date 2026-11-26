@@ -16,8 +16,9 @@ File Description:
 python class to get time data from SDM zarr store and return in various formats
 """
 
-import xarray as xr
 from pathlib import Path
+
+import xarray as xr
 
 
 class Time:
@@ -34,7 +35,7 @@ class Time:
     def tryopen_time(self, dataset):
         """returns time variable (with metadata) from xarray dataset"""
 
-        if isinstance(dataset, str) or isinstance(dataset, Path):
+        if isinstance(dataset, (str, Path)):
             print("time from dataset: ", dataset)
             timeds = xr.open_dataset(dataset, engine="zarr", consolidated=False)["time"]
         else:

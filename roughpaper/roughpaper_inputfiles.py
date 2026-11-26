@@ -82,6 +82,7 @@ def generate_gridbox_boundaries(
 ):
     """example of using cleopy to create the gridbox boundaries binary file"""
     import numpy as np
+
     from cleopy import geninitconds
 
     ### input parameters for zcoords of gridbox boundaries
@@ -120,7 +121,7 @@ def generate_thermodynamics(
     """example of using cleopy to create the thermodynamics binary files
     (for coupled dynamics read from file)"""
     from cleopy import geninitconds
-    from cleopy.thermobinary_src import thermogen, windsgen, thermodyngen
+    from cleopy.thermobinary_src import thermodyngen, thermogen, windsgen
 
     ### --- Choose Initial Thermodynamic Conditions for Gridboxes  --- ###
 
@@ -236,7 +237,7 @@ def generate_initial_superdroplets(
     superdroplet conditions"""
     # import numpy as np
     from cleopy import geninitconds
-    from cleopy.initsuperdropsbinary_src import rgens, probdists, attrsgen, crdgens
+    from cleopy.initsuperdropsbinary_src import attrsgen, crdgens, probdists, rgens
 
     gbxs2plt = "all"  # indexes of GBx index of SDs to plot (nb. "all" can be very slow)
 
@@ -360,6 +361,7 @@ def main(
     save_figures=False,
 ):
     from pathlib import Path
+
     from ruamel.yaml import YAML
 
     if path2CLEO == path2build:

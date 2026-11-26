@@ -15,12 +15,13 @@ https://opensource.org/licenses/BSD-3-Clause
 File Description:
 """
 
-import numpy as np
-import matplotlib.pyplot as plt
 from pathlib import Path
 
-from .create_gbxboundaries import get_COORD0_from_constsfile
+import matplotlib.pyplot as plt
+import numpy as np
+
 from ..readbinary import readbinary
+from .create_gbxboundaries import get_COORD0_from_constsfile
 
 
 def get_gridboxboundaries(
@@ -262,7 +263,7 @@ def calc_domainvol(zhalf, xhalf, yhalf):
 
 def calc_gridboxvols(gbxbounds):
     gbxvols = []
-    for gbxindex, bounds in gbxbounds.items():
+    for bounds in gbxbounds.values():
         zwidth = bounds[1] - bounds[0]
         xwidth = bounds[3] - bounds[2]
         ywidth = bounds[5] - bounds[4]
@@ -322,7 +323,7 @@ def print_domain_info(constants_filename, grid_filename):
         + "------------- "
         + str(griddims)
         + "-D MODEL -------------\n"
-        + "domain dimensions: ({:3g}x{:3g}x{:3g})m^3\n".format(ztot, xtot, ytot)
+        + f"domain dimensions: ({ztot:3g}x{xtot:3g}x{ytot:3g})m^3\n"
         + "domain no. gridboxes: "
         + str(len(spacings[0]))
         + "x"
@@ -330,19 +331,15 @@ def print_domain_info(constants_filename, grid_filename):
         + "x"
         + str(len(spacings[2]))
         + "\n"
-        + "domain z limits: ({:3g},{:3g})m\n".format(np.amin(xtns[0]), np.amax(xtns[0]))
-        + "domain x limits: ({:3g}, {:3g})m\n".format(
-            np.amin(xtns[1]), np.amax(xtns[1])
-        )
-        + "domain y limits: ({:3g}, {:3g})m\n".format(
-            np.amin(xtns[2]), np.amax(xtns[2])
-        )
-        + "mean gridbox z spacing: {:3g} m\n".format(np.mean(spacings[0]))
-        + "mean gridbox x spacing: {:3g} m\n".format(np.mean(spacings[1]))
-        + "mean gridbox y spacing: {:3g} m\n".format(np.mean(spacings[2]))
-        + "mean gridbox volume: {:3g}".format(np.mean(gridboxvols))
+        + f"domain z limits: ({np.amin(xtns[0]):3g},{np.amax(xtns[0]):3g})m\n"
+        + f"domain x limits: ({np.amin(xtns[1]):3g}, {np.amax(xtns[1]):3g})m\n"
+        + f"domain y limits: ({np.amin(xtns[2]):3g}, {np.amax(xtns[2]):3g})m\n"
+        + f"mean gridbox z spacing: {np.mean(spacings[0]):3g} m\n"
+        + f"mean gridbox x spacing: {np.mean(spacings[1]):3g} m\n"
+        + f"mean gridbox y spacing: {np.mean(spacings[2]):3g} m\n"
+        + f"mean gridbox volume: {np.mean(gridboxvols):3g}"
         + " m^3\n"
-        + "total domain volume: {:3g} m^3\n".format(domainvol)
+        + f"total domain volume: {domainvol:3g} m^3\n"
         + "total no. gridboxes: "
         + str(ngridboxes)
         + "\n------------------------------------\n"

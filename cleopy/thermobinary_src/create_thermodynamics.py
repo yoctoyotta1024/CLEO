@@ -15,8 +15,10 @@ https://opensource.org/licenses/BSD-3-Clause
 File Description:
 """
 
-import numpy as np
 from os.path import isfile
+
+import numpy as np
+
 from .. import cxx2py, readconfigfile, writebinary
 from ..gbxboundariesbinary_src.read_gbxboundaries import (
     read_dimless_gbxboundaries_binary,
@@ -92,11 +94,11 @@ class DimlessThermodynamics:
             "qvap": thermo["qvap"],
             "qcond": thermo["qcond"],
         }
-        if "wvel" in thermo.keys():
+        if "wvel" in thermo:
             THERMODATA["wvel"] = thermo["wvel"] * self.VEL0
-        if "uvel" in thermo.keys():
+        if "uvel" in thermo:
             THERMODATA["uvel"] = thermo["uvel"] * self.VEL0
-        if "vvel" in thermo.keys():
+        if "vvel" in thermo:
             THERMODATA["vvel"] = thermo["vvel"] * self.VEL0
 
         return THERMODATA

@@ -27,11 +27,11 @@ def nsupers_at_domain_base(grid_filename, constants_filename, nsupers, zlim):
     only occur in gridboxes with upper bound <= zlim"""
 
     COORD0 = rgrid.get_COORD0_from_constsfile(constants_filename)
-    gbxbounds, ndims = rgrid.read_dimless_gbxboundaries_binary(
+    gbxbounds, _ndims = rgrid.read_dimless_gbxboundaries_binary(
         grid_filename, COORD0=COORD0, return_ndims=True, isprint=False
     )
     nsupersdict = {}
-    for ii in gbxbounds.keys():
+    for ii in gbxbounds:
         gbx_zupper = gbxbounds[ii][1]  # z upper bound of gridbox
         if gbx_zupper <= zlim:
             nsupersdict[ii] = nsupers
@@ -46,11 +46,11 @@ def nsupers_at_domain_top(grid_filename, constants_filename, nsupers, zlim):
     only occur in gridboxes with lower bound >= zlim"""
 
     COORD0 = rgrid.get_COORD0_from_constsfile(constants_filename)
-    gbxbounds, ndims = rgrid.read_dimless_gbxboundaries_binary(
+    gbxbounds, _ndims = rgrid.read_dimless_gbxboundaries_binary(
         grid_filename, COORD0=COORD0, return_ndims=True, isprint=False
     )
     nsupersdict = {}
-    for ii in gbxbounds.keys():
+    for ii in gbxbounds:
         gbx_zlower = gbxbounds[ii][0]  # z lower bound of gridbox
         if gbx_zlower >= zlim:
             nsupersdict[ii] = nsupers

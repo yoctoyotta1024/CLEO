@@ -15,15 +15,16 @@ https://opensource.org/licenses/BSD-3-Clause
 File Description:
 """
 
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import colors
 from pathlib import Path
 
-from .create_thermodynamics import thermoinputsdict, DimlessThermodynamics
-from .thermogen import saturation_press
-from ..readbinary import readbinary
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib import colors
+
 from ..gbxboundariesbinary_src import read_gbxboundaries as rgrid
+from ..readbinary import readbinary
+from .create_thermodynamics import DimlessThermodynamics, thermoinputsdict
+from .thermogen import saturation_press
 
 
 def relative_humidity(press, temp, qvap, Mr_ratio):
@@ -61,15 +62,15 @@ class ThermoOnGrid:
         self.qvap = np.reshape(thermodata["qvap"], cen)
         self.qcond = np.reshape(thermodata["qcond"], cen)
 
-        if "wvel" in thermodata.keys():
+        if "wvel" in thermodata:
             self.wvel = np.reshape(thermodata["wvel"], zface)
             self.wvel_cens = (self.wvel[:, :, :, 1:] + self.wvel[:, :, :, :-1]) / 2
             self.vars += ["wvel", "wvel_cens"]
-            if "uvel" in thermodata.keys():
+            if "uvel" in thermodata:
                 self.uvel = np.reshape(thermodata["uvel"], xface)
                 self.uvel_cens = (self.uvel[:, :, 1:, :] + self.uvel[:, :, :-1, :]) / 2
                 self.vars += ["uvel", "uvel_cens"]
-                if "vvel" in thermodata.keys():
+                if "vvel" in thermodata:
                     self.vvel = np.reshape(thermodata["vvel"], yface)
                     self.vvel_cens = (
                         self.vvel[:, 1:, :, :] + self.vvel[:, :-1, :, :]
@@ -218,9 +219,9 @@ def read_initial_pressure_into_dict(
         dimless_press[0, :] * inputs["P0"]
     )  # re-dimensionalise and take first time
 
-    assert len(initial_press) == len(
-        gbxbounds.keys()
-    ), "number of gbxindexes and number of initial pressure values are not equal"
+    assert len(initial_press) == len(gbxbounds.keys()), (
+        "number of gbxindexes and number of initial pressure values are not equal"
+    )
 
     return dict(zip(gbxbounds.keys(), initial_press))
 
@@ -243,7 +244,7 @@ def plot_thermodynamics(
     )
     xyzhalf = rgrid.halfcoords_from_gbxbounds(gbxbounds, isprint=False)  # [m]
     zhalf, xhalf, yhalf = [half / 1000 for half in xyzhalf]  # convery [m] to [km]
-    zfull, xfull, yfull = rgrid.fullcell_fromhalfcoords(zhalf, xhalf, yhalf)  # [m]
+    zfull, xfull, _yfull = rgrid.fullcell_fromhalfcoords(zhalf, xhalf, yhalf)  # [m]
 
     thermodata = get_thermodynamics_from_thermofiles(thermofiles, ndims, inputs=inputs)
 
@@ -320,7 +321,7 @@ def plot_1dthermodynamics(
     if press_ref is None:
         press_ref = pressxy[0, 0]
     theta = potential_temperature(pressxy, tempxy, press_ref, RGAS_DRY, CP_DRY)
-    label = "\u03F4 /K"
+    label = "\u03f4 /K"
     n = try1dplot(axs[n], n, theta.T, zfull[None, :].T, label)
 
     return n
@@ -391,14 +392,14 @@ def plot_2dmean(ax, meanfunc, xxh, zzh, var, label, unit, norm, cmap):
         cb = plt.colorbar(pcm, ax=ax, location="top", label=label + unit)
         return mean2d, pcm, cb
     else:
-        txt = label + " = {:.2f}".format(np.nanmin(mean2d)) + unit
+        txt = label + f" = {np.nanmin(mean2d):.2f}" + unit
         ax.text(0.5, 0.5, txt, ha="center")
         return np.nanmin(mean2d), False, False
 
 
 def plot_2dcontour(ax, xxf, zzf, mean2d, contour, cb, cbticks):
     cb.ax.set_xticks(cbticks)
-    cb.ax.set_xticklabels(["{:.3g}".format(c) for c in cbticks])
+    cb.ax.set_xticklabels([f"{c:.3g}" for c in cbticks])
 
     try:
         ax.contour(
@@ -424,7 +425,7 @@ def relh_supersat_theta_colomaps(
     )
 
     vars = [relh, supersat, theta]
-    labels = ["% relative humidity", "supersaturation", "\u03F4"]
+    labels = ["% relative humidity", "supersaturation", "\u03f4"]
     units = ["", "", " /K"]
     cmaps = ["Blues", "PuOr", "RdBu_r"]
     norms = [
@@ -434,9 +435,8 @@ def relh_supersat_theta_colomaps(
     ]
     contours = [1.0, 0.0, None]
 
-    n = 0
-    for var, label, unit, norm, cmap, cont in zip(
-        vars, labels, units, norms, cmaps, contours
+    for n, (var, label, unit, norm, cmap, cont) in enumerate(
+        zip(vars, labels, units, norms, cmaps, contours)
     ):
         mean2d, pcm, cb = plot_2dmean(
             axs[n], thermodata.ytmean, xxh, zzh, var, label, unit, norm, cmap
@@ -448,8 +448,6 @@ def relh_supersat_theta_colomaps(
             else:
                 cbticks = np.linspace(pcm.norm.vmin, pcm.norm.vmax, 5)
             plot_2dcontour(axs[n], xxf, zzf, mean2d, cont, cb, cbticks)
-
-        n += 1
 
 
 def plot_2dcolormaps(
@@ -469,13 +467,11 @@ def plot_2dcolormaps(
     axs = axs.flatten()
     axs[-1].remove()
 
-    n = 0
-    for var, unit, cmapcen, cmap in zip(vars, units, cmapcens, cmaps):
+    for n, (var, unit, cmapcen, cmap) in enumerate(zip(vars, units, cmapcens, cmaps)):
         norm = colors.CenteredNorm(vcenter=cmapcen)
         plot_2dmean(
             axs[n], thermodata.ytmean, xxh, zzh, thermodata[var], var, unit, norm, cmap
         )
-        n += 1
 
     relh_supersat_theta_colomaps(
         [axs[4], axs[5], axs[6]],

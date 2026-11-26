@@ -89,7 +89,7 @@ def displacement(time, w_avg, thalf):
 
 def get_results(path2CLEO, grid_filename, setupfile, dataset):
     """read in required data from given dataset and setupfile"""
-    from cleopy.sdmout_src import pyzarr, pysetuptxt, pygbxsdat
+    from cleopy.sdmout_src import pygbxsdat, pysetuptxt, pyzarr
 
     config = pysetuptxt.get_config(setupfile, nattrs=3, isprint=True)
     consts = pysetuptxt.get_consts(setupfile, isprint=True)
@@ -107,14 +107,13 @@ def get_results(path2CLEO, grid_filename, setupfile, dataset):
 # %%
 ### -------------------------------- MAIN ---------------------------------- ###
 def main(path2CLEO, savefigpath, grid_filename, setupfiles, datasets, runnums):
-    import numpy as np
     import matplotlib.pyplot as plt
-
+    import numpy as np
     from plotcleo import as2017fig
 
-    assert (
-        len(setupfiles) == len(runnums) and len(datasets) == len(runnums)
-    ), "number of items in lists of setupfiles and datasets should equal number of runnums"
+    assert len(setupfiles) == len(runnums) and len(datasets) == len(runnums), (
+        "number of items in lists of setupfiles and datasets should equal number of runnums"
+    )
 
     lwdths = {  # config_params number: linewidth
         0: 2,
@@ -169,16 +168,16 @@ def main(path2CLEO, savefigpath, grid_filename, setupfiles, datasets, runnums):
                 + str(numconc)
                 + "cm$^{-3}$\n"
                 + "r$_{dry}$ = "
-                + "{:.2g}\u03BCm\n".format(r_initial)
+                + f"{r_initial:.2g}\u03bcm\n"
             )
             axs[0].text(0.03, 0.875, textlab, transform=axs[0].transAxes)
             axs[1].legend(loc="upper left")
             numconc_prev = numconc
             r_initial_prev = r_initial
         else:
-            assert (
-                numconc == numconc_prev and r_initial == r_initial_prev
-            ), "all plots on same column of figure should have same numconc and initial radius"
+            assert numconc == numconc_prev and r_initial == r_initial_prev, (
+                "all plots on same column of figure should have same numconc and initial radius"
+            )
 
     for ax in axes[0, :]:
         ax.legend(loc="lower right", fontsize=10)

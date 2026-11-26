@@ -15,8 +15,9 @@ https://opensource.org/licenses/BSD-3-Clause
 File Description:
 """
 
-import numpy as np
 import struct
+
+import numpy as np
 
 
 def writebinary(filename, data, ndata, datatypes, units, scale_factors, metastr):
@@ -43,9 +44,8 @@ def writebinary(filename, data, ndata, datatypes, units, scale_factors, metastr)
 
     print("Writing gridbox boundaries binary file to:\n " + str(filename))
     s = struct.pack(format, *array2write)
-    f = open(filename, "wb")
-    f.write(s)
-    f.close()
+    with open(filename, "wb") as f:
+        f.write(s)
 
 
 def check_validinputs(data, ndata, datatypes, units, scale_factors):
@@ -53,7 +53,7 @@ def check_validinputs(data, ndata, datatypes, units, scale_factors):
     a binary encoded single character and that the dataype given matches
     the type of the data"""
 
-    if any([type(s) != np.double for s in scale_factors]):
+    if any(type(s) != np.double for s in scale_factors):
         raise ValueError("type of scale_factors must be C type double")
 
     for u in units:
@@ -62,7 +62,7 @@ def check_validinputs(data, ndata, datatypes, units, scale_factors):
 
     i = 0
     for j, n in enumerate(ndata):
-        if any([type(d) != datatypes[j] for d in data[i : i + n]]):
+        if any(type(d) != datatypes[j] for d in data[i : i + n]):
             err = (
                 "stated datatype "
                 + str(datatypes[j])
@@ -91,7 +91,7 @@ class DataTypeCodes:
             np.uintc: "I",
             np.double: "d",
             np.uint: "Q",
-            type("c"): "c",
+            str: "c",
         }
 
         self.d2binaryf = {
@@ -99,7 +99,7 @@ class DataTypeCodes:
             np.uintc: b"I",
             np.double: b"d",
             np.uint: b"Q",
-            type("c"): b"c",
+            str: b"c",
         }
 
     def dtype2bytesize(self, datatype):
@@ -124,7 +124,7 @@ class DataTypeCodes:
 
 class MetadataPerVariable(DataTypeCodes):
     def __init__(self):
-        super(MetadataPerVariable, self).__init__()
+        super().__init__()
 
         self.mpv_format = "IIIccd"
         self.mpv_bytesize = self.format_size(self.mpv_format)
@@ -146,7 +146,7 @@ class MetadataPerVariable(DataTypeCodes):
 
 class CreateMetadataForBinaryArray(MetadataPerVariable):
     def __init__(self, nvars, ndata, datatypes, units, scale_factors, metastr):
-        super(CreateMetadataForBinaryArray, self).__init__()
+        super().__init__()
 
         self.nvars = nvars
         self.ndata = ndata

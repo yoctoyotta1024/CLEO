@@ -78,7 +78,7 @@ def where_typename_ends(line):
     elif line[:17] == "constexpruint64_t":
         x = "constexpruint64_t"
     else:
-        raise Exception("c++ type for variable not understood")
+        raise ValueError(f"c++ type for variable not understood: {x!r}")
     return len(x)
 
 

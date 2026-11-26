@@ -17,16 +17,13 @@ functions to return zarr data in useful formats for plotting e.g. for handling r
 of superdroplet attributes
 """
 
-
-import numpy as np
-import xarray as xr
-import awkward as ak
 from pathlib import Path
 
-from . import thermodata
-from . import superdrops
-from . import massmoms
-from . import timedata
+import awkward as ak
+import numpy as np
+import xarray as xr
+
+from . import massmoms, superdrops, thermodata, timedata
 
 
 def get_rawdataset(dataset):
@@ -45,7 +42,7 @@ def get_rawdata4raggedkey(dataset, key):
 def raggedvar_fromzarr(ds, raggedcount, var):
     """returns ragged ak.Array dims [time, ragged]
     for a variable "var" in zarr ds"""
-    if isinstance(ds, str) or isinstance(ds, Path):
+    if isinstance(ds, (str, Path)):
         ds = get_rawdataset(ds)
 
     return ak.unflatten(ds[var].values, raggedcount)
@@ -54,7 +51,7 @@ def raggedvar_fromzarr(ds, raggedcount, var):
 def var4d_fromzarr(ds, ntime, ndims, key):
     """' returns 4D variable with dims
     [time, y, x, z] from zarr dataset "ds" """
-    if isinstance(ds, str) or isinstance(ds, Path):
+    if isinstance(ds, (str, Path)):
         ds = get_rawdataset(ds)
 
     reshape = [ntime] + list(ndims)
@@ -64,7 +61,7 @@ def var4d_fromzarr(ds, ntime, ndims, key):
 def var3d_fromzarr(ds, ndims, key):
     """' returns 3D variable with dims
     [y, x, z] from zarr dataset "ds" """
-    if isinstance(ds, str) or isinstance(ds, Path):
+    if isinstance(ds, (str, Path)):
         ds = get_rawdataset(ds)
 
     return np.reshape(ds[key].values, ndims)
@@ -106,7 +103,7 @@ def get_gbxindex(dataset, ndims):
 
 
 def get_totnsupers(dataset):
-    if isinstance(dataset, str) or isinstance(dataset, Path):
+    if isinstance(dataset, (str, Path)):
         dataset = get_rawdataset(dataset)
     try:
         return dataset["totnsupers"].values

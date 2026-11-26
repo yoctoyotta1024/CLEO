@@ -17,7 +17,6 @@ attributes given individual generators
 """
 
 import numpy as np
-from typing import Optional
 
 from ..gbxboundariesbinary_src import read_gbxboundaries as rgrid
 
@@ -36,9 +35,9 @@ class AttrsGenerator:
         coord3gen,
         coord1gen,
         coord2gen,
-        xi_by_pressure: Optional[bool] = False,
-        press: Optional[dict] = None,
-        press_ref: Optional[float] = 0.0,
+        xi_by_pressure: bool | None = False,
+        press: dict | None = None,
+        press_ref: float | None = 0.0,
     ):
         self.radiigen = radiigen  # generates radius (solute + water)
         self.dryradiigen = dryradiigen  # generates dry radius (-> solute mass)
@@ -55,7 +54,7 @@ class AttrsGenerator:
             self.press = press
             if press_ref == 0.0:
                 # take first value for pressure as reference value
-                self.press_ref = list(self.press.values())[0]
+                self.press_ref = next(iter(self.press.values()))
             else:
                 self.press_ref = press_ref
         else:
@@ -132,17 +131,16 @@ class AttrsGenerator:
         if abs(np.rint(gbxnumconc) - calcnumconc) / gbxnumconc > numconc_tolerance:
             errmsg = (
                 "total real droplet concentration"
-                + " {:0g} != numconc, {:0g} within error tolerance".format(
-                    calcnumconc, gbxnumconc
-                )
+                + f" {calcnumconc:0g} != numconc, {gbxnumconc:0g} within error tolerance"
             )
             raise ValueError(errmsg)
 
         nreals_tolerance = max(0.001, numconc_tolerance)
         if abs(nreals - calcnreals) / nreals > nreals_tolerance:
-            errmsg = "total no. real droplets, {:0g},".format(
-                calcnreals
-            ) + " not consistent with sample volume {:.3g} m^3".format(samplevol)
+            errmsg = (
+                f"total no. real droplets, {calcnreals:0g},"
+                + f" not consistent with sample volume {samplevol:.3g} m^3"
+            )
             raise ValueError(errmsg)
 
     def print_totalconc(self, multiplicities, radii, mass_solutes, RHO_SOL, samplevol):
@@ -165,8 +163,8 @@ class AttrsGenerator:
 
         msg = (
             "--- total droplet concentration = "
-            + "{:1g}cm^-3 => {:.1g}g/m^3".format(numconc, massconc)
-            + ", in {:.3g}m^3 volume --- ".format(samplevol)
+            + f"{numconc:1g}cm^-3 => {massconc:.1g}g/m^3"
+            + f", in {samplevol:.3g}m^3 volume --- "
         )
 
         print(msg)
