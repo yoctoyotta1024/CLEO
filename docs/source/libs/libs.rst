@@ -17,16 +17,16 @@ Contents:
 
    configuration/configurationmod
    gridboxes/gridboxesmod
-   cartesiandomain/cartesiandomainmod
+   grids/cartesiandomain/cartesiandomainmod
    superdrops/superdropsmod
    initialise/initialisemod
    runcleo/runcleomod
    observers/observersmod
    zarr/zarrmod
-   coupldyn_null/coupldynnullmod
-   coupldyn_fromfile/coupldynfromfilemod
-   coupldyn_cvode/coupldyncvodemod
-   coupldyn_yac/coupldynyacmod
+   coupled_dynamics/coupldyn_null/coupldynnullmod
+   coupled_dynamics/coupldyn_fromfile/coupldynfromfilemod
+   coupled_dynamics/coupldyn_cvode/coupldyncvodemod
+   coupled_dynamics/coupldyn_yac/coupldynyacmod
    cleo_python_bindings/cleopythonbindingsmod
    cleoconstants
    kokkosaliases
