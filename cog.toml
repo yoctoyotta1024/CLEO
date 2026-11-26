@@ -34,5 +34,3 @@ owner = "yoctoyotta1024"
 authors = [{ username = "yoctoyotta1024", signature = "Clara Bayley" }]
 
 [bump_profiles]
-
-[packages]
