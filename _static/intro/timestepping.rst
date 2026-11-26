@@ -1,9 +1,14 @@
+.. _timestepping:
+
 Timestepping
 ============
 
+This page describes Cleo's timestepping routine, which is also explained more thoroughly in
+:cite:`bayley2026a` (Sect. 5).
+
 The core elements of Cleo's routine calling is summarised below.
 
-.. figure:: ./figs/timestepping.png
+.. figure:: ../figs/timestepping.png
    :alt: Diagram for Cleo's timestepping routine
    :align: right
 
@@ -42,6 +47,7 @@ This looks a bit like so:
         };
 
 Then we can combine these "action" types in an adaptive timestepping algorithm, e.g.
+something like:
 
 .. code-block:: cpp
 
@@ -53,7 +59,7 @@ Then we can combine these "action" types in an adaptive timestepping algorithm, 
     {
       ...
       auto t_mdl = 0;
-      while (t_mdl <= t_end)
+      while (t_mdl < t_end)
       {
         const auto t_next = start_step(t_mdl, dynamics, microphysics);
 
@@ -63,7 +69,9 @@ Then we can combine these "action" types in an adaptive timestepping algorithm, 
 
         t_mdl = proceed_to_next_step(t_next);
       }
+      at_last_step(t_mdl, t_end, dynamics, microphysics);
     }
+
 
 where
 

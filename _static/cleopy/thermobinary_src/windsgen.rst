@@ -1,5 +1,6 @@
-WINDSGEN
+windsgen
 =========
 
 .. automodule:: cleopy.thermobinary_src.windsgen
-  :members:
+   :members:
+   :undoc-members:

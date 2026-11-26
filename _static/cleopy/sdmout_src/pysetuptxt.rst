@@ -1,5 +1,6 @@
-PYSETUPTXT
+pysetuptxt
 ==========
 
 .. automodule:: cleopy.sdmout_src.pysetuptxt
-  :members:
+   :members:
+   :undoc-members:

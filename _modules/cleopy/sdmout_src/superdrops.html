@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html">
 
     <!-- Generated with Sphinx 9.2.0 and Furo 2025.12.19 -->
-        <title>cleopy.sdmout_src.superdrops - CLEO 0.X.Y documentation</title>
+        <title>cleopy.sdmout_src.superdrops - Cleo 0.X.Y documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
@@ -162,7 +162,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">CLEO 0.X.Y documentation</div></a>
+      <a href="../../../index.html"><div class="brand">Cleo 0.X.Y documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -183,7 +183,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
   
-  <span class="sidebar-brand-text">CLEO 0.X.Y documentation</span>
+  <span class="sidebar-brand-text">Cleo 0.X.Y documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -192,12 +192,11 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../intro/intro.html">Programming Guide</a><input aria-label="Toggle navigation of Programming Guide" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../intro/background.html">Background to the Super-Droplet Model (SDM)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../intro/motivation.html">Motivation for Cleo</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../intro/intro.html">General Introduction</a><input aria-label="Toggle navigation of General Introduction" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../intro/background.html">Background to Cleo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../intro/memorylayout.html">Memory Layout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../intro/timestepping.html">Timestepping</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../intro/coupling.html">Coupling to Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../intro/timestepping.html">Timestepping</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../intro/monoids.html">Monoids</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../intro/kokkos.html">Kokkos Thread Parallelism</a></li>
 </ul>
@@ -211,69 +210,123 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../usage/examples/examples_vanilla.html">Examples on “Vanilla” Machines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../usage/examples/examples_levante.html">Examples on Levante</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../usage/examples/examples_jupiter.html">Examples on JUPITER</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../usage/examples/bashscripts.html">The Bash Scripts in Detail</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../usage/quickstart.html">Quickstart</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cleopy/cleopy.html">API: Cleo Python Package, cleopy</a><input aria-label="Toggle navigation of API: Cleo Python Package, cleopy" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/gbxboundariesbinary_src/gbxboundariesbinary_src.html">GbxBoundariesBinary</a><input aria-label="Toggle navigation of GbxBoundariesBinary" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/gbxboundariesbinary_src/create_gbxboundaries.html">CREATE_GBXBOUNDARIES</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/gbxboundariesbinary_src/read_gbxboundaries.html">READ_GBXBOUNDARIES</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../prog_guide/prog_guide.html">Programming Guide</a><input aria-label="Toggle navigation of Programming Guide" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../prog_guide/code_structure.html">Cleo’s Code Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../prog_guide/main_cpp.html">Understanding and Adapting <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../prog_guide/tutorial_new_example.html">Tutorial: Creating a New Cleo Experiment From Scratch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../prog_guide/external_project.html">Using Cleo in an External Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../prog_guide/microphysics_and_observers.html">Combining Microphysics and Observers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../prog_guide/coupled_dynamics.html">Coupled Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../prog_guide/bashscripts_detail.html">The Bash Scripts in Detail</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/initsuperdropsbinary_src.html">InitSuperdropsBinary</a><input aria-label="Toggle navigation of InitSuperdropsBinary" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/create_initsuperdrops.html">CREATE_INITSUPERDROPS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/read_initsuperdrops.html">READ_INITSUPERDROPS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/attrsgen.html">ATTRSGEN</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/crdgens.html">CRDGENS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/probdists.html">PROBDISTS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/rgens.html">RGENS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/dryrgens.html">DRYRGENS</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../usage/for_develop/for_develop.html">For Developers</a><input aria-label="Toggle navigation of For Developers" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/for_develop/contributing.html">Contributing Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/for_develop/good_code.html">Good Coding Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/for_develop/ourdocs.html">Our Docs</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/thermobinary_src/thermobinary_src.html">ThermoBinary</a><input aria-label="Toggle navigation of ThermoBinary" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/create_thermodynamics.html">CREATE_THERMODYNAMICS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/read_thermodynamics.html">READ_THERMODYNAMICS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/thermodyngen.html">THERMODYNGEN</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/thermogen.html">THERMOGEN</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/windsgen.html">WINDSGEN</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cleopy/cleopy.html">API: Cleo Python Package, cleopy</a><input aria-label="Toggle navigation of API: Cleo Python Package, cleopy" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/gbxboundariesbinary_src/gbxboundariesbinary_src.html">GbxBoundariesBinary</a><input aria-label="Toggle navigation of GbxBoundariesBinary" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/gbxboundariesbinary_src/create_gbxboundaries.html">create_gbxboundaries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/gbxboundariesbinary_src/read_gbxboundaries.html">read_gbxboundaries</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/sdmout_src/sdmout_src.html">SDMOut</a><input aria-label="Toggle navigation of SDMOut" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/pyzarr.html">PYZARR</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/pysetuptxt.html">PYSETUPTXT</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/pygbxsdat.html">PYGBXSDAT</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/timedata.html">TIMEDATA</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/thermodata.html">THERMODATA</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/massmoms.html">MASSMOMS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/thermoeqns.html">THERMOEQNS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/superdrops.html">SUPERDROPS</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/initsuperdropsbinary_src.html">InitSuperdropsBinary</a><input aria-label="Toggle navigation of InitSuperdropsBinary" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/create_initsuperdrops.html">create_initsuperdrops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/read_initsuperdrops.html">read_initsuperdrops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/attrsgen.html">attrsgen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/crdgens.html">crdgens</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/probdists.html">probdists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/rgens.html">rgens</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/dryrgens.html">dryrggens</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../../cleopy/cxx2py.html">CXX2PY</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../cleopy/readconfigfile.html">READCONFIGFILE</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../cleopy/editconfigfile.html">EDITCONFIGFILE</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../cleopy/readbinary.html">READBINARY</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../cleopy/writebinary.html">WRITEBINARY</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/thermobinary_src/thermobinary_src.html">ThermoBinary</a><input aria-label="Toggle navigation of ThermoBinary" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/create_thermodynamics.html">create_thermodynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/read_thermodynamics.html">read_thermodynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/thermodyngen.html">thermodyngen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/thermogen.html">thermogen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/windsgen.html">windsgen</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../libs/libs.html">API: Cleo C++ Library</a><input aria-label="Toggle navigation of API: Cleo C++ Library" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../libs/runcleo/runcleomod.html">RunCLEO Module</a><input aria-label="Toggle navigation of RunCLEO Module" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/runcleo/coupleddynamics.html">CoupledDynamics</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/runcleo/couplingcomms.html">CouplingComms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/runcleo/creategbxs.html">Create Gridboxes Sub-Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/runcleo/createsupers.html">Create Super-droplets Sub-Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/runcleo/runcleo.html">RunCLEO</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/runcleo/sdmmethods.html">SDMMethods</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/sdmout_src/sdmout_src.html">SDMOut</a><input aria-label="Toggle navigation of SDMOut" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/pyzarr.html">pyzarr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/pysetuptxt.html">pysetuptxt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/pygbxsdat.html">pygbxsdat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/timedata.html">timedata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/thermodata.html">thermodata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/massmoms.html">massmoms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/thermoeqns.html">thermoeqns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/superdrops.html">superdrops</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../libs/superdrops/superdropsmod.html">Superdrops Module</a><input aria-label="Toggle navigation of Superdrops Module" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../../libs/superdrops/collisions/collisionsmod.html">Collisions Module</a><input aria-label="Toggle navigation of Collisions Module" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../cleopy/cxx2py.html">Cxx2Py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cleopy/geninitconds.html">geninitconds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cleopy/readconfigfile.html">readconfigfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cleopy/editconfigfile.html">editconfigfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cleopy/readbinary.html">readbinary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cleopy/writebinary.html">writebinary</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../libs/libs.html">API: Cleo C++ Library</a><input aria-label="Toggle navigation of API: Cleo C++ Library" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../libs/configuration/configurationmod.html">Configuration Module</a><input aria-label="Toggle navigation of Configuration Module" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/configuration/config.html">Config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/configuration/required_config_params.html">Required Config Params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/configuration/optional_config_params.html">Optional Config Params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/configuration/communicator.html">Communicator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/configuration/copyfiles2txt.html">Copy Files To Txt</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../libs/gridboxes/gridboxesmod.html">Gridboxes Module</a><input aria-label="Toggle navigation of Gridboxes Module" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/gridboxes/gridboxmaps.html">GridboxMaps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/gridboxes/gridbox.html">Gridbox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/gridboxes/gbxindex.html">Gbxindex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/gridboxes/supersingbx.html">SupersInGbx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/gridboxes/supersindomain.html">SupersInDomain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/gridboxes/findrefs.html">Find Refs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/gridboxes/sortsupers.html">Sort Supers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/gridboxes/movesupersindomain.html">MoveSupersInDomain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/gridboxes/predcorr.html">PredCorr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/gridboxes/predcorrmotion.html">PredCorrMotion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/gridboxes/boundary_conditions.html">BoundaryConditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/gridboxes/transport_across_domain.html">TransportAcrossDomain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/gridboxes/cfl_criteria.html">CFL Criteria</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../libs/cartesiandomain/cartesiandomainmod.html">CartesianDomain Module</a><input aria-label="Toggle navigation of CartesianDomain Module" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../libs/cartesiandomain/movement/movementmod.html">Movement Module</a><input aria-label="Toggle navigation of Movement Module" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../libs/cartesiandomain/movement/cartesian_motion.html">Cartesian Motion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../libs/cartesiandomain/movement/cartesian_movement.html">Cartesian Movement</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../libs/cartesiandomain/movement/cartesian_transport_across_domain.html">Cartesian Transport Across Domain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../libs/cartesiandomain/movement/add_supers_to_domain.html">Add Supers To Domain</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/cartesiandomain/cartesian_decomposition.html">Cartesian Decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/cartesiandomain/cartesianmaps.html">CartesianMaps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/cartesiandomain/createcartesianmaps.html">Create Cartesian Maps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/cartesiandomain/domainboundaries.html">Domain Boundaries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/cartesiandomain/doubly_periodic_domain.html">Doubly Periodic Domain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/cartesiandomain/collect_data_for_collective_dataset.html">Collect Data For Collective Dataset</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../libs/superdrops/superdropsmod.html">Superdrops Module</a><input aria-label="Toggle navigation of Superdrops Module" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../libs/superdrops/collisions/collisionsmod.html">Collisions Module</a><input aria-label="Toggle navigation of Collisions Module" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../../libs/superdrops/collisions/collisions.html">Collisions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../libs/superdrops/collisions/collisionkinetics.html">Collision Kinetics</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../libs/superdrops/collisions/coalescence.html">Coalescence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../libs/superdrops/collisions/coalescence_efficiency.html">Coalescence Efficiency</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../libs/superdrops/collisions/breakup.html">Breakup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../libs/superdrops/collisions/breakup_nfrags.html">Breakup NFrags</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../libs/superdrops/collisions/coalbure.html">Coalescence-Breakup-Rebound</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../libs/superdrops/collisions/coalbure_flag.html">CoalBuRe Flag</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../libs/superdrops/collisions/constprob.html">Const Prob</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../libs/superdrops/collisions/golovinprob.html">Golovin Prob</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../libs/superdrops/collisions/hydrodynamicprob.html">Hydrodynamic Prob</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../libs/superdrops/collisions/longhydroprob.html">Long Hydro Prob</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../libs/superdrops/collisions/lowlistprob.html">Low List Prob</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../libs/superdrops/collisions/shuffle.html">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../libs/superdrops/collisions/urbg.html">Randomness Generation</a></li>
 </ul>
@@ -282,6 +335,8 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../libs/superdrops/impliciteuler.html">Implicit Euler Method for Condensation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../libs/superdrops/kokkosaliases_sd.html">Super-Droplet Kokkos Aliases</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../libs/superdrops/microphysical_process.html">Microphysical Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/superdrops/motion.html">Motion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/superdrops/sdmmonitor.html">SDMMonitor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../libs/superdrops/state.html">State</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../libs/superdrops/superdrop.html">Superdrop</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../libs/superdrops/superdrop_ids.html">Superdrop IDs</a></li>
@@ -290,7 +345,56 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../libs/superdrops/thermodynamic_equations.html">Thermodynamic Equations</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../libs/zarr/zarrmod.html">Zarr Module</a><input aria-label="Toggle navigation of Zarr Module" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../libs/initialise/initialisemod.html">Initialisation Module</a><input aria-label="Toggle navigation of Initialisation Module" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/initialise/initialconditions.html">InitialConditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/initialise/timesteps.html">Timesteps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/initialise/readbinary.html">Read Binary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/initialise/gbx_bounds_from_binary.html">GbxBoundsFromBinary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/initialise/init_all_supers_from_binary.html">InitAllSupersFromBinary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/initialise/init_supers_from_binary.html">InitSupersFromBinary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/initialise/initgbxsnull.html">InitGbxsNull</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../libs/runcleo/runcleomod.html">RunCLEO Module</a><input aria-label="Toggle navigation of RunCLEO Module" class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/runcleo/coupleddynamics.html">CoupledDynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/runcleo/couplingcomms.html">CouplingComms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/runcleo/creategbxs.html">Create Gridboxes Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/runcleo/createsupers.html">Create Super-droplets Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/runcleo/gensuperdrop.html">GenSuperdrop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/runcleo/runcleo.html">RunCLEO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/runcleo/sdmmethods.html">SDMMethods</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../libs/observers/observersmod.html">Observers Module</a><input aria-label="Toggle navigation of Observers Module" class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/observers.html">Observers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/streamout_observer.html">StreamOut Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/consttstep_observer.html">Constant Time Step Observers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/write_to_dataset_observer.html">Template for Observer to Write To Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/parallel_write_data.html">Parallel Write Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/collect_data_for_dataset.html">Collect Data For Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/collect_data_for_simple_dataset.html">Collect Data For Simple Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/generic_collect_data.html">Generic Collect Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/time_observer.html">Time Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/gbxindex_observer.html">Gbxindex Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/superdrops_observer.html">Superdrops Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/nsupers_observer.html">Nsupers Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/totnsupers_observer.html">TotNsupers Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/state_observer.html">State Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/thermo_observer.html">Thermodynamics Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/windvel_observer.html">WindVel Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/massmoments_observer.html">Massmoments Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/create_massmoments_arrays.html">Create Massmoments Arrays</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../libs/observers/sdmmonitor/sdmmonitormod.html">SDMMonitor Observers Module</a><input aria-label="Toggle navigation of SDMMonitor Observers Module" class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../libs/observers/sdmmonitor/do_sdmmonitor_obs.html">DoSDMMonitorObs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../libs/observers/sdmmonitor/monitor_condensation_observer.html">Monitor Condensation Observer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../libs/observers/sdmmonitor/monitor_massmoments_change.html">Monitor Massmoments Change</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../libs/observers/sdmmonitor/monitor_massmoments_change_observer.html">Monitor Massmoments Change Observer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../libs/observers/sdmmonitor/monitor_precipitation_observer.html">Monitor Precipitation Observer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../libs/zarr/zarrmod.html">Zarr Module</a><input aria-label="Toggle navigation of Zarr Module" class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../libs/zarr/buffer.html">Buffer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../libs/zarr/chunks.html">Chunks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../libs/zarr/dataset.html">Dataset</a></li>
@@ -303,38 +407,54 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../libs/zarr/zarr_group.html">ZarrGroup</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../libs/observers/observersmod.html">Observers Module</a><input aria-label="Toggle navigation of Observers Module" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/observers.html">Observers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/streamout_observer.html">StreamOut Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/consttstep_observer.html">Constant Time Step Observers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/write_to_dataset_observer.html">Template for Observer to Write To Dataset</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/parallel_write_data.html">Parallel Write Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/collect_data_for_dataset.html">Collect Data For Dataset</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/generic_collect_data.html">Generic Collect Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/time_observer.html">Time Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/gbxindex_observer.html">Gbxindex Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/superdrops_observer.html">Superdrops Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/nsupers_observer.html">Nsupers Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/totnsupers_observer.html">TotNsupers Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/state_observer.html">State Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/thermo_observer.html">Thermodynamics Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/windvel_observer.html">WindVel Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/observers/massmoments_observer.html">Massmoments Observer</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../libs/coupldyn_null/coupldynnullmod.html">Coupldyn Null Module</a><input aria-label="Toggle navigation of Coupldyn Null Module" class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/coupldyn_null/nulldynamics.html">NullDynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/coupldyn_null/nulldyncomms.html">NullDynComms</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../libs/initialise/initialisemod.html">Initialisation Module</a><input aria-label="Toggle navigation of Initialisation Module" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../../libs/initialise/initialconditions.html">InitialConditions</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../libs/coupldyn_fromfile/coupldynfromfilemod.html">Coupldyn FromFile Module</a><input aria-label="Toggle navigation of Coupldyn FromFile Module" class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/coupldyn_fromfile/fromfile_cartesian_dynamics.html">FromFile Cartesian Dynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/coupldyn_fromfile/fromfilecomms.html">FromFileComms</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../libs/coupldyn_cvode/coupldyncvodemod.html">Coupldyn CVODE Module</a><input aria-label="Toggle navigation of Coupldyn CVODE Module" class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/coupldyn_cvode/cvodedynamics.html">CvodeDynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/coupldyn_cvode/cvodecomms.html">CvodeComms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/coupldyn_cvode/differentialfuncs.html">Differential Funcs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/coupldyn_cvode/initgbxs_cvode.html">InitGbxsCvode</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../libs/coupldyn_yac/coupldynyacmod.html">Coupldyn YAC Module</a><input aria-label="Toggle navigation of Coupldyn YAC Module" class="toctree-checkbox" id="toctree-checkbox-26" name="toctree-checkbox-26" role="switch" type="checkbox"/><label for="toctree-checkbox-26"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/coupldyn_yac/yac_cartesian_dynamics.html">YAC Cartesian Dynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/coupldyn_yac/yac_comms.html">YAC Comms</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../libs/cleo_python_bindings/cleopythonbindingsmod.html">CLEO Python Bindings Module</a><input aria-label="Toggle navigation of CLEO Python Bindings Module" class="toctree-checkbox" id="toctree-checkbox-27" name="toctree-checkbox-27" role="switch" type="checkbox"/><label for="toctree-checkbox-27"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../../libs/cleo_python_bindings/coupldyn_numpy/coupldynnumpymod.html">Coupldyn Numpy Module</a><input aria-label="Toggle navigation of Coupldyn Numpy Module" class="toctree-checkbox" id="toctree-checkbox-28" name="toctree-checkbox-28" role="switch" type="checkbox"/><label for="toctree-checkbox-28"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../libs/cleo_python_bindings/coupldyn_numpy/numpy_dynamics.html">NumpyDynamics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../libs/cleo_python_bindings/coupldyn_numpy/numpy_comms.html">NumpyComms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../libs/cleo_python_bindings/coupldyn_numpy/pycoupldyn_numpy.html">Py Coupldyn Numpy</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/cleo_python_bindings/cleo_python_bindings.html">CLEO Python Bindings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/cleo_python_bindings/cleo_python_bindings_aliases.html">CLEO Python Bindings Aliases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/cleo_python_bindings/optional_terminal_velocity.html">Optional Terminal Velocity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/cleo_python_bindings/py_cartesiandomain.html">Py CartesianDomain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/cleo_python_bindings/py_configuration.html">Py Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/cleo_python_bindings/py_gridboxes.html">Py Gridboxes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/cleo_python_bindings/py_initialise.html">Py Initialise</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/cleo_python_bindings/py_observers.html">Py Observers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/cleo_python_bindings/py_runcleo.html">Py RunCLEO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/cleo_python_bindings/py_superdrops.html">Py Superdrops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../libs/cleo_python_bindings/py_zarr.html">Py Zarr</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../../libs/cleoconstants.html">Cleo Constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../libs/kokkosaliases.html">Kokkos Aliases</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../../usage/ourdocs.html">Our Docs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../usage/contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/yoctoyotta1024/CLEO.git">GitHub Repo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../usage/good_coding.html">Good Coding Practices</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../usage/contact.html">Contact Us!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contact.html">Contact Us!</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a></li>
 </ul>
 
@@ -424,36 +544,54 @@
         <span class="k">if</span> <span class="n">is_print</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">print_properties</span><span class="p">()</span>
 
+<div class="viewcode-block" id="SuperdropProperties.get_props">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.SuperdropProperties.get_props">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_props</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">units</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="n">var</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="n">var</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="n">var</span> <span class="o">+</span> <span class="s2">"_units"</span><span class="p">]</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="n">var</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="n">var</span> <span class="o">+</span> <span class="s2">"_units"</span><span class="p">]</span></div>
 
+
+<div class="viewcode-block" id="SuperdropProperties.RHO_L">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.SuperdropProperties.RHO_L">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">RHO_L</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_props</span><span class="p">(</span><span class="s2">"RHO_L"</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_props</span><span class="p">(</span><span class="s2">"RHO_L"</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="SuperdropProperties.RHO_SOL">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.SuperdropProperties.RHO_SOL">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">RHO_SOL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_props</span><span class="p">(</span><span class="s2">"RHO_SOL"</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_props</span><span class="p">(</span><span class="s2">"RHO_SOL"</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="SuperdropProperties.MR_SOL">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.SuperdropProperties.MR_SOL">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">MR_SOL</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_props</span><span class="p">(</span><span class="s2">"MR_SOL"</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_props</span><span class="p">(</span><span class="s2">"MR_SOL"</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="n">units</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="SuperdropProperties.IONIC">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.SuperdropProperties.IONIC">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">IONIC</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">units</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">"degree ionic dissociation (van't Hoff factor) has no units"</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_props</span><span class="p">(</span><span class="s2">"IONIC"</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_props</span><span class="p">(</span><span class="s2">"IONIC"</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_props</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 
+<div class="viewcode-block" id="SuperdropProperties.print_properties">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.SuperdropProperties.print_properties">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">print_properties</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">"---- Superdrop Properties -----"</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">"RHO_L ="</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">RHO_L</span><span class="p">())</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">"RHO_SOL ="</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">RHO_SOL</span><span class="p">())</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">"MR_SOL ="</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MR_SOL</span><span class="p">())</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">"IONIC ="</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">IONIC</span><span class="p">())</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">"-------------------------------"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"-------------------------------"</span><span class="p">)</span></div>
+
 
 <div class="viewcode-block" id="SuperdropProperties.rhoeff">
 <a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.SuperdropProperties.rhoeff">[docs]</a>
@@ -564,12 +702,15 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"unknow type of dataset to make superdroplets from"</span><span class="p">)</span>
 
+<div class="viewcode-block" id="Superdrops.tryopen_dataset">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.tryopen_dataset">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">tryopen_dataset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">"supers dataset: "</span><span class="p">,</span> <span class="n">dataset</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">"zarr"</span><span class="p">,</span> <span class="n">consolidated</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">dataset</span>
+            <span class="k">return</span> <span class="n">dataset</span></div>
+
 
 <div class="viewcode-block" id="Superdrops.tryvar">
 <a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.tryvar">[docs]</a>
@@ -595,65 +736,116 @@
             <span class="k">return</span> <span class="s2">""</span></div>
 
 
+<div class="viewcode-block" id="Superdrops.get_units">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.get_units">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_units</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units</span><span class="p">[</span><span class="n">var</span> <span class="o">+</span> <span class="s2">"_units"</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units</span><span class="p">[</span><span class="n">var</span> <span class="o">+</span> <span class="s2">"_units"</span><span class="p">]</span></div>
 
+
+<div class="viewcode-block" id="Superdrops.get_variable">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.get_variable">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_variable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">units</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">units</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">[</span><span class="n">var</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">[</span><span class="n">var</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">[</span><span class="n">var</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="n">var</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Superdrops.sdId">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.sdId">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">sdId</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"sdId"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"sdId"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Superdrops.sdgbxindex">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.sdgbxindex">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">sdgbxindex</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"sdgbxindex"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"sdgbxindex"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Superdrops.xi">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.xi">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">xi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"xi"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"xi"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Superdrops.radius">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.radius">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">radius</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"radius"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"radius"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Superdrops.msol">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.msol">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">msol</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"msol"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"msol"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Superdrops.coord3">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.coord3">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">coord3</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"coord3"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"coord3"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Superdrops.coord1">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.coord1">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">coord1</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"coord1"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"coord1"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Superdrops.coord2">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.coord2">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">coord2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"coord2"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"coord2"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Superdrops.time">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.time">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="k">if</span> <span class="s2">"time"</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_variable</span><span class="p">(</span><span class="s2">"time"</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">"time is not attached to superdrops"</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
 
+
+<div class="viewcode-block" id="Superdrops.radius_units">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.radius_units">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">radius_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">"radius"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">"radius"</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Superdrops.msol_units">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.msol_units">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">msol_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">"msol"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">"msol"</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Superdrops.coord3_units">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.coord3_units">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">coord3_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">"coord3"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">"coord3"</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Superdrops.coord1_units">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.coord1_units">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">coord1_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">"coord1"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">"coord1"</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Superdrops.coord2_units">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.coord2_units">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">coord2_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">"coord2"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">"coord2"</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Superdrops.time_units">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.time_units">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">time_units</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="s2">"time"</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_units</span><span class="p">(</span><span class="s2">"time"</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">"time is not attached to superdrops"</span><span class="p">)</span>
-        <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"sdId"</span><span class="p">:</span>
@@ -690,6 +882,8 @@
             <span class="n">err</span> <span class="o">=</span> <span class="s2">"no known return provided for "</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s2">" key"</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
 
+<div class="viewcode-block" id="Superdrops.attach_time">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.attach_time">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">attach_time</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">time_units</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">do_reshape</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">var4reshape</span><span class="o">=</span><span class="s2">"sdId"</span>
     <span class="p">):</span>
@@ -701,8 +895,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">[</span><span class="s2">"time"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">Array</span><span class="p">(</span><span class="n">time</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_units</span><span class="p">[</span><span class="s2">"time_units"</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_units</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">"time already attached to superdrops"</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"time already attached to superdrops"</span><span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Superdrops.detach_time">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.detach_time">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">detach_time</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="s2">"time"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">"time is not attached to superdrops"</span><span class="p">)</span>
@@ -711,8 +908,11 @@
             <span class="n">variables</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="s2">"time"</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">[</span><span class="s2">"time"</span><span class="p">]</span>
-            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units</span><span class="p">[</span><span class="s2">"time_units"</span><span class="p">]</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_units</span><span class="p">[</span><span class="s2">"time_units"</span><span class="p">]</span></div>
 
+
+<div class="viewcode-block" id="Superdrops.sample">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.sample">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">sample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sample_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sample_values</span><span class="o">=</span><span class="s2">"all"</span><span class="p">,</span> <span class="n">variables2sample</span><span class="o">=</span><span class="s2">"all"</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sample_var</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">sample_var</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raw_data</span><span class="p">[</span><span class="n">sample_var</span><span class="p">]</span>
@@ -740,8 +940,11 @@
         <span class="n">superdrops_sample</span><span class="o">.</span><span class="n">_variables</span> <span class="o">=</span> <span class="n">raw_data</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
         <span class="n">superdrops_sample</span><span class="o">.</span><span class="n">_raw_data</span> <span class="o">=</span> <span class="n">raw_data</span>
 
-        <span class="k">return</span> <span class="n">superdrops_sample</span>
+        <span class="k">return</span> <span class="n">superdrops_sample</span></div>
 
+
+<div class="viewcode-block" id="Superdrops.random_sample">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.random_sample">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">random_sample</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">sample_var</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -758,8 +961,11 @@
         <span class="n">sample_values</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">sample_population</span><span class="p">,</span> <span class="n">ndrops2sample</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span>
             <span class="n">sample_var</span><span class="p">,</span> <span class="n">sample_values</span><span class="o">=</span><span class="n">sample_values</span><span class="p">,</span> <span class="n">variables2sample</span><span class="o">=</span><span class="n">variables2sample</span>
-        <span class="p">)</span>
+        <span class="p">)</span></div>
 
+
+<div class="viewcode-block" id="Superdrops.select_range">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.select_range">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">select_range</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">var_for_range</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">range_values</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">variables2select</span><span class="o">=</span><span class="s2">"all"</span>
     <span class="p">):</span>
@@ -787,8 +993,11 @@
         <span class="n">superdrops_sample</span><span class="o">.</span><span class="n">_variables</span> <span class="o">=</span> <span class="n">raw_data</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
         <span class="n">superdrops_sample</span><span class="o">.</span><span class="n">_raw_data</span> <span class="o">=</span> <span class="n">raw_data</span>
 
-        <span class="k">return</span> <span class="n">superdrops_sample</span>
+        <span class="k">return</span> <span class="n">superdrops_sample</span></div>
 
+
+<div class="viewcode-block" id="Superdrops.indexes_of_time_slices">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.indexes_of_time_slices">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">indexes_of_time_slices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">times2select</span><span class="p">):</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">time_indexes</span> <span class="o">=</span> <span class="p">[]</span>
@@ -807,8 +1016,11 @@
                 <span class="n">idx</span> <span class="o">=</span> <span class="n">ak</span><span class="o">.</span><span class="n">nanargmin</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">time</span> <span class="o">-</span> <span class="n">t</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">time_indexes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">time_indexes</span>
+        <span class="k">return</span> <span class="n">time_indexes</span></div>
 
+
+<div class="viewcode-block" id="Superdrops.time_slice">
+<a class="viewcode-back" href="../../../cleopy/sdmout_src/superdrops.html#cleopy.sdmout_src.superdrops.Superdrops.time_slice">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">time_slice</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">times2select</span><span class="p">,</span>
@@ -844,6 +1056,7 @@
         <span class="n">superdrops_timeslice</span><span class="o">.</span><span class="n">_raw_data</span> <span class="o">=</span> <span class="n">raw_data</span>
 
         <span class="k">return</span> <span class="n">superdrops_timeslice</span></div>
+</div>
 
 </pre></div>
         </article>

@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Examples on Levante" href="examples_levante.html"><link rel="prev" title="Examples" href="examples.html">
 
     <!-- Generated with Sphinx 9.2.0 and Furo 2025.12.19 -->
-        <title>Examples on “Vanilla” Machines - CLEO 0.X.Y documentation</title>
+        <title>Examples on “Vanilla” Machines - Cleo 0.X.Y documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
@@ -163,7 +163,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">CLEO 0.X.Y documentation</div></a>
+      <a href="../../index.html"><div class="brand">Cleo 0.X.Y documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -184,7 +184,7 @@
       
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
-  <span class="sidebar-brand-text">CLEO 0.X.Y documentation</span>
+  <span class="sidebar-brand-text">Cleo 0.X.Y documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -193,12 +193,11 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <ul class="current">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../intro/intro.html">Programming Guide</a><input aria-label="Toggle navigation of Programming Guide" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../intro/background.html">Background to the Super-Droplet Model (SDM)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../intro/motivation.html">Motivation for Cleo</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../intro/intro.html">General Introduction</a><input aria-label="Toggle navigation of General Introduction" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/background.html">Background to Cleo</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../intro/memorylayout.html">Memory Layout</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../intro/timestepping.html">Timestepping</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../intro/coupling.html">Coupling to Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/timestepping.html">Timestepping</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../intro/monoids.html">Monoids</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../intro/kokkos.html">Kokkos Thread Parallelism</a></li>
 </ul>
@@ -212,69 +211,123 @@
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Examples on “Vanilla” Machines</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples_levante.html">Examples on Levante</a></li>
 <li class="toctree-l2"><a class="reference internal" href="examples_jupiter.html">Examples on JUPITER</a></li>
-<li class="toctree-l2"><a class="reference internal" href="bashscripts.html">The Bash Scripts in Detail</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../cleopy/cleopy.html">API: Cleo Python Package, cleopy</a><input aria-label="Toggle navigation of API: Cleo Python Package, cleopy" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../cleopy/gbxboundariesbinary_src/gbxboundariesbinary_src.html">GbxBoundariesBinary</a><input aria-label="Toggle navigation of GbxBoundariesBinary" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../cleopy/gbxboundariesbinary_src/create_gbxboundaries.html">CREATE_GBXBOUNDARIES</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../cleopy/gbxboundariesbinary_src/read_gbxboundaries.html">READ_GBXBOUNDARIES</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../prog_guide/prog_guide.html">Programming Guide</a><input aria-label="Toggle navigation of Programming Guide" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../prog_guide/code_structure.html">Cleo’s Code Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../prog_guide/main_cpp.html">Understanding and Adapting <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../prog_guide/tutorial_new_example.html">Tutorial: Creating a New Cleo Experiment From Scratch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../prog_guide/external_project.html">Using Cleo in an External Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../prog_guide/microphysics_and_observers.html">Combining Microphysics and Observers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../prog_guide/coupled_dynamics.html">Coupled Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../prog_guide/bashscripts_detail.html">The Bash Scripts in Detail</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/initsuperdropsbinary_src.html">InitSuperdropsBinary</a><input aria-label="Toggle navigation of InitSuperdropsBinary" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/create_initsuperdrops.html">CREATE_INITSUPERDROPS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/read_initsuperdrops.html">READ_INITSUPERDROPS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/attrsgen.html">ATTRSGEN</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/crdgens.html">CRDGENS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/probdists.html">PROBDISTS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/rgens.html">RGENS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/dryrgens.html">DRYRGENS</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../for_develop/for_develop.html">For Developers</a><input aria-label="Toggle navigation of For Developers" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../for_develop/contributing.html">Contributing Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../for_develop/good_code.html">Good Coding Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../for_develop/ourdocs.html">Our Docs</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../cleopy/thermobinary_src/thermobinary_src.html">ThermoBinary</a><input aria-label="Toggle navigation of ThermoBinary" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/create_thermodynamics.html">CREATE_THERMODYNAMICS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/read_thermodynamics.html">READ_THERMODYNAMICS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/thermodyngen.html">THERMODYNGEN</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/thermogen.html">THERMOGEN</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/windsgen.html">WINDSGEN</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../cleopy/cleopy.html">API: Cleo Python Package, cleopy</a><input aria-label="Toggle navigation of API: Cleo Python Package, cleopy" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../cleopy/gbxboundariesbinary_src/gbxboundariesbinary_src.html">GbxBoundariesBinary</a><input aria-label="Toggle navigation of GbxBoundariesBinary" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/gbxboundariesbinary_src/create_gbxboundaries.html">create_gbxboundaries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/gbxboundariesbinary_src/read_gbxboundaries.html">read_gbxboundaries</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../cleopy/sdmout_src/sdmout_src.html">SDMOut</a><input aria-label="Toggle navigation of SDMOut" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/pyzarr.html">PYZARR</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/pysetuptxt.html">PYSETUPTXT</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/pygbxsdat.html">PYGBXSDAT</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/timedata.html">TIMEDATA</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/thermodata.html">THERMODATA</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/massmoms.html">MASSMOMS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/thermoeqns.html">THERMOEQNS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/superdrops.html">SUPERDROPS</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/initsuperdropsbinary_src.html">InitSuperdropsBinary</a><input aria-label="Toggle navigation of InitSuperdropsBinary" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/create_initsuperdrops.html">create_initsuperdrops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/read_initsuperdrops.html">read_initsuperdrops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/attrsgen.html">attrsgen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/crdgens.html">crdgens</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/probdists.html">probdists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/rgens.html">rgens</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/dryrgens.html">dryrggens</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="../../cleopy/cxx2py.html">CXX2PY</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../cleopy/readconfigfile.html">READCONFIGFILE</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../cleopy/editconfigfile.html">EDITCONFIGFILE</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../cleopy/readbinary.html">READBINARY</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../cleopy/writebinary.html">WRITEBINARY</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../cleopy/thermobinary_src/thermobinary_src.html">ThermoBinary</a><input aria-label="Toggle navigation of ThermoBinary" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/create_thermodynamics.html">create_thermodynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/read_thermodynamics.html">read_thermodynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/thermodyngen.html">thermodyngen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/thermogen.html">thermogen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/windsgen.html">windsgen</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../libs/libs.html">API: Cleo C++ Library</a><input aria-label="Toggle navigation of API: Cleo C++ Library" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../libs/runcleo/runcleomod.html">RunCLEO Module</a><input aria-label="Toggle navigation of RunCLEO Module" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/runcleo/coupleddynamics.html">CoupledDynamics</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/runcleo/couplingcomms.html">CouplingComms</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/runcleo/creategbxs.html">Create Gridboxes Sub-Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/runcleo/createsupers.html">Create Super-droplets Sub-Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/runcleo/runcleo.html">RunCLEO</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/runcleo/sdmmethods.html">SDMMethods</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../cleopy/sdmout_src/sdmout_src.html">SDMOut</a><input aria-label="Toggle navigation of SDMOut" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/pyzarr.html">pyzarr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/pysetuptxt.html">pysetuptxt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/pygbxsdat.html">pygbxsdat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/timedata.html">timedata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/thermodata.html">thermodata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/massmoms.html">massmoms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/thermoeqns.html">thermoeqns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/superdrops.html">superdrops</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../libs/superdrops/superdropsmod.html">Superdrops Module</a><input aria-label="Toggle navigation of Superdrops Module" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3 has-children"><a class="reference internal" href="../../libs/superdrops/collisions/collisionsmod.html">Collisions Module</a><input aria-label="Toggle navigation of Collisions Module" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../cleopy/cxx2py.html">Cxx2Py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleopy/geninitconds.html">geninitconds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleopy/readconfigfile.html">readconfigfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleopy/editconfigfile.html">editconfigfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleopy/readbinary.html">readbinary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleopy/writebinary.html">writebinary</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../libs/libs.html">API: Cleo C++ Library</a><input aria-label="Toggle navigation of API: Cleo C++ Library" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../libs/configuration/configurationmod.html">Configuration Module</a><input aria-label="Toggle navigation of Configuration Module" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/configuration/config.html">Config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/configuration/required_config_params.html">Required Config Params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/configuration/optional_config_params.html">Optional Config Params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/configuration/communicator.html">Communicator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/configuration/copyfiles2txt.html">Copy Files To Txt</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../libs/gridboxes/gridboxesmod.html">Gridboxes Module</a><input aria-label="Toggle navigation of Gridboxes Module" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/gridboxes/gridboxmaps.html">GridboxMaps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/gridboxes/gridbox.html">Gridbox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/gridboxes/gbxindex.html">Gbxindex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/gridboxes/supersingbx.html">SupersInGbx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/gridboxes/supersindomain.html">SupersInDomain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/gridboxes/findrefs.html">Find Refs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/gridboxes/sortsupers.html">Sort Supers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/gridboxes/movesupersindomain.html">MoveSupersInDomain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/gridboxes/predcorr.html">PredCorr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/gridboxes/predcorrmotion.html">PredCorrMotion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/gridboxes/boundary_conditions.html">BoundaryConditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/gridboxes/transport_across_domain.html">TransportAcrossDomain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/gridboxes/cfl_criteria.html">CFL Criteria</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../libs/cartesiandomain/cartesiandomainmod.html">CartesianDomain Module</a><input aria-label="Toggle navigation of CartesianDomain Module" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../libs/cartesiandomain/movement/movementmod.html">Movement Module</a><input aria-label="Toggle navigation of Movement Module" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../libs/cartesiandomain/movement/cartesian_motion.html">Cartesian Motion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../libs/cartesiandomain/movement/cartesian_movement.html">Cartesian Movement</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../libs/cartesiandomain/movement/cartesian_transport_across_domain.html">Cartesian Transport Across Domain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../libs/cartesiandomain/movement/add_supers_to_domain.html">Add Supers To Domain</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/cartesiandomain/cartesian_decomposition.html">Cartesian Decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/cartesiandomain/cartesianmaps.html">CartesianMaps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/cartesiandomain/createcartesianmaps.html">Create Cartesian Maps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/cartesiandomain/domainboundaries.html">Domain Boundaries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/cartesiandomain/doubly_periodic_domain.html">Doubly Periodic Domain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/cartesiandomain/collect_data_for_collective_dataset.html">Collect Data For Collective Dataset</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../libs/superdrops/superdropsmod.html">Superdrops Module</a><input aria-label="Toggle navigation of Superdrops Module" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../libs/superdrops/collisions/collisionsmod.html">Collisions Module</a><input aria-label="Toggle navigation of Collisions Module" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l4"><a class="reference internal" href="../../libs/superdrops/collisions/collisions.html">Collisions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../libs/superdrops/collisions/collisionkinetics.html">Collision Kinetics</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../libs/superdrops/collisions/coalescence.html">Coalescence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../libs/superdrops/collisions/coalescence_efficiency.html">Coalescence Efficiency</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../libs/superdrops/collisions/breakup.html">Breakup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../libs/superdrops/collisions/breakup_nfrags.html">Breakup NFrags</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../libs/superdrops/collisions/coalbure.html">Coalescence-Breakup-Rebound</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../libs/superdrops/collisions/coalbure_flag.html">CoalBuRe Flag</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../libs/superdrops/collisions/constprob.html">Const Prob</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../libs/superdrops/collisions/golovinprob.html">Golovin Prob</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../libs/superdrops/collisions/hydrodynamicprob.html">Hydrodynamic Prob</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../libs/superdrops/collisions/longhydroprob.html">Long Hydro Prob</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../libs/superdrops/collisions/lowlistprob.html">Low List Prob</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../libs/superdrops/collisions/shuffle.html">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../libs/superdrops/collisions/urbg.html">Randomness Generation</a></li>
 </ul>
@@ -283,6 +336,8 @@
 <li class="toctree-l3"><a class="reference internal" href="../../libs/superdrops/impliciteuler.html">Implicit Euler Method for Condensation</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../libs/superdrops/kokkosaliases_sd.html">Super-Droplet Kokkos Aliases</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../libs/superdrops/microphysical_process.html">Microphysical Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/superdrops/motion.html">Motion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/superdrops/sdmmonitor.html">SDMMonitor</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../libs/superdrops/state.html">State</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../libs/superdrops/superdrop.html">Superdrop</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../libs/superdrops/superdrop_ids.html">Superdrop IDs</a></li>
@@ -291,7 +346,56 @@
 <li class="toctree-l3"><a class="reference internal" href="../../libs/superdrops/thermodynamic_equations.html">Thermodynamic Equations</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../libs/zarr/zarrmod.html">Zarr Module</a><input aria-label="Toggle navigation of Zarr Module" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../libs/initialise/initialisemod.html">Initialisation Module</a><input aria-label="Toggle navigation of Initialisation Module" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/initialise/initialconditions.html">InitialConditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/initialise/timesteps.html">Timesteps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/initialise/readbinary.html">Read Binary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/initialise/gbx_bounds_from_binary.html">GbxBoundsFromBinary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/initialise/init_all_supers_from_binary.html">InitAllSupersFromBinary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/initialise/init_supers_from_binary.html">InitSupersFromBinary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/initialise/initgbxsnull.html">InitGbxsNull</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../libs/runcleo/runcleomod.html">RunCLEO Module</a><input aria-label="Toggle navigation of RunCLEO Module" class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/runcleo/coupleddynamics.html">CoupledDynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/runcleo/couplingcomms.html">CouplingComms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/runcleo/creategbxs.html">Create Gridboxes Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/runcleo/createsupers.html">Create Super-droplets Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/runcleo/gensuperdrop.html">GenSuperdrop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/runcleo/runcleo.html">RunCLEO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/runcleo/sdmmethods.html">SDMMethods</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../libs/observers/observersmod.html">Observers Module</a><input aria-label="Toggle navigation of Observers Module" class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/observers.html">Observers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/streamout_observer.html">StreamOut Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/consttstep_observer.html">Constant Time Step Observers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/write_to_dataset_observer.html">Template for Observer to Write To Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/parallel_write_data.html">Parallel Write Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/collect_data_for_dataset.html">Collect Data For Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/collect_data_for_simple_dataset.html">Collect Data For Simple Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/generic_collect_data.html">Generic Collect Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/time_observer.html">Time Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/gbxindex_observer.html">Gbxindex Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/superdrops_observer.html">Superdrops Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/nsupers_observer.html">Nsupers Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/totnsupers_observer.html">TotNsupers Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/state_observer.html">State Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/thermo_observer.html">Thermodynamics Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/windvel_observer.html">WindVel Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/massmoments_observer.html">Massmoments Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/create_massmoments_arrays.html">Create Massmoments Arrays</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../libs/observers/sdmmonitor/sdmmonitormod.html">SDMMonitor Observers Module</a><input aria-label="Toggle navigation of SDMMonitor Observers Module" class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../libs/observers/sdmmonitor/do_sdmmonitor_obs.html">DoSDMMonitorObs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../libs/observers/sdmmonitor/monitor_condensation_observer.html">Monitor Condensation Observer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../libs/observers/sdmmonitor/monitor_massmoments_change.html">Monitor Massmoments Change</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../libs/observers/sdmmonitor/monitor_massmoments_change_observer.html">Monitor Massmoments Change Observer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../libs/observers/sdmmonitor/monitor_precipitation_observer.html">Monitor Precipitation Observer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../libs/zarr/zarrmod.html">Zarr Module</a><input aria-label="Toggle navigation of Zarr Module" class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../libs/zarr/buffer.html">Buffer</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../libs/zarr/chunks.html">Chunks</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../libs/zarr/dataset.html">Dataset</a></li>
@@ -304,38 +408,54 @@
 <li class="toctree-l3"><a class="reference internal" href="../../libs/zarr/zarr_group.html">ZarrGroup</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../libs/observers/observersmod.html">Observers Module</a><input aria-label="Toggle navigation of Observers Module" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/observers.html">Observers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/streamout_observer.html">StreamOut Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/consttstep_observer.html">Constant Time Step Observers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/write_to_dataset_observer.html">Template for Observer to Write To Dataset</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/parallel_write_data.html">Parallel Write Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/collect_data_for_dataset.html">Collect Data For Dataset</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/generic_collect_data.html">Generic Collect Data</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/time_observer.html">Time Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/gbxindex_observer.html">Gbxindex Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/superdrops_observer.html">Superdrops Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/nsupers_observer.html">Nsupers Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/totnsupers_observer.html">TotNsupers Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/state_observer.html">State Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/thermo_observer.html">Thermodynamics Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/windvel_observer.html">WindVel Observer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/observers/massmoments_observer.html">Massmoments Observer</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../libs/coupldyn_null/coupldynnullmod.html">Coupldyn Null Module</a><input aria-label="Toggle navigation of Coupldyn Null Module" class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/coupldyn_null/nulldynamics.html">NullDynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/coupldyn_null/nulldyncomms.html">NullDynComms</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../libs/initialise/initialisemod.html">Initialisation Module</a><input aria-label="Toggle navigation of Initialisation Module" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../../libs/initialise/initialconditions.html">InitialConditions</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../libs/coupldyn_fromfile/coupldynfromfilemod.html">Coupldyn FromFile Module</a><input aria-label="Toggle navigation of Coupldyn FromFile Module" class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/coupldyn_fromfile/fromfile_cartesian_dynamics.html">FromFile Cartesian Dynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/coupldyn_fromfile/fromfilecomms.html">FromFileComms</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../libs/coupldyn_cvode/coupldyncvodemod.html">Coupldyn CVODE Module</a><input aria-label="Toggle navigation of Coupldyn CVODE Module" class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/coupldyn_cvode/cvodedynamics.html">CvodeDynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/coupldyn_cvode/cvodecomms.html">CvodeComms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/coupldyn_cvode/differentialfuncs.html">Differential Funcs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/coupldyn_cvode/initgbxs_cvode.html">InitGbxsCvode</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../libs/coupldyn_yac/coupldynyacmod.html">Coupldyn YAC Module</a><input aria-label="Toggle navigation of Coupldyn YAC Module" class="toctree-checkbox" id="toctree-checkbox-26" name="toctree-checkbox-26" role="switch" type="checkbox"/><label for="toctree-checkbox-26"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/coupldyn_yac/yac_cartesian_dynamics.html">YAC Cartesian Dynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/coupldyn_yac/yac_comms.html">YAC Comms</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../libs/cleo_python_bindings/cleopythonbindingsmod.html">CLEO Python Bindings Module</a><input aria-label="Toggle navigation of CLEO Python Bindings Module" class="toctree-checkbox" id="toctree-checkbox-27" name="toctree-checkbox-27" role="switch" type="checkbox"/><label for="toctree-checkbox-27"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../libs/cleo_python_bindings/coupldyn_numpy/coupldynnumpymod.html">Coupldyn Numpy Module</a><input aria-label="Toggle navigation of Coupldyn Numpy Module" class="toctree-checkbox" id="toctree-checkbox-28" name="toctree-checkbox-28" role="switch" type="checkbox"/><label for="toctree-checkbox-28"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../libs/cleo_python_bindings/coupldyn_numpy/numpy_dynamics.html">NumpyDynamics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../libs/cleo_python_bindings/coupldyn_numpy/numpy_comms.html">NumpyComms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../libs/cleo_python_bindings/coupldyn_numpy/pycoupldyn_numpy.html">Py Coupldyn Numpy</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/cleo_python_bindings/cleo_python_bindings.html">CLEO Python Bindings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/cleo_python_bindings/cleo_python_bindings_aliases.html">CLEO Python Bindings Aliases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/cleo_python_bindings/optional_terminal_velocity.html">Optional Terminal Velocity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/cleo_python_bindings/py_cartesiandomain.html">Py CartesianDomain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/cleo_python_bindings/py_configuration.html">Py Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/cleo_python_bindings/py_gridboxes.html">Py Gridboxes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/cleo_python_bindings/py_initialise.html">Py Initialise</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/cleo_python_bindings/py_observers.html">Py Observers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/cleo_python_bindings/py_runcleo.html">Py RunCLEO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/cleo_python_bindings/py_superdrops.html">Py Superdrops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../libs/cleo_python_bindings/py_zarr.html">Py Zarr</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../../libs/cleoconstants.html">Cleo Constants</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../libs/kokkosaliases.html">Kokkos Aliases</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../ourdocs.html">Our Docs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/yoctoyotta1024/CLEO.git">GitHub Repo</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../good_coding.html">Good Coding Practices</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../contact.html">Contact Us!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contact.html">Contact Us!</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
 </ul>
 
@@ -379,10 +499,7 @@
 <span id="examples-vanilla"></span><h1>Examples on “Vanilla” Machines<a class="headerlink" href="#examples-on-vanilla-machines" title="Link to this heading">¶</a></h1>
 <p>Having <a class="reference internal" href="examples.html#install-plotcleo"><span class="std std-ref">installed plotcleo</span></a>, the following instructions are intended to guide you
 through running each example using the bash scripts in <code class="docutils literal notranslate"><span class="pre">scripts/vanilla/</span></code>. See
-<a class="reference internal" href="examples.html#bashscripts"><span class="std std-ref">how the bash scripts work</span></a> for an overview of these scripts.</p>
-<p><em>Note</em>: the <code class="docutils literal notranslate"><span class="pre">fromfile</span></code>, <code class="docutils literal notranslate"><span class="pre">fromfile_irreg</span></code> and <code class="docutils literal notranslate"><span class="pre">bubble3d</span></code> examples need an HPC with Slurm
-(and YAC for <code class="docutils literal notranslate"><span class="pre">bubble3d</span></code>), so they can only be run on <a class="reference internal" href="examples_levante.html#examples-levante"><span class="std std-ref">Levante</span></a> or
-<a class="reference internal" href="examples_jupiter.html#examples-jupiter"><span class="std std-ref">JUPITER</span></a>.</p>
+<a class="reference internal" href="examples.html#how-bashscripts-work"><span class="std std-ref">how the bash scripts work</span></a> for an overview of these scripts.</p>
 <section id="configure-the-bash-scripts">
 <span id="configurebash-vanilla"></span><h2>Configure the Bash Scripts<a class="headerlink" href="#configure-the-bash-scripts" title="Link to this heading">¶</a></h2>
 <p>Every example is run with the same job script, <code class="docutils literal notranslate"><span class="pre">scripts/vanilla/cpu.sh</span></code>.
@@ -492,7 +609,7 @@ files, run and plot it again without reconfiguring Cleo:</p>
 <p class="sd-card-text">The examples, <code class="docutils literal notranslate"><span class="pre">as2017.py</span></code> and <code class="docutils literal notranslate"><span class="pre">cuspbifurc.py</span></code>, in <code class="docutils literal notranslate"><span class="pre">examples/adiabaticparcel/</span></code> are for a
 0-D model of a parcel of air expanding and contracting adiabatically with a two-way coupling between
 the SDM microphysics and the thermodynamics. The setup mimics that in Arabas and Shima 2017
-section 7 <span class="bibtex-citation" id="id1">[<a class="reference internal" href="../../references.html#id6" title="S. Arabas and S. Shima. On the ccn (de)activation nonlinearities. Nonlinear Processes in Geophysics, 24(3):535–542, 2017. URL: https://npg.copernicus.org/articles/24/535/2017/, doi:10.5194/npg-24-535-2017.">AS17</a>]</span>. <em>Note</em>: due to numerical differences, the conditions for cusp
+section 7 <span class="bibtex-citation" id="id1">[<a class="reference internal" href="../../references.html#id6" title="S. Arabas and S. Shima. On the ccn (de)activation nonlinearities. Nonlinear Processes in Geophysics, 24(3):535–542, 2017. URL: https://npg.copernicus.org/articles/24/535/2017/, doi:10.5194/npg-24-535-2017.">Arabas and Shima, 2017</a>]</span>. <em>Note</em>: due to numerical differences, the conditions for cusp
 bifurcation and the plots will not be exactly identical to this reference.</p>
 <details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3 sd-fade-in-slide-down">
 <summary class="sd-summary-title sd-card-header">
@@ -505,7 +622,7 @@ bifurcation and the plots will not be exactly identical to this reference.</p>
 </pre></div>
 </div>
 <p class="sd-card-text">The plot produced, by default called <code class="docutils literal notranslate"><span class="pre">${CLEO_PATH2CLEO}/build_adia0d/as2017/bin/as2017fig.png</span></code>, should be
-similar to figure 5 from Arabas and Shima 2017 <span class="bibtex-citation" id="id2">[<a class="reference internal" href="../../references.html#id6" title="S. Arabas and S. Shima. On the ccn (de)activation nonlinearities. Nonlinear Processes in Geophysics, 24(3):535–542, 2017. URL: https://npg.copernicus.org/articles/24/535/2017/, doi:10.5194/npg-24-535-2017.">AS17</a>]</span>.</p>
+similar to figure 5 from Arabas and Shima 2017 <span class="bibtex-citation" id="id2">[<a class="reference internal" href="../../references.html#id6" title="S. Arabas and S. Shima. On the ccn (de)activation nonlinearities. Nonlinear Processes in Geophysics, 24(3):535–542, 2017. URL: https://npg.copernicus.org/articles/24/535/2017/, doi:10.5194/npg-24-535-2017.">Arabas and Shima, 2017</a>]</span>.</p>
 </div>
 </details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3 sd-fade-in-slide-down">
 <summary class="sd-summary-title sd-card-header">
@@ -519,7 +636,7 @@ similar to figure 5 from Arabas and Shima 2017 <span class="bibtex-citation" id=
 </div>
 <p class="sd-card-text">The plots produced, by default called <code class="docutils literal notranslate"><span class="pre">${CLEO_PATH2CLEO}/build_adia0d/cuspbifurc/bin/cuspbifurc_validation.png</span></code> and
 <code class="docutils literal notranslate"><span class="pre">${CLEO_PATH2CLEO}/build_adia0d/cuspbifurc/bin/cuspbifurc_SDgrowth.png</span></code> illustrate an example of cusp bifurcation, analagous
-to the third column of figure 5 from Arabas and Shima 2017 <span class="bibtex-citation" id="id3">[<a class="reference internal" href="../../references.html#id6" title="S. Arabas and S. Shima. On the ccn (de)activation nonlinearities. Nonlinear Processes in Geophysics, 24(3):535–542, 2017. URL: https://npg.copernicus.org/articles/24/535/2017/, doi:10.5194/npg-24-535-2017.">AS17</a>]</span>.</p>
+to the third column of figure 5 from Arabas and Shima 2017 <span class="bibtex-citation" id="id3">[<a class="reference internal" href="../../references.html#id6" title="S. Arabas and S. Shima. On the ccn (de)activation nonlinearities. Nonlinear Processes in Geophysics, 24(3):535–542, 2017. URL: https://npg.copernicus.org/articles/24/535/2017/, doi:10.5194/npg-24-535-2017.">Arabas and Shima, 2017</a>]</span>.</p>
 </div>
 </details></div>
 </details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3 sd-fade-in">
@@ -527,7 +644,7 @@ to the third column of figure 5 from Arabas and Shima 2017 <span class="bibtex-c
 <span class="sd-summary-text">Box Model Collisions</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
 <p class="sd-card-text">These examples, <code class="docutils literal notranslate"><span class="pre">shima2009.py</span></code> and <code class="docutils literal notranslate"><span class="pre">breakup.py</span></code>, in <code class="docutils literal notranslate"><span class="pre">examples/boxmodelcollisions/</span></code> are for a
 0-D box model with various collision kernels. The setup mimics that in Shima et al. 2009
-section 5.1.4 <span class="bibtex-citation" id="id4">[<a class="reference internal" href="../../references.html#id32" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">SKK+09</a>]</span>. <em>Note</em>: due to the randomness of the initial super-droplet
+section 5.1.4 <span class="bibtex-citation" id="id4">[<a class="reference internal" href="../../references.html#id35" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">Shima <em>et al.</em>, 2009</a>]</span>. <em>Note</em>: due to the randomness of the initial super-droplet
 conditions and the collision algorithm, each run of these examples will not be completely identical,
 but they should be reasonably similar, and have the same mean behaviour.</p>
 <div class="large-text docutils container">
@@ -536,31 +653,31 @@ but they should be reasonably similar, and have the same mean behaviour.</p>
 <p class="sd-card-text"><em>Golovin</em></p>
 <p class="sd-card-text">The <code class="docutils literal notranslate"><span class="pre">shima2009.py</span></code> example models collision-coalescence using Golovin’s kernel.</p>
 <p class="sd-card-text">The plot produced, by default called <code class="docutils literal notranslate"><span class="pre">${CLEO_PATH2CLEO}/build_colls0d/shima2009/bin/golovin_validation.png</span></code>,
-should be similar to Fig.2(a) of Shima et al. 2009 <span class="bibtex-citation" id="id5">[<a class="reference internal" href="../../references.html#id32" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">SKK+09</a>]</span>.</p>
+should be similar to Fig.2(a) of Shima et al. 2009 <span class="bibtex-citation" id="id5">[<a class="reference internal" href="../../references.html#id35" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">Shima <em>et al.</em>, 2009</a>]</span>.</p>
 <p class="sd-card-text"><em>Long</em></p>
 <p class="sd-card-text">The <code class="docutils literal notranslate"><span class="pre">shima2009.py</span></code> example models collision-coalescence using Long’s collision efficiency as
-given by equation 13 of Simmel et al. 2002 <span class="bibtex-citation" id="id6">[<a class="reference internal" href="../../references.html#id33" title="Martin Simmel, Thomas Trautmann, and Gerd Tetzlaff. Numerical solution of the stochastic collection equation—comparison of the linear discrete method with other methods. Atmospheric Research, 61(2):135-148, 2002. URL: https://www.sciencedirect.com/science/article/pii/S0169809501001314, doi:https://doi.org/10.1016/S0169-8095(01)00131-4.">STT02</a>]</span>.</p>
+given by equation 13 of Simmel et al. 2002 <span class="bibtex-citation" id="id6">[<a class="reference internal" href="../../references.html#id36" title="Martin Simmel, Thomas Trautmann, and Gerd Tetzlaff. Numerical solution of the stochastic collection equation—comparison of the linear discrete method with other methods. Atmospheric Research, 61(2):135-148, 2002. URL: https://www.sciencedirect.com/science/article/pii/S0169809501001314, doi:https://doi.org/10.1016/S0169-8095(01)00131-4.">Simmel <em>et al.</em>, 2002</a>]</span>.</p>
 <p class="sd-card-text">The plot produced, by default called <code class="docutils literal notranslate"><span class="pre">${CLEO_PATH2CLEO}/build_colls0d/shima2009/bin/long_validation_[X].png</span></code>,
-should be similar to Fig.2(b) of Shima et al. 2009 <span class="bibtex-citation" id="id7">[<a class="reference internal" href="../../references.html#id32" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">SKK+09</a>]</span>.</p>
+should be similar to Fig.2(b) of Shima et al. 2009 <span class="bibtex-citation" id="id7">[<a class="reference internal" href="../../references.html#id35" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">Shima <em>et al.</em>, 2009</a>]</span>.</p>
 <p class="sd-card-text"><em>Low and List</em></p>
 <p class="sd-card-text">The <code class="docutils literal notranslate"><span class="pre">breakup.py</span></code> example models collision-coalescence-rebound-breakup using the hydrodynamic
-kernel with Long’s collision efficiency as given by equation 13 of Simmel et al. 2002 <span class="bibtex-citation" id="id8">[<a class="reference internal" href="../../references.html#id33" title="Martin Simmel, Thomas Trautmann, and Gerd Tetzlaff. Numerical solution of the stochastic collection equation—comparison of the linear discrete method with other methods. Atmospheric Research, 61(2):135-148, 2002. URL: https://www.sciencedirect.com/science/article/pii/S0169809501001314, doi:https://doi.org/10.1016/S0169-8095(01)00131-4.">STT02</a>]</span>,
-and the coalescence/breakup/rebound probability from Low and List 1982(a) <span class="bibtex-citation" id="id9">[<a class="reference internal" href="../../references.html#id21" title="T. B. Low and Roland List. Collision, coalescence and breakup of raindrops. part i: experimentally established coalescence efficiencies and fragment size distributions in breakup. Journal of Atmospheric Sciences, 39(7):1591 - 1606, 1982. URL: https://journals.ametsoc.org/view/journals/atsc/39/7/1520-0469_1982_039_1591_ccabor_2_0_co_2.xml, doi:https://doi.org/10.1175/1520-0469(1982)039&lt;1591:CCABOR&gt;2.0.CO;2.">LL82</a>]</span>
-(see also McFarquhar 2004 <span class="bibtex-citation" id="id10">[<a class="reference internal" href="../../references.html#id24" title="Greg M. McFarquhar. A new representation of collision-induced breakup of raindrops and its implications for the shapes of raindrop size distributions. Journal of the Atmospheric Sciences, 61(7):777 - 794, 2004. URL: https://journals.ametsoc.org/view/journals/atsc/61/7/1520-0469_2004_061_0777_anrocb_2.0.co_2.xml, doi:https://doi.org/10.1175/1520-0469(2004)061&lt;0777:ANROCB&gt;2.0.CO;2.">McF04</a>]</span>). If breakup occurs, a constant
+kernel with Long’s collision efficiency as given by equation 13 of Simmel et al. 2002 <span class="bibtex-citation" id="id8">[<a class="reference internal" href="../../references.html#id36" title="Martin Simmel, Thomas Trautmann, and Gerd Tetzlaff. Numerical solution of the stochastic collection equation—comparison of the linear discrete method with other methods. Atmospheric Research, 61(2):135-148, 2002. URL: https://www.sciencedirect.com/science/article/pii/S0169809501001314, doi:https://doi.org/10.1016/S0169-8095(01)00131-4.">Simmel <em>et al.</em>, 2002</a>]</span>,
+and the coalescence/breakup/rebound probability from Low and List 1982(a) <span class="bibtex-citation" id="id9">[<a class="reference internal" href="../../references.html#id24" title="T. B. Low and Roland List. Collision, coalescence and breakup of raindrops. part i: experimentally established coalescence efficiencies and fragment size distributions in breakup. Journal of Atmospheric Sciences, 39(7):1591 - 1606, 1982. URL: https://journals.ametsoc.org/view/journals/atsc/39/7/1520-0469_1982_039_1591_ccabor_2_0_co_2.xml, doi:https://doi.org/10.1175/1520-0469(1982)039&lt;1591:CCABOR&gt;2.0.CO;2.">Low and List, 1982</a>]</span>
+(see also McFarquhar 2004 <span class="bibtex-citation" id="id10">[<a class="reference internal" href="../../references.html#id27" title="Greg M. McFarquhar. A new representation of collision-induced breakup of raindrops and its implications for the shapes of raindrop size distributions. Journal of the Atmospheric Sciences, 61(7):777 - 794, 2004. URL: https://journals.ametsoc.org/view/journals/atsc/61/7/1520-0469_2004_061_0777_anrocb_2.0.co_2.xml, doi:https://doi.org/10.1175/1520-0469(2004)061&lt;0777:ANROCB&gt;2.0.CO;2.">McFarquhar, 2004</a>]</span>). If breakup occurs, a constant
 number of fragments is produced.</p>
 <p class="sd-card-text">This example produces a plot, by default called <code class="docutils literal notranslate"><span class="pre">${CLEO_PATH2CLEO}/build_colls0d/breakup/bin/lowlist_validation.png</span></code>.</p>
 <p class="sd-card-text"><em>Szakáll and Urbich</em></p>
 <p class="sd-card-text">The <code class="docutils literal notranslate"><span class="pre">breakup.py</span></code> example models collision-coalescence-rebound-breakup using the hydrodynamic kernel with Long’s
-collision efficiency as given by equation 13 of Simmel et al. 2002 <span class="bibtex-citation" id="id11">[<a class="reference internal" href="../../references.html#id33" title="Martin Simmel, Thomas Trautmann, and Gerd Tetzlaff. Numerical solution of the stochastic collection equation—comparison of the linear discrete method with other methods. Atmospheric Research, 61(2):135-148, 2002. URL: https://www.sciencedirect.com/science/article/pii/S0169809501001314, doi:https://doi.org/10.1016/S0169-8095(01)00131-4.">STT02</a>]</span>, and the
-coalescence/breakup/rebound probability from Szakáll and Urbich 2018 <span class="bibtex-citation" id="id12">[<a class="reference internal" href="../../references.html#id37" title="Miklós Szakáll and Isabel Urbich. Wind tunnel study on the size distribution of droplets after collision induced breakup of levitating water drops. Atmospheric Research, 213:51-56, 2018. URL: https://www.sciencedirect.com/science/article/pii/S0169809517313066, doi:https://doi.org/10.1016/j.atmosres.2018.05.007.">SU18</a>]</span>.
+collision efficiency as given by equation 13 of Simmel et al. 2002 <span class="bibtex-citation" id="id11">[<a class="reference internal" href="../../references.html#id36" title="Martin Simmel, Thomas Trautmann, and Gerd Tetzlaff. Numerical solution of the stochastic collection equation—comparison of the linear discrete method with other methods. Atmospheric Research, 61(2):135-148, 2002. URL: https://www.sciencedirect.com/science/article/pii/S0169809501001314, doi:https://doi.org/10.1016/S0169-8095(01)00131-4.">Simmel <em>et al.</em>, 2002</a>]</span>, and the
+coalescence/breakup/rebound probability from Szakáll and Urbich 2018 <span class="bibtex-citation" id="id12">[<a class="reference internal" href="../../references.html#id40" title="Miklós Szakáll and Isabel Urbich. Wind tunnel study on the size distribution of droplets after collision induced breakup of levitating water drops. Atmospheric Research, 213:51-56, 2018. URL: https://www.sciencedirect.com/science/article/pii/S0169809517313066, doi:https://doi.org/10.1016/j.atmosres.2018.05.007.">Szakáll and Urbich, 2018</a>]</span>.
 If breakup occurs, a constant number of fragments is produced.</p>
 <p class="sd-card-text">This example produces a plot, by default called <code class="docutils literal notranslate"><span class="pre">${CLEO_PATH2CLEO}/build_colls0d/breakup/bin/szakallurbich_validation.png</span></code>.</p>
 <p class="sd-card-text"><em>Testik and Straub</em></p>
 <p class="sd-card-text">The <code class="docutils literal notranslate"><span class="pre">breakup.py</span></code> example models collision-coalescence-rebound-breakup using the hydrodynamic kernel with Long’s
-collision efficiency as given by equation 13 of Simmel et al. 2002 <span class="bibtex-citation" id="id13">[<a class="reference internal" href="../../references.html#id33" title="Martin Simmel, Thomas Trautmann, and Gerd Tetzlaff. Numerical solution of the stochastic collection equation—comparison of the linear discrete method with other methods. Atmospheric Research, 61(2):135-148, 2002. URL: https://www.sciencedirect.com/science/article/pii/S0169809501001314, doi:https://doi.org/10.1016/S0169-8095(01)00131-4.">STT02</a>]</span>, and the
+collision efficiency as given by equation 13 of Simmel et al. 2002 <span class="bibtex-citation" id="id13">[<a class="reference internal" href="../../references.html#id36" title="Martin Simmel, Thomas Trautmann, and Gerd Tetzlaff. Numerical solution of the stochastic collection equation—comparison of the linear discrete method with other methods. Atmospheric Research, 61(2):135-148, 2002. URL: https://www.sciencedirect.com/science/article/pii/S0169809501001314, doi:https://doi.org/10.1016/S0169-8095(01)00131-4.">Simmel <em>et al.</em>, 2002</a>]</span>, and the
 coalescence/breakup/rebound probability based on section 4 of Testik et al. 2011 (figure 12)
-<span class="bibtex-citation" id="id14">[<a class="reference internal" href="../../references.html#id39" title="F. Y. Testik, A. P. Barros, and L. F. Bliven. Toward a physical characterization of raindrop collision outcome regimes. Journal of the Atmospheric Sciences, 68(5):1097 - 1113, 2011. URL: https://journals.ametsoc.org/view/journals/atsc/68/5/2010jas3706.1.xml, doi:10.1175/2010JAS3706.1.">TBB11</a>]</span> (first proposed in <span class="bibtex-citation" id="id15">[<a class="reference internal" href="../../references.html#id38" title="Firat Y. Testik. Outcome regimes of binary raindrop collisions. Atmospheric Research, 94(3):389-399, November 2009. doi:10.1016/j.atmosres.2009.06.017.">Testik09</a>]</span>), as well as coalescence efficiency and number of fragements
-produced from Straub et al. 2010 and Schlottke et al. 2010 respectively (<span class="bibtex-citation" id="id16">[<a class="reference internal" href="../../references.html#id28" title="Jan Schlottke, Winfried Straub, Klaus Dieter Beheng, Hassan Gomaa, and Bernhard Weigand. Numerical investigation of collision-induced breakup of raindrops. part i: methodology and dependencies on collision energy and eccentricity. Journal of the Atmospheric Sciences, 67(3):557 - 575, 2010. URL: https://journals.ametsoc.org/view/journals/atsc/67/3/2009jas3174.1.xml, doi:10.1175/2009JAS3174.1.">SSB+10</a>]</span>, <span class="bibtex-citation" id="id17">[<a class="reference internal" href="../../references.html#id36" title="Winfried Straub, Klaus Dieter Beheng, Axel Seifert, Jan Schlottke, and Bernhard Weigand. Numerical investigation of collision-induced breakup of raindrops. part ii: parameterizations of coalescence efficiencies and fragment size distributions. Journal of the Atmospheric Sciences, 67(3):576 - 588, 2010. URL: https://journals.ametsoc.org/view/journals/atsc/67/3/2009jas3175.1.xml, doi:10.1175/2009JAS3175.1.">SBS+10</a>]</span>).</p>
+<span class="bibtex-citation" id="id14">[<a class="reference internal" href="../../references.html#id42" title="F. Y. Testik, A. P. Barros, and L. F. Bliven. Toward a physical characterization of raindrop collision outcome regimes. Journal of the Atmospheric Sciences, 68(5):1097 - 1113, 2011. URL: https://journals.ametsoc.org/view/journals/atsc/68/5/2010jas3706.1.xml, doi:10.1175/2010JAS3706.1.">Testik <em>et al.</em>, 2011</a>]</span> (first proposed in <span class="bibtex-citation" id="id15">[<a class="reference internal" href="../../references.html#id41" title="Firat Y. Testik. Outcome regimes of binary raindrop collisions. Atmospheric Research, 94(3):389-399, November 2009. doi:10.1016/j.atmosres.2009.06.017.">Testik, 2009</a>]</span>), as well as coalescence efficiency and number of fragements
+produced from Straub et al. 2010 and Schlottke et al. 2010 respectively (<span class="bibtex-citation" id="id16">[<a class="reference internal" href="../../references.html#id31" title="Jan Schlottke, Winfried Straub, Klaus Dieter Beheng, Hassan Gomaa, and Bernhard Weigand. Numerical investigation of collision-induced breakup of raindrops. part i: methodology and dependencies on collision energy and eccentricity. Journal of the Atmospheric Sciences, 67(3):557 - 575, 2010. URL: https://journals.ametsoc.org/view/journals/atsc/67/3/2009jas3174.1.xml, doi:10.1175/2009JAS3174.1.">Schlottke <em>et al.</em>, 2010</a>]</span>, <span class="bibtex-citation" id="id17">[<a class="reference internal" href="../../references.html#id39" title="Winfried Straub, Klaus Dieter Beheng, Axel Seifert, Jan Schlottke, and Bernhard Weigand. Numerical investigation of collision-induced breakup of raindrops. part ii: parameterizations of coalescence efficiencies and fragment size distributions. Journal of the Atmospheric Sciences, 67(3):576 - 588, 2010. URL: https://journals.ametsoc.org/view/journals/atsc/67/3/2009jas3175.1.xml, doi:10.1175/2009JAS3175.1.">Straub <em>et al.</em>, 2010</a>]</span>).</p>
 <p class="sd-card-text">This example produces a plot, by default called <code class="docutils literal notranslate"><span class="pre">${CLEO_PATH2CLEO}/build_colls0d/breakup/bin/testikstraub_validation.png</span></code>.</p>
 <div class="large-text docutils container">
 <p><strong>Running the Box Model Collisions Examples:</strong></p>
@@ -575,20 +692,20 @@ produced from Straub et al. 2010 and Schlottke et al. 2010 respectively (<span c
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>scripts/vanilla/cpu.sh<span class="w"> </span>all<span class="w"> </span>shima2009
 </pre></div>
 </div>
-<p class="sd-card-text">By default the golovin exectuable and two examples using the long executable will be compiled and
+<p class="sd-card-text">By default the golovin executable and two examples using the long executable will be compiled and
 run. You can change this by editing <code class="docutils literal notranslate"><span class="pre">--kernels</span> <span class="pre">golovin</span> <span class="pre">long1</span> <span class="pre">long2</span></code> in the <code class="docutils literal notranslate"><span class="pre">shima2009</span></code> entry
 of <code class="docutils literal notranslate"><span class="pre">scripts/common/examples.sh</span></code>.</p>
 <p class="sd-card-text"><strong>Golovin</strong></p>
 <p class="sd-card-text">This example models collision-coalescence using Golovin’s kernel.</p>
 <p class="sd-card-text">The plot produced, by default called <code class="docutils literal notranslate"><span class="pre">${CLEO_PATH2CLEO}/build_colls0d/shima2009/bin/golovin_validation.png</span></code>, should be
-comparable to Fig.2(a) of Shima et al. 2009 <span class="bibtex-citation" id="id18">[<a class="reference internal" href="../../references.html#id32" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">SKK+09</a>]</span>.</p>
+comparable to Fig.2(a) of Shima et al. 2009 <span class="bibtex-citation" id="id18">[<a class="reference internal" href="../../references.html#id35" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">Shima <em>et al.</em>, 2009</a>]</span>.</p>
 <p class="sd-card-text"><strong>Long1 and Long2</strong></p>
 <p class="sd-card-text">These examples model collision-coalescence using Long’s collision efficiency as given by equation
-13 of Simmel et al. 2002 <span class="bibtex-citation" id="id19">[<a class="reference internal" href="../../references.html#id33" title="Martin Simmel, Thomas Trautmann, and Gerd Tetzlaff. Numerical solution of the stochastic collection equation—comparison of the linear discrete method with other methods. Atmospheric Research, 61(2):135-148, 2002. URL: https://www.sciencedirect.com/science/article/pii/S0169809501001314, doi:https://doi.org/10.1016/S0169-8095(01)00131-4.">STT02</a>]</span>. The two examples use almost identical initial
-conditions and collision timesteps, as in Shima et al. 2009 <span class="bibtex-citation" id="id20">[<a class="reference internal" href="../../references.html#id32" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">SKK+09</a>]</span>.</p>
+13 of Simmel et al. 2002 <span class="bibtex-citation" id="id19">[<a class="reference internal" href="../../references.html#id36" title="Martin Simmel, Thomas Trautmann, and Gerd Tetzlaff. Numerical solution of the stochastic collection equation—comparison of the linear discrete method with other methods. Atmospheric Research, 61(2):135-148, 2002. URL: https://www.sciencedirect.com/science/article/pii/S0169809501001314, doi:https://doi.org/10.1016/S0169-8095(01)00131-4.">Simmel <em>et al.</em>, 2002</a>]</span>. The two examples use almost identical initial
+conditions and collision timesteps, as in Shima et al. 2009 <span class="bibtex-citation" id="id20">[<a class="reference internal" href="../../references.html#id35" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">Shima <em>et al.</em>, 2009</a>]</span>.</p>
 <p class="sd-card-text">The plots produced, by default called <code class="docutils literal notranslate"><span class="pre">${CLEO_PATH2CLEO}/build_colls0d/shima2009/bin/long_validation_1.png</span></code> and
 <code class="docutils literal notranslate"><span class="pre">${CLEO_PATH2CLEO}/build_colls0d/shima2009/bin/long_validation_2.png</span></code>, should be comparable to
-Fig.2(b) and Fig.2(c) of Shima et al. 2009 <span class="bibtex-citation" id="id21">[<a class="reference internal" href="../../references.html#id32" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">SKK+09</a>]</span>.</p>
+Fig.2(b) and Fig.2(c) of Shima et al. 2009 <span class="bibtex-citation" id="id21">[<a class="reference internal" href="../../references.html#id35" title="S. Shima, K. Kusano, A. Kawano, T. Sugiyama, and S. Kawahara. The super-droplet method for the numerical simulation of clouds and precipitation: a particle-based and probabilistic microphysics model coupled with a non-hydrostatic model. Quarterly Journal of the Royal Meteorological Society, 135(642):1307-1320, 2009. URL: https://rmets.onlinelibrary.wiley.com/doi/abs/10.1002/qj.441, arXiv:https://rmets.onlinelibrary.wiley.com/doi/pdf/10.1002/qj.441, doi:https://doi.org/10.1002/qj.441.">Shima <em>et al.</em>, 2009</a>]</span>.</p>
 </div>
 </details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3 sd-fade-in-slide-down">
 <summary class="sd-summary-title sd-card-header">
@@ -637,7 +754,7 @@ should remain constant over time, as shown in the plot produced and by default c
 </pre></div>
 </div>
 <p class="sd-card-text">Several plots and animations are produced by this example. If you would like to compare to our
-reference solutions please <a class="reference internal" href="../contact.html#contact"><span class="std std-ref">contact us</span></a>.</p>
+reference solutions please <a class="reference internal" href="../../contact.html#contact"><span class="std std-ref">contact us</span></a>.</p>
 </div>
 </details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3 sd-fade-in-slide-down">
 <summary class="sd-summary-title sd-card-header">
@@ -666,7 +783,7 @@ It is run from the <code class="docutils literal notranslate"><span class="pre">
 </pre></div>
 </div>
 <p class="sd-card-text">Several plots and animations are produced by this example. If you would like to compare to our
-reference solutions please <a class="reference internal" href="../contact.html#contact"><span class="std std-ref">contact us</span></a>.</p>
+reference solutions please <a class="reference internal" href="../../contact.html#contact"><span class="std std-ref">contact us</span></a>.</p>
 </div>
 </details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3 sd-fade-in">
 <summary class="sd-summary-title sd-card-header">
@@ -679,23 +796,24 @@ reference solutions please <a class="reference internal" href="../contact.html#c
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>scripts/vanilla/cpu.sh<span class="w"> </span>all<span class="w"> </span>python_bindings
 </pre></div>
 </div>
-<p class="sd-card-text"><em>Note</em>: you may have issues with python versions &gt;= 3.14, please
-see <a class="reference internal" href="../installation/extern.html#id2"><span class="std std-ref">this note</span></a> for details.</p>
 <p class="sd-card-text">No plots are produced by this example but it should run sucessfully multiple times and produce
 <code class="docutils literal notranslate"><span class="pre">no</span> <span class="pre">plotting</span> <span class="pre">script</span> <span class="pre">for</span> <span class="pre">python</span> <span class="pre">bindings</span> <span class="pre">example</span></code> messages. Please note the output during
 time-stepping may not be ordered due to parallel execution.</p>
 </div>
 </details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3 sd-fade-in">
 <summary class="sd-summary-title sd-card-header">
-<span class="sd-summary-text">Your Own Executable (roughpaper)</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
-<p class="sd-card-text">This is not an example with a reference solution, but a starting point for running your own
-setup of Cleo. It builds and runs the executable <code class="docutils literal notranslate"><span class="pre">cleocoupledsdm</span></code> from
-<code class="docutils literal notranslate"><span class="pre">roughpaper/src/main.cpp</span></code> (see the <a class="reference internal" href="../quickstart.html"><span class="doc">quickstart</span></a>) with the configuration
-file <code class="docutils literal notranslate"><span class="pre">roughpaper/src/config/config.yaml</span></code>. Its input files are made by
-<code class="docutils literal notranslate"><span class="pre">roughpaper/roughpaper_inputfiles.py</span></code>, which is also an example of various ways to use
-<code class="docutils literal notranslate"><span class="pre">cleopy</span></code> to create them. The run is driven by <code class="docutils literal notranslate"><span class="pre">roughpaper/roughpaper.py</span></code>.</p>
-<p class="sd-card-text"><em>Note</em>: roughpaper is not in the job scripts’ default <code class="docutils literal notranslate"><span class="pre">examples</span></code> lists, because it is a
-starting point you have to adapt and it does not currently run out of the box.</p>
+<span class="sd-summary-text">Roughpaper → Towards Your Own Experiment</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text">In <code class="docutils literal notranslate"><span class="pre">CLEO/roughpaper</span></code> we provide a source of inspiration for you to run your own experiment with
+Cleo. <code class="docutils literal notranslate"><span class="pre">roughpaper</span></code> is not an example with a reference solution, but it acts analogously and
+demonstrates most of the settings you can choose from when designing your own experiment.
+See our <a class="reference internal" href="../../prog_guide/tutorial_new_example.html#tutorial-new-example"><span class="std std-ref">tutorial</span></a> for more information
+on how to create your own experiment and how roughpaper can be useful for that.</p>
+<p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">roughpaper</span></code> is not in the job scripts’ default <code class="docutils literal notranslate"><span class="pre">examples</span></code> list, however, if you wish to
+do so, you can run the roughpaper setup with Cleo’s bash scripts just like you would for
+an example. <code class="docutils literal notranslate"><span class="pre">roughpaper</span></code> builds and runs the executable <code class="docutils literal notranslate"><span class="pre">cleocoupledsdm</span></code> from
+<code class="docutils literal notranslate"><span class="pre">roughpaper/src/main.cpp</span></code> with the configuration file <code class="docutils literal notranslate"><span class="pre">roughpaper/src/config/config.yaml</span></code>.
+Its input files are made by <code class="docutils literal notranslate"><span class="pre">roughpaper/roughpaper_inputfiles.py</span></code> and the run is driven by
+<code class="docutils literal notranslate"><span class="pre">roughpaper/roughpaper.py</span></code>, all in an analogous way to Cleo’s actual examples.</p>
 <ol class="arabic simple">
 <li><p><a class="reference internal" href="#configurebash-vanilla"><span class="std std-ref">Configure the bash scripts</span></a>.</p></li>
 <li><p>Execute the job script, e.g. from your Cleo directory:</p></li>
@@ -703,11 +821,14 @@ starting point you have to adapt and it does not currently run out of the box.</
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>scripts/vanilla/cpu.sh<span class="w"> </span>all<span class="w"> </span>roughpaper
 </pre></div>
 </div>
-<p class="sd-card-text">To run your own setup, edit <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code>, <code class="docutils literal notranslate"><span class="pre">config.yaml</span></code> and <code class="docutils literal notranslate"><span class="pre">roughpaper_inputfiles.py</span></code>
-and run it again. If your <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code> uses different coupled dynamics (e.g. <code class="docutils literal notranslate"><span class="pre">cvode</span></code> or
-<code class="docutils literal notranslate"><span class="pre">yac</span></code>), also change <code class="docutils literal notranslate"><span class="pre">-DCLEO_COUPLED_DYNAMICS</span></code> in the <code class="docutils literal notranslate"><span class="pre">roughpaper</span></code> entry of
-<code class="docutils literal notranslate"><span class="pre">scripts/common/examples.sh</span></code> and build from scratch (delete <code class="docutils literal notranslate"><span class="pre">build_roughpaper</span></code> first).</p>
-<p class="sd-card-text">Figures of the initial conditions are saved in <code class="docutils literal notranslate"><span class="pre">${CLEO_PATH2CLEO}/build_roughpaper/bin/</span></code>
+<p class="sd-card-text">To adapt the roughpaper setup, edit <code class="docutils literal notranslate"><span class="pre">roughpaper/src/main.cpp</span></code>, <code class="docutils literal notranslate"><span class="pre">roughpaper/src/main_impl.hpp</span></code>,
+<code class="docutils literal notranslate"><span class="pre">roughpaper/src/config/config.yaml</span></code>, <code class="docutils literal notranslate"><span class="pre">roughpaper/roughpaper.py</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">roughpaper/roughpaper_inputfiles.py</span></code>. If your new roughpaper executable uses different
+coupled dynamics (e.g. <code class="docutils literal notranslate"><span class="pre">cvode</span></code> or <code class="docutils literal notranslate"><span class="pre">yac</span></code>), also change <code class="docutils literal notranslate"><span class="pre">-DCLEO_COUPLED_DYNAMICS</span></code> in the
+<code class="docutils literal notranslate"><span class="pre">roughpaper</span></code> entry of <code class="docutils literal notranslate"><span class="pre">scripts/common/examples.sh</span></code> and build from scratch
+(delete your build directory first). Again, rather than edit roughpaper, we recommend you build
+your own experiment as explained <a class="reference internal" href="../../prog_guide/tutorial_new_example.html#tutorial-new-example"><span class="std std-ref">by the tutorial</span></a>.</p>
+<p class="sd-card-text">Figures of the initial conditions are saved by default in <code class="docutils literal notranslate"><span class="pre">${CLEO_PATH2CLEO}/build_roughpaper/bin/</span></code>
 and the output dataset is <code class="docutils literal notranslate"><span class="pre">${CLEO_PATH2CLEO}/build_roughpaper/bin/SDMdata.zarr</span></code>. No plots
 of the results are made.</p>
 </div>
@@ -717,6 +838,11 @@ of the results are made.</p>
 <p>Explore <code class="docutils literal notranslate"><span class="pre">examples/exampleplotting</span></code> which gives examples of how to plot output from Cleo
 with <code class="docutils literal notranslate"><span class="pre">cleopy</span></code> and <code class="docutils literal notranslate"><span class="pre">plotcleo</span></code>, a few examples are demonstrated in the
 <code class="docutils literal notranslate"><span class="pre">examples/exampleplotting/exampleplotting.py</span></code> script.</p>
+</section>
+<section id="finished">
+<h2>Finished!<a class="headerlink" href="#finished" title="Link to this heading">¶</a></h2>
+<p>Want to learn more? Edit an example or create your own simulation? Take a look into Cleo’s
+<a class="reference internal" href="../../prog_guide/prog_guide.html"><span class="doc">programming guide</span></a> to find out how…</p>
 </section>
 </section>
 
@@ -781,6 +907,7 @@ with <code class="docutils literal notranslate"><span class="pre">cleopy</span><
 <li><a class="reference internal" href="#execute-the-bash-scripts">Execute the Bash Scripts</a></li>
 <li><a class="reference internal" href="#the-examples">The Examples</a></li>
 <li><a class="reference internal" href="#extension">Extension</a></li>
+<li><a class="reference internal" href="#finished">Finished!</a></li>
 </ul>
 </li>
 </ul>

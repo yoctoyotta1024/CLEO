@@ -1,5 +1,6 @@
-THERMOGEN
+thermogen
 =========
 
 .. automodule:: cleopy.thermobinary_src.thermogen
-  :members:
+   :members:
+   :undoc-members:

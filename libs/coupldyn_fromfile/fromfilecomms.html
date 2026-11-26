@@ -1,0 +1,616 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../genindex.html"><link rel="search" title="Search" href="../../search.html"><link rel="next" title="Coupldyn CVODE Module" href="../coupldyn_cvode/coupldyncvodemod.html"><link rel="prev" title="FromFile Cartesian Dynamics" href="fromfile_cartesian_dynamics.html">
+
+    <!-- Generated with Sphinx 9.2.0 and Furo 2025.12.19 -->
+        <title>FromFileComms - Cleo 0.X.Y documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">Cleo 0.X.Y documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
+  
+  <span class="sidebar-brand-text">Cleo 0.X.Y documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../intro/intro.html">General Introduction</a><input aria-label="Toggle navigation of General Introduction" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/background.html">Background to Cleo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/memorylayout.html">Memory Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/coupling.html">Coupling to Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/timestepping.html">Timestepping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/monoids.html">Monoids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../intro/kokkos.html">Kokkos Thread Parallelism</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../usage/installation/installation.html">Installation</a><input aria-label="Toggle navigation of Installation" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../usage/installation/requirements.html">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../usage/installation/extern.html">External Libraries</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../usage/examples/examples.html">Examples</a><input aria-label="Toggle navigation of Examples" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../usage/examples/examples_vanilla.html">Examples on “Vanilla” Machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../usage/examples/examples_levante.html">Examples on Levante</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../usage/examples/examples_jupiter.html">Examples on JUPITER</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../prog_guide/prog_guide.html">Programming Guide</a><input aria-label="Toggle navigation of Programming Guide" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../prog_guide/code_structure.html">Cleo’s Code Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../prog_guide/main_cpp.html">Understanding and Adapting <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../prog_guide/tutorial_new_example.html">Tutorial: Creating a New Cleo Experiment From Scratch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../prog_guide/external_project.html">Using Cleo in an External Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../prog_guide/microphysics_and_observers.html">Combining Microphysics and Observers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../prog_guide/coupled_dynamics.html">Coupled Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../prog_guide/bashscripts_detail.html">The Bash Scripts in Detail</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../usage/for_develop/for_develop.html">For Developers</a><input aria-label="Toggle navigation of For Developers" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../usage/for_develop/contributing.html">Contributing Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../usage/for_develop/good_code.html">Good Coding Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../usage/for_develop/ourdocs.html">Our Docs</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../cleopy/cleopy.html">API: Cleo Python Package, cleopy</a><input aria-label="Toggle navigation of API: Cleo Python Package, cleopy" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../cleopy/gbxboundariesbinary_src/gbxboundariesbinary_src.html">GbxBoundariesBinary</a><input aria-label="Toggle navigation of GbxBoundariesBinary" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/gbxboundariesbinary_src/create_gbxboundaries.html">create_gbxboundaries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/gbxboundariesbinary_src/read_gbxboundaries.html">read_gbxboundaries</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/initsuperdropsbinary_src.html">InitSuperdropsBinary</a><input aria-label="Toggle navigation of InitSuperdropsBinary" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/create_initsuperdrops.html">create_initsuperdrops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/read_initsuperdrops.html">read_initsuperdrops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/attrsgen.html">attrsgen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/crdgens.html">crdgens</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/probdists.html">probdists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/rgens.html">rgens</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/initsuperdropsbinary_src/dryrgens.html">dryrggens</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../cleopy/thermobinary_src/thermobinary_src.html">ThermoBinary</a><input aria-label="Toggle navigation of ThermoBinary" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/create_thermodynamics.html">create_thermodynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/read_thermodynamics.html">read_thermodynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/thermodyngen.html">thermodyngen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/thermogen.html">thermogen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/thermobinary_src/windsgen.html">windsgen</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../cleopy/sdmout_src/sdmout_src.html">SDMOut</a><input aria-label="Toggle navigation of SDMOut" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/pyzarr.html">pyzarr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/pysetuptxt.html">pysetuptxt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/pygbxsdat.html">pygbxsdat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/timedata.html">timedata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/thermodata.html">thermodata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/massmoms.html">massmoms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/thermoeqns.html">thermoeqns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleopy/sdmout_src/superdrops.html">superdrops</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleopy/cxx2py.html">Cxx2Py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleopy/geninitconds.html">geninitconds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleopy/readconfigfile.html">readconfigfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleopy/editconfigfile.html">editconfigfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleopy/readbinary.html">readbinary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleopy/writebinary.html">writebinary</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../libs.html">API: Cleo C++ Library</a><input aria-label="Toggle navigation of API: Cleo C++ Library" checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../configuration/configurationmod.html">Configuration Module</a><input aria-label="Toggle navigation of Configuration Module" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../configuration/config.html">Config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration/required_config_params.html">Required Config Params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration/optional_config_params.html">Optional Config Params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration/communicator.html">Communicator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../configuration/copyfiles2txt.html">Copy Files To Txt</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../gridboxes/gridboxesmod.html">Gridboxes Module</a><input aria-label="Toggle navigation of Gridboxes Module" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../gridboxes/gridboxmaps.html">GridboxMaps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../gridboxes/gridbox.html">Gridbox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../gridboxes/gbxindex.html">Gbxindex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../gridboxes/supersingbx.html">SupersInGbx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../gridboxes/supersindomain.html">SupersInDomain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../gridboxes/findrefs.html">Find Refs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../gridboxes/sortsupers.html">Sort Supers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../gridboxes/movesupersindomain.html">MoveSupersInDomain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../gridboxes/predcorr.html">PredCorr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../gridboxes/predcorrmotion.html">PredCorrMotion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../gridboxes/boundary_conditions.html">BoundaryConditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../gridboxes/transport_across_domain.html">TransportAcrossDomain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../gridboxes/cfl_criteria.html">CFL Criteria</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../cartesiandomain/cartesiandomainmod.html">CartesianDomain Module</a><input aria-label="Toggle navigation of CartesianDomain Module" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../cartesiandomain/movement/movementmod.html">Movement Module</a><input aria-label="Toggle navigation of Movement Module" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../cartesiandomain/movement/cartesian_motion.html">Cartesian Motion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cartesiandomain/movement/cartesian_movement.html">Cartesian Movement</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cartesiandomain/movement/cartesian_transport_across_domain.html">Cartesian Transport Across Domain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cartesiandomain/movement/add_supers_to_domain.html">Add Supers To Domain</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../cartesiandomain/cartesian_decomposition.html">Cartesian Decomposition</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cartesiandomain/cartesianmaps.html">CartesianMaps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cartesiandomain/createcartesianmaps.html">Create Cartesian Maps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cartesiandomain/domainboundaries.html">Domain Boundaries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cartesiandomain/doubly_periodic_domain.html">Doubly Periodic Domain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cartesiandomain/collect_data_for_collective_dataset.html">Collect Data For Collective Dataset</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../superdrops/superdropsmod.html">Superdrops Module</a><input aria-label="Toggle navigation of Superdrops Module" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../superdrops/collisions/collisionsmod.html">Collisions Module</a><input aria-label="Toggle navigation of Collisions Module" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/collisions.html">Collisions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/collisionkinetics.html">Collision Kinetics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/coalescence.html">Coalescence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/coalescence_efficiency.html">Coalescence Efficiency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/breakup.html">Breakup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/breakup_nfrags.html">Breakup NFrags</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/coalbure.html">Coalescence-Breakup-Rebound</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/coalbure_flag.html">CoalBuRe Flag</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/constprob.html">Const Prob</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/golovinprob.html">Golovin Prob</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/hydrodynamicprob.html">Hydrodynamic Prob</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/longhydroprob.html">Long Hydro Prob</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/lowlistprob.html">Low List Prob</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/shuffle.html">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../superdrops/collisions/urbg.html">Randomness Generation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/condensation.html">Condensation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/impliciteuler.html">Implicit Euler Method for Condensation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/kokkosaliases_sd.html">Super-Droplet Kokkos Aliases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/microphysical_process.html">Microphysical Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/motion.html">Motion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/sdmmonitor.html">SDMMonitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/state.html">State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/superdrop.html">Superdrop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/superdrop_ids.html">Superdrop IDs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/superdrop_attrs.html">Superdrop Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/terminalvelocity.html">Terminal Velocities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../superdrops/thermodynamic_equations.html">Thermodynamic Equations</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../initialise/initialisemod.html">Initialisation Module</a><input aria-label="Toggle navigation of Initialisation Module" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../initialise/initialconditions.html">InitialConditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../initialise/timesteps.html">Timesteps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../initialise/readbinary.html">Read Binary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../initialise/gbx_bounds_from_binary.html">GbxBoundsFromBinary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../initialise/init_all_supers_from_binary.html">InitAllSupersFromBinary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../initialise/init_supers_from_binary.html">InitSupersFromBinary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../initialise/initgbxsnull.html">InitGbxsNull</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../runcleo/runcleomod.html">RunCLEO Module</a><input aria-label="Toggle navigation of RunCLEO Module" class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/coupleddynamics.html">CoupledDynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/couplingcomms.html">CouplingComms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/creategbxs.html">Create Gridboxes Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/createsupers.html">Create Super-droplets Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/gensuperdrop.html">GenSuperdrop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/runcleo.html">RunCLEO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../runcleo/sdmmethods.html">SDMMethods</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../observers/observersmod.html">Observers Module</a><input aria-label="Toggle navigation of Observers Module" class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../observers/observers.html">Observers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/streamout_observer.html">StreamOut Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/consttstep_observer.html">Constant Time Step Observers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/write_to_dataset_observer.html">Template for Observer to Write To Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/parallel_write_data.html">Parallel Write Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/collect_data_for_dataset.html">Collect Data For Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/collect_data_for_simple_dataset.html">Collect Data For Simple Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/generic_collect_data.html">Generic Collect Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/time_observer.html">Time Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/gbxindex_observer.html">Gbxindex Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/superdrops_observer.html">Superdrops Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/nsupers_observer.html">Nsupers Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/totnsupers_observer.html">TotNsupers Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/state_observer.html">State Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/thermo_observer.html">Thermodynamics Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/windvel_observer.html">WindVel Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/massmoments_observer.html">Massmoments Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../observers/create_massmoments_arrays.html">Create Massmoments Arrays</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../observers/sdmmonitor/sdmmonitormod.html">SDMMonitor Observers Module</a><input aria-label="Toggle navigation of SDMMonitor Observers Module" class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../observers/sdmmonitor/do_sdmmonitor_obs.html">DoSDMMonitorObs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../observers/sdmmonitor/monitor_condensation_observer.html">Monitor Condensation Observer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../observers/sdmmonitor/monitor_massmoments_change.html">Monitor Massmoments Change</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../observers/sdmmonitor/monitor_massmoments_change_observer.html">Monitor Massmoments Change Observer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../observers/sdmmonitor/monitor_precipitation_observer.html">Monitor Precipitation Observer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../zarr/zarrmod.html">Zarr Module</a><input aria-label="Toggle navigation of Zarr Module" class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../zarr/buffer.html">Buffer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../zarr/chunks.html">Chunks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../zarr/dataset.html">Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../zarr/fsstore.html">FSStore</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../zarr/store_accessor.html">StoreAccessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../zarr/xarray_zarr_array.html">XarrayZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../zarr/xarray_metadata.html">Xarray Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../zarr/zarr_array.html">ZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../zarr/zarr_metadata.html">Zarr Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../zarr/zarr_group.html">ZarrGroup</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../coupldyn_null/coupldynnullmod.html">Coupldyn Null Module</a><input aria-label="Toggle navigation of Coupldyn Null Module" class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../coupldyn_null/nulldynamics.html">NullDynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../coupldyn_null/nulldyncomms.html">NullDynComms</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="coupldynfromfilemod.html">Coupldyn FromFile Module</a><input aria-label="Toggle navigation of Coupldyn FromFile Module" checked="" class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="fromfile_cartesian_dynamics.html">FromFile Cartesian Dynamics</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">FromFileComms</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../coupldyn_cvode/coupldyncvodemod.html">Coupldyn CVODE Module</a><input aria-label="Toggle navigation of Coupldyn CVODE Module" class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../coupldyn_cvode/cvodedynamics.html">CvodeDynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../coupldyn_cvode/cvodecomms.html">CvodeComms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../coupldyn_cvode/differentialfuncs.html">Differential Funcs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../coupldyn_cvode/initgbxs_cvode.html">InitGbxsCvode</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../coupldyn_yac/coupldynyacmod.html">Coupldyn YAC Module</a><input aria-label="Toggle navigation of Coupldyn YAC Module" class="toctree-checkbox" id="toctree-checkbox-26" name="toctree-checkbox-26" role="switch" type="checkbox"/><label for="toctree-checkbox-26"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../coupldyn_yac/yac_cartesian_dynamics.html">YAC Cartesian Dynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../coupldyn_yac/yac_comms.html">YAC Comms</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../cleo_python_bindings/cleopythonbindingsmod.html">CLEO Python Bindings Module</a><input aria-label="Toggle navigation of CLEO Python Bindings Module" class="toctree-checkbox" id="toctree-checkbox-27" name="toctree-checkbox-27" role="switch" type="checkbox"/><label for="toctree-checkbox-27"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../cleo_python_bindings/coupldyn_numpy/coupldynnumpymod.html">Coupldyn Numpy Module</a><input aria-label="Toggle navigation of Coupldyn Numpy Module" class="toctree-checkbox" id="toctree-checkbox-28" name="toctree-checkbox-28" role="switch" type="checkbox"/><label for="toctree-checkbox-28"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../cleo_python_bindings/coupldyn_numpy/numpy_dynamics.html">NumpyDynamics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cleo_python_bindings/coupldyn_numpy/numpy_comms.html">NumpyComms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cleo_python_bindings/coupldyn_numpy/pycoupldyn_numpy.html">Py Coupldyn Numpy</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../cleo_python_bindings/cleo_python_bindings.html">CLEO Python Bindings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cleo_python_bindings/cleo_python_bindings_aliases.html">CLEO Python Bindings Aliases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cleo_python_bindings/optional_terminal_velocity.html">Optional Terminal Velocity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cleo_python_bindings/py_cartesiandomain.html">Py CartesianDomain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cleo_python_bindings/py_configuration.html">Py Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cleo_python_bindings/py_gridboxes.html">Py Gridboxes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cleo_python_bindings/py_initialise.html">Py Initialise</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cleo_python_bindings/py_observers.html">Py Observers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cleo_python_bindings/py_runcleo.html">Py RunCLEO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cleo_python_bindings/py_superdrops.html">Py Superdrops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../cleo_python_bindings/py_zarr.html">Py Zarr</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../cleoconstants.html">Cleo Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kokkosaliases.html">Kokkos Aliases</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/yoctoyotta1024/CLEO.git">GitHub Repo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contact.html">Contact Us!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../../_sources/libs/coupldyn_fromfile/fromfilecomms.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="fromfilecomms">
+<h1>FromFileComms<a class="headerlink" href="#fromfilecomms" title="Link to this heading">¶</a></h1>
+<p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/coupldyn_fromfile/fromfilecomms.hpp&gt;</span></code>
+<a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/coupldyn_fromfile/fromfilecomms.hpp">[source]</a></p>
+<p>A <code class="docutils literal notranslate"><span class="pre">CouplingComms</span></code> (see <a class="reference internal" href="../runcleo/couplingcomms.html"><span class="doc">CouplingComms</span></a>) that only “receives” state from
+<a class="reference internal" href="fromfile_cartesian_dynamics.html"><span class="doc">FromFile Cartesian Dynamics</span></a> into gridboxes — a one-way coupling, as nothing is sent back.</p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv413FromFileComms">
+<span id="_CPPv313FromFileComms"></span><span id="_CPPv213FromFileComms"></span><span id="FromFileComms"></span><span class="target" id="structFromFileComms"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">FromFileComms</span></span></span><a class="headerlink" href="#_CPPv413FromFileComms" title="Link to this definition">¶</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;fromfilecomms.hpp&gt;</em></div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00ENK13FromFileComms13send_dynamicsEvRK7GbxMapsK17dualview_constgbxRK14SupersInDomainR16FromFileDynamics">
+<span id="_CPPv3I00ENK13FromFileComms13send_dynamicsERK7GbxMapsK17dualview_constgbxRK14SupersInDomainR16FromFileDynamics"></span><span id="_CPPv2I00ENK13FromFileComms13send_dynamicsERK7GbxMapsK17dualview_constgbxRK14SupersInDomainR16FromFileDynamics"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxMaps</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CD</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="fromfile_cartesian_dynamics.html#_CPPv416FromFileDynamics" title="FromFileDynamics"><span class="n"><span class="pre">FromFileDynamics</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structFromFileComms_1aaab3961f5175142f3ab7b1f01e11db98"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">send_dynamics</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00ENK13FromFileComms13send_dynamicsEvRK7GbxMapsK17dualview_constgbxRK14SupersInDomainR16FromFileDynamics" title="FromFileComms::send_dynamics::GbxMaps"><span class="n"><span class="pre">GbxMaps</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">gbxmaps</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv417dualview_constgbx" title="dualview_constgbx"><span class="n"><span class="pre">dualview_constgbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">gbxs</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../gridboxes/supersindomain.html#_CPPv414SupersInDomain" title="SupersInDomain"><span class="n"><span class="pre">SupersInDomain</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">allsupers</span></span>, <a class="reference internal" href="fromfile_cartesian_dynamics.html#_CPPv416FromFileDynamics" title="FromFileDynamics"><span class="n"><span class="pre">FromFileDynamics</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ffdyn</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4I00ENK13FromFileComms13send_dynamicsEvRK7GbxMapsK17dualview_constgbxRK14SupersInDomainR16FromFileDynamics" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00ENK13FromFileComms16receive_dynamicsEvRK7GbxMapsRK16FromFileDynamicsK9viewh_gbx">
+<span id="_CPPv3I00ENK13FromFileComms16receive_dynamicsERK7GbxMapsRK16FromFileDynamicsK9viewh_gbx"></span><span id="_CPPv2I00ENK13FromFileComms16receive_dynamicsERK7GbxMapsRK16FromFileDynamicsK9viewh_gbx"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">GbxMaps</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CD</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="fromfile_cartesian_dynamics.html#_CPPv416FromFileDynamics" title="FromFileDynamics"><span class="n"><span class="pre">FromFileDynamics</span></span></a><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="structFromFileComms_1a0f4e3ebe9f4fc94771b0203d2a35e42d"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">receive_dynamics</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00ENK13FromFileComms16receive_dynamicsEvRK7GbxMapsRK16FromFileDynamicsK9viewh_gbx" title="FromFileComms::receive_dynamics::GbxMaps"><span class="n"><span class="pre">GbxMaps</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">gbxmaps</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="fromfile_cartesian_dynamics.html#_CPPv416FromFileDynamics" title="FromFileDynamics"><span class="n"><span class="pre">FromFileDynamics</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ffdyn</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../kokkosaliases.html#_CPPv49viewh_gbx" title="viewh_gbx"><span class="n"><span class="pre">viewh_gbx</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">h_gbxs</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4I00ENK13FromFileComms16receive_dynamicsEvRK7GbxMapsRK16FromFileDynamicsK9viewh_gbx" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-functions">Private Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13FromFileComms20update_gridbox_stateERK16FromFileDynamicsK6size_tR7Gridbox">
+<span id="_CPPv3NK13FromFileComms20update_gridbox_stateERK16FromFileDynamicsK6size_tR7Gridbox"></span><span id="_CPPv2NK13FromFileComms20update_gridbox_stateERK16FromFileDynamicsK6size_tR7Gridbox"></span><span id="FromFileComms::update_gridbox_state__FromFileDynamicsCR.sC.GridboxRC"></span><span class="target" id="structFromFileComms_1a7070204abb065391f437465275298d56"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">update_gridbox_state</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="fromfile_cartesian_dynamics.html#_CPPv416FromFileDynamics" title="FromFileDynamics"><span class="n"><span class="pre">FromFileDynamics</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">ffdyn</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ii</span></span>, <a class="reference internal" href="../gridboxes/gridbox.html#_CPPv47Gridbox" title="Gridbox"><span class="n"><span class="pre">Gridbox</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">gbx</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13FromFileComms20update_gridbox_stateERK16FromFileDynamicsK6size_tR7Gridbox" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../coupldyn_cvode/coupldyncvodemod.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Coupldyn CVODE Module</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="fromfile_cartesian_dynamics.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">FromFile Cartesian Dynamics</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; (2023) MPI-M, Clara Bayley
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 26 November 2026</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">FromFileComms</a><ul>
+<li><a class="reference internal" href="#_CPPv413FromFileComms"><code class="docutils literal notranslate"><span class="pre">FromFileComms</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4I00ENK13FromFileComms13send_dynamicsEvRK7GbxMapsK17dualview_constgbxRK14SupersInDomainR16FromFileDynamics"><code class="docutils literal notranslate"><span class="pre">send_dynamics()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I00ENK13FromFileComms16receive_dynamicsEvRK7GbxMapsRK16FromFileDynamicsK9viewh_gbx"><code class="docutils literal notranslate"><span class="pre">receive_dynamics()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13FromFileComms20update_gridbox_stateERK16FromFileDynamicsK6size_tR7Gridbox"><code class="docutils literal notranslate"><span class="pre">update_gridbox_state()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../_static/documentation_options.js?v=7e333e1e"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=35a8b989"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../_static/design-tabs.js?v=fcb327ea"></script>
+    </body>
+</html>
