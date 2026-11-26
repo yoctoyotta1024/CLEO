@@ -14,7 +14,7 @@ https://opensource.org/licenses/BSD-3-Clause
 -----
 File Description:
 python class(es) to handle superdroplet attributes data from SDM zarr store in ragged array format.
-Non-compatible update on supersdata and sdtracing modules
+(Non-compatible update on supersdata and sdtracing modules from v0.40.0)
 """
 
 import random
