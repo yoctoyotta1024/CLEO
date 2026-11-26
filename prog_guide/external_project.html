@@ -679,6 +679,11 @@ Kokkos-based code in particular.</p></li>
 <li><p><strong>Kokkos and YAC flags.</strong> Any <code class="docutils literal notranslate"><span class="pre">-DKokkos_ARCH_...</span></code>/<code class="docutils literal notranslate"><span class="pre">-DKokkos_ENABLE_...</span></code> or <code class="docutils literal notranslate"><span class="pre">YAC</span></code> flags you
 pass to <code class="docutils literal notranslate"><span class="pre">cmake</span></code> apply globally to the whole configure, including Cleo’s fetched Kokkos — set
 them once, when you configure your own project’s build.</p></li>
+<li><p><strong>YAC and YAXT are required unconditionally.</strong> Even if you only select <code class="docutils literal notranslate"><span class="pre">fromfile</span></code> coupled
+dynamics (as in the worked example above), Cleo’s <code class="docutils literal notranslate"><span class="pre">configuration</span></code> library depends on YAC.
+You must therefore set <code class="docutils literal notranslate"><span class="pre">CLEO_YAC_ROOT</span></code>, <code class="docutils literal notranslate"><span class="pre">CLEO_YAXT_ROOT</span></code>, and <code class="docutils literal notranslate"><span class="pre">CLEO_YAC_MODULE_PATH</span></code> for
+your own project’s configure the same way you would for building Cleo standalone, regardless of
+which <code class="docutils literal notranslate"><span class="pre">CLEO_COUPLED_DYNAMICS</span></code> option you choose.</p></li>
 <li><p><strong>MPI compiler wrappers.</strong> Since Cleo’s top-level <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> unconditionally requires MPI,
 you’ll generally want to configure your whole project with MPI compiler wrappers as you would
 for building Cleo standalone (e.g. <code class="docutils literal notranslate"><span class="pre">-DCMAKE_CXX_COMPILER=mpic++</span> <span class="pre">-DCMAKE_C_COMPILER=mpicc</span></code>).</p></li>

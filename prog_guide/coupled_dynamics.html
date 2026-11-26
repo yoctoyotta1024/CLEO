@@ -598,7 +598,7 @@ per coupling step. Cleo’s own effect on these fields is never sent back — th
 “piggybacking” a pre-existing dynamical solution. Used by e.g. the <code class="docutils literal notranslate"><span class="pre">rainshaft1d</span></code> and
 <code class="docutils literal notranslate"><span class="pre">constthermo2d</span></code> examples.</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">coupldyn_cvode</span></code> → <code class="docutils literal notranslate"><span class="pre">CvodeDynamics</span></code>, <code class="docutils literal notranslate"><span class="pre">CouplingComms</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">coupldyn_cvode</span></code> → <code class="docutils literal notranslate"><span class="pre">CvodeDynamics</span></code>, <code class="docutils literal notranslate"><span class="pre">CvodeComms</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">cvode</span></code></p></td>
 <td><p>Two-way coupling to a 0-D adiabatic-parcel ODE model integrated with SUNDIALS’ CVODE
 solver (see <a class="reference internal" href="../usage/installation/extern.html"><span class="doc">External Libraries</span></a>). Used by the <code class="docutils literal notranslate"><span class="pre">adiabaticparcel</span></code>
@@ -610,7 +610,7 @@ parcel’s temperature and vapour content.</p></td>
 <td><p>Coupling via YAC (see <a class="reference internal" href="../usage/installation/extern.html"><span class="doc">External Libraries</span></a>) to an external dynamical
 core (e.g. ICON), for large-eddy-simulations one-way or two-way coupled — the
 motivation for this setup is explained in B2026a <span class="bibtex-citation" id="id2">[<a class="reference internal" href="../references.html#id9" title="C. J. A. Bayley, T. Kölling, A. K. Naumann, R. Vogel, and B. Stevens. Cleo: the fundamental design of a new superdroplet model for high computational performance (v0.39.0). Geoscientific Model Development, 19(13):6099–6120, 2026. URL: https://gmd.copernicus.org/articles/19/6099/2026/, doi:10.5194/gmd-19-6099-2026.">Bayley <em>et al.</em>, 2026</a>]</span>, Sect. 1. Used by Cleo’s
-<code class="docutils literal notranslate"><span class="pre">bubble</span></code> example, it is currently only compatible with Cleo’s <code class="docutils literal notranslate"><span class="pre">cartesiandomain</span></code> grid
+<code class="docutils literal notranslate"><span class="pre">bubble3d</span></code> example, it is currently only compatible with Cleo’s <code class="docutils literal notranslate"><span class="pre">cartesiandomain</span></code> grid
 and ICON’s 100km, 5km resolution toroidal grid.</p></td>
 </tr>
 <tr class="row-even"><td><p>(for python bindings) <code class="docutils literal notranslate"><span class="pre">coupldyn_numpy</span></code> → <code class="docutils literal notranslate"><span class="pre">NumpyDynamics</span></code> <code class="docutils literal notranslate"><span class="pre">NumpyComms</span></code></p></td>

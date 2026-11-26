@@ -2,7 +2,7 @@ CartesianDomain Module
 =======================
 
 This module of Cleo contains the implementation of a Cartesian (0-D, 1-D, 2-D or 3-D) domain:
-its ``GridboxMaps`` (see :doc:`../gridboxes/gridboxmaps`), its MPI domain decomposition, and
+its ``GridboxMaps`` (see :doc:`../../gridboxes/gridboxmaps`), its MPI domain decomposition, and
 the super-droplet motion and transport-across-domain logic specific to a Cartesian grid.
 
 

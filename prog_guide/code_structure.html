@@ -561,7 +561,7 @@ domain, and observers (including Zarr dataset output).</p>
 <p>Occasionally this seperation between <code class="docutils literal notranslate"><span class="pre">superdroplets</span></code>, <code class="docutils literal notranslate"><span class="pre">gridboxes</span></code> and a particular
 <code class="docutils literal notranslate"><span class="pre">GridboxMaps</span></code> implementation (i.e. domain geometry) requires a component of the model
 to be divided into seperate parts across different libraries. This is the case for super-droplet
-motion. The abstract concept for super-droplet <code class="docutils literal notranslate"><span class="pre">Motion</span></code> is defined in <code class="docutils literal notranslate"><span class="pre">libs/superdroplets</span></code>
+motion. The abstract concept for super-droplet <code class="docutils literal notranslate"><span class="pre">Motion</span></code> is defined in <code class="docutils literal notranslate"><span class="pre">libs/superdrops</span></code>
 along with the <code class="docutils literal notranslate"><span class="pre">VelocityFormula</span></code> concept and several formulations of a superdroplet’s terminal
 velocity which satisfy that concept. The structure for moving superdroplets through a domain,
 <code class="docutils literal notranslate"><span class="pre">MoveSupersInDomain</span></code>, is then defined in <code class="docutils literal notranslate"><span class="pre">libs/gridboxes</span></code>, since this library handles how
@@ -574,11 +574,13 @@ superdroplets across the domain and how to enact boundary conditions for that pa
 <p>Some libraries are <em>always</em> needed regardless of setup: <code class="docutils literal notranslate"><span class="pre">configuration</span></code>, <code class="docutils literal notranslate"><span class="pre">initialise</span></code>,
 <code class="docutils literal notranslate"><span class="pre">gridboxes</span></code>, <code class="docutils literal notranslate"><span class="pre">runcleo</span></code>, <code class="docutils literal notranslate"><span class="pre">observers</span></code>, <code class="docutils literal notranslate"><span class="pre">zarr</span></code>, and <code class="docutils literal notranslate"><span class="pre">superdrops</span></code>, and are built into every
 executable, as per <code class="docutils literal notranslate"><span class="pre">libs/CMakeLists.txt</span></code>. The libraries that can vary between setups —
-which coupled dynamics and which domain geometry you use — are built only when selected,
-controlled by two CMake cache variables read in <code class="docutils literal notranslate"><span class="pre">libs/CMakeLists.txt</span></code>:</p>
-<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># from libs/CMakeLists.txt</span>
+which coupled dynamics and which grid you use (i.e. domain geometry) — are built only when selected,
+controlled by two CMake cache variables read in <code class="docutils literal notranslate"><span class="pre">libs/coupled_dynamics/</span></code> and
+<code class="docutils literal notranslate"><span class="pre">libs/grids/</span></code>:</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c"># from libs/coupled_dynamics/CMakeLists.txt</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">valid_coupled_dynamics</span><span class="w"> </span><span class="s2">"null"</span><span class="w"> </span><span class="s2">"fromfile"</span><span class="w"> </span><span class="s2">"cvode"</span><span class="w"> </span><span class="s2">"yac"</span><span class="w"> </span><span class="s2">"numpy"</span><span class="p">)</span>
-<span class="c"># ...</span>
+
+<span class="c"># libs/grids/CMakeLists.txt</span>
 <span class="nb">set</span><span class="p">(</span><span class="s">valid_domain</span><span class="w"> </span><span class="s2">"cartesian"</span><span class="p">)</span>
 </pre></div>
 </div>

@@ -20,7 +20,7 @@ Header file: ``<libs/zarr/collective_dataset.hpp>``
 
 ``CollectiveDataset`` is the Zarr dataset implementation used for a run split across multiple
 MPI processes (e.g. a two-way-coupled run with its own domain decomposition, see
-:doc:`../cartesiandomain/cartesian_decomposition`): each process writes only the data for the
+:doc:`../grids/cartesiandomain/cartesian_decomposition`): each process writes only the data for the
 gridboxes/super-droplets it owns, coordinated as a single collective write.
 
 .. doxygenclass:: CollectiveDataset

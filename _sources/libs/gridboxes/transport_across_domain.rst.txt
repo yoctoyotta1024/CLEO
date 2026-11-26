@@ -6,7 +6,7 @@ Header file: ``<libs/gridboxes/transport_across_domain.hpp>``
 
 The C++ concept for transporting super-droplets that have moved beyond a gridbox's boundary
 (including between MPI processes); ``CartesianTransportAcrossDomain``
-(:doc:`../cartesiandomain/movement/cartesian_transport_across_domain`) is the concrete
+(:doc:`../grids/cartesiandomain/movement/cartesian_transport_across_domain`) is the concrete
 implementation for a Cartesian domain.
 
 .. doxygenconcept:: TransportAcrossDomain

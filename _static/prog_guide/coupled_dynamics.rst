@@ -111,7 +111,7 @@ Here is a summary of the available options:
        per coupling step. Cleo's own effect on these fields is never sent back — this is
        "piggybacking" a pre-existing dynamical solution. Used by e.g. the ``rainshaft1d`` and
        ``constthermo2d`` examples.
-   * - ``coupldyn_cvode`` → ``CvodeDynamics``, ``CouplingComms``
+   * - ``coupldyn_cvode`` → ``CvodeDynamics``, ``CvodeComms``
      - ``cvode``
      - Two-way coupling to a 0-D adiabatic-parcel ODE model integrated with SUNDIALS' CVODE
        solver (see :doc:`../usage/installation/extern`). Used by the ``adiabaticparcel``
@@ -122,7 +122,7 @@ Here is a summary of the available options:
      - Coupling via YAC (see :doc:`../usage/installation/extern`) to an external dynamical
        core (e.g. ICON), for large-eddy-simulations one-way or two-way coupled — the
        motivation for this setup is explained in B2026a :cite:`bayley2026a`, Sect. 1. Used by Cleo's
-       ``bubble`` example, it is currently only compatible with Cleo's ``cartesiandomain`` grid
+       ``bubble3d`` example, it is currently only compatible with Cleo's ``cartesiandomain`` grid
        and ICON's 100km, 5km resolution toroidal grid.
    * - (for python bindings) ``coupldyn_numpy`` → ``NumpyDynamics`` ``NumpyComms``
      - ``numpy``
