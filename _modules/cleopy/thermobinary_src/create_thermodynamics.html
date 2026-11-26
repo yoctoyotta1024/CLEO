@@ -386,8 +386,10 @@
 <span class="sd">File Description:</span>
 <span class="sd">"""</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">os.path</span><span class="w"> </span><span class="kn">import</span> <span class="n">isfile</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">cxx2py</span><span class="p">,</span> <span class="n">readconfigfile</span><span class="p">,</span> <span class="n">writebinary</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..gbxboundariesbinary_src.read_gbxboundaries</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">read_dimless_gbxboundaries_binary</span><span class="p">,</span>
@@ -466,11 +468,11 @@
             <span class="s2">"qvap"</span><span class="p">:</span> <span class="n">thermo</span><span class="p">[</span><span class="s2">"qvap"</span><span class="p">],</span>
             <span class="s2">"qcond"</span><span class="p">:</span> <span class="n">thermo</span><span class="p">[</span><span class="s2">"qcond"</span><span class="p">],</span>
         <span class="p">}</span>
-        <span class="k">if</span> <span class="s2">"wvel"</span> <span class="ow">in</span> <span class="n">thermo</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="s2">"wvel"</span> <span class="ow">in</span> <span class="n">thermo</span><span class="p">:</span>
             <span class="n">THERMODATA</span><span class="p">[</span><span class="s2">"wvel"</span><span class="p">]</span> <span class="o">=</span> <span class="n">thermo</span><span class="p">[</span><span class="s2">"wvel"</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">VEL0</span>
-        <span class="k">if</span> <span class="s2">"uvel"</span> <span class="ow">in</span> <span class="n">thermo</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="s2">"uvel"</span> <span class="ow">in</span> <span class="n">thermo</span><span class="p">:</span>
             <span class="n">THERMODATA</span><span class="p">[</span><span class="s2">"uvel"</span><span class="p">]</span> <span class="o">=</span> <span class="n">thermo</span><span class="p">[</span><span class="s2">"uvel"</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">VEL0</span>
-        <span class="k">if</span> <span class="s2">"vvel"</span> <span class="ow">in</span> <span class="n">thermo</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="s2">"vvel"</span> <span class="ow">in</span> <span class="n">thermo</span><span class="p">:</span>
             <span class="n">THERMODATA</span><span class="p">[</span><span class="s2">"vvel"</span><span class="p">]</span> <span class="o">=</span> <span class="n">thermo</span><span class="p">[</span><span class="s2">"vvel"</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">VEL0</span>
 
         <span class="k">return</span> <span class="n">THERMODATA</span>

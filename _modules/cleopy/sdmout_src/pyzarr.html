@@ -388,16 +388,13 @@
 <span class="sd">of superdroplet attributes</span>
 <span class="sd">"""</span>
 
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">awkward</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ak</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">thermodata</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">superdrops</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">massmoms</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">timedata</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">awkward</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ak</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">massmoms</span><span class="p">,</span> <span class="n">superdrops</span><span class="p">,</span> <span class="n">thermodata</span><span class="p">,</span> <span class="n">timedata</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_rawdataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">):</span>
@@ -418,7 +415,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">raggedvar_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">raggedcount</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""returns ragged ak.Array dims [time, ragged]</span>
 <span class="sd">    for a variable "var" in zarr ds"""</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
         <span class="n">ds</span> <span class="o">=</span> <span class="n">get_rawdataset</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">ak</span><span class="o">.</span><span class="n">unflatten</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="n">var</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">raggedcount</span><span class="p">)</span></div>
@@ -430,7 +427,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">var4d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">ntime</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""' returns 4D variable with dims</span>
 <span class="sd">    [time, y, x, z] from zarr dataset "ds" """</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
         <span class="n">ds</span> <span class="o">=</span> <span class="n">get_rawdataset</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
 
     <span class="n">reshape</span> <span class="o">=</span> <span class="p">[</span><span class="n">ntime</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">ndims</span><span class="p">)</span>
@@ -443,7 +440,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">var3d_fromzarr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""' returns 3D variable with dims</span>
 <span class="sd">    [y, x, z] from zarr dataset "ds" """</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
         <span class="n">ds</span> <span class="o">=</span> <span class="n">get_rawdataset</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="n">ndims</span><span class="p">)</span></div>
@@ -489,7 +486,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_totnsupers</span><span class="p">(</span><span class="n">dataset</span><span class="p">):</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">Path</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">)):</span>
         <span class="n">dataset</span> <span class="o">=</span> <span class="n">get_rawdataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">"totnsupers"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>

@@ -389,10 +389,11 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">integrate</span>
+
 <span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">cxx2py</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..gbxboundariesbinary_src</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_gbxboundaries</span> <span class="k">as</span> <span class="n">rgrid</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.create_thermodynamics</span><span class="w"> </span><span class="kn">import</span> <span class="n">thermoinputsdict</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">.windsgen</span><span class="w"> </span><span class="kn">import</span> <span class="n">DryAdiabat2DFlowField</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..gbxboundariesbinary_src</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_gbxboundaries</span> <span class="k">as</span> <span class="n">rgrid</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_Mrratio_from_constants_filename</span><span class="p">(</span><span class="n">constants_filename</span><span class="p">):</span>
@@ -568,7 +569,7 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_thermo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">ntime</span><span class="p">):</span>
-        <span class="n">zfulls</span><span class="p">,</span> <span class="n">xfulls</span><span class="p">,</span> <span class="n">yfulls</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">fullcoords_forallgridboxes</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">)</span>
+        <span class="n">zfulls</span><span class="p">,</span> <span class="n">_xfulls</span><span class="p">,</span> <span class="n">_yfulls</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">fullcoords_forallgridboxes</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">)</span>
 
         <span class="n">qvap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_qvap_profile</span><span class="p">(</span><span class="n">zfulls</span><span class="p">)</span>
 
@@ -703,7 +704,7 @@
         <span class="k">return</span> <span class="n">DryAdiabat2DFlowField</span><span class="p">(</span><span class="n">WMAX</span><span class="p">,</span> <span class="n">Zlength</span><span class="p">,</span> <span class="n">Xlength</span><span class="p">,</span> <span class="n">VVEL</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_thermo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">ntime</span><span class="p">):</span>
-        <span class="n">zfulls</span><span class="p">,</span> <span class="n">xfulls</span><span class="p">,</span> <span class="n">yfulls</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">fullcoords_forallgridboxes</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">)</span>
+        <span class="n">zfulls</span><span class="p">,</span> <span class="n">xfulls</span><span class="p">,</span> <span class="n">_yfulls</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">fullcoords_forallgridboxes</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">)</span>
         <span class="n">PRESS</span><span class="p">,</span> <span class="n">TEMP</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hydrostatic_adiabatic_thermo</span><span class="p">(</span><span class="n">zfulls</span><span class="p">)</span>
 
         <span class="n">qvap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generate_qvap</span><span class="p">(</span><span class="n">zfulls</span><span class="p">,</span> <span class="n">xfulls</span><span class="p">,</span> <span class="n">PRESS</span><span class="p">,</span> <span class="n">TEMP</span><span class="p">)</span>
@@ -763,7 +764,7 @@
 <span class="w">        </span><span class="sd">"""note unit conversion of input lapse rates:</span>
 <span class="sd">        templapse rate = -dT/dz [K km^-1]  --&gt;  [K m^-1]"""</span>
         <span class="n">temp1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEMPz0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEMPlapses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="n">z</span>
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">temp1</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">temp1</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"TEMP &gt; 0.0K"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">temp1</span></div>
 
@@ -775,7 +776,7 @@
 <span class="sd">        templapse rate = -dT/dz [K km^-1]  --&gt;  [K m^-1]"""</span>
         <span class="n">T_Zbase</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp1</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Zbase</span><span class="p">)</span>  <span class="c1"># TEMP at Zbase</span>
         <span class="n">temp2</span> <span class="o">=</span> <span class="n">T_Zbase</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">TEMPlapses</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">*</span> <span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Zbase</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">temp2</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">temp2</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"TEMP &gt; 0.0K"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">temp2</span></div>
 
@@ -814,7 +815,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">qvap1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvapz0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvaplapses</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e6</span> <span class="o">*</span> <span class="n">z</span>
 
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">qvap1</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">qvap1</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"TEMP &gt; 0.0K"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">qvap1</span></div>
 
@@ -831,7 +832,7 @@
             <span class="n">qvap_Zbase</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvap1</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Zbase</span><span class="p">)</span>  <span class="c1"># qvap at Zbase</span>
             <span class="n">qvap2</span> <span class="o">=</span> <span class="n">qvap_Zbase</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvaplapses</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1e6</span> <span class="o">*</span> <span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Zbase</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">qvap2</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">qvap2</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"TEMP &gt; 0.0K"</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">qvap2</span></div>
 
@@ -867,7 +868,7 @@
         <span class="k">return</span> <span class="n">TEMP</span><span class="p">,</span> <span class="n">PRESS</span><span class="p">,</span> <span class="n">qvap</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">generate_thermo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">,</span> <span class="n">ntime</span><span class="p">):</span>
-        <span class="n">zfulls</span><span class="p">,</span> <span class="n">xfulls</span><span class="p">,</span> <span class="n">yfulls</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">fullcoords_forallgridboxes</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">)</span>
+        <span class="n">zfulls</span><span class="p">,</span> <span class="n">_xfulls</span><span class="p">,</span> <span class="n">_yfulls</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">fullcoords_forallgridboxes</span><span class="p">(</span><span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span><span class="p">)</span>
 
         <span class="n">TEMP</span><span class="p">,</span> <span class="n">PRESS</span><span class="p">,</span> <span class="n">qvap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hydrostatic_lapserates_thermo</span><span class="p">(</span><span class="n">zfulls</span><span class="p">)</span>
 

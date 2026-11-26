@@ -386,8 +386,9 @@
 <span class="sd">File Description:</span>
 <span class="sd">"""</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">struct</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 
 <div class="viewcode-block" id="writebinary">
@@ -416,9 +417,8 @@
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">"Writing gridbox boundaries binary file to:</span><span class="se">\n</span><span class="s2"> "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
     <span class="n">s</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="nb">format</span><span class="p">,</span> <span class="o">*</span><span class="n">array2write</span><span class="p">)</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"wb"</span><span class="p">)</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
-    <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"wb"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">s</span><span class="p">)</span></div>
 
 
 
@@ -429,7 +429,7 @@
 <span class="sd">    a binary encoded single character and that the dataype given matches</span>
 <span class="sd">    the type of the data"""</span>
 
-    <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">double</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scale_factors</span><span class="p">]):</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">double</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scale_factors</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"type of scale_factors must be C type double"</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">units</span><span class="p">:</span>
@@ -438,7 +438,7 @@
 
     <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ndata</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="nb">type</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">!=</span> <span class="n">datatypes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">n</span><span class="p">]]):</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="o">!=</span> <span class="n">datatypes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">n</span><span class="p">]):</span>
             <span class="n">err</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="s2">"stated datatype "</span>
                 <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">datatypes</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
@@ -468,7 +468,7 @@
             <span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">:</span> <span class="s2">"I"</span><span class="p">,</span>
             <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">:</span> <span class="s2">"d"</span><span class="p">,</span>
             <span class="n">np</span><span class="o">.</span><span class="n">uint</span><span class="p">:</span> <span class="s2">"Q"</span><span class="p">,</span>
-            <span class="nb">type</span><span class="p">(</span><span class="s2">"c"</span><span class="p">):</span> <span class="s2">"c"</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">:</span> <span class="s2">"c"</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">d2binaryf</span> <span class="o">=</span> <span class="p">{</span>
@@ -476,7 +476,7 @@
             <span class="n">np</span><span class="o">.</span><span class="n">uintc</span><span class="p">:</span> <span class="sa">b</span><span class="s2">"I"</span><span class="p">,</span>
             <span class="n">np</span><span class="o">.</span><span class="n">double</span><span class="p">:</span> <span class="sa">b</span><span class="s2">"d"</span><span class="p">,</span>
             <span class="n">np</span><span class="o">.</span><span class="n">uint</span><span class="p">:</span> <span class="sa">b</span><span class="s2">"Q"</span><span class="p">,</span>
-            <span class="nb">type</span><span class="p">(</span><span class="s2">"c"</span><span class="p">):</span> <span class="sa">b</span><span class="s2">"c"</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">:</span> <span class="sa">b</span><span class="s2">"c"</span><span class="p">,</span>
         <span class="p">}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">dtype2bytesize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datatype</span><span class="p">):</span>
@@ -501,7 +501,7 @@
 
 <span class="k">class</span><span class="w"> </span><span class="nc">MetadataPerVariable</span><span class="p">(</span><span class="n">DataTypeCodes</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">MetadataPerVariable</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">mpv_format</span> <span class="o">=</span> <span class="s2">"IIIccd"</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mpv_bytesize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format_size</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mpv_format</span><span class="p">)</span>
@@ -523,7 +523,7 @@
 
 <span class="k">class</span><span class="w"> </span><span class="nc">CreateMetadataForBinaryArray</span><span class="p">(</span><span class="n">MetadataPerVariable</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nvars</span><span class="p">,</span> <span class="n">ndata</span><span class="p">,</span> <span class="n">datatypes</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="n">scale_factors</span><span class="p">,</span> <span class="n">metastr</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">CreateMetadataForBinaryArray</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">nvars</span> <span class="o">=</span> <span class="n">nvars</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ndata</span> <span class="o">=</span> <span class="n">ndata</span>

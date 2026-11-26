@@ -400,11 +400,11 @@
 <span class="sd">    only occur in gridboxes with upper bound &lt;= zlim"""</span>
 
     <span class="n">COORD0</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">get_COORD0_from_constsfile</span><span class="p">(</span><span class="n">constants_filename</span><span class="p">)</span>
-    <span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">read_dimless_gbxboundaries_binary</span><span class="p">(</span>
+    <span class="n">gbxbounds</span><span class="p">,</span> <span class="n">_ndims</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">read_dimless_gbxboundaries_binary</span><span class="p">(</span>
         <span class="n">grid_filename</span><span class="p">,</span> <span class="n">COORD0</span><span class="o">=</span><span class="n">COORD0</span><span class="p">,</span> <span class="n">return_ndims</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span>
     <span class="n">nsupersdict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="n">gbxbounds</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="n">gbxbounds</span><span class="p">:</span>
         <span class="n">gbx_zupper</span> <span class="o">=</span> <span class="n">gbxbounds</span><span class="p">[</span><span class="n">ii</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># z upper bound of gridbox</span>
         <span class="k">if</span> <span class="n">gbx_zupper</span> <span class="o">&lt;=</span> <span class="n">zlim</span><span class="p">:</span>
             <span class="n">nsupersdict</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">nsupers</span>
@@ -422,11 +422,11 @@
 <span class="sd">    only occur in gridboxes with lower bound &gt;= zlim"""</span>
 
     <span class="n">COORD0</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">get_COORD0_from_constsfile</span><span class="p">(</span><span class="n">constants_filename</span><span class="p">)</span>
-    <span class="n">gbxbounds</span><span class="p">,</span> <span class="n">ndims</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">read_dimless_gbxboundaries_binary</span><span class="p">(</span>
+    <span class="n">gbxbounds</span><span class="p">,</span> <span class="n">_ndims</span> <span class="o">=</span> <span class="n">rgrid</span><span class="o">.</span><span class="n">read_dimless_gbxboundaries_binary</span><span class="p">(</span>
         <span class="n">grid_filename</span><span class="p">,</span> <span class="n">COORD0</span><span class="o">=</span><span class="n">COORD0</span><span class="p">,</span> <span class="n">return_ndims</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">isprint</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span>
     <span class="n">nsupersdict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="n">gbxbounds</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="n">gbxbounds</span><span class="p">:</span>
         <span class="n">gbx_zlower</span> <span class="o">=</span> <span class="n">gbxbounds</span><span class="p">[</span><span class="n">ii</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># z lower bound of gridbox</span>
         <span class="k">if</span> <span class="n">gbx_zlower</span> <span class="o">&gt;=</span> <span class="n">zlim</span><span class="p">:</span>
             <span class="n">nsupersdict</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">nsupers</span>

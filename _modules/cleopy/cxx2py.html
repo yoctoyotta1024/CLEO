@@ -460,7 +460,7 @@
     <span class="k">elif</span> <span class="n">line</span><span class="p">[:</span><span class="mi">17</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"constexpruint64_t"</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="s2">"constexpruint64_t"</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">"c++ type for variable not understood"</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"c++ type for variable not understood: </span><span class="si">{</span><span class="n">x</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
     <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
 
 

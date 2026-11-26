@@ -386,9 +386,9 @@
 <span class="sd">File Description:</span>
 <span class="sd">"""</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">struct</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">struct</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">.writebinary</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataTypeCodes</span><span class="p">,</span> <span class="n">MetadataPerVariable</span>
 
@@ -417,7 +417,7 @@
 
     <span class="n">dtc</span> <span class="o">=</span> <span class="n">DataTypeCodes</span><span class="p">()</span>
 
-    <span class="n">metabytes</span><span class="p">,</span> <span class="n">gblmeta_bytes</span><span class="p">,</span> <span class="n">nvars</span><span class="p">,</span> <span class="n">mpv_bytes</span> <span class="o">=</span> <span class="n">first4uints</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">dtc</span><span class="p">)</span>
+    <span class="n">metabytes</span><span class="p">,</span> <span class="n">gblmeta_bytes</span><span class="p">,</span> <span class="n">nvars</span><span class="p">,</span> <span class="n">_mpv_bytes</span> <span class="o">=</span> <span class="n">first4uints</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">dtc</span><span class="p">)</span>
 
     <span class="n">gblmetadata</span><span class="p">,</span> <span class="n">metapervar</span> <span class="o">=</span> <span class="n">get_metadatapervar</span><span class="p">(</span>
         <span class="n">filename</span><span class="p">,</span> <span class="n">dtc</span><span class="p">,</span> <span class="n">gblmeta_bytes</span><span class="p">,</span> <span class="n">nvars</span><span class="p">,</span> <span class="n">metabytes</span>
@@ -443,7 +443,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">get_metadatapervar</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">dtc</span><span class="p">,</span> <span class="n">gblmeta_bytes</span><span class="p">,</span> <span class="n">nvars</span><span class="p">,</span> <span class="n">metabytes</span><span class="p">):</span>
     <span class="n">mpv_format</span> <span class="o">=</span> <span class="n">MetadataPerVariable</span><span class="p">()</span><span class="o">.</span><span class="n">mpv_format</span>
 
-    <span class="n">nchars</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">gblmeta_bytes</span> <span class="o">/</span> <span class="n">dtc</span><span class="o">.</span><span class="n">dtype2bytesize</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="s2">"c"</span><span class="p">)))</span>
+    <span class="n">nchars</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">gblmeta_bytes</span> <span class="o">/</span> <span class="n">dtc</span><span class="o">.</span><span class="n">dtype2bytesize</span><span class="p">(</span><span class="nb">str</span><span class="p">))</span>
     <span class="nb">format</span> <span class="o">=</span> <span class="s2">"&lt;"</span> <span class="o">+</span> <span class="s2">"c"</span> <span class="o">*</span> <span class="n">nchars</span> <span class="o">+</span> <span class="n">mpv_format</span> <span class="o">*</span> <span class="n">nvars</span>
 
     <span class="n">skipbytes</span> <span class="o">=</span> <span class="n">dtc</span><span class="o">.</span><span class="n">format_size</span><span class="p">(</span><span class="s2">"IIII"</span><span class="p">)</span>
