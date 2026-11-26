@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.75.1](https://github.com/yoctoyotta1024/CLEO/compare/f76405968e603bb702610c7b3a7c64bb0ac80275..v0.75.1) - 2026-11-26
+#### Bug Fixes
+- Cocogitto 7 doesn't support empty packages - ([08ed7d5](https://github.com/yoctoyotta1024/CLEO/commit/08ed7d5c3e2b13195e0d85798c88b391a553f3d9)) - clara.bayley
+#### Documentation
+- update relative paths since library restructuring - ([4e63a8c](https://github.com/yoctoyotta1024/CLEO/commit/4e63a8cdb93ab962f1029093d97348b18a48561a)) - clara.bayley
+- minor update of drifted documentation - ([93fb5bf](https://github.com/yoctoyotta1024/CLEO/commit/93fb5bf7e197ab34bbc9f472449ab4ba6abe0bc5)) - clara.bayley
+#### Miscellaneous Chores
+- (**deps**) bump cocogitto/cocogitto-action - ([f764059](https://github.com/yoctoyotta1024/CLEO/commit/f76405968e603bb702610c7b3a7c64bb0ac80275)) - dependabot[bot]
+
+- - -
+
 ## [v0.75.0](https://github.com/yoctoyotta1024/CLEO/compare/a7f4b620bce82c559fe8f9209ba24f3298b16d87..v0.75.0) - 2026-11-26
 #### Features
 - handling of new metadata in zarr - ([d3cc0b5](https://github.com/yoctoyotta1024/CLEO/commit/d3cc0b5a20a48b4f7b19fcda1620ea5c48f12b99)) - clara.bayley
