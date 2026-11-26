@@ -15,7 +15,7 @@
  * File Description:
  * runs the CLEO super-droplet model (SDM)
  * after make/compiling, execute for example via:
- * ./roughpaper/src/cleocoupledsdm ../roughpaper/src/config/config.yaml
+ * ./build/roughpaper/src/cleocoupledsdm roughpaper/src/config/config.yaml
  */
 
 #include "./main_impl.hpp"
