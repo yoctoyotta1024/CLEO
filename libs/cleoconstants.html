@@ -597,6 +597,18 @@
 
 <dl class="cpp var">
 <dt class="sig sig-object cpp">
+<span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dimmed_constants</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">RAINDROP_RADIUS</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">40e-6</span></span><br /></dt>
+<dd><p>‘rain’ droplets have radius &gt;= RAINDROP_RADIUS [m] </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dimmed_constants</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">CLOUDDROP_RADIUS</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1e-6</span></span><br /></dt>
+<dd><p>‘cloud’ droplets have CLOUDDROP_RADIUS &lt;= radius &lt; RAINRADIUS [m] </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
 <span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dimless_constants</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">W0</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">1.0</span></span><br /></dt>
 <dd><p>Characteristic velocity [m/s]. </p>
 </dd></dl>
@@ -743,6 +755,18 @@
 <dt class="sig sig-object cpp">
 <span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dimless_constants</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">surfconst</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">4.0</span></span><span class="w"> </span><span class="o"><span class="pre">*</span></span><span class="w"> </span><span class="n"><span class="pre">DC</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">SURFSIGMA</span></span><span class="w"> </span><span class="o"><span class="pre">*</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">numbers</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pi</span></span><span class="w"> </span><span class="o"><span class="pre">*</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N17dimless_constants2R0E" title="dimless_constants::R0"><span class="n"><span class="pre">R0</span></span></a><span class="w"> </span><span class="o"><span class="pre">*</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N17dimless_constants2R0E" title="dimless_constants::R0"><span class="n"><span class="pre">R0</span></span></a><br /></dt>
 <dd><p>Surface tension energy constant (see collisionkinetics) </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dimless_constants</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">raindrop_radius</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">DC</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">RAINDROP_RADIUS</span></span><span class="w"> </span><span class="o"><span class="pre">/</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N17dimless_constants2R0E" title="dimless_constants::R0"><span class="n"><span class="pre">R0</span></span></a><br /></dt>
+<dd><p>dimensionless RAINDROP_RADIUS </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="k"><span class="pre">constexpr</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">dimless_constants</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">clouddrop_radius</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">DC</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">CLOUDDROP_RADIUS</span></span><span class="w"> </span><span class="o"><span class="pre">/</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N17dimless_constants2R0E" title="dimless_constants::R0"><span class="n"><span class="pre">R0</span></span></a><br /></dt>
+<dd><p>dimensionless CLOUDDROP_RADIUS </p>
 </dd></dl>
 
 <dl class="cpp var">

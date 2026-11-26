@@ -535,7 +535,7 @@
 <span id="_CPPv324RaindropsMassMomentsFunc"></span><span id="_CPPv224RaindropsMassMomentsFunc"></span><span id="RaindropsMassMomentsFunc"></span><span class="target" id="structRaindropsMassMomentsFunc"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RaindropsMassMomentsFunc</span></span></span><a class="headerlink" href="#_CPPv424RaindropsMassMomentsFunc" title="Link to this definition">¶</a><br /></dt>
 <dd><p>Functor to perform calculation of 0th, 1st, and 2nd moments of the (real) rain-droplet mass distribution in each gridbox. </p>
 <p>This operator is a functor to perform the calculation of the 0th, 1st, and 2nd moments of the rain-droplet mass distribution in each gridbox within a Kokkos::parallel_for range policy loop over superdroplets. The calculation is equivalent to 0th, 3rd, and 6th moments of the rain-droplet radius distribution for each gridbox.</p>
-<p>A raindroplet is a droplet with a radius &gt;= rlim = 40microns.</p>
+<p>A raindroplet is a droplet with a radius &gt;= rlim.</p>
 <p><em>Note:</em> the conversion from 8 to 4-byte precision for all three moments. </p>
 <div class="breathe-sectiondef docutils container">
 <p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
