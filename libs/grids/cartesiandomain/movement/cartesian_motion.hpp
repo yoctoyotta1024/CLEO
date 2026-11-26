@@ -20,14 +20,14 @@
  * conditions
  */
 
-#ifndef LIBS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_MOTION_HPP_
-#define LIBS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_MOTION_HPP_
+#ifndef LIBS_GRIDS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_MOTION_HPP_
+#define LIBS_GRIDS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_MOTION_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
 #include <functional>
 
-#include "../../cleoconstants.hpp"
+#include "../../../cleoconstants.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/doubly_periodic_domain.hpp"
 #include "gridboxes/predcorrmotion.hpp"
@@ -69,4 +69,4 @@ inline PredCorrMotion<CartesianMaps, TV, CartesianCheckBounds> CartesianMotion(
                                                                  CartesianCheckBounds{});
 }
 
-#endif  // LIBS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_MOTION_HPP_
+#endif  // LIBS_GRIDS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_MOTION_HPP_

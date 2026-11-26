@@ -17,8 +17,8 @@
  * to use for a Cartesian Domain in MoveSupersInDomain.
  */
 
-#ifndef LIBS_CARTESIANDOMAIN_MOVEMENT_ADD_SUPERS_TO_DOMAIN_HPP_
-#define LIBS_CARTESIANDOMAIN_MOVEMENT_ADD_SUPERS_TO_DOMAIN_HPP_
+#ifndef LIBS_GRIDS_CARTESIANDOMAIN_MOVEMENT_ADD_SUPERS_TO_DOMAIN_HPP_
+#define LIBS_GRIDS_CARTESIANDOMAIN_MOVEMENT_ADD_SUPERS_TO_DOMAIN_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <algorithm>
@@ -33,8 +33,8 @@
 #include <utility>
 #include <vector>
 
-#include "../../cleoconstants.hpp"
-#include "../../kokkosaliases.hpp"
+#include "../../../cleoconstants.hpp"
+#include "../../../kokkosaliases.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/domainboundaries.hpp"
 #include "configuration/optional_config_params.hpp"
@@ -137,4 +137,4 @@ struct AddSupersToDomain {
                        SupersInDomain& allsupers) const;
 };
 
-#endif  // LIBS_CARTESIANDOMAIN_MOVEMENT_ADD_SUPERS_TO_DOMAIN_HPP_
+#endif  // LIBS_GRIDS_CARTESIANDOMAIN_MOVEMENT_ADD_SUPERS_TO_DOMAIN_HPP_

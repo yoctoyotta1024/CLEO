@@ -17,8 +17,8 @@
  * in a cartesian domain
  */
 
-#ifndef LIBS_CARTESIANDOMAIN_CARTESIAN_DECOMPOSITION_HPP_
-#define LIBS_CARTESIANDOMAIN_CARTESIAN_DECOMPOSITION_HPP_
+#ifndef LIBS_GRIDS_CARTESIANDOMAIN_CARTESIAN_DECOMPOSITION_HPP_
+#define LIBS_GRIDS_CARTESIANDOMAIN_CARTESIAN_DECOMPOSITION_HPP_
 
 #include <mpi.h>
 
@@ -32,7 +32,7 @@
 #include <stdexcept>
 #include <vector>
 
-#include "../cleoconstants.hpp"
+#include "../../cleoconstants.hpp"
 #include "cartesiandomain/domainboundaries.hpp"
 #include "configuration/communicator.hpp"
 #include "initialise/gbx_bounds_from_binary.hpp"
@@ -143,4 +143,4 @@ int get_multiplications_to_turn_int(double entry_value);
 int binary_search(std::array<double, 3>& coordinates, int dimension,
                   std::array<size_t, 3> partition_size,
                   std::vector<std::vector<double>> gridbox_bounds);
-#endif  // LIBS_CARTESIANDOMAIN_CARTESIAN_DECOMPOSITION_HPP_
+#endif  // LIBS_GRIDS_CARTESIANDOMAIN_CARTESIAN_DECOMPOSITION_HPP_

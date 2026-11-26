@@ -19,13 +19,13 @@
  * crosses the domain boundary in a particular direction.
  */
 
-#ifndef LIBS_CARTESIANDOMAIN_DOMAINBOUNDARIES_HPP_
-#define LIBS_CARTESIANDOMAIN_DOMAINBOUNDARIES_HPP_
+#ifndef LIBS_GRIDS_CARTESIANDOMAIN_DOMAINBOUNDARIES_HPP_
+#define LIBS_GRIDS_CARTESIANDOMAIN_DOMAINBOUNDARIES_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
 
-#include "../cleoconstants.hpp"
+#include "../../cleoconstants.hpp"
 
 /* returns true if gbxindex for gridbox is at/beyond a
 boundary of cartesian domain, given neighbouring indexes
@@ -108,4 +108,4 @@ KOKKOS_INLINE_FUNCTION double coordbeyond_periodicdomain(const double coord, con
   return coord + lim1 - lim2;  // periodic domain coord -> coord +/- |length_of_domain|
 }
 
-#endif  // LIBS_CARTESIANDOMAIN_DOMAINBOUNDARIES_HPP_
+#endif  // LIBS_GRIDS_CARTESIANDOMAIN_DOMAINBOUNDARIES_HPP_

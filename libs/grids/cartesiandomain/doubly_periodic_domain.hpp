@@ -17,8 +17,8 @@
  * Super-Droplets and MoveSupersInDomain
  */
 
-#ifndef LIBS_CARTESIANDOMAIN_DOUBLY_PERIODIC_DOMAIN_HPP_
-#define LIBS_CARTESIANDOMAIN_DOUBLY_PERIODIC_DOMAIN_HPP_
+#ifndef LIBS_GRIDS_CARTESIANDOMAIN_DOUBLY_PERIODIC_DOMAIN_HPP_
+#define LIBS_GRIDS_CARTESIANDOMAIN_DOUBLY_PERIODIC_DOMAIN_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
@@ -102,4 +102,4 @@ KOKKOS_INLINE_FUNCTION double boundarycond_coord2(const double coord2, const dou
 
 }  // namespace DoublyPeriodicDomain
 
-#endif  // LIBS_CARTESIANDOMAIN_DOUBLY_PERIODIC_DOMAIN_HPP_
+#endif  // LIBS_GRIDS_CARTESIANDOMAIN_DOUBLY_PERIODIC_DOMAIN_HPP_

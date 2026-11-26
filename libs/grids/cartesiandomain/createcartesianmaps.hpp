@@ -19,8 +19,8 @@
  * coordinate (upper and lower) boundaries
  */
 
-#ifndef LIBS_CARTESIANDOMAIN_CREATECARTESIANMAPS_HPP_
-#define LIBS_CARTESIANDOMAIN_CREATECARTESIANMAPS_HPP_
+#ifndef LIBS_GRIDS_CARTESIANDOMAIN_CREATECARTESIANMAPS_HPP_
+#define LIBS_GRIDS_CARTESIANDOMAIN_CREATECARTESIANMAPS_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
@@ -31,8 +31,8 @@
 #include <string_view>
 #include <vector>
 
-#include "../cleoconstants.hpp"
-#include "../kokkosaliases.hpp"
+#include "../../cleoconstants.hpp"
+#include "../../kokkosaliases.hpp"
 #include "cartesiandomain/cartesian_decomposition.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/doubly_periodic_domain.hpp"
@@ -51,4 +51,4 @@ from the gridfile 'grid_filename' */
 CartesianMaps create_cartesian_maps(const size_t ngbxs, const unsigned int nspacedims,
                                     const std::filesystem::path grid_filename);
 
-#endif  // LIBS_CARTESIANDOMAIN_CREATECARTESIANMAPS_HPP_
+#endif  // LIBS_GRIDS_CARTESIANDOMAIN_CREATECARTESIANMAPS_HPP_

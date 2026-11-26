@@ -17,8 +17,8 @@
  * more than one MPI process
  */
 
-#ifndef LIBS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_TRANSPORT_ACROSS_DOMAIN_HPP_
-#define LIBS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_TRANSPORT_ACROSS_DOMAIN_HPP_
+#ifndef LIBS_GRIDS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_TRANSPORT_ACROSS_DOMAIN_HPP_
+#define LIBS_GRIDS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_TRANSPORT_ACROSS_DOMAIN_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <array>
@@ -29,8 +29,8 @@
 #include <stdexcept>
 #include <vector>
 
-#include "../../cleoconstants.hpp"
-#include "../../kokkosaliases.hpp"
+#include "../../../cleoconstants.hpp"
+#include "../../../kokkosaliases.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "configuration/communicator.hpp"
 #include "gridboxes/gridbox.hpp"
@@ -238,4 +238,4 @@ viewd_supers sendrecv_supers(const GbxMaps& gbxmaps, const viewd_gbx d_gbxs,
   return totsupers;
 }
 
-#endif  // LIBS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_TRANSPORT_ACROSS_DOMAIN_HPP_
+#endif  // LIBS_GRIDS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_TRANSPORT_ACROSS_DOMAIN_HPP_

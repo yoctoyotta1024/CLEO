@@ -19,12 +19,12 @@
  * satisfy the CollectDataForDataset<CollectiveDataset<FSStore, CartesianDecomposition>> concept.
  */
 
-#ifndef LIBS_CARTESIANDOMAIN_COLLECT_DATA_FOR_COLLECTIVE_DATASET_HPP_
-#define LIBS_CARTESIANDOMAIN_COLLECT_DATA_FOR_COLLECTIVE_DATASET_HPP_
+#ifndef LIBS_GRIDS_CARTESIANDOMAIN_COLLECT_DATA_FOR_COLLECTIVE_DATASET_HPP_
+#define LIBS_GRIDS_CARTESIANDOMAIN_COLLECT_DATA_FOR_COLLECTIVE_DATASET_HPP_
 
 #include <Kokkos_Core.hpp>
 
-#include "../kokkosaliases.hpp"
+#include "../../kokkosaliases.hpp"
 #include "cartesiandomain/cartesian_decomposition.hpp"
 #include "observers/collect_data_for_dataset.hpp"
 #include "zarr/collective_dataset.hpp"
@@ -45,4 +45,4 @@ auto operator>>(const CollectData1 a, const CollectData2 b) {
   return CombinedCollectDataForDataset<CollectData1, CollectData2>(a, b);
 }
 
-#endif  // LIBS_CARTESIANDOMAIN_COLLECT_DATA_FOR_COLLECTIVE_DATASET_HPP_
+#endif  // LIBS_GRIDS_CARTESIANDOMAIN_COLLECT_DATA_FOR_COLLECTIVE_DATASET_HPP_

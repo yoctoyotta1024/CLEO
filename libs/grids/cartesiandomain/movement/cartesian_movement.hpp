@@ -17,8 +17,8 @@
  * more than one MPI process, using certain boundary conditions and a method for superdroplet motion
  */
 
-#ifndef LIBS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_MOVEMENT_HPP_
-#define LIBS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_MOVEMENT_HPP_
+#ifndef LIBS_GRIDS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_MOVEMENT_HPP_
+#define LIBS_GRIDS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_MOVEMENT_HPP_
 
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "cartesiandomain/movement/cartesian_transport_across_domain.hpp"
@@ -35,4 +35,4 @@ inline auto cartesian_movement(const CartesianMaps& gbxmaps, const M motion,
       motion, transport_across_domain, boundary_conditions);
 }
 
-#endif  // LIBS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_MOVEMENT_HPP_
+#endif  // LIBS_GRIDS_CARTESIANDOMAIN_MOVEMENT_CARTESIAN_MOVEMENT_HPP_

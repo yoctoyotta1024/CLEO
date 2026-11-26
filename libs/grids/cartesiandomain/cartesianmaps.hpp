@@ -18,8 +18,8 @@
  * cartesian C grid
  */
 
-#ifndef LIBS_CARTESIANDOMAIN_CARTESIANMAPS_HPP_
-#define LIBS_CARTESIANDOMAIN_CARTESIANMAPS_HPP_
+#ifndef LIBS_GRIDS_CARTESIANDOMAIN_CARTESIANMAPS_HPP_
+#define LIBS_GRIDS_CARTESIANDOMAIN_CARTESIANMAPS_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_Pair.hpp>
@@ -28,8 +28,8 @@
 #include <stdexcept>
 #include <vector>
 
-#include "../cleoconstants.hpp"
-#include "../kokkosaliases.hpp"
+#include "../../cleoconstants.hpp"
+#include "../../kokkosaliases.hpp"
 #include "cartesiandomain/cartesian_decomposition.hpp"
 #include "cartesiandomain/doubly_periodic_domain.hpp"
 #include "initialise/gbx_bounds_from_binary.hpp"
@@ -302,4 +302,4 @@ struct CartesianMaps {
                                                 double& coord1, double& coord2) const;
 };
 
-#endif  // LIBS_CARTESIANDOMAIN_CARTESIANMAPS_HPP_
+#endif  // LIBS_GRIDS_CARTESIANDOMAIN_CARTESIANMAPS_HPP_
