@@ -26,7 +26,7 @@ add_library("${LIBNAME}" STATIC ${SOURCES})
 target_include_directories(${LIBNAME} PRIVATE "${CLEO_SOURCE_DIR}/libs" ${MPI_INCLUDE_PATH})
 
 # Link libraries to target library
-set(LINKLIBS configuration initialise gridboxes superdrops)
+set(LINKLIBS configuration initialise gridboxes superdrops cartesiandomain)
 target_link_libraries("${LIBNAME}" PUBLIC ${LINKLIBS} MPI::MPI_C)
 
 # set specific C++ compiler options for target (optional)
