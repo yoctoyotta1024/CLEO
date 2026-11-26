@@ -31,6 +31,7 @@
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "observers/cleo_variables_metadata.hpp"
 #include "observers/collect_data_for_dataset.hpp"
 #include "observers/generic_collect_data.hpp"
 #include "observers/write_to_dataset_observer.hpp"
@@ -77,7 +78,7 @@ inline CollectDataForDataset<Dataset> auto CollectNsupers(const Dataset& dataset
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
   const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
   const auto xzarr =
-      dataset.template create_array<uint32_t>("nsupers", "", 1, chunkshape, dimnames);
+      dataset.template create_array<uint32_t>(cleo_metadata::nsupers, chunkshape, dimnames);
   return GenericCollectData(NsupersFunc{}, xzarr, ngbxs);
 }
 

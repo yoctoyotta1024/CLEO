@@ -30,6 +30,7 @@
 
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
+#include "observers/cleo_variables_metadata.hpp"
 #include "observers/collect_data_for_dataset.hpp"
 #include "observers/generic_collect_data.hpp"
 #include "observers/write_to_dataset_observer.hpp"
@@ -61,8 +62,8 @@ struct RaggedCount {
    */
   RaggedCount(const Dataset& dataset, Store& store, const size_t maxchunk)
       : xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
-            dataset.template create_raggedcount_array<uint32_t>("raggedcount", "", 1, {maxchunk},
-                                                                {"time"}, "superdroplets"))) {}
+            dataset.template create_raggedcount_array<uint32_t>(
+                cleo_metadata::raggedcount, {maxchunk}, {"time"}, "superdroplets"))) {}
 
   /**
    * @brief Writes the total number of super-droplets to the ragged count array in the dataset.
@@ -102,22 +103,22 @@ struct RaggedCount {
  * @tparam FunctorFunc The type of the functor function.
  * @param dataset The dataset to collect data from.
  * @param ffunc The functor function to apply to collect data.
- * @param name The name of the variable.
- * @param units The units of the variable.
- * @param scale_factor The scale factor of the variable.
+ * @param meta The variable's metadata (name, units, scale_factor, long_name, standard_name,
+ * description).
  * @param maxchunk The maximum chunk size.
  * @return CollectDataForDataset<Dataset> An instance of CollectDataForDataset for collecting
  * superdroplet variable data.
  */
 template <typename Dataset, typename T, typename FunctorFunc>
-CollectDataForDataset<Dataset> auto CollectSuperdropVariable(
-    const Dataset& dataset, const FunctorFunc ffunc, const std::string_view name,
-    const std::string_view units, const double scale_factor, const size_t maxchunk) {
+CollectDataForDataset<Dataset> auto CollectSuperdropVariable(const Dataset& dataset,
+                                                              const FunctorFunc ffunc,
+                                                              const VariableMetadata& meta,
+                                                              const size_t maxchunk) {
   const auto chunkshape = std::vector<size_t>{maxchunk};
   const auto dimnames = std::vector<std::string>{"superdroplets"};
   const auto sampledimname = std::string_view("superdroplets");
-  const auto xzarr = dataset.template create_ragged_array<T>(name, units, scale_factor, chunkshape,
-                                                             dimnames, sampledimname);
+  const auto xzarr =
+      dataset.template create_ragged_array<T>(meta, chunkshape, dimnames, sampledimname);
 
   return GenericCollectData(ffunc, xzarr, 0);
 }
@@ -162,8 +163,8 @@ struct SdgbxindexFunc {
 template <typename Dataset>
 CollectDataForDataset<Dataset> auto CollectSdgbxindex(const Dataset& dataset,
                                                       const size_t maxchunk) {
-  return CollectSuperdropVariable<Dataset, uint32_t, SdgbxindexFunc>(dataset, SdgbxindexFunc{},
-                                                                     "sdgbxindex", "", 1, maxchunk);
+  return CollectSuperdropVariable<Dataset, uint32_t, SdgbxindexFunc>(
+      dataset, SdgbxindexFunc{}, cleo_metadata::sdgbxindex, maxchunk);
 }
 
 /**
@@ -205,8 +206,8 @@ struct SdIdFunc {
  */
 template <typename Dataset>
 CollectDataForDataset<Dataset> auto CollectSdId(const Dataset& dataset, const size_t maxchunk) {
-  return CollectSuperdropVariable<Dataset, uint32_t, SdIdFunc>(dataset, SdIdFunc{}, "sdId", "", 1,
-                                                               maxchunk);
+  return CollectSuperdropVariable<Dataset, uint32_t, SdIdFunc>(dataset, SdIdFunc{},
+                                                                cleo_metadata::sdId, maxchunk);
 }
 
 /**
@@ -253,7 +254,7 @@ struct XiFunc {
  */
 template <typename Dataset>
 CollectDataForDataset<Dataset> auto CollectXi(const Dataset& dataset, const size_t maxchunk) {
-  return CollectSuperdropVariable<Dataset, uint64_t, XiFunc>(dataset, XiFunc{}, "xi", "", 1,
+  return CollectSuperdropVariable<Dataset, uint64_t, XiFunc>(dataset, XiFunc{}, cleo_metadata::xi,
                                                              maxchunk);
 }
 
@@ -295,8 +296,8 @@ struct RadiusFunc {
  */
 template <typename Dataset>
 CollectDataForDataset<Dataset> auto CollectRadius(const Dataset& dataset, const size_t maxchunk) {
-  return CollectSuperdropVariable<Dataset, float, RadiusFunc>(dataset, RadiusFunc{}, "radius",
-                                                              "micro-m", dlc::R0 * 1e6, maxchunk);
+  return CollectSuperdropVariable<Dataset, float, RadiusFunc>(dataset, RadiusFunc{},
+                                                              cleo_metadata::radius, maxchunk);
 }
 
 /**
@@ -336,8 +337,8 @@ struct MsolFunc {
  */
 template <typename Dataset>
 CollectDataForDataset<Dataset> auto CollectMsol(const Dataset& dataset, const size_t maxchunk) {
-  return CollectSuperdropVariable<Dataset, float, MsolFunc>(dataset, MsolFunc{}, "msol", "g",
-                                                            dlc::MASS0grams, maxchunk);
+  return CollectSuperdropVariable<Dataset, float, MsolFunc>(dataset, MsolFunc{},
+                                                            cleo_metadata::msol, maxchunk);
 }
 
 /**
@@ -378,8 +379,8 @@ struct Coord3Func {
  */
 template <typename Dataset>
 CollectDataForDataset<Dataset> auto CollectCoord3(const Dataset& dataset, const size_t maxchunk) {
-  return CollectSuperdropVariable<Dataset, float, Coord3Func>(dataset, Coord3Func{}, "coord3", "m",
-                                                              dlc::COORD0, maxchunk);
+  return CollectSuperdropVariable<Dataset, float, Coord3Func>(dataset, Coord3Func{},
+                                                              cleo_metadata::coord3, maxchunk);
 }
 
 /**
@@ -420,8 +421,8 @@ struct Coord1Func {
  */
 template <typename Dataset>
 CollectDataForDataset<Dataset> auto CollectCoord1(const Dataset& dataset, const size_t maxchunk) {
-  return CollectSuperdropVariable<Dataset, float, Coord1Func>(dataset, Coord1Func{}, "coord1", "m",
-                                                              dlc::COORD0, maxchunk);
+  return CollectSuperdropVariable<Dataset, float, Coord1Func>(dataset, Coord1Func{},
+                                                              cleo_metadata::coord1, maxchunk);
 }
 
 /**
@@ -462,8 +463,8 @@ struct Coord2Func {
  */
 template <typename Dataset>
 CollectDataForDataset<Dataset> auto CollectCoord2(const Dataset& dataset, const size_t maxchunk) {
-  return CollectSuperdropVariable<Dataset, float, Coord2Func>(dataset, Coord2Func{}, "coord2", "m",
-                                                              dlc::COORD0, maxchunk);
+  return CollectSuperdropVariable<Dataset, float, Coord2Func>(dataset, Coord2Func{},
+                                                              cleo_metadata::coord2, maxchunk);
 }
 
 /**

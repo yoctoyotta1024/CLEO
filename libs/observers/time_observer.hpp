@@ -30,6 +30,7 @@
 
 #include "../kokkosaliases.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "observers/cleo_variables_metadata.hpp"
 #include "observers/consttstep_observer.hpp"
 #include "observers/observers.hpp"
 #include "superdrops/sdmmonitor.hpp"
@@ -81,7 +82,7 @@ class DoTimeObs {
             const std::function<double(unsigned int)> step2dimlesstime)
       : dataset(dataset),
         xzarr_ptr(std::make_shared<XarrayZarrArray<Store, float>>(
-            dataset.template create_coordinate_array<float>("time", "s", dlc::TIME0, maxchunk, 0))),
+            dataset.template create_coordinate_array<float>(cleo_metadata::time, maxchunk, 0))),
         step2dimlesstime(step2dimlesstime) {}
 
   /**

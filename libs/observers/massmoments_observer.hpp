@@ -28,6 +28,7 @@
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "observers/cleo_variables_metadata.hpp"
 #include "observers/collect_data_for_dataset.hpp"
 #include "observers/create_massmoments_arrays.hpp"
 #include "observers/generic_collect_data.hpp"
@@ -371,9 +372,12 @@ struct CollectMassMoments {
 template <typename Dataset, typename Store>
 inline Observer auto MassMomentsObserver(const unsigned int interval, const Dataset& dataset,
                                          Store& store, const size_t maxchunk, const size_t ngbxs) {
-  const auto xzarr_mom0 = create_massmom0_xarray(dataset, store, "massmom0", maxchunk, ngbxs);
-  const auto xzarr_mom1 = create_massmom1_xarray(dataset, store, "massmom1", maxchunk, ngbxs);
-  const auto xzarr_mom2 = create_massmom2_xarray(dataset, store, "massmom2", maxchunk, ngbxs);
+  const auto xzarr_mom0 =
+      create_massmom0_xarray(dataset, store, cleo_metadata::massmom0, maxchunk, ngbxs);
+  const auto xzarr_mom1 =
+      create_massmom1_xarray(dataset, store, cleo_metadata::massmom1, maxchunk, ngbxs);
+  const auto xzarr_mom2 =
+      create_massmom2_xarray(dataset, store, cleo_metadata::massmom2, maxchunk, ngbxs);
 
   const auto ffunc = MassMomentsFunc{};
 
@@ -403,11 +407,11 @@ inline Observer auto MassMomentsRaindropsObserver(const unsigned int interval,
                                                   const Dataset& dataset, Store& store,
                                                   const size_t maxchunk, const size_t ngbxs) {
   const auto xzarr_mom0 =
-      create_massmom0_xarray(dataset, store, "massmom0_raindrops", maxchunk, ngbxs);
+      create_massmom0_xarray(dataset, store, cleo_metadata::massmom0_raindrops, maxchunk, ngbxs);
   const auto xzarr_mom1 =
-      create_massmom1_xarray(dataset, store, "massmom1_raindrops", maxchunk, ngbxs);
+      create_massmom1_xarray(dataset, store, cleo_metadata::massmom1_raindrops, maxchunk, ngbxs);
   const auto xzarr_mom2 =
-      create_massmom2_xarray(dataset, store, "massmom2_raindrops", maxchunk, ngbxs);
+      create_massmom2_xarray(dataset, store, cleo_metadata::massmom2_raindrops, maxchunk, ngbxs);
 
   const auto ffunc = RaindropsMassMomentsFunc{};
 
