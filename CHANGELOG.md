@@ -2,6 +2,32 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.74.2](https://github.com/yoctoyotta1024/CLEO/compare/12e21b0cd804003db45749ab937d62105285e3c6..v0.74.2) - 2026-11-26
+#### Bug Fixes
+- return newton raphson convergence to an abort - ([b23b938](https://github.com/yoctoyotta1024/CLEO/commit/b23b938ce4d715f0d676cbb68d053c86245455b7)) - clara.bayley
+- missing include for nested libraries inside grids and coupled_dynamics - ([a3c7246](https://github.com/yoctoyotta1024/CLEO/commit/a3c7246c1f5bee76c04ce68d2ce658c50f76a3e1)) - clara.bayley
+- zarr library missing mpi dependency - ([f90bdd4](https://github.com/yoctoyotta1024/CLEO/commit/f90bdd4583bbe4e3f4e133a533a0303385d48fe1)) - clara.bayley
+- missing cartesiandomain linking in coupldyn_fromfile - ([9e1853a](https://github.com/yoctoyotta1024/CLEO/commit/9e1853a9e42ffcd11da7ec41570bd0a7194f0ea6)) - clara.bayley
+- initialise shouldn't depend on cartesiandomain libs - ([372079b](https://github.com/yoctoyotta1024/CLEO/commit/372079b027380f2e43f080bd707d40f928642426)) - clara.bayley
+#### Performance Improvements
+- clearer path in note - ([89ece1d](https://github.com/yoctoyotta1024/CLEO/commit/89ece1d28ea5dfd30e62a52e6dd217e3d247c27f)) - clara.bayley
+#### Documentation
+- make compatible with moved around files and cleaner cmake - ([aed0a7e](https://github.com/yoctoyotta1024/CLEO/commit/aed0a7e6a94637c99e7f1009706c305d20f61573)) - clara.bayley
+- correct mentions of coupled dynamics and grids - ([169b8d9](https://github.com/yoctoyotta1024/CLEO/commit/169b8d9f2d079a6209ad1c923c0343e7b9714dc1)) - clara.bayley
+#### Refactoring
+- update includes in examples and roughpaper - ([489671a](https://github.com/yoctoyotta1024/CLEO/commit/489671a9c4039b822070a5da05c42e0d7f792601)) - clara.bayley
+- tidy up cmake includes and linking - ([edf4148](https://github.com/yoctoyotta1024/CLEO/commit/edf41485b3f4547deb5034cd1981c9ca0ab95514)) - clara.bayley
+- tidy-up cmakes of examples and roughpaper - ([92764ff](https://github.com/yoctoyotta1024/CLEO/commit/92764ffa3d75b86724a6da59c7c13645171382b3)) - clara.bayley
+- update includes in examples and roughpaper - ([035ed5a](https://github.com/yoctoyotta1024/CLEO/commit/035ed5add78efb1890eca79b3597e3f2f85316ed)) - clara.bayley
+- move cmake options for grids - ([04eeca9](https://github.com/yoctoyotta1024/CLEO/commit/04eeca9e7e92634b4b96e8da26e5667ef7fd3ad5)) - clara.bayley
+- move cmake options for coupled dynamics - ([74ae51c](https://github.com/yoctoyotta1024/CLEO/commit/74ae51cd64001759da01b14fef38f6d5fe1b225a)) - clara.bayley
+#### Miscellaneous Chores
+- remove relative paths into libs - ([b6f8ab3](https://github.com/yoctoyotta1024/CLEO/commit/b6f8ab3bec80f17d51c3d7afea2fa77504cb15ba)) - clara.bayley
+- move all grids/domains into grids library - ([6adccaa](https://github.com/yoctoyotta1024/CLEO/commit/6adccaa34af6e6cf7a52638094facbd7f1132125)) - clara.bayley
+- move all coupled dynamics into coupled_dynamics - ([12e21b0](https://github.com/yoctoyotta1024/CLEO/commit/12e21b0cd804003db45749ab937d62105285e3c6)) - clara.bayley
+
+- - -
+
 ## [v0.74.1](https://github.com/yoctoyotta1024/CLEO/compare/c4f40b3daf8b13614674e8e48f19c4c620c6aada..v0.74.1) - 2026-11-26
 #### Bug Fixes
 - cocogitto-action now lives under cocogitto - ([92f9956](https://github.com/yoctoyotta1024/CLEO/commit/92f9956898c803a91d7de50567706d8fb42254c4)) - clara.bayley
