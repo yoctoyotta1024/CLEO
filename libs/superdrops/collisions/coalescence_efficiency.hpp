@@ -21,8 +21,8 @@
 
 #include <Kokkos_Core.hpp>
 
-#include "../superdrop.hpp"
 #include "./collisionkinetics.hpp"
+#include "superdrops/superdrop.hpp"
 
 /*
  * coalescence efficency given a collision occurs according to parameterisation from

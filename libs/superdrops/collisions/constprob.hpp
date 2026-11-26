@@ -23,7 +23,7 @@
 
 #include <Kokkos_Core.hpp>
 
-#include "../superdrop.hpp"
+#include "superdrops/superdrop.hpp"
 
 /* Probability of collision of a pair of droplets
 as formulated in Shima et al. 2009 equation 3,

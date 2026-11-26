@@ -22,9 +22,9 @@
 #include <Kokkos_Core.hpp>
 #include <Kokkos_StdAlgorithms.hpp>
 
-#include "../kokkosaliases_sd.hpp"
-#include "../superdrop.hpp"
 #include "./urbg.hpp"
+#include "superdrops/kokkosaliases_sd.hpp"
+#include "superdrops/superdrop.hpp"
 
 /**
  * @brief Randomly shuffles the order of super-droplet objects in a view

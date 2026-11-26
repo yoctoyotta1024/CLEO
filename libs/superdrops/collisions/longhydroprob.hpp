@@ -25,9 +25,9 @@
 #include <Kokkos_Core.hpp>
 
 #include "../../cleoconstants.hpp"
-#include "../superdrop.hpp"
-#include "../terminalvelocity.hpp"
 #include "./hydrodynamicprob.hpp"
+#include "superdrops/superdrop.hpp"
+#include "superdrops/terminalvelocity.hpp"
 
 namespace dlc = dimless_constants;
 

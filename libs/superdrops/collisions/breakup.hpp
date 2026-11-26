@@ -26,10 +26,10 @@
 #include <cstdint>
 #include <functional>
 
-#include "../microphysicalprocess.hpp"
-#include "../superdrop.hpp"
 #include "./breakup_nfrags.hpp"
 #include "./collisions.hpp"
+#include "superdrops/microphysicalprocess.hpp"
+#include "superdrops/superdrop.hpp"
 
 template <NFragments NFrags>
 struct DoBreakup {
