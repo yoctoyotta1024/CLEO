@@ -7,7 +7,7 @@ This page covers two ways to use Cleo as a dependency in an external project.
 
 .. note::
    This page assumes you've already read the installation and dependencies documentation for
-   building Cleo itself (compiler, CMake, Kokkos, and MPI requirements) — the same requirements
+   building Cleo itself (compiler, CMake, Kokkos, YAC, and MPI requirements) — the same requirements
    apply when building Cleo as a dependency of your own project, since you are compiling exactly
    the same Cleo source code either way.
 

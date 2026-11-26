@@ -272,10 +272,11 @@ generate the input data you want for your experiment.
 
 Cleo's examples show how different grids / initial superdroplet conditions / ``fromfile``
 thermodynamics can be generated, have a look at the ``XXX_inputfiles.py`` scripts for inspiration.
-Alternatively, all options for creating grids are shown in ``create_gbxboundariesbinary_script.py``,
-all options for creating initial superdroplet conditions are shown in
-``create_initsuperdropsbinary_script.py``, and all options for creating thermodynamic conditions
-(for setups using ``fromfile`` coupled dynamics) are shown in ``create_thermobinaries_script.py``.
+Alternatively, all options are shown in ``roughpaper/roughpaper_inputfiles.py``: for creating grids
+in the function ``create_gridbox_boundaries(...)``, for creating initial superdroplet conditions
+in ``create_initial_superdroplets(...)``, and for creating thermodynamic conditions
+(for setups using ``fromfile`` coupled dynamics) in ``create_thermodynamics(...)``. This script is
+driven similarly to the examples ``XXX_inputfiles.py`` scripts via  ``roughpaper/roughpaper.py``.
 
 I. Creating Cleo's Grid
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -305,7 +306,8 @@ To create the ``.dat`` binary grid file, you goal is to run:
         )
 
 You thus need to create 3 python arrays or lists for ``zgrid``, ``xgrid``, and ``ygrid``.
-See Cleo's examples or the script ``create_gbxboundariesbinary_script.py`` for how this can be done.
+See Cleo's examples or the ``create_gridbox_boundaries(...)`` function in
+``roughpaper/roughpaper_inputfiles.py`` for how this can be done.
 
 Note the call to ``generate_gridbox_boundaries`` will de-dimensionalise the ``zgrid``,
 ``xgrid``, and ``ygrid`` data you provide in meters, hence the name of the file is
@@ -349,9 +351,9 @@ This function requires 3 key inputs ``initattrsgen``, ``nsupers`` and ``numconc`
 * ``initattrsgen`` is the attribute generator, it consists of 5 inidividual generators:
     ``radiigen``, ``dryradiigen``, ``coord3gen``, ``coord1gen``, ``coord2gen``, and a probability
     distirbution for droplet sizes, ``xiprobdist``, which is used togetehr with ``radiigen`` to
-    generate each superdroplet's radius and multiplicity. See Cleo's examples, or the script
-    ``create_initsuperdropsbinary_script.py`` for what generators are available and how they
-    can be used (or create one yourself!).
+    generate each superdroplet's radius and multiplicity. See Cleo's examples, or the function
+    ``create_initial_superdroplets(...)`` in ``roughpaper/roughpaper_inputfiles.py``
+    for what generators are available and how they can be used (or create one yourself!).
 * ``nsupers`` is the number of superdroplets per gridbox, it can either be a single number, or a
     dictionary of ``gbxindex: nsupers`` items for the number of superdroplets in each gridbox. You
     can also use the function ``nsupers_at_domain_top`` or ``nsupers_at_domain_base``from
@@ -404,8 +406,9 @@ This function has one key argument, ``thermodyngen``, which is analogous to ``in
 ``thermodyngen`` is a generator of thermodynamics and consists of two generators, a
 ``thermog`` (or "thermo-generator") for pressure, temperature, qvap, and qcond fields, and a
 ``windsg`` (or "winds-generator") for wvel, uvel and vvel fields. See Cleo's examples which
-use ``fromfile`` dynamics or browse the script ``create_thermobinaries_script.py`` for the
-different generators that are available and how to use them (or create one yourself!).
+use ``fromfile`` dynamics or browse the function ``create_thermodynamics(...)`` in
+``roughpaper/roughpaper_inputfiles.py`` for the different generators that are available
+and how to use them (or create one yourself!).
 
 That's it, that covers the creation of all of Cleo's input files!
 
@@ -478,8 +481,9 @@ libraries, examples, and roughpaper targets get configured. The following flags 
 
 Additionally...
 
-- You will also want to pass ``CLEO_CMAKE_BUILD_TYPE="Release"`` to benefit from performance
-  optimisations rather than debugging. The default is otherwise ``CLEO_CMAKE_BUILD_TYPE="Debug"``.
+- You will also want to pass ``-DCMAKE_BUILD_TYPE=Release`` to benefit from performance
+  optimisations rather than debugging (this is CMake's own standard build-type variable, not a
+  Cleo-specific flag — Cleo's ``CMakeLists.txt`` does not set a default for it).
 - You must also pass various flags for Kokkos and YAC. See Cleo's bash scripts for the flags
   Cleo currently uses.
 - Note: Cleo's configuration also requires ``MPI`` (``find_package(MPI REQUIRED COMPONENTS C)``),

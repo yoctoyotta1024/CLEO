@@ -275,8 +275,9 @@ With ``coupldyn_null``, everything is trivial:
       KOKKOS_INLINE_FUNCTION void receive_dynamics(const GbxMaps&, const NullDynamics&,
                                                    const viewh_gbx) const {}
       template <typename GbxMaps, typename CD = NullDynComms>
-      KOKKOS_INLINE_FUNCTION void send_dynamics(const GbxMaps&, const viewh_constgbx,
-                                                NullDynamics&) const {}
+      KOKKOS_INLINE_FUNCTION void send_dynamics(const GbxMaps&, const dualview_constgbx,
+                                                const SupersInDomain&,
+                                                const NullDynamics&) const {}
     };
 
 With ``coupldyn_fromfile``, ``FromFileDynamics`` instead owns a ``CartesianDynamics`` object
