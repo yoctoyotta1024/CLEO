@@ -16,12 +16,12 @@
  * is no dynamics nor coupling to SDM
  */
 
-#ifndef LIBS_COUPLDYN_NULL_NULLDYNAMICS_HPP_
-#define LIBS_COUPLDYN_NULL_NULLDYNAMICS_HPP_
+#ifndef LIBS_COUPLED_DYNAMICS_COUPLDYN_NULL_NULLDYNAMICS_HPP_
+#define LIBS_COUPLED_DYNAMICS_COUPLDYN_NULL_NULLDYNAMICS_HPP_
 
 #include <Kokkos_Core.hpp>
 
-#include "../kokkosaliases.hpp"
+#include "../../kokkosaliases.hpp"
 
 struct NullDynamics {
  private:
@@ -39,4 +39,4 @@ struct NullDynamics {
   void run_step(const unsigned int t_mdl, const unsigned int t_next) const {}
 };
 
-#endif  // LIBS_COUPLDYN_NULL_NULLDYNAMICS_HPP_
+#endif  // LIBS_COUPLED_DYNAMICS_COUPLDYN_NULL_NULLDYNAMICS_HPP_

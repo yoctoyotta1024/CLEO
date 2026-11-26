@@ -16,13 +16,13 @@
  * send and receive dynamics functions for SDM when coupled to the CVODE ODE solver
  */
 
-#ifndef LIBS_COUPLDYN_CVODE_CVODECOMMS_HPP_
-#define LIBS_COUPLDYN_CVODE_CVODECOMMS_HPP_
+#ifndef LIBS_COUPLED_DYNAMICS_COUPLDYN_CVODE_CVODECOMMS_HPP_
+#define LIBS_COUPLED_DYNAMICS_COUPLDYN_CVODE_CVODECOMMS_HPP_
 
 #include <array>
 #include <vector>
 
-#include "../kokkosaliases.hpp"
+#include "../../kokkosaliases.hpp"
 #include "coupldyn_cvode/cvodedynamics.hpp"
 #include "gridboxes/gridbox.hpp"
 #include "gridboxes/supersindomain.hpp"
@@ -90,4 +90,4 @@ struct CvodeComms {
   }
 };
 
-#endif  // LIBS_COUPLDYN_CVODE_CVODECOMMS_HPP_
+#endif  // LIBS_COUPLED_DYNAMICS_COUPLDYN_CVODE_CVODECOMMS_HPP_

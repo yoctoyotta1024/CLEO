@@ -17,8 +17,8 @@
  * one-way and dynamics are read from file
  */
 
-#ifndef LIBS_COUPLDYN_YAC_YAC_CARTESIAN_DYNAMICS_HPP_
-#define LIBS_COUPLDYN_YAC_YAC_CARTESIAN_DYNAMICS_HPP_
+#ifndef LIBS_COUPLED_DYNAMICS_COUPLDYN_YAC_YAC_CARTESIAN_DYNAMICS_HPP_
+#define LIBS_COUPLED_DYNAMICS_COUPLDYN_YAC_YAC_CARTESIAN_DYNAMICS_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
@@ -248,4 +248,4 @@ struct YacCartesianDynamics {
   std::pair<double, double> get_vvel(const size_t ii) const { return dynvars->get_vvel(ii); }
 };
 
-#endif  // LIBS_COUPLDYN_YAC_YAC_CARTESIAN_DYNAMICS_HPP_
+#endif  // LIBS_COUPLED_DYNAMICS_COUPLDYN_YAC_YAC_CARTESIAN_DYNAMICS_HPP_

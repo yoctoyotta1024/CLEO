@@ -17,8 +17,8 @@
  * one-way and dynamics are read from file.
  */
 
-#ifndef LIBS_COUPLDYN_FROMFILE_FROMFILE_CARTESIAN_DYNAMICS_HPP_
-#define LIBS_COUPLDYN_FROMFILE_FROMFILE_CARTESIAN_DYNAMICS_HPP_
+#ifndef LIBS_COUPLED_DYNAMICS_COUPLDYN_FROMFILE_FROMFILE_CARTESIAN_DYNAMICS_HPP_
+#define LIBS_COUPLED_DYNAMICS_COUPLDYN_FROMFILE_FROMFILE_CARTESIAN_DYNAMICS_HPP_
 
 #include <array>
 #include <filesystem>
@@ -166,4 +166,4 @@ struct FromFileDynamics {
   std::pair<double, double> get_vvel(const size_t ii) const { return dynvars->get_vvel(ii); }
 };
 
-#endif  // LIBS_COUPLDYN_FROMFILE_FROMFILE_CARTESIAN_DYNAMICS_HPP_
+#endif  // LIBS_COUPLED_DYNAMICS_COUPLDYN_FROMFILE_FROMFILE_CARTESIAN_DYNAMICS_HPP_

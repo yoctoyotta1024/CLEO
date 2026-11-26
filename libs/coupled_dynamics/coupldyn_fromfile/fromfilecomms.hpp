@@ -17,10 +17,10 @@
  * dynamics solver
  */
 
-#ifndef LIBS_COUPLDYN_FROMFILE_FROMFILECOMMS_HPP_
-#define LIBS_COUPLDYN_FROMFILE_FROMFILECOMMS_HPP_
+#ifndef LIBS_COUPLED_DYNAMICS_COUPLDYN_FROMFILE_FROMFILECOMMS_HPP_
+#define LIBS_COUPLED_DYNAMICS_COUPLDYN_FROMFILE_FROMFILECOMMS_HPP_
 
-#include "../kokkosaliases.hpp"
+#include "../../kokkosaliases.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
 #include "gridboxes/gridbox.hpp"
@@ -52,4 +52,4 @@ struct FromFileComms {
                         const viewh_gbx h_gbxs) const;
 };
 
-#endif  // LIBS_COUPLDYN_FROMFILE_FROMFILECOMMS_HPP_
+#endif  // LIBS_COUPLED_DYNAMICS_COUPLDYN_FROMFILE_FROMFILECOMMS_HPP_

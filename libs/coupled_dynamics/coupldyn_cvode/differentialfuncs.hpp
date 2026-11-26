@@ -15,15 +15,15 @@
  * CVODE ode solver to model evolution of the
  * thermodynamics (p, temp, qv and qc) over time */
 
-#ifndef LIBS_COUPLDYN_CVODE_DIFFERENTIALFUNCS_HPP_
-#define LIBS_COUPLDYN_CVODE_DIFFERENTIALFUNCS_HPP_
+#ifndef LIBS_COUPLED_DYNAMICS_COUPLDYN_CVODE_DIFFERENTIALFUNCS_HPP_
+#define LIBS_COUPLED_DYNAMICS_COUPLDYN_CVODE_DIFFERENTIALFUNCS_HPP_
 
 #include <nvector/nvector_serial.h> /* access to serial N_Vector            */
 
 #include <cmath>
 #include <stdexcept>
 
-#include "../cleoconstants.hpp"
+#include "../../cleoconstants.hpp"
 
 namespace dlc = dimless_constants;
 namespace DC = dimmed_constants;
@@ -65,4 +65,4 @@ double cvode_saturationpressure(const double temp);
   integrate ODEs over time. */
 int odes_func(realtype t, N_Vector y, N_Vector ydot, void* user_data);
 
-#endif  // LIBS_COUPLDYN_CVODE_DIFFERENTIALFUNCS_HPP_
+#endif  // LIBS_COUPLED_DYNAMICS_COUPLDYN_CVODE_DIFFERENTIALFUNCS_HPP_

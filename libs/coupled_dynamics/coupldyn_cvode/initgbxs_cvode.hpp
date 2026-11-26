@@ -18,13 +18,13 @@
  * GbxInitConds type
  */
 
-#ifndef LIBS_COUPLDYN_CVODE_INITGBXS_CVODE_HPP_
-#define LIBS_COUPLDYN_CVODE_INITGBXS_CVODE_HPP_
+#ifndef LIBS_COUPLED_DYNAMICS_COUPLDYN_CVODE_INITGBXS_CVODE_HPP_
+#define LIBS_COUPLED_DYNAMICS_COUPLDYN_CVODE_INITGBXS_CVODE_HPP_
 
 #include <utility>
 #include <vector>
 
-#include "../cleoconstants.hpp"
+#include "../../cleoconstants.hpp"
 #include "configuration/optional_config_params.hpp"
 #include "coupldyn_cvode/differentialfuncs.hpp"
 
@@ -94,4 +94,4 @@ struct InitGbxsCvode {
   }
 };
 
-#endif  // LIBS_COUPLDYN_CVODE_INITGBXS_CVODE_HPP_
+#endif  // LIBS_COUPLED_DYNAMICS_COUPLDYN_CVODE_INITGBXS_CVODE_HPP_

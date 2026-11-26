@@ -17,12 +17,12 @@
  * no coupling / communication to SDM
  */
 
-#ifndef LIBS_COUPLDYN_NULL_NULLDYNCOMMS_HPP_
-#define LIBS_COUPLDYN_NULL_NULLDYNCOMMS_HPP_
+#ifndef LIBS_COUPLED_DYNAMICS_COUPLDYN_NULL_NULLDYNCOMMS_HPP_
+#define LIBS_COUPLED_DYNAMICS_COUPLDYN_NULL_NULLDYNCOMMS_HPP_
 
 #include <Kokkos_Core.hpp>
 
-#include "../kokkosaliases.hpp"
+#include "../../kokkosaliases.hpp"
 #include "coupldyn_null/nulldynamics.hpp"
 #include "gridboxes/supersindomain.hpp"
 
@@ -43,4 +43,4 @@ struct NullDynComms {
                                             const NullDynamics& nulldyn) const {}
 };
 
-#endif  // LIBS_COUPLDYN_NULL_NULLDYNCOMMS_HPP_
+#endif  // LIBS_COUPLED_DYNAMICS_COUPLDYN_NULL_NULLDYNCOMMS_HPP_

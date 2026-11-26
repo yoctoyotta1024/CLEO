@@ -17,13 +17,13 @@
  * dynamics solver
  */
 
-#ifndef LIBS_COUPLDYN_YAC_YAC_COMMS_HPP_
-#define LIBS_COUPLDYN_YAC_YAC_COMMS_HPP_
+#ifndef LIBS_COUPLED_DYNAMICS_COUPLDYN_YAC_YAC_COMMS_HPP_
+#define LIBS_COUPLED_DYNAMICS_COUPLDYN_YAC_YAC_COMMS_HPP_
 
 #include <Kokkos_Core.hpp>
 #include <Kokkos_DualView.hpp>
 
-#include "../kokkosaliases.hpp"
+#include "../../kokkosaliases.hpp"
 #include "cartesiandomain/cartesianmaps.hpp"
 #include "coupldyn_yac/yac_cartesian_dynamics.hpp"
 #include "gridboxes/gridbox.hpp"
@@ -114,4 +114,4 @@ struct YacComms {
                         const viewh_gbx h_gbxs) const;
 };
 
-#endif  // LIBS_COUPLDYN_YAC_YAC_COMMS_HPP_
+#endif  // LIBS_COUPLED_DYNAMICS_COUPLDYN_YAC_YAC_COMMS_HPP_

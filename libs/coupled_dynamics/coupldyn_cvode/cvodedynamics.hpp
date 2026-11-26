@@ -17,8 +17,8 @@
  * to cvode adiabatic parcel ODE solver
  */
 
-#ifndef LIBS_COUPLDYN_CVODE_CVODEDYNAMICS_HPP_
-#define LIBS_COUPLDYN_CVODE_CVODEDYNAMICS_HPP_
+#ifndef LIBS_COUPLED_DYNAMICS_COUPLDYN_CVODE_CVODEDYNAMICS_HPP_
+#define LIBS_COUPLED_DYNAMICS_COUPLDYN_CVODE_CVODEDYNAMICS_HPP_
 
 #include <cvodes/cvodes.h>             /* prototypes for CVODE fcts., consts.  */
 #include <nvector/nvector_serial.h>    /* access to serial N_Vector            */
@@ -32,7 +32,7 @@
 #include <stdexcept>
 #include <vector>
 
-#include "../cleoconstants.hpp"
+#include "../../cleoconstants.hpp"
 #include "configuration/optional_config_params.hpp"
 #include "coupldyn_cvode/differentialfuncs.hpp"
 
@@ -145,4 +145,4 @@ struct CvodeDynamics {
   }
 };
 
-#endif  // LIBS_COUPLDYN_CVODE_CVODEDYNAMICS_HPP_
+#endif  // LIBS_COUPLED_DYNAMICS_COUPLDYN_CVODE_CVODEDYNAMICS_HPP_
