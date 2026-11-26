@@ -37,14 +37,6 @@ target_link_libraries(straubcolls PRIVATE Kokkos::kokkos)
 target_link_libraries(szakallurbichcolls PRIVATE Kokkos::kokkos)
 target_link_libraries(testikstraubcolls PRIVATE Kokkos::kokkos)
 
-target_include_directories(constcoalcolls PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
-target_include_directories(golcolls PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
-target_include_directories(longcolls PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
-target_include_directories(lowlistcolls PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
-target_include_directories(straubcolls PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
-target_include_directories(szakallurbichcolls PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
-target_include_directories(testikstraubcolls PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
-
 # set specific C++ compiler options for target (optional)
 #target_compile_options([target] PRIVATE)
 

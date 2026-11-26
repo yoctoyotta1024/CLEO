@@ -17,7 +17,6 @@ add_executable(eurec4a1d EXCLUDE_FROM_ALL "main_eurec4a1d.cpp")
 # Add directories and link libraries to target
 target_link_libraries(eurec4a1d PRIVATE coupldyn_fromfile cartesiandomain "${CLEOLIBS}")
 target_link_libraries(eurec4a1d PRIVATE Kokkos::kokkos)
-target_include_directories(eurec4a1d PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
 
 # set specific C++ compiler options for target (optional)
 #target_compile_options(eurec4a1d PRIVATE)
