@@ -25,9 +25,9 @@
 #include <functional>
 
 #include "../../cleoconstants.hpp"
-#include "../microphysicalprocess.hpp"
-#include "../superdrop.hpp"
 #include "./collisions.hpp"
+#include "superdrops/microphysicalprocess.hpp"
+#include "superdrops/superdrop.hpp"
 
 struct DoCoalescence {
  private:

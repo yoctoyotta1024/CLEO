@@ -239,8 +239,7 @@ experiment by adapting the following lines:
     add_executable([your_executable] EXCLUDE_FROM_ALL "main.cpp")
     # [...]
     target_link_libraries([your_executable] PRIVATE coupldyn_fromfile cartesiandomain "${CLEOLIBS}")
-    target_link_libraries([your_executable] PUBLIC Kokkos::kokkos)
-    target_include_directories([your_executable] PRIVATE "${CLEO_SOURCE_DIR}/libs")
+    target_link_libraries([your_executable] PRIVATE Kokkos::kokkos)
     set_target_properties([your_executable] PROPERTIES CMAKE_CXX_STANDARD_REQUIRED ON
                                                        CMAKE_CXX_EXTENSIONS ON CXX_STANDARD 20)
 

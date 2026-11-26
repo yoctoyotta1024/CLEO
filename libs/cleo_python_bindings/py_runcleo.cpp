@@ -20,7 +20,7 @@
 #include "./py_runcleo.hpp"
 
 void pycreate_supers_from_binary(py::module& m) {
-  m.def("create_supers_from_binary", &create_supers<InitSupersFromBinary>,
+  m.def("create_supers_from_binary", &create_supers<InitSupersFromBinary<CartesianMaps>>,
         "returns SupersInDomain instance", py::arg("sdic"), py::arg("gbxindex_max"));
 }
 

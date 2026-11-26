@@ -950,14 +950,14 @@ WARN_LOGFILE           =
 # Note: If this tag is empty the current directory is searched.
 
 INPUT                  = ../libs/ \
-                         ../libs/cartesiandomain/ \
                          ../libs/cleo_python_bindings/ \
                          ../libs/configuration/ \
-                         ../libs/coupldyn_cvode/ \
-                         ../libs/coupldyn_fromfile/ \
-                         ../libs/coupldyn_null/ \
-                         ../libs/coupldyn_yac/ \
+                         ../libs/coupled_dynamics/coupldyn_cvode/ \
+                         ../libs/coupled_dynamics/coupldyn_fromfile/ \
+                         ../libs/coupled_dynamics/coupldyn_null/ \
+                         ../libs/coupled_dynamics/coupldyn_yac/ \
                          ../libs/gridboxes/ \
+                         ../libs/grids/cartesiandomain/ \
                          ../libs/initialise/ \
                          ../libs/observers/ \
                          ../libs/runcleo/ \

@@ -22,9 +22,12 @@ set(SOURCES
 # must use STATIC (not(!) SHARED) lib for linking to executable if build is CUDA enabled with Kokkos
 add_library("${LIBNAME}" STATIC ${SOURCES})
 
+# Add directories for target library
+# target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
+
 # Add directories and link libraries for target library
 # target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
-target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
+target_link_libraries(${LIBNAME} PUBLIC cleo_libs_include Kokkos::kokkos)
 
 # set specific C++ compiler options for target (optional)
 #target_compile_options(${LIBNAME} PRIVATE)

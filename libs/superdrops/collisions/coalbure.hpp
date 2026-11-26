@@ -28,14 +28,14 @@
 #include <cstdint>
 #include <functional>
 
-#include "../microphysicalprocess.hpp"
-#include "../superdrop.hpp"
 #include "./breakup.hpp"
 #include "./breakup_nfrags.hpp"
 #include "./coalbure_flag.hpp"
 #include "./coalescence.hpp"
 #include "./collisionkinetics.hpp"
 #include "./collisions.hpp"
+#include "superdrops/microphysicalprocess.hpp"
+#include "superdrops/superdrop.hpp"
 
 /**
  * @brief DoCoalBuRe = DoCoalescenceBreakupRebound, i.e. enacts collision-coalescence, breakup, or

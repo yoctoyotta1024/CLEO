@@ -86,7 +86,7 @@ The Available Options
 ------------------------
 
 Each option for the actual ``CoupledDynamics`` type you may want to use has its
-own ``libs/coupldyn_*`` directory, alongside its associated ``CouplingComms`` type
+own ``libs/coupled_dynamics/coupldyn_*`` directory, alongside its associated ``CouplingComms`` type
 (see :doc:`code_structure`), and is selected during the configuration of your Cleo build via
 the CMake flag: ``-DCLEO_COUPLED_DYNAMICS=<option>``.
 
@@ -149,8 +149,8 @@ you could have something like:
 
 .. code-block:: cpp
 
-    #include "coupldyn_null/nulldynamics.hpp"
-    #include "coupldyn_null/nulldyncomms.hpp"
+    #include "coupled_dynamics/coupldyn_null/nulldynamics.hpp"
+    #include "coupled_dynamics/coupldyn_null/nulldyncomms.hpp"
 
     /* [...] */
 
@@ -188,8 +188,8 @@ E.g. If you instead used ``FromFile`` (like the ``constthermo2d`` example), you 
 
 .. code-block:: cpp
 
-    #include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
-    #include "coupldyn_fromfile/fromfilecomms.hpp"
+    #include "coupled_dynamics/coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
+    #include "coupled_dynamics/coupldyn_fromfile/fromfilecomms.hpp"
 
     /* [...] */
 
@@ -256,7 +256,7 @@ With ``coupldyn_null``, everything is trivial:
 
 .. code-block:: cpp
 
-    /* libs/coupldyn_null/nulldynamics.hpp */
+    /* libs/coupled_dynamics/coupldyn_null/nulldynamics.hpp */
     struct NullDynamics { // satisfies CoupledDynamics, does nothing
      private:
       const unsigned int interval;
@@ -269,7 +269,7 @@ With ``coupldyn_null``, everything is trivial:
       void run_step(const unsigned int t_mdl, const unsigned int t_next) const {}
     };
 
-    /* libs/coupldyn_null/nulldyncomms.hpp */
+    /* libs/coupled_dynamics/coupldyn_null/nulldyncomms.hpp */
     struct NullDynComms {  // satisfies CouplingComms, does nothing
       template <typename GbxMaps, typename CD = NullDynComms>
       KOKKOS_INLINE_FUNCTION void receive_dynamics(const GbxMaps&, const NullDynamics&,
@@ -286,7 +286,7 @@ holding vectors of pressure/temperature/vapour/liquid/wind read from binary file
 
 .. code-block:: cpp
 
-    /* libs/coupldyn_fromfile/fromfile_cartesian_dynamics.hpp */
+    /* libs/coupled_dynamics/coupldyn_fromfile/fromfile_cartesian_dynamics.hpp */
     struct FromFileDynamics { // satisfies CoupledDynamics, reads vectors initialised from files
      private:
       const unsigned int interval;
@@ -311,7 +311,7 @@ holding vectors of pressure/temperature/vapour/liquid/wind read from binary file
       // ... get_temp, get_qvap, get_qcond, get_wvel, get_uvel, get_vvel similarly
     };
 
-    /* libs/coupldyn_fromfile/fromfilecomms.hpp */
+    /* libs/coupled_dynamics/coupldyn_fromfile/fromfilecomms.hpp */
     struct FromFileComms { // satisfies CouplingComms, one-way coupling to Cleo's gridboxes
     private:
       void update_gridbox_state(const FromFileDynamics& ffdyn, const size_t ii, Gridbox& gbx) const;

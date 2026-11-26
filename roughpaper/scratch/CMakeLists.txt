@@ -20,9 +20,7 @@ set(CLEOLIBS configuration coupldyn_fromfile cartesiandomain gridboxes initialis
 add_executable(test main.cpp)
 
 # Add directories and link libraries to target
-target_link_libraries(test PRIVATE ${CLEOLIBS})
-target_link_libraries(test PUBLIC Kokkos::kokkos)
-target_include_directories(test PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
+target_link_libraries(test PRIVATE ${CLEOLIBS} Kokkos::kokkos)
 target_include_directories(test PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
 
 # set C++ properties for target
