@@ -519,10 +519,18 @@ attribute all equal to attr0</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="cleopy.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen">
-<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cleopy.initsuperdropsbinary_src.rgens.</span></span><span class="sig-name descname"><span class="pre">SampleLog10RadiiGen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rspan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/cleopy/initsuperdropsbinary_src/rgens.html#SampleLog10RadiiGen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cleopy.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen" title="Link to this definition">¶</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">cleopy.initsuperdropsbinary_src.rgens.</span></span><span class="sig-name descname"><span class="pre">SampleLog10RadiiGen</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rspan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_random</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/cleopy/initsuperdropsbinary_src/rgens.html#SampleLog10RadiiGen"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cleopy.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen" title="Link to this definition">¶</a></dt>
 <dd><p>method to generate superdroplet radii by randomly
 sampling from bins that are linearly spaced in log10(r)
 between rspan[0] and rspan[1]</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="cleopy.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.evenlysample_log10rbins">
+<span class="sig-name descname"><span class="pre">evenlysample_log10rbins</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">log10redgs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/cleopy/initsuperdropsbinary_src/rgens.html#SampleLog10RadiiGen.evenlysample_log10rbins"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cleopy.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.evenlysample_log10rbins" title="Link to this definition">¶</a></dt>
+<dd><p>given the bin edges, evenly samples each bin of log10(radius /m),
+by calculating the geometric mean radius of the two edges,
+returns the resultant radii [m]</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="cleopy.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.generate_radiisample">
 <span class="sig-name descname"><span class="pre">generate_radiisample</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nbins</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/cleopy/initsuperdropsbinary_src/rgens.html#SampleLog10RadiiGen.generate_radiisample"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#cleopy.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.generate_radiisample" title="Link to this definition">¶</a></dt>
@@ -602,6 +610,7 @@ log10(radius /m) and return the resultant radii [m]</p>
 <li><a class="reference internal" href="#">rgens</a><ul>
 <li><a class="reference internal" href="#cleopy.initsuperdropsbinary_src.rgens.MonoAttrGen"><code class="docutils literal notranslate"><span class="pre">MonoAttrGen</span></code></a></li>
 <li><a class="reference internal" href="#cleopy.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen"><code class="docutils literal notranslate"><span class="pre">SampleLog10RadiiGen</span></code></a><ul>
+<li><a class="reference internal" href="#cleopy.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.evenlysample_log10rbins"><code class="docutils literal notranslate"><span class="pre">SampleLog10RadiiGen.evenlysample_log10rbins()</span></code></a></li>
 <li><a class="reference internal" href="#cleopy.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.generate_radiisample"><code class="docutils literal notranslate"><span class="pre">SampleLog10RadiiGen.generate_radiisample()</span></code></a></li>
 <li><a class="reference internal" href="#cleopy.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.randomlysample_log10rbins"><code class="docutils literal notranslate"><span class="pre">SampleLog10RadiiGen.randomlysample_log10rbins()</span></code></a></li>
 </ul>

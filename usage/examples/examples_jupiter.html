@@ -851,10 +851,15 @@ and plot it, e.g. from your Cleo directory:</p>
 ``cpu.sh``, not ``gpu.sh``.</em></p>
 <p class="sd-card-text">This example is run from the <code class="docutils literal notranslate"><span class="pre">examples/bubble3d/bubble3d.py</span></code> script. It couples Cleo to the
 dynamics of ICON’s bubble test case via YAC, so it requires Cleo to be built with the <code class="docutils literal notranslate"><span class="pre">gcc</span></code>
-compiler and <a class="reference internal" href="../installation/extern.html#install-yac"><span class="std std-ref">YAC and YAXT</span></a> to be installed with the same version as ICON.
-It also reads the ICON grid and data files given by <code class="docutils literal notranslate"><span class="pre">orginal_icon_grid_file</span></code> and
-<code class="docutils literal notranslate"><span class="pre">orginal_icon_data_file</span></code> in <code class="docutils literal notranslate"><span class="pre">bubble3d.py</span></code>, which you may need to change to the location
-of these files on JUPITER.</p>
+compiler and <a class="reference internal" href="../installation/extern.html#install-yac"><span class="std std-ref">YAC and YAXT</span></a> to be installed. Unlike the other examples,
+the input files / output files directories are set independently from the build directory, through
+<code class="docutils literal notranslate"><span class="pre">path2experiment=[...]</span></code> in the <code class="docutils literal notranslate"><span class="pre">bubble3d</span></code> entry of <code class="docutils literal notranslate"><span class="pre">scripts/common/examples.sh</span></code>. This is so
+that the structure of the example’s build vs. input/output directories can be analogous to ICON’s.
+Additionally, this example reads the ICON grid and data files from the directory given by
+<code class="docutils literal notranslate"><span class="pre">path2iconfiles</span></code>, and copies the YAC coupling configuration from <code class="docutils literal notranslate"><span class="pre">src_yac_config_filename</span></code>;
+both of these, along with <code class="docutils literal notranslate"><span class="pre">path2experiment</span></code>, are also set in the <code class="docutils literal notranslate"><span class="pre">bubble3d</span></code> entry of
+<code class="docutils literal notranslate"><span class="pre">scripts/common/examples.sh</span></code>. You will need to edit these paths to point to your
+own bubble experiment and ICON grid/data directories on JUPITER.</p>
 <ol class="arabic simple">
 <li><p><a class="reference internal" href="#configurebash-jupiter"><span class="std std-ref">Configure the bash scripts</span></a>.</p></li>
 </ol>

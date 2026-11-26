@@ -539,7 +539,8 @@
 <span class="sd">    sampling from bins that are linearly spaced in log10(r)</span>
 <span class="sd">    between rspan[0] and rspan[1]"""</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rspan</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rspan</span><span class="p">,</span> <span class="n">is_random</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">is_random</span> <span class="o">=</span> <span class="n">is_random</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rspan</span> <span class="o">=</span> <span class="n">rspan</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nsupers</span><span class="p">):</span>
@@ -560,7 +561,10 @@
                 <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rspan</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rspan</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span> <span class="n">nbins</span> <span class="o">+</span> <span class="mi">1</span>
             <span class="p">)</span>  <span class="c1"># log10(r) bin edges</span>
 
-            <span class="n">radii</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">randomlysample_log10rbins</span><span class="p">(</span><span class="n">nbins</span><span class="p">,</span> <span class="n">log10redgs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_random</span><span class="p">:</span>
+                <span class="n">radii</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">randomlysample_log10rbins</span><span class="p">(</span><span class="n">nbins</span><span class="p">,</span> <span class="n">log10redgs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">radii</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evenlysample_log10rbins</span><span class="p">(</span><span class="n">log10redgs</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">radii</span>  <span class="c1"># [m]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span></div>
@@ -578,6 +582,20 @@
         <span class="n">randlog10r</span> <span class="o">=</span> <span class="n">log10redgs</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">randlog10deltar</span>
 
         <span class="n">radii</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="n">randlog10r</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">radii</span>  <span class="c1"># [m]</span></div>
+
+
+<div class="viewcode-block" id="SampleLog10RadiiGen.evenlysample_log10rbins">
+<a class="viewcode-back" href="../../../cleopy/initsuperdropsbinary_src/rgens.html#cleopy.initsuperdropsbinary_src.rgens.SampleLog10RadiiGen.evenlysample_log10rbins">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">evenlysample_log10rbins</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">log10redgs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""given the bin edges, evenly samples each bin of log10(radius /m),</span>
+<span class="sd">        by calculating the geometric mean radius of the two edges,</span>
+<span class="sd">        returns the resultant radii [m]"""</span>
+
+        <span class="n">log10r_geomeanbin</span> <span class="o">=</span> <span class="p">(</span><span class="n">log10redgs</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">log10redgs</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+
+        <span class="n">radii</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="n">log10r_geomeanbin</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">radii</span>  <span class="c1"># [m]</span></div>
 </div>
