@@ -410,10 +410,15 @@ The Examples
 
   This example is run from the ``examples/bubble3d/bubble3d.py`` script. It couples Cleo to the
   dynamics of ICON's bubble test case via YAC, so it requires Cleo to be built with the ``gcc``
-  compiler and :ref:`YAC and YAXT<install_yac>` to be installed with the same version as ICON.
-  It also reads the ICON grid and data files given by ``orginal_icon_grid_file`` and
-  ``orginal_icon_data_file`` in ``bubble3d.py``, which you may need to change to the location
-  of these files on JUPITER.
+  compiler and :ref:`YAC and YAXT<install_yac>` to be installed. Unlike the other examples,
+  the input files / output files directories are set independently from the build directory, through
+  ``path2experiment=[...]`` in the ``bubble3d`` entry of ``scripts/common/examples.sh``. This is so
+  that the structure of the example's build vs. input/output directories can be analogous to ICON's.
+  Additionally, this example reads the ICON grid and data files from the directory given by
+  ``path2iconfiles``, and copies the YAC coupling configuration from ``src_yac_config_filename``;
+  both of these, along with ``path2experiment``, are also set in the ``bubble3d`` entry of
+  ``scripts/common/examples.sh``. You will need to edit these paths to point to your
+  own bubble experiment and ICON grid/data directories on Levante.
 
   1. :ref:`Configure the bash scripts<configurebash_levante>`.
 
