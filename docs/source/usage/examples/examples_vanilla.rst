@@ -7,9 +7,6 @@ Having :ref:`installed plotcleo<install_plotcleo>`, the following instructions a
 through running each example using the bash scripts in ``scripts/vanilla/``. See
 :ref:`how the bash scripts work<how_bashscripts_work>` for an overview of these scripts.
 
-*Note*: the ``fromfile``, ``fromfile_irreg`` and ``bubble3d`` examples need an HPC with Slurm
-(and YAC for ``bubble3d``), so they can only be run on :ref:`Levante<examples_levante>` or
-:ref:`JUPITER<examples_jupiter>`.
 
 .. _configurebash_vanilla:
 
@@ -372,9 +369,6 @@ The Examples
   .. code-block:: console
 
     $ scripts/vanilla/cpu.sh all python_bindings
-
-  *Note*: you may have issues with python versions >= 3.14, please
-  see :ref:`this note<pybind11>` for details.
 
   No plots are produced by this example but it should run sucessfully multiple times and produce
   ``no plotting script for python bindings example`` messages. Please note the output during

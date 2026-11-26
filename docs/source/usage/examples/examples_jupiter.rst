@@ -465,9 +465,6 @@ The Examples
     $ scripts/jupiter/cpu.sh configure,compile python_bindings
     $ sbatch scripts/jupiter/cpu.sh inputs,run,plot python_bindings
 
-  *Note*: you may have issues with python versions >= 3.14, please
-  see :ref:`this note<pybind11>` for details.
-
   No plots are produced by this example but it should run sucessfully multiple times and produce
   ``no plotting script for python bindings example`` messages. Please note the output during
   time-stepping may not be ordered due to parallel execution.

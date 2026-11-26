@@ -84,10 +84,6 @@ dependencies (e.g. Kokkos) when it configures Cleo. On machines whose compute no
 internet access, such as JUPITER, first do ``configure,compile`` on a login node, and then submit a
 job which does ``inputs,run,plot``.
 
-*Note*: currently, the examples which run with MPI, i.e. ``fromfile``, ``fromfile_irreg`` and
-``bubble3d``, only work on CPUs. They do not yet work on GPUs, i.e. with the ``cuda`` build
-configuration and the GPU job scripts.
-
 To build an example from scratch, delete its build directory (e.g.
 ``rm -rf [CLEO_PATH2CLEO]/build_const2d``) and then do the ``configure`` step (e.g. with ``all``), so that
 CMake configures Cleo again without reusing its old cache.

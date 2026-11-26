@@ -76,14 +76,15 @@ You can optionally configure the job script in the following ways:
 * Choose your build configuration:
 
   choose which parallelism to utilise via the ``buildtype``. The options are
-  ``serial``, ``threads``, ``openmp`` or ``cuda``. The default is ``openmp``. *Note*: setting ``buildtype`` to
-  ``cuda`` requires you to use the GPU job script, ``gpu.sh``, and the ``gcc`` compiler.
+  ``serial``, ``threads``, ``openmp`` or ``cuda``. The default is ``openmp``. *Note*: setting
+  ``buildtype`` to ``cuda`` requires you to use the GPU job script, ``gpu.sh``, and the ``gcc``
+  compiler.
 
 * Choose your compiler:
 
   choose which compilers to use via the ``compilername``. The options are ``gcc`` or
-  ``intel`` (both via MPI wrappers). *Note*: the ``cuda`` build configuration and the bubble3d
-  example require you use the ``gcc`` compiler.
+  ``intel`` (both via MPI wrappers). *Note*: the ``cuda`` build configuration requires
+  you use the ``gcc`` compiler.
 
 * Choose your build directory:
 
@@ -400,7 +401,7 @@ The Examples
     ``${CLEO_PATH2CLEO}/build_fromfile_irreg/bin/ntasks4/``.
 
 
-.. dropdown:: 3-D Bubble (GCC compiler and CPU only)
+.. dropdown:: 3-D Bubble (CPU and GCC only)
   :animate: fade-in
 
   *Note: currently this example is not GPU compatible, therefore it can only be run with
@@ -426,7 +427,7 @@ The Examples
   ``${CLEO_PATH2CLEO}/build_bubble3d/bin/bubble_motion.png`` and ``${CLEO_PATH2CLEO}/build_bubble3d/bin/bubble_[variable].png``.
 
 
-.. dropdown:: Python Bindings (GCC compiler only)
+.. dropdown:: Python Bindings (GCC only)
   :animate: fade-in
 
   *Note: currently this example is not compatible with intel compilers on Levante, therefore it
@@ -442,10 +443,6 @@ The Examples
 
     $ sbatch scripts/levante/cpu.sh all python_bindings
 
-  *Note*: on Levante this example currently only works with the ``gcc`` compiler.
-
-  *Note*: you may have issues with python versions >= 3.14, please
-  see :ref:`this note<pybind11>` for details.
 
   No plots are produced by this example but it should run sucessfully multiple times and produce
   ``no plotting script for python bindings example`` messages. Please note the output during
