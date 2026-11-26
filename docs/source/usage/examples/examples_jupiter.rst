@@ -259,7 +259,7 @@ The Examples
       $ scripts/jupiter/cpu.sh configure,compile shima2009
       $ sbatch scripts/jupiter/cpu.sh inputs,run,plot shima2009
 
-    By default the golovin exectuable and two examples using the long executable will be compiled and
+    By default the golovin executable and two examples using the long executable will be compiled and
     run. You can change this by editing ``--kernels golovin long1 long2`` in the ``shima2009`` entry
     of ``scripts/common/examples.sh``.
 

@@ -444,7 +444,7 @@ Very roughly speaking, you will need to call something like this:
   # run your experiment (assuming you have already generated your input files)
   $ ./build/experiments/your_new_experiment/your_executable /path/to/your/config.yaml
 
-Where ``your_executable`` matches the name you used for your exectuable in your ``CMakeLists.txt``.
+Where ``your_executable`` matches the name you used for your executable in your ``CMakeLists.txt``.
 
 **Rather than do all this yourself,** to build, compile, and run your executable, it's easiest to
 add your experiment to Cleo's bash scripts in ``CLEO/scripts``, like what's done for Cleo's examples

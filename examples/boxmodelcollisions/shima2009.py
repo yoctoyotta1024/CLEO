@@ -204,7 +204,7 @@ def inputfiles(
     subprocess.run(cmd, check=True)
 
 
-def run_exectuable(executable, config_filename):
+def run_executable(executable, config_filename):
     ### --- delete any existing output dataset and setup files --- ###
     yaml = YAML()
     with open(config_filename, "r") as file:
@@ -212,7 +212,7 @@ def run_exectuable(executable, config_filename):
     Path(config["outputdata"]["setup_filename"]).unlink(missing_ok=True)
     shutil.rmtree(Path(config["outputdata"]["zarrbasedir"]), ignore_errors=True)
 
-    ### --- run exectuable with given config file --- ###
+    ### --- run executable with given config file --- ###
     cmd = [executable, config_filename]
     print(" ".join([str(c) for c in cmd]))
     subprocess.run(cmd, check=True)
@@ -275,7 +275,7 @@ for kernel, [config_filename, config_params] in kernel_configs.items():
         executable = (
             path2build / "examples" / "boxmodelcollisions" / "src" / executables[kernel]
         )
-        run_exectuable(executable, config_filename)
+        run_executable(executable, config_filename)
 
     if args.do_plot_results:
         plot_results(path2CLEO, config_filename, savefigpath, kernel)

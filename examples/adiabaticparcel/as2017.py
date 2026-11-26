@@ -192,7 +192,7 @@ def inputfiles(
     subprocess.run(cmd, check=True)
 
 
-def run_exectuable(path2build, config_filename):
+def run_executable(path2build, config_filename):
     ### --- delete any existing output dataset and setup files --- ###
     yaml = YAML()
     with open(config_filename, "r") as file:
@@ -200,7 +200,7 @@ def run_exectuable(path2build, config_filename):
     Path(config["outputdata"]["setup_filename"]).unlink(missing_ok=True)
     shutil.rmtree(Path(config["outputdata"]["zarrbasedir"]), ignore_errors=True)
 
-    ### --- run exectuable with given config file --- ###
+    ### --- run executable with given config file --- ###
     executable = path2build / "examples" / "adiabaticparcel" / "src" / "adia0d"
     cmd = [executable, config_filename]
     print(" ".join([str(c) for c in cmd]))
@@ -276,7 +276,7 @@ if args.do_inputfiles:
 if args.do_run_executable:
     cfs = [cfgs[0] for cfgs in run_configs.values()]
     for config_filename in cfs:
-        run_exectuable(path2build, config_filename)
+        run_executable(path2build, config_filename)
 
 if args.do_plot_results:
     runnums = list(run_configs.keys())

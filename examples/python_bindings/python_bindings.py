@@ -250,7 +250,7 @@ def run_sdm_example(cleo, python_config, config_filename):
         cleo_sdm_example(cleo, python_config, cleo_config, is_sdm_null)
 
 
-def run_exectuable(path2build, config_filename):
+def run_executable(path2build, config_filename):
     sys.path.append(str(path2build / "cleo_python_bindings"))
     import cleo_python_bindings as cleo
     from cleo_python_bindings import coupldyn_numpy
@@ -289,7 +289,7 @@ if args.do_inputfiles:
     )
 
 if args.do_run_executable:
-    run_exectuable(path2build, config_filename)
+    run_executable(path2build, config_filename)
 
 if args.do_plot_results:
     print("\nno plotting script for python bindings example")
