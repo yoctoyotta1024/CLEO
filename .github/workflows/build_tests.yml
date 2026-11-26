@@ -7,11 +7,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Cache YAXT
         id: cache_yaxt
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ runner.temp }}/yaxt/
           key: ${{ runner.os }}-yaxt-cache-v0.12.1
@@ -20,7 +20,7 @@ jobs:
 
       - name: Cache YAC
         id: cache_yac
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ runner.temp }}/yac/
           key: ${{ runner.os }}-yac-cache-v3.20.2
@@ -67,7 +67,7 @@ jobs:
                 bubble3d, fromfile, fromfile_irreg, cleo_python_bindings]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install Software Dependencies
         run: |
@@ -79,13 +79,13 @@ jobs:
           apt list --installed
 
       - name: Restore YAXT Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ runner.temp }}/yaxt/
           key: ${{ runner.os }}-yaxt-cache-v0.12.1
 
       - name: Restore YAC Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ runner.temp }}/yac/
           key: ${{ runner.os }}-yac-cache-v3.20.2
@@ -117,7 +117,7 @@ jobs:
         target: [fromfile, fromfile_irreg]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install Software Dependencies
         run: |
@@ -129,13 +129,13 @@ jobs:
           apt list --installed
 
       - name: Restore YAXT Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ runner.temp }}/yaxt/
           key: ${{ runner.os }}-yaxt-cache-v0.12.1
 
       - name: Restore YAC Cache
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ${{ runner.temp }}/yac/
           key: ${{ runner.os }}-yac-cache-v3.20.2

@@ -16,10 +16,10 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
             fetch-depth: 0
-      - uses: astral-sh/setup-uv@v3
+      - uses: astral-sh/setup-uv@v7
       # Only release new version of cleopy when CHANGELOG.md changes (e.g. by cocogitto.yml)
       - name: check for difference in changelog
         id: check_changelog
