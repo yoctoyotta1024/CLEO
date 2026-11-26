@@ -433,32 +433,61 @@ Use Cleo's scripts
 
 You are now ready to build, compile and sucessfully run your Cleo experiment!
 
-To build and compile your executable, it's easiest to add your experiment to Cleo's bash
-scripts in ``CLEO/scripts``, like what's done for Cleo's examples. Then the handling of the
-compilers, modules, build flags, etc. for your computer architecture is sorted out by the
-scripts automatically. Very roughly speaking, those scripts eventually call something like:
+Very roughly speaking, you will need to call something like this:
 
 .. code-block:: console
 
+  # configure your experiment
   $ cmake -S . -B ./build -DCLEO_COUPLED_DYNAMICS=fromfile -DCLEO_DOMAIN=cartesian [YAC_flags, Kokkos_flags, ...]
+  # build and compile your experiment
   $ cmake --build ./build --target your_executable
-
-To run your experiment, you then need to execute
-
-.. code-block:: console
-
+  # run your experiment (assuming you have already generated your input files)
   $ ./build/experiments/your_new_experiment/your_executable /path/to/your/config.yaml
 
 Where ``your_executable`` matches the name you used for your exectuable in your ``CMakeLists.txt``.
 
-Rather than actually run Cleo from a bash script (``./[...]/your_executable /path/to/your/config.yaml``),
-and therefore have to ensure yourself that you load the relevant run-time modules/settings for
-your computer architecture, you might want to write a Python driver script like in Cleo's examples
-(e.g. ``rainshaft1d.py``), which includes not only running the executable (this step) but also
-generating the input data (step 4) and post-processing/plotting it (step 6) (with control over
-each steup via the ``--do_inputfiles`` / ``--do_run_executable`` / ``--do_plot_results`` flags).
-You would then use the bash scripts in exactly the same way as the examples, namely to build and
-compile Cleo and then to launch your python driver script.
+**Rather than do all this yourself,** to build, compile, and run your executable, it's easiest to
+add your experiment to Cleo's bash scripts in ``CLEO/scripts``, like what's done for Cleo's examples
+(see below). Then the handling of the compilers, modules, build flags, etc. for your computer
+architecture is sorted out by the scripts automatically, as well as loading the relevant
+run-time modules/settings.
+
+We also reccomend you write a Python driver script like in Cleo's examples (e.g. ``rainshaft1d.py``),
+which includes not only running the executable (``./[...]/your_executable /path/to/your/config.yaml``)
+but also generating the input data (step 4) and post-processing/plotting it (step 6) (with control
+over each steup via the ``--do_inputfiles`` / ``--do_run_executable`` / ``--do_plot_results`` flags).
+Note, your Python script must accept the path to Cleo, the path to the build directory, ``script_args``,
+and one of ``--do_inputfiles``, ``--do_run_executable`` or ``--do_plot_results`` as arguments,
+just like the examples' scripts do.
+
+Then, to use Cleo's bash scripts in the same way as the examples, namely to build and
+compile Cleo and then to launch your python driver script, do the following:
+
+1. Add an entry for ``your_new_experiment`` to ``load_example_config`` in
+   ``scripts/common/examples.sh``: its ``build_subdir``, ``build_flags`` (see below), ``executables``
+   (``your_executable``), ``pythonscript``, ``src_config_filename`` and ``script_args``.
+
+2. Add ``your_new_experiment`` to ``machine_examples`` in the ``build_compile_run_plot_cleo.sh`` of
+   each machine (``vanilla``, ``levante`` or ``jupiter``) you want to run it on.
+
+3. Optionally, add it to the ``examples`` list of that machine's job script
+   (``cpu.sh``/``gpu.sh``).
+
+Then, from your Cleo directory, run (or submit) the job script for your experiment, e.g.
+
+.. code-block:: console
+
+  $ scripts/vanilla/cpu.sh all your_new_experiment openmp gcc
+
+or call ``build_compile_run_plot_cleo.sh`` directly, e.g.
+
+.. code-block:: console
+
+  $ scripts/vanilla/build_compile_run_plot_cleo.sh your_new_experiment openmp gcc $(pwd) /your/path/to/build
+
+See :ref:`how the bash scripts work <bashscripts>` for what the steps (``configure``, ``compile``,
+``inputs``, ``run``, ``plot``) do, and :ref:`the bash scripts in detail <bashscripts_detail>` for
+every field of the ``examples.sh`` entry and for adding a new machine.
 
 
 .. _cleo_cmake_flags:
