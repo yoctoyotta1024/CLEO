@@ -2,6 +2,89 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.72.0](https://github.com/yoctoyotta1024/CLEO/compare/c82b7e8f948d769f97845135dbe5057b7ac7ffe6..v0.72.0) - 2026-11-26
+#### Bug Fixes
+- drop the x86-only -mpc64 from the vanilla debug flags - ([39dd458](https://github.com/yoctoyotta1024/CLEO/commit/39dd458ee9d65b861dad79dbb848d3d0acab94ab)) - Claude
+- reset modules at the start of the JUPITER job scripts - ([9363a43](https://github.com/yoctoyotta1024/CLEO/commit/9363a437b01b0c359fbe2e9bc6cde702ce744337)) - Harshada Balasubramanian
+- quote the source and build paths for cmake and make - ([f955055](https://github.com/yoctoyotta1024/CLEO/commit/f955055ac80f83261882e3c3b2d0a1f63fceb75f)) - Harshada Balasubramanian
+- reject a build directory equal to the CLEO source directory - ([75edf8c](https://github.com/yoctoyotta1024/CLEO/commit/75edf8c7115bda7189095da0cc7d197afa43825e)) - Harshada Balasubramanian
+- set Kokkos_ARCH_AMPERE80 for Levante CUDA builds - ([2b8f81e](https://github.com/yoctoyotta1024/CLEO/commit/2b8f81e6fd63c7f572cd8378d32984095dfc4b6a)) - Harshada Balasubramanian
+- drop curl --retry-all-errors in Levante's install_yac.sh - ([2e5fd6d](https://github.com/yoctoyotta1024/CLEO/commit/2e5fd6d65edc9107d475ba65294155d17e9ee833)) - Harshada Balasubramanian
+- point CLEO_YAC_MODULE_PATH at libs/configuration/cmake - ([b8ebadb](https://github.com/yoctoyotta1024/CLEO/commit/b8ebadbedba7a5fadd59b5ba7c4ad0de14187b10)) - Harshada Balasubramanian
+- put Open MPI's lib folder on LD_LIBRARY_PATH at runtime on Levante - ([542c48e](https://github.com/yoctoyotta1024/CLEO/commit/542c48e25ab580337c620258d58166927ab6c768)) - Harshada Balasubramanian
+- get all examples building and running on JUPITER - ([49b605b](https://github.com/yoctoyotta1024/CLEO/commit/49b605b32b6e5cb23eac40f1d26906660112d15e)) - Harshada Balasubramanian
+- load the machine toolchain before compiling in run mode - ([942cc13](https://github.com/yoctoyotta1024/CLEO/commit/942cc13d1aada6178ac8db1a49d4833d5297df6c)) - Harshada Balasubramanian
+- documentation version 1 - ([4d071e0](https://github.com/yoctoyotta1024/CLEO/commit/4d071e085e900a731b304c5990aa21792f516698)) - Harshada Balasubramanian
+- make scripts_2 shell scripts executable - ([70063fd](https://github.com/yoctoyotta1024/CLEO/commit/70063fdf25f45b5b35e6c5bd55681f066dab2f4d)) - Harshada Balasubramanian
+- spelt jupiter wrong - ([08c0f79](https://github.com/yoctoyotta1024/CLEO/commit/08c0f7975b5ffd868f6edc063afe6eeedc1e425b)) - Harshada Balasubramanian
+- simplify kokkostools env behavior across machines - ([2b55106](https://github.com/yoctoyotta1024/CLEO/commit/2b5510678cc09b23725ffc5d724be165ddd81834)) - Harshada Balasubramanian
+- correct kokkostools argument wiring by build type - ([c58b052](https://github.com/yoctoyotta1024/CLEO/commit/c58b052e12615eea69b72275516d94a7bfbfa734)) - Harshada Balasubramanian
+- pass CMake build type from CLEO_ENABLEDEBUG - ([318b8e0](https://github.com/yoctoyotta1024/CLEO/commit/318b8e07c1be277e5011cba8886660300c76399d)) - Harshada Balasubramanian
+- restrict vanilla experiments to supported set - ([f6428c1](https://github.com/yoctoyotta1024/CLEO/commit/f6428c18d2a02bdf5a99d63139c0471297f3c6d4)) - Harshada Balasubramanian
+- skip broken MPI wrappers and always require CLEO_YACYAXTROOT - ([43ff63b](https://github.com/yoctoyotta1024/CLEO/commit/43ff63bd92abe2d153317f4ab9b6f34365ad8338)) - Harshada Balasubramanian
+#### Continuous Integration
+- owncloud yacyaxt to nextcloud migration - ([7712a78](https://github.com/yoctoyotta1024/CLEO/commit/7712a78dd6a68cfd808b971192cefa5722c54c8f)) - clara.bayley
+#### Documentation
+- list all modes in the job scripts' usage, keep login-node builds for Jupiter only - ([0d91ff2](https://github.com/yoctoyotta1024/CLEO/commit/0d91ff2fba81a1c2a1ac11f7d8368ca3a723d905)) - Harshada Balasubramanian
+- drop the Jupiter Kokkos architecture note from extern.rst - ([f98a4af](https://github.com/yoctoyotta1024/CLEO/commit/f98a4afa765c9b3ce612cc8a76d4577f3fb03e96)) - Harshada Balasubramanian
+- remove the note that the YAC path is unused in the machine pages - ([363ce7e](https://github.com/yoctoyotta1024/CLEO/commit/363ce7ed867bd98d69dfb0a9a3f223e956204899)) - Harshada Balasubramanian
+- remove the CLEO_YACYAXTROOT note from bashscripts.rst - ([15444a5](https://github.com/yoctoyotta1024/CLEO/commit/15444a5f5a44c66205179863769cb340dbbb4d7f)) - Harshada Balasubramanian
+- drop confusing "(for debug and release builds)" in bashscripts.rst - ([e935f3d](https://github.com/yoctoyotta1024/CLEO/commit/e935f3d1641de0f0cdf6012be3312e690b93f559)) - Harshada Balasubramanian
+- note that the MPI examples only work on CPUs - ([e8777b2](https://github.com/yoctoyotta1024/CLEO/commit/e8777b2edea223d13a98aa720f6e8ccc1622050a)) - Harshada Balasubramanian
+- add "The Bash Scripts in Detail" page and scripts/README.md - ([51b8223](https://github.com/yoctoyotta1024/CLEO/commit/51b8223a32b523b7f5081ff217945bb536c42dfb)) - Harshada Balasubramanian
+#### Features
+- CLEO_PATH2BUILD is the exact build directory - ([85c7379](https://github.com/yoctoyotta1024/CLEO/commit/85c737948aed20a50183436218a168e1127ac10a)) - Harshada Balasubramanian
+- python_bindings on Levante requires gcc - ([3cdfab9](https://github.com/yoctoyotta1024/CLEO/commit/3cdfab9b4b70065b68626bbbdfd16ac7c8de4ab3)) - Harshada Balasubramanian
+- CLEO_YACYAXTROOT holds one YAC/YAXT install per compiler - ([4f9c780](https://github.com/yoctoyotta1024/CLEO/commit/4f9c780260492a45c85c81f49b2e476a92696e01)) - Harshada Balasubramanian
+- let an exported CLEO_PATH2CLEO override the job scripts' default - ([3243e41](https://github.com/yoctoyotta1024/CLEO/commit/3243e4112e38b9a234b7731d5836bc571c6af2b2)) - Harshada Balasubramanian
+- job scripts take a list of steps; rename the build step to configure - ([f25fce8](https://github.com/yoctoyotta1024/CLEO/commit/f25fce8ce5b4d0c49843c7a70fc8fb4f58c35a8e)) - Harshada Balasubramanian
+- split generating the input files from running the executable - ([5dbd5a8](https://github.com/yoctoyotta1024/CLEO/commit/5dbd5a8fc3dd59b6db0b11767f860ebe6f113987)) - Harshada Balasubramanian
+- gpu.sh always uses the cuda build type - ([5cd66a8](https://github.com/yoctoyotta1024/CLEO/commit/5cd66a8cd9f76bebadfc02b67be79afc491f31d6)) - Harshada Balasubramanian
+- add threads builds to the vanilla example list - ([4ad9883](https://github.com/yoctoyotta1024/CLEO/commit/4ad9883f639e6a0f4ffeee5edffbb6c100e060c4)) - Harshada Balasubramanian
+- optional settings section in the job scripts - ([46e352c](https://github.com/yoctoyotta1024/CLEO/commit/46e352c1ecb142f56872870243c7d3cb5073aa68)) - Harshada Balasubramanian
+- run roughpaper with the scripts; remove scripts_old - ([fef4d2b](https://github.com/yoctoyotta1024/CLEO/commit/fef4d2be3c05eff68314ece824575b51f37bec45)) - Harshada Balasubramanian
+- make_clean builds from scratch - ([0830900](https://github.com/yoctoyotta1024/CLEO/commit/08309006e50e4f4c09295149fa96444a44e3072b)) - Harshada Balasubramanian
+- upgrade kokkos to run with cuda 13.0 - ([4d84b70](https://github.com/yoctoyotta1024/CLEO/commit/4d84b7098a17b3c4185fe2c6de1a70d9340992cb)) - Harshada Balasubramanian
+- cpu scripts for jupyter - ([49eabb4](https://github.com/yoctoyotta1024/CLEO/commit/49eabb48d3f080239b882b1f2e6b6632d2304a39)) - Harshada Balasubramanian
+- helper scripts for jupyter - ([3bf48ab](https://github.com/yoctoyotta1024/CLEO/commit/3bf48ab23dcc71b29f36594ee80dddae9a195d6e)) - Harshada Balasubramanian
+- add opt-in auto install for kokkostools experiment - ([b0b5b70](https://github.com/yoctoyotta1024/CLEO/commit/b0b5b70a9f2069eec30adc435cab0fc4f3c07bfc)) - Harshada Balasubramanian
+- update levante scripts - ([542d3ec](https://github.com/yoctoyotta1024/CLEO/commit/542d3ec6a8de76e4497b3a8606c4918332a8d2db)) - Harshada Balasubramanian
+- script version for vanilla - ([cb7623c](https://github.com/yoctoyotta1024/CLEO/commit/cb7623cdb5115293a3c1990880330377a575ba3e)) - Harshada Balasubramanian
+#### Miscellaneous Chores
+- small fixes from review - ([c044e2a](https://github.com/yoctoyotta1024/CLEO/commit/c044e2a3049ee4292ec4c746d45046a7262cebab)) - Harshada Balasubramanian
+- use a <YOUR_ACCOUNT> placeholder in the JUPITER job scripts - ([c40ff4f](https://github.com/yoctoyotta1024/CLEO/commit/c40ff4f240062c23a3746a6df7f5569684a8bf81)) - Harshada Balasubramanian
+- take roughpaper out of the default example lists - ([48b8a70](https://github.com/yoctoyotta1024/CLEO/commit/48b8a701285e5f735de6034bea22182ac789ddf9)) - Harshada Balasubramanian
+- update list of tested experiments - ([ac32e80](https://github.com/yoctoyotta1024/CLEO/commit/ac32e805e47cad142549f2019ffd4c94fce27ebe)) - Harshada Balasubramanian
+- add all experiments for testing on vanilla - ([68513bd](https://github.com/yoctoyotta1024/CLEO/commit/68513bded7b68c7e8955e7af4628f0e4a92e5abd)) - Harshada Balasubramanian
+- examples.sh, "machine" wording, JUPITER login-node builds, docs fixes - ([22e274f](https://github.com/yoctoyotta1024/CLEO/commit/22e274f9d279db8f146d5edbc35a621b12558dc1)) - Harshada Balasubramanian
+- remove run_launcher; request full Levante cores in job scripts - ([29e2398](https://github.com/yoctoyotta1024/CLEO/commit/29e2398bb6b953c9a4f176fea80e93c6553aa0cd)) - Harshada Balasubramanian
+- rename scripts to scripts_old and scripts_2 to scripts - ([cf1ab8b](https://github.com/yoctoyotta1024/CLEO/commit/cf1ab8ba4b31ccdc851e6968c97b10323788de5a)) - Harshada Balasubramanian
+- remove old scripts replaced by scripts_2 - ([6839286](https://github.com/yoctoyotta1024/CLEO/commit/683928678d2a9c6ea60acc8c63b2b82a755e0baa)) - Harshada Balasubramanian
+- remove kokkos tools profiling and NSYS_PREFIX - ([9672fd8](https://github.com/yoctoyotta1024/CLEO/commit/9672fd85f8983bf41d4f5a4f1fffca8d66480985)) - Harshada Balasubramanian
+- remove redundancy in the experiment - ([e31e987](https://github.com/yoctoyotta1024/CLEO/commit/e31e98717a708eabf4af4963614c2ba6b2d8ad2e)) - Harshada Balasubramanian
+- rm kokkos_tools related dinge - ([d8b3e33](https://github.com/yoctoyotta1024/CLEO/commit/d8b3e33ff2044457c4007bb787292d9d77025dc3)) - Harshada Balasubramanian
+- consistency across different builds - ([13ae1c2](https://github.com/yoctoyotta1024/CLEO/commit/13ae1c224b0225cbc823de81d5ffbf683be41383)) - Harshada Balasubramanian
+- add machine specific build flags - ([bfd9ffc](https://github.com/yoctoyotta1024/CLEO/commit/bfd9ffc4c1ed673ff95ce3e2c8909017f5096753)) - Harshada Balasubramanian
+- cleanup - ([ea06b2d](https://github.com/yoctoyotta1024/CLEO/commit/ea06b2dbc223d1ac90c124d14523b3e3e0977a5f)) - Harshada Balasubramanian
+- update gpu scripts for levante - ([0a32931](https://github.com/yoctoyotta1024/CLEO/commit/0a32931275120bb8a5f57e258aa43a95d69d6a08)) - Harshada Balasubramanian
+- edit gpu scripts - ([c52b7db](https://github.com/yoctoyotta1024/CLEO/commit/c52b7dbdeb1728cffcdbfaf3d5f5dead7af070c2)) - Harshada Balasubramanian
+- remove changes from scripts - ([dd0ee43](https://github.com/yoctoyotta1024/CLEO/commit/dd0ee43e0f44b1df6cfa244406a7e3a98c343e06)) - Harshada Balasubramanian
+- update experiment list for levante testing - ([2de11c5](https://github.com/yoctoyotta1024/CLEO/commit/2de11c52382c7cfe5ac7b8682bca82d3da0b5cee)) - Harshada Balasubramanian
+- document required env vars in script entrypoints - ([852c643](https://github.com/yoctoyotta1024/CLEO/commit/852c64398bf5220c228fa26e634f858f071b78aa)) - Harshada Balasubramanian
+- unify levante loading and enable gpu flow - ([fe096b1](https://github.com/yoctoyotta1024/CLEO/commit/fe096b1a591abe1f148705fc8ce613637bfbe79f)) - Harshada Balasubramanian
+- refactor levante scripts to explicit helper APIs - ([f9fd438](https://github.com/yoctoyotta1024/CLEO/commit/f9fd438762d34adb89c6fa07b25c5fe425d63afb)) - Harshada Balasubramanian
+- restructure script2 file structure - ([4dc32d7](https://github.com/yoctoyotta1024/CLEO/commit/4dc32d710596d29e33a78bfafe1297fe7d66a00a)) - Harshada Balasubramanian
+- restructure script2 file structure - ([20b40a5](https://github.com/yoctoyotta1024/CLEO/commit/20b40a515a627a396cac0459f92afe4fbd172702)) - Harshada Balasubramanian
+- update sbatch scripts - ([da43076](https://github.com/yoctoyotta1024/CLEO/commit/da430763d9c5e1d672865a9d94c989e23e56fe0b)) - Harshada Balasubramanian
+- formatting - ([c82b7e8](https://github.com/yoctoyotta1024/CLEO/commit/c82b7e8f948d769f97845135dbe5057b7ac7ffe6)) - clara.bayley
+#### Refactoring
+- tidy the load_example_config interface - ([31c969a](https://github.com/yoctoyotta1024/CLEO/commit/31c969ad418c66cccc2e3eeb6876e75fed2d2e9a)) - Harshada Balasubramanian
+- load the build toolchain once in the driver - ([dafdb1a](https://github.com/yoctoyotta1024/CLEO/commit/dafdb1a48ab6ce970ab4af78201e173955724e7e)) - Harshada Balasubramanian
+- drop the unused NONE branch, eval and check_yac - ([7d6ff22](https://github.com/yoctoyotta1024/CLEO/commit/7d6ff226b35e96098a651ad39d5c65a2625d5f16)) - Harshada Balasubramanian
+- remove the CLEO_MAKE_CLEAN option - ([0770cfb](https://github.com/yoctoyotta1024/CLEO/commit/0770cfbe81864014fd1b15f36e98f3d132919c24)) - Harshada Balasubramanian
+
+- - -
+
 ## [v0.71.0](https://github.com/yoctoyotta1024/CLEO/compare/d2b7de5e844eefef26c6f0fbb8b3f1aa797bae36..v0.71.0) - 2026-10-29
 #### Bug Fixes
 - missing cartesiandomain library dependency - ([aecbd37](https://github.com/yoctoyotta1024/CLEO/commit/aecbd37022ba9eda6451e98cb205f3783e159d05)) - clara.bayley
