@@ -201,6 +201,11 @@ as we do for Cleo stand-alone (see :ref:`building_cleo`). Some common issues inc
 - **Kokkos and YAC flags.** Any ``-DKokkos_ARCH_...``/``-DKokkos_ENABLE_...`` or ``YAC`` flags you
   pass to ``cmake`` apply globally to the whole configure, including Cleo's fetched Kokkos — set
   them once, when you configure your own project's build.
+- **YAC and YAXT are required unconditionally.** Even if you only select ``fromfile`` coupled
+  dynamics (as in the worked example above), Cleo's ``configuration`` library depends on YAC.
+  You must therefore set ``CLEO_YAC_ROOT``, ``CLEO_YAXT_ROOT``, and ``CLEO_YAC_MODULE_PATH`` for
+  your own project's configure the same way you would for building Cleo standalone, regardless of
+  which ``CLEO_COUPLED_DYNAMICS`` option you choose.
 - **MPI compiler wrappers.** Since Cleo's top-level ``CMakeLists.txt`` unconditionally requires MPI,
   you'll generally want to configure your whole project with MPI compiler wrappers as you would
   for building Cleo standalone (e.g. ``-DCMAKE_CXX_COMPILER=mpic++ -DCMAKE_C_COMPILER=mpicc``).

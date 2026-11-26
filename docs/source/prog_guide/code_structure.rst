@@ -75,7 +75,7 @@ domain, and observers (including Zarr dataset output).
 Occasionally this seperation between ``superdroplets``, ``gridboxes`` and a particular
 ``GridboxMaps`` implementation (i.e. domain geometry) requires a component of the model
 to be divided into seperate parts across different libraries. This is the case for super-droplet
-motion. The abstract concept for super-droplet ``Motion`` is defined in ``libs/superdroplets``
+motion. The abstract concept for super-droplet ``Motion`` is defined in ``libs/superdrops``
 along with the ``VelocityFormula`` concept and several formulations of a superdroplet's terminal
 velocity which satisfy that concept. The structure for moving superdroplets through a domain,
 ``MoveSupersInDomain``, is then defined in ``libs/gridboxes``, since this library handles how
@@ -89,14 +89,16 @@ superdroplets across the domain and how to enact boundary conditions for that pa
 Some libraries are *always* needed regardless of setup: ``configuration``, ``initialise``,
 ``gridboxes``, ``runcleo``, ``observers``, ``zarr``, and ``superdrops``, and are built into every
 executable, as per ``libs/CMakeLists.txt``. The libraries that can vary between setups —
-which coupled dynamics and which domain geometry you use — are built only when selected,
-controlled by two CMake cache variables read in ``libs/CMakeLists.txt``:
+which coupled dynamics and which grid you use (i.e. domain geometry) — are built only when selected,
+controlled by two CMake cache variables read in ``libs/coupled_dynamics/`` and
+``libs/grids/``:
 
 .. code-block:: cmake
 
-    # from libs/CMakeLists.txt
+    # from libs/coupled_dynamics/CMakeLists.txt
     set(valid_coupled_dynamics "null" "fromfile" "cvode" "yac" "numpy")
-    # ...
+
+    # libs/grids/CMakeLists.txt
     set(valid_domain "cartesian")
 
 You choose between them when you invoke CMake, e.g. ``-DCLEO_COUPLED_DYNAMICS=fromfile

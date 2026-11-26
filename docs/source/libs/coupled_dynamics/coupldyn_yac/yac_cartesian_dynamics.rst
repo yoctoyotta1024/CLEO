@@ -1,10 +1,10 @@
 YAC Cartesian Dynamics
 ========================
 
-Header file: ``<libs/coupldyn_yac/yac_cartesian_dynamics.hpp>``
-`[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/coupldyn_yac/yac_cartesian_dynamics.hpp>`_
+Header file: ``<libs/coupled_dynamics/coupldyn_yac/yac_cartesian_dynamics.hpp>``
+`[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/coupled_dynamics/coupldyn_yac/yac_cartesian_dynamics.hpp>`_
 
-A ``CoupledDynamics`` (see :doc:`../runcleo/coupleddynamics`) for a Cartesian domain whose
+A ``CoupledDynamics`` (see :doc:`../../runcleo/coupleddynamics`) for a Cartesian domain whose
 thermodynamic and wind fields are received from an external dynamical core via YAC.
 
 .. note::

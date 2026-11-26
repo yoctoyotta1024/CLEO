@@ -1,10 +1,10 @@
 NullDynComms
 ==============
 
-Header file: ``<libs/coupldyn_null/nulldyncomms.hpp>``
-`[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/coupldyn_null/nulldyncomms.hpp>`_
+Header file: ``<libs/coupled_dynamics/coupldyn_null/nulldyncomms.hpp>``
+`[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/coupled_dynamics/coupldyn_null/nulldyncomms.hpp>`_
 
-A ``CouplingComms`` (see :doc:`../runcleo/couplingcomms`) that does nothing, paired with
+A ``CouplingComms`` (see :doc:`../../runcleo/couplingcomms`) that does nothing, paired with
 :doc:`nulldynamics`.
 
 .. doxygenfile:: nulldyncomms.hpp
