@@ -24,11 +24,10 @@ add_library("${LIBNAME}" STATIC ${SOURCES})
 
 # Add directories for target library
 # target_include_directories(${LIBNAME} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
-target_include_directories(${LIBNAME} PUBLIC "${CLEO_SOURCE_DIR}/libs" "${CLEO_SOURCE_DIR}/libs/grids") # CLEO libs directory
 
 # Link libraries to target library
 set(LINKLIBS configuration initialise superdrops gridboxes observers zarr movement)
-target_link_libraries(${LIBNAME} PUBLIC "${LINKLIBS}")
+target_link_libraries(${LIBNAME} PUBLIC cleo_libs_include "${LINKLIBS}")
 target_link_libraries(${LIBNAME} PUBLIC Kokkos::kokkos)
 
 # set specific C++ compiler options for target (optional)
