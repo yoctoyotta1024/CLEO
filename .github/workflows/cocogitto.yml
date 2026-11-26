@@ -12,9 +12,10 @@ jobs:
           fetch-depth: 0
 
       - name: Conventional commits compliance check
-        uses: oknozor/cocogitto-action@v4
+        uses: cocogitto/cocogitto-action@v4.1.0
         with:
-          check-latest-tag-only: true
+          command: check
+          args: --from-latest-tag
           git-user: 'yoctoyotta1024'
           git-user-email: 'yoctoyotta1024@yahoo.com'
 
@@ -54,21 +55,17 @@ jobs:
           fetch-depth: 0
 
       - name: semver release with cocogitto
-        uses: oknozor/cocogitto-action@v4
+        uses: cocogitto/cocogitto-action@v4.1.0
         id: release
         with:
-          release: true
-          check-latest-tag-only: true
+          command: bump
+          args: --auto
           git-user: 'yoctoyotta1024'
           git-user-email: 'yoctoyotta1024@yahoo.com'
 
-      - name: Print and update hard-coded version for release
+      - name: Print version for release
         run: |
-          echo "current Cleo version: ${{ steps.release.outputs.version }}"
-          export version=$(echo "${{ steps.release.outputs.version }}" | sed 's/^v//')
-          export version_date=$(date)
-          sed -i "s/^version: .*/version: ${version}/" CITATION.cff
-          sed -i "s/^date-released: .*/date-released: ${version_date}/" CITATION.cff
+          echo "current Cleo version: ${{ steps.release.outputs.version }}, updated in CITATION.cff"
 
       - name: Generate Changelog
         run: cog changelog --at ${{ steps.release.outputs.version }} -t remote > GITHUB_CHANGELOG.md

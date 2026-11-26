@@ -11,7 +11,9 @@ pre_package_bump_hooks = []
 post_package_bump_hooks = []
 
 pre_bump_hooks = [
-    "echo 'bumping version from {{latest}} to {{version}}'"
+  "echo 'bumping version from {{latest}} to {{version}}'",
+  "sed -i 's/^version: .*/version: {{version}}/' CITATION.cff",
+  "sed -i \"s/^date-released: .*/date-released: $(date +%F)/\" CITATION.cff",
 ]
 
 post_bump_hooks = [
