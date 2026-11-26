@@ -2,6 +2,23 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.73.0](https://github.com/yoctoyotta1024/CLEO/compare/b91025529976297116fa5378247ae6d1fa9d0238..v0.73.0) - 2026-11-26
+#### Features
+- add dependabot version updating - ([21c3bf0](https://github.com/yoctoyotta1024/CLEO/commit/21c3bf07bde2569a446df65edfd57b1d25359aef)) - clara.bayley
+- add uv.lock file to repo - ([0da174e](https://github.com/yoctoyotta1024/CLEO/commit/0da174e0ea3cb401f29d3e2402a597056fcc8df1)) - clara.bayley
+- include clang-format guidelines in repo - ([b910255](https://github.com/yoctoyotta1024/CLEO/commit/b91025529976297116fa5378247ae6d1fa9d0238)) - clara.bayley
+#### Miscellaneous Chores
+- formatting roughpaper python files with updated ruff - ([24b6c46](https://github.com/yoctoyotta1024/CLEO/commit/24b6c46de78978c79d170c0a714ae5d60ca1de42)) - clara.bayley
+- update ruff pre-commit name to ruff-check - ([355b2ff](https://github.com/yoctoyotta1024/CLEO/commit/355b2ffdea9153a37511292ec420ad9813b11663)) - clara.bayley
+- formatting python files with updated ruff - ([fe5f45d](https://github.com/yoctoyotta1024/CLEO/commit/fe5f45d5bfc2825557b90c0233a286fead5f2870)) - clara.bayley
+- update pre-commit hooks - ([250ec97](https://github.com/yoctoyotta1024/CLEO/commit/250ec9705429a5561ddc4ba64de492920dd6be14)) - clara.bayley
+- update python package dependencies' versions - ([440ea49](https://github.com/yoctoyotta1024/CLEO/commit/440ea49c25925f1e732276e43d4c4da881ddcbc0)) - clara.bayley
+#### Refactoring
+- update readme - ([5fe43d3](https://github.com/yoctoyotta1024/CLEO/commit/5fe43d396e021934545162e47482b2f03c902a47)) - clara.bayley
+- add uv lock to pre-commit - ([50ae93b](https://github.com/yoctoyotta1024/CLEO/commit/50ae93b6470fcc9f27c2611715fc35c56d0077ae)) - clara.bayley
+
+- - -
+
 ## [v0.72.0](https://github.com/yoctoyotta1024/CLEO/compare/c82b7e8f948d769f97845135dbe5057b7ac7ffe6..v0.72.0) - 2026-11-26
 #### Bug Fixes
 - drop the x86-only -mpc64 from the vanilla debug flags - ([39dd458](https://github.com/yoctoyotta1024/CLEO/commit/39dd458ee9d65b861dad79dbb848d3d0acab94ab)) - Claude
