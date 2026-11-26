@@ -5,19 +5,17 @@ Examples on JUPITER
 
 Having :ref:`installed plotcleo<install_plotcleo>`, the following instructions are intended to guide you
 through running each example using the bash scripts in ``scripts/jupiter/``. See
-:ref:`how the bash scripts work<bashscripts>` for an overview of these scripts.
+:ref:`how the bash scripts work<how_bashscripts_work>` for an overview of these scripts.
 
 *Note*: on JUPITER, Cleo is built for the Grace CPUs and, with the GPU job script
 ``scripts/jupiter/gpu.sh``, for the Hopper GPUs of the booster partition. Both job scripts
 therefore run on the booster partition.
 
-*Note*: currently, the examples which run with MPI (``fromfile``, ``fromfile_irreg`` and
-``bubble3d``) only work on CPUs, so run them with ``cpu.sh`` and not with ``gpu.sh``.
-
 *Note*: JUPITER's compute nodes have no internet access, but building Cleo does (CMake downloads
 some of Cleo's dependencies, e.g. Kokkos). So always build Cleo and compile the examples on a
 login node with ``configure,compile``, and then submit a job with ``inputs,run,plot``. This is also
 true when building from scratch.
+
 
 .. _configurebash_jupiter:
 
@@ -259,7 +257,7 @@ The Examples
       $ scripts/jupiter/cpu.sh configure,compile shima2009
       $ sbatch scripts/jupiter/cpu.sh inputs,run,plot shima2009
 
-    By default the golovin exectuable and two examples using the long executable will be compiled and
+    By default the golovin executable and two examples using the long executable will be compiled and
     run. You can change this by editing ``--kernels golovin long1 long2`` in the ``shima2009`` entry
     of ``scripts/common/examples.sh``.
 
@@ -379,8 +377,11 @@ The Examples
   reference solutions please :ref:`contact us <contact>`.
 
 
-.. dropdown:: 3-D Thermodynamics From File
+.. dropdown:: 3-D Thermodynamics From File (CPU only)
   :animate: fade-in
+
+  *Note: currently these examples are not GPU compatible, therefore they can only be run with
+  ``cpu.sh``, not ``gpu.sh``.*
 
   The examples, ``fromfile.py`` and ``fromfile_irreg.py``, in ``examples/fromfile/`` and
   ``examples/fromfile_irreg/`` are for a 3-D domain with time varying thermodynamics read from
@@ -422,14 +423,18 @@ The Examples
     ``${CLEO_PATH2CLEO}/build_fromfile_irreg/bin/ntasks4/``.
 
 
-.. dropdown:: 3-D Bubble (Coupled to ICON via YAC)
+.. dropdown:: 3-D Bubble (CPU only)
   :animate: fade-in
+
+  *Note: currently this example is not GPU compatible, therefore it can only be run with
+  ``cpu.sh``, not ``gpu.sh``.*
 
   This example is run from the ``examples/bubble3d/bubble3d.py`` script. It couples Cleo to the
   dynamics of ICON's bubble test case via YAC, so it requires Cleo to be built with the ``gcc``
-  compiler and :ref:`YAC and YAXT<install_yac>` to be installed. It also reads the ICON grid and data
-  files given by ``orginal_icon_grid_file`` and ``orginal_icon_data_file`` in ``bubble3d.py``,
-  which you may need to change to the location of these files on JUPITER.
+  compiler and :ref:`YAC and YAXT<install_yac>` to be installed with the same version as ICON.
+  It also reads the ICON grid and data files given by ``orginal_icon_grid_file`` and
+  ``orginal_icon_data_file`` in ``bubble3d.py``, which you may need to change to the location
+  of these files on JUPITER.
 
   1. :ref:`Configure the bash scripts<configurebash_jupiter>`.
 
@@ -460,26 +465,26 @@ The Examples
     $ scripts/jupiter/cpu.sh configure,compile python_bindings
     $ sbatch scripts/jupiter/cpu.sh inputs,run,plot python_bindings
 
-  *Note*: you may have issues with python versions >= 3.14, please
-  see :ref:`this note<pybind11>` for details.
-
   No plots are produced by this example but it should run sucessfully multiple times and produce
   ``no plotting script for python bindings example`` messages. Please note the output during
   time-stepping may not be ordered due to parallel execution.
 
 
-.. dropdown:: Your Own Executable (roughpaper)
+.. dropdown:: Roughpaper → Towards Your Own Experiment
   :animate: fade-in
 
-  This is not an example with a reference solution, but a starting point for running your own
-  setup of Cleo. It builds and runs the executable ``cleocoupledsdm`` from
-  ``roughpaper/src/main.cpp`` (see the :doc:`quickstart <../quickstart>`) with the configuration
-  file ``roughpaper/src/config/config.yaml``. Its input files are made by
-  ``roughpaper/roughpaper_inputfiles.py``, which is also an example of various ways to use
-  ``cleopy`` to create them. The run is driven by ``roughpaper/roughpaper.py``.
+  In ``CLEO/roughpaper`` we provide a source of inspiration for you to run your own experiment with
+  Cleo. ``roughpaper`` is not an example with a reference solution, but it acts analogously and
+  demonstrates most of the settings you can choose from when designing your own experiment.
+  See our :ref:`tutorial <tutorial_new_example>` for more information
+  on how to create your own experiment and how roughpaper can be useful for that.
 
-  *Note*: roughpaper is not in the job scripts' default ``examples`` lists, because it is a
-  starting point you have to adapt and it does not currently run out of the box.
+  ``roughpaper`` is not in the job scripts' default ``examples`` list, however, if you wish to
+  do so, you can run the roughpaper setup with Cleo's bash scripts just like you would for
+  an example. ``roughpaper`` builds and runs the executable ``cleocoupledsdm`` from
+  ``roughpaper/src/main.cpp`` with the configuration file ``roughpaper/src/config/config.yaml``.
+  Its input files are made by ``roughpaper/roughpaper_inputfiles.py`` and the run is driven by
+  ``roughpaper/roughpaper.py``, all in an analogous way to Cleo's actual examples.
 
   1. :ref:`Configure the bash scripts<configurebash_jupiter>`.
 
@@ -491,12 +496,15 @@ The Examples
     $ scripts/jupiter/cpu.sh configure,compile roughpaper
     $ sbatch scripts/jupiter/cpu.sh inputs,run,plot roughpaper
 
-  To run your own setup, edit ``main.cpp``, ``config.yaml`` and ``roughpaper_inputfiles.py``
-  and run it again. If your ``main.cpp`` uses different coupled dynamics (e.g. ``cvode`` or
-  ``yac``), also change ``-DCLEO_COUPLED_DYNAMICS`` in the ``roughpaper`` entry of
-  ``scripts/common/examples.sh`` and build from scratch (delete ``build_roughpaper`` first).
+  To adapt the roughpaper setup, edit ``roughpaper/src/main.cpp``, ``roughpaper/src/main_impl.hpp``,
+  ``roughpaper/src/config/config.yaml``, ``roughpaper/roughpaper.py``, and
+  ``roughpaper/roughpaper_inputfiles.py``. If your new roughpaper executable uses different
+  coupled dynamics (e.g. ``cvode`` or ``yac``), also change ``-DCLEO_COUPLED_DYNAMICS`` in the
+  ``roughpaper`` entry of ``scripts/common/examples.sh`` and build from scratch
+  (delete your build directory first). Again, rather than edit roughpaper, we recommend you build
+  your own experiment as explained :ref:`by the tutorial<tutorial_new_example>`.
 
-  Figures of the initial conditions are saved in ``${CLEO_PATH2CLEO}/build_roughpaper/bin/``
+  Figures of the initial conditions are saved by default in ``${CLEO_PATH2CLEO}/build_roughpaper/bin/``
   and the output dataset is ``${CLEO_PATH2CLEO}/build_roughpaper/bin/SDMdata.zarr``. No plots
   of the results are made.
 

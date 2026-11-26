@@ -1,5 +1,6 @@
-PYGBXSDAT
+pygbxsdat
 =========
 
 .. automodule:: cleopy.sdmout_src.pygbxsdat
-  :members:
+   :members:
+   :undoc-members:

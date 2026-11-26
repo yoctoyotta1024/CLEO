@@ -77,7 +77,7 @@ def parse_arguments():
     return parser.parse_args()
 
 
-def generate_gridbox_boundaries(
+def create_gridbox_boundaries(
     grid_filename, constants_filename, isfigures, savefigpath
 ):
     """example of using cleopy to create the gridbox boundaries binary file"""
@@ -110,7 +110,7 @@ def generate_gridbox_boundaries(
     )
 
 
-def generate_thermodynamics(
+def create_thermodynamics(
     thermofiles,
     config_filename,
     constants_filename,
@@ -225,7 +225,7 @@ def generate_thermodynamics(
     )
 
 
-def generate_initial_superdroplets(
+def create_initial_superdroplets(
     initsupers_filename,
     config_filename,
     constants_filename,
@@ -386,13 +386,13 @@ def main(
     ### ----- write gridbox boundaries binary ----- ###
     grid_filename = Path(config["inputfiles"]["grid_filename"])
     if gen_gbxs:
-        generate_gridbox_boundaries(
+        create_gridbox_boundaries(
             grid_filename, constants_filename, isfigures, savefigpath
         )
 
     ### ----- write thermodynamics binaries ----- ###
     if gen_thermo:
-        generate_thermodynamics(
+        create_thermodynamics(
             thermofiles,
             config_filename,
             constants_filename,
@@ -404,7 +404,7 @@ def main(
     ### ----- write initial superdroplets binary ----- ###
     if gen_supers:
         initsupers_filename = Path(config["initsupers"]["initsupers_filename"])
-        generate_initial_superdroplets(
+        create_initial_superdroplets(
             initsupers_filename,
             config_filename,
             constants_filename,

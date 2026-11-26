@@ -169,7 +169,7 @@ def inputfiles(
     subprocess.run(cmd, check=True)
 
 
-def run_exectuable(path2build, config_filename):
+def run_executable(path2build, config_filename):
     ### --- delete any existing output dataset and setup files --- ###
     yaml = YAML()
     with open(config_filename, "r") as file:
@@ -177,7 +177,7 @@ def run_exectuable(path2build, config_filename):
     Path(config["outputdata"]["setup_filename"]).unlink(missing_ok=True)
     shutil.rmtree(Path(config["outputdata"]["zarrbasedir"]), ignore_errors=True)
 
-    ### --- run exectuable with given config file --- ###
+    ### --- run executable with given config file --- ###
     executable = path2build / "roughpaper" / "src" / "cleocoupledsdm"
     cmd = [executable, config_filename]
     print(" ".join([str(c) for c in cmd]))
@@ -214,7 +214,7 @@ if args.do_inputfiles:
     )
 
 if args.do_run_executable:
-    run_exectuable(path2build, config_filename)
+    run_executable(path2build, config_filename)
 
 if args.do_plot_results:
     plot_results()

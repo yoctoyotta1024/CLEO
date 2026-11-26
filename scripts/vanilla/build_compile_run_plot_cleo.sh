@@ -42,6 +42,8 @@ machine_examples=(
   as2017 cuspbifurc breakup shima2009 constthermo2d divfree2d
   eurec4a1d rainshaft1d python_bindings roughpaper
 )
+# TODO(CB): allow ``fromfile``, ``fromfile_irreg`` and ``bubble3d`` to run on vanilla machines
+#           (also update examples_vanilla doc to include them)
 machine_default_stacksize=""
 machine_default_make_jobs=8
 ### ---------------------------------------------------- ###
