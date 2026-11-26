@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.74.1](https://github.com/yoctoyotta1024/CLEO/compare/c4f40b3daf8b13614674e8e48f19c4c620c6aada..v0.74.1) - 2026-11-26
+#### Bug Fixes
+- cocogitto-action now lives under cocogitto - ([92f9956](https://github.com/yoctoyotta1024/CLEO/commit/92f9956898c803a91d7de50567706d8fb42254c4)) - clara.bayley
+#### Miscellaneous Chores
+- (**deps**) bump the actions group with 5 updates - ([c4f40b3](https://github.com/yoctoyotta1024/CLEO/commit/c4f40b3daf8b13614674e8e48f19c4c620c6aada)) - dependabot[bot]
+
+- - -
+
 ## [v0.74.0](https://github.com/yoctoyotta1024/CLEO/compare/75fe1816102759d829d1efc195ef7e8feafc14b3..v0.74.0) - 2026-11-26
 #### Bug Fixes
 - update bubble script to be compatible with new bubble python example and new scripting - ([1685d81](https://github.com/yoctoyotta1024/CLEO/commit/1685d813ec0ca04bd0e624d7bfa9f461506665cf)) - clara.bayley
