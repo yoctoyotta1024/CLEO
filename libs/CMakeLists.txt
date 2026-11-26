@@ -14,19 +14,7 @@ add_subdirectory(observers)
 
 # libraries particular to certain CLEO configurations #
 add_subdirectory(coupled_dynamics)
-
-# CLEO's Domain
-set(valid_domain "cartesian")
-if("${CLEO_DOMAIN}" IN_LIST valid_domain)
-  if("${CLEO_DOMAIN}" STREQUAL "cartesian")
-    add_subdirectory(cartesiandomain EXCLUDE_FROM_ALL)
-  endif()
-elseif("${CLEO_DOMAIN}" STREQUAL "" OR "${CLEO_DOMAIN}" STREQUAL "all") # default and all
-  add_subdirectory(cartesiandomain EXCLUDE_FROM_ALL)
-else()
-  set(errmsg "Invalid CLEO_DOMAIN '${CLEO_DOMAIN}', please choose from: ${valid_domain}")
-  message(FATAL_ERROR "${errmsg}")
-endif()
+add_subdirectory(grids)
 
 # optionally make CLEO's python bindings
 if(CLEO_NO_PYBINDINGS)
