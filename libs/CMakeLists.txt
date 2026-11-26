@@ -13,31 +13,7 @@ add_subdirectory(zarr)
 add_subdirectory(observers)
 
 # libraries particular to certain CLEO configurations #
-# CLEO's CoupledDynamics
-set(valid_coupled_dynamics "null" "fromfile" "cvode" "yac" "numpy")
-if("${CLEO_COUPLED_DYNAMICS}" IN_LIST valid_coupled_dynamics)
-  if("${CLEO_COUPLED_DYNAMICS}" STREQUAL "null")
-    message(STATUS "CLEO using no coupled dynamics (${CLEO_COUPLED_DYNAMICS})")
-  elseif("${CLEO_COUPLED_DYNAMICS}" STREQUAL "fromfile")
-    add_subdirectory(coupldyn_fromfile EXCLUDE_FROM_ALL)
-  elseif("${CLEO_COUPLED_DYNAMICS}" STREQUAL "cvode")
-    add_subdirectory(coupldyn_cvode EXCLUDE_FROM_ALL)
-  elseif("${CLEO_COUPLED_DYNAMICS}" STREQUAL "yac")
-    add_subdirectory(coupldyn_yac EXCLUDE_FROM_ALL)
-  # "numpy" case contained within add_subdirectory(cleo_python_bindings [...]), see below
-  endif()
-elseif("${CLEO_COUPLED_DYNAMICS}" STREQUAL "all") # all
-  add_subdirectory(coupldyn_cvode EXCLUDE_FROM_ALL)
-  add_subdirectory(coupldyn_fromfile EXCLUDE_FROM_ALL)
-  add_subdirectory(coupldyn_yac EXCLUDE_FROM_ALL)
-  # "numpy" case also included if add_subdirectory(cleo_python_bindings [...]), see below
-elseif("${CLEO_COUPLED_DYNAMICS}" STREQUAL "") # default
-  add_subdirectory(coupldyn_cvode EXCLUDE_FROM_ALL)
-  add_subdirectory(coupldyn_fromfile EXCLUDE_FROM_ALL)
-else()
-  set(errmsg "Invalid CLEO_COUPLED_DYNAMICS '${CLEO_COUPLED_DYNAMICS}', please choose from: ${valid_coupled_dynamics}")
-  message(FATAL_ERROR "${errmsg}")
-endif()
+add_subdirectory(coupled_dynamics)
 
 # CLEO's Domain
 set(valid_domain "cartesian")
