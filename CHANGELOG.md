@@ -2,6 +2,18 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.75.0](https://github.com/yoctoyotta1024/CLEO/compare/a7f4b620bce82c559fe8f9209ba24f3298b16d87..v0.75.0) - 2026-11-26
+#### Features
+- handling of new metadata in zarr - ([d3cc0b5](https://github.com/yoctoyotta1024/CLEO/commit/d3cc0b5a20a48b4f7b19fcda1620ea5c48f12b99)) - clara.bayley
+- use new metadata in observers - ([7f98fb3](https://github.com/yoctoyotta1024/CLEO/commit/7f98fb3fa381e462d79ce0e7237a4d585461a03f)) - clara.bayley
+- new metadata for datasets and new files to organise variable metadata - ([ca0f5d2](https://github.com/yoctoyotta1024/CLEO/commit/ca0f5d2158678b2dc7f8e543f3e33653c7da53b9)) - clara.bayley
+#### Bug Fixes
+- make examples and roughpaper compatible with new metadata - ([0c5d42f](https://github.com/yoctoyotta1024/CLEO/commit/0c5d42f650f945c95b2b8947af501df78ff0619f)) - clara.bayley
+#### Refactoring
+- move raindrop radius size limit into cleoconstants - ([a7f4b62](https://github.com/yoctoyotta1024/CLEO/commit/a7f4b620bce82c559fe8f9209ba24f3298b16d87)) - clara.bayley
+
+- - -
+
 ## [v0.74.2](https://github.com/yoctoyotta1024/CLEO/compare/12e21b0cd804003db45749ab937d62105285e3c6..v0.74.2) - 2026-11-26
 #### Bug Fixes
 - return newton raphson convergence to an abort - ([b23b938](https://github.com/yoctoyotta1024/CLEO/commit/b23b938ce4d715f0d676cbb68d053c86245455b7)) - clara.bayley
