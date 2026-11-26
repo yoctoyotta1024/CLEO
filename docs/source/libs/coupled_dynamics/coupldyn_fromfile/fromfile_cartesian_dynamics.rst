@@ -1,12 +1,12 @@
 FromFile Cartesian Dynamics
 =============================
 
-Header file: ``<libs/coupldyn_fromfile/fromfile_cartesian_dynamics.hpp>``
-`[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/coupldyn_fromfile/fromfile_cartesian_dynamics.hpp>`_
+Header file: ``<libs/coupled_dynamics/coupldyn_fromfile/fromfile_cartesian_dynamics.hpp>``
+`[source] <https://github.com/yoctoyotta1024/CLEO/blob/main/libs/coupled_dynamics/coupldyn_fromfile/fromfile_cartesian_dynamics.hpp>`_
 
-A ``CoupledDynamics`` (see :doc:`../runcleo/coupleddynamics`) reading thermodynamics and wind
+A ``CoupledDynamics`` (see :doc:`../../runcleo/coupleddynamics`) reading thermodynamics and wind
 fields for a Cartesian domain from binary files (see
-:doc:`../../cleopy/thermobinary_src/thermobinary_src`), one timestep at a time.
+:doc:`../../../cleopy/thermobinary_src/thermobinary_src`), one timestep at a time.
 
 .. note::
    This header also defines an internal helper struct called ``CartesianDynamics`` that holds
