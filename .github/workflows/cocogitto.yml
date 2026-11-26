@@ -12,7 +12,7 @@ jobs:
           fetch-depth: 0
 
       - name: Conventional commits compliance check
-        uses: cocogitto/cocogitto-action@v4.1.0
+        uses: cocogitto/cocogitto-action@v4.2.0
         with:
           command: check
           args: --from-latest-tag
@@ -55,7 +55,7 @@ jobs:
           fetch-depth: 0
 
       - name: semver release with cocogitto
-        uses: cocogitto/cocogitto-action@v4.1.0
+        uses: cocogitto/cocogitto-action@v4.2.0
         id: release
         with:
           command: bump
