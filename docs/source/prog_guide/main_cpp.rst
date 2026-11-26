@@ -123,10 +123,12 @@ the templated types that compose ``RunCLEO`` and ``SDMMethods`` are not explicit
 ~~~~~~~~~~~~~~~~~~
 
 ``main_impl.hpp`` holds the ``create_*`` functions that ``main(...)`` calls. Reading it
-top-to-bottom mirrors the order things are needed in ``main(...)``:
-
-The first 3 steps are handled directly by various constructors and initializers, so the first
-``create_*`` function is at step 4, ``create_sdm``. This function looks as follows:
+bottom-to-top roughly mirrors the order things are needed in ``main(...)`` (the file is ordered
+bottom-up by dependency: small "ingredient" functions first and with the function that ties
+them all together, ``create_sdm``, defined last). The first 3 steps of ``main(...)`` are handled
+directly by various constructors and initializers, so the first ``create_*`` function ``main(...)``
+actually *calls* is at step 4, ``create_sdm`` — even though it's the *last* function defined in
+the file. It looks as follows:
 
 .. code-block:: cpp
 
@@ -142,8 +144,9 @@ The first 3 steps are handled directly by various constructors and initializers,
 
 So, to create a SDMMethods struct, we need to four ingredients: a ``GridboxMaps``, a
 ``MicrophysicalProcess``, a ``MoveSupersInDomain`` struct, and an ``Observer``.
-Starting with the ``GridboxMaps``, we call the ``create_gbxmaps`` function. This is the first
-function found in ``main_impl.hpp`` and looks as follows:
+
+Starting with the ``GridboxMaps``, we call the ``create_gbxmaps`` function. In
+``main_impl.hpp`` it is defined as follows:
 
 .. code-block:: cpp
 
@@ -255,7 +258,7 @@ able to understand the ``create_sdm`` function shown at the start:
     template <typename Dataset, typename Store>
     inline Observer auto create_observer(const Config& config, const Timesteps& tsteps,
                                          Dataset& dataset, Store& store) {
-      // ... builds and combines ~9 observers, see
+      // ... builds and combines ~9 observers, see roughpaper/src/main_impl.hpp
     }
 
     template <typename Dataset, typename Store>
@@ -402,17 +405,22 @@ calls it (i.e. calls its operator). Inside ``libs/runcleo/runcleo.hpp``, the ``R
 creates the initial gridboxes/super-droplet arrays from the initial conditions and then
 runs ``timestep_cleo``:
 
+(Note the loop itself only runs up to (not including) ``t_mdl == t_end``; therefore the call to
+``at_last_step`` runs once more afterwards in case the final point in time still needs something, e.g.
+its own observation (e.g. the last Zarr write) before timestep_cleo returns.)
+
 .. code-block:: cpp
 
     int timestep_cleo(const unsigned int t_end, const dualview_gbx gbxs,
                       SupersInDomain& allsupers) const {
       unsigned int t_mdl(0);
-      while (t_mdl <= t_end) {
-        const auto t_next = start_step(t_mdl, gbxs, allsupers);   // 1. receive dynamics, observe
-        coupldyn_step(t_mdl, t_next);                              // 2. advance coupled dynamics
-        sdm_step(t_mdl, t_next, gbxs, allsupers);                  // 3. advance SDM (motion+microphysics)
-        t_mdl = proceed_to_next_step(t_next, gbxs);                // 4. send dynamics back out
+      while (t_mdl < t_end) {
+        const auto t_next = start_step(t_mdl, t_end, gbxs, allsupers);  // 1. receive dynamics, observe
+        coupldyn_step(t_mdl, t_next);                                   // 2. advance coupled dynamics
+        sdm_step(t_mdl, t_next, gbxs, allsupers);                       // 3. advance SDM (motion+microphysics)
+        t_mdl = proceed_to_next_step(t_next, gbxs, allsupers);          // 4. send dynamics back out
       }
+      at_last_step(t_mdl, t_end, gbxs, allsupers);                      // 5. one last observation at t_mdl == t_end
     }
 
 with ``t_next`` chosen adaptively each iteration as the sooner of the next coupling time and the
