@@ -381,18 +381,21 @@ The Examples
   time-stepping may not be ordered due to parallel execution.
 
 
-.. dropdown:: Your Own Executable (roughpaper)
+.. dropdown:: Roughpaper → Towards Your Own Experiment
   :animate: fade-in
 
-  This is not an example with a reference solution, but a starting point for running your own
-  setup of Cleo. It builds and runs the executable ``cleocoupledsdm`` from
-  ``roughpaper/src/main.cpp`` (see the :doc:`quickstart <../quickstart>`) with the configuration
-  file ``roughpaper/src/config/config.yaml``. Its input files are made by
-  ``roughpaper/roughpaper_inputfiles.py``, which is also an example of various ways to use
-  ``cleopy`` to create them. The run is driven by ``roughpaper/roughpaper.py``.
+  In ``CLEO/roughpaper`` we provide a source of inspiration for you to run your own experiment with
+  Cleo. ``roughpaper`` is not an example with a reference solution, but it acts analogously and
+  demonstrates most of the settings you can choose from when designing your own experiment.
+  See our :ref:`tutorial <tutorial_new_example>` for more information
+  on how to create your own experiment and how roughpaper can be useful for that.
 
-  *Note*: roughpaper is not in the job scripts' default ``examples`` lists, because it is a
-  starting point you have to adapt and it does not currently run out of the box.
+  ``roughpaper`` is not in the job scripts' default ``examples`` list, however, if you wish to
+  do so, you can run the roughpaper setup with Cleo's bash scripts just like you would for
+  an example. ``roughpaper`` builds and runs the executable ``cleocoupledsdm`` from
+  ``roughpaper/src/main.cpp`` with the configuration file ``roughpaper/src/config/config.yaml``.
+  Its input files are made by ``roughpaper/roughpaper_inputfiles.py`` and the run is driven by
+  ``roughpaper/roughpaper.py``, all in an analogous way to Cleo's actual examples.
 
   1. :ref:`Configure the bash scripts<configurebash_vanilla>`.
 
@@ -402,12 +405,15 @@ The Examples
 
     $ scripts/vanilla/cpu.sh all roughpaper
 
-  To run your own setup, edit ``main.cpp``, ``config.yaml`` and ``roughpaper_inputfiles.py``
-  and run it again. If your ``main.cpp`` uses different coupled dynamics (e.g. ``cvode`` or
-  ``yac``), also change ``-DCLEO_COUPLED_DYNAMICS`` in the ``roughpaper`` entry of
-  ``scripts/common/examples.sh`` and build from scratch (delete ``build_roughpaper`` first).
+  To adapt the roughpaper setup, edit ``roughpaper/src/main.cpp``, ``roughpaper/src/main_impl.hpp``,
+  ``roughpaper/src/config/config.yaml``, ``roughpaper/roughpaper.py``, and
+  ``roughpaper/roughpaper_inputfiles.py``. If your new roughpaper executable uses different
+  coupled dynamics (e.g. ``cvode`` or ``yac``), also change ``-DCLEO_COUPLED_DYNAMICS`` in the
+  ``roughpaper`` entry of ``scripts/common/examples.sh`` and build from scratch
+  (delete your build directory first). Again, rather than edit roughpaper, we recommend you build
+  your own experiment as explained :ref:`by the tutorial<tutorial_new_example>`.
 
-  Figures of the initial conditions are saved in ``${CLEO_PATH2CLEO}/build_roughpaper/bin/``
+  Figures of the initial conditions are saved by default in ``${CLEO_PATH2CLEO}/build_roughpaper/bin/``
   and the output dataset is ``${CLEO_PATH2CLEO}/build_roughpaper/bin/SDMdata.zarr``. No plots
   of the results are made.
 
