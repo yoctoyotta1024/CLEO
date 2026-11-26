@@ -39,7 +39,7 @@ so-called "vanilla", machine:
    examples_jupiter
 
 
-.. _bashscripts:
+.. _how_bashscripts_work:
 
 How the Bash Scripts Work:
 --------------------------
@@ -92,14 +92,6 @@ To build an example from scratch, delete its build directory (e.g.
 ``rm -rf [CLEO_PATH2CLEO]/build_const2d``) and then do the ``configure`` step (e.g. with ``all``), so that
 CMake configures Cleo again without reusing its old cache.
 
-For a detailed description of the bash scripts, e.g. where to change the compiler flags or how to
-add a new example or machine, see:
-
-.. toctree::
-   :maxdepth: 1
-
-   bashscripts
-
 .. dropdown:: Using ``build_compile_run_plot_cleo.sh`` directly
   :animate: fade-in
 
@@ -122,3 +114,5 @@ add a new example or machine, see:
   .. code-block:: console
 
     $ scripts/vanilla/build_compile_run_plot_cleo.sh shima2009 openmp gcc $(pwd) /your/path/to/builds "" "" true "" configure,compile
+
+You can read about how the bash scripts work in more detail :ref:`in Cleo's programming guide<bashscripts_detail>`.

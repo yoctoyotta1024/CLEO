@@ -8,4 +8,4 @@ flags (`build_flags.sh`), runtime environment (`runtime_settings.sh`) and packag
 - To run the examples, see the docs page for your machine under *Usage → Examples*
   (`docs/source/usage/examples/`).
 - For how the scripts work and where to change things (compiler flags, modules, adding an example
-  or a machine), see *The Bash Scripts in Detail* (`docs/source/usage/examples/bashscripts.rst`).
+  or a machine), see *The Bash Scripts in Detail* (`docs/source/prog_guide/bashscripts_detail.rst`).

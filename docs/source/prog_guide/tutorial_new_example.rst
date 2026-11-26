@@ -1,6 +1,6 @@
 .. _tutorial_new_example:
 
-Tutorial: Building a New Cleo Experiment From Scratch
+Tutorial: Creating a New Cleo Experiment From Scratch
 ======================================================
 
 This tutorial walks through everything needed to create a new Cleo example, using one running
@@ -485,7 +485,7 @@ or call ``build_compile_run_plot_cleo.sh`` directly, e.g.
 
   $ scripts/vanilla/build_compile_run_plot_cleo.sh your_new_experiment openmp gcc $(pwd) /your/path/to/build
 
-See :ref:`how the bash scripts work <bashscripts>` for what the steps (``configure``, ``compile``,
+See :ref:`how the bash scripts work <how_bashscripts_work>` for what the steps (``configure``, ``compile``,
 ``inputs``, ``run``, ``plot``) do, and :ref:`the bash scripts in detail <bashscripts_detail>` for
 every field of the ``examples.sh`` entry and for adding a new machine.
 

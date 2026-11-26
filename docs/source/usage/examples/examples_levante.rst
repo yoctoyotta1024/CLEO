@@ -5,7 +5,7 @@ Examples on Levante
 
 Having :ref:`installed plotcleo<install_plotcleo>`, the following instructions are intended to guide you
 through running each example using the bash scripts in ``scripts/levante/``. See
-:ref:`how the bash scripts work<bashscripts>` for an overview of these scripts.
+:ref:`how the bash scripts work<how_bashscripts_work>` for an overview of these scripts.
 
 *Note*: the GPU job script, ``scripts/levante/gpu.sh``, chooses a build configuration which uses
 GPUs. It must therefore run on a node in the GPU partition of Levante

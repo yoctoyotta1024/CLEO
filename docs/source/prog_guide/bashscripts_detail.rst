@@ -5,7 +5,7 @@ The Bash Scripts in Detail
 
 This page is an optional read for anyone who wants to change the bash scripts in ``scripts/``,
 e.g. to change the compiler flags, add a new example or add a new machine. To simply run the
-examples, see :ref:`how the bash scripts work<bashscripts>` and the page for
+examples, see :ref:`how the bash scripts work<how_bashscripts_work>` and the page for
 :ref:`your machine<examples>` instead.
 
 The scripts are designed so that everything which is the same on every machine is written once,

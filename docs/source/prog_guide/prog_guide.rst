@@ -27,6 +27,8 @@ Concretely, this section explains:
 5. :doc:`external_project` — how to fetch and build Cleo as a dependency of another project.
 6. :doc:`microphysics_and_observers` — a deeper dive into how microphysics and observers are combined in code.
 7. :doc:`coupled_dynamics` — a deeper dive into what "coupled dynamics" means and the available options.
+8. :doc:`bashscripts_detail` - a detailed description of the bash scripts, e.g. where to change the compiler
+   flags or how to add a new example or machine.
 
 It deliberately does not re-explain the physics of warm-cloud microphysics nor Cleo's computational
 performance in depth — for that, see the two papers describing Cleo:
@@ -284,6 +286,7 @@ In The Following Sections...
    external_project
    microphysics_and_observers
    coupled_dynamics
+   bashscripts_detail
 
 ----
 

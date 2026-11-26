@@ -5,7 +5,7 @@ Examples on JUPITER
 
 Having :ref:`installed plotcleo<install_plotcleo>`, the following instructions are intended to guide you
 through running each example using the bash scripts in ``scripts/jupiter/``. See
-:ref:`how the bash scripts work<bashscripts>` for an overview of these scripts.
+:ref:`how the bash scripts work<how_bashscripts_work>` for an overview of these scripts.
 
 *Note*: on JUPITER, Cleo is built for the Grace CPUs and, with the GPU job script
 ``scripts/jupiter/gpu.sh``, for the Hopper GPUs of the booster partition. Both job scripts
