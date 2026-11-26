@@ -43,7 +43,7 @@ void pyrealtime2step(py::module& m) {
 }
 
 void pyInitSupersFromBinary(py::module& m) {
-  py::class_<InitSupersFromBinary>(m, "InitSupersFromBinary")
+  py::class_<InitSupersFromBinary<CartesianMaps>>(m, "InitSupersFromBinary")
       .def(py::init<const OptionalConfigParams::InitSupersFromBinaryParams&,
                     const CartesianMaps&>());
 }

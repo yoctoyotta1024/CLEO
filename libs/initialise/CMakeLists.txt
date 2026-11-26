@@ -17,7 +17,6 @@ find_package(MPI REQUIRED COMPONENTS C)
 set(SOURCES
 "gbx_bounds_from_binary.cpp"
 "init_all_supers_from_binary.cpp"
-"init_supers_from_binary.cpp"
 "readbinary.cpp"
 "timesteps.cpp"
 )

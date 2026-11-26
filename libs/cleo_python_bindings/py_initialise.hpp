@@ -22,6 +22,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl/filesystem.h>
 
+#include "cartesiandomain/cartesianmaps.hpp"
 #include "configuration/config.hpp"
 #include "initialise/init_supers_from_binary.hpp"
 #include "initialise/initgbxsnull.hpp"
