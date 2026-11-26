@@ -25,16 +25,16 @@
 #include <stdexcept>
 #include <string_view>
 
-#include "cartesiandomain/cartesianmaps.hpp"
-#include "cartesiandomain/createcartesianmaps.hpp"
-#include "cartesiandomain/movement/cartesian_motion.hpp"
-#include "cartesiandomain/movement/cartesian_movement.hpp"
 #include "configuration/communicator.hpp"
 #include "configuration/config.hpp"
-#include "coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
-#include "coupldyn_fromfile/fromfilecomms.hpp"
+#include "coupled_dynamics/coupldyn_fromfile/fromfile_cartesian_dynamics.hpp"
+#include "coupled_dynamics/coupldyn_fromfile/fromfilecomms.hpp"
 #include "gridboxes/boundary_conditions.hpp"
 #include "gridboxes/gridboxmaps.hpp"
+#include "grids/cartesiandomain/cartesianmaps.hpp"
+#include "grids/cartesiandomain/createcartesianmaps.hpp"
+#include "grids/cartesiandomain/movement/cartesian_motion.hpp"
+#include "grids/cartesiandomain/movement/cartesian_movement.hpp"
 #include "initialise/init_all_supers_from_binary.hpp"
 #include "initialise/initgbxsnull.hpp"
 #include "initialise/initialconditions.hpp"
