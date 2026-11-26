@@ -30,6 +30,7 @@
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "observers/cleo_variables_metadata.hpp"
 #include "observers/collect_data_for_dataset.hpp"
 #include "observers/generic_collect_data.hpp"
 #include "observers/write_to_dataset_observer.hpp"
@@ -46,23 +47,22 @@
  * @param dataset The dataset to write the variable to.
  * @param ffunc The functor function to collect the variable from within a parallel range policy
  * over gridboxes.
- * @param name The name of the new coordinate.
- * @param units The units of the coordinate.
- * @param scale_factor The scale factor of the coordinate data.
+ * @param meta The variable's metadata (name, units, scale_factor, long_name, standard_name,
+ * description).
  * @param maxchunk The maximum chunk size (number of elements).
  * @param ngbxs The number of gridboxes.
  * @return CollectDataForDataset<Dataset> An instance satisfying the CollectDataForDataset concept
  * for collecting a 2-D floating point variable (e.g. a thermodynamic variable) from each gridbox.
  */
 template <typename Dataset, typename FunctorFunc>
-CollectDataForDataset<Dataset> auto CollectThermoVariable(
-    const Dataset& dataset, const FunctorFunc ffunc, const std::string_view name,
-    const std::string_view units, const double scale_factor, const size_t maxchunk,
-    const size_t ngbxs) {
+CollectDataForDataset<Dataset> auto CollectThermoVariable(const Dataset& dataset,
+                                                          const FunctorFunc ffunc,
+                                                          const VariableMetadata& meta,
+                                                          const size_t maxchunk,
+                                                          const size_t ngbxs) {
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
   const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
-  const auto xzarr =
-      dataset.template create_array<float>(name, units, scale_factor, chunkshape, dimnames);
+  const auto xzarr = dataset.template create_array<float>(meta, chunkshape, dimnames);
   return GenericCollectData(ffunc, xzarr, ngbxs);
 }
 
@@ -173,16 +173,16 @@ inline CollectDataForDataset<Dataset> auto CollectThermo(const Dataset& dataset,
                                                          const size_t maxchunk,
                                                          const size_t ngbxs) {
   const CollectDataForDataset<Dataset> auto press = CollectThermoVariable<Dataset, PressFunc>(
-      dataset, PressFunc{}, "press", "hPa", dlc::P0 / 100, maxchunk, ngbxs);
+      dataset, PressFunc{}, cleo_metadata::press, maxchunk, ngbxs);
 
   const CollectDataForDataset<Dataset> auto temp = CollectThermoVariable<Dataset, TempFunc>(
-      dataset, TempFunc{}, "temp", "K", dlc::TEMP0, maxchunk, ngbxs);
+      dataset, TempFunc{}, cleo_metadata::temp, maxchunk, ngbxs);
 
   const CollectDataForDataset<Dataset> auto qvap = CollectThermoVariable<Dataset, QvapFunc>(
-      dataset, QvapFunc{}, "qvap", "g/Kg", 1000.0, maxchunk, ngbxs);
+      dataset, QvapFunc{}, cleo_metadata::qvap, maxchunk, ngbxs);
 
   const CollectDataForDataset<Dataset> auto qcond = CollectThermoVariable<Dataset, QcondFunc>(
-      dataset, QcondFunc{}, "qcond", "g/Kg", 1000.0, maxchunk, ngbxs);
+      dataset, QcondFunc{}, cleo_metadata::qcond, maxchunk, ngbxs);
 
   const CollectDataForDataset<Dataset> auto a = CombinedCollectDataForDataset(press, temp);
   const CollectDataForDataset<Dataset> auto b = CombinedCollectDataForDataset(qvap, qcond);

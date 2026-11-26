@@ -27,6 +27,7 @@
 
 #include "../kokkosaliases.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "observers/cleo_variables_metadata.hpp"
 #include "observers/observers.hpp"
 #include "superdrops/sdmmonitor.hpp"
 #include "zarr/buffer.hpp"
@@ -98,7 +99,7 @@ class GbxindexObserver {
   GbxindexObserver(Dataset& dataset, Store& store, const size_t maxchunk, const size_t ngbxs)
       : dataset(dataset),
         xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
-            dataset.template create_coordinate_array<uint32_t>("gbxindex", "", 1, maxchunk,
+            dataset.template create_coordinate_array<uint32_t>(cleo_metadata::gbxindex, maxchunk,
                                                                ngbxs))) {}
 
   ~GbxindexObserver() { dataset.write_arrayshape(xzarr_ptr); }

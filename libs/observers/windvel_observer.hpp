@@ -30,6 +30,7 @@
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "observers/cleo_variables_metadata.hpp"
 #include "observers/collect_data_for_dataset.hpp"
 #include "observers/generic_collect_data.hpp"
 #include "observers/write_to_dataset_observer.hpp"
@@ -46,7 +47,8 @@
  * @param dataset The Dataset to write the wind velocity component to.
  * @param ffunc The functor function to collect the wind velocity component from within a parallel
  * range policy over gridboxes.
- * @param name Name of the array in the store where the chunk will be written.
+ * @param meta The variable's metadata (name, units, scale_factor, long_name, standard_name,
+ * description).
  * @param maxchunk The maximum chunk size (number of elements).
  * @param ngbxs The number of gridboxes.
  * @return CollectDataForDataset<Dataset> An instance satisfying the CollectDataForDataset concept
@@ -55,14 +57,11 @@
 template <typename Dataset, typename FunctorFunc>
 CollectDataForDataset<Dataset> auto CollectWindVariable(const Dataset& dataset,
                                                         const FunctorFunc ffunc,
-                                                        const std::string_view name,
+                                                        const VariableMetadata& meta,
                                                         const size_t maxchunk, const size_t ngbxs) {
-  const auto units = std::string_view("m/s");
-  const auto scale_factor = dlc::W0;
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
   const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
-  const auto xzarr =
-      dataset.template create_array<float>(name, units, scale_factor, chunkshape, dimnames);
+  const auto xzarr = dataset.template create_array<float>(meta, chunkshape, dimnames);
   return GenericCollectData(ffunc, xzarr, ngbxs);
 }
 
@@ -149,14 +148,14 @@ template <typename Dataset>
 inline CollectDataForDataset<Dataset> auto CollectWindVel(const Dataset& dataset,
                                                           const size_t maxchunk,
                                                           const size_t ngbxs) {
-  const CollectDataForDataset<Dataset> auto wvel =
-      CollectWindVariable<Dataset, WvelFunc>(dataset, WvelFunc{}, "wvel", maxchunk, ngbxs);
+  const CollectDataForDataset<Dataset> auto wvel = CollectWindVariable<Dataset, WvelFunc>(
+      dataset, WvelFunc{}, cleo_metadata::wvel, maxchunk, ngbxs);
 
-  const CollectDataForDataset<Dataset> auto uvel =
-      CollectWindVariable<Dataset, UvelFunc>(dataset, UvelFunc{}, "uvel", maxchunk, ngbxs);
+  const CollectDataForDataset<Dataset> auto uvel = CollectWindVariable<Dataset, UvelFunc>(
+      dataset, UvelFunc{}, cleo_metadata::uvel, maxchunk, ngbxs);
 
-  const CollectDataForDataset<Dataset> auto vvel =
-      CollectWindVariable<Dataset, VvelFunc>(dataset, VvelFunc{}, "vvel", maxchunk, ngbxs);
+  const CollectDataForDataset<Dataset> auto vvel = CollectWindVariable<Dataset, VvelFunc>(
+      dataset, VvelFunc{}, cleo_metadata::vvel, maxchunk, ngbxs);
 
   return CombinedCollectDataForDataset(CombinedCollectDataForDataset(vvel, uvel), wvel);
 }

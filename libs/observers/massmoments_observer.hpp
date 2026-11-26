@@ -28,6 +28,7 @@
 #include "../cleoconstants.hpp"
 #include "../kokkosaliases.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "observers/cleo_variables_metadata.hpp"
 #include "observers/collect_data_for_dataset.hpp"
 #include "observers/create_massmoments_arrays.hpp"
 #include "observers/generic_collect_data.hpp"
@@ -70,7 +71,7 @@ void calculate_massmoments(const TeamMember& team_member, const viewd_constsuper
  * droplet radius distribution) within a Kokkos::parallel_for range policy
  * loop over superdroplets within a team policy loop over gridboxes.
  *
- * A raindroplet is a droplet with a radius >= rlim = 40microns.
+ * A raindroplet is a droplet with a radius >= rlim.
  *
  * Kokkos::parallel_reduce([...]) is equivalent in serial to sum over result of:
  * for (size_t kk(0); kk < supers.extent(0); ++kk){[...]}.
@@ -140,7 +141,7 @@ struct MassMomentsFunc {
  * policy loop over superdroplets. The calculation is equivalent to 0th, 3rd, and 6th moments of the
  * rain-droplet radius distribution for each gridbox.
  *
- * A raindroplet is a droplet with a radius >= rlim = 40microns.
+ * A raindroplet is a droplet with a radius >= rlim.
  *
  * _Note:_ the conversion from 8 to 4-byte precision for all three moments.
  */
@@ -371,9 +372,12 @@ struct CollectMassMoments {
 template <typename Dataset, typename Store>
 inline Observer auto MassMomentsObserver(const unsigned int interval, const Dataset& dataset,
                                          Store& store, const size_t maxchunk, const size_t ngbxs) {
-  const auto xzarr_mom0 = create_massmom0_xarray(dataset, store, "massmom0", maxchunk, ngbxs);
-  const auto xzarr_mom1 = create_massmom1_xarray(dataset, store, "massmom1", maxchunk, ngbxs);
-  const auto xzarr_mom2 = create_massmom2_xarray(dataset, store, "massmom2", maxchunk, ngbxs);
+  const auto xzarr_mom0 =
+      create_massmom0_xarray(dataset, store, cleo_metadata::massmom0, maxchunk, ngbxs);
+  const auto xzarr_mom1 =
+      create_massmom1_xarray(dataset, store, cleo_metadata::massmom1, maxchunk, ngbxs);
+  const auto xzarr_mom2 =
+      create_massmom2_xarray(dataset, store, cleo_metadata::massmom2, maxchunk, ngbxs);
 
   const auto ffunc = MassMomentsFunc{};
 
@@ -403,11 +407,11 @@ inline Observer auto MassMomentsRaindropsObserver(const unsigned int interval,
                                                   const Dataset& dataset, Store& store,
                                                   const size_t maxchunk, const size_t ngbxs) {
   const auto xzarr_mom0 =
-      create_massmom0_xarray(dataset, store, "massmom0_raindrops", maxchunk, ngbxs);
+      create_massmom0_xarray(dataset, store, cleo_metadata::massmom0_raindrops, maxchunk, ngbxs);
   const auto xzarr_mom1 =
-      create_massmom1_xarray(dataset, store, "massmom1_raindrops", maxchunk, ngbxs);
+      create_massmom1_xarray(dataset, store, cleo_metadata::massmom1_raindrops, maxchunk, ngbxs);
   const auto xzarr_mom2 =
-      create_massmom2_xarray(dataset, store, "massmom2_raindrops", maxchunk, ngbxs);
+      create_massmom2_xarray(dataset, store, cleo_metadata::massmom2_raindrops, maxchunk, ngbxs);
 
   const auto ffunc = RaindropsMassMomentsFunc{};
 

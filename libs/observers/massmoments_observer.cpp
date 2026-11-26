@@ -74,7 +74,7 @@ void calculate_massmoments(const TeamMember& team_member, const viewd_constsuper
  * droplet radius distribution) within a Kokkos::parallel_for range policy
  * loop over superdroplets within a team policy loop over gridboxes.
  *
- * A raindroplet is a droplet with a radius >= rlim = 40microns.
+ * A raindroplet is a droplet with a radius >= rlim.
  *
  * Kokkos::parallel_reduce([...]) is equivalent in serial to sum over result of:
  * for (size_t kk(0); kk < supers.extent(0); ++kk){[...]}.
@@ -92,7 +92,7 @@ void calculate_massmoments(const TeamMember& team_member, const viewd_constsuper
 KOKKOS_FUNCTION
 void calculate_rainmassmoments(const TeamMember& team_member, const viewd_constsupers supers,
                                uint64_t& mom0, float& mom1, float& mom2) {
-  constexpr double rlim(40e-6 / dlc::R0);  // dimless minimum radius of raindrop
+  constexpr double rlim(dlc::raindrop_radius);  // dimless minimum radius of raindrop
 
   const size_t nsupers(supers.extent(0));
   Kokkos::parallel_reduce(

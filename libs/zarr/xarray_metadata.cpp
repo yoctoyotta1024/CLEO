@@ -53,18 +53,36 @@ std::string scale_factor_string(const double scale_factor) {
 }
 
 /**
+ * @brief Returns a ",\n  \"key\": \"value\"" .zattrs entry if value is non-empty, otherwise an
+ * empty string.
+ *
+ * Used so optional metadata fields (long_name, standard_name, description) are only written to
+ * .zattrs when they have actually been set for a variable, rather than cluttering every array's
+ * attributes with blank placeholders.
+ *
+ * @param key The name of the .zattrs key to write (e.g. "long_name").
+ * @param value The value of the key; if empty, nothing is appended.
+ * @return A string with the extra .zattrs entry, or an empty string if value is empty.
+ */
+std::string optional_attr(const std::string_view key, const std::string_view value) {
+  if (value.empty()) {
+    return std::string{};
+  }
+  return ",\n  \"" + std::string(key) + "\": \"" + std::string(value) + "\"";
+}
+
+/**
  * @brief Make string of array attributes metadata for .zattrs json which is used to make zarr array
  * compatible with Xarray and NetCDF.
  *
  * Metadata includes scale_factor so is only valid for floating point types (dtype "f") or
  * complex floating point (dtype "c").
  *
- * @param units The units of the array's coordinates.
- * @param scale_factor The scale factor of data.
+ * @param meta The variable's metadata (units, scale_factor, long_name, standard_name, description).
  * @param dimnames The names of each dimension of the array.
  * @return A string representing the metadata.
  */
-std::string xarray_metadata_for_floats(const std::string_view units, const double scale_factor,
+std::string xarray_metadata_for_floats(const VariableMetadata& meta,
                                        const std::vector<std::string>& dimnames) {
   const auto zattrs = std::string(
       "{\n"
@@ -72,10 +90,13 @@ std::string xarray_metadata_for_floats(const std::string_view units, const doubl
       vecstr_to_string(dimnames) +  // names of each dimension of array
       ",\n"
       "  \"units\": " +
-      "\"" + std::string(units) + "\"" +  // units of coordinate being stored
+      "\"" + std::string(meta.units) + "\"" +  // units of coordinate being stored
       ",\n"
       "  \"scale_factor\": " +
-      scale_factor_string(scale_factor) +  // scale_factor of data
+      scale_factor_string(meta.scale_factor) +  // scale_factor of data
+      optional_attr("long_name", meta.long_name) +
+      optional_attr("standard_name", meta.standard_name) +
+      optional_attr("description", meta.description) +
       "\n}");
   return zattrs;
 }
@@ -87,14 +108,13 @@ std::string xarray_metadata_for_floats(const std::string_view units, const doubl
  * Metadata for integer types (e.g. dtype "u") doesn't include scale_factor so error-test included
  * to check scale_factor is equal to 1.0.
  *
- * @param units The units of the array's coordinates.
- * @param scale_factor The scale factor of data, must equal 1.0.
+ * @param meta The variable's metadata (units, scale_factor, long_name, standard_name, description).
  * @param dimnames The names of each dimension of the array.
  * @return A string representing the metadata.
  */
-std::string xarray_metadata_for_ints(const std::string_view units, const double scale_factor,
+std::string xarray_metadata_for_ints(const VariableMetadata& meta,
                                      const std::vector<std::string>& dimnames) {
-  if (scale_factor != 1.0) {
+  if (meta.scale_factor != 1.0) {
     throw std::runtime_error("scale_factor cannot be used on non-floating point type");
   }
   const auto zattrs = std::string(
@@ -103,7 +123,10 @@ std::string xarray_metadata_for_ints(const std::string_view units, const double 
       vecstr_to_string(dimnames) +  // names of each dimension of array
       ",\n"
       "  \"units\": " +
-      "\"" + std::string(units) + "\"" +  // units of coordinate being stored
+      "\"" + std::string(meta.units) + "\"" +  // units of coordinate being stored
+      optional_attr("long_name", meta.long_name) +
+      optional_attr("standard_name", meta.standard_name) +
+      optional_attr("description", meta.description) +
       "\n}");
   return zattrs;
 }
@@ -115,14 +138,12 @@ std::string xarray_metadata_for_ints(const std::string_view units, const double 
  * Metadata includes scale_factor so is only valid for floating point types (dtype "f") or
  * complex floating point (dtype "c").
  *
- * @param units The units of the array's coordinates.
- * @param scale_factor The scale factor of data.
+ * @param meta The variable's metadata (units, scale_factor, long_name, standard_name, description).
  * @param dimnames The names of each dimension of the array.
  * @param sampledimname The name of the dimension the ragged count samples.
  * @return A string representing the metadata.
  */
-std::string raggedarray_xarray_metadata_for_floats(const std::string_view units,
-                                                   const double scale_factor,
+std::string raggedarray_xarray_metadata_for_floats(const VariableMetadata& meta,
                                                    const std::vector<std::string>& dimnames,
                                                    const std::string_view sampledimname) {
   const auto zattrs = std::string(
@@ -131,13 +152,16 @@ std::string raggedarray_xarray_metadata_for_floats(const std::string_view units,
       vecstr_to_string(dimnames) +  // names of each dimension of array
       ",\n"
       "  \"units\": " +
-      "\"" + std::string(units) + "\"" +  // units of coordinate being stored
+      "\"" + std::string(meta.units) + "\"" +  // units of coordinate being stored
       ",\n"
       "  \"scale_factor\": " +
-      scale_factor_string(scale_factor) +  // scale_factor of data
+      scale_factor_string(meta.scale_factor) +  // scale_factor of data
       ",\n"
       "  \"sample_dimension\": " +
       "\"" + std::string(sampledimname) + "\"" +  // name of sample dimension
+      optional_attr("long_name", meta.long_name) +
+      optional_attr("standard_name", meta.standard_name) +
+      optional_attr("description", meta.description) +
       "\n}");
   return zattrs;
 }
@@ -149,17 +173,15 @@ std::string raggedarray_xarray_metadata_for_floats(const std::string_view units,
  * Metadata for integer types (e.g. dtype "u") doesn't include scale_factor so error-test included
  * to check scale_factor is equal to 1.0.
  *
- * @param units The units of the array's coordinates.
- * @param scale_factor The scale factor of data.
+ * @param meta The variable's metadata (units, scale_factor, long_name, standard_name, description).
  * @param dimnames The names of each dimension of the array.
  * @param sampledimname The name of the dimension the ragged count samples.
  * @return A string representing the metadata.
  */
-std::string raggedarray_xarray_metadata_for_ints(const std::string_view units,
-                                                 const double scale_factor,
+std::string raggedarray_xarray_metadata_for_ints(const VariableMetadata& meta,
                                                  const std::vector<std::string>& dimnames,
                                                  const std::string_view sampledimname) {
-  if (scale_factor != 1.0) {
+  if (meta.scale_factor != 1.0) {
     throw std::runtime_error("scale_factor cannot be used on non-floating point type");
   }
   const auto zattrs = std::string(
@@ -168,62 +190,65 @@ std::string raggedarray_xarray_metadata_for_ints(const std::string_view units,
       vecstr_to_string(dimnames) +  // names of each dimension of array
       ",\n"
       "  \"units\": " +
-      "\"" + std::string(units) + "\"" +  // units of coordinate being stored
+      "\"" + std::string(meta.units) + "\"" +  // units of coordinate being stored
       ",\n"
       "  \"sample_dimension\": " +
       "\"" + std::string(sampledimname) + "\"" +  // name of sample dimension
+      optional_attr("long_name", meta.long_name) +
+      optional_attr("standard_name", meta.standard_name) +
+      optional_attr("description", meta.description) +
       "\n}");
   return zattrs;
 }
 
 template <>
-std::string xarray_metadata<double>(const std::string_view units, const double scale_factor,
+std::string xarray_metadata<double>(const VariableMetadata& meta,
                                     const std::vector<std::string>& dimnames) {
-  return xarray_metadata_for_floats(units, scale_factor, dimnames);
+  return xarray_metadata_for_floats(meta, dimnames);
 }
 
 template <>
-std::string xarray_metadata<float>(const std::string_view units, const double scale_factor,
+std::string xarray_metadata<float>(const VariableMetadata& meta,
                                    const std::vector<std::string>& dimnames) {
-  return xarray_metadata_for_floats(units, scale_factor, dimnames);
+  return xarray_metadata_for_floats(meta, dimnames);
 }
 
 template <>
-std::string xarray_metadata<uint32_t>(const std::string_view units, const double scale_factor,
+std::string xarray_metadata<uint32_t>(const VariableMetadata& meta,
                                       const std::vector<std::string>& dimnames) {
-  return xarray_metadata_for_ints(units, scale_factor, dimnames);
+  return xarray_metadata_for_ints(meta, dimnames);
 }
 
 template <>
-std::string xarray_metadata<uint64_t>(const std::string_view units, const double scale_factor,
+std::string xarray_metadata<uint64_t>(const VariableMetadata& meta,
                                       const std::vector<std::string>& dimnames) {
-  return xarray_metadata_for_ints(units, scale_factor, dimnames);
+  return xarray_metadata_for_ints(meta, dimnames);
 }
 
 template <>
-std::string xarray_metadata<double>(const std::string_view units, const double scale_factor,
+std::string xarray_metadata<double>(const VariableMetadata& meta,
                                     const std::vector<std::string>& dimnames,
                                     const std::string_view sampledimname) {
-  return raggedarray_xarray_metadata_for_floats(units, scale_factor, dimnames, sampledimname);
+  return raggedarray_xarray_metadata_for_floats(meta, dimnames, sampledimname);
 }
 
 template <>
-std::string xarray_metadata<float>(const std::string_view units, const double scale_factor,
+std::string xarray_metadata<float>(const VariableMetadata& meta,
                                    const std::vector<std::string>& dimnames,
                                    const std::string_view sampledimname) {
-  return raggedarray_xarray_metadata_for_floats(units, scale_factor, dimnames, sampledimname);
+  return raggedarray_xarray_metadata_for_floats(meta, dimnames, sampledimname);
 }
 
 template <>
-std::string xarray_metadata<uint32_t>(const std::string_view units, const double scale_factor,
+std::string xarray_metadata<uint32_t>(const VariableMetadata& meta,
                                       const std::vector<std::string>& dimnames,
                                       const std::string_view sampledimname) {
-  return raggedarray_xarray_metadata_for_ints(units, scale_factor, dimnames, sampledimname);
+  return raggedarray_xarray_metadata_for_ints(meta, dimnames, sampledimname);
 }
 
 template <>
-std::string xarray_metadata<uint64_t>(const std::string_view units, const double scale_factor,
+std::string xarray_metadata<uint64_t>(const VariableMetadata& meta,
                                       const std::vector<std::string>& dimnames,
                                       const std::string_view sampledimname) {
-  return raggedarray_xarray_metadata_for_ints(units, scale_factor, dimnames, sampledimname);
+  return raggedarray_xarray_metadata_for_ints(meta, dimnames, sampledimname);
 }

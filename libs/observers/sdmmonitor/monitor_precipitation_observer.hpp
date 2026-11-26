@@ -29,6 +29,7 @@
 #include "../../cleoconstants.hpp"
 #include "../../kokkosaliases.hpp"
 #include "gridboxes/gridboxmaps.hpp"
+#include "observers/cleo_variables_metadata.hpp"
 #include "observers/consttstep_observer.hpp"
 #include "observers/observers.hpp"
 #include "observers/sdmmonitor/do_sdmmonitor_obs.hpp"
@@ -132,13 +133,11 @@ inline Observer auto MonitorPrecipitationObserver(const unsigned int interval, D
                                                   Store& store, const size_t maxchunk,
                                                   const size_t ngbxs) {
   using Mo = MonitorPrecipitation;
-  const auto name = std::string_view("precip");
-  const auto units = std::string_view("m");
-  constexpr auto scale_factor = dlc::R0 * dlc::R0 * dlc::R0 / dlc::COORD0 / dlc::COORD0;
+  const auto& meta = cleo_metadata::precip;
   const auto chunkshape = good2Dchunkshape(maxchunk, ngbxs);
   const auto dimnames = std::vector<std::string>{"time", "gbxindex"};
   const auto xzarr_ptr = std::make_shared<XarrayZarrArray<Store, Mo::datatype>>(
-      dataset.template create_array<Mo::datatype>(name, units, scale_factor, chunkshape, dimnames));
+      dataset.template create_array<Mo::datatype>(meta, chunkshape, dimnames));
 
   const auto do_obs =
       DoSDMMonitorObs<Dataset, Store, Mo, Mo::datatype>(dataset, store, xzarr_ptr, Mo(ngbxs));

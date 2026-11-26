@@ -27,6 +27,7 @@
 #include <memory>
 
 #include "../../kokkosaliases.hpp"
+#include "observers/cleo_variables_metadata.hpp"
 #include "observers/consttstep_observer.hpp"
 #include "observers/create_massmoments_arrays.hpp"
 #include "observers/observers.hpp"
@@ -54,18 +55,24 @@ struct MonitorMassMomentsChangeXarrays {
 
   MonitorMassMomentsChangeXarrays(const Dataset& dataset, Store& store, const size_t maxchunk,
                                   const size_t ngbxs)
-      : delta_mom0_microphys(
-            create_massmom0_xarray(dataset, store, "delta_massmom0_microphys", maxchunk, ngbxs)),
-        delta_mom1_microphys(
-            create_massmom1_xarray(dataset, store, "delta_massmom1_microphys", maxchunk, ngbxs)),
-        delta_mom2_microphys(
-            create_massmom2_xarray(dataset, store, "delta_massmom2_microphys", maxchunk, ngbxs)),
-        delta_mom0_motion(
-            create_massmom0_xarray(dataset, store, "delta_massmom0_motion", maxchunk, ngbxs)),
-        delta_mom1_motion(
-            create_massmom1_xarray(dataset, store, "delta_massmom1_motion", maxchunk, ngbxs)),
-        delta_mom2_motion(
-            create_massmom2_xarray(dataset, store, "delta_massmom2_motion", maxchunk, ngbxs)) {}
+      : delta_mom0_microphys(create_massmom0_xarray(dataset, store,
+                                                    cleo_metadata::delta_massmom0_microphys,
+                                                    maxchunk, ngbxs)),
+        delta_mom1_microphys(create_massmom1_xarray(dataset, store,
+                                                    cleo_metadata::delta_massmom1_microphys,
+                                                    maxchunk, ngbxs)),
+        delta_mom2_microphys(create_massmom2_xarray(dataset, store,
+                                                    cleo_metadata::delta_massmom2_microphys,
+                                                    maxchunk, ngbxs)),
+        delta_mom0_motion(create_massmom0_xarray(dataset, store,
+                                                 cleo_metadata::delta_massmom0_motion, maxchunk,
+                                                 ngbxs)),
+        delta_mom1_motion(create_massmom1_xarray(dataset, store,
+                                                 cleo_metadata::delta_massmom1_motion, maxchunk,
+                                                 ngbxs)),
+        delta_mom2_motion(create_massmom2_xarray(dataset, store,
+                                                 cleo_metadata::delta_massmom2_motion, maxchunk,
+                                                 ngbxs)) {}
 };
 
 template <typename Dataset, typename Store>
@@ -86,17 +93,17 @@ struct MonitorRainMassMomentsChangeXarrays {
   MonitorRainMassMomentsChangeXarrays(const Dataset& dataset, Store& store, const size_t maxchunk,
                                       const size_t ngbxs)
       : delta_mom0_microphys(create_massmom0_xarray(
-            dataset, store, "delta_massmom0_raindrops_microphys", maxchunk, ngbxs)),
+            dataset, store, cleo_metadata::delta_massmom0_raindrops_microphys, maxchunk, ngbxs)),
         delta_mom1_microphys(create_massmom1_xarray(
-            dataset, store, "delta_massmom1_raindrops_microphys", maxchunk, ngbxs)),
+            dataset, store, cleo_metadata::delta_massmom1_raindrops_microphys, maxchunk, ngbxs)),
         delta_mom2_microphys(create_massmom2_xarray(
-            dataset, store, "delta_massmom2_raindrops_microphys", maxchunk, ngbxs)),
-        delta_mom0_motion(create_massmom0_xarray(dataset, store, "delta_massmom0_raindrops_motion",
-                                                 maxchunk, ngbxs)),
-        delta_mom1_motion(create_massmom1_xarray(dataset, store, "delta_massmom1_raindrops_motion",
-                                                 maxchunk, ngbxs)),
-        delta_mom2_motion(create_massmom2_xarray(dataset, store, "delta_massmom2_raindrops_motion",
-                                                 maxchunk, ngbxs)) {}
+            dataset, store, cleo_metadata::delta_massmom2_raindrops_microphys, maxchunk, ngbxs)),
+        delta_mom0_motion(create_massmom0_xarray(
+            dataset, store, cleo_metadata::delta_massmom0_raindrops_motion, maxchunk, ngbxs)),
+        delta_mom1_motion(create_massmom1_xarray(
+            dataset, store, cleo_metadata::delta_massmom1_raindrops_motion, maxchunk, ngbxs)),
+        delta_mom2_motion(create_massmom2_xarray(
+            dataset, store, cleo_metadata::delta_massmom2_raindrops_motion, maxchunk, ngbxs)) {}
 };
 
 /**

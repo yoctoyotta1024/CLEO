@@ -139,7 +139,8 @@ inline Observer auto create_gridboxes_observer(const unsigned int interval, Data
                                                const int maxchunk, const size_t ngbxs) {
   const CollectDataForDataset<Dataset> auto thermo = CollectThermo(dataset, maxchunk, ngbxs);
   const CollectDataForDataset<Dataset> auto wvel =
-      CollectWindVariable<Dataset, WvelFunc>(dataset, WvelFunc{}, "wvel", maxchunk, ngbxs);
+      CollectWindVariable<Dataset, WvelFunc>(dataset, WvelFunc{}, cleo_metadata::wvel, maxchunk,
+                                            ngbxs);
 
   const CollectDataForDataset<Dataset> auto nsupers = CollectNsupers(dataset, maxchunk, ngbxs);
 

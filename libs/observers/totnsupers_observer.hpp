@@ -28,6 +28,7 @@
 
 #include "../kokkosaliases.hpp"
 #include "gridboxes/gridbox.hpp"
+#include "observers/cleo_variables_metadata.hpp"
 #include "observers/consttstep_observer.hpp"
 #include "observers/observers.hpp"
 #include "superdrops/sdmmonitor.hpp"
@@ -72,7 +73,8 @@ class DoTotNsupersObs {
   DoTotNsupersObs(Dataset& dataset, Store& store, const size_t maxchunk)
       : dataset(dataset),
         xzarr_ptr(std::make_shared<XarrayZarrArray<Store, uint32_t>>(
-            dataset.template create_array<uint32_t>("totnsupers", "", 1, {maxchunk}, {"time"}))) {}
+            dataset.template create_array<uint32_t>(cleo_metadata::totnsupers, {maxchunk},
+                                                    {"time"}))) {}
 
   /**
    * @brief Destructor for DoTotNsupersObs.

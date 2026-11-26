@@ -32,6 +32,7 @@
 #include <vector>
 
 #include "configuration/communicator.hpp"
+#include "zarr/variable_metadata.hpp"
 #include "zarr/xarray_metadata.hpp"
 #include "zarr/zarr_array.hpp"
 
@@ -145,17 +146,16 @@ class XarrayZarrArray {
    *
    * @param store The store where the array will be stored.
    * @param datasetdims Dictionary like object for the dimensions of the dataset.
-   * @param name The name of the array.
-   * @param units The units of the array data.
-   * @param scale_factor The scale factor of array data.
+   * @param meta The variable's metadata (name, units, scale_factor, long_name, standard_name,
+   * description).
    * @param chunkshape The shape of the array chunks.
    * @param dimnames The names of each dimension of the array (in order outermost->innermost).
    */
   XarrayZarrArray(Store& store, const std::unordered_map<std::string, size_t>& datasetdims,
-                  const std::string_view name, const std::string_view units,
-                  const double scale_factor, const std::vector<size_t>& chunkshape,
+                  const VariableMetadata& meta, const std::vector<size_t>& chunkshape,
                   const std::vector<std::string>& dimnames)
-      : zarr(store, name, chunkshape, true, reduced_arrayshape_from_dims(datasetdims, dimnames)),
+      : zarr(store, meta.name, chunkshape, true,
+             reduced_arrayshape_from_dims(datasetdims, dimnames)),
         dimnames(dimnames),
         arrayshape(dimnames.size(), 0),
         last_totnchunks(0) {
@@ -168,7 +168,7 @@ class XarrayZarrArray {
 
     if (my_rank == 0) {
       write_arrayshape(datasetdims);
-      write_zattrs_json(store, name, xarray_metadata<T>(units, scale_factor, dimnames));
+      write_zattrs_json(store, meta.name, xarray_metadata<T>(meta, dimnames));
     }
   }
 
@@ -178,18 +178,17 @@ class XarrayZarrArray {
    *
    * @param store The store where the array will be stored.
    * @param datasetdims Dictionary like object for the dimensions of the dataset.
-   * @param name The name of the array.
-   * @param units The units of the array data.
-   * @param scale_factor The scale factor of array data.
+   * @param meta The variable's metadata (name, units, scale_factor, long_name, standard_name,
+   * description).
    * @param chunkshape The shape of the array chunks.
    * @param dimnames The names of each dimension of the array (in order outermost->innermost).
    * @param sampledimname The name of the dimension the ragged count samples.
    */
   XarrayZarrArray(Store& store, const std::unordered_map<std::string, size_t>& datasetdims,
-                  const std::string_view name, const std::string_view units,
-                  const double scale_factor, const std::vector<size_t>& chunkshape,
+                  const VariableMetadata& meta, const std::vector<size_t>& chunkshape,
                   const std::vector<std::string>& dimnames, const std::string_view sampledimname)
-      : zarr(store, name, chunkshape, true, reduced_arrayshape_from_dims(datasetdims, dimnames)),
+      : zarr(store, meta.name, chunkshape, true,
+             reduced_arrayshape_from_dims(datasetdims, dimnames)),
         dimnames(dimnames),
         arrayshape(dimnames.size(), 0),
         last_totnchunks(0) {
@@ -200,8 +199,7 @@ class XarrayZarrArray {
     int my_rank;
     my_rank = init_communicator::get_comm_rank();
     if (my_rank == 0) {
-      write_zattrs_json(store, name,
-                        xarray_metadata<T>(units, scale_factor, dimnames, sampledimname));
+      write_zattrs_json(store, meta.name, xarray_metadata<T>(meta, dimnames, sampledimname));
     }
   }
 

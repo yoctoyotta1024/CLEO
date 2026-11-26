@@ -56,6 +56,10 @@ constexpr double MR_SOL = 0.05844277;
 constexpr int IONIC = 2; /**< Degree ionic dissociation (van't Hoff factor) [dimensionless]. */
 
 constexpr double SURFSIGMA = 7.28e-2; /**< Surface tension of water [J/m^-2]. */
+
+constexpr double RAINDROP_RADIUS = 40e-6; /**< 'rain' droplets have radius >= RAINDROP_RADIUS [m] */
+constexpr double CLOUDDROP_RADIUS =
+    1e-6; /**< 'cloud' droplets have CLOUDDROP_RADIUS <= radius < RAINRADIUS [m] */
 }  // namespace dimmed_constants
 
 /**
@@ -101,6 +105,10 @@ constexpr int IONIC = DC::IONIC;                          /**< Dimensionless ION
 
 constexpr double surfconst = 4.0 * DC::SURFSIGMA * std::numbers::pi * R0 * R0;
 /**< Surface tension energy constant (see collisionkinetics) */
+
+constexpr double raindrop_radius = DC::RAINDROP_RADIUS / R0; /**< dimensionless RAINDROP_RADIUS */
+constexpr double clouddrop_radius =
+    DC::CLOUDDROP_RADIUS / R0; /**< dimensionless CLOUDDROP_RADIUS */
 }  // namespace dimless_constants
 
 /**
