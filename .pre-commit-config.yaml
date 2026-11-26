@@ -23,7 +23,7 @@ repos:
         name: Trim trailing whitespaces
         description: Trailing whitespaces are trimmed
 -   repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.17.5
+    rev: v0.17.6
     hooks:
     -   id: ruff-check
         description: python linter
@@ -45,6 +45,6 @@ repos:
         stages: [commit-msg]
         args: []
 -   repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.13.8
+    rev: 0.13.9
     hooks:
       - id: uv-lock
