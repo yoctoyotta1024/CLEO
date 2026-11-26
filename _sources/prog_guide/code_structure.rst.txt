@@ -21,17 +21,15 @@ Top-Level Repository Map
     │   │   └── collisions/        # collision-coalescence, breakup and rebound schemes
     │   ├── gridboxes/             # gridboxes (as in volumes of space) and their super-droplet
     |   |                             handling
-    │   ├── cartesiandomain/       # an implementatation of the GridboxMaps concept: a Cartesian
-    |   |                             (C-grid) domain, including droplet motion and MPI domain
-    |   |                             decomposition
-    │   ├── coupldyn_null/         # an implementatation of the CoupledDynamics concept:
-    |   |                             no dynamics at all
-    │   ├── coupldyn_fromfile/     # an implementatation of the CoupledDynamics concept:
-    |   |                             read from binary files (one-way)
-    │   ├── coupldyn_cvode/        # an implementatation of the CoupledDynamics concept:
-    |   |                             CVODE ODE solver (two-way; for a 0-D parcel model only)
-    │   ├── coupldyn_yac/          # an implementatation of the CoupledDynamics concept:
-    |   |                             YAC-coupled external dynamical core (one-way or two-way; ICON)
+    │   ├── grids/                 # concrete GridboxMaps implementations, one library per geometry/domain
+    │   │   └── cartesiandomain/   # an implementation of the GridboxMaps concept: a Cartesian
+    │   │                             (C-grid) domain, including droplet motion and MPI domain
+    │   │                             decomposition
+    │   ├── coupled_dynamics/      # concrete CoupledDynamics and associated CouplingComms implementations
+    │   │   ├── coupldyn_null/     # no dynamics at all
+    │   │   ├── coupldyn_fromfile/ # read from binary files (one-way)
+    │   │   ├── coupldyn_cvode/    # CVODE ODE solver (two-way; for a 0-D parcel model only)
+    │   │   └── coupldyn_yac/      # YAC-coupled external dynamical core (one-way or two-way; ICON)
     │   ├── observers/             # observers: for writing/streaming data output
     │   ├── zarr/                  # a minimal Zarr dataset writer used by some observers for output
     |   └── cleo_python_bindings/  # pybind11 bindings exposing parts of Cleo to Python and an
@@ -65,10 +63,10 @@ alongside the ``GridboxMaps`` concept which defines how gridboxes can be mapped 
 domain geometry (without specifying any specific geometry). A concrete domain geometry and
 its associated methods for super-droplet motion are dependent on the particular implementation of the
 GridboxMaps concept, they thus depend on ``libs/gridboxes`` and are stored in a seperate library,
-e.g. ``libs/cartesiandomain`` for a cartesian domain. If Cleo grows another domain type in the
+e.g. ``libs/grids/cartesiandomain`` for a cartesian domain. If Cleo grows another domain type in the
 future (e.g. unstructured), it would live alongside ``cartesiandomain``, implementing its own
 version of the ``GridboxMaps`` concept. The directory for coupled dynamics
-implementations (``libs/coupldyn_*``) are separate from all the SDM libraries (superdroplets,
+implementations (``libs/coupled_dynamics/coupldyn_*``) are separate from all the SDM libraries (superdroplets,
 gridboxes, observers etc.), because the coupled dynamics is independent of SDM. It is the
 ``libs/runcleo`` library which ties everything together: the model configuration, initialisation,
 coupled dynamics (and coupler), superdroplets (including their motion and microphysics), gridboxes,
@@ -84,7 +82,7 @@ velocity which satisfy that concept. The structure for moving superdroplets thro
 superdroplets relate to gridboxes, however, this is a templated structure which is agnostic to a
 particular domain geometry. Therefore, the actual implementation of the ``MoveSupersInDomain``
 structure only comes together in a particular domain geometry's library
-(e.g. in ``libs/cartesiandomain/movement``). This is where ``MoveSupersInDomain`` is filled-in with
+(e.g. in ``libs/grids/cartesiandomain/movement``). This is where ``MoveSupersInDomain`` is filled-in with
 an implmentation of the ``Motion`` concept, as well as implementations for how to transport
 superdroplets across the domain and how to enact boundary conditions for that particular geometry.
 
@@ -112,7 +110,7 @@ it links against:
     set(CLEOLIBS configuration gridboxes initialise observers runcleo superdrops zarr)
     add_executable(rshaft1d EXCLUDE_FROM_ALL "main_rshaft1d.cpp")
     target_link_libraries(rshaft1d PRIVATE coupldyn_fromfile cartesiandomain "${CLEOLIBS}")
-    target_link_libraries(rshaft1d PUBLIC Kokkos::kokkos)
+    target_link_libraries(rshaft1d PRIVATE Kokkos::kokkos)
 
 Library Overview
 ----------------
@@ -151,7 +149,7 @@ Nevertheless, here is each library in a bit more detail...
     reference/pointer-like object (``SupersInGbx``) into the slice of the super-droplet array that
     belongs to it.
 
-``cartesiandomain/`` — a concrete implementatation of the ``GridboxMaps`` concept
+``grids/cartesiandomain/`` — a concrete implementatation of the ``GridboxMaps`` concept
     Implements ``CartesianMaps`` which satisfies the ``GridboxMaps`` concept for a structured
     cartesian C-grid domain including MPI domain-decomposition logic for splitting the domain
     across MPI processes. This library also includes a concrete implementation of
@@ -192,7 +190,7 @@ Nevertheless, here is each library in a bit more detail...
     (``SuperdropInitConds``). These arrays are then used by ``RunCleo`` to create gridboxes
     and superdroplets.
 
-``coupldyn_*/`` — coupled dynamics implementations
+``coupled_dynamics/coupldyn_*/`` — coupled dynamics implementations
     One directory per option for where the thermodynamic/wind fields come from. See
     :doc:`coupled_dynamics` for what each one does and when to use it.
 

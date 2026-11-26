@@ -1,0 +1,897 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../../../">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../../../genindex.html"><link rel="search" title="Search" href="../../../search.html"><link rel="next" title="Create Cartesian Maps" href="createcartesianmaps.html"><link rel="prev" title="Cartesian Decomposition" href="cartesian_decomposition.html">
+
+    <!-- Generated with Sphinx 9.2.0 and Furo 2025.12.19 -->
+        <title>CartesianMaps - Cleo 0.X.Y documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=d111a655" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=7bdb33bb" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=8dab3a3b" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f2f2f2;
+  --color-code-foreground: #1e1e1e;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-with-moon" viewBox="0 0 24 24">
+    <title>Auto light/dark, in light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path style="opacity: 50%" d="M 5.411 14.504 C 5.471 14.504 5.532 14.504 5.591 14.504 C 3.639 16.319 4.383 19.569 6.931 20.352 C 7.693 20.586 8.512 20.551 9.25 20.252 C 8.023 23.207 4.056 23.725 2.11 21.184 C 0.166 18.642 1.702 14.949 4.874 14.536 C 5.051 14.512 5.231 14.5 5.411 14.5 L 5.411 14.504 Z"/>
+      <line x1="14.5" y1="3.25" x2="14.5" y2="1.25"/>
+      <line x1="14.5" y1="15.85" x2="14.5" y2="17.85"/>
+      <line x1="10.044" y1="5.094" x2="8.63" y2="3.68"/>
+      <line x1="19" y1="14.05" x2="20.414" y2="15.464"/>
+      <line x1="8.2" y1="9.55" x2="6.2" y2="9.55"/>
+      <line x1="20.8" y1="9.55" x2="22.8" y2="9.55"/>
+      <line x1="10.044" y1="14.006" x2="8.63" y2="15.42"/>
+      <line x1="19" y1="5.05" x2="20.414" y2="3.636"/>
+      <circle cx="14.5" cy="9.55" r="3.6"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon-with-sun" viewBox="0 0 24 24">
+    <title>Auto light/dark, in dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+      class="icon-custom-derived-from-feather-sun-and-tabler-moon">
+      <path d="M 8.282 7.007 C 8.385 7.007 8.494 7.007 8.595 7.007 C 5.18 10.184 6.481 15.869 10.942 17.24 C 12.275 17.648 13.706 17.589 15 17.066 C 12.851 22.236 5.91 23.143 2.505 18.696 C -0.897 14.249 1.791 7.786 7.342 7.063 C 7.652 7.021 7.965 7 8.282 7 L 8.282 7.007 Z"/>
+      <line style="opacity: 50%" x1="18" y1="3.705" x2="18" y2="2.5"/>
+      <line style="opacity: 50%" x1="18" y1="11.295" x2="18" y2="12.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="4.816" x2="14.464" y2="3.964"/>
+      <line style="opacity: 50%" x1="20.711" y1="10.212" x2="21.563" y2="11.063"/>
+      <line style="opacity: 50%" x1="14.205" y1="7.5" x2="13.001" y2="7.5"/>
+      <line style="opacity: 50%" x1="21.795" y1="7.5" x2="23" y2="7.5"/>
+      <line style="opacity: 50%" x1="15.316" y1="10.184" x2="14.464" y2="11.036"/>
+      <line style="opacity: 50%" x1="20.711" y1="4.789" x2="21.563" y2="3.937"/>
+      <circle style="opacity: 50%" cx="18" cy="7.5" r="2.169"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-pencil" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-pencil-code">
+      <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+      <path d="M13.5 6.5l4 4" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+  <symbol id="svg-eye" viewBox="0 0 24 24">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-eye-code">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+      <path
+        d="M11.11 17.958c-3.209 -.307 -5.91 -2.293 -8.11 -5.958c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6c-.21 .352 -.427 .688 -.647 1.008" />
+      <path d="M20 21l2 -2l-2 -2" />
+      <path d="M17 17l-2 2l2 2" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle site navigation sidebar">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc" aria-label="Toggle table of contents sidebar">
+<label class="overlay sidebar-overlay" for="__navigation"></label>
+<label class="overlay toc-overlay" for="__toc"></label>
+
+<a class="skip-to-content muted-link" href="#furo-main-content">Skip to content</a>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <span class="icon"><svg><use href="#svg-menu"></use></svg></span>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../../index.html"><div class="brand">Cleo 0.X.Y documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+          <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+          <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../../../index.html">
+  
+  <span class="sidebar-brand-text">Cleo 0.X.Y documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../intro/intro.html">General Introduction</a><input aria-label="Toggle navigation of General Introduction" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../intro/background.html">Background to Cleo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../intro/memorylayout.html">Memory Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../intro/coupling.html">Coupling to Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../intro/timestepping.html">Timestepping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../intro/monoids.html">Monoids</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../intro/kokkos.html">Kokkos Thread Parallelism</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../usage/installation/installation.html">Installation</a><input aria-label="Toggle navigation of Installation" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/installation/requirements.html">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/installation/extern.html">External Libraries</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../usage/examples/examples.html">Examples</a><input aria-label="Toggle navigation of Examples" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/examples/examples_vanilla.html">Examples on “Vanilla” Machines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/examples/examples_levante.html">Examples on Levante</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/examples/examples_jupiter.html">Examples on JUPITER</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../prog_guide/prog_guide.html">Programming Guide</a><input aria-label="Toggle navigation of Programming Guide" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../prog_guide/code_structure.html">Cleo’s Code Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../prog_guide/main_cpp.html">Understanding and Adapting <code class="docutils literal notranslate"><span class="pre">main.cpp</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../prog_guide/tutorial_new_example.html">Tutorial: Creating a New Cleo Experiment From Scratch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../prog_guide/external_project.html">Using Cleo in an External Project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../prog_guide/microphysics_and_observers.html">Combining Microphysics and Observers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../prog_guide/coupled_dynamics.html">Coupled Dynamics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../prog_guide/bashscripts_detail.html">The Bash Scripts in Detail</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../usage/for_develop/for_develop.html">For Developers</a><input aria-label="Toggle navigation of For Developers" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/for_develop/contributing.html">Contributing Guidelines</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/for_develop/good_code.html">Good Coding Practices</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../usage/for_develop/ourdocs.html">Our Docs</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../cleopy/cleopy.html">API: Cleo Python Package, cleopy</a><input aria-label="Toggle navigation of API: Cleo Python Package, cleopy" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/gbxboundariesbinary_src/gbxboundariesbinary_src.html">GbxBoundariesBinary</a><input aria-label="Toggle navigation of GbxBoundariesBinary" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/gbxboundariesbinary_src/create_gbxboundaries.html">create_gbxboundaries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/gbxboundariesbinary_src/read_gbxboundaries.html">read_gbxboundaries</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/initsuperdropsbinary_src.html">InitSuperdropsBinary</a><input aria-label="Toggle navigation of InitSuperdropsBinary" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/create_initsuperdrops.html">create_initsuperdrops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/read_initsuperdrops.html">read_initsuperdrops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/attrsgen.html">attrsgen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/crdgens.html">crdgens</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/probdists.html">probdists</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/rgens.html">rgens</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/initsuperdropsbinary_src/dryrgens.html">dryrggens</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/thermobinary_src/thermobinary_src.html">ThermoBinary</a><input aria-label="Toggle navigation of ThermoBinary" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/create_thermodynamics.html">create_thermodynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/read_thermodynamics.html">read_thermodynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/thermodyngen.html">thermodyngen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/thermogen.html">thermogen</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/thermobinary_src/windsgen.html">windsgen</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../cleopy/sdmout_src/sdmout_src.html">SDMOut</a><input aria-label="Toggle navigation of SDMOut" class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/pyzarr.html">pyzarr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/pysetuptxt.html">pysetuptxt</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/pygbxsdat.html">pygbxsdat</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/timedata.html">timedata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/thermodata.html">thermodata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/massmoms.html">massmoms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/thermoeqns.html">thermoeqns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../cleopy/sdmout_src/superdrops.html">superdrops</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cleopy/cxx2py.html">Cxx2Py</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cleopy/geninitconds.html">geninitconds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cleopy/readconfigfile.html">readconfigfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cleopy/editconfigfile.html">editconfigfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cleopy/readbinary.html">readbinary</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../cleopy/writebinary.html">writebinary</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../../libs.html">API: Cleo C++ Library</a><input aria-label="Toggle navigation of API: Cleo C++ Library" checked="" class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../configuration/configurationmod.html">Configuration Module</a><input aria-label="Toggle navigation of Configuration Module" class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../configuration/config.html">Config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configuration/required_config_params.html">Required Config Params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configuration/optional_config_params.html">Optional Config Params</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configuration/communicator.html">Communicator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../configuration/copyfiles2txt.html">Copy Files To Txt</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../gridboxes/gridboxesmod.html">Gridboxes Module</a><input aria-label="Toggle navigation of Gridboxes Module" class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../gridboxes/gridboxmaps.html">GridboxMaps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../gridboxes/gridbox.html">Gridbox</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../gridboxes/gbxindex.html">Gbxindex</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../gridboxes/supersingbx.html">SupersInGbx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../gridboxes/supersindomain.html">SupersInDomain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../gridboxes/findrefs.html">Find Refs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../gridboxes/sortsupers.html">Sort Supers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../gridboxes/movesupersindomain.html">MoveSupersInDomain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../gridboxes/predcorr.html">PredCorr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../gridboxes/predcorrmotion.html">PredCorrMotion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../gridboxes/boundary_conditions.html">BoundaryConditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../gridboxes/transport_across_domain.html">TransportAcrossDomain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../gridboxes/cfl_criteria.html">CFL Criteria</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="cartesiandomainmod.html">CartesianDomain Module</a><input aria-label="Toggle navigation of CartesianDomain Module" checked="" class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul class="current">
+<li class="toctree-l3 has-children"><a class="reference internal" href="movement/movementmod.html">Movement Module</a><input aria-label="Toggle navigation of Movement Module" class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="movement/cartesian_motion.html">Cartesian Motion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="movement/cartesian_movement.html">Cartesian Movement</a></li>
+<li class="toctree-l4"><a class="reference internal" href="movement/cartesian_transport_across_domain.html">Cartesian Transport Across Domain</a></li>
+<li class="toctree-l4"><a class="reference internal" href="movement/add_supers_to_domain.html">Add Supers To Domain</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cartesian_decomposition.html">Cartesian Decomposition</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">CartesianMaps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="createcartesianmaps.html">Create Cartesian Maps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="domainboundaries.html">Domain Boundaries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="doubly_periodic_domain.html">Doubly Periodic Domain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="collect_data_for_collective_dataset.html">Collect Data For Collective Dataset</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../superdrops/superdropsmod.html">Superdrops Module</a><input aria-label="Toggle navigation of Superdrops Module" class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../superdrops/collisions/collisionsmod.html">Collisions Module</a><input aria-label="Toggle navigation of Collisions Module" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../superdrops/collisions/collisions.html">Collisions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../superdrops/collisions/collisionkinetics.html">Collision Kinetics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../superdrops/collisions/coalescence.html">Coalescence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../superdrops/collisions/coalescence_efficiency.html">Coalescence Efficiency</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../superdrops/collisions/breakup.html">Breakup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../superdrops/collisions/breakup_nfrags.html">Breakup NFrags</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../superdrops/collisions/coalbure.html">Coalescence-Breakup-Rebound</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../superdrops/collisions/coalbure_flag.html">CoalBuRe Flag</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../superdrops/collisions/constprob.html">Const Prob</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../superdrops/collisions/golovinprob.html">Golovin Prob</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../superdrops/collisions/hydrodynamicprob.html">Hydrodynamic Prob</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../superdrops/collisions/longhydroprob.html">Long Hydro Prob</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../superdrops/collisions/lowlistprob.html">Low List Prob</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../superdrops/collisions/shuffle.html">Thread-Safe Superdroplet Shuffling Algorithms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../superdrops/collisions/urbg.html">Randomness Generation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../superdrops/condensation.html">Condensation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../superdrops/impliciteuler.html">Implicit Euler Method for Condensation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../superdrops/kokkosaliases_sd.html">Super-Droplet Kokkos Aliases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../superdrops/microphysical_process.html">Microphysical Process</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../superdrops/motion.html">Motion</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../superdrops/sdmmonitor.html">SDMMonitor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../superdrops/state.html">State</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../superdrops/superdrop.html">Superdrop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../superdrops/superdrop_ids.html">Superdrop IDs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../superdrops/superdrop_attrs.html">Superdrop Attributes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../superdrops/terminalvelocity.html">Terminal Velocities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../superdrops/thermodynamic_equations.html">Thermodynamic Equations</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../initialise/initialisemod.html">Initialisation Module</a><input aria-label="Toggle navigation of Initialisation Module" class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../initialise/initialconditions.html">InitialConditions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../initialise/timesteps.html">Timesteps</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../initialise/readbinary.html">Read Binary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../initialise/gbx_bounds_from_binary.html">GbxBoundsFromBinary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../initialise/init_all_supers_from_binary.html">InitAllSupersFromBinary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../initialise/init_supers_from_binary.html">InitSupersFromBinary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../initialise/initgbxsnull.html">InitGbxsNull</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../runcleo/runcleomod.html">RunCLEO Module</a><input aria-label="Toggle navigation of RunCLEO Module" class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../runcleo/coupleddynamics.html">CoupledDynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../runcleo/couplingcomms.html">CouplingComms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../runcleo/creategbxs.html">Create Gridboxes Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../runcleo/createsupers.html">Create Super-droplets Sub-Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../runcleo/gensuperdrop.html">GenSuperdrop</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../runcleo/runcleo.html">RunCLEO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../runcleo/sdmmethods.html">SDMMethods</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../observers/observersmod.html">Observers Module</a><input aria-label="Toggle navigation of Observers Module" class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/observers.html">Observers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/streamout_observer.html">StreamOut Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/consttstep_observer.html">Constant Time Step Observers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/write_to_dataset_observer.html">Template for Observer to Write To Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/parallel_write_data.html">Parallel Write Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/collect_data_for_dataset.html">Collect Data For Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/collect_data_for_simple_dataset.html">Collect Data For Simple Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/generic_collect_data.html">Generic Collect Data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/time_observer.html">Time Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/gbxindex_observer.html">Gbxindex Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/superdrops_observer.html">Superdrops Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/nsupers_observer.html">Nsupers Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/totnsupers_observer.html">TotNsupers Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/state_observer.html">State Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/thermo_observer.html">Thermodynamics Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/windvel_observer.html">WindVel Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/massmoments_observer.html">Massmoments Observer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../observers/create_massmoments_arrays.html">Create Massmoments Arrays</a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../observers/sdmmonitor/sdmmonitormod.html">SDMMonitor Observers Module</a><input aria-label="Toggle navigation of SDMMonitor Observers Module" class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../observers/sdmmonitor/do_sdmmonitor_obs.html">DoSDMMonitorObs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../observers/sdmmonitor/monitor_condensation_observer.html">Monitor Condensation Observer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../observers/sdmmonitor/monitor_massmoments_change.html">Monitor Massmoments Change</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../observers/sdmmonitor/monitor_massmoments_change_observer.html">Monitor Massmoments Change Observer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../observers/sdmmonitor/monitor_precipitation_observer.html">Monitor Precipitation Observer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../zarr/zarrmod.html">Zarr Module</a><input aria-label="Toggle navigation of Zarr Module" class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../zarr/buffer.html">Buffer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../zarr/chunks.html">Chunks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../zarr/dataset.html">Dataset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../zarr/fsstore.html">FSStore</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../zarr/store_accessor.html">StoreAccessor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../zarr/xarray_zarr_array.html">XarrayZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../zarr/xarray_metadata.html">Xarray Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../zarr/zarr_array.html">ZarrArray</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../zarr/zarr_metadata.html">Zarr Metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../zarr/zarr_group.html">ZarrGroup</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../coupled_dynamics/coupldyn_null/coupldynnullmod.html">Coupldyn Null Module</a><input aria-label="Toggle navigation of Coupldyn Null Module" class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../coupled_dynamics/coupldyn_null/nulldynamics.html">NullDynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../coupled_dynamics/coupldyn_null/nulldyncomms.html">NullDynComms</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../coupled_dynamics/coupldyn_fromfile/coupldynfromfilemod.html">Coupldyn FromFile Module</a><input aria-label="Toggle navigation of Coupldyn FromFile Module" class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../coupled_dynamics/coupldyn_fromfile/fromfile_cartesian_dynamics.html">FromFile Cartesian Dynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../coupled_dynamics/coupldyn_fromfile/fromfilecomms.html">FromFileComms</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../coupled_dynamics/coupldyn_cvode/coupldyncvodemod.html">Coupldyn CVODE Module</a><input aria-label="Toggle navigation of Coupldyn CVODE Module" class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../coupled_dynamics/coupldyn_cvode/cvodedynamics.html">CvodeDynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../coupled_dynamics/coupldyn_cvode/cvodecomms.html">CvodeComms</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../coupled_dynamics/coupldyn_cvode/differentialfuncs.html">Differential Funcs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../coupled_dynamics/coupldyn_cvode/initgbxs_cvode.html">InitGbxsCvode</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../coupled_dynamics/coupldyn_yac/coupldynyacmod.html">Coupldyn YAC Module</a><input aria-label="Toggle navigation of Coupldyn YAC Module" class="toctree-checkbox" id="toctree-checkbox-26" name="toctree-checkbox-26" role="switch" type="checkbox"/><label for="toctree-checkbox-26"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../coupled_dynamics/coupldyn_yac/yac_cartesian_dynamics.html">YAC Cartesian Dynamics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../coupled_dynamics/coupldyn_yac/yac_comms.html">YAC Comms</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../cleo_python_bindings/cleopythonbindingsmod.html">CLEO Python Bindings Module</a><input aria-label="Toggle navigation of CLEO Python Bindings Module" class="toctree-checkbox" id="toctree-checkbox-27" name="toctree-checkbox-27" role="switch" type="checkbox"/><label for="toctree-checkbox-27"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../../cleo_python_bindings/coupldyn_numpy/coupldynnumpymod.html">Coupldyn Numpy Module</a><input aria-label="Toggle navigation of Coupldyn Numpy Module" class="toctree-checkbox" id="toctree-checkbox-28" name="toctree-checkbox-28" role="switch" type="checkbox"/><label for="toctree-checkbox-28"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../cleo_python_bindings/coupldyn_numpy/numpy_dynamics.html">NumpyDynamics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../cleo_python_bindings/coupldyn_numpy/numpy_comms.html">NumpyComms</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../cleo_python_bindings/coupldyn_numpy/pycoupldyn_numpy.html">Py Coupldyn Numpy</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleo_python_bindings/cleo_python_bindings.html">CLEO Python Bindings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleo_python_bindings/cleo_python_bindings_aliases.html">CLEO Python Bindings Aliases</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleo_python_bindings/optional_terminal_velocity.html">Optional Terminal Velocity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleo_python_bindings/py_cartesiandomain.html">Py CartesianDomain</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleo_python_bindings/py_configuration.html">Py Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleo_python_bindings/py_gridboxes.html">Py Gridboxes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleo_python_bindings/py_initialise.html">Py Initialise</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleo_python_bindings/py_observers.html">Py Observers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleo_python_bindings/py_runcleo.html">Py RunCLEO</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleo_python_bindings/py_superdrops.html">Py Superdrops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../cleo_python_bindings/py_zarr.html">Py Zarr</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../cleoconstants.html">Cleo Constants</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../kokkosaliases.html">Kokkos Aliases</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/yoctoyotta1024/CLEO.git">GitHub Repo</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contact.html">Contact Us!</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../references.html">References</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="view-this-page">
+  <a class="muted-link" href="../../../_sources/libs/grids/cartesiandomain/cartesianmaps.rst.txt" title="View this page">
+    <svg><use href="#svg-eye"></use></svg>
+    <span class="visually-hidden">View this page</span>
+  </a>
+</div>
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle" aria-label="Toggle Light / Dark / Auto color theme">
+              <svg class="theme-icon-when-auto-light"><use href="#svg-sun-with-moon"></use></svg>
+              <svg class="theme-icon-when-auto-dark"><use href="#svg-moon-with-sun"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <span class="icon"><svg><use href="#svg-toc"></use></svg></span>
+          </label>
+        </div>
+        <article role="main" id="furo-main-content">
+          <section id="cartesianmaps">
+<h1>CartesianMaps<a class="headerlink" href="#cartesianmaps" title="Link to this heading">¶</a></h1>
+<p>Header file: <code class="docutils literal notranslate"><span class="pre">&lt;libs/cartesiandomain/cartesianmaps.hpp&gt;</span></code>
+<a class="reference external" href="https://github.com/yoctoyotta1024/CLEO/blob/main/libs/cartesiandomain/cartesianmaps.hpp">[source]</a></p>
+<p>The concrete implementation of the <span class="xref std std-doc">../gridboxes/gridboxmaps</span> concept for a Cartesian domain.</p>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv413CartesianMaps">
+<span id="_CPPv313CartesianMaps"></span><span id="_CPPv213CartesianMaps"></span><span id="CartesianMaps"></span><span class="target" id="structCartesianMaps"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CartesianMaps</span></span></span><a class="headerlink" href="#_CPPv413CartesianMaps" title="Link to this definition">¶</a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;cartesianmaps.hpp&gt;</em></div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps13CartesianMapsEv">
+<span id="_CPPv3N13CartesianMaps13CartesianMapsEv"></span><span id="_CPPv2N13CartesianMaps13CartesianMapsEv"></span><span id="CartesianMaps::CartesianMaps"></span><span class="target" id="structCartesianMaps_1a660d4b91edb2e0bf8b2e7e79c56188be"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">explicit</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">CartesianMaps</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13CartesianMaps13CartesianMapsEv" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps25set_coord3bounds_via_copyEKN14kokkos_pairmap10HostMirrorE">
+<span id="_CPPv3N13CartesianMaps25set_coord3bounds_via_copyEKN14kokkos_pairmap10HostMirrorE"></span><span id="_CPPv2N13CartesianMaps25set_coord3bounds_via_copyEKN14kokkos_pairmap10HostMirrorE"></span><span id="CartesianMaps::set_coord3bounds_via_copy__kokkos_pairmap::HostMirrorC"></span><span class="target" id="structCartesianMaps_1a89fe5f04ae276f6dd3b44dba2009ae9c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_coord3bounds_via_copy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../../kokkosaliases.html#_CPPv414kokkos_pairmap" title="kokkos_pairmap"><span class="n"><span class="pre">kokkos_pairmap</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">HostMirror</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">h_to_coord3bounds</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13CartesianMaps25set_coord3bounds_via_copyEKN14kokkos_pairmap10HostMirrorE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps25set_coord1bounds_via_copyEKN14kokkos_pairmap10HostMirrorE">
+<span id="_CPPv3N13CartesianMaps25set_coord1bounds_via_copyEKN14kokkos_pairmap10HostMirrorE"></span><span id="_CPPv2N13CartesianMaps25set_coord1bounds_via_copyEKN14kokkos_pairmap10HostMirrorE"></span><span id="CartesianMaps::set_coord1bounds_via_copy__kokkos_pairmap::HostMirrorC"></span><span class="target" id="structCartesianMaps_1a16b847e4d3ce3c33174f5d5031db09ea"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_coord1bounds_via_copy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../../kokkosaliases.html#_CPPv414kokkos_pairmap" title="kokkos_pairmap"><span class="n"><span class="pre">kokkos_pairmap</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">HostMirror</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">h_to_coord1bounds</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13CartesianMaps25set_coord1bounds_via_copyEKN14kokkos_pairmap10HostMirrorE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps25set_coord2bounds_via_copyEKN14kokkos_pairmap10HostMirrorE">
+<span id="_CPPv3N13CartesianMaps25set_coord2bounds_via_copyEKN14kokkos_pairmap10HostMirrorE"></span><span id="_CPPv2N13CartesianMaps25set_coord2bounds_via_copyEKN14kokkos_pairmap10HostMirrorE"></span><span id="CartesianMaps::set_coord2bounds_via_copy__kokkos_pairmap::HostMirrorC"></span><span class="target" id="structCartesianMaps_1a25824452dc172ffef7a8e80175695e03"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_coord2bounds_via_copy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../../kokkosaliases.html#_CPPv414kokkos_pairmap" title="kokkos_pairmap"><span class="n"><span class="pre">kokkos_pairmap</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">HostMirror</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">h_to_coord2bounds</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13CartesianMaps25set_coord2bounds_via_copyEKN14kokkos_pairmap10HostMirrorE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps29set_back_coord3nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE">
+<span id="_CPPv3N13CartesianMaps29set_back_coord3nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE"></span><span id="_CPPv2N13CartesianMaps29set_back_coord3nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE"></span><span id="CartesianMaps::set_back_coord3nghbr_via_copy__kokkos_uintmap::HostMirrorC"></span><span class="target" id="structCartesianMaps_1acdd61bb9f40c001bca7f0d7fdae29b2d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_back_coord3nghbr_via_copy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../../kokkosaliases.html#_CPPv414kokkos_uintmap" title="kokkos_uintmap"><span class="n"><span class="pre">kokkos_uintmap</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">HostMirror</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">h_to_back_coord3nghbr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13CartesianMaps29set_back_coord3nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps32set_forward_coord3nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE">
+<span id="_CPPv3N13CartesianMaps32set_forward_coord3nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE"></span><span id="_CPPv2N13CartesianMaps32set_forward_coord3nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE"></span><span id="CartesianMaps::set_forward_coord3nghbr_via_copy__kokkos_uintmap::HostMirrorC"></span><span class="target" id="structCartesianMaps_1a9b8c6ba3e00008a25493cc40a93c2791"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_forward_coord3nghbr_via_copy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../../kokkosaliases.html#_CPPv414kokkos_uintmap" title="kokkos_uintmap"><span class="n"><span class="pre">kokkos_uintmap</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">HostMirror</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">h_to_forward_coord3nghbr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13CartesianMaps32set_forward_coord3nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps29set_back_coord1nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE">
+<span id="_CPPv3N13CartesianMaps29set_back_coord1nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE"></span><span id="_CPPv2N13CartesianMaps29set_back_coord1nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE"></span><span id="CartesianMaps::set_back_coord1nghbr_via_copy__kokkos_uintmap::HostMirrorC"></span><span class="target" id="structCartesianMaps_1a018e9baead09cdfe47e7572ce77ca550"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_back_coord1nghbr_via_copy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../../kokkosaliases.html#_CPPv414kokkos_uintmap" title="kokkos_uintmap"><span class="n"><span class="pre">kokkos_uintmap</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">HostMirror</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">h_to_back_coord1nghbr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13CartesianMaps29set_back_coord1nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps32set_forward_coord1nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE">
+<span id="_CPPv3N13CartesianMaps32set_forward_coord1nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE"></span><span id="_CPPv2N13CartesianMaps32set_forward_coord1nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE"></span><span id="CartesianMaps::set_forward_coord1nghbr_via_copy__kokkos_uintmap::HostMirrorC"></span><span class="target" id="structCartesianMaps_1ad34bb7a5f75a1d13662e9809095f15c9"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_forward_coord1nghbr_via_copy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../../kokkosaliases.html#_CPPv414kokkos_uintmap" title="kokkos_uintmap"><span class="n"><span class="pre">kokkos_uintmap</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">HostMirror</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">h_to_forward_coord1nghbr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13CartesianMaps32set_forward_coord1nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps29set_back_coord2nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE">
+<span id="_CPPv3N13CartesianMaps29set_back_coord2nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE"></span><span id="_CPPv2N13CartesianMaps29set_back_coord2nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE"></span><span id="CartesianMaps::set_back_coord2nghbr_via_copy__kokkos_uintmap::HostMirrorC"></span><span class="target" id="structCartesianMaps_1a092d23f70441c6711ed509787061a00b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_back_coord2nghbr_via_copy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../../kokkosaliases.html#_CPPv414kokkos_uintmap" title="kokkos_uintmap"><span class="n"><span class="pre">kokkos_uintmap</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">HostMirror</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">h_to_back_coord2nghbr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13CartesianMaps29set_back_coord2nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps32set_forward_coord2nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE">
+<span id="_CPPv3N13CartesianMaps32set_forward_coord2nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE"></span><span id="_CPPv2N13CartesianMaps32set_forward_coord2nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE"></span><span id="CartesianMaps::set_forward_coord2nghbr_via_copy__kokkos_uintmap::HostMirrorC"></span><span class="target" id="structCartesianMaps_1ac2e8773778f31a41d257f35059dcf4ba"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_forward_coord2nghbr_via_copy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../../kokkosaliases.html#_CPPv414kokkos_uintmap" title="kokkos_uintmap"><span class="n"><span class="pre">kokkos_uintmap</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">HostMirror</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">h_to_forward_coord2nghbr</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13CartesianMaps32set_forward_coord2nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps16set_gbxareas_mapEK14kokkos_dblmaph">
+<span id="_CPPv3N13CartesianMaps16set_gbxareas_mapEK14kokkos_dblmaph"></span><span id="_CPPv2N13CartesianMaps16set_gbxareas_mapEK14kokkos_dblmaph"></span><span id="CartesianMaps::set_gbxareas_map__kokkos_dblmaphC"></span><span class="target" id="structCartesianMaps_1afabb1a11a46cfc7c2526697f047d1bce"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_gbxareas_map</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../../kokkosaliases.html#_CPPv414kokkos_dblmaph" title="kokkos_dblmaph"><span class="n"><span class="pre">kokkos_dblmaph</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">i_to_areas</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13CartesianMaps16set_gbxareas_mapEK14kokkos_dblmaph" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps18set_gbxvolumes_mapEK14kokkos_dblmaph">
+<span id="_CPPv3N13CartesianMaps18set_gbxvolumes_mapEK14kokkos_dblmaph"></span><span id="_CPPv2N13CartesianMaps18set_gbxvolumes_mapEK14kokkos_dblmaph"></span><span id="CartesianMaps::set_gbxvolumes_map__kokkos_dblmaphC"></span><span class="target" id="structCartesianMaps_1ad7a9ea8cdcc90babb9f3c742ccd3bc65"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_gbxvolumes_map</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../../kokkosaliases.html#_CPPv414kokkos_dblmaph" title="kokkos_dblmaph"><span class="n"><span class="pre">kokkos_dblmaph</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">i_to_volumes</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13CartesianMaps18set_gbxvolumes_mapEK14kokkos_dblmaph" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps25set_global_ndims_via_copyEKN11viewd_ndims10HostMirrorE">
+<span id="_CPPv3N13CartesianMaps25set_global_ndims_via_copyEKN11viewd_ndims10HostMirrorE"></span><span id="_CPPv2N13CartesianMaps25set_global_ndims_via_copyEKN11viewd_ndims10HostMirrorE"></span><span id="CartesianMaps::set_global_ndims_via_copy__viewd_ndims::HostMirrorC"></span><span class="target" id="structCartesianMaps_1a806598e46fc21f40a3bddea4d605425e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_global_ndims_via_copy</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="../../kokkosaliases.html#_CPPv411viewd_ndims" title="viewd_ndims"><span class="n"><span class="pre">viewd_ndims</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">HostMirror</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">h_global_ndims</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13CartesianMaps25set_global_ndims_via_copyEKN11viewd_ndims10HostMirrorE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13CartesianMaps25get_global_ndims_hostcopyEv">
+<span id="_CPPv3NK13CartesianMaps25get_global_ndims_hostcopyEv"></span><span id="_CPPv2NK13CartesianMaps25get_global_ndims_hostcopyEv"></span><span id="CartesianMaps::get_global_ndims_hostcopyC"></span><span class="target" id="structCartesianMaps_1a267fe01630eedd16ffb608472a8a5a65"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../../kokkosaliases.html#_CPPv411viewd_ndims" title="viewd_ndims"><span class="n"><span class="pre">viewd_ndims</span></span></a><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">HostMirror</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_global_ndims_hostcopy</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13CartesianMaps25get_global_ndims_hostcopyEv" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13CartesianMaps16get_global_ndimsEv">
+<span id="_CPPv3NK13CartesianMaps16get_global_ndimsEv"></span><span id="_CPPv2NK13CartesianMaps16get_global_ndimsEv"></span><span id="CartesianMaps::get_global_ndimsC"></span><span class="target" id="structCartesianMaps_1a6e4b634100b1b40f0c932aa8827f3362"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="../../kokkosaliases.html#_CPPv411viewd_ndims" title="viewd_ndims"><span class="n"><span class="pre">viewd_ndims</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_global_ndims</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13CartesianMaps16get_global_ndimsEv" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13CartesianMaps15get_global_ndimEKj">
+<span id="_CPPv3NK13CartesianMaps15get_global_ndimEKj"></span><span id="_CPPv2NK13CartesianMaps15get_global_ndimEKj"></span><span id="CartesianMaps::get_global_ndim__unsigned-iCC"></span><span class="target" id="structCartesianMaps_1a4fdb028c0cd0ae9998cd3b6c3c3d9c8c"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_global_ndim</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">d</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13CartesianMaps15get_global_ndimEKj" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13CartesianMaps9maps_sizeEv">
+<span id="_CPPv3NK13CartesianMaps9maps_sizeEv"></span><span id="_CPPv2NK13CartesianMaps9maps_sizeEv"></span><span id="CartesianMaps::maps_sizeC"></span><span class="target" id="structCartesianMaps_1a18ac6fb72fe35464b60f64e3ada411b3"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maps_size</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13CartesianMaps9maps_sizeEv" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13CartesianMaps13get_gbxvolumeEKj">
+<span id="_CPPv3NK13CartesianMaps13get_gbxvolumeEKj"></span><span id="_CPPv2NK13CartesianMaps13get_gbxvolumeEKj"></span><span id="CartesianMaps::get_gbxvolume__unsigned-iCC"></span><span class="target" id="structCartesianMaps_1ae16973bf9ebd161583093f95bb3ed5d6"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_gbxvolume</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gbxidx</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13CartesianMaps13get_gbxvolumeEKj" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13CartesianMaps11get_gbxareaEKj">
+<span id="_CPPv3NK13CartesianMaps11get_gbxareaEKj"></span><span id="_CPPv2NK13CartesianMaps11get_gbxareaEKj"></span><span id="CartesianMaps::get_gbxarea__unsigned-iCC"></span><span class="target" id="structCartesianMaps_1afb6556d4f824e47ddca7e46e74c98f4f"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_gbxarea</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gbxidx</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13CartesianMaps11get_gbxareaEKj" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13CartesianMaps12coord3boundsEKj">
+<span id="_CPPv3NK13CartesianMaps12coord3boundsEKj"></span><span id="_CPPv2NK13CartesianMaps12coord3boundsEKj"></span><span id="CartesianMaps::coord3bounds__unsigned-iCC"></span><span class="target" id="structCartesianMaps_1a32122dfd756e47c9377a05fab05e89b4"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coord3bounds</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gbxidx</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13CartesianMaps12coord3boundsEKj" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13CartesianMaps12coord1boundsEKj">
+<span id="_CPPv3NK13CartesianMaps12coord1boundsEKj"></span><span id="_CPPv2NK13CartesianMaps12coord1boundsEKj"></span><span id="CartesianMaps::coord1bounds__unsigned-iCC"></span><span class="target" id="structCartesianMaps_1a0d28758adc4f7aacfb1e3f837f3a1590"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coord1bounds</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gbxidx</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13CartesianMaps12coord1boundsEKj" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13CartesianMaps12coord2boundsEKj">
+<span id="_CPPv3NK13CartesianMaps12coord2boundsEKj"></span><span id="_CPPv2NK13CartesianMaps12coord2boundsEKj"></span><span id="CartesianMaps::coord2bounds__unsigned-iCC"></span><span class="target" id="structCartesianMaps_1acdecdd7929269acc1684762d79c44e05"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">Kokkos</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">pair</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coord2bounds</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gbxidx</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13CartesianMaps12coord2boundsEKj" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13CartesianMaps14coord3backwardEj">
+<span id="_CPPv3NK13CartesianMaps14coord3backwardEj"></span><span id="_CPPv2NK13CartesianMaps14coord3backwardEj"></span><span id="CartesianMaps::coord3backward__unsigned-iC"></span><span class="target" id="structCartesianMaps_1a14d736603775d508f75aa8ba49439791"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coord3backward</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gbxindex</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13CartesianMaps14coord3backwardEj" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13CartesianMaps13coord3forwardEj">
+<span id="_CPPv3NK13CartesianMaps13coord3forwardEj"></span><span id="_CPPv2NK13CartesianMaps13coord3forwardEj"></span><span id="CartesianMaps::coord3forward__unsigned-iC"></span><span class="target" id="structCartesianMaps_1a55e6b64e7fca6288091658fd24652e5d"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coord3forward</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gbxindex</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13CartesianMaps13coord3forwardEj" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13CartesianMaps14coord1backwardEj">
+<span id="_CPPv3NK13CartesianMaps14coord1backwardEj"></span><span id="_CPPv2NK13CartesianMaps14coord1backwardEj"></span><span id="CartesianMaps::coord1backward__unsigned-iC"></span><span class="target" id="structCartesianMaps_1a79138629bf46378c70d1e57ae379c2b8"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coord1backward</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gbxindex</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13CartesianMaps14coord1backwardEj" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13CartesianMaps13coord1forwardEj">
+<span id="_CPPv3NK13CartesianMaps13coord1forwardEj"></span><span id="_CPPv2NK13CartesianMaps13coord1forwardEj"></span><span id="CartesianMaps::coord1forward__unsigned-iC"></span><span class="target" id="structCartesianMaps_1a1e72e31cd41e2d6b2186529178c852cc"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coord1forward</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gbxindex</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13CartesianMaps13coord1forwardEj" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13CartesianMaps14coord2backwardEj">
+<span id="_CPPv3NK13CartesianMaps14coord2backwardEj"></span><span id="_CPPv2NK13CartesianMaps14coord2backwardEj"></span><span id="CartesianMaps::coord2backward__unsigned-iC"></span><span class="target" id="structCartesianMaps_1a0e704315d5719038438a21ab42806e28"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coord2backward</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gbxindex</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13CartesianMaps14coord2backwardEj" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13CartesianMaps13coord2forwardEj">
+<span id="_CPPv3NK13CartesianMaps13coord2forwardEj"></span><span id="_CPPv2NK13CartesianMaps13coord2forwardEj"></span><span id="CartesianMaps::coord2forward__unsigned-iC"></span><span class="target" id="structCartesianMaps_1a2384649d3a97ba4b8d0ecbe548a9871b"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">coord2forward</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gbxindex</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13CartesianMaps13coord2forwardEj" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps20create_decompositionENSt6vectorI6size_tEE19GbxBoundsFromBinary">
+<span id="_CPPv3N13CartesianMaps20create_decompositionENSt6vectorI6size_tEE19GbxBoundsFromBinary"></span><span id="_CPPv2N13CartesianMaps20create_decompositionENSt6vectorI6size_tEE19GbxBoundsFromBinary"></span><span id="CartesianMaps::create_decomposition__std::vector:s:.GbxBoundsFromBinary"></span><span class="target" id="structCartesianMaps_1a1cefc793e9724cf982986cdc32d2e47a"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_decomposition</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">global_ndims</span></span>, <a class="reference internal" href="../../initialise/gbx_bounds_from_binary.html#_CPPv419GbxBoundsFromBinary" title="GbxBoundsFromBinary"><span class="n"><span class="pre">GbxBoundsFromBinary</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">gfb</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N13CartesianMaps20create_decompositionENSt6vectorI6size_tEE19GbxBoundsFromBinary" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13CartesianMaps24get_domain_decompositionEv">
+<span id="_CPPv3NK13CartesianMaps24get_domain_decompositionEv"></span><span id="_CPPv2NK13CartesianMaps24get_domain_decompositionEv"></span><span id="CartesianMaps::get_domain_decompositionC"></span><span class="target" id="structCartesianMaps_1acac3f5c885c322b96804ca7c4c0cbc81"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="cartesian_decomposition.html#_CPPv422CartesianDecomposition" title="CartesianDecomposition"><span class="n"><span class="pre">CartesianDecomposition</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">get_domain_decomposition</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13CartesianMaps24get_domain_decompositionEv" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13CartesianMaps27get_total_global_ngridboxesEv">
+<span id="_CPPv3NK13CartesianMaps27get_total_global_ngridboxesEv"></span><span id="_CPPv2NK13CartesianMaps27get_total_global_ngridboxesEv"></span><span id="CartesianMaps::get_total_global_ngridboxesC"></span><span class="target" id="structCartesianMaps_1ae506c5b24f2835b92c77b36ce78e5d90"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_total_global_ngridboxes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13CartesianMaps27get_total_global_ngridboxesEv" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13CartesianMaps20get_local_ngridboxesEv">
+<span id="_CPPv3NK13CartesianMaps20get_local_ngridboxesEv"></span><span id="_CPPv2NK13CartesianMaps20get_local_ngridboxesEv"></span><span id="CartesianMaps::get_local_ngridboxesC"></span><span class="target" id="structCartesianMaps_1a48d0357790b1e8126628e0d07fa00385"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_local_ngridboxes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13CartesianMaps20get_local_ngridboxesEv" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13CartesianMaps29get_local_ngridboxes_hostcopyEv">
+<span id="_CPPv3NK13CartesianMaps29get_local_ngridboxes_hostcopyEv"></span><span id="_CPPv2NK13CartesianMaps29get_local_ngridboxes_hostcopyEv"></span><span id="CartesianMaps::get_local_ngridboxes_hostcopyC"></span><span class="target" id="structCartesianMaps_1a6efa0c58343eafbe18add5dc0776d9ca"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_local_ngridboxes_hostcopy</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13CartesianMaps29get_local_ngridboxes_hostcopyEv" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13CartesianMaps24global_to_local_gbxindexE6size_t">
+<span id="_CPPv3NK13CartesianMaps24global_to_local_gbxindexE6size_t"></span><span id="_CPPv2NK13CartesianMaps24global_to_local_gbxindexE6size_t"></span><span id="CartesianMaps::global_to_local_gbxindex__sC"></span><span class="target" id="structCartesianMaps_1a7251fb92a38bc01838bb09c4e7bdb6bb"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">global_to_local_gbxindex</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">global_gridbox_index</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13CartesianMaps24global_to_local_gbxindexE6size_t" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13CartesianMaps29local_to_global_gridbox_indexEji">
+<span id="_CPPv3NK13CartesianMaps29local_to_global_gridbox_indexEji"></span><span id="_CPPv2NK13CartesianMaps29local_to_global_gridbox_indexEji"></span><span id="CartesianMaps::local_to_global_gridbox_index__unsigned-i.iC"></span><span class="target" id="structCartesianMaps_1a9f6f87df2413e80e4afff8e4690cc704"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">local_to_global_gridbox_index</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">local_gridbox_index</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">process</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="o"><span class="pre">-</span></span><span class="m"><span class="pre">1</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13CartesianMaps29local_to_global_gridbox_indexEji" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK13CartesianMaps32get_local_bounding_gridbox_indexEKjRdRdRd">
+<span id="_CPPv3NK13CartesianMaps32get_local_bounding_gridbox_indexEKjRdRdRd"></span><span id="_CPPv2NK13CartesianMaps32get_local_bounding_gridbox_indexEKjRdRdRd"></span><span id="CartesianMaps::get_local_bounding_gridbox_index__unsigned-iC.doubleR.doubleR.doubleRC"></span><span class="target" id="structCartesianMaps_1ad26c27a0a3021866c0e5e663d13ba377"></span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_local_bounding_gridbox_index</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">unsigned</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">gbxindex</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">coord3</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">coord1</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">coord2</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK13CartesianMaps32get_local_bounding_gridbox_indexEKjRdRdRd" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-private-members">Private Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps20domain_decompositionE">
+<span id="_CPPv3N13CartesianMaps20domain_decompositionE"></span><span id="_CPPv2N13CartesianMaps20domain_decompositionE"></span><span id="CartesianMaps::domain_decomposition__CartesianDecomposition"></span><span class="target" id="structCartesianMaps_1aea98ddcd7d12b190c6e16ffb5bc775a0"></span><a class="reference internal" href="cartesian_decomposition.html#_CPPv422CartesianDecomposition" title="CartesianDecomposition"><span class="n"><span class="pre">CartesianDecomposition</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">domain_decomposition</span></span></span><a class="headerlink" href="#_CPPv4N13CartesianMaps20domain_decompositionE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps9is_decompE">
+<span id="_CPPv3N13CartesianMaps9is_decompE"></span><span id="_CPPv2N13CartesianMaps9is_decompE"></span><span id="CartesianMaps::is_decomp__b"></span><span class="target" id="structCartesianMaps_1ad9a846b5b81d8d3376462792b763e3fe"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_decomp</span></span></span><a class="headerlink" href="#_CPPv4N13CartesianMaps9is_decompE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps15to_coord3boundsE">
+<span id="_CPPv3N13CartesianMaps15to_coord3boundsE"></span><span id="_CPPv2N13CartesianMaps15to_coord3boundsE"></span><span id="CartesianMaps::to_coord3bounds__kokkos_pairmap"></span><span class="target" id="structCartesianMaps_1a7a9f8c9a69b6067b313e28f7e4610bf1"></span><a class="reference internal" href="../../kokkosaliases.html#_CPPv414kokkos_pairmap" title="kokkos_pairmap"><span class="n"><span class="pre">kokkos_pairmap</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">to_coord3bounds</span></span></span><a class="headerlink" href="#_CPPv4N13CartesianMaps15to_coord3boundsE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps15to_coord1boundsE">
+<span id="_CPPv3N13CartesianMaps15to_coord1boundsE"></span><span id="_CPPv2N13CartesianMaps15to_coord1boundsE"></span><span id="CartesianMaps::to_coord1bounds__kokkos_pairmap"></span><span class="target" id="structCartesianMaps_1a03cebf24db5ce77ab79b57100e4af2ec"></span><a class="reference internal" href="../../kokkosaliases.html#_CPPv414kokkos_pairmap" title="kokkos_pairmap"><span class="n"><span class="pre">kokkos_pairmap</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">to_coord1bounds</span></span></span><a class="headerlink" href="#_CPPv4N13CartesianMaps15to_coord1boundsE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps15to_coord2boundsE">
+<span id="_CPPv3N13CartesianMaps15to_coord2boundsE"></span><span id="_CPPv2N13CartesianMaps15to_coord2boundsE"></span><span id="CartesianMaps::to_coord2bounds__kokkos_pairmap"></span><span class="target" id="structCartesianMaps_1a344b848f7289a2f45c1adce30dc2993f"></span><a class="reference internal" href="../../kokkosaliases.html#_CPPv414kokkos_pairmap" title="kokkos_pairmap"><span class="n"><span class="pre">kokkos_pairmap</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">to_coord2bounds</span></span></span><a class="headerlink" href="#_CPPv4N13CartesianMaps15to_coord2boundsE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps19to_back_coord3nghbrE">
+<span id="_CPPv3N13CartesianMaps19to_back_coord3nghbrE"></span><span id="_CPPv2N13CartesianMaps19to_back_coord3nghbrE"></span><span id="CartesianMaps::to_back_coord3nghbr__kokkos_uintmap"></span><span class="target" id="structCartesianMaps_1ad006a248a9bd93b4515f983b5612b671"></span><a class="reference internal" href="../../kokkosaliases.html#_CPPv414kokkos_uintmap" title="kokkos_uintmap"><span class="n"><span class="pre">kokkos_uintmap</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">to_back_coord3nghbr</span></span></span><a class="headerlink" href="#_CPPv4N13CartesianMaps19to_back_coord3nghbrE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps22to_forward_coord3nghbrE">
+<span id="_CPPv3N13CartesianMaps22to_forward_coord3nghbrE"></span><span id="_CPPv2N13CartesianMaps22to_forward_coord3nghbrE"></span><span id="CartesianMaps::to_forward_coord3nghbr__kokkos_uintmap"></span><span class="target" id="structCartesianMaps_1a7ddd79e3c7290b312b8994188aeeb418"></span><a class="reference internal" href="../../kokkosaliases.html#_CPPv414kokkos_uintmap" title="kokkos_uintmap"><span class="n"><span class="pre">kokkos_uintmap</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">to_forward_coord3nghbr</span></span></span><a class="headerlink" href="#_CPPv4N13CartesianMaps22to_forward_coord3nghbrE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps19to_back_coord1nghbrE">
+<span id="_CPPv3N13CartesianMaps19to_back_coord1nghbrE"></span><span id="_CPPv2N13CartesianMaps19to_back_coord1nghbrE"></span><span id="CartesianMaps::to_back_coord1nghbr__kokkos_uintmap"></span><span class="target" id="structCartesianMaps_1a6a9666dd2c26b35af1422e6f6c7baa07"></span><a class="reference internal" href="../../kokkosaliases.html#_CPPv414kokkos_uintmap" title="kokkos_uintmap"><span class="n"><span class="pre">kokkos_uintmap</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">to_back_coord1nghbr</span></span></span><a class="headerlink" href="#_CPPv4N13CartesianMaps19to_back_coord1nghbrE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps22to_forward_coord1nghbrE">
+<span id="_CPPv3N13CartesianMaps22to_forward_coord1nghbrE"></span><span id="_CPPv2N13CartesianMaps22to_forward_coord1nghbrE"></span><span id="CartesianMaps::to_forward_coord1nghbr__kokkos_uintmap"></span><span class="target" id="structCartesianMaps_1a35df8a7f878006fa937029bd10558f6f"></span><a class="reference internal" href="../../kokkosaliases.html#_CPPv414kokkos_uintmap" title="kokkos_uintmap"><span class="n"><span class="pre">kokkos_uintmap</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">to_forward_coord1nghbr</span></span></span><a class="headerlink" href="#_CPPv4N13CartesianMaps22to_forward_coord1nghbrE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps19to_back_coord2nghbrE">
+<span id="_CPPv3N13CartesianMaps19to_back_coord2nghbrE"></span><span id="_CPPv2N13CartesianMaps19to_back_coord2nghbrE"></span><span id="CartesianMaps::to_back_coord2nghbr__kokkos_uintmap"></span><span class="target" id="structCartesianMaps_1a7b09424e31e4ee0488e806f87e4d47f6"></span><a class="reference internal" href="../../kokkosaliases.html#_CPPv414kokkos_uintmap" title="kokkos_uintmap"><span class="n"><span class="pre">kokkos_uintmap</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">to_back_coord2nghbr</span></span></span><a class="headerlink" href="#_CPPv4N13CartesianMaps19to_back_coord2nghbrE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps22to_forward_coord2nghbrE">
+<span id="_CPPv3N13CartesianMaps22to_forward_coord2nghbrE"></span><span id="_CPPv2N13CartesianMaps22to_forward_coord2nghbrE"></span><span id="CartesianMaps::to_forward_coord2nghbr__kokkos_uintmap"></span><span class="target" id="structCartesianMaps_1a9ade3133a94c0bbe8d4c775c552bb238"></span><a class="reference internal" href="../../kokkosaliases.html#_CPPv414kokkos_uintmap" title="kokkos_uintmap"><span class="n"><span class="pre">kokkos_uintmap</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">to_forward_coord2nghbr</span></span></span><a class="headerlink" href="#_CPPv4N13CartesianMaps22to_forward_coord2nghbrE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps8to_areasE">
+<span id="_CPPv3N13CartesianMaps8to_areasE"></span><span id="_CPPv2N13CartesianMaps8to_areasE"></span><span id="CartesianMaps::to_areas__kokkos_dblmaph"></span><span class="target" id="structCartesianMaps_1acc590d19ce129c3431bf363b574f4051"></span><a class="reference internal" href="../../kokkosaliases.html#_CPPv414kokkos_dblmaph" title="kokkos_dblmaph"><span class="n"><span class="pre">kokkos_dblmaph</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">to_areas</span></span></span><a class="headerlink" href="#_CPPv4N13CartesianMaps8to_areasE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps10to_volumesE">
+<span id="_CPPv3N13CartesianMaps10to_volumesE"></span><span id="_CPPv2N13CartesianMaps10to_volumesE"></span><span id="CartesianMaps::to_volumes__kokkos_dblmaph"></span><span class="target" id="structCartesianMaps_1a773ae54c0240d6e2084b03a035d3b766"></span><a class="reference internal" href="../../kokkosaliases.html#_CPPv414kokkos_dblmaph" title="kokkos_dblmaph"><span class="n"><span class="pre">kokkos_dblmaph</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">to_volumes</span></span></span><a class="headerlink" href="#_CPPv4N13CartesianMaps10to_volumesE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N13CartesianMaps12global_ndimsE">
+<span id="_CPPv3N13CartesianMaps12global_ndimsE"></span><span id="_CPPv2N13CartesianMaps12global_ndimsE"></span><span id="CartesianMaps::global_ndims__viewd_ndims"></span><span class="target" id="structCartesianMaps_1aa01a09d3e0e8e39d52bbcf8fbf8aa3ba"></span><a class="reference internal" href="../../kokkosaliases.html#_CPPv411viewd_ndims" title="viewd_ndims"><span class="n"><span class="pre">viewd_ndims</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">global_ndims</span></span></span><a class="headerlink" href="#_CPPv4N13CartesianMaps12global_ndimsE" title="Link to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="createcartesianmaps.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Create Cartesian Maps</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="cartesian_decomposition.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Cartesian Decomposition</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; (2023) MPI-M, Clara Bayley
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            <div class="last-updated">
+              Last updated on 26 November 2026</div>
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">CartesianMaps</a><ul>
+<li><a class="reference internal" href="#_CPPv413CartesianMaps"><code class="docutils literal notranslate"><span class="pre">CartesianMaps</span></code></a><ul>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps13CartesianMapsEv"><code class="docutils literal notranslate"><span class="pre">CartesianMaps()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps25set_coord3bounds_via_copyEKN14kokkos_pairmap10HostMirrorE"><code class="docutils literal notranslate"><span class="pre">set_coord3bounds_via_copy()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps25set_coord1bounds_via_copyEKN14kokkos_pairmap10HostMirrorE"><code class="docutils literal notranslate"><span class="pre">set_coord1bounds_via_copy()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps25set_coord2bounds_via_copyEKN14kokkos_pairmap10HostMirrorE"><code class="docutils literal notranslate"><span class="pre">set_coord2bounds_via_copy()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps29set_back_coord3nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE"><code class="docutils literal notranslate"><span class="pre">set_back_coord3nghbr_via_copy()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps32set_forward_coord3nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE"><code class="docutils literal notranslate"><span class="pre">set_forward_coord3nghbr_via_copy()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps29set_back_coord1nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE"><code class="docutils literal notranslate"><span class="pre">set_back_coord1nghbr_via_copy()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps32set_forward_coord1nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE"><code class="docutils literal notranslate"><span class="pre">set_forward_coord1nghbr_via_copy()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps29set_back_coord2nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE"><code class="docutils literal notranslate"><span class="pre">set_back_coord2nghbr_via_copy()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps32set_forward_coord2nghbr_via_copyEKN14kokkos_uintmap10HostMirrorE"><code class="docutils literal notranslate"><span class="pre">set_forward_coord2nghbr_via_copy()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps16set_gbxareas_mapEK14kokkos_dblmaph"><code class="docutils literal notranslate"><span class="pre">set_gbxareas_map()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps18set_gbxvolumes_mapEK14kokkos_dblmaph"><code class="docutils literal notranslate"><span class="pre">set_gbxvolumes_map()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps25set_global_ndims_via_copyEKN11viewd_ndims10HostMirrorE"><code class="docutils literal notranslate"><span class="pre">set_global_ndims_via_copy()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13CartesianMaps25get_global_ndims_hostcopyEv"><code class="docutils literal notranslate"><span class="pre">get_global_ndims_hostcopy()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13CartesianMaps16get_global_ndimsEv"><code class="docutils literal notranslate"><span class="pre">get_global_ndims()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13CartesianMaps15get_global_ndimEKj"><code class="docutils literal notranslate"><span class="pre">get_global_ndim()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13CartesianMaps9maps_sizeEv"><code class="docutils literal notranslate"><span class="pre">maps_size()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13CartesianMaps13get_gbxvolumeEKj"><code class="docutils literal notranslate"><span class="pre">get_gbxvolume()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13CartesianMaps11get_gbxareaEKj"><code class="docutils literal notranslate"><span class="pre">get_gbxarea()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13CartesianMaps12coord3boundsEKj"><code class="docutils literal notranslate"><span class="pre">coord3bounds()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13CartesianMaps12coord1boundsEKj"><code class="docutils literal notranslate"><span class="pre">coord1bounds()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13CartesianMaps12coord2boundsEKj"><code class="docutils literal notranslate"><span class="pre">coord2bounds()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13CartesianMaps14coord3backwardEj"><code class="docutils literal notranslate"><span class="pre">coord3backward()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13CartesianMaps13coord3forwardEj"><code class="docutils literal notranslate"><span class="pre">coord3forward()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13CartesianMaps14coord1backwardEj"><code class="docutils literal notranslate"><span class="pre">coord1backward()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13CartesianMaps13coord1forwardEj"><code class="docutils literal notranslate"><span class="pre">coord1forward()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13CartesianMaps14coord2backwardEj"><code class="docutils literal notranslate"><span class="pre">coord2backward()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13CartesianMaps13coord2forwardEj"><code class="docutils literal notranslate"><span class="pre">coord2forward()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps20create_decompositionENSt6vectorI6size_tEE19GbxBoundsFromBinary"><code class="docutils literal notranslate"><span class="pre">create_decomposition()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13CartesianMaps24get_domain_decompositionEv"><code class="docutils literal notranslate"><span class="pre">get_domain_decomposition()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13CartesianMaps27get_total_global_ngridboxesEv"><code class="docutils literal notranslate"><span class="pre">get_total_global_ngridboxes()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13CartesianMaps20get_local_ngridboxesEv"><code class="docutils literal notranslate"><span class="pre">get_local_ngridboxes()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13CartesianMaps29get_local_ngridboxes_hostcopyEv"><code class="docutils literal notranslate"><span class="pre">get_local_ngridboxes_hostcopy()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13CartesianMaps24global_to_local_gbxindexE6size_t"><code class="docutils literal notranslate"><span class="pre">global_to_local_gbxindex()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13CartesianMaps29local_to_global_gridbox_indexEji"><code class="docutils literal notranslate"><span class="pre">local_to_global_gridbox_index()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4NK13CartesianMaps32get_local_bounding_gridbox_indexEKjRdRdRd"><code class="docutils literal notranslate"><span class="pre">get_local_bounding_gridbox_index()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps20domain_decompositionE"><code class="docutils literal notranslate"><span class="pre">domain_decomposition</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps9is_decompE"><code class="docutils literal notranslate"><span class="pre">is_decomp</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps15to_coord3boundsE"><code class="docutils literal notranslate"><span class="pre">to_coord3bounds</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps15to_coord1boundsE"><code class="docutils literal notranslate"><span class="pre">to_coord1bounds</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps15to_coord2boundsE"><code class="docutils literal notranslate"><span class="pre">to_coord2bounds</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps19to_back_coord3nghbrE"><code class="docutils literal notranslate"><span class="pre">to_back_coord3nghbr</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps22to_forward_coord3nghbrE"><code class="docutils literal notranslate"><span class="pre">to_forward_coord3nghbr</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps19to_back_coord1nghbrE"><code class="docutils literal notranslate"><span class="pre">to_back_coord1nghbr</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps22to_forward_coord1nghbrE"><code class="docutils literal notranslate"><span class="pre">to_forward_coord1nghbr</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps19to_back_coord2nghbrE"><code class="docutils literal notranslate"><span class="pre">to_back_coord2nghbr</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps22to_forward_coord2nghbrE"><code class="docutils literal notranslate"><span class="pre">to_forward_coord2nghbr</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps8to_areasE"><code class="docutils literal notranslate"><span class="pre">to_areas</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps10to_volumesE"><code class="docutils literal notranslate"><span class="pre">to_volumes</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N13CartesianMaps12global_ndimsE"><code class="docutils literal notranslate"><span class="pre">global_ndims</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../../../_static/documentation_options.js?v=7e333e1e"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../_static/scripts/furo.js?v=46bd48cc"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=35a8b989"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../../_static/design-tabs.js?v=fcb327ea"></script>
+    </body>
+</html>
