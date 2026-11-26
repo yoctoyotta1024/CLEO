@@ -15,7 +15,7 @@ add_executable(cleocoupledsdm main.cpp)
 
 # Add directories and link libraries to target
 target_link_libraries(cleocoupledsdm PRIVATE coupldyn_fromfile cartesiandomain ${CLEOLIBS})
-target_link_libraries(cleocoupledsdm PUBLIC Kokkos::kokkos)
+target_link_libraries(cleocoupledsdm PRIVATE Kokkos::kokkos)
 target_include_directories(cleocoupledsdm PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
 target_include_directories(cleocoupledsdm PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 

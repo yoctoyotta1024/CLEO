@@ -16,7 +16,7 @@ add_executable(adia0d EXCLUDE_FROM_ALL "main_adia0d.cpp")
 
 # Add directories and link libraries to target
 target_link_libraries(adia0d PRIVATE coupldyn_cvode cartesiandomain "${CLEOLIBS}")
-target_link_libraries(adia0d PUBLIC Kokkos::kokkos)
+target_link_libraries(adia0d PRIVATE Kokkos::kokkos)
 target_include_directories(adia0d PRIVATE "${CLEO_SOURCE_DIR}/libs") # CLEO libs directory
 
 # set specific C++ compiler options for target (optional)
