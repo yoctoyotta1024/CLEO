@@ -134,7 +134,10 @@ and links against Cleo's libraries, using the local-clone/submodule approach fro
 
    cmake_minimum_required(VERSION 3.18.0)
 
-   project(your_executable LANGUAGES CXX C)
+   project(your_executable
+      LANGUAGES CXX C
+      DESCRIPTION "Your project by You and Others"
+   )
 
    set(CMAKE_CXX_STANDARD 20)
    set(CMAKE_CXX_STANDARD_REQUIRED ON)
