@@ -2,6 +2,78 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## [v0.74.0](https://github.com/yoctoyotta1024/CLEO/compare/75fe1816102759d829d1efc195ef7e8feafc14b3..v0.74.0) - 2026-11-26
+#### Bug Fixes
+- update bubble script to be compatible with new bubble python example and new scripting - ([1685d81](https://github.com/yoctoyotta1024/CLEO/commit/1685d813ec0ca04bd0e624d7bfa9f461506665cf)) - clara.bayley
+- smaller cond/evap minimum timestep - ([e4cf054](https://github.com/yoctoyotta1024/CLEO/commit/e4cf054bf5b6087ffd1e4f5f8bd5f908f2c37bc1)) - clara.bayley
+- sdid must be first sd observer - ([4ba9231](https://github.com/yoctoyotta1024/CLEO/commit/4ba92311079d178b7e61492704f69c0c115ce25b)) - clara.bayley
+- temporary fix while collective dataset cannot handle more than one unsigned int sd output - ([a8cb5f3](https://github.com/yoctoyotta1024/CLEO/commit/a8cb5f3ca9ca61af8176e38f448249a070e18b14)) - clara.bayley
+#### Documentation
+- update args explained in documentation - ([ad8481e](https://github.com/yoctoyotta1024/CLEO/commit/ad8481ed55b8b5cf898cf287518e334697079ce9)) - clara.bayley
+- improve explanation of roughapper - ([78dcc97](https://github.com/yoctoyotta1024/CLEO/commit/78dcc978783feb23eaee7a133be52309318d0da8)) - clara.bayley
+- more explanation how to use the bash scripts for yourself - ([ffd2fc1](https://github.com/yoctoyotta1024/CLEO/commit/ffd2fc1629d7d67181a1647d10ef05826a38274c)) - clara.bayley
+- make compatible with new scripting - ([a55dde1](https://github.com/yoctoyotta1024/CLEO/commit/a55dde16546ab75a9fbda36207d633f98613423a)) - clara.bayley
+- overhaul of developer guidelines - ([dc403e2](https://github.com/yoctoyotta1024/CLEO/commit/dc403e280ed581252aef24fe20e8bdd672414292)) - clara.bayley
+- reorganise for developers section - ([99ab3c7](https://github.com/yoctoyotta1024/CLEO/commit/99ab3c79d02091ea9e06c52ffb3e1603b1f7b1cd)) - clara.bayley
+- chore rename index to prog_guide - ([a0b1f2b](https://github.com/yoctoyotta1024/CLEO/commit/a0b1f2be1296ad440f5d37bc4430df4d1d3df3aa)) - clara.bayley
+- re-arrange developer docs - ([8dfb5cb](https://github.com/yoctoyotta1024/CLEO/commit/8dfb5cbb38556f27ed9edb5e83f21f0d0c204caa)) - clara.bayley
+- rename deep dive as programming guide - ([c885cbf](https://github.com/yoctoyotta1024/CLEO/commit/c885cbf7af5bd585e51fc4bb2819f234692351ff)) - clara.bayley
+- update introductory figures - ([7e233fc](https://github.com/yoctoyotta1024/CLEO/commit/7e233fc5f7ae475eb1aa85874667a79f8e2c1a16)) - clara.bayley
+- change path to figures - ([8c3c2b1](https://github.com/yoctoyotta1024/CLEO/commit/8c3c2b1a3a32278c4397d39660a3522e8e2405eb)) - clara.bayley
+- merge motivation and background pages - ([85eb556](https://github.com/yoctoyotta1024/CLEO/commit/85eb5561f554cf437f5bdd12b1e904fefc1197e5)) - clara.bayley
+- rename programming guide as general introduction - ([5687c5a](https://github.com/yoctoyotta1024/CLEO/commit/5687c5a1dbd759a1f6a584cc97844b8e171c5248)) - clara.bayley
+- correct list of deep dive doc pages - ([a8e2ed7](https://github.com/yoctoyotta1024/CLEO/commit/a8e2ed7974cd23a3dafde2cffd0da7044cd54c8c)) - clara.bayley
+- re-write external project how-to deep dive - ([cc69ee6](https://github.com/yoctoyotta1024/CLEO/commit/cc69ee69b65f1559eccac46f759786f5b53e6d53)) - clara.bayley
+- update coupled dynamics code deep dive - ([91d1441](https://github.com/yoctoyotta1024/CLEO/commit/91d144199634b0a7be3ba16c7faa4c3bc8aeacb0)) - clara.bayley
+- correct note on clashing CartesianDynamics struct API names - ([0416aab](https://github.com/yoctoyotta1024/CLEO/commit/0416aab0f9c839a793e0e811c2569c6089aa7c73)) - clara.bayley
+- minor tweaks to environment info - ([eb70069](https://github.com/yoctoyotta1024/CLEO/commit/eb70069dcd238e617d04c5b81d88053897775ea3)) - clara.bayley
+- update C++ libs API - ([de470e7](https://github.com/yoctoyotta1024/CLEO/commit/de470e7353262075442098f72b6949aef22e5948)) - clara.bayley
+- update cleopy API - ([db4966c](https://github.com/yoctoyotta1024/CLEO/commit/db4966c68a8156f738cdbacf89bdaf27eb1c33c0)) - clara.bayley
+- include all libs in doxygen input and conf projects - ([f7179bc](https://github.com/yoctoyotta1024/CLEO/commit/f7179bcbe42b2abce83f34798d250ffa2e3ddf60)) - clara.bayley
+- ammendments to the deep dive - ([fed525f](https://github.com/yoctoyotta1024/CLEO/commit/fed525fa847c300272ce8deca8cb811e50d597db)) - clara.bayley
+- expansion on coupling guide - ([021683a](https://github.com/yoctoyotta1024/CLEO/commit/021683a3043f20af39da59ed124c351be8adc5b2)) - clara.bayley
+- add links to intro - ([3b46629](https://github.com/yoctoyotta1024/CLEO/commit/3b46629b7ddf87a85bfad086dd62f1adfe9517e2)) - clara.bayley
+- include cleo references and change bib style - ([1592423](https://github.com/yoctoyotta1024/CLEO/commit/1592423da44bd112b686a13cb437e9348ad04d74)) - clara.bayley
+- improve landing page and remove quickstart - ([cd6be56](https://github.com/yoctoyotta1024/CLEO/commit/cd6be566d47a2389621970a45833cef5379191f9)) - clara.bayley
+- change project name CLEO to Cleo - ([df69ac9](https://github.com/yoctoyotta1024/CLEO/commit/df69ac9b9a0ccd207fdd8b7b884a8d46d22c6e05)) - clara.bayley
+- better admonition rather than note - ([aeb3cc7](https://github.com/yoctoyotta1024/CLEO/commit/aeb3cc7f5de9f03b112ab21c42cc17a4086196dc)) - clara.bayley
+- rename and remove index lookups on landing pages - ([1b642d1](https://github.com/yoctoyotta1024/CLEO/commit/1b642d14a64501e1fad86d6a64437a1b38815075)) - clara.bayley
+- remove redundant note - ([7677da4](https://github.com/yoctoyotta1024/CLEO/commit/7677da47239128a2aebfde959821c1fa8e851765)) - clara.bayley
+#### Features
+- copy yac source config into tmp like for cleo config - ([253d78e](https://github.com/yoctoyotta1024/CLEO/commit/253d78ed0a87fe4bca94fbd27ebac6a9cc8af94e)) - clara.bayley
+#### Miscellaneous Chores
+- **(deps)** bump the python-minor-patch group with 2 updates - ([1a61b61](https://github.com/yoctoyotta1024/CLEO/commit/1a61b61200b9aa426f5a466f343f80106989ab9c)) - dependabot[bot]
+- **(deps)** bump the pre-commit-hooks group with 2 updates - ([75fe181](https://github.com/yoctoyotta1024/CLEO/commit/75fe1816102759d829d1efc195ef7e8feafc14b3)) - dependabot[bot]
+- delete redundant run_bubble_tmp.sh - ([4c41c36](https://github.com/yoctoyotta1024/CLEO/commit/4c41c36805d01a828a7611a12814e896a788e9af)) - clara.bayley
+- update icon-mpim to icon - ([b6886db](https://github.com/yoctoyotta1024/CLEO/commit/b6886dbdd7ffa276ed67400039f711981b44453c)) - clara.bayley
+- change location of icon-mpim bubble data - ([adcfb8c](https://github.com/yoctoyotta1024/CLEO/commit/adcfb8c6e6941917f5a5584ea2fb38bed4f2df63)) - clara.bayley
+- delete redundant out-of-date quickstart doc - ([88c2562](https://github.com/yoctoyotta1024/CLEO/commit/88c256240e67b60f6c1b915c9399ef7205deccc2)) - clara.bayley
+- correct typo - ([0dcd3af](https://github.com/yoctoyotta1024/CLEO/commit/0dcd3af3b7f0b9f7f55fb32a2778fe2d541336c7)) - clara.bayley
+- delete very old depreciated files - ([2f2a6b0](https://github.com/yoctoyotta1024/CLEO/commit/2f2a6b0d6f9233694e063c9246e138429ea0a680)) - clara.bayley
+- typos - ([0ef5bb7](https://github.com/yoctoyotta1024/CLEO/commit/0ef5bb708f0299dad352b619f4d6cdcdbf7f437b)) - clara.bayley
+- delete unwanted file descriptions - ([21f515d](https://github.com/yoctoyotta1024/CLEO/commit/21f515dc530fb47a74ad2eefaeb480a8e828ec90)) - clara.bayley
+#### Performance Improvements
+- clean-up comments - ([f614913](https://github.com/yoctoyotta1024/CLEO/commit/f614913aaeb1e0da93121c2c80d33145e07f24d9)) - clara.bayley
+#### Refactoring
+- improve interpolation stack for two-way coupling from Cleo to ICON - ([1bdd4fe](https://github.com/yoctoyotta1024/CLEO/commit/1bdd4fe6969b7501ffd4201b9d99f8f93daa8d82)) - clara.bayley
+- do alter thermo in bubble - ([a5d254f](https://github.com/yoctoyotta1024/CLEO/commit/a5d254f8cb7b3297a7bf5c9f959877d17428c251)) - clara.bayley
+- improve interpolation stack and use high resolution - ([c9bb688](https://github.com/yoctoyotta1024/CLEO/commit/c9bb6889fe6d1f6c6382ea73741cfb63b8504dcb)) - clara.bayley
+- make bubble domain smaller - ([eca47fb](https://github.com/yoctoyotta1024/CLEO/commit/eca47fbfd8dd9b2b3612fc7d384277866839f43f)) - clara.bayley
+- loosen conditions on condensation settings for bubble - ([e2e1f38](https://github.com/yoctoyotta1024/CLEO/commit/e2e1f38f87ef627d18289cf27b63b5817b96a533)) - clara.bayley
+- error on Newton Raphson (NR) method changed to a warning - ([51ea7d2](https://github.com/yoctoyotta1024/CLEO/commit/51ea7d2fbd53d69ecd2b41491fc3c337002f5b0b)) - clara.bayley
+- avoid errors with rspan and microphysics timestepping changes - ([c4a28a3](https://github.com/yoctoyotta1024/CLEO/commit/c4a28a36aedad944441f8fabdebbab7502be3d57)) - clara.bayley
+- give bubble dry aerosol initial conditions and microphysics - ([b2b813b](https://github.com/yoctoyotta1024/CLEO/commit/b2b813bf5703ae28a57b633b91690f23f758f38d)) - clara.bayley
+- change location of tmp, bin and share for bubble example - ([fcc896b](https://github.com/yoctoyotta1024/CLEO/commit/fcc896bb5a3a7235a222556e95817b11fd39700a)) - clara.bayley
+- make bubble example suitable for mpi domain decomposition - ([2b0eac8](https://github.com/yoctoyotta1024/CLEO/commit/2b0eac83f2818554ae307290305548da67404d71)) - clara.bayley
+- re-organise the examples landing page - ([9bbf0e6](https://github.com/yoctoyotta1024/CLEO/commit/9bbf0e6e51a4ed4ae28e1858284d77cd768f1aad)) - clara.bayley
+- reorganise where restrictions on running certain examples are documented - ([200f03c](https://github.com/yoctoyotta1024/CLEO/commit/200f03c0e0de6b19f668a40c703fae0949cd508a)) - clara.bayley
+- move bashscripts_detail into programming guide and rename - ([9d52e8a](https://github.com/yoctoyotta1024/CLEO/commit/9d52e8ad4daaf51beb3e12c8a601f1f3992e645b)) - clara.bayley
+- rename functions to avoid confusion with cleopy - ([a87f2e3](https://github.com/yoctoyotta1024/CLEO/commit/a87f2e3c240576653d4ae574f4d82e776e8c377e)) - clara.bayley
+- missing allsupers parameter in docstring - ([09505ba](https://github.com/yoctoyotta1024/CLEO/commit/09505bafa331606ee20462e98c1aa7d0daee77d7)) - clara.bayley
+- first draft deep_dive section to docs - ([d5605bb](https://github.com/yoctoyotta1024/CLEO/commit/d5605bbcdfea5a31934a0819dd053ef0084cda35)) - clara.bayley
+
+- - -
+
 ## [v0.73.0](https://github.com/yoctoyotta1024/CLEO/compare/b91025529976297116fa5378247ae6d1fa9d0238..v0.73.0) - 2026-11-26
 #### Features
 - add dependabot version updating - ([21c3bf0](https://github.com/yoctoyotta1024/CLEO/commit/21c3bf07bde2569a446df65edfd57b1d25359aef)) - clara.bayley
