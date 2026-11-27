@@ -106,13 +106,12 @@ Cleo's ``cleo_python_bindings`` library requires pybind11 to create python bindi
 libraries. You can find more information about it from `the pybind11 repository: <https://github.com/pybind/pybind11>`_.
 
 .. _pybind11:
-.. admonition:: Using python bindings with python version >= 3.14
+.. note::
 
-  Cleo's python bindings may not work with python versions higher than 3.13.*. One way
-  to ensure you have a reasonable version of python for the bindings is to change the python
-  requirement to ``requires-python=">=3.13,<3.14"`` in the  ``cleopy`` ``pyproject.toml`` and then
-  update your python environment, e.g. with ``uv sync --extra examples --extra yac``
-
+  Cleo fetches pybind11 via CMake's ``FetchContent`` (see ``libs/cleo_python_bindings/CMakeLists.txt``).
+  As of pybind11 3.1.0, Python 3.14 is supported (pybind11 < 3.0 does not support Python 3.14 and will
+  abort at runtime when creating bindings under a 3.14 interpreter, so if you build Cleo's python
+  bindings against an older pinned pybind11 version, keep your python environment on <3.14).
 
 The pybind11 library for Cleo is automatically built using CMAKE and compiled if required.
 *Note*: you can avoid making Cleo's python bindings, and thereby avoid the pybind11
