@@ -21,12 +21,12 @@ message(STATUS "CLEO python libraries: ${Python_STDLIB}")
 
 # fetch and make pybind11 library available
 include(FetchContent)
-set(PYTHON_EXECUTABLE ${Python_EXECUTABLE})
+set(PYBIND11_FINDPYTHON ON)
 FetchContent_Declare(
   pybind11
   DOWNLOAD_EXTRACT_TIMESTAMP TRUE
-  URL https://github.com/pybind/pybind11/archive/refs/tags/v2.13.6.tar.gz
-  GIT_TAG a2e59f0e7065404b44dfe92a28aca47ba1378dc4
+  URL https://github.com/pybind/pybind11/archive/refs/tags/v3.1.0.tar.gz
+  GIT_TAG 97bf890db679505a14dfe547a5e77bb2bd05dc90
 )
 FetchContent_MakeAvailable(pybind11)
 
